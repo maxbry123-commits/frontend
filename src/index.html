@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NCT Command Center · FRONT v0.1.0</title>
+<link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+
+<!-- Top bar -->
+<header class="topbar">
+  <div class="topbar-left">
+    <span class="logo-dot">●</span>
+    <span class="brand">JARVIS COMMAND CENTER</span>
+    <span class="version">v2.0 — Inspired by Claude Code &amp; Claude Design</span>
+  </div>
+  <div class="topbar-right">
+    <span class="live"><span class="dot-green"></span> EN VIVO</span>
+    <span class="clock" id="clock">01:24:38</span>
+    <button class="btn-ghost">Compartir</button>
+    <button class="btn-ghost">Exportar</button>
+    <img class="avatar" src="/assets/avatar.svg" alt="Max" />
+  </div>
+</header>
+
+<!-- Project selector -->
+<div class="project-bar">
+  <span class="project-label">Proyecto actual</span>
+  <select class="project-select"><option>Lanzamiento App de IA en Salud ▾</option></select>
+  <nav class="tabs-main">
+    <a class="tab">Resumen</a>
+    <a class="tab active">Crazy Wall</a>
+    <a class="tab">Terminal IA</a>
+    <a class="tab">Artefactos</a>
+    <a class="tab">Decisiones</a>
+    <a class="tab">Reportes</a>
+  </nav>
+</div>
+
+<!-- 3-column shell -->
+<main class="shell">
+
+  <!-- LEFT: agents -->
+  <aside class="col col-left">
+    <h3 class="col-title">AGENTES ACTIVOS <button class="add-btn">+</button></h3>
+    <ul class="agents-list" id="agents-list"></ul>
+
+    <h3 class="col-title">CONTEXTOS ABIERTOS <button class="search-btn">🔍</button></h3>
+    <ul class="ctx-list">
+      <li>📄 Investigación de Mercado</li>
+      <li>📄 Modelos de Negocio</li>
+      <li>📄 Análisis Técnico</li>
+      <li>📄 Riesgos y Cumplimiento</li>
+      <li>📄 Proyecciones Financieras</li>
+    </ul>
+
+    <h3 class="col-title">TERMINAL IA <span class="term-pill">bash</span></h3>
+    <pre class="terminal">
+&gt; Analizando entorno competitivo...
+&gt; Extrayendo datos de 42 fuentes
+&gt; Generando insights clave
+&gt; Actualizando Crazy Wall...
+&gt; Confianza actual: 87%
+&gt; Siguiente paso sugerido: Validar
+  supuestos con datos reales
+jarvis@command:~$ <span class="cursor">|</span></pre>
+  </aside>
+
+  <!-- CENTER: debate wall -->
+  <section class="col col-center">
+    <div class="center-header">
+      <h2>CRAZY WALL — DEBATE VISUAL EN VIVO</h2>
+      <div class="center-actions">
+        <button class="icon">🔍</button>
+        <button class="icon">⤢</button>
+        <button class="icon">⚙</button>
+        <button class="icon">👤</button>
+        <button class="btn-add">+ Nodo</button>
+      </div>
+    </div>
+
+    <div class="view-tabs">
+      <span class="vt active">Vista: Grafo</span>
+      <span class="vt">Tabla</span>
+      <span class="vt">Timeline</span>
+    </div>
+
+    <!-- Grafo fake -->
+    <div class="grafo">
+      <div class="node center-node">
+        <div class="node-title">Lanzamiento App<br/>de IA en Salud</div>
+        <span class="node-tag">OBJETIVO</span>
+      </div>
+
+      <div class="node n-top-left" style="--color:#22d3ee">
+        <div class="node-pct">92%</div>
+        <div class="node-title">Necesidad del Mercado</div>
+        <div class="node-sub">Alta demanda de soluciones IA en clínicas y hospitales</div>
+        <div class="node-author">👤 Analista de Mercado</div>
+      </div>
+
+      <div class="node n-top-mid" style="--color:#22c55e">
+        <div class="node-pct">85%</div>
+        <div class="node-title">Modelo de Negocio</div>
+        <div class="node-sub">SaaS B2B con suscripción mensual por institución</div>
+        <div class="node-author">👤 CEO Agent</div>
+      </div>
+
+      <div class="node n-top-right" style="--color:#a78bfa">
+        <div class="node-pct">90%</div>
+        <div class="node-title">Tecnología Recomendada</div>
+        <div class="node-sub">IA + Integración con sistemas médicos (EHR)</div>
+        <div class="node-author">👤 Experto en IA/ML</div>
+      </div>
+
+      <div class="node n-mid-left" style="--color:#3b82f6">
+        <div class="node-pct">90%</div>
+        <div class="node-title">Producto Principal</div>
+        <div class="node-sub">Plataforma de diagnóstico asistido por IA</div>
+        <div class="node-author">👤 Arquitecto de Soluciones</div>
+      </div>
+
+      <div class="node n-mid-right" style="--color:#10b981">
+        <div class="node-pct">88%</div>
+        <div class="node-title">Ventaja Competitiva</div>
+        <div class="node-sub">Precisión superior + Facilidad de uso</div>
+        <div class="node-author">👤 UX Researcher</div>
+      </div>
+
+      <div class="node n-bot-left" style="--color:#ef4444">
+        <div class="node-pct">78%</div>
+        <div class="node-title">Riesgos Principales</div>
+        <div class="node-sub">Regulaciones<br/>Privacidad de datos<br/>Competencia</div>
+        <div class="node-author">👤 Abogado IA</div>
+      </div>
+
+      <!-- connections -->
+      <svg class="edges" viewBox="0 0 1000 600" preserveAspectRatio="none">
+        <defs>
+          <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#22c55e"/></marker>
+          <marker id="re" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ef4444"/></marker>
+        </defs>
+        <line x1="200" y1="180" x2="430" y2="240" stroke="#22c55e" stroke-width="2" marker-end="url(#ap)"/>
+        <text x="270" y="200" fill="#22c55e" font-size="11">apoya</text>
+        <line x1="430" y1="180" x2="430" y2="240" stroke="#a78bfa" stroke-width="2" marker-end="url(#ap)"/>
+        <text x="490" y="200" fill="#a78bfa" font-size="11">apoya</text>
+        <line x1="650" y1="180" x2="430" y2="240" stroke="#ef4444" stroke-width="2" marker-end="url(#re)"/>
+        <text x="540" y="170" fill="#ef4444" font-size="11">refuta</text>
+        <line x1="200" y1="380" x2="430" y2="320" stroke="#22c55e" stroke-width="2" marker-end="url(#ap)"/>
+        <text x="280" y="360" fill="#22c55e" font-size="11">apoya</text>
+        <line x1="700" y1="380" x2="430" y2="320" stroke="#22c55e" stroke-width="2" marker-end="url(#ap)"/>
+        <text x="540" y="360" fill="#22c55e" font-size="11">apoya</text>
+        <line x1="200" y1="500" x2="430" y2="400" stroke="#ef4444" stroke-width="2" marker-end="url(#re)"/>
+        <text x="280" y="470" fill="#ef4444" font-size="11">refuta</text>
+      </svg>
+    </div>
+
+    <!-- Interacción con el equipo -->
+    <div class="interaction">
+      <h3>INTERACCIÓN CON EL EQUIPO DE IA</h3>
+      <div class="input-row">
+        <input type="text" placeholder="Escribe una pregunta, solicita análisis o propone una idea…" />
+        <button class="btn-send">➤</button>
+      </div>
+      <div class="quick-actions">
+        <button>💬 Preguntar</button>
+        <button>💡 Proponer Idea</button>
+        <button>📊 Solicitar Análisis</button>
+        <button>🔁 Simular Escenario</button>
+        <button>📎 Agregar Contexto</button>
+      </div>
+    </div>
+
+    <!-- Progreso del debate -->
+    <div class="progress">
+      <h3>PROGRESO DEL DEBATE</h3>
+      <ol class="steps">
+        <li class="done">✓<br><span>1. Definición del Problema</span><br><small>Completado · 00:10</small></li>
+        <li class="done">✓<br><span>2. Generación de Ideas</span><br><small>24 ideas · 00:25</small></li>
+        <li class="active">●<br><span>3. Debate y Análisis</span><br><small>En progreso · 01:24</small></li>
+        <li>○<br><span>4. Validación</span><br><small>Pendiente</small></li>
+        <li>○<br><span>5. Decisión Final</span><br><small>Pendiente</small></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- RIGHT: debate in vivo -->
+  <aside class="col col-right">
+    <h3 class="col-title">DEBATE EN VIVO</h3>
+    <div class="tabs-rt">
+      <span class="t active">Todos</span>
+      <span class="t">Debates</span>
+      <span class="t">Preguntas</span>
+      <span class="t">Votos</span>
+    </div>
+    <ul class="feed">
+      <li>
+        <div class="feed-h"><span class="ava">👩</span> Analista de Mercado <span class="t-stamp">10:24:15</span></div>
+        <p>¿Qué opinan sobre el tamaño real del mercado TAM/SAM/SOM para este proyecto?</p>
+        <small>👥 5   💬 3 respuestas</small>
+      </li>
+      <li>
+        <div class="feed-h"><span class="ava">👨</span> Finanzas Agent <span class="t-stamp">10:24:32</span></div>
+        <p>Desde el punto de vista financiero, ¿cuál sería el ROI estimado en 3 años?</p>
+        <small>👥 4   💬 2 respuestas</small>
+      </li>
+      <li>
+        <div class="feed-h"><span class="ava">🧑‍💻</span> Experto en IA/ML <span class="t-stamp">10:24:45</span></div>
+        <p>¿Qué modelos de IA son más adecuados para diagnóstico médico asistido?</p>
+        <small>👥 6   💬 4 respuestas</small>
+      </li>
+      <li>
+        <div class="feed-h"><span class="ava">👩‍💼</span> CEO Agent <span class="t-stamp">10:25:01</span></div>
+        <p>Necesitamos definir: ¿Lanzamiento inicial en 1 país o estrategia multi-país desde el inicio?</p>
+        <small>👥 7   💬 5 respuestas</small>
+      </li>
+    </ul>
+    <button class="new-q">📝 Nueva Pregunta al Equipo</button>
+
+    <h3 class="col-title">CONSENSO ACTUAL</h3>
+    <div class="consensus">
+      <div class="ring">
+        <span class="ring-pct">72%</span>
+      </div>
+      <p>Hay consenso general en la dirección estratégica del proyecto</p>
+      <a class="link">Confianza del consenso →</a>
+    </div>
+
+    <h3 class="col-title">ARTEFACTOS GENERADOS <a class="link-right">Ver todos →</a></h3>
+    <ul class="artifacts">
+      <li>📄 Análisis de Mercado Completo<br><small>PDF · 2.3 MB · 10:20 AM</small></li>
+      <li>📊 Modelo Financiero Proyectado<br><small>XLSX · 1.8 MB · 10:18 AM</small></li>
+      <li>📄 Arquitectura Técnica v1.0<br><small>PDF · 3.1 MB · 10:15 AM</small></li>
+      <li>📄 Matriz de Riesgos<br><small>PDF · 1.2 MB · 10:10 AM</small></li>
+    </ul>
+  </aside>
+
+</main>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
