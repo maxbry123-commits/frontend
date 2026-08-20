@@ -33,6 +33,7 @@ jobs:
           path: source-hub
           fetch-depth: 1
 
+      # Deterministic COPY-FIRST import: source code only, preserving source paths.
       - name: Copy code only, preserving source paths
         shell: bash
         run: |
