@@ -55,7 +55,7 @@ jobs:
             echo 'NO_NEW_FILES'
             exit 0
           fi
-          git commit -m 'Copy Code and frontend documents from trabajo-grok [skip ci]'
+          git commit -m 'Copy Code and frontend documents from trabajo-grok'
           git push
 
-# LOOP trigger verification 2026-08-21
+# LOOP trigger verification 2026-08-21-RETRY
