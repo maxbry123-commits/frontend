@@ -32,3 +32,25 @@ Cuando haya varios archivos nuevos, se pueden preparar varias entradas en un ún
 ## Flujo canónico
 
 `origen → blob/SHA → auditoría destino → tree → commit → push → verificación SHA`
+
+## Procedimiento ZIP → nueva raíz
+
+1. Localizar el ZIP exacto en el repositorio y verificar nombre, ruta, SHA y tamaño.
+2. Descargar el ZIP como binario; no leerlo como UTF-8.
+3. Extraer todos sus archivos y directorios en un área temporal.
+4. Inventariar la extracción y detectar si el ZIP creó una carpeta envolvente.
+5. Crear una única raíz nueva con el nombre solicitado.
+6. Desplegar dentro de esa raíz TODO el contenido del ZIP, quitando solo la carpeta envolvente si existe.
+7. Mantener nombres, rutas internas y contenido sin modificaciones.
+8. Comparar inventario ZIP ↔ raíz desplegada: archivos, directorios, tamaños y SHA/contenido cuando sea posible.
+9. Crear tree/commit sobre el árbol existente, actualizar la rama y conservar el resto del repositorio.
+10. Verificar directamente en GitHub que la nueva raíz contiene todo el contenido del ZIP.
+
+### Reglas ZIP
+
+- No eliminar el ZIP original salvo instrucción expresa.
+- No clasificar, mover, borrar ni reescribir documentos ajenos a esta tarea.
+- GitHub es la fuente de verdad.
+- TERMINADA solo después de la verificación cruzada.
+
+Flujo ZIP: `ZIP → binario → extracción → inventario → nueva raíz → despliegue completo → comparación → commit → push → verificación`.
