@@ -1,1 +1,0 @@
-Extracción de trabajo-grok-main.zip completada mediante GitHub Actions en la raíz Trabajo de grock.
