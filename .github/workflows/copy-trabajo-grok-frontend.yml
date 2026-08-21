@@ -1,0 +1,60 @@
+name: Copy frontend and Code documents from trabajo-grok
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  copy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout destination
+        uses: actions/checkout@v6
+        with:
+          path: destination
+
+      - name: Checkout source
+        uses: actions/checkout@v6
+        with:
+          repository: maxbry123-commits/trabajo-grok
+          ref: main
+          path: source
+
+      - name: Copy only Code/Frontend/Fromted documents, never replace destination files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE"
+          mkdir -p destination/.copy-staging
+          while IFS= read -r -d '' f; do
+            rel="${f#source/}"
+            name="$(basename "$rel")"
+            if [[ "$name" =~ FROMTED|FROMTED|LEY-CODIGO|CHAT|CODE|FRONTEND|FROMTED ]] || grep -Eiq 'frontend|fronted|react|vite|assistant-ui|UICommand|OpenClaw|\bcode\b|\bcódigo\b' "$f"; then
+              target="destination/$rel"
+              if [[ ! -e "$target" ]]; then
+                mkdir -p "$(dirname "$target")"
+                cp -p "$f" "$target"
+                echo "COPIED $rel"
+              else
+                echo "SKIP_EXISTING $rel"
+              fi
+            fi
+          done < <(find source -maxdepth 1 -type f -name '*.md' -print0)
+
+      - name: Commit new copies only
+        working-directory: destination
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- '*.md'
+          if git diff --cached --quiet; then
+            echo 'NO_NEW_FILES'
+            exit 0
+          fi
+          git commit -m 'Copy Code and frontend documents from trabajo-grok [skip ci]'
+          git push
