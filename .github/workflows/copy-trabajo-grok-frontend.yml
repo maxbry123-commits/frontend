@@ -3,6 +3,7 @@ name: Copy frontend and Code documents from trabajo-grok
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -23,28 +24,24 @@ jobs:
           ref: main
           path: source
 
-      - name: Copy only Code/Frontend/Fromted documents, never replace destination files
+      - name: Copy eligible root documents without replacing destination files
         shell: bash
         run: |
           set -euo pipefail
-          cd "$GITHUB_WORKSPACE"
-          mkdir -p destination/.copy-staging
           while IFS= read -r -d '' f; do
-            rel="${f#source/}"
-            name="$(basename "$rel")"
-            if [[ "$name" =~ FROMTED|FROMTED|LEY-CODIGO|CHAT|CODE|FRONTEND|FROMTED ]] || grep -Eiq 'frontend|fronted|react|vite|assistant-ui|UICommand|OpenClaw|\bcode\b|\bcódigo\b' "$f"; then
-              target="destination/$rel"
+            name="$(basename "$f")"
+            if [[ "$name" =~ FROMTED|LEY-CODIGO|CHAT|CODE|FRONTEND ]] || grep -Eiq 'frontend|fronted|react|vite|assistant-ui|OpenClaw|\bcode\b|\bcódigo\b|UI' "$f"; then
+              target="destination/$name"
               if [[ ! -e "$target" ]]; then
-                mkdir -p "$(dirname "$target")"
                 cp -p "$f" "$target"
-                echo "COPIED $rel"
+                echo "COPIED $name"
               else
-                echo "SKIP_EXISTING $rel"
+                echo "SKIP_EXISTING $name"
               fi
             fi
           done < <(find source -maxdepth 1 -type f -name '*.md' -print0)
 
-      - name: Commit new copies only
+      - name: Commit only newly copied documents
         working-directory: destination
         shell: bash
         run: |
