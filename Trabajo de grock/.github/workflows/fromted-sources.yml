@@ -1,0 +1,99 @@
+name: fromted-sources
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "fromted/manifest.sources.json"
+      - ".github/workflows/fromted-sources.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  install-sources:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch and materialize sources as regular files
+        working-directory: fromted
+        run: |
+          set -euo pipefail
+          mkdir -p sources
+          python3 << 'PY'
+          import json, subprocess, os, datetime, pathlib, shutil
+          root = pathlib.Path(".")
+          man = json.loads((root / "manifest.sources.json").read_text())
+          report = {
+            "version": man.get("version"),
+            "wave": man.get("wave"),
+            "date": datetime.datetime.utcnow().isoformat() + "Z",
+            "items": [],
+          }
+          # remove old submodule pointers / dirs
+          sources = root / "sources"
+          if sources.exists():
+              shutil.rmtree(sources)
+          sources.mkdir(parents=True, exist_ok=True)
+          for repo in man["repositories"]:
+              rid = repo["id"]
+              url = repo["official_repository"]
+              branch = repo.get("branch") or "main"
+              pin = repo.get("commit")
+              dest = root / repo["destination_path"]
+              item = {"id": rid, "url": url, "branch": branch, "commit": None, "status": "FAILED", "error": None}
+              try:
+                  if dest.exists():
+                      shutil.rmtree(dest)
+                  dest.parent.mkdir(parents=True, exist_ok=True)
+                  sparse = repo.get("sparse") or []
+                  if sparse:
+                      subprocess.run(
+                          ["git", "clone", "--depth", "1", "--filter=blob:none", "--sparse", "--branch", branch, url, str(dest)],
+                          check=True, capture_output=True, text=True,
+                      )
+                      subprocess.run(["git", "-C", str(dest), "sparse-checkout", "set", *sparse], check=True, capture_output=True, text=True)
+                  else:
+                      subprocess.run(
+                          ["git", "clone", "--depth", "1", "--branch", branch, url, str(dest)],
+                          check=True, capture_output=True, text=True,
+                      )
+                  if pin:
+                      subprocess.run(["git", "-C", str(dest), "fetch", "--depth", "1", "origin", pin], check=False, capture_output=True, text=True)
+                      subprocess.run(["git", "-C", str(dest), "checkout", pin], check=False, capture_output=True, text=True)
+                  sha = subprocess.check_output(["git", "-C", str(dest), "rev-parse", "HEAD"], text=True).strip()
+                  # CRITICAL: delete .git so commit stores real files, not submodule
+                  gitdir = dest / ".git"
+                  if gitdir.exists():
+                      shutil.rmtree(gitdir)
+                  item["commit"] = sha
+                  item["status"] = "SUCCESS"
+                  print(f"SUCCESS {rid} {sha} files-only")
+              except subprocess.CalledProcessError as e:
+                  item["error"] = ((e.stderr or e.stdout or str(e)))[:500]
+                  print(f"FAILED {rid}: {item['error']}")
+                  if repo.get("required"):
+                      report["items"].append(item)
+                      (root / "inventory.json").write_text(json.dumps(report, indent=2))
+                      raise SystemExit(f"REQUIRED FAILED: {rid}")
+              report["items"].append(item)
+          (root / "inventory.json").write_text(json.dumps(report, indent=2))
+          print("inventory.json written")
+          PY
+
+      - name: Remove gitlink entries if any
+        run: |
+          git rm -rf --cached fromted/sources 2>/dev/null || true
+          rm -f fromted/sources/**/.git 2>/dev/null || true
+
+      - name: Commit materialized sources
+        run: |
+          git config user.name "fromted-bot"
+          git config user.email "fromted-bot@users.noreply.github.com"
+          git add -A fromted/sources fromted/inventory.json
+          git status
+          git diff --staged --quiet && echo "No changes" && exit 0
+          git commit -m "T-01 materialize sources as files (no submodule) [skip ci]"
+          git push

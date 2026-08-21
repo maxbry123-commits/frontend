@@ -1,0 +1,53 @@
+name: React types compatibility (@types/react next)
+
+# Catches the next React major's type changes before users do (the React 18
+# release produced a wave of TFunctionResult/children type breakages): runs the
+# typescript test suite against @types/react@next on a weekly schedule.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  typescript-next:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Override react types with newest available (pre-release tag if any)
+        run: |
+          # DefinitelyTyped only publishes pre-release tags (next/rc/beta/canary) around
+          # a React major; outside those windows fall back to latest so the job keeps running.
+          TAG=latest
+          for candidate in next rc beta canary; do
+            if npm view "@types/react@$candidate" version >/dev/null 2>&1; then
+              TAG="$candidate"
+              break
+            fi
+          done
+          echo "Using @types/react tag: $TAG"
+          npm install --no-save "@types/react@$TAG"
+          if npm view "@types/react-dom@$TAG" version >/dev/null 2>&1; then
+            npm install --no-save "@types/react-dom@$TAG"
+          else
+            npm install --no-save @types/react-dom@latest
+          fi
+          node -p "'@types/react: ' + require('@types/react/package.json').version"
+          node -p "'@types/react-dom: ' + require('@types/react-dom/package.json').version"
+
+      - name: Test typescript
+        run: npm run test:typescript

@@ -1,0 +1,5 @@
+# PIPE INDEX — CLOSED docs S12
+
+01–12 + MAPA-PARTES-PIPE [x]
+
+Otro Grok: `HANDOFF.md` → **P02.N01**

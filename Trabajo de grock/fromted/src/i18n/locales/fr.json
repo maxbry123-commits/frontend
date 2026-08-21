@@ -1,0 +1,14 @@
+{
+  "app.title": "FROMTED",
+  "app.status": "Shell prêt",
+  "settings.appearance": "Apparence",
+  "settings.language": "Langue",
+  "settings.theme": "Thème",
+  "theme.dark-warm": "Sombre chaud",
+  "theme.gray-warm": "Gris chaud",
+  "theme.light": "Clair",
+  "chat.placeholder": "Message…",
+  "action.load": "Charger",
+  "action.download": "Télécharger",
+  "action.add": "Ajouter"
+}

@@ -1,0 +1,46 @@
+packages:
+  - api-surface
+  - packages/*
+  - examples/*
+  - apps/*
+  - templates/*
+
+linkWorkspacePackages: true
+preferWorkspacePackages: true
+publicHoistPattern:
+  - '@types/*'
+
+strictDepBuilds: true
+
+verifyDepsBeforeRun: install
+
+minimumReleaseAge: 1440
+minimumReleaseAgeExclude:
+  - '@assistant-ui/*'
+  - '@typescript/typescript-*'
+  - assistant-cloud
+  - assistant-stream
+  - assistant-ui
+  - create-assistant-ui
+  - eve
+  - heat-graph
+  - safe-content-frame
+  - tw-glass
+  - tw-shimmer
+  - typescript
+
+allowBuilds:
+  '@clerk/shared': false
+  '@google/genai': false
+  '@modelcontextprotocol/ext-apps': false
+  '@mongodb-js/zstd': false
+  '@parcel/watcher': false
+  '@tailwindcss/oxide': false
+  core-js: false
+  esbuild@0.28.1: true
+  msgpackr-extract: true
+  node-liblzma: false
+  protobufjs: false
+  react-grab: false
+  sharp@0.34.5: true
+  sqlite3@5.1.7: true
