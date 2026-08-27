@@ -1,4 +1,4 @@
-name: Import chat interface code
+name: Import chat and command center code
 
 on:
   push:
@@ -25,31 +25,42 @@ jobs:
           path: source-chat
           fetch-depth: 1
 
-      - name: Checkout nct-hub source
+      - name: Checkout Command-Center source
         uses: actions/checkout@v6
         with:
-          repository: maxbry123-commits/nct-hub
+          repository: maxbry123-commits/Command-Center
           token: ${{ secrets.SOURCE_REPO_TOKEN || secrets.GH_PAT }}
-          path: source-hub
+          path: source-command-center
           fetch-depth: 1
 
-      # Deterministic COPY-FIRST import: source code only, preserving source paths.
+      - name: Checkout comand-Center source
+        uses: actions/checkout@v6
+        with:
+          repository: maxbry123-commits/comand-Center
+          token: ${{ secrets.SOURCE_REPO_TOKEN || secrets.GH_PAT }}
+          path: source-comand-center
+          fetch-depth: 1
+
+      # COPY-FIRST: only source-code files are imported; documentation/assets are excluded.
       - name: Copy code only, preserving source paths
         shell: bash
         run: |
           set -euo pipefail
           cd "$GITHUB_WORKSPACE/target"
-          mkdir -p IMPORTED_CODE/CHAT_FRONTEND IMPORTED_CODE/NCT_HUB
+          mkdir -p IMPORTED_CODE/CHAT_FRONTEND IMPORTED_CODE/COMMAND_CENTER IMPORTED_CODE/COMAND_CENTER
 
           copy_code() {
             local src="$1"
             local dst="$2"
             find "$src" -type f \( \
-              -name '*.js' -o -name '*.jsx' -o -name '*.ts' -o -name '*.tsx' -o \
-              -name '*.css' -o -name '*.scss' -o -name '*.html' -o -name '*.htm' -o \
-              -name '*.py' -o -name '*.sh' -o -name '*.go' -o -name '*.rs' -o \
-              -name '*.java' -o -name '*.c' -o -name '*.h' -o -name '*.cpp' -o \
-              -name '*.hpp' -o -name '*.vue' -o -name '*.svelte' \
+              -name '*.js' -o -name '*.jsx' -o -name '*.mjs' -o -name '*.cjs' -o \
+              -name '*.ts' -o -name '*.tsx' -o -name '*.css' -o -name '*.scss' -o -name '*.sass' -o -name '*.less' -o \
+              -name '*.html' -o -name '*.htm' -o -name '*.vue' -o -name '*.svelte' -o \
+              -name '*.py' -o -name '*.pyw' -o -name '*.sh' -o -name '*.bash' -o -name '*.zsh' -o \
+              -name '*.go' -o -name '*.rs' -o -name '*.java' -o -name '*.kt' -o -name '*.kts' -o \
+              -name '*.c' -o -name '*.h' -o -name '*.cc' -o -name '*.cpp' -o -name '*.cxx' -o \
+              -name '*.hpp' -o -name '*.cs' -o -name '*.php' -o -name '*.rb' -o -name '*.swift' -o \
+              -name '*.sql' -o -name '*.graphql' -o -name '*.gql' -o -name '*.proto' \
             \) -print0 | while IFS= read -r -d '' f; do
               rel="${f#"$src/"}"
               mkdir -p "$dst/$(dirname "$rel")"
@@ -58,7 +69,8 @@ jobs:
           }
 
           copy_code "$GITHUB_WORKSPACE/source-chat" "$GITHUB_WORKSPACE/target/IMPORTED_CODE/CHAT_FRONTEND"
-          copy_code "$GITHUB_WORKSPACE/source-hub" "$GITHUB_WORKSPACE/target/IMPORTED_CODE/NCT_HUB"
+          copy_code "$GITHUB_WORKSPACE/source-command-center" "$GITHUB_WORKSPACE/target/IMPORTED_CODE/COMMAND_CENTER"
+          copy_code "$GITHUB_WORKSPACE/source-comand-center" "$GITHUB_WORKSPACE/target/IMPORTED_CODE/COMAND_CENTER"
 
           cd "$GITHUB_WORKSPACE/target"
           git config user.name 'github-actions[bot]'
@@ -68,5 +80,5 @@ jobs:
             echo 'No code changes to import.'
             exit 0
           fi
-          git commit -m 'chore: import chat interface code from chat-frontend and nct-hub'
+          git commit -m 'chore: import code from chat-frontend and command centers'
           git push
