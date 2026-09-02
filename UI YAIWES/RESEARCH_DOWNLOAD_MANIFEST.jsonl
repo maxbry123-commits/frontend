@@ -1,2 +1,3 @@
 {"number": 1, "parts": 1, "slug": "Transformers.js", "source": "https://github.com/huggingface/transformers.js.git", "source_commit": "bf27627c7e3d706133fd773c32b212470785e367", "status": "COMPLETE"}
 {"number": 2, "parts": 1, "slug": "MLC-WebLLM", "source": "https://github.com/mlc-ai/web-llm.git", "source_commit": "fa123eba72978920c6c9f1b1e96c0c7c6be41f0f", "status": "COMPLETE"}
+{"number": 3, "parts": 25, "slug": "ONNX-Runtime", "source": "https://github.com/microsoft/onnxruntime.git", "source_commit": "2a5b485430c882f220c07d12a00e795c04a88258", "status": "COMPLETE"}
