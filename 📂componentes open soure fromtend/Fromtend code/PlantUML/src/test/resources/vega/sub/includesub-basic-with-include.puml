@@ -1,8 +1,0 @@
----
-output: preproc
----
-@startuml
-
-title this contains only B and D
-!includesub includesub-basic.puml!BASIC
-@enduml

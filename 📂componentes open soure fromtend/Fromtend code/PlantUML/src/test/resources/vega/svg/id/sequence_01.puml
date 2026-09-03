@@ -1,6 +1,0 @@
----
-output: svg
----
-@startuml
-a -> b
-@enduml

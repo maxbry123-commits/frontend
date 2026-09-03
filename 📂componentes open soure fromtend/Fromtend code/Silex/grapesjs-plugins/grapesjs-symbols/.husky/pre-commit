@@ -1,5 +1,0 @@
-npm install --package-lock-only --workspaces false
-git update-index --again
-npm run build
-npm test
-npm run lint

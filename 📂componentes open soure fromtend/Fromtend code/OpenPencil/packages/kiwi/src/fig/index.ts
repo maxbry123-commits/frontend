@@ -1,5 +1,0 @@
-export { default as figmaSchema } from './schema'
-export * from './page-manifest'
-export * from './protocol'
-export * from './types'
-export * from './variable-bindings'

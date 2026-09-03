@@ -1,7 +1,0 @@
-@startpacketdiag
-{
-  0-3: A [height = 3]
-  4-7: B
-  8-15: C
-}
-@endpacketdiag

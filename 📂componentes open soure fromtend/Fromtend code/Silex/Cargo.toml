@@ -1,6 +1,0 @@
-[workspace]
-members = [
-    "server-rust",
-    "desktop/src-tauri",
-]
-resolver = "2"

@@ -1,7 +1,0 @@
-@startpacketdiag
-{
-  0-3: A [description = desc_value]
-  4-7: B
-  8-15: C
-}
-@endpacketdiag

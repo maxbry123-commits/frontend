@@ -1,9 +1,0 @@
-@startpacketdiag
-{
-  colwidth = 16
-  same_height = true
-  0-3: A [colheight = 3]
-  4-7: B
-  8-15: C
-}
-@endpacketdiag

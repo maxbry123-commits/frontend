@@ -1,8 +1,0 @@
----
-output: svg, debug, atxt, utxt
-expected-description: (2 participants)
----
-@startuml
-alice->bob: this is a test
-note right: Some right note
-@enduml

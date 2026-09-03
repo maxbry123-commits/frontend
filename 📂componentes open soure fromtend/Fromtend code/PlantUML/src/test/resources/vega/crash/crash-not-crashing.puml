@@ -1,8 +1,0 @@
----
-output: svg
-expected-description: Crash Diagram
-expected-status: 0
----
-@startcrash
-This is working
-@endcrash
