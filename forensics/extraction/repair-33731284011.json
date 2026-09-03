@@ -1,0 +1,115 @@
+{
+  "schema": "yaiwes.extraction.guardian.v1",
+  "run_id": "33731284011",
+  "archive_groups": 27,
+  "pending_before": 15,
+  "processed": [
+    {
+      "slug": "accessibility-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/accessibility-skills",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "📂componentes open soure fromtend/Fromtend code/accessibility-skills_0001.zip": "a45486e86015e12a4655595df0bb42bf4c1c70662d65295bd9f8cbea8e12111f"
+      },
+      "copied": 209,
+      "mirrors": [],
+      "files": 209,
+      "bytes": 1569035,
+      "tree_sha256": "44f0c4caac56fb8e740a310ed498f15dee29a9cc7065b50ae8b1b17b2ecd89c8"
+    },
+    {
+      "slug": "Onlook",
+      "target": "📂componentes open soure fromtend/Fromtend code/Onlook",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 2,
+      "part_sha256": {
+        "📂componentes open soure fromtend/Fromtend code/Onlook_0001.zip": "5d123f48e28db6f5d73daeec5d668e59d7547c0abfe35a34d786e5457ad8b035",
+        "📂componentes open soure fromtend/Fromtend code/Onlook_0002.zip": "7ca1383eebf1b6af13a243bd34b7b3cb3a40e0ba57fc71aaeffdd6f6a9489990"
+      },
+      "copied": 1695,
+      "mirrors": [],
+      "files": 1695,
+      "bytes": 26679152,
+      "tree_sha256": "80802d729d6d130315371b3cbb71e33656f35ee32a0dd636f82f3bb51123040e"
+    },
+    {
+      "slug": "frontend-audit-skill",
+      "target": "📂componentes open soure fromtend/Fromtend code/frontend-audit-skill",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "📂componentes open soure fromtend/Fromtend code/frontend-audit-skill_0001.zip": "6faa2c22e7e827521990662cea752f96efb7301d0c87bccd4a283617e58f5821"
+      },
+      "copied": 17,
+      "mirrors": [],
+      "files": 17,
+      "bytes": 228278,
+      "tree_sha256": "569915416fc195dde93c355ac986eea9dcf3f19aa21e7972f4c4cac4580668d7"
+    }
+  ],
+  "failures": [],
+  "remaining_gaps": [
+    {
+      "slug": "Frappe-Builder",
+      "target": "📂componentes open soure fromtend/Fromtend code/Frappe-Builder",
+      "mirror": null
+    },
+    {
+      "slug": "nolly-agent-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/nolly-agent-skills",
+      "mirror": null
+    },
+    {
+      "slug": "PracticalSwan-agent-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/PracticalSwan-agent-skills",
+      "mirror": null
+    },
+    {
+      "slug": "ui-ux-pro-max-skill",
+      "target": "📂componentes open soure fromtend/Fromtend code/ui-ux-pro-max-skill",
+      "mirror": null
+    },
+    {
+      "slug": "Craft.js",
+      "target": "📂componentes open soure fromtend/Fromtend code/Craft.js",
+      "mirror": null
+    },
+    {
+      "slug": "microsoft-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/microsoft-skills",
+      "mirror": null
+    },
+    {
+      "slug": "Silex",
+      "target": "📂componentes open soure fromtend/Fromtend code/Silex",
+      "mirror": null
+    },
+    {
+      "slug": "LiteRT",
+      "target": "📂componentes open soure fromtend/UI YAIWES/LiteRT",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    },
+    {
+      "slug": "ONNX-Runtime",
+      "target": "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    },
+    {
+      "slug": "wllama",
+      "target": "📂componentes open soure fromtend/UI YAIWES/wllama",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    },
+    {
+      "slug": "MLC-WebLLM",
+      "target": "📂componentes open soure fromtend/UI YAIWES/MLC-WebLLM",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    },
+    {
+      "slug": "Transformers.js",
+      "target": "📂componentes open soure fromtend/UI YAIWES/Transformers.js",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    }
+  ],
+  "verdict": "GAPS_PENDING"
+}
