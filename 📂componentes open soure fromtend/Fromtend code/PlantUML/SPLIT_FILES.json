@@ -1,0 +1,30 @@
+[
+  {
+    "repo": "PlantUML",
+    "path": "src/main/resources/teavm/material7.4.47.min.js",
+    "chunks_dir": "PlantUML/src/main/resources/teavm/material7.4.47.min.js.chunks",
+    "bytes": 17151755,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "PlantUML",
+    "path": "src/main/resources/teavm/awslib20.min.js",
+    "chunks_dir": "PlantUML/src/main/resources/teavm/awslib20.min.js.chunks",
+    "bytes": 10182413,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "PlantUML",
+    "path": "src/main/resources/teavm/ibm.min.js",
+    "chunks_dir": "PlantUML/src/main/resources/teavm/ibm.min.js.chunks",
+    "bytes": 23636085,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "PlantUML",
+    "path": "src/main/resources/teavm/tupadr3.min.js",
+    "chunks_dir": "PlantUML/src/main/resources/teavm/tupadr3.min.js.chunks",
+    "bytes": 20227666,
+    "chunk_bytes": 8388608
+  }
+]
