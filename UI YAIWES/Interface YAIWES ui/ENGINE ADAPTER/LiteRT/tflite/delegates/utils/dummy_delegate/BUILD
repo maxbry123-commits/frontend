@@ -1,0 +1,86 @@
+# Copyright 2026 The TensorFlow Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+
+load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("//tflite:build_def.bzl", "tflite_copts")
+
+package(
+    # copybara:uncomment default_applicable_licenses = ["@org_tensorflow//tensorflow:license"],
+    default_visibility = [
+        "//visibility:public",
+    ],
+    licenses = ["notice"],
+)
+
+cc_library(
+    name = "dummy_delegate",
+    srcs = [
+        "dummy_delegate.cc",
+    ],
+    hdrs = [
+        "dummy_delegate.h",
+    ],
+    deps = [
+        "//tflite/c:c_api_types",
+        "//tflite/c:common",
+        "//tflite/core/c:common",
+        "//tflite/delegates/utils:simple_delegate",
+    ],
+)
+
+cc_binary(
+    name = "dummy_external_delegate.so",
+    srcs = [
+        "external_delegate_adaptor.cc",
+    ],
+    defines = ["TFL_EXTERNAL_DELEGATE_COMPILE_LIBRARY"],
+    linkshared = 1,
+    linkstatic = 1,
+    deps = [
+        ":dummy_delegate",
+        "//tflite/core/c:common",
+        "//tflite/delegates/external:external_delegate_interface",
+        "//tflite/tools:command_line_flags",
+        "//tflite/tools:logging",
+    ],
+)
+
+#### The following are for using the dummy test delegate in TFLite tooling ####
+cc_library(
+    name = "dummy_delegate_provider",
+    srcs = ["dummy_delegate_provider.cc"],
+    copts = tflite_copts(),
+    deps = [
+        ":dummy_delegate",
+        "//tflite/c:c_api_types",
+        "//tflite/tools:command_line_flags",
+        "//tflite/tools:tool_params",
+        "//tflite/tools/delegates:delegate_provider_hdr",
+    ],
+    alwayslink = 1,
+)
+
+sh_test(
+    name = "external_delegate_test",
+    srcs = ["external_delegate_test.sh"],
+    data = [
+        "//tflite/delegates/utils/dummy_delegate:dummy_external_delegate.so",
+        "//tflite/tools/benchmark:benchmark_model",
+        "@tflite_mobilenet_float//:mobilenet_v1_1.0_224.tflite",
+    ],
+    visibility = ["//visibility:private"],
+)

@@ -1,0 +1,158 @@
+// Copyright 2026 Google LLC.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#ifndef ODML_LITERT_LITERT_CORE_MODEL_OPS_TRANSPOSE_H_
+#define ODML_LITERT_LITERT_CORE_MODEL_OPS_TRANSPOSE_H_
+
+#include <cstddef>
+#include <cstdint>
+#include <type_traits>
+#include <utility>
+#include <vector>
+
+#include "absl/log/absl_check.h"  // from @com_google_absl
+#include "absl/types/span.h"  // from @com_google_absl
+#include "litert/c/litert_common.h"
+#include "litert/core/model/model.h"
+#include "litert/core/model/shape_inference_types.h"
+
+namespace litert::internal {
+
+inline LiteRtStatus InferTranspose(const LiteRtOpT& op,
+                                   absl::Span<const Dims> input_shapes,
+                                   std::vector<Dims>& output_shapes) {
+  constexpr int kTransposeMinArgs = 2;
+  constexpr int kInputArgIndex = 0;
+  constexpr int kPermArgIndex = 1;
+
+  if (input_shapes.size() < kTransposeMinArgs) {
+    return kLiteRtStatusErrorShapeInferenceFailed;
+  }
+  const auto& input_shape = input_shapes[kInputArgIndex];
+  const auto& perm_tensor = op.Input(kPermArgIndex);
+
+  if (output_shapes.empty()) {
+    output_shapes.resize(1);
+  }
+
+  if (perm_tensor.Weights().Buffer().Size() > 0) {
+    auto buf = perm_tensor.Weights().Buffer();
+    const int32_t* perm = reinterpret_cast<const int32_t*>(buf.Data());
+    size_t rank = buf.Size() / sizeof(int32_t);
+    if (rank != input_shape.size()) {
+      return kLiteRtStatusErrorShapeInferenceFailed;
+    }
+
+    Dims out_shape(rank);
+    for (int i = 0; i < rank; ++i) {
+      if (perm[i] < 0 || perm[i] >= rank) {
+        return kLiteRtStatusErrorShapeInferenceFailed;
+      }
+      out_shape[i] = input_shape[perm[i]];
+    }
+    output_shapes[0] = std::move(out_shape);
+    return kLiteRtStatusOk;
+  }
+
+  output_shapes[0] = Dims(input_shape.size(), -1);
+  return kLiteRtStatusOk;
+}
+
+template <typename T, typename = void>
+struct HasSubByte4 : std::false_type {};
+
+template <typename T>
+struct HasSubByte4<T, std::void_t<decltype(std::declval<T>().c),
+                                  decltype(std::declval<T>().d)>>
+    : std::true_type {};
+
+template <typename T, typename = void>
+struct HasSubByte2 : std::false_type {};
+
+template <typename T>
+struct HasSubByte2<T, std::void_t<decltype(std::declval<T>().a),
+                                  decltype(std::declval<T>().b)>>
+    : std::true_type {};
+
+constexpr int kMaxRank = 8;
+
+template <typename T>
+inline void ReferenceTranspose(const T* input_data, const int32_t* input_dims,
+                               const int32_t* perm, int rank, T* output_data) {
+  if (rank <= 0) return;
+  ABSL_CHECK_LE(rank, kMaxRank);
+  int64_t in_strides[kMaxRank];
+  int64_t out_strides[kMaxRank];
+
+  in_strides[rank - 1] = 1;
+  for (int i = rank - 2; i >= 0; --i) {
+    in_strides[i] = in_strides[i + 1] * input_dims[i + 1];
+  }
+
+  out_strides[rank - 1] = 1;
+  for (int i = rank - 2; i >= 0; --i) {
+    out_strides[i] = out_strides[i + 1] * input_dims[perm[i + 1]];
+  }
+
+  int64_t num_elements = in_strides[0] * input_dims[0];
+
+  auto get_in_idx = [&](int64_t o) {
+    int64_t temp = o;
+    int64_t in_idx = 0;
+    for (int i = 0; i < rank; ++i) {
+      int64_t coord = temp / out_strides[i];
+      temp %= out_strides[i];
+      in_idx += coord * in_strides[perm[i]];
+    }
+    return in_idx;
+  };
+
+  if constexpr (HasSubByte4<T>::value) {
+    auto get_elem = [&](int64_t in_idx) {
+      switch (in_idx & 3) {
+        case 0:
+          return input_data[in_idx >> 2].a;
+        case 1:
+          return input_data[in_idx >> 2].b;
+        case 2:
+          return input_data[in_idx >> 2].c;
+        default:
+          return input_data[in_idx >> 2].d;
+      }
+    };
+    for (int64_t o = 0; o < num_elements >> 2; ++o) {
+      output_data[o].a = get_elem(get_in_idx(o << 2));
+      output_data[o].b = get_elem(get_in_idx((o << 2) + 1));
+      output_data[o].c = get_elem(get_in_idx((o << 2) + 2));
+      output_data[o].d = get_elem(get_in_idx((o << 2) + 3));
+    }
+  } else if constexpr (HasSubByte2<T>::value) {
+    auto get_elem = [&](int64_t in_idx) {
+      return (in_idx & 1) == 0 ? input_data[in_idx >> 1].a
+                               : input_data[in_idx >> 1].b;
+    };
+    for (int64_t o = 0; o < num_elements >> 1; ++o) {
+      output_data[o].a = get_elem(get_in_idx(o << 1));
+      output_data[o].b = get_elem(get_in_idx((o << 1) + 1));
+    }
+  } else {
+    for (int64_t o = 0; o < num_elements; ++o) {
+      output_data[o] = input_data[get_in_idx(o)];
+    }
+  }
+}
+
+}  // namespace litert::internal
+
+#endif  // ODML_LITERT_LITERT_CORE_MODEL_OPS_TRANSPOSE_H_

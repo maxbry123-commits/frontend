@@ -1,0 +1,318 @@
+/* Copyright 2025 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+#include "litert/tools/benchmark_litert_model.h"
+
+#include <fcntl.h>
+#include <sys/stat.h>
+
+#include <cstddef>
+#include <cstdlib>
+#include <fstream>
+#include <ios>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include <gtest/gtest.h>
+#include "absl/flags/flag.h"  // from @com_google_absl
+#include "absl/types/span.h"  // from @com_google_absl
+#include "litert/cc/litert_tensor_buffer.h"
+#include "litert/cc/options/litert_mediatek_options.h"
+#include "litert/cc/options/litert_qualcomm_options.h"
+#include "litert/tools/flags/vendors/mediatek_flags.h"
+#include "litert/tools/flags/vendors/qualcomm_flags.h"
+#include "tflite/core/c/c_api_types.h"
+#include "tflite/tools/benchmark/benchmark_model.h"
+#include "tflite/tools/benchmark/benchmark_params.h"
+
+namespace litert {
+namespace benchmark {
+namespace {
+using ::litert::benchmark::BenchmarkLiteRtModel;
+using ::tflite::benchmark::BenchmarkListener;
+using ::tflite::benchmark::BenchmarkParams;
+using ::tflite::benchmark::BenchmarkResults;
+
+static constexpr char kModelPath[] =
+    "litert/test/testdata/"
+    "mobilenet_v2_1.0_224.tflite";
+static constexpr char kSignatureToRunFor[] = "<placeholder signature>";
+
+class TestBenchmarkListener : public BenchmarkListener {
+ public:
+  void OnBenchmarkEnd(const BenchmarkResults& results) override {
+    results_ = results;
+  }
+
+  BenchmarkResults results_;
+};
+
+}  // namespace
+
+// Test fixture moved out of anonymous namespace to be accessible for
+// friendship.
+class BenchmarkLiteRtModelTest : public ::testing::Test {
+ protected:
+  std::vector<litert::TensorBuffer>& GetInputBuffers(
+      BenchmarkLiteRtModel& benchmark) {
+    return *benchmark.input_buffers_;
+  }
+};
+
+namespace {
+
+TEST_F(BenchmarkLiteRtModelTest, GetModelSizeFromPathSucceeded) {
+  BenchmarkParams params = BenchmarkLiteRtModel::DefaultParams();
+  params.Set<std::string>("graph", kModelPath);
+  params.Set<std::string>("signature_to_run_for", kSignatureToRunFor);
+  params.Set<int>("num_runs", 1);
+  params.Set<int>("warmup_runs", 0);
+  params.Set<bool>("use_cpu", true);
+  params.Set<bool>("use_gpu", false);
+  params.Set<bool>("require_full_delegation", false);
+  params.Set<bool>("use_profiler", true);
+
+  BenchmarkLiteRtModel benchmark = BenchmarkLiteRtModel(std::move(params));
+  TestBenchmarkListener listener;
+  benchmark.AddListener(&listener);
+
+  benchmark.Run();
+
+  EXPECT_GE(listener.results_.model_size_mb(), 0);
+}
+
+TEST_F(BenchmarkLiteRtModelTest, DefaultParamsExposeXnnpackWeightCacheOptions) {
+  BenchmarkParams params = BenchmarkLiteRtModel::DefaultParams();
+
+  EXPECT_TRUE(params.HasParam("xnnpack_weight_cache_file_path"));
+  EXPECT_EQ(params.Get<std::string>("xnnpack_weight_cache_file_path"), "");
+}
+
+TEST_F(BenchmarkLiteRtModelTest, CpuOnlyInitDoesNotProbeGpuAccelerator) {
+#if defined(LITERT_DISABLE_GPU)
+  GTEST_SKIP() << "GPU accelerator auto-registration is disabled.";
+#endif
+  BenchmarkParams params = BenchmarkLiteRtModel::DefaultParams();
+  params.Set<std::string>("graph", kModelPath);
+  params.Set<std::string>("signature_to_run_for", kSignatureToRunFor);
+  params.Set<bool>("use_cpu", true);
+  params.Set<bool>("use_gpu", false);
+  params.Set<bool>("use_npu", false);
+  params.Set<bool>("require_full_delegation", false);
+
+  BenchmarkLiteRtModel benchmark = BenchmarkLiteRtModel(std::move(params));
+
+  testing::internal::CaptureStderr();
+  EXPECT_EQ(benchmark.Init(), kTfLiteOk);
+  const std::string logs = testing::internal::GetCapturedStderr();
+
+  EXPECT_EQ(logs.find("Attempting to load GPU accelerator("), std::string::npos)
+      << logs;
+}
+
+TEST_F(BenchmarkLiteRtModelTest, BenchmarkWithXnnpackWeightCacheFilePath) {
+  BenchmarkParams params = BenchmarkLiteRtModel::DefaultParams();
+  params.Set<std::string>("graph", kModelPath);
+  params.Set<std::string>("signature_to_run_for", kSignatureToRunFor);
+  params.Set<bool>("use_cpu", true);
+  params.Set<bool>("use_gpu", false);
+  params.Set<bool>("require_full_delegation", false);
+
+  std::string cache_file_path = ::testing::TempDir();
+  if (!cache_file_path.empty() && cache_file_path.back() != '/') {
+    cache_file_path.push_back('/');
+  }
+  cache_file_path += "litert_xnnpack_weight_cache_test.bin";
+  params.Set<std::string>("xnnpack_weight_cache_file_path", cache_file_path);
+
+  BenchmarkLiteRtModel benchmark = BenchmarkLiteRtModel(std::move(params));
+
+  EXPECT_EQ(benchmark.Init(), kTfLiteOk);
+}
+
+TEST_F(BenchmarkLiteRtModelTest, BenchmarkWithResultFilePath) {
+  BenchmarkParams params = BenchmarkLiteRtModel::DefaultParams();
+  params.Set<std::string>("graph", kModelPath);
+  params.Set<std::string>("signature_to_run_for", kSignatureToRunFor);
+  params.Set<bool>("use_cpu", true);
+  params.Set<bool>("use_gpu", false);
+  params.Set<bool>("require_full_delegation", false);
+
+#if defined(__ANDROID__)
+  std::string result_file_path = "/data/local/tmp/benchmark_result.pb";
+#else
+  std::string result_file_path = "/tmp/benchmark_result.pb";
+#endif
+  params.Set<std::string>("result_file_path", result_file_path);
+
+  BenchmarkLiteRtModel benchmark = BenchmarkLiteRtModel(std::move(params));
+  TestBenchmarkListener listener;
+  benchmark.AddListener(&listener);
+
+  EXPECT_EQ(benchmark.Run(), kTfLiteOk);
+
+  std::ifstream in_file(result_file_path, std::ios::binary | std::ios::in);
+  BenchmarkResult result;
+  result.ParseFromIstream(&in_file);
+
+  // Verify latency metrics.
+  EXPECT_FLOAT_EQ(result.latency_metrics().init_ms(),
+                  listener.results_.startup_latency_us() / 1000.0);
+  EXPECT_FLOAT_EQ(result.latency_metrics().first_inference_ms(),
+                  listener.results_.warmup_time_us().first() / 1000.0);
+  EXPECT_FLOAT_EQ(result.latency_metrics().average_warm_up_ms(),
+                  listener.results_.warmup_time_us().avg() / 1000.0);
+  EXPECT_FLOAT_EQ(result.latency_metrics().avg_ms(),
+                  listener.results_.inference_time_us().avg() / 1000.0);
+  EXPECT_FLOAT_EQ(result.latency_metrics().min_ms(),
+                  listener.results_.inference_time_us().min() / 1000.0);
+  EXPECT_FLOAT_EQ(result.latency_metrics().max_ms(),
+                  listener.results_.inference_time_us().max() / 1000.0);
+  EXPECT_FLOAT_EQ(
+      result.latency_metrics().stddev_ms(),
+      listener.results_.inference_time_us().std_deviation() / 1000.0);
+  EXPECT_FLOAT_EQ(
+      result.latency_metrics().median_ms(),
+      listener.results_.inference_time_us().percentile(50) / 1000.0);
+  EXPECT_FLOAT_EQ(
+      result.latency_metrics().p95_ms(),
+      listener.results_.inference_time_us().percentile(95) / 1000.0);
+  EXPECT_FLOAT_EQ(result.latency_metrics().p5_ms(),
+                  listener.results_.inference_time_us().percentile(5) / 1000.0);
+
+  // Verify memory metrics.
+  EXPECT_EQ(result.memory_metrics().init_footprint_kb(),
+            listener.results_.init_mem_usage().mem_footprint_kb);
+  EXPECT_EQ(result.memory_metrics().overall_footprint_kb(),
+            listener.results_.overall_mem_usage().mem_footprint_kb);
+  EXPECT_EQ(result.memory_metrics().has_peak_mem_mb(), false);
+
+  // Verify misc metrics.
+  EXPECT_FLOAT_EQ(result.misc_metrics().model_size_mb(),
+                  listener.results_.model_size_mb());
+  EXPECT_EQ(result.misc_metrics().num_runs(),
+            listener.results_.inference_time_us().count());
+  EXPECT_EQ(result.misc_metrics().num_warmup_runs(),
+            listener.results_.warmup_time_us().count());
+  EXPECT_FLOAT_EQ(result.misc_metrics().model_throughput_in_mb_per_sec(),
+                  listener.results_.throughput_MB_per_second());
+}
+
+TEST_F(BenchmarkLiteRtModelTest, BenchmarkWithModelRuntimeInfoFilePath) {
+  BenchmarkParams params = BenchmarkLiteRtModel::DefaultParams();
+  params.Set<std::string>("graph", kModelPath);
+  params.Set<std::string>("signature_to_run_for", kSignatureToRunFor);
+  params.Set<bool>("use_cpu", true);
+  params.Set<bool>("use_gpu", false);
+  params.Set<bool>("require_full_delegation", false);
+  std::string model_runtime_info_output_file;
+#if defined(__ANDROID__)
+  model_runtime_info_output_file = "/data/local/tmp/model_runtime_info.pb";
+#else
+  model_runtime_info_output_file = "/tmp/model_runtime_info.pb";
+#endif
+  params.Set<std::string>("model_runtime_info_output_file",
+                          model_runtime_info_output_file);
+
+  BenchmarkLiteRtModel benchmark = BenchmarkLiteRtModel(std::move(params));
+  EXPECT_EQ(benchmark.Run(), kTfLiteOk);
+
+  std::ifstream in_file(model_runtime_info_output_file,
+                        std::ios::binary | std::ios::in);
+  tflite::profiling::ModelRuntimeDetails model_runtime_details;
+  model_runtime_details.ParseFromIstream(&in_file);
+  EXPECT_EQ(model_runtime_details.subgraphs_size(), 1);
+  EXPECT_GT(model_runtime_details.subgraphs(0).execution_plan_size(), 0);
+  EXPECT_GT(model_runtime_details.subgraphs(0).nodes_size(), 0);
+  EXPECT_GT(model_runtime_details.subgraphs(0).edges_size(), 0);
+}
+
+// Use TEST_F to use the friend class fixture.
+TEST_F(BenchmarkLiteRtModelTest, BenchmarkWithInputLayerValueRange) {
+  BenchmarkParams params = BenchmarkLiteRtModel::DefaultParams();
+  params.Set<std::string>("graph", kModelPath);
+  params.Set<std::string>("signature_to_run_for", kSignatureToRunFor);
+  params.Set<bool>("use_cpu", true);
+  params.Set<bool>("use_gpu", false);
+  params.Set<bool>("require_full_delegation", false);
+  // The input name of mobilenet_v2_1.0_224.tflite is "input".
+  params.Set<std::string>("input_layer_value_range", "input,10.0,20.0");
+
+  BenchmarkLiteRtModel benchmark = BenchmarkLiteRtModel(std::move(params));
+  EXPECT_EQ(benchmark.Init(), kTfLiteOk);
+  EXPECT_EQ(benchmark.PrepareInputData(), kTfLiteOk);
+
+  // Verify the input data range.
+  auto& input_buffers = GetInputBuffers(benchmark);
+  ASSERT_EQ(input_buffers.size(), 1);
+  auto& buffer = input_buffers[0];
+
+  auto size_bytes_res = buffer.PackedSize();
+  ASSERT_TRUE(size_bytes_res.HasValue());
+  size_t size_bytes = size_bytes_res.Value();
+  size_t num_elements = size_bytes / sizeof(float);
+
+  std::vector<float> data(num_elements);
+  ASSERT_TRUE(buffer.Read<float>(absl::MakeSpan(data)).HasValue());
+
+  for (size_t i = 0; i < num_elements; ++i) {
+    EXPECT_GE(data[i], 10.0f);
+    EXPECT_LE(data[i], 20.0f);
+  }
+}
+
+}  // namespace
+
+int Main(int argc, char** argv);
+
+namespace {
+
+TEST(BenchmarkLiteRtModelMainTest, MainFunctionParseFlags) {
+  using litert::mediatek::MediatekOptions;
+  using litert::qualcomm::QualcommOptions;
+  std::string graph_flag = std::string("--graph=") + kModelPath;
+  const char* argv[] = {
+      "benchmark_model",
+      graph_flag.c_str(),
+      "--use_cpu=true",
+      "--use_gpu=false",
+      "--require_full_delegation=false",
+      "--num_runs=1",
+      "--warmup_runs=0",
+      "--mediatek_enable_l1_cache_optimizations=true",
+      "--mediatek_performance_mode_type=turbo_boost",
+      "--qualcomm_htp_performance_mode=burst",
+  };
+  int argc = sizeof(argv) / sizeof(argv[0]);
+
+  absl::SetFlag(&FLAGS_mediatek_enable_l1_cache_optimizations, false);
+  absl::SetFlag(&FLAGS_mediatek_performance_mode_type,
+                MediatekOptions::PerformanceMode::kSustainedSpeed);
+  absl::SetFlag(&FLAGS_qualcomm_htp_performance_mode,
+                QualcommOptions::HtpPerformanceMode::kDefault);
+
+  EXPECT_EQ(Main(argc, const_cast<char**>(argv)), EXIT_SUCCESS);
+
+  EXPECT_TRUE(absl::GetFlag(FLAGS_mediatek_enable_l1_cache_optimizations));
+  EXPECT_EQ(absl::GetFlag(FLAGS_mediatek_performance_mode_type),
+            MediatekOptions::PerformanceMode::kTurboBoost);
+  EXPECT_EQ(absl::GetFlag(FLAGS_qualcomm_htp_performance_mode),
+            QualcommOptions::HtpPerformanceMode::kBurst);
+}
+
+}  // namespace
+}  // namespace benchmark
+}  // namespace litert

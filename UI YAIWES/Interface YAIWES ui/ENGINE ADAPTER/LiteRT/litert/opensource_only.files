@@ -1,0 +1,17 @@
+/litert/ats/README.md:
+/litert/build_common/special_rule.bzl:
+/litert/build_common/strict.default.bzl:
+/litert/compiler/BUILD:
+/litert/core/util/perfetto_profiling.cc:
+/litert/core/util/perfetto_profiling.h:
+/litert/python/aot/core/tflxx_util.py:
+/litert/python/mlir/BUILD:
+/opensource_only/ci/tools/python/vendor_sdk/BUILD:
+/opensource_only/ci/tools/python/vendor_sdk/google_tensor/BUILD:
+/opensource_only/ci/tools/python/vendor_sdk/intel/BUILD:
+/opensource_only/ci/tools/python/vendor_sdk/mediatek/BUILD:
+/opensource_only/ci/tools/python/vendor_sdk/qualcomm/BUILD:
+/opensource_only/ci/tools/python/vendor_sdk/samsung/BUILD:
+/opensource_only/ci/tools/python/wheel/BUILD:
+/opensource_only/ci/tools/python/wheel/utils/BUILD:
+/tensor/examples/utils/initialization:.cc
