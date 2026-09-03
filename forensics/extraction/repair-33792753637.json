@@ -1,0 +1,45 @@
+{
+  "schema": "yaiwes.extraction.guardian.v2",
+  "run_id": "33792753637",
+  "archive_groups": 27,
+  "processed": [],
+  "failures": [],
+  "remaining_gaps": [
+    {
+      "slug": "OpenPencil",
+      "target": "📂componentes open soure fromtend/Fromtend code/OpenPencil",
+      "mirror": null
+    },
+    {
+      "slug": "LiteRT",
+      "target": "📂componentes open soure fromtend/UI YAIWES/LiteRT",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    }
+  ],
+  "retryable_gaps": [],
+  "blocked_gaps": [
+    {
+      "slug": "OpenPencil",
+      "target": "📂componentes open soure fromtend/Fromtend code/OpenPencil",
+      "mirror": null,
+      "code": "SOURCE_LFS_POINTER_GAP",
+      "detail": "SOURCE_LFS_POINTER_GAP:existing:OpenPencil/tests/fixtures/circle-text.fig,OpenPencil/tests/fixtures/fonts/NotoNaskhArabic-Regular.ttf,OpenPencil/tests/fixtures/gold-preview.fig",
+      "evidence": "forensics/extraction/repair-33790605091.json"
+    },
+    {
+      "slug": "LiteRT",
+      "target": "📂componentes open soure fromtend/UI YAIWES/LiteRT",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER",
+      "code": "SOURCE_LFS_POINTER_GAP",
+      "detail": "SOURCE_LFS_POINTER_GAP:LiteRT/litert/prebuilt/android_arm32/libLiteRt.so,LiteRT/litert/prebuilt/android_arm32/libLiteRtClGlAccelerator.so,LiteRT/litert/prebuilt/android_arm64/libLiteRt.so,LiteRT/litert/prebuilt/android_arm64/libLiteRtClGlAccelerator.so,LiteRT/litert/prebuilt/android_arm64/libLiteRtWebGpuAccelerator.so,LiteRT/litert/prebuilt/android_x86_64/libLiteRt.so,LiteRT/litert/prebuilt/android_x86_64/libLiteRtClGlAccelerator.so,LiteRT/litert/prebuilt/android_x86_64/libLiteRtWebGpuAccelerator.so,LiteRT/litert/prebuilt/ios_arm64/libLiteRt.dylib,LiteRT/litert/prebuilt/ios_arm64/libLiteRtMetalAccelerator.dylib,LiteRT/litert/prebuilt/ios_sim_arm64/libLiteRt.dylib,LiteRT/litert/prebuilt/ios_sim_arm64/libLiteRtMetalAccelerator.dylib,LiteRT/litert/prebuilt/linux_arm64/libLiteRt.so,LiteRT/litert/prebuilt/linux_arm64/libLiteRtWebGpuAccelerator.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRt.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRtCompilerPlugin_IntelOpenvino.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRtCompilerPlugin_Qualcomm.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRtCompilerPlugin_google_tensor.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRtWebGpuAccelerator.so,LiteRT/litert/prebuilt/macos_arm64/libLiteRt.dylib",
+      "evidence": "forensics/extraction/repair-33790605091.json"
+    }
+  ],
+  "counts": {
+    "remaining": 2,
+    "retryable": 0,
+    "blocked": 2,
+    "processed": 0
+  },
+  "verdict": "GAPS_PENDING"
+}
