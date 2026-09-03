@@ -1,0 +1,42 @@
+name: Frontend extract verified components
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/frontend-extract-verified-components.yml"
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: frontend-extract-verified-components
+  cancel-in-progress: false
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout ZIP payloads and extractor
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: false
+          filter: blob:none
+          sparse-checkout: |
+            📂componentes open soure fromtend/Fromtend code
+            📂componentes open soure fromtend/UI YAIWES
+            📂componentes open soure fromtend/tools/extract_verified_components.py
+            UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER
+            📂 skills de fromtend/📂 archivos skills fromtend
+          sparse-checkout-cone-mode: false
+
+      - name: X-Ray extract 27 components, verify and remove ZIP only after PASS
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "📂componentes open soure fromtend/tools/extract_verified_components.py"
