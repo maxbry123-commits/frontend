@@ -1,0 +1,84 @@
+{
+  "schema": "yaiwes.extraction.guardian.v1",
+  "run_id": "33731470084",
+  "archive_groups": 27,
+  "pending_before": 9,
+  "processed": [
+    {
+      "slug": "Craft.js",
+      "target": "📂componentes open soure fromtend/Fromtend code/Craft.js",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "📂componentes open soure fromtend/Fromtend code/Craft.js_0001.zip": "0b9a9a9ba7ea137eb1d1907f924dcddc2a3110e11559dfaa58cbf879bc20a4f8"
+      },
+      "copied": 373,
+      "mirrors": [],
+      "files": 373,
+      "bytes": 7873658,
+      "tree_sha256": "fc3f0ba0adb0977818af6590bd915842f41ccc80351fa56a204f80ec79774c9e"
+    },
+    {
+      "slug": "Frappe-Builder",
+      "target": "📂componentes open soure fromtend/Fromtend code/Frappe-Builder",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "📂componentes open soure fromtend/Fromtend code/Frappe-Builder_0001.zip": "1502e13e1104be7bafce8361ea782810a917c6f65a59fb624927cef9d718627e"
+      },
+      "copied": 628,
+      "mirrors": [],
+      "files": 628,
+      "bytes": 9530873,
+      "tree_sha256": "c7e9ce1dc1a2ecd58d8d8257ca88a11013083ae6a9b76684c41bb3806befe25f"
+    },
+    {
+      "slug": "nolly-agent-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/nolly-agent-skills",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "📂componentes open soure fromtend/Fromtend code/nolly-agent-skills_0001.zip": "a2cf49c49d17bb8389d6cdbf2799249789540d1894c09c08936fb33730220e42"
+      },
+      "copied": 16,
+      "mirrors": [],
+      "files": 16,
+      "bytes": 46347,
+      "tree_sha256": "81d87db720256edc5390278f82f1cfa9bc72f65adb2aa568e4b4715de64c9f2d"
+    }
+  ],
+  "failures": [],
+  "remaining_gaps": [
+    {
+      "slug": "PracticalSwan-agent-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/PracticalSwan-agent-skills",
+      "mirror": null
+    },
+    {
+      "slug": "LiteRT",
+      "target": "📂componentes open soure fromtend/UI YAIWES/LiteRT",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    },
+    {
+      "slug": "ONNX-Runtime",
+      "target": "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    },
+    {
+      "slug": "MLC-WebLLM",
+      "target": "📂componentes open soure fromtend/UI YAIWES/MLC-WebLLM",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    },
+    {
+      "slug": "Transformers.js",
+      "target": "📂componentes open soure fromtend/UI YAIWES/Transformers.js",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    },
+    {
+      "slug": "wllama",
+      "target": "📂componentes open soure fromtend/UI YAIWES/wllama",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    }
+  ],
+  "verdict": "GAPS_PENDING"
+}
