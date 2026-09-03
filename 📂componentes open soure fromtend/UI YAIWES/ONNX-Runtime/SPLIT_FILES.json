@@ -1,0 +1,65 @@
+[
+  {
+    "repo": "ONNX-Runtime",
+    "path": "winml/test/scenario/models/onnxzoo_lotus_inception_v1-dq.onnx",
+    "chunks_dir": "ONNX-Runtime/winml/test/scenario/models/onnxzoo_lotus_inception_v1-dq.onnx.chunks",
+    "bytes": 10432032,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "ONNX-Runtime",
+    "path": "winml/test/scenario/models/coreml_Resnet50_ImageNet-dq.onnx",
+    "chunks_dir": "ONNX-Runtime/winml/test/scenario/models/coreml_Resnet50_ImageNet-dq.onnx.chunks",
+    "bytes": 32559099,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "ONNX-Runtime",
+    "path": "onnxruntime/test/testdata/bart_tiny.onnx",
+    "chunks_dir": "ONNX-Runtime/onnxruntime/test/testdata/bart_tiny.onnx.chunks",
+    "bytes": 28712022,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "ONNX-Runtime",
+    "path": "onnxruntime/test/testdata/bert_toy_postprocessed.onnx",
+    "chunks_dir": "ONNX-Runtime/onnxruntime/test/testdata/bert_toy_postprocessed.onnx.chunks",
+    "bytes": 20642654,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "ONNX-Runtime",
+    "path": "onnxruntime/test/testdata/transform/bert_toy_opset14.onnx",
+    "chunks_dir": "ONNX-Runtime/onnxruntime/test/testdata/transform/bert_toy_opset14.onnx.chunks",
+    "bytes": 20642719,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "ONNX-Runtime",
+    "path": "onnxruntime/test/testdata/transform/fusion/gqa_fusion_quantized_simple.onnx",
+    "chunks_dir": "ONNX-Runtime/onnxruntime/test/testdata/transform/fusion/gqa_fusion_quantized_simple.onnx.chunks",
+    "bytes": 15497299,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "ONNX-Runtime",
+    "path": "onnxruntime/test/testdata/transform/fusion/gqa_fusion_quantized_different_head_sizes.onnx",
+    "chunks_dir": "ONNX-Runtime/onnxruntime/test/testdata/transform/fusion/gqa_fusion_quantized_different_head_sizes.onnx.chunks",
+    "bytes": 9504755,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "ONNX-Runtime",
+    "path": "onnxruntime/test/testdata/transform/fusion/gqa_fusion_different_head_sizes.onnx",
+    "chunks_dir": "ONNX-Runtime/onnxruntime/test/testdata/transform/fusion/gqa_fusion_different_head_sizes.onnx.chunks",
+    "bytes": 23070331,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "ONNX-Runtime",
+    "path": "onnxruntime/test/testdata/transform/matmul_add_fusion/matmul_add_from_attention.onnx",
+    "chunks_dir": "ONNX-Runtime/onnxruntime/test/testdata/transform/matmul_add_fusion/matmul_add_from_attention.onnx.chunks",
+    "bytes": 44523117,
+    "chunk_bytes": 8388608
+  }
+]

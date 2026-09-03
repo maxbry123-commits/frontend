@@ -1,0 +1,173 @@
+{
+  "schema": "yaiwes.extraction.guardian.v2",
+  "run_id": "33790605091",
+  "archive_groups": 27,
+  "processed": [
+    {
+      "slug": "PracticalSwan-agent-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/PracticalSwan-agent-skills",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "📂componentes open soure fromtend/Fromtend code/PracticalSwan-agent-skills_0001.zip": "bbc9124edf399a806dbc5bc7ba103d0cadc7f9db07352b52cb3bdaf359bc11a9"
+      },
+      "copied": 2135,
+      "mirrors": [],
+      "files": 2134,
+      "bytes": 18394647,
+      "tree_sha256": "a594ead5fe6982d9d4006cfcfd48329aab717c4bdb143d61f65091fb19c30330"
+    },
+    {
+      "slug": "ONNX-Runtime",
+      "target": "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 25,
+      "part_sha256": {
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0001.zip": "26c22610d0e5af97a5c439d557fd78f356c5e8cde375ed1d73eb9dd86191dafe",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0002.zip": "2232dcbb3c5d93c68d8043c8bd23bc911ed5805814adc8355d360fe13ccc72e3",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0003.zip": "04bcc189456f967aebb31b06e26f025aa0e5152c000bb96b4f9ba82991a0d2aa",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0004.zip": "23d698d9696161e65a87a3dacaf62a8fb93c56b60ac1fc39b216060cd5be00cd",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0005.zip": "f8a8659f2c32e48e1011eb10b57ff0738aa87e4fa6581906867150e75072cd4e",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0006.zip": "dea2592aa5151ae0ad970b75337fb706ea2a111d42cc1465c421503f1e01d483",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0007.zip": "4aa92b8fb1f3d9c775b9278346db55986758a11ebc11de5ae3fad37f639e7c92",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0008.zip": "51b998e3506ab5a0f5c477611a2506df497b83facfa955cff02cf567609a52af",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0009.zip": "fe934b8df347a8009ea38cf21e614b078cdc9d29b867fca5f4786bb93e47e8eb",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0010.zip": "caa0d504ac08424bccfca76d960fa7f104f5739831d2cede3f17015100e410e2",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0011.zip": "0fbf53471feef0ed828caac5e8157f4dc752981f02739febcd3e748b5f704f40",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0012.zip": "6a68d15c1be17bb04cca2b108cdc98837478e364d6eaadbb0e146f672e3380df",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0013.zip": "5e494ab7865f0714db1936915244f34c6fa72b0534bea246459032fc5de06811",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0014.zip": "48d6d54a72c515c3c75389b6b48eaa26e4f2959d4c6296d0118adca8f63b9895",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0015.zip": "c621c58c4c9fab10c562d0f3a5a19244599d7bc81c2f5c31997a07daebea966b",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0016.zip": "a8a23c4620fe040a9379cb7c39f7948e4b9db510966327c22993a8a635f6cc9c",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0017.zip": "0459852388aeeb0c86516d45d4f8960325867c22db7f0b717668e62e3cc9c876",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0018.zip": "c69b2b511d21d4f099bf2db1ced7317dcd5c381c338e2e4867340079255e3238",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0019.zip": "8502b0be2f2ef5e494259c53b151614e7d2740cd6e25b6560b88a8955d11a7fd",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0020.zip": "775aca9597789944266c1a14ab4ddc3a8429cc4db15b931581a8d80f564665e5",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0021.zip": "75c0a916d433130c3281bf89fee268021d0bdf484c6b9d71b88c60a74267b63f",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0022.zip": "71f6915bfc8824de527e0e52840c5e3520b3bc1b2d7972db360baf1026aeddf0",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0023.zip": "ccba1b513b13ececd3e4500d0bc3971d63460393e8d1a54d50acb06b8b8e4c9f",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0024.zip": "91a2171c2a97f0e8009b6412f112503de7da60c48e03dec5ede281c78bac8711",
+        "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime_0025.zip": "67f9bc9cd59e3dc13417bb3b1ca49fa50501a8a45c0ec07bf65de016cff7b57a"
+      },
+      "copied": 11018,
+      "mirrors": [
+        {
+          "path": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER/ONNX-Runtime",
+          "copied": 11018
+        }
+      ],
+      "files": 11018,
+      "bytes": 575067582,
+      "tree_sha256": "654cadb5fa408cceff6d9a6b7f0c39658606398402c1ea05464a661fc2f136c6"
+    },
+    {
+      "slug": "MLC-WebLLM",
+      "target": "📂componentes open soure fromtend/UI YAIWES/MLC-WebLLM",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "📂componentes open soure fromtend/UI YAIWES/MLC-WebLLM_0001.zip": "80c4feaf4a47144a195d7b929aacf137853d3cdcb9df5732a453cf022b2dbc21"
+      },
+      "copied": 276,
+      "mirrors": [
+        {
+          "path": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER/MLC-WebLLM",
+          "copied": 276
+        }
+      ],
+      "files": 276,
+      "bytes": 12626196,
+      "tree_sha256": "433838074dce9e22090ba6290428862b8d53531902ff5b1d20e8752807f429ac"
+    },
+    {
+      "slug": "Transformers.js",
+      "target": "📂componentes open soure fromtend/UI YAIWES/Transformers.js",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "📂componentes open soure fromtend/UI YAIWES/Transformers.js_0001.zip": "55eb9aaa58b1a45f338d63c0dc7e5ebd18982171a6196ee768e27cc162caf858"
+      },
+      "copied": 702,
+      "mirrors": [
+        {
+          "path": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER/Transformers.js",
+          "copied": 702
+        }
+      ],
+      "files": 702,
+      "bytes": 3255158,
+      "tree_sha256": "1475902686aed6291361349a0e567ab4a50006e37974ef9a8a3cb39336c889ca"
+    },
+    {
+      "slug": "wllama",
+      "target": "📂componentes open soure fromtend/UI YAIWES/wllama",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "📂componentes open soure fromtend/UI YAIWES/wllama_0001.zip": "ed099454f15e1d882d9df951f990285a7f62f402d808578f2eb3358c854bdcd9"
+      },
+      "copied": 122,
+      "mirrors": [
+        {
+          "path": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER/wllama",
+          "copied": 122
+        }
+      ],
+      "files": 122,
+      "bytes": 1870801,
+      "tree_sha256": "d1522abde24bba92716c909d9499b8d45ff9b57cc9ee8388bb22b297ffc9b721"
+    }
+  ],
+  "failures": [
+    {
+      "slug": "OpenPencil",
+      "target": "📂componentes open soure fromtend/Fromtend code/OpenPencil",
+      "error": "SOURCE_LFS_POINTER_GAP:existing:OpenPencil/tests/fixtures/circle-text.fig,OpenPencil/tests/fixtures/fonts/NotoNaskhArabic-Regular.ttf,OpenPencil/tests/fixtures/gold-preview.fig",
+      "retryable": false
+    },
+    {
+      "slug": "LiteRT",
+      "target": "📂componentes open soure fromtend/UI YAIWES/LiteRT",
+      "error": "SOURCE_LFS_POINTER_GAP:LiteRT/litert/prebuilt/android_arm32/libLiteRt.so,LiteRT/litert/prebuilt/android_arm32/libLiteRtClGlAccelerator.so,LiteRT/litert/prebuilt/android_arm64/libLiteRt.so,LiteRT/litert/prebuilt/android_arm64/libLiteRtClGlAccelerator.so,LiteRT/litert/prebuilt/android_arm64/libLiteRtWebGpuAccelerator.so,LiteRT/litert/prebuilt/android_x86_64/libLiteRt.so,LiteRT/litert/prebuilt/android_x86_64/libLiteRtClGlAccelerator.so,LiteRT/litert/prebuilt/android_x86_64/libLiteRtWebGpuAccelerator.so,LiteRT/litert/prebuilt/ios_arm64/libLiteRt.dylib,LiteRT/litert/prebuilt/ios_arm64/libLiteRtMetalAccelerator.dylib,LiteRT/litert/prebuilt/ios_sim_arm64/libLiteRt.dylib,LiteRT/litert/prebuilt/ios_sim_arm64/libLiteRtMetalAccelerator.dylib,LiteRT/litert/prebuilt/linux_arm64/libLiteRt.so,LiteRT/litert/prebuilt/linux_arm64/libLiteRtWebGpuAccelerator.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRt.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRtCompilerPlugin_IntelOpenvino.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRtCompilerPlugin_Qualcomm.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRtCompilerPlugin_google_tensor.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRtWebGpuAccelerator.so,LiteRT/litert/prebuilt/macos_arm64/libLiteRt.dylib",
+      "retryable": false
+    }
+  ],
+  "remaining_gaps": [
+    {
+      "slug": "OpenPencil",
+      "target": "📂componentes open soure fromtend/Fromtend code/OpenPencil",
+      "mirror": null
+    },
+    {
+      "slug": "LiteRT",
+      "target": "📂componentes open soure fromtend/UI YAIWES/LiteRT",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    }
+  ],
+  "retryable_gaps": [],
+  "blocked_gaps": [
+    {
+      "slug": "OpenPencil",
+      "target": "📂componentes open soure fromtend/Fromtend code/OpenPencil",
+      "mirror": null,
+      "code": "SOURCE_LFS_POINTER_GAP",
+      "detail": "SOURCE_LFS_POINTER_GAP:existing:OpenPencil/tests/fixtures/circle-text.fig,OpenPencil/tests/fixtures/fonts/NotoNaskhArabic-Regular.ttf,OpenPencil/tests/fixtures/gold-preview.fig",
+      "evidence": "current-run"
+    },
+    {
+      "slug": "LiteRT",
+      "target": "📂componentes open soure fromtend/UI YAIWES/LiteRT",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER",
+      "code": "SOURCE_LFS_POINTER_GAP",
+      "detail": "SOURCE_LFS_POINTER_GAP:LiteRT/litert/prebuilt/android_arm32/libLiteRt.so,LiteRT/litert/prebuilt/android_arm32/libLiteRtClGlAccelerator.so,LiteRT/litert/prebuilt/android_arm64/libLiteRt.so,LiteRT/litert/prebuilt/android_arm64/libLiteRtClGlAccelerator.so,LiteRT/litert/prebuilt/android_arm64/libLiteRtWebGpuAccelerator.so,LiteRT/litert/prebuilt/android_x86_64/libLiteRt.so,LiteRT/litert/prebuilt/android_x86_64/libLiteRtClGlAccelerator.so,LiteRT/litert/prebuilt/android_x86_64/libLiteRtWebGpuAccelerator.so,LiteRT/litert/prebuilt/ios_arm64/libLiteRt.dylib,LiteRT/litert/prebuilt/ios_arm64/libLiteRtMetalAccelerator.dylib,LiteRT/litert/prebuilt/ios_sim_arm64/libLiteRt.dylib,LiteRT/litert/prebuilt/ios_sim_arm64/libLiteRtMetalAccelerator.dylib,LiteRT/litert/prebuilt/linux_arm64/libLiteRt.so,LiteRT/litert/prebuilt/linux_arm64/libLiteRtWebGpuAccelerator.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRt.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRtCompilerPlugin_IntelOpenvino.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRtCompilerPlugin_Qualcomm.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRtCompilerPlugin_google_tensor.so,LiteRT/litert/prebuilt/linux_x86_64/libLiteRtWebGpuAccelerator.so,LiteRT/litert/prebuilt/macos_arm64/libLiteRt.dylib",
+      "evidence": "current-run"
+    }
+  ],
+  "counts": {
+    "remaining": 2,
+    "retryable": 0,
+    "blocked": 2,
+    "processed": 5
+  },
+  "verdict": "GAPS_PENDING"
+}
