@@ -1,0 +1,16 @@
+[
+  {
+    "repo": "BESSER",
+    "path": "docs/source/img/GUI_WEB_SHOW.gif",
+    "chunks_dir": "BESSER/docs/source/img/GUI_WEB_SHOW.gif.chunks",
+    "bytes": 22359943,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "BESSER",
+    "path": "docs/source/img/besser_new.gif",
+    "chunks_dir": "BESSER/docs/source/img/besser_new.gif.chunks",
+    "bytes": 28915651,
+    "chunk_bytes": 8388608
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "repo": "drawio",
+    "path": "etc/build/compiler.jar",
+    "chunks_dir": "drawio/etc/build/compiler.jar.chunks",
+    "bytes": 13512691,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "drawio",
+    "path": "src/main/webapp/js/app.min.js",
+    "chunks_dir": "drawio/src/main/webapp/js/app.min.js.chunks",
+    "bytes": 9615294,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "drawio",
+    "path": "src/main/webapp/js/integrate.min.js",
+    "chunks_dir": "drawio/src/main/webapp/js/integrate.min.js.chunks",
+    "bytes": 22409534,
+    "chunk_bytes": 8388608
+  }
+]

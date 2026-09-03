@@ -1,0 +1,170 @@
+{
+  "schema": "yaiwes.extraction.guardian.v1",
+  "run_id": "33730908118",
+  "archive_groups": 27,
+  "pending_before": 24,
+  "processed": [
+    {
+      "slug": "drawio",
+      "target": "📂componentes open soure fromtend/Fromtend code/drawio",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 7,
+      "part_sha256": {
+        "📂componentes open soure fromtend/Fromtend code/drawio_0001.zip": "0cae1dc24ee8a31cbcb96db1dbea2244d9367c7203ab2b12260c911aed3fe529",
+        "📂componentes open soure fromtend/Fromtend code/drawio_0002.zip": "18c3bac917135393e8043937501af6f48e89fdb7a66865dc2f82842efb304819",
+        "📂componentes open soure fromtend/Fromtend code/drawio_0003.zip": "fdec394b9e9250ada89f4f84c981ae88ba7001930d69cccce6d6b5c6c570d575",
+        "📂componentes open soure fromtend/Fromtend code/drawio_0004.zip": "d8d241d91b11e708d8557230bf83be9f22ff8381694db0a5fb42bee1562852a3",
+        "📂componentes open soure fromtend/Fromtend code/drawio_0005.zip": "3f8439aebf977265cd87f4ffa5020da626ff60401a6762752d649890ee67600c",
+        "📂componentes open soure fromtend/Fromtend code/drawio_0006.zip": "44874e2bf985f487880155faf5e669ca91164b81c3b9399fb3b4fbcb39a2dea7",
+        "📂componentes open soure fromtend/Fromtend code/drawio_0007.zip": "6b976754d0f824ef94a5fb48052889d46f7ad97b6987ce72e1501754c8cb7474"
+      },
+      "copied": 3480,
+      "mirrors": [],
+      "files": 3480,
+      "bytes": 167262305,
+      "tree_sha256": "f03aa5f94a777f6440de11926b5170d8391b82d3e9072cb504d6d03f9ca20dec"
+    },
+    {
+      "slug": "BESSER",
+      "target": "📂componentes open soure fromtend/Fromtend code/BESSER",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 6,
+      "part_sha256": {
+        "📂componentes open soure fromtend/Fromtend code/BESSER_0001.zip": "0f8758261eee5026a673c7923c2475f9c1bf1988563bcaa602a0988b385fb7b2",
+        "📂componentes open soure fromtend/Fromtend code/BESSER_0002.zip": "1f04a336a10093f0fcf6d9f42f1f2515ed6345687ce5bddb073d13919b769fc4",
+        "📂componentes open soure fromtend/Fromtend code/BESSER_0003.zip": "e82d342e8817a906b8d8ed107ea067e1f8a788cccb013f163c5462ecb0946449",
+        "📂componentes open soure fromtend/Fromtend code/BESSER_0004.zip": "7f420b001d5a20d84586bb4f9f6f7d17a94fedf94ce7130d54575761fc2dcb12",
+        "📂componentes open soure fromtend/Fromtend code/BESSER_0005.zip": "63d6da958b71da8077b12534d3037889fb8ff6c99d988cb9895ba9bdf61f5e38",
+        "📂componentes open soure fromtend/Fromtend code/BESSER_0006.zip": "4339a1b9f9614e0737a449679b030733764cae6e558497dc77a29e987fb786aa"
+      },
+      "copied": 960,
+      "mirrors": [],
+      "files": 960,
+      "bytes": 78135519,
+      "tree_sha256": "d9ac2ef91866ee63eb1071bcf2b3c02cb6e03e074f3eaa0f12196c254cc710ff"
+    },
+    {
+      "slug": "xyflow",
+      "target": "📂componentes open soure fromtend/Fromtend code/xyflow",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "📂componentes open soure fromtend/Fromtend code/xyflow_0001.zip": "2a4c9d2219aaf628777eb8b222a5e0139bad5e882bc4df71748242784f45a356"
+      },
+      "copied": 700,
+      "mirrors": [],
+      "files": 700,
+      "bytes": 2301876,
+      "tree_sha256": "ef2d44be9da32142a48c7a8e1719f234aeeb01ab001bc3ada5f7db678181fc02"
+    }
+  ],
+  "failures": [],
+  "remaining_gaps": [
+    {
+      "slug": "OpenPencil",
+      "target": "📂componentes open soure fromtend/Fromtend code/OpenPencil",
+      "mirror": null
+    },
+    {
+      "slug": "wordpress-agent-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/wordpress-agent-skills",
+      "mirror": null
+    },
+    {
+      "slug": "tldraw",
+      "target": "📂componentes open soure fromtend/Fromtend code/tldraw",
+      "mirror": null
+    },
+    {
+      "slug": "Webstudio",
+      "target": "📂componentes open soure fromtend/Fromtend code/Webstudio",
+      "mirror": null
+    },
+    {
+      "slug": "PlantUML",
+      "target": "📂componentes open soure fromtend/Fromtend code/PlantUML",
+      "mirror": null
+    },
+    {
+      "slug": "anthropic-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/anthropic-skills",
+      "mirror": null
+    },
+    {
+      "slug": "accessibility-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/accessibility-skills",
+      "mirror": null
+    },
+    {
+      "slug": "microsoft-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/microsoft-skills",
+      "mirror": null
+    },
+    {
+      "slug": "Silex",
+      "target": "📂componentes open soure fromtend/Fromtend code/Silex",
+      "mirror": null
+    },
+    {
+      "slug": "ui-ux-pro-max-skill",
+      "target": "📂componentes open soure fromtend/Fromtend code/ui-ux-pro-max-skill",
+      "mirror": null
+    },
+    {
+      "slug": "Craft.js",
+      "target": "📂componentes open soure fromtend/Fromtend code/Craft.js",
+      "mirror": null
+    },
+    {
+      "slug": "Frappe-Builder",
+      "target": "📂componentes open soure fromtend/Fromtend code/Frappe-Builder",
+      "mirror": null
+    },
+    {
+      "slug": "nolly-agent-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/nolly-agent-skills",
+      "mirror": null
+    },
+    {
+      "slug": "Onlook",
+      "target": "📂componentes open soure fromtend/Fromtend code/Onlook",
+      "mirror": null
+    },
+    {
+      "slug": "frontend-audit-skill",
+      "target": "📂componentes open soure fromtend/Fromtend code/frontend-audit-skill",
+      "mirror": null
+    },
+    {
+      "slug": "PracticalSwan-agent-skills",
+      "target": "📂componentes open soure fromtend/Fromtend code/PracticalSwan-agent-skills",
+      "mirror": null
+    },
+    {
+      "slug": "LiteRT",
+      "target": "📂componentes open soure fromtend/UI YAIWES/LiteRT",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    },
+    {
+      "slug": "ONNX-Runtime",
+      "target": "📂componentes open soure fromtend/UI YAIWES/ONNX-Runtime",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    },
+    {
+      "slug": "MLC-WebLLM",
+      "target": "📂componentes open soure fromtend/UI YAIWES/MLC-WebLLM",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    },
+    {
+      "slug": "Transformers.js",
+      "target": "📂componentes open soure fromtend/UI YAIWES/Transformers.js",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    },
+    {
+      "slug": "wllama",
+      "target": "📂componentes open soure fromtend/UI YAIWES/wllama",
+      "mirror": "UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"
+    }
+  ],
+  "verdict": "GAPS_PENDING"
+}
