@@ -1,0 +1,63 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "incremental": true,
+    "allowImportingTsExtensions": true,
+    "customConditions": ["sui", "sui-pro"],
+    "baseUrl": ".",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "content-collections": ["./.content-collections/generated"],
+      "compositions/*": ["../compositions/src/*"],
+      "#components/*": ["./components/*"],
+      "#lib/*": ["./lib/*"],
+      "#utils/*": ["./utils/*"],
+      "#hooks/*": ["./hooks/*"],
+      "#theme/*": ["./theme/*"],
+      "#registry/*": ["./registry/*"],
+      "@/*": ["./*"]
+    },
+    "target": "ES2017"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".velite",
+    ".next/types/**/*.ts",
+    "../compositions",
+    "next.config.mjs",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "registry/panda/**",
+    ".next/types/validator.ts",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "registry/**/*.stories.ts",
+    "registry/**/*.stories.tsx",
+    "registry/**/*.spec.ts",
+    "registry/**/*.spec.tsx",
+    "registry/**/*.test.ts",
+    "registry/**/*.test.tsx",
+    "registry/**/*.test-d.ts"
+  ]
+}

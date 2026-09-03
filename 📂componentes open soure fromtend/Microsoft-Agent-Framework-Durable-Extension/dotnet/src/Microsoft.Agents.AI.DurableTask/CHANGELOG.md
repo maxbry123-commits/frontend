@@ -1,0 +1,73 @@
+# Release History
+
+## [Unreleased]
+
+- Fixed `ConfigureDurableAgents` and `ConfigureDurableWorkflows` ignoring the `workerBuilder` or `clientBuilder` supplied to a later call when no earlier call supplied one, so the Durable Task worker and client are now registered whichever configuration call provides them. The first non-null delegate wins; later ones are still ignored so a builder passed to several calls is only applied once. Registering an agent that a workflow already referenced now promotes it to an explicitly registered agent instead of throwing, so agents and workflows can be configured in either order ([#67](https://github.com/microsoft/agent-framework-durable-extension/pull/67))
+- [BREAKING] Fixed `AddWorkflow` silently overwriting an existing workflow registered under the same name, which left the workflow and executor registries inconsistent. Registering a different workflow under a name that is already taken now throws, while re-registering the same workflow instance remains a no-op. An application that registers duplicate workflow names starts today but will now fail at startup ([#66](https://github.com/microsoft/agent-framework-durable-extension/pull/66))
+- Fixed a `JsonTypeInfo metadata ... was not provided` failure when persisting agent state for function calls or results that carry values the state serializer has no metadata for, such as the `AIContent` results returned by MCP tools ([#57](https://github.com/microsoft/agent-framework-durable-extension/pull/57))
+- [BREAKING] Added `IWorkflowClient` overloads that start a registered workflow by name, and made workflow result deserialization case-insensitive so results can be read back when hosted in Azure Functions. External implementations of `IWorkflowClient` must implement the new members, and an untyped `null` first argument is now ambiguous between the `Workflow` and workflow-name overloads ([#48](https://github.com/microsoft/agent-framework-durable-extension/pull/48))
+- [BREAKING] Removed the `AddAIAgents` and `AddWorkflows` bulk registration APIs and changed `AddWorkflow` to return `DurableWorkflowOptions` so multiple workflows can be registered fluently ([#39](https://github.com/microsoft/agent-framework-durable-extension/pull/39))
+- Use "session" instead of "thread" terminology in documentation and API comments ([#47](https://github.com/microsoft/agent-framework-durable-extension/pull/47))
+- Wrap RequestPort external responses in a controlled `DurableExecutorOutput` envelope so that only the `result` property is populated during deserialization ([#20](https://github.com/microsoft/agent-framework-durable-extension/pull/20))
+- Bound the live workflow status to a trailing event window so multi-executor workflows with large typed outputs no longer overflow the Durable Task 16&#160;KB custom status cap ([#6775](https://github.com/microsoft/agent-framework/pull/6775))
+- Fixed `WorkflowOutputEvent` streaming deserialization to read `executorId` instead of the renamed `sourceId` property, with fallback for backward compatibility ([#6896](https://github.com/microsoft/agent-framework/pull/6896))
+- Fix issue with resuming checkpoint after package version upgrade ([#6670](https://github.com/microsoft/agent-framework/pull/6670))
+- Bind MCP threadId to the current agent and guard cross-agent session dispatch ([#6531](https://github.com/microsoft/agent-framework/pull/6531))
+- Added support for durable workflows ([#4436](https://github.com/microsoft/agent-framework/pull/4436))
+- Added support for `AddSwitch` and target-selecting fan-out edges in the durable workflow runner ([#6749](https://github.com/microsoft/agent-framework/pull/6749))
+
+## v1.0.0-preview.260219.1
+
+- [BREAKING] Changed ChatHistory and AIContext Providers to have pipeline semantics ([#3806](https://github.com/microsoft/agent-framework/pull/3806))
+- Marked all `RunAsync<T>` overloads as `new`, added missing ones, and added support for primitives and arrays #3803
+- Improve session cast error message quality and consistency ([#3973](https://github.com/microsoft/agent-framework/pull/3973))
+
+## v1.0.0-preview.260212.1
+
+- [BREAKING] Changed AIAgent.SerializeSession to AIAgent.SerializeSessionAsync ([#3879](https://github.com/microsoft/agent-framework/pull/3879))
+
+## v1.0.0-preview.260209.1
+
+- [BREAKING] Introduce Core method pattern for Session management methods on AIAgent ([#3699](https://github.com/microsoft/agent-framework/pull/3699))
+
+## v1.0.0-preview.260205.1
+
+- [BREAKING] Moved AgentSession.Serialize to AIAgent.SerializeSession ([#3650](https://github.com/microsoft/agent-framework/pull/3650))
+- [BREAKING] Renamed serializedSession parameter to serializedState on DeserializeSessionAsync for consistency ([#3681](https://github.com/microsoft/agent-framework/pull/3681))
+
+## v1.0.0-preview.260127.1
+
+- [BREAKING] Renamed AgentThread to AgentSession ([#3430](https://github.com/microsoft/agent-framework/pull/3430))
+
+## v1.0.0-preview.260108.1
+
+- [BREAKING] Removed AgentThreadMetadata and used AgentSessionId directly instead ([#3067](https://github.com/microsoft/agent-framework/pull/3067))
+
+## v1.0.0-preview.251219.1
+
+- Filter empty `AIContent` from durable agent state responses ([#4670](https://github.com/microsoft/agent-framework/pull/4670))
+
+## v1.0.0-preview.260311.1
+
+### Changed
+
+- Added TTL configuration for durable agent entities ([#2679](https://github.com/microsoft/agent-framework/pull/2679))
+- Switch to new "Run" method name ([#2843](https://github.com/microsoft/agent-framework/pull/2843))
+
+NOTE: Some of the above changes may have been part of earlier releases not mentioned in this file.
+
+## v1.0.0-preview.251204.1
+
+- Added orchestration ID to durable agent entity state ([#2137](https://github.com/microsoft/agent-framework/pull/2137))
+
+## v1.0.0-preview.251125.1
+
+- Added support for .NET 10 ([#2128](https://github.com/microsoft/agent-framework/pull/2128))
+
+## v1.0.0-preview.251114.1
+
+- Added friendly error message when running durable agent that isn't registered ([#2214](https://github.com/microsoft/agent-framework/pull/2214))
+
+## v1.0.0-preview.251112.1
+
+- Initial public release ([#1916](https://github.com/microsoft/agent-framework/pull/1916))

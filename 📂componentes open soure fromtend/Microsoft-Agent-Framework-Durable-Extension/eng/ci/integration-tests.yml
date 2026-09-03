@@ -1,0 +1,87 @@
+# This pipeline is connected to the GitHub repository so it can validate pull
+# requests. It does not run as a CI build on push (trigger: none); it runs on PRs
+# targeting main and on a daily schedule. Pull requests from forks are prevented
+# from running by the Azure DevOps org/project setting "Limit building pull requests
+# from forked GitHub repositories" (set to Disable), so only team-authored PRs run
+# and secrets are never exposed to forks.
+trigger: none
+
+pr:
+  branches:
+    include:
+      - main
+
+parameters:
+  - name: linuxImage
+    type: string
+    default: '1es-ubuntu-24.04-min'
+    # Must be an Ubuntu-based image: the integration infrastructure setup uses
+    # apt-get, dpkg, and the Ubuntu-specific packages.microsoft.com/config/ubuntu
+    # feed. A non-Ubuntu image (e.g. Debian or Azure Linux 3) would require reworking
+    # that setup step, since the feed path is keyed to the Ubuntu version.
+    # 1es-ubuntu-24.04-min is a lightweight image with Docker and more free disk
+    # space, chosen to avoid the disk exhaustion seen on 1es-ubuntu-22.04.
+    displayName: '1ES Hosted Pools Linux image (Ubuntu-based)'
+  - name: windowsImage
+    type: string
+    default: '1es-windows-2022'
+    displayName: '1ES Hosted Pools Windows image (for SDL source analysis)'
+  - name: azureServiceConnection
+    type: string
+    default: 'agent-framework-durable-extension-e2e'
+    displayName: 'Azure Resource Manager service connection'
+
+schedules:
+  - cron: '0 8 * * *'
+    displayName: 'Daily integration tests'
+    branches:
+      include:
+        - main
+    always: true
+
+resources:
+  repositories:
+    - repository: 1es
+      type: git
+      name: 1ESPipelineTemplates/1ESPipelineTemplates
+      ref: refs/tags/release
+    - repository: eng
+      type: git
+      name: engineering
+      ref: refs/tags/release
+
+variables:
+  - template: /ci/variables/cfs.yml@eng
+  - group: agent-framework-durable-extension-e2e
+
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1es
+  parameters:
+    pool:
+      name: 1es-pool-azfunc
+      # The Linux image is selected via the linuxImage parameter. It must be a
+      # 1ES-compliant Ubuntu image in the pool that provides Docker. Azure CLI and
+      # Azure Functions Core Tools are installed by the integration infra setup, so
+      # they are not required to be preinstalled on the image. CoreAI recommends
+      # migrating to an Azure Linux 3 image later for better vulnerability servicing.
+      image: ${{ parameters.linuxImage }}
+      os: linux
+
+    # The SDL source-analysis stage only runs on Windows. Because the build pool
+    # is Linux, 1ES requires a Windows image in the same pool for that stage.
+    sdl:
+      sourceAnalysisPool:
+        name: 1es-pool-azfunc
+        image: ${{ parameters.windowsImage }}
+        os: windows
+
+    stages:
+      - stage: IntegrationTests
+        displayName: 'Integration tests'
+        jobs:
+          - template: /eng/templates/jobs/dotnet-integration-tests.yml@self
+            parameters:
+              azureServiceConnection: ${{ parameters.azureServiceConnection }}
+          - template: /eng/templates/jobs/python-integration-tests.yml@self
+            parameters:
+              azureServiceConnection: ${{ parameters.azureServiceConnection }}

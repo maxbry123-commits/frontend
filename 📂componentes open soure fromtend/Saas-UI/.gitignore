@@ -1,0 +1,98 @@
+.# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+**/node_modules
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnpm-store
+
+# testing
+coverage
+# Not checking in snapshots for the moment
+__snapshots__
+
+# next.js
+.next/
+**/out/
+
+# production
+**/dist
+**/build/**
+
+# we include these files so they don't have to be re-build when deploying to Vercel
+!tooling/props-docs/dist
+
+# misc
+.DS_Store
+*.pem
+tsconfig.tsbuildinfo
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*
+
+# editors
+!.vscode
+.idea/**/*
+
+# vercel
+.vercel
+
+!.vscode
+
+# turbo
+.turbo
+
+# Local Netlify folder
+.netlify
+
+# Docs
+.contentlayer
+.content-collections
+
+.changelogrc
+
+*storybook.log
+/packages/storybook/storybook-static/
+
+## Panda
+styled-system
+styled-system-studio
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# Generated release handoff artifacts
+/.artifacts/
+
+# Generated registry artifacts (authored icon sources remain tracked)
+/apps/website/public/r/
+/apps/website/__registry__/
+
+# Local standalone Pro checkout
+/packages/pro/
+
+# Impeccable local critique reports
+.impeccable/
+
+ideas

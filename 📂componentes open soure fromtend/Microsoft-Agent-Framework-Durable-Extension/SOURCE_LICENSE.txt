@@ -1,0 +1,1 @@
+LICENSE; python/packages/azurefunctions/LICENSE; python/packages/durabletask/LICENSE

@@ -1,0 +1,73 @@
+trigger: none
+pr: none
+
+parameters:
+  - name: publishDotNet
+    type: boolean
+    default: false
+    displayName: 'Publish .NET packages'
+  - name: publishPython
+    type: boolean
+    default: false
+    displayName: 'Publish Python package'
+  - name: artifactName
+    type: string
+    default: 'agent-framework-durable-extension-packages'
+    displayName: 'Pipeline artifact name'
+  - name: nugetServiceConnection
+    type: string
+    default: 'agent-framework-durable-extension-nuget-org'
+    displayName: 'NuGet.org service connection'
+  - name: esrpMainPublisher
+    type: string
+    default: 'agent-framework-durable-extension'
+    displayName: 'ESRP main publisher label (PyPI release)'
+
+resources:
+  repositories:
+    - repository: 1es
+      type: git
+      name: 1ESPipelineTemplates/1ESPipelineTemplates
+      ref: refs/tags/release
+    - repository: eng
+      type: git
+      name: engineering
+      ref: refs/tags/release
+
+variables:
+  - template: /ci/variables/cfs.yml@eng
+
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1es
+  parameters:
+    pool:
+      name: 1es-pool-azfunc
+      image: 1es-windows-2022
+      os: windows
+
+    stages:
+      - stage: BuildPackages
+        displayName: 'Build packages'
+        jobs:
+          - template: /eng/templates/official/jobs/build-packages.yml@self
+            parameters:
+              artifactName: ${{ parameters.artifactName }}
+
+      # Gate the entire publish stage at compile time (not with a runtime `condition`).
+      # 1ES validates referenced service connections even for jobs that would be
+      # skipped by a runtime condition, so a dry run (both flags false) would still
+      # fail on the publish service connections. A compile-time `${{ if }}` removes the
+      # stage from the pipeline entirely when nothing is being published, so a dry run
+      # only runs BuildPackages and requires no publishing credentials.
+      - ${{ if or(eq(parameters.publishDotNet, true), eq(parameters.publishPython, true)) }}:
+        - stage: PublishPackages
+          displayName: 'Publish packages'
+          dependsOn: BuildPackages
+          jobs:
+            - template: /eng/templates/official/jobs/publish-packages.yml@self
+              parameters:
+                artifactName: ${{ parameters.artifactName }}
+                publishDotNet: ${{ parameters.publishDotNet }}
+                publishPython: ${{ parameters.publishPython }}
+                nugetServiceConnection: ${{ parameters.nugetServiceConnection }}
+                esrpMainPublisher: ${{ parameters.esrpMainPublisher }}

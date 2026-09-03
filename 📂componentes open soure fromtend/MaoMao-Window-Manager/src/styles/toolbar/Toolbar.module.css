@@ -1,0 +1,34 @@
+.desktopOnly {
+  display: block;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+.icon {
+  width: auto;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .desktopOnly {
+    display: none !important;
+  }
+
+  .mobileOnly {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    top: auto;
+    right: auto;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    pointer-events: none;
+    z-index: 100000;
+  }
+}

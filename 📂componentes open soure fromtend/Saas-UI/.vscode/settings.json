@@ -1,0 +1,6 @@
+{
+  "search.exclude": {
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.importModuleSpecifierEnding": "minimal"
+}

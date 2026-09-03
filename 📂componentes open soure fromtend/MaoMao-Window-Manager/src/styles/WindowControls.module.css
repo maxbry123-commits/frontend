@@ -1,0 +1,57 @@
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.button {
+  background: transparent;
+  border: none;
+  color: #52525b;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+
+[data-system-style="default"] .button:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.05);
+  color: #18181b;
+}
+
+.button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+[data-system-style="default"] .button.close:hover:not(:disabled) {
+  background: #ef4444;
+  color: white;
+}
+
+/* Prevent Tree Shaking of dynamic class names */
+.close {
+  display: flex;
+}
+
+.minimize {
+  display: flex;
+}
+
+.maximize {
+  display: flex;
+}
+
+@media (prefers-color-scheme: dark) {
+  .button {
+    color: #a1a1aa;
+  }
+
+  [data-system-style="default"] .button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e4e4e7;
+  }
+}

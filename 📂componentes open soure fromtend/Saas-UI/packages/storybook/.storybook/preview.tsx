@@ -1,0 +1,59 @@
+import React from 'react'
+
+import { ChakraProvider } from '@chakra-ui/react'
+import '@fontsource-variable/inter'
+import { defaultSystem } from '@saas-ui/chakra-preset'
+import { withThemeByClassName } from '@storybook/addon-themes'
+import type { Preview, ReactRenderer } from '@storybook/react-vite'
+import { INITIAL_VIEWPORTS } from 'storybook/viewport'
+
+/**
+ * Add global context for RTL-LTR switching
+ */
+export const globalTypes = {
+  direction: {
+    name: 'Direction',
+    description: 'Direction for layout',
+    defaultValue: 'LTR',
+    toolbar: {
+      icon: 'globe',
+      items: ['LTR', 'RTL'],
+    },
+  },
+}
+
+export const parameters = {
+  viewport: {
+    viewports: INITIAL_VIEWPORTS,
+  },
+}
+
+const preview: Preview = {
+  parameters: {
+    options: {
+      storySort: {
+        method: 'alphabetical',
+      },
+    },
+
+    docs: {
+      codePanel: true,
+    },
+  },
+  decorators: [
+    withThemeByClassName<ReactRenderer>({
+      defaultTheme: 'light',
+      themes: {
+        light: '',
+        dark: 'dark',
+      },
+    }),
+    (Story) => (
+      <ChakraProvider value={defaultSystem}>
+        <Story />
+      </ChakraProvider>
+    ),
+  ],
+}
+
+export default preview

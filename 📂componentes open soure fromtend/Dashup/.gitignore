@@ -1,0 +1,11 @@
+dist
+docs
+coverage
+node_modules
+public
+
+*.tgz
+gh-pages
+gh-pages.pub
+
+.DS_Store

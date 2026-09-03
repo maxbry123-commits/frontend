@@ -1,0 +1,51 @@
+# Default endpoint address for local testing
+@authority=http://localhost:7071
+
+### Cancel an order
+POST {{authority}}/api/workflows/CancelOrder/run
+Content-Type: text/plain
+
+12345
+
+### Cancel an order and wait for the result (plain-text response)
+POST {{authority}}/api/workflows/CancelOrder/run?waitForResponse=true&timeoutSeconds=30
+Content-Type: text/plain
+Accept: text/plain
+
+12345
+
+### Cancel an order and wait for the result (default JSON response)
+POST {{authority}}/api/workflows/CancelOrder/run?waitForResponse=true
+Content-Type: text/plain
+
+12345
+
+### Cancel an order with a custom run ID
+POST {{authority}}/api/workflows/CancelOrder/run?runId=my-custom-id-123
+Content-Type: text/plain
+
+99999
+
+### Get order status (shares OrderLookup executor with CancelOrder)
+POST {{authority}}/api/workflows/OrderStatus/run
+Content-Type: text/plain
+
+12345
+
+### Get order status and wait for the result
+POST {{authority}}/api/workflows/OrderStatus/run?waitForResponse=true
+Content-Type: text/plain
+
+12345
+
+### Batch cancel orders with a complex JSON input
+POST {{authority}}/api/workflows/BatchCancelOrders/run
+Content-Type: application/json
+
+{"orderIds": ["1001", "1002", "1003"], "reason": "Customer requested cancellation", "notifyCustomers": true}
+
+### Cancel an order from function code (see OrderFunctions.cs), returning the run ID
+POST {{authority}}/api/orders/12345/cancel
+
+### Cancel an order from function code and wait for the result
+POST {{authority}}/api/orders/12345/cancel-and-wait

@@ -1,0 +1,53 @@
+{
+  "task_id": "RDC-FRONTEND-ADDITIONAL-20260903",
+  "components": [
+    {
+      "slug": "Microsoft-Agent-Framework-Durable-Extension",
+      "status": "EXTRACTED_VERIFIED",
+      "target": "📂componentes open soure fromtend/Microsoft-Agent-Framework-Durable-Extension",
+      "source_commit": "522e1d98afff58c251c4402578cb4d1187f91a84",
+      "files": 651,
+      "tree_sha256": "c44ae00b87ef93112548135baaa0f83e4566591cc86156031f840c9d1589791f"
+    },
+    {
+      "slug": "shadcn-ui",
+      "status": "EXTRACTED_VERIFIED",
+      "target": "📂componentes open soure fromtend/shadcn-ui",
+      "source_commit": "71e50952fbb7eda2c992660d36cd58671a2edf42",
+      "files": 5798,
+      "tree_sha256": "0cdbcab4d540d2ad88d116d66c754aa29a97220f0ec2d5110b18f3657e4f7d45"
+    },
+    {
+      "slug": "Volt-React-Dashboard",
+      "status": "EXTRACTED_VERIFIED",
+      "target": "📂componentes open soure fromtend/Volt-React-Dashboard",
+      "source_commit": "419e51539b8a7a3878fa186b6912eafaf48d2d60",
+      "files": 314,
+      "tree_sha256": "3d6704ff542a9386ff9eaaf3104625d917f0a0451c225e492a0c2e9577d6ca06"
+    },
+    {
+      "slug": "Saas-UI",
+      "status": "EXTRACTED_VERIFIED",
+      "target": "📂componentes open soure fromtend/Saas-UI",
+      "source_commit": "dafe6c2e50e1f0cff689cf1af0d792aa23984c70",
+      "files": 4042,
+      "tree_sha256": "975429ca689e86d83dd507bd6b13e98839a04e247c49dd4ff20382fb71d72ba3"
+    },
+    {
+      "slug": "MaoMao-Window-Manager",
+      "status": "EXTRACTED_VERIFIED",
+      "target": "📂componentes open soure fromtend/MaoMao-Window-Manager",
+      "source_commit": "3c5bf6c9200a06c0ab512aa04b643fbc14de760d",
+      "files": 86,
+      "tree_sha256": "1d496ad657928403a7353fcaca2d73726922d22f127fe4db1b696ecfdb2721e7"
+    },
+    {
+      "slug": "Dashup",
+      "status": "EXTRACTED_VERIFIED",
+      "target": "📂componentes open soure fromtend/Dashup",
+      "source_commit": "6c5afbb5c68fe6761c5b52eda64b2d696e4cf6b2",
+      "files": 50,
+      "tree_sha256": "8f64b056452039f38f921756a63bbbd8052d307f8833f83b1457c02c07657690"
+    }
+  ]
+}
