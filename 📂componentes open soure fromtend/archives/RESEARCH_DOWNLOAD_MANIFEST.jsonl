@@ -1,0 +1,6 @@
+{"number": 1, "parts": 1, "slug": "Microsoft-Agent-Framework-Durable-Extension", "source": "https://github.com/microsoft/agent-framework-durable-extension.git", "source_commit": "522e1d98afff58c251c4402578cb4d1187f91a84", "status": "COMPLETE"}
+{"number": 2, "parts": 3, "slug": "shadcn-ui", "source": "https://github.com/shadcn-ui/ui.git", "source_commit": "71e50952fbb7eda2c992660d36cd58671a2edf42", "status": "COMPLETE"}
+{"number": 3, "parts": 1, "slug": "Volt-React-Dashboard", "source": "https://github.com/themesberg/volt-react-dashboard.git", "source_commit": "419e51539b8a7a3878fa186b6912eafaf48d2d60", "status": "COMPLETE"}
+{"number": 4, "parts": 2, "slug": "Saas-UI", "source": "https://github.com/saas-js/saas-ui.git", "source_commit": "dafe6c2e50e1f0cff689cf1af0d792aa23984c70", "status": "COMPLETE"}
+{"number": 5, "parts": 1, "slug": "MaoMao-Window-Manager", "source": "https://github.com/maomaolabs/core.git", "source_commit": "3c5bf6c9200a06c0ab512aa04b643fbc14de760d", "status": "COMPLETE"}
+{"number": 6, "parts": 1, "slug": "Dashup", "source": "https://github.com/edgarberm/dashup.git", "source_commit": "6c5afbb5c68fe6761c5b52eda64b2d696e4cf6b2", "status": "COMPLETE"}
