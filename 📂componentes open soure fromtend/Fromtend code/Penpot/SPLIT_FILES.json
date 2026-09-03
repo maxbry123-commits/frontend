@@ -1,0 +1,51 @@
+[
+  {
+    "repo": "Penpot",
+    "path": "experiments/scripts/black_3600x2700.ppm",
+    "chunks_dir": "Penpot/experiments/scripts/black_3600x2700.ppm.chunks",
+    "bytes": 29160017,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "Penpot",
+    "path": "docs/img/flexlayout-inspect.gif",
+    "chunks_dir": "Penpot/docs/img/flexlayout-inspect.gif.chunks",
+    "bytes": 9942122,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "Penpot",
+    "path": "docs/img/plugins/deploy-cloudflare-repo.mp4",
+    "chunks_dir": "Penpot/docs/img/plugins/deploy-cloudflare-repo.mp4.chunks",
+    "bytes": 9561806,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "Penpot",
+    "path": "docs/img/plugins/deploy-netlify-dragdrop.mp4",
+    "chunks_dir": "Penpot/docs/img/plugins/deploy-netlify-dragdrop.mp4.chunks",
+    "bytes": 10032864,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "Penpot",
+    "path": "docs/img/plugins/deploy-cloudflare-dragdrop.mp4",
+    "chunks_dir": "Penpot/docs/img/plugins/deploy-cloudflare-dragdrop.mp4.chunks",
+    "bytes": 8941204,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "Penpot",
+    "path": "docs/img/plugins/deploy-netlify-repo.mp4",
+    "chunks_dir": "Penpot/docs/img/plugins/deploy-netlify-repo.mp4.chunks",
+    "bytes": 12835128,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "Penpot",
+    "path": "frontend/resources/images/features/2.16-fixes.gif",
+    "chunks_dir": "Penpot/frontend/resources/images/features/2.16-fixes.gif.chunks",
+    "bytes": 8576955,
+    "chunk_bytes": 8388608
+  }
+]
