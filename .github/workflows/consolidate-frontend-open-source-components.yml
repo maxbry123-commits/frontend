@@ -129,7 +129,10 @@ jobs:
           if payload:
               run(["git", "update-index", "-z", "--index-info"], env=env, data=bytes(payload))
 
-          # Component blobs only: do not modify .github/workflows from inside this run.\n          # This avoids requiring GitHub App workflow-write permission.\n\n          tree = text(["git", "write-tree"], env=env)
+          # Component blobs only: do not modify .github/workflows from inside this run.
+          # This avoids requiring GitHub App workflow-write permission.
+
+          tree = text(["git", "write-tree"], env=env)
           total = 0
 
           for old, new, mapping in planned:
