@@ -91,3 +91,14 @@ Estos repos están definidos en `scripts/research_download_frontend_b.py`, pero 
 ## F. Regla de movimiento
 
 La consolidación debe preservar los blobs originales y sus SHA. No recomprimir, reescribir ni modificar el contenido de los componentes; solo cambiar su ruta Git dentro del mismo repositorio.
+
+## G. Verificación posterior a consolidación
+
+- **Estado:** VERIFIED_CLOSED ✅
+- **GitHub Actions run:** `33706505219` — success.
+- **Commit de migración:** `23f29663cf07ebd28716aa4194299f6a3569e642`.
+- **Entradas movidas con mode + blob SHA preservados:** **1459**.
+- **Rutas antiguas:** `Fromtend code/` = 0 archivos; `UI YAIWES/` = 0; `Trabajo de grock/fromted/sources/` = 0.
+- **Nueva raíz:** `📂componentes open soure fromtend/`.
+- **GitHub Actions abiertos/encolados detectados al cierre:** **0**.
+- Los workflows de descarga A/B y UI YAIWES fueron retargeteados para escribir directamente en la nueva raíz.
