@@ -1,0 +1,9 @@
+[
+  {
+    "repo": "wordpress-agent-skills",
+    "path": "claude-code/wp-site-creator/scripts/block-fixer/cli.js",
+    "chunks_dir": "wordpress-agent-skills/claude-code/wp-site-creator/scripts/block-fixer/cli.js.chunks",
+    "bytes": 9983814,
+    "chunk_bytes": 8388608
+  }
+]

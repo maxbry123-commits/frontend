@@ -1,0 +1,23 @@
+[
+  {
+    "repo": "OpenPencil",
+    "path": "tests/fixtures/material3.fig",
+    "chunks_dir": "OpenPencil/tests/fixtures/material3.fig.chunks",
+    "bytes": 57312586,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "OpenPencil",
+    "path": "tests/fixtures/nuxtui.fig",
+    "chunks_dir": "OpenPencil/tests/fixtures/nuxtui.fig.chunks",
+    "bytes": 85671218,
+    "chunk_bytes": 8388608
+  },
+  {
+    "repo": "OpenPencil",
+    "path": "tests/fixtures/fonts/NotoSansSC-Regular.ttf",
+    "chunks_dir": "OpenPencil/tests/fixtures/fonts/NotoSansSC-Regular.ttf.chunks",
+    "bytes": 10540644,
+    "chunk_bytes": 8388608
+  }
+]
