@@ -19,6 +19,6 @@ jobs:
           filter: blob:none
           sparse-checkout: |
             scripts/research_download_ui_yaiwes_03.py
-            UI YAIWES/RESEARCH_DOWNLOAD_MANIFEST.jsonl
+            📂componentes open soure fromtend/UI YAIWES/RESEARCH_DOWNLOAD_MANIFEST.jsonl
           sparse-checkout-cone-mode: false
-      - run: python3 scripts/research_download_ui_yaiwes_03.py "UI YAIWES" "_work/ui-yaiwes-03"
+      - run: python3 scripts/research_download_ui_yaiwes_03.py "📂componentes open soure fromtend/UI YAIWES" "_work/ui-yaiwes-03"
