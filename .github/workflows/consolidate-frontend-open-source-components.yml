@@ -129,55 +129,7 @@ jobs:
           if payload:
               run(["git", "update-index", "-z", "--index-info"], env=env, data=bytes(payload))
 
-          def show(path):
-              p = run(["git", "show", base + ":" + path], check=False)
-              if p.returncode:
-                  raise SystemExit("FAIL_CLOSED cannot read " + path)
-              return p.stdout.decode("utf-8")
-
-          def put(path, content):
-              sha = run(
-                  ["git", "hash-object", "-w", "--stdin"],
-                  data=content.encode("utf-8")
-              ).stdout.decode().strip()
-              rec = ("100644 " + sha + "\t" + path).encode() + b"\0"
-              run(["git", "update-index", "-z", "--index-info"], env=env, data=rec)
-
-          edits = {
-              ".github/workflows/download-frontend-a.yml": [
-                  (
-                      "python3 scripts/research_download_frontend_a.py 'Fromtend code' '_work/frontend-a'",
-                      "python3 scripts/research_download_frontend_a.py '" + DEST + "/Fromtend code' '_work/frontend-a'"
-                  )
-              ],
-              ".github/workflows/download-frontend-b.yml": [
-                  (
-                      "python3 scripts/research_download_frontend_b.py 'Fromtend code' '_work/frontend-b'",
-                      "python3 scripts/research_download_frontend_b.py '" + DEST + "/Fromtend code' '_work/frontend-b'"
-                  )
-              ],
-              ".github/workflows/ui-yaiwes-components-03.yml": [
-                  (
-                      "UI YAIWES/RESEARCH_DOWNLOAD_MANIFEST.jsonl",
-                      DEST + "/UI YAIWES/RESEARCH_DOWNLOAD_MANIFEST.jsonl"
-                  ),
-                  (
-                      'python3 scripts/research_download_ui_yaiwes_03.py "UI YAIWES" "_work/ui-yaiwes-03"',
-                      'python3 scripts/research_download_ui_yaiwes_03.py "' + DEST + '/UI YAIWES" "_work/ui-yaiwes-03"'
-                  )
-              ]
-          }
-
-          for path, replacements in edits.items():
-              original = show(path)
-              updated = original
-              for old, new in replacements:
-                  updated = updated.replace(old, new)
-              if updated != original:
-                  put(path, updated)
-                  print("UPDATED_DESTINATION", path)
-
-          tree = text(["git", "write-tree"], env=env)
+          # Component blobs only: do not modify .github/workflows from inside this run.\n          # This avoids requiring GitHub App workflow-write permission.\n\n          tree = text(["git", "write-tree"], env=env)
           total = 0
 
           for old, new, mapping in planned:
