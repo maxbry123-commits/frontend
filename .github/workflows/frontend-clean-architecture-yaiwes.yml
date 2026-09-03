@@ -1,0 +1,115 @@
+name: Frontend deterministic cleanup + YAIWES adapters
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/frontend-clean-architecture-yaiwes.yml"
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: frontend-clean-architecture-yaiwes
+  cancel-in-progress: false
+
+jobs:
+  download-missing-adapters:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: false
+          filter: blob:none
+          sparse-checkout: |
+            📂componentes open soure fromtend/tools/research_download_ui_yaiwes_05.py
+            📂componentes open soure fromtend/UI YAIWES/RESEARCH_DOWNLOAD_MANIFEST.jsonl
+          sparse-checkout-cone-mode: false
+
+      - name: Download wllama + LiteRT with copied deterministic chain
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "📂componentes open soure fromtend/tools/research_download_ui_yaiwes_05.py" \
+            "📂componentes open soure fromtend/UI YAIWES" \
+            "_work/ui-yaiwes-05"
+
+  clean-organize-index:
+    needs: download-missing-adapters
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout latest main metadata
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: false
+          filter: blob:none
+          sparse-checkout: |
+            📂componentes open soure fromtend/tools/frontend_main_cleaner.py
+            .github/workflows
+          sparse-checkout-cone-mode: false
+
+      - name: Move code, delete non-code garbage, build requested architecture and index
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "📂componentes open soure fromtend/tools/frontend_main_cleaner.py"
+
+  vercel-git-connect:
+    needs: clean-organize-index
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout Git metadata only
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            .github/workflows/frontend-clean-architecture-yaiwes.yml
+          sparse-checkout-cone-mode: false
+
+      - name: Connect existing Vercel project to this GitHub repository when token exists
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${VERCEL_TOKEN:-}" ]; then
+            echo "VERCEL_CONNECT_SKIPPED: VERCEL_TOKEN secret not configured"
+            exit 0
+          fi
+
+          python3 - <<'PY'
+          import json, os, urllib.request
+          token=os.environ["VERCEL_TOKEN"]
+          url="https://api.vercel.com/v9/projects/prj_cT8Z08lXflii2ZOMTKRfRJdArdVU?teamId=team_hG9df7zIgfZFY0oxFFsIRr1u"
+          body=json.dumps({
+            "rootDirectory":"📂componentes open soure fromtend/codigo real frontend/Fromted React Vite"
+          }).encode()
+          req=urllib.request.Request(
+              url, data=body, method="PATCH",
+              headers={
+                  "Authorization":"Bearer "+token,
+                  "Content-Type":"application/json",
+                  "User-Agent":"frontend-vercel-git-connect"
+              }
+          )
+          with urllib.request.urlopen(req, timeout=30) as r:
+              print("VERCEL_PROJECT_PATCH", r.status)
+          PY
+
+          npm install -g vercel@latest
+          mkdir -p .vercel
+          printf '%s\n' '{"orgId":"team_hG9df7zIgfZFY0oxFFsIRr1u","projectId":"prj_cT8Z08lXflii2ZOMTKRfRJdArdVU"}' > .vercel/project.json
+          vercel git connect --yes --token "$VERCEL_TOKEN" --scope maxbry123-8833s-projects
+          vercel git ls --token "$VERCEL_TOKEN" --scope maxbry123-8833s-projects
