@@ -1,0 +1,1 @@
+https://github.com/modelcontextprotocol/typescript-sdk/blob/5119ee7fd7790e335a3fb60ef36f85334e2a6326/LICENSE
