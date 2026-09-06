@@ -1,0 +1,14 @@
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/LICENSE
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/external/bcmaps/LICENSE
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/external/brotli/LICENSE_BROTLI
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/external/iccs/LICENSE
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/external/jbig2/LICENSE_JBIG2
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/external/jbig2/LICENSE_PDFJS_JBIG2
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/external/openjpeg/LICENSE_OPENJPEG
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/external/openjpeg/LICENSE_PDFJS_OPENJPEG
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/external/qcms/LICENSE_PDFJS_QCMS
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/external/qcms/LICENSE_QCMS
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/external/standard_fonts/LICENSE_FOXIT
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/external/standard_fonts/LICENSE_LIBERATION
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/src/license_header.js
+https://github.com/mozilla/pdf.js/blob/4c6025719e324761f9ee32e52b052565887c283a/src/license_header_libre.js
