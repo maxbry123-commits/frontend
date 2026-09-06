@@ -1,0 +1,3 @@
+https://github.com/docling-project/docling/blob/025b27ca2c2f040b5b9628dccffd2611246990ca/.agents/skills/dignified-python/LICENSE
+https://github.com/docling-project/docling/blob/025b27ca2c2f040b5b9628dccffd2611246990ca/.github/license-header.txt
+https://github.com/docling-project/docling/blob/025b27ca2c2f040b5b9628dccffd2611246990ca/LICENSE
