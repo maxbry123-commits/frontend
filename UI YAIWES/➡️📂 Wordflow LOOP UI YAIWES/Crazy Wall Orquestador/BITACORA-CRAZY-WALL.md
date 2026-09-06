@@ -45,36 +45,42 @@ Esta bitácora registra progreso humano-legible. `STATE.json` registra el estado
 - `RECOVERY-PATCH.md` creado.
 - Esta bitácora creada.
 - `LEDGER-ARQUITECTURA-UI-YAIWES.md` creado.
-- `Documentos proyecto UI YAIWES/` ya existía al inicio.
-- Se creó la raíz exacta solicitada `documentos proyectos UI YAIWES/` sin borrar la histórica.
 
 ## EVENTO UI-CW-0006 — RECONCILIACIÓN DEL README
 - Read-back del destino mostró que ya existía `UI YAIWES/Readme arquitectura UI YAIWES.md` con arquitectura frontend/local WebGPU/HF.
-- El README backend creado en esta ejecución difería solo por mayúsculas y generaba riesgo de doble autoridad.
-- Se preservó intacta la arquitectura frontend existente y se fusionó dentro de ese README toda la arquitectura backend/Wordflow 1:1.
-- El duplicado creado por esta ejecución fue eliminado después de la fusión.
-- README canónico único: `UI YAIWES/Readme arquitectura UI YAIWES.md`.
+- Se preservó esa arquitectura y se fusionó dentro del mismo README la arquitectura backend/Wordflow.
+- El duplicado temporal creado en esta ejecución fue eliminado.
+- README arquitectura canónico único: `UI YAIWES/Readme arquitectura UI YAIWES.md`.
 
-## EVENTO UI-CW-0007 — RAÍCES DE TRABAJO REPLICADAS
-- Wordflow raíz creado: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/`.
-- Crazy Wall: creado.
-- PIPELINE: creado con 3 métodos.
-- runtime/docs: creado.
-- runtime/src/core: creado.
-- runtime/src/adapters: creado.
-- runtime/src/tasks: creado.
-- runtime/src/integration: creado.
-- runtime/tests: creado.
+## EVENTO UI-CW-0007 — PRIMERA RÉPLICA PARCIAL
+- Se crearon Crazy Wall, HANDOFF, PIPELINE y raíces iniciales de runtime.
+- La revisión posterior del Director señaló correctamente que la raíz no era una réplica completa del árbol fuente.
+- Veredicto histórico de esta fase: `PARTIAL`; queda supersedido por UI-CW-0009.
 
-## EVENTO UI-CW-0008 — READ-BACK REAL
-- `Wordflow` read-back: `Crazy Wall Orquestador`, `HANDOFF.md`, `PIPELINE`, `runtime` presentes.
-- `Crazy Wall` read-back: BITACORA, CHECKPOINT, LEDGER, RECOVERY y STATE presentes.
-- `runtime/src` read-back: adapters/core/integration/tasks presentes.
-- `PIPELINE` read-back: 00_METODO, FORENSIC_CODE_AUDIT y ADVANCED_ENGINEERING_STANDARD_V3 presentes.
-- `UI YAIWES/componentes/`: segunda comprobación = `404 / NOT_FOUND`.
-- Veredicto del nodo de réplica: `PASS_STRUCTURE_WITH_EXTERNAL_COMPONENTS_GAP`.
+## EVENTO UI-CW-0008 — SEGUNDA AUDITORÍA LITERAL DE RAÍCES
+- Se releyó directamente `agentes/main/➡️📂 Wordflow LOOP Yaiwes`.
+- Raíces fuente verificadas: `Crazy Wall Orquestador`, `HANDOFF.md`, `runtime`, `wordflow_loop`, README Wordflow, `Capa de persistencia open mythos`, `Capa workflow GitHub Action`, `Capa workflow evolución`, `archivos download`, `notas auditoría Claude`.
+- Orden literal del Director: `📂 archivos download` NO se replica.
+- Se crearon además las dos raíces documentales solicitadas dentro del Wordflow destino.
 
-## SIGUIENTE NODO
-`WAIT_COMPONENTS ➡️ FORENSIC_REVIEW_COMPONENTS ➡️ WIRE_STABILIZE_MEMORY_ROUTER_VALIDATOR ➡️ TEST/RECOVERY/E2E`
+## EVENTO UI-CW-0009 — RÉPLICA FIEL VERIFICADA POR TREE SHA
+- `wordflow_loop`: origen=destino tree `5e06f48dcbb01b17d07240a2b7919d92d0a04f77`.
+- `📂 Capa de persistencia open mythos`: origen=destino tree `99d51adb61db9328fe1cbf4683aa0ee70b4d4abc`.
+- `📂 Capa workflow GitHub Action`: origen=destino tree `76d79758c86beb3856b5b736d434b6095110d13a`.
+- `📂 Capa workflow evolución`: origen=destino tree `cf029c82e8879b3c8c297844d45578b0ff83e925`.
+- `📂 notas auditoría Claude`: origen=destino tree `d07582fe8bc990e5ce5c3a1850956c697feee653`.
+- Durante verificación se detectó un blob no idéntico en `FORENSIC-PASS-research_download_chain.py`; se corrigió y quedó blob fuente exacto `b629f9a7844a4752ff7c28b844b83e7f1d99ccb1`.
+- `📂 archivos download` en destino: read-back `404`, conforme a orden.
+- `runtime/src`: presentes las 15 raíces estructurales del origen; se mantienen además `adapters`, `tasks`, `integration` como extensiones del backend Stabilize.
+- El README fuente de `wordflow_loop` menciona `runner.py`, `layers/`, `tests/`, pero esos objetos no existen en el árbol fuente real; se preservó el GAP y no se inventaron.
 
-No se declara integración backend funcional ni E2E hasta que exista evidencia real de componentes, wiring y tests.
+## EVENTO UI-CW-0010 — RAÍCES DOCUMENTALES
+- Creada: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Documentos proyectos wordflow backend UI YAIWES/`.
+- Creada: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/`.
+- Ambas son raíces documentales; ninguna es carpeta de descarga/extracción.
+- Checkpoint activo: `UIYAIWES-ROOT-MIRROR-0005`.
+
+## VEREDICTO DEL NODO
+`ROOTS_AND_METHODS_REPLICATION_VERIFIED`.
+
+Este veredicto cierra únicamente la réplica de raíces/métodos. La integración funcional del backend Stabilize, Router, Memory, Validator y pruebas E2E continúa como nodo separado.
