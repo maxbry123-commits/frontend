@@ -14,10 +14,15 @@ _APPROVED_FACTORY_KEYS: dict[str, str] = {
     "starlette": "starlette.asgi",
     "resilient_circuit": "resilient_circuit.breaker",
     "bulkman": "bulkman.bulkhead",
+    "structlog": "structlog.logging",
+    "opentelemetry_python": "opentelemetry.api",
+    "apache_pycasbin": "casbin.authorization",
 }
+
 
 class ActivationRejectedError(ValueError):
     pass
+
 
 def build_runtime_registry(enabled_names: Iterable[str] = ()) -> PluginRegistry:
     requested = frozenset(enabled_names)
