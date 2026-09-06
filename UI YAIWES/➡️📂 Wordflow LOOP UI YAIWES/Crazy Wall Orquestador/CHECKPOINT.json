@@ -1,57 +1,40 @@
 {
-  "checkpoint_id": "UIYAIWES-ARCH-0004",
+  "checkpoint_id": "UIYAIWES-ROOT-MIRROR-0005",
   "contract": "tel.workflow/v3",
-  "status": "PASS_STRUCTURE_WITH_EXTERNAL_COMPONENTS_GAP",
-  "current_node": "WAIT_COMPONENTS",
-  "readme_anchor": "UI YAIWES/Readme arquitectura UI YAIWES.md",
-  "handoff_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/HANDOFF.md",
-  "state_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/STATE.json",
-  "recovery_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/RECOVERY-PATCH.md",
-  "crazy_wall_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/BITACORA-CRAZY-WALL.md",
-  "ledger_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/LEDGER-ARQUITECTURA-UI-YAIWES.md",
-  "source_wordflow": "https://github.com/maxbry123-commits/agentes/tree/main/%E2%9E%A1%EF%B8%8F%F0%9F%93%82%20Wordflow%20LOOP%20Yaiwes",
-  "source_evidence": {
-    "source_tree_sha": "4d0ed5e0910ca6fe573b7b3dac83d2c451ba49b3",
-    "method_commit": "8024e57606cedc34592ef18b3565c624b1e6d676",
-    "forensic_commit": "2072d535920573550a443cf9a3967ab66b50375c",
-    "engineering_commit": "7bc798ad4173f39f758abd3d4e6cbc2d909658e6"
+  "status": "ROOTS_AND_METHODS_REPLICATION_VERIFIED",
+  "current_node": "ROOT_REPLICATION_VERIFIED",
+  "source": {
+    "repository": "maxbry123-commits/agentes",
+    "root": "➡️📂 Wordflow LOOP Yaiwes",
+    "tree_sha": "4d0ed5e0910ca6fe573b7b3dac83d2c451ba49b3"
   },
-  "completed": [
-    "MERGE_BACKEND_1A1_INTO_CANONICAL_README",
-    "REMOVE_SESSION_DUPLICATE_README",
-    "CREATE_HANDOFF",
-    "CREATE_STATE",
-    "CREATE_CHECKPOINT",
-    "CREATE_RECOVERY",
-    "CREATE_CRAZY_WALL",
-    "CREATE_LEDGER",
-    "CREATE_PIPELINE_METHODS",
-    "CREATE_RUNTIME_ROOTS",
-    "CREATE_EXACT_DOCUMENTS_ROOT",
-    "READBACK_WORDFLOW_ROOT",
-    "READBACK_CRAZY_WALL_5_OF_5",
-    "READBACK_PIPELINE_3_OF_3",
-    "READBACK_RUNTIME_SRC_4_OF_4"
-  ],
-  "readback": {
-    "wordflow_root": "PASS",
-    "crazy_wall": "PASS_5_OF_5",
-    "pipeline": "PASS_3_OF_3",
-    "runtime": "PASS",
-    "runtime_src": "PASS_4_OF_4",
-    "components_root": "GAP_404_AFTER_SECOND_CHECK"
+  "destination_root": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES",
+  "anchors": {
+    "architecture_readme": "UI YAIWES/Readme arquitectura UI YAIWES.md",
+    "wordflow_readme": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/➡️📂 readme wordflow loop UI YAIWES.md",
+    "handoff": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/HANDOFF.md",
+    "state": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/STATE.json",
+    "checkpoint": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/CHECKPOINT.json",
+    "recovery": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/RECOVERY-PATCH.md",
+    "crazy_wall": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/BITACORA-CRAZY-WALL.md"
   },
-  "pending": [
-    "COMPONENTS_ARRIVAL",
-    "FORENSIC_REVIEW_DOWNLOADED_COMPONENTS",
-    "WIRE_STABILIZE_CORE",
-    "WIRE_MEMORY_ADAPTER",
-    "WIRE_ROUTER_ADAPTER",
-    "WIRE_VALIDATOR_JUDGE",
-    "RUN_RECOVERY_TESTS",
-    "RUN_E2E_TESTS"
-  ],
-  "next_node": "FORENSIC_REVIEW_COMPONENTS_WHEN_PRESENT",
-  "rollback": "GitHub commit history per created/updated file",
-  "closure_rule": "No VERIFIED_CLOSED until downloaded component code exists in destination, is reviewed/wired and recovery/E2E tests pass with evidence"
+  "verified": {
+    "wordflow_loop_tree_sha": "5e06f48dcbb01b17d07240a2b7919d92d0a04f77",
+    "persistence_tree_sha": "99d51adb61db9328fe1cbf4683aa0ee70b4d4abc",
+    "github_action_tree_sha": "76d79758c86beb3856b5b736d434b6095110d13a",
+    "evolution_tree_sha": "cf029c82e8879b3c8c297844d45578b0ff83e925",
+    "claude_notes_tree_sha": "d07582fe8bc990e5ce5c3a1850956c697feee653",
+    "runtime_src_roots": "PASS_15_OF_15_PLUS_3_PROJECT_EXTRAS",
+    "pipeline_methods": "PASS_3_OF_3",
+    "archivos_download": "EXCLUDED_BY_DIRECTOR_AND_404_IN_DESTINATION",
+    "documents_backend_root": "PRESENT",
+    "documents_visible_root": "PRESENT"
+  },
+  "source_gap_preserved": {
+    "wordflow_loop_readme_declares_missing_source_objects": ["runner.py", "layers/", "tests/"],
+    "resolution": "NOT_INVENTED"
+  },
+  "next_node": "COMPONENT_INVENTORY_AND_BACKEND_WIRING_PENDING_SEPARATE_NODE",
+  "rollback": "GitHub commit history",
+  "closure_rule": "This checkpoint closes only the roots/method replication node; backend functional integration remains a separate node requiring wiring and tests"
 }
