@@ -1,37 +1,38 @@
 {
-  "checkpoint_id": "UIYAIWES-P02A-FLAG-P02B-0011",
-  "previous_checkpoint_id": "UIYAIWES-P02A-FACTORY-WIRING-0010",
+  "checkpoint_id": "UIYAIWES-P02B-FLAG-P02C-0012",
+  "previous_checkpoint_id": "UIYAIWES-P02A-FLAG-P02B-0011",
   "contract": "tel.workflow/v3",
-  "status": "P02A_CLOSED_UNVERIFIED_WITH_FLAG_P02B_ACTIVE",
+  "status": "P02B_CLOSED_UNVERIFIED_WITH_FLAG_P02C_ACTIVE",
   "verified": {
     "p01_verified_closed": true,
-    "universal_plugin_readback": true,
-    "stabilize_factory_module_present": true,
-    "runtime_activation_explicit_allowlist": true,
-    "stabilize_single_workflow_owner": true,
-    "queue_required": true,
-    "store_dependency_injected": true,
-    "fake_orchestrator_loader_mount_tests": "PASS_5_OF_5",
-    "additional_fail_closed_guard_tests_present": true,
-    "adapter_local_readme_present": true,
-    "architecture_delta_present": true,
-    "actual_vendored_orchestrator_mount": false
+    "p02a_adapter_wired": true,
+    "p02a_real_vendor_mount": false,
+    "p02b_five_reuse_searches": true,
+    "pydantic_source_tree_present": true,
+    "pydantic_core_source_tree_present": true,
+    "p02b_non_monolithic_adapter_present": true,
+    "p02b_code_only_vendor_present": true,
+    "p02b_local_logic_tests": "PASS_4_OF_4",
+    "p02b_github_readback": true,
+    "p02b_real_runtime_compatible": false
   },
-  "flag": {
-    "id": "P02A-FLAG-REAL-VENDOR-EXECUTION",
-    "classification": "ENVIRONMENT_BLOCK",
-    "evidence": "independent sparse git clone failed: Could not resolve host: github.com",
-    "impact": "P02A cannot become VERIFIED_CLOSED",
-    "recovery": "rerun real vendor import/mount in an executable environment; same adapter, no duplicate implementation"
-  },
-  "evidence_commits": [
-    "88b424424d62db798da8ea2406992d043e3a23fc",
-    "2887aa1db2c8d7e21213931b55181969581c1b52",
-    "4ce6ae36e6a15a12f3adc20e9f78217abc7332f4",
-    "27cae7621cdd8f444d81fad469310e4a35a98c72",
-    "0a847bbc023bf81e09451f5f2beb33847b41a40a"
+  "flags": [
+    {
+      "id": "P02A-FLAG-REAL-VENDOR-EXECUTION",
+      "reason": "local DNS blocks independent materialization/execution of target vendor"
+    },
+    {
+      "id": "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
+      "expected": "pydantic 2.14.0b1 / pydantic-core 2.48.0",
+      "actual_local": "pydantic 2.13.4 / pydantic-core 2.46.4",
+      "behavior": "factory fails closed"
+    }
   ],
-  "current_node": "P02B_PYDANTIC_CONTRACT_PLUGIN",
-  "p02b_scope": "build disabled typed-contract plugin independently; inspect pydantic-core; no live workflow dependency",
-  "closure_rule": "P02A remains unverified until real vendored mount; P02B can progress only through its own isolated plugin gates"
+  "evidence_commits": [
+    "9cc1d0a2e5876b0f87a36a297c65c422be36b7e6",
+    "c01b4ddbefd29b760dc5a54327cbe39a15ce54a1",
+    "c01d224664e7960f95a2a8b932ce74c884627597"
+  ],
+  "current_node": "P02C_RULE_ENGINE_POLICY_PLUGIN",
+  "closure_rule": "flags remain open and visible; P02C may continue only as an isolated safe plugin that does not depend on a live P02A/P02B runtime"
 }
