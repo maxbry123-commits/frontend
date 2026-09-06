@@ -1,0 +1,16 @@
+{
+  "checkpoint_id": "UIYAIWES-PLUGIN-INTEGRATION-0007",
+  "previous_checkpoint": "UIYAIWES-PROGRAMMING-0006",
+  "status": "P01_ROOT_INVENTORY_PASS_P01B_ACTIVE",
+  "verified": {
+    "ui_root_no_scattered_component_dirs": true,
+    "central_component_count": 14,
+    "component_root_tree_sha": "4318b69193b6ba0dedda81e601e174fefa3c5cf7",
+    "acquisition_batches_classified_as_non_component_code": true,
+    "runtime_plugin_manifest_exists": true,
+    "runtime_plugin_wiring_verified": false
+  },
+  "gaps": ["plugin manifest references non-materialized runtime modules", "component code reuse not yet mapped one-by-one"],
+  "next": "P01B_COMPONENT_CODE_REVIEW_AND_PLUGIN_MOUNT",
+  "closure_rule": "No component is INTEGRATED until adapter/plugin + registry + test + evidence pass"
+}

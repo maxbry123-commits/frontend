@@ -1,0 +1,18 @@
+{
+  "contract": "tel.workflow/v3",
+  "project": "UI YAIWES modular component integration",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "P01_INVENTORY_ACTIVE_PLUGIN_GAP_FOUND",
+  "current_node": "P01B_COMPONENT_CODE_REVIEW_AND_PLUGIN_MOUNT",
+  "component_root": "UI YAIWES/componentes open soure UI YAIWES",
+  "component_root_tree_sha": "4318b69193b6ba0dedda81e601e174fefa3c5cf7",
+  "component_count": 14,
+  "root_scattered_components_observed": 0,
+  "acquisition_json_is_component_code": false,
+  "runtime_manifest": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/plugin-manifest.yaml",
+  "runtime_manifest_state": "DECLARED_NOT_WIRED",
+  "coding_rule": "NON_MONOLITHIC_FILES_PLUS_UNIVERSAL_PLUGIN",
+  "write_log_root": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint",
+  "architecture_log_root": "UI YAIWES/readme arquitectura UI YAIWES",
+  "next_node": "CREATE_MINIMAL_UNIVERSAL_PLUGIN_AND_TESTS"
+}
