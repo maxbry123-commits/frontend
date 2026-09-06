@@ -14,6 +14,8 @@ _APPROVED_FACTORY_KEYS: dict[str, str] = {
     "starlette": "starlette.asgi",
     "resilient_circuit": "resilient_circuit.breaker",
     "bulkman": "bulkman.bulkhead",
+    "structlog": "structlog.logging",
+    "opentelemetry_python": "opentelemetry.observability",
 }
 
 class ActivationRejectedError(ValueError):
