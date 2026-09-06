@@ -2,17 +2,26 @@
   "contract": "tel.workflow/v3",
   "project": "UI YAIWES modular component integration",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "P01_INVENTORY_ACTIVE_PLUGIN_GAP_FOUND",
-  "current_node": "P01B_COMPONENT_CODE_REVIEW_AND_PLUGIN_MOUNT",
+  "status": "P01_EVIDENCE_MATRIX_READY_VERIFY_FINAL_PENDING",
+  "current_node": "P01_VERIFY_14_COMPONENT_PROVENANCE_MATRIX",
   "component_root": "UI YAIWES/componentes open soure UI YAIWES",
   "component_root_tree_sha": "4318b69193b6ba0dedda81e601e174fefa3c5cf7",
   "component_count": 14,
   "root_scattered_components_observed": 0,
-  "acquisition_json_is_component_code": false,
-  "runtime_manifest": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/plugin-manifest.yaml",
-  "runtime_manifest_state": "DECLARED_NOT_WIRED",
-  "coding_rule": "NON_MONOLITHIC_FILES_PLUS_UNIVERSAL_PLUGIN",
-  "write_log_root": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint",
-  "architecture_log_root": "UI YAIWES/readme arquitectura UI YAIWES",
-  "next_node": "CREATE_MINIMAL_UNIVERSAL_PLUGIN_AND_TESTS"
+  "provenance_matrix": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/COMPONENT-CODE-MAP.md",
+  "provenance_fields": ["SOURCE_URL", "SOURCE_COMMIT", "component_tree_sha", "code_root", "code_root_sha", "destination", "dedup"],
+  "universal_plugin_socket": {
+    "commit": "4960005c12668e9ef843e1a42b842989cca6e338",
+    "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins",
+    "local_deterministic_tests": "PASS_5_OF_5",
+    "github_readback": "PASS_FILES_PRESENT",
+    "components_enabled": 0
+  },
+  "stabilize_vendor": {
+    "code_tree_sha": "35c7f5b60ee6cf8fd5ae3187d6e92fe15012499b",
+    "state": "VENDORED_NOT_MOUNTED",
+    "api_boundary": "Orchestrator(queue, store=None)"
+  },
+  "concurrent_reconciliation_commit": "50342c5d60a78928a3cc6ef723bac66c915b629b",
+  "next_node_if_verify_pass": "P02A_STABILIZE_FACTORY_DEPENDENCY_INJECTION"
 }
