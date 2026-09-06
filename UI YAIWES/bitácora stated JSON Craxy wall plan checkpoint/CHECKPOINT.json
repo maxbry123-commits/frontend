@@ -1,31 +1,37 @@
 {
-  "checkpoint_id": "UIYAIWES-P02A-FACTORY-WIRING-0010",
-  "previous_checkpoint_id": "UIYAIWES-P01-VERIFIED-CLOSED-0009",
+  "checkpoint_id": "UIYAIWES-P02A-FLAG-P02B-0011",
+  "previous_checkpoint_id": "UIYAIWES-P02A-FACTORY-WIRING-0010",
   "contract": "tel.workflow/v3",
-  "status": "P02A_ACTIVE_LOOP_VERIFY_FINAL_PENDING",
+  "status": "P02A_CLOSED_UNVERIFIED_WITH_FLAG_P02B_ACTIVE",
   "verified": {
     "p01_verified_closed": true,
-    "central_component_count": 14,
     "universal_plugin_readback": true,
     "stabilize_factory_module_present": true,
     "runtime_activation_explicit_allowlist": true,
     "stabilize_single_workflow_owner": true,
     "queue_required": true,
     "store_dependency_injected": true,
-    "loader_mount_test": "PASS",
-    "dependency_identity_health_test": "PASS",
-    "local_deterministic_tests": "PASS_5_OF_5",
-    "github_code_readback": true,
+    "fake_orchestrator_loader_mount_tests": "PASS_5_OF_5",
+    "additional_fail_closed_guard_tests_present": true,
+    "adapter_local_readme_present": true,
+    "architecture_delta_present": true,
     "actual_vendored_orchestrator_mount": false
   },
+  "flag": {
+    "id": "P02A-FLAG-REAL-VENDOR-EXECUTION",
+    "classification": "ENVIRONMENT_BLOCK",
+    "evidence": "independent sparse git clone failed: Could not resolve host: github.com",
+    "impact": "P02A cannot become VERIFIED_CLOSED",
+    "recovery": "rerun real vendor import/mount in an executable environment; same adapter, no duplicate implementation"
+  },
   "evidence_commits": [
-    "4960005c12668e9ef843e1a42b842989cca6e338",
-    "5dee82b06afc9882140caa14050a7bfb921b2e25",
     "88b424424d62db798da8ea2406992d043e3a23fc",
-    "134e2c0c17521919de8cbbd83ca614ac7afd5be3"
+    "2887aa1db2c8d7e21213931b55181969581c1b52",
+    "4ce6ae36e6a15a12f3adc20e9f78217abc7332f4",
+    "27cae7621cdd8f444d81fad469310e4a35a98c72",
+    "0a847bbc023bf81e09451f5f2beb33847b41a40a"
   ],
-  "current_node": "P02A_STABILIZE_FACTORY_DEPENDENCY_INJECTION",
-  "active_gap": "Real vendored stabilize.Orchestrator mount has not yet been executed through the universal loader",
-  "next_gate": "execute actual vendored Orchestrator(queue, store), verify runtime.health and independent GitHub readback",
-  "closure_rule": "P02A cannot PASS on FakeOrchestrator tests alone; real vendored mount evidence is mandatory"
+  "current_node": "P02B_PYDANTIC_CONTRACT_PLUGIN",
+  "p02b_scope": "build disabled typed-contract plugin independently; inspect pydantic-core; no live workflow dependency",
+  "closure_rule": "P02A remains unverified until real vendored mount; P02B can progress only through its own isolated plugin gates"
 }
