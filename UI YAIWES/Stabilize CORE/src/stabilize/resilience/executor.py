@@ -1,0 +1,204 @@
+"""
+Resilience executor for Stabilize.
+
+Provides a unified execution function that combines bulkhead and circuit
+breaker protection, mapping library exceptions to Stabilize's error types.
+"""
+
+from __future__ import annotations
+
+import logging
+from collections.abc import Callable
+from typing import Any, TypeVar, cast
+
+from bulkman.config import ExecutionResult
+from bulkman.exceptions import (
+    BulkheadCircuitOpenError,
+    BulkheadFullError,
+    BulkheadShutdownError,
+    BulkheadTimeoutError,
+)
+from resilient_circuit import CircuitProtectorPolicy
+from resilient_circuit.exceptions import ProtectedCallError
+
+from stabilize.errors import TaskTimeoutError, TransientError
+from stabilize.resilience.bulkheads import TaskBulkheadManager
+
+logger = logging.getLogger(__name__)
+
+T = TypeVar("T")
+
+
+def execute_with_resilience(
+    bulkhead_manager: TaskBulkheadManager,
+    circuit: CircuitProtectorPolicy,
+    task_type: str,
+    func: Callable[..., T],
+    func_args: tuple[Any, ...],
+    func_kwargs: dict[str, Any] | None = None,
+    timeout: float | None = None,
+    task_name: str = "unknown",
+    stage_id: str | None = None,
+    execution_id: str | None = None,
+) -> T:
+    """
+    Execute a function with bulkhead and circuit breaker protection.
+
+    This function:
+    1. Checks the circuit breaker - fails fast if circuit is open
+    2. Executes through the bulkhead with timeout
+    3. Maps any library exceptions to Stabilize's error types
+
+    Args:
+        bulkhead_manager: The bulkhead manager to use
+        circuit: The circuit breaker to use
+        task_type: The task type (for bulkhead selection)
+        func: The function to execute
+        func_args: Tuple of positional arguments for the function
+        func_kwargs: Dict of keyword arguments for the function
+        timeout: Timeout in seconds
+        task_name: Name of the task (for error messages)
+        stage_id: Stage ID (for error context)
+        execution_id: Execution ID (for error context)
+
+    Returns:
+        The result of the function
+
+    Raises:
+        TransientError: For bulkhead full, circuit open, or a manager that is
+            shutting down (retry later)
+        TaskTimeoutError: For timeout exceeded
+        Exception: Any other exception from the function itself
+    """
+    if func_kwargs is None:
+        func_kwargs = {}
+
+    # A manager that has already shut down cannot accept work: under bulkman
+    # >=2.0.0 shutdown is terminal. Refuse before entering the circuit so the
+    # attempt is not recorded as a task failure against it.
+    if bulkhead_manager.is_shutdown:
+        raise TransientError(
+            f"Bulkhead manager is shutting down; {task_type} task not dispatched",
+            retry_after=5,
+        )
+
+    try:
+        # Wrap execution with circuit breaker
+        @circuit
+        def protected_execute() -> ExecutionResult:
+            return bulkhead_manager.execute_with_timeout(
+                task_type,
+                func,
+                *func_args,
+                timeout=timeout,
+                **func_kwargs,
+            )
+
+        result = protected_execute()
+
+        # Check if the execution was successful
+        if result.success:
+            return cast(T, result.result)
+        else:
+            # Re-raise the original error from the task
+            if result.error:
+                raise result.error
+            else:
+                raise RuntimeError(f"Task failed without error: {result}")
+
+    except BulkheadFullError as e:
+        # Bulkhead is at capacity - retry later when capacity available
+        logger.debug("Bulkhead full for task type '%s': %s", task_type, e)
+        raise TransientError(
+            f"Bulkhead full for {task_type}: {e}",
+            retry_after=5,  # Suggest retry after 5 seconds
+            cause=e,
+        ) from e
+
+    except (BulkheadCircuitOpenError, ProtectedCallError) as e:
+        # Circuit breaker is open - retry after cooldown
+        logger.debug("Circuit breaker open for task type '%s': %s", task_type, e)
+        raise TransientError(
+            f"Circuit breaker open for {task_type}: {e}",
+            retry_after=30,  # Suggest retry after cooldown period
+            cause=e,
+        ) from e
+
+    except BulkheadShutdownError as e:
+        # The manager shut down between the pre-dispatch check above and the
+        # submit. bulkman >=2.0.1 signals this with a dedicated type, so the
+        # race is classified on the type alone — no message matching, and no
+        # risk of swallowing a failure raised by the task itself (those arrive
+        # as BulkheadError, which is this exception's parent, not its subclass).
+        logger.debug(
+            "Bulkhead manager shut down mid-dispatch for task type '%s': %s",
+            task_type,
+            e,
+        )
+        raise TransientError(
+            f"Bulkhead manager shut down while dispatching {task_type}: {e}",
+            retry_after=5,
+            cause=e,
+        ) from e
+
+    except BulkheadTimeoutError as e:
+        # Task exceeded timeout. In thread mode this is a SOFT timeout: the
+        # worker thread cannot be killed and keeps running, occupying one of
+        # max_workers slots until the task function returns on its own. Only
+        # STABILIZE_ISOLATION_MODE=process enforces a hard kill.
+        logger.warning(
+            "Task '%s' timed out: %s — worker thread keeps running (soft "
+            "timeout); set STABILIZE_ISOLATION_MODE=process for hard kills",
+            task_name,
+            e,
+        )
+        raise TaskTimeoutError(
+            f"Task exceeded timeout: {e}",
+            task_name=task_name,
+            stage_id=stage_id,
+            execution_id=execution_id,
+            cause=e,
+        ) from e
+
+
+def extract_result_or_raise(
+    result: ExecutionResult,
+    task_name: str = "unknown",
+    stage_id: str | None = None,
+    execution_id: str | None = None,
+) -> Any:
+    """
+    Extract the result from an ExecutionResult or raise the appropriate error.
+
+    Args:
+        result: The ExecutionResult from bulkhead execution
+        task_name: Name of the task (for error messages)
+        stage_id: Stage ID (for error context)
+        execution_id: Execution ID (for error context)
+
+    Returns:
+        The result value if successful
+
+    Raises:
+        TaskTimeoutError: If the execution timed out
+        Exception: The original error if execution failed
+    """
+    if result.success:
+        return result.result
+
+    error = result.error
+    if error is None:
+        raise RuntimeError(f"Task '{task_name}' failed without error details")
+
+    # Check if it was a timeout
+    if isinstance(error, BulkheadTimeoutError):
+        raise TaskTimeoutError(
+            f"Task exceeded timeout: {error}",
+            task_name=task_name,
+            stage_id=stage_id,
+            execution_id=execution_id,
+            cause=error,
+        ) from error
+
+    # Re-raise the original error
+    raise error
