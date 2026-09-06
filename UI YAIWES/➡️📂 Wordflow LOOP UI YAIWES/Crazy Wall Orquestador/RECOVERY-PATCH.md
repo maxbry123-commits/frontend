@@ -4,7 +4,7 @@ Contrato: `tel.workflow/v3`
 Modo: FAIL-CLOSED
 
 ## Anclas canónicas
-- README: `UI YAIWES/README arquitectura UI YAIWES.md`
+- README: `UI YAIWES/Readme arquitectura UI YAIWES.md`
 - HANDOFF: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/HANDOFF.md`
 - STATE: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/STATE.json`
 - CHECKPOINT: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/CHECKPOINT.json`
