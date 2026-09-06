@@ -1,6 +1,6 @@
 {
-  "checkpoint_id": "UIYAIWES-P05-P08-STAGING-0017",
-  "previous_checkpoint_id": "UIYAIWES-P05-P08-STAGING-0016",
+  "checkpoint_id": "UIYAIWES-P05-P08-STAGING-0018",
+  "previous_checkpoint_id": "UIYAIWES-P05-P08-STAGING-0017",
   "contract": "tel.workflow/v3",
   "status": "P05_P08_STAGED_MAIN_RECONCILIATION_BLOCKED",
   "branch": "yaiwes-runtime-staging-20260906",
@@ -34,6 +34,16 @@
     "pycasbin_local_dependencies": "MISSING_CASBIN_SIMPLEEVAL_WCMATCH",
     "result": "NOT_PROVEN_NO_PASS_PROMOTION"
   },
+  "queue_integrity": {
+    "expected_components": 124,
+    "queue_entries": 124,
+    "director_index_9": "Hypothesis is intentionally ordered last after director_index 124",
+    "missing_index_gap": false,
+    "last_observed_director_index": 20,
+    "last_observed_component": "Zustand",
+    "queue_position_completed": 19,
+    "queue_entries_remaining": 105
+  },
   "flags": [
     "P05-FLAG-STRUCTLOG-REAL-VENDOR-EXECUTION",
     "P05-FLAG-OTEL-VERSION-MISMATCH",
@@ -45,8 +55,7 @@
     "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131",
     "last_observed_status": "in_progress",
     "last_observed_step": "Process 124 components sequentially with pinned source SHA",
-    "last_observed_component": "017/124 React",
-    "last_observed_main_commit": "5d8a3d8871f79bbc9193533962f265509bb0f7dd"
+    "last_observed_main_commit": "3afb3674da83eed4dde50319bafe8ff00617ae8d"
   },
   "current_node": "RECONCILE_STAGING_AFTER_UIYAIWES_124",
   "closure_rule": "Do not merge or deduplicate while workflow 34060401131 mutates main. After it stops, compare final main with staging; apply only missing runtime delta; rerun real-vendor checks; flags never become PASS without execution evidence."
