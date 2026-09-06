@@ -1,0 +1,20 @@
+.:
+  createCommentNotationTransformer: function
+  findAllSubstringIndexes: function
+  parseMetaHighlightString: function
+  parseMetaHighlightWords: function
+  transformerCompactLineOptions: function
+  transformerMetaHighlight: function
+  transformerMetaWordHighlight: function
+  transformerNotationDiff: function
+  transformerNotationErrorLevel: function
+  transformerNotationFocus: function
+  transformerNotationHighlight: function
+  transformerNotationMap: function
+  transformerNotationWordHighlight: function
+  transformerRemoveComments: function
+  transformerRemoveLineBreak: function
+  transformerRemoveNotationEscape: function
+  transformerRenderIndentGuides: function
+  transformerRenderWhitespace: function
+  transformerStyleToClass: function

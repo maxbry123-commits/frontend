@@ -1,0 +1,3 @@
+https://github.com/shikijs/shiki/blob/48cd2cc695ed2e3357c3f9c370578ea843d6d9a3/LICENSE
+https://github.com/shikijs/shiki/blob/48cd2cc695ed2e3357c3f9c370578ea843d6d9a3/packages/engine-oniguruma/src/oniguruma/LICENSE
+https://github.com/shikijs/shiki/blob/48cd2cc695ed2e3357c3f9c370578ea843d6d9a3/packages/shiki/NOTICE

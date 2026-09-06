@@ -1,0 +1,9 @@
+.:
+  default: function
+  fromAsyncCodeToHtml: function
+  fromHighlighter: function
+  setupMarkdownExit: function
+  setupMarkdownExitAsync: function
+./core:
+  fromHighlighter: function
+  setupMarkdownExit: function

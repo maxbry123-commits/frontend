@@ -1,0 +1,18 @@
+{
+  "name": "@shikijs/monaco-playground",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "play": "vite"
+  },
+  "dependencies": {
+    "@shikijs/monaco": "workspace:*",
+    "monaco-editor-core": "catalog:integrations",
+    "shiki": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:cli",
+    "vite": "catalog:bundling"
+  }
+}
