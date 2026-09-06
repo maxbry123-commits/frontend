@@ -1,0 +1,14 @@
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/LICENSE
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/de/notices.md
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/es/notices.md
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/fr/notices.md
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/hi/notices.md
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/ja/notices.md
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/ko/notices.md
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/notices.md
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/pt/notices.md
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/ru/notices.md
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/tr/notices.md
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/uk/notices.md
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/zh-hant/notices.md
+https://github.com/modelcontextprotocol/python-sdk/blob/08a3bc8eaf5bb69a6cb05ac708a86f5325977c20/i18n/zh/notices.md
