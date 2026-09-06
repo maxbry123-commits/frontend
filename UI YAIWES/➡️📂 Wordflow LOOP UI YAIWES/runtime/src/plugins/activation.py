@@ -9,6 +9,7 @@ from .registry import PluginRegistry
 
 _APPROVED_FACTORY_KEYS: dict[str, str] = {
     "stabilize_core": "stabilize.orchestrator",
+    "pydantic": "pydantic.contracts",
 }
 
 
