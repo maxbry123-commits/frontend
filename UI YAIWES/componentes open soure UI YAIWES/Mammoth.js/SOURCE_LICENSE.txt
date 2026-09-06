@@ -1,0 +1,1 @@
+https://github.com/mwilliamson/mammoth.js/blob/870603494b464c737b0a2200742370332142d516/LICENSE
