@@ -12,7 +12,7 @@ Punto de entrada para Codex/GPT que continúe el backend de `frontend/UI YAIWES/
 - Memory: existente, se adapta.
 
 ## ORDEN DE LECTURA
-1. `UI YAIWES/README arquitectura UI YAIWES.md`
+1. `UI YAIWES/Readme arquitectura UI YAIWES.md`
 2. este `HANDOFF.md`
 3. `Crazy Wall Orquestador/STATE.json`
 4. `Crazy Wall Orquestador/CHECKPOINT.json`
