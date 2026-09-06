@@ -1,0 +1,135 @@
+name: UI YAIWES Hypothesis NO-LFS Auditor 01
+run-name: UI YAIWES Hypothesis NO-LFS Auditor 01 • ${{ github.event_name }} • ${{ github.sha }}
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [ui-yaiwes-hypothesis-no-lfs-repair-01-complete]
+  schedule:
+    - cron: '17 * * * *'
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  GIT_TERMINAL_PROMPT: "0"
+  SKILL_COMMIT: c789e5fe635e220230ffc759d86dc3bbb8e261d4
+  SKILL_YAML_BLOB: 9ffd682ec9491741a8f49e4a7f8bb385aa62c2ee
+  SOURCE_COMMIT: a8dcd7422a325926693b5464f73349e361562b7c
+  DEST: UI YAIWES/componentes open soure UI YAIWES/Hypothesis
+
+concurrency:
+  group: frontend-ui-yaiwes-hypothesis-no-lfs-auditor-01
+  cancel-in-progress: false
+
+jobs:
+  audit-hypothesis:
+    name: Independent four-pass NO-LFS audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout destination main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Checkout fixed official Hypothesis source
+        uses: actions/checkout@v4
+        with:
+          repository: HypothesisWorks/hypothesis
+          ref: ${{ env.SOURCE_COMMIT }}
+          path: _audit_source/hypothesis
+          fetch-depth: 1
+          lfs: false
+
+      - name: Execute independent deterministic audit
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PARENT_RUN_ID: ${{ github.event.client_payload.repair_run_id }}
+        run: |
+          set -euo pipefail
+          # Base: skills/skills Github acción/assets/FORENSIC-PASS-research-download-chain-final.yml
+          # Pinned by Director: c789e5fe635e220230ffc759d86dc3bbb8e261d4
+          base='https://raw.githubusercontent.com/maxbry123-commits/agentes/'"$SKILL_COMMIT"'/skills/skills%20Github%20acci%C3%B3n/assets/FORENSIC-PASS-research-download-chain-final.yml'
+          curl -fsSL --retry 3 "$base" -o /tmp/pinned-skill.yml
+          test "$(git hash-object /tmp/pinned-skill.yml)" = "$SKILL_YAML_BLOB"
+
+          SRC='_audit_source/hypothesis'
+          test -d "$DEST"
+          test "$(git -C "$SRC" rev-parse HEAD)" = "$SOURCE_COMMIT"
+
+          # PASS 1: source/destination path coverage and byte verification.
+          source_count=0
+          missing=0
+          mismatch=0
+          pointers=0
+          : > /tmp/source-paths
+          while IFS= read -r -d '' p; do
+            rel="${p#"$SRC/"}"
+            printf '%s\n' "$rel" >> /tmp/source-paths
+            source_count=$((source_count+1))
+            out="$DEST/$rel"
+            if ! test -f "$out"; then
+              echo "MISSING $rel"
+              missing=$((missing+1))
+              continue
+            fi
+            if test "$(head -n 1 "$p" 2>/dev/null || true)" = 'version https://git-lfs.github.com/spec/v1'; then
+              pointers=$((pointers+1))
+              oid="$(awk '/^oid sha256:/{sub("sha256:","",$2);print $2}' "$p")"
+              size="$(awk '/^size /{print $2}' "$p")"
+              got="$(sha256sum "$out" | awk '{print $1}')"
+              actual_size="$(stat -c %s "$out")"
+              if test "$got" != "$oid" || test "$actual_size" != "$size"; then
+                echo "MATERIALIZED_MISMATCH $rel expected=$oid/$size got=$got/$actual_size"
+                mismatch=$((mismatch+1))
+              fi
+            elif ! cmp -s "$p" "$out"; then
+              echo "CONTENT_MISMATCH $rel"
+              mismatch=$((mismatch+1))
+            fi
+          done < <(find "$SRC" -type f ! -path "$SRC/.git/*" -print0)
+
+          # PASS 2: reject any pointer stored in destination; source has exactly the known 10 pointer records.
+          dest_pointers=0
+          while IFS= read -r -d '' p; do
+            if test "$(head -n 1 "$p" 2>/dev/null || true)" = 'version https://git-lfs.github.com/spec/v1'; then
+              echo "DEST_LFS_POINTER $p"
+              dest_pointers=$((dest_pointers+1))
+            fi
+          done < <(find "$DEST" -type f -size -1025c -print0)
+          test "$pointers" -eq 10
+          test "$dest_pointers" -eq 0
+
+          # PASS 3: no source path may be missing/mismatched; traceability required by the pinned skill.
+          test "$source_count" -eq 8094
+          test "$missing" -eq 0
+          test "$mismatch" -eq 0
+          test -s "$DEST/SOURCE_URL.txt"
+          test -s "$DEST/SOURCE_COMMIT.txt"
+          test -s "$DEST/SOURCE_LICENSE.txt"
+          test -s "$DEST/SOURCE_SHA256SUMS.txt"
+          test "$(tr -d '\r\n' < "$DEST/SOURCE_COMMIT.txt")" = "$SOURCE_COMMIT"
+          (cd "$DEST" && sha256sum -c SOURCE_SHA256SUMS.txt)
+
+          # PASS 4: read-back is this fresh checkout; reject unrelated active/queued runs.
+          in_progress="$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs?status=in_progress&per_page=100")"
+          queued="$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs?status=queued&per_page=100")"
+          active_jobs="$({ printf '%s\n' "$in_progress"; printf '%s\n' "$queued"; } | jq -s --arg self "$GITHUB_RUN_ID" --arg parent "${PARENT_RUN_ID:-}" '[.[].workflow_runs[] | select((.id|tostring)!=$self and (.id|tostring)!=$parent)] | unique_by(.id) | length')"
+          test "$active_jobs" -eq 0
+
+          echo "expected_files=$source_count"
+          echo "verified_source_paths=$source_count"
+          echo "source_lfs_records=$pointers"
+          echo "destination_lfs_pointers=$dest_pointers"
+          echo "remaining_gaps=0"
+          echo "failures=0"
+          echo "active_jobs=$active_jobs"
+          echo "sha_check=PASS"
+          echo "read_back=PASS"
+          echo "verdict=VERIFIED_CLOSED"
