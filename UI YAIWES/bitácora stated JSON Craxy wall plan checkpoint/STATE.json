@@ -2,34 +2,38 @@
   "contract": "tel.workflow/v3",
   "project": "UI YAIWES modular component integration",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "P02A_FLAG_P02B_FLAG_P02C_FLAG_P03_PARTIAL_P04_ACTIVE",
-  "current_node": "P04_BULKMAN_RESILIENT_CIRCUIT",
+  "status": "P04_CLOSED_UNVERIFIED_WITH_FLAGS_P05_ACTIVE",
+  "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
   "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY",
   "component_count": 14,
   "workflow_owner": "stabilize_core",
-  "p02a": {"status":"CLOSED_UNVERIFIED_WITH_FLAG","commit":"88b424424d62db798da8ea2406992d043e3a23fc"},
-  "p02b": {"status":"CLOSED_UNVERIFIED_WITH_VERSION_FLAG","commit":"9cc1d0a2e5876b0f87a36a297c65c422be36b7e6"},
-  "p02c": {"status":"CLOSED_UNVERIFIED_WITH_EXECUTION_FLAG","commit":"a1e6e4a4ac595a7c29e04bbdb150e3c226d116f5"},
   "p03": {
     "status": "PARTIAL_VERIFIED_WITH_STARLETTE_FLAG",
     "commit": "85a3f758a4a6228e0d5d030a544365ccdef0a198",
-    "httpx": {
-      "status": "VERIFIED_RUNTIME_LOCAL",
-      "source_url": "https://github.com/encode/httpx",
-      "source_commit": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
-      "source_version": "0.28.1",
-      "vendor_tree": "21eaf49210613909be2f7a864389a312a484d0eb",
-      "local_version": "0.28.1",
-      "real_mocktransport_request": "PASS"
+    "httpx": "VERIFIED_RUNTIME_LOCAL",
+    "starlette": "CLOSED_UNVERIFIED_WITH_VERSION_FLAG"
+  },
+  "p04": {
+    "status": "CLOSED_UNVERIFIED_WITH_EXECUTION_FLAGS",
+    "commit": "b7545ca41ae0012e658d3ab8334cbe5aa98c077b",
+    "resilient_circuit": {
+      "source_url": "https://github.com/rodmena-limited/resilient-circuit",
+      "source_commit": "c9d80c845df771a9b9d63f9a48e6f24e6ed0b94a",
+      "source_version": "0.7.0",
+      "vendor_tree": "61ada5ed0ecf9bad6059645264c9fd5549669715",
+      "factory_key": "resilient_circuit.breaker",
+      "adapter_logic": "PASS_INJECTION",
+      "real_vendor_execution": "NOT_PROVEN_LOCAL_PACKAGE_MISSING"
     },
-    "starlette": {
-      "status": "CLOSED_UNVERIFIED_WITH_VERSION_FLAG",
-      "source_url": "https://github.com/Kludex/starlette",
-      "source_commit": "0fcaff1d1e1d16a702a06b40d20092cc9d84d4a3",
-      "source_version": "1.6.0",
-      "vendor_tree": "820b2cdde800811062b2be43abd909e27b38854f",
-      "local_version": "0.50.0",
-      "behavior": "factory rejects mismatch fail-closed"
+    "bulkman": {
+      "source_url": "https://github.com/rodmena-limited/bulkman",
+      "source_commit": "99607f7e1b881a68cc99305ab233299c57469414",
+      "source_version": "2.0.3",
+      "vendor_tree": "c964f8b80bb8e9f5492c5a87a3eeb0bdc43f21af",
+      "factory_key": "bulkman.bulkhead",
+      "dependency": "resilient-circuit>=0.5,<0.8; selected vendor 0.7.0 compatible",
+      "adapter_logic": "PASS_INJECTION",
+      "real_vendor_execution": "NOT_PROVEN_LOCAL_PACKAGE_MISSING"
     },
     "github_readback": "PASS"
   },
@@ -37,7 +41,9 @@
     "P02A-FLAG-REAL-VENDOR-EXECUTION",
     "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
     "P02C-FLAG-REAL-VENDOR-EXECUTION",
-    "P03-FLAG-STARLETTE-VERSION-MISMATCH"
+    "P03-FLAG-STARLETTE-VERSION-MISMATCH",
+    "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
+    "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
   ],
-  "next_gate": "P04: execute five reuse searches and mount Bulkman/resilient-circuit as isolated resilience adapters only"
+  "next_gate": "P05: five reuse searches; mount structlog logging and OpenTelemetry observability as read-only adapters; observability must never govern workflow"
 }
