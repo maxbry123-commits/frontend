@@ -2,41 +2,45 @@
   "contract": "tel.workflow/v3",
   "project": "UI YAIWES modular component integration",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "P01_VERIFIED_CLOSED_P02A_READY",
+  "status": "P01_VERIFIED_CLOSED_P02A_ACTIVE_LOOP",
   "current_node": "P02A_STABILIZE_FACTORY_DEPENDENCY_INJECTION",
   "component_root": "UI YAIWES/componentes open soure UI YAIWES",
   "component_root_tree_sha": "4318b69193b6ba0dedda81e601e174fefa3c5cf7",
   "component_count": 14,
   "root_scattered_components_observed": 0,
   "provenance_matrix": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/COMPONENT-CODE-MAP.md",
-  "provenance_fields": ["SOURCE_URL", "SOURCE_COMMIT", "component_tree_sha", "code_root", "code_root_sha", "destination", "dedup"],
   "p01_verify_final": {
     "status": "PASS",
     "inventory_rows": 14,
     "provenance_rows": 14,
-    "source_url_rows": 14,
-    "source_commit_rows": 14,
-    "destination_dedup_rows": 14,
     "independent_readback": true
   },
   "universal_plugin_socket": {
-    "commit": "4960005c12668e9ef843e1a42b842989cca6e338",
+    "base_commit": "4960005c12668e9ef843e1a42b842989cca6e338",
+    "p02a_commit": "88b424424d62db798da8ea2406992d043e3a23fc",
     "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins",
-    "local_deterministic_tests": "PASS_5_OF_5",
-    "github_readback": "PASS_FILES_PRESENT",
-    "components_enabled": 0
+    "catalog_default_enabled": 0,
+    "runtime_activation": "EXPLICIT_ALLOWLIST_ONLY",
+    "workflow_owner": "stabilize_core"
   },
-  "stabilize_vendor": {
-    "code_tree_sha": "35c7f5b60ee6cf8fd5ae3187d6e92fe15012499b",
-    "state": "VENDORED_NOT_MOUNTED",
-    "api_boundary": "Orchestrator(queue, store=None)"
+  "p02a": {
+    "factory_key": "stabilize.orchestrator",
+    "adapter_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/stabilize_adapter",
+    "queue_required": true,
+    "store_injected": true,
+    "loader_mount_test": "PASS",
+    "dependency_identity_health_test": "PASS",
+    "local_deterministic_tests": "PASS_5_OF_5",
+    "github_readback": "PASS",
+    "actual_vendored_orchestrator_mount": "PENDING_VERIFY_FINAL"
   },
   "reuse_searches": {
     "component_root": "DONE",
-    "frontend_all_roots": "DONE_ROOT_AND_CANONICAL_READBACK",
-    "agentes": "DONE_ROOT_REVIEW",
-    "router_inteligente_universal": "DONE_ROOT_REVIEW",
-    "osquestador_auditor": "DONE_ROOT_REVIEW"
+    "frontend_all_roots": "DONE",
+    "agentes": "DONE",
+    "router_inteligente_universal": "DONE",
+    "osquestador_auditor": "DONE"
   },
-  "next_gate": "P02A must prove factory dependency injection + registry/mount/health with executable evidence; vendored code alone is not integration"
+  "active_gap": "P02A requires executable mount against the real vendored stabilize.Orchestrator before VERIFIED_CLOSED",
+  "next_gate": "execute real vendored Orchestrator(queue, store) through universal loader, verify health/readback, then close P02A or apply StrategyDelta"
 }
