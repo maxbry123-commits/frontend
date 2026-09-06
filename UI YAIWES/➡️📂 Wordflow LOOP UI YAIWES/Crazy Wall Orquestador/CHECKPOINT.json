@@ -1,9 +1,9 @@
 {
-  "checkpoint_id": "UIYAIWES-ARCH-0002",
+  "checkpoint_id": "UIYAIWES-ARCH-0003",
   "contract": "tel.workflow/v3",
-  "status": "WORK_ROOTS_REPLICATED_PENDING_COMPONENT_WIRING",
+  "status": "WORK_ROOTS_REPLICATED_PENDING_FINAL_READBACK",
   "current_node": "VERIFY_DESTINATION_TREE_AND_COMPONENTS",
-  "readme_anchor": "UI YAIWES/README arquitectura UI YAIWES.md",
+  "readme_anchor": "UI YAIWES/Readme arquitectura UI YAIWES.md",
   "handoff_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/HANDOFF.md",
   "state_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/STATE.json",
   "recovery_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/RECOVERY-PATCH.md",
@@ -20,7 +20,8 @@
     "engineering_commit": "7bc798ad4173f39f758abd3d4e6cbc2d909658e6"
   },
   "completed": [
-    "CREATE_CANONICAL_README",
+    "CREATE_AND_MERGE_CANONICAL_README",
+    "REMOVE_SESSION_DUPLICATE_README",
     "CREATE_HANDOFF",
     "CREATE_STATE",
     "CREATE_CHECKPOINT",
