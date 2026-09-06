@@ -1,0 +1,4 @@
+https://github.com/parallax/jsPDF/blob/a3930ce03a585a26b2c76d12a0f413ce96f6d1a3/LICENSE
+https://github.com/parallax/jsPDF/blob/a3930ce03a585a26b2c76d12a0f413ce96f6d1a3/examples/PDF.js/web/cmaps/LICENSE
+https://github.com/parallax/jsPDF/blob/a3930ce03a585a26b2c76d12a0f413ce96f6d1a3/src/license.js
+https://github.com/parallax/jsPDF/blob/a3930ce03a585a26b2c76d12a0f413ce96f6d1a3/test/reference/fonts/Roboto/LICENSE.txt
