@@ -1,0 +1,44 @@
+{
+  "task_id": "ui-yaiwes-grupo-a-14-20260906",
+  "source_skill": {
+    "commit": "a9efcf1ffc3c4e44bd49de1c323287770bed79a7",
+    "lock_note": "The older ADVERTENCIA-CODE.json still lists historical YAML locks. These actual blobs belong to the current section-20 example at this pinned commit.",
+    "path": "skills/skills Github acción/Code Github acción descargar y extracción/",
+    "repository": "maxbry123-commits/agentes",
+    "script_blob": "ef3cef1c8026191c8b06276b4cfe531da45b408e",
+    "yaml_blob": "f5f182358ca54b38c800b366f674e79bf1f7bf16"
+  },
+  "source_base_script": "https://github.com/maxbry123-commits/agentes/blob/a9efcf1ffc3c4e44bd49de1c323287770bed79a7/skills/skills%20Github%20acci%C3%B3n/Code%20Github%20acci%C3%B3n%20descargar%20y%20extracci%C3%B3n/extract_existing_parts.py",
+  "source_base_yaml": "https://github.com/maxbry123-commits/agentes/blob/a9efcf1ffc3c4e44bd49de1c323287770bed79a7/skills/skills%20Github%20acci%C3%B3n/Code%20Github%20acci%C3%B3n%20descargar%20y%20extracci%C3%B3n/gha-download-extract.yml",
+  "surgical_changes": [
+    "TASK_ID, destination, evidence/checkpoint paths and source entries",
+    "Read source blob metadata from pinned source Git trees in PLAN instead of mutable or per-file contents API",
+    "Acquire sources with pinned read-only checkouts; consume Git blobs without executing upstream code",
+    "Preserve source 100644/100755/120000 Git modes; reject unsafe symlink targets",
+    "Generate provenance and SHA256SUMS for regular files from source blob bytes",
+    "Retain baseline snapshot publication, no-filter staging, pointer/size gates, checkpoint and read-back"
+  ],
+  "local_validation": {
+    "syntax": "PASS",
+    "yaml": "PASS",
+    "source_mapping": "14/14; 8094 unique source paths",
+    "bytes_and_modes": "PASS: binary/CRLF, executable, safe symlink",
+    "mismatch_rejection": "PASS",
+    "publish_and_readback": "PASS against isolated local bare Git fixture"
+  },
+  "status": "WORKFLOW_PREPARED; remote execution is the real delivery gate",
+  "integration": {
+    "primary_runtime": "Stabilize CORE",
+    "donors": [
+      "Dagu",
+      "redun"
+    ],
+    "optional": [
+      "Apache PyCasbin"
+    ],
+    "excluded": [
+      "Self-Discover"
+    ],
+    "scope": "Delivery now; Sol prompt covers subsequent integration/wiring after read-back."
+  }
+}

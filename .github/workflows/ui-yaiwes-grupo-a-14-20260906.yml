@@ -1,0 +1,198 @@
+# Ejemplo corregido: copiar este YAML y el extractor con sus locks.
+# Cambiar exclusivamente ui-yaiwes-grupo-a-14-20260906; PLAN.json contiene fuentes y destinos fijados.
+name: ui-yaiwes-grupo-a-14-20260906
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/ui-yaiwes-grupo-a-14-20260906.yml"]
+permissions:
+  contents: write
+env:
+  GIT_LFS_SKIP_SMUDGE: "1"
+  GIT_LFS_SKIP_PUSH: "1"
+  GIT_LFS_SKIP_DOWNLOAD: "1"
+  GIT_TERMINAL_PROMPT: "0"
+concurrency:
+  group: ${{ github.repository }}-main-ui-yaiwes-grupo-a
+  cancel-in-progress: false
+jobs:
+  download-extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: false
+          path: _destination
+          sparse-checkout: |
+            .github/workflows
+            scripts/ui-yaiwes-grupo-a-14-20260906
+            UI YAIWES/Stabilize CORE
+            UI YAIWES/Pydantic
+            UI YAIWES/Bulkman
+            UI YAIWES/resilient-circuit
+            UI YAIWES/Rule Engine
+            UI YAIWES/Starlette
+            UI YAIWES/HTTPX
+            UI YAIWES/structlog
+            UI YAIWES/OpenTelemetry Python
+            UI YAIWES/pytest
+            UI YAIWES/Hypothesis
+            UI YAIWES/Dagu
+            UI YAIWES/redun
+            UI YAIWES/Apache PyCasbin
+            UI YAIWES/_adquisicion/ui-yaiwes-grupo-a-14-20260906
+      - name: Acquire Stabilize CORE at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: rodmena-limited/stabilize
+          ref: 471b501e73a74affd504364c601e5cb7c6296c33
+          path: _rdc_sources/Stabilize CORE
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire Pydantic at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: pydantic/pydantic
+          ref: c23cb86ef197693fc016437614f174252a3d189a
+          path: _rdc_sources/Pydantic
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire Bulkman at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: rodmena-limited/bulkman
+          ref: 99607f7e1b881a68cc99305ab233299c57469414
+          path: _rdc_sources/Bulkman
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire resilient-circuit at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: rodmena-limited/resilient-circuit
+          ref: c9d80c845df771a9b9d63f9a48e6f24e6ed0b94a
+          path: _rdc_sources/resilient-circuit
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire Rule Engine at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: zeroSteiner/rule-engine
+          ref: c166666f66acabfa42856639812a3c20ae04da60
+          path: _rdc_sources/Rule Engine
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire Starlette at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: Kludex/starlette
+          ref: 0fcaff1d1e1d16a702a06b40d20092cc9d84d4a3
+          path: _rdc_sources/Starlette
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire HTTPX at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: encode/httpx
+          ref: b5addb64f0161ff6bfe94c124ef76f6a1fba5254
+          path: _rdc_sources/HTTPX
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire structlog at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: hynek/structlog
+          ref: 73393f34b40c15688b3fdd0982889b225f11b59b
+          path: _rdc_sources/structlog
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire OpenTelemetry Python at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: open-telemetry/opentelemetry-python
+          ref: 96df63add12f6e0453b265ac34c5c07ec7b9267e
+          path: _rdc_sources/OpenTelemetry Python
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire pytest at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: pytest-dev/pytest
+          ref: 1f787563f0a174f938ad3415c2ecd90ae35f03e2
+          path: _rdc_sources/pytest
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire Hypothesis at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: HypothesisWorks/hypothesis
+          ref: a8dcd7422a325926693b5464f73349e361562b7c
+          path: _rdc_sources/Hypothesis
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire Dagu at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: dagucloud/dagu
+          ref: 79747252180ee17f451267d7e2e098e219a04722
+          path: _rdc_sources/Dagu
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire redun at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: insitro/redun
+          ref: 49a299b223bc345b999aaa40daa6876f105089e1
+          path: _rdc_sources/redun
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Acquire Apache PyCasbin at pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: apache/casbin-pycasbin
+          ref: bf5a94be899c3eb14e9d9509904a3b38d9f2cf71
+          path: _rdc_sources/Apache PyCasbin
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+      - name: Deliver 14 pinned source trees with hashes
+        shell: bash
+        working-directory: _destination
+        env:
+          RDC_SOURCE_ROOT: ${{ github.workspace }}/_rdc_sources
+          GH_TOKEN: ${{ github.token }}
+          GIT_LFS_SKIP_SMUDGE: "1"
+          GIT_LFS_SKIP_PUSH: "1"
+          GIT_TERMINAL_PROMPT: "0"
+        run: |
+          set -euo pipefail
+          git config --global filter.lfs.smudge ''
+          git config --global filter.lfs.clean ''
+          git config --global filter.lfs.process ''
+          git config --global filter.lfs.required false
+          git config --global core.compression 0
+          python3 scripts/ui-yaiwes-grupo-a-14-20260906/extract_existing_parts.py --queue scripts/ui-yaiwes-grupo-a-14-20260906/PLAN.json
+      - name: Preserve checkpoint even when a component is blocked
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-yaiwes-grupo-a-14-20260906-checkpoint
+          path: ${{ runner.temp }}/ui-yaiwes-grupo-a-14-20260906-checkpoint.json
+          if-no-files-found: warn
