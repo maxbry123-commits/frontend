@@ -1,30 +1,31 @@
 {
-  "checkpoint_id": "UIYAIWES-P01-VERIFIED-CLOSED-0009",
-  "previous_checkpoint_id": "UIYAIWES-P01-PROVENANCE-0008",
+  "checkpoint_id": "UIYAIWES-P02A-FACTORY-WIRING-0010",
+  "previous_checkpoint_id": "UIYAIWES-P01-VERIFIED-CLOSED-0009",
   "contract": "tel.workflow/v3",
-  "status": "P01_VERIFIED_CLOSED",
+  "status": "P02A_ACTIVE_LOOP_VERIFY_FINAL_PENDING",
   "verified": {
-    "root_scattered_component_dirs": 0,
+    "p01_verified_closed": true,
     "central_component_count": 14,
-    "component_root_tree_sha": "4318b69193b6ba0dedda81e601e174fefa3c5cf7",
-    "inventory_rows": 14,
-    "source_url_rows": 14,
-    "source_commit_rows": 14,
-    "destination_dedup_rows": 14,
-    "code_root_review_rows": 14,
-    "independent_component_map_readback": true,
     "universal_plugin_readback": true,
-    "universal_plugin_local_test": "PASS_5_OF_5",
-    "stabilize_vendor_readback": true,
-    "stabilize_mounted": false
+    "stabilize_factory_module_present": true,
+    "runtime_activation_explicit_allowlist": true,
+    "stabilize_single_workflow_owner": true,
+    "queue_required": true,
+    "store_dependency_injected": true,
+    "loader_mount_test": "PASS",
+    "dependency_identity_health_test": "PASS",
+    "local_deterministic_tests": "PASS_5_OF_5",
+    "github_code_readback": true,
+    "actual_vendored_orchestrator_mount": false
   },
   "evidence_commits": [
-    "7614673cbfe8a3fb9ee634350ef3028b9a7040b7",
     "4960005c12668e9ef843e1a42b842989cca6e338",
-    "50342c5d60a78928a3cc6ef723bac66c915b629b",
-    "acd82ef941ae8c6ce46d91dce456c3c74f7c03f3"
+    "5dee82b06afc9882140caa14050a7bfb921b2e25",
+    "88b424424d62db798da8ea2406992d043e3a23fc",
+    "134e2c0c17521919de8cbbd83ca614ac7afd5be3"
   ],
-  "next_node": "P02A_STABILIZE_FACTORY_DEPENDENCY_INJECTION",
-  "next_gate": "factory + Queue/WorkflowStore injection + registry/mount/health executable evidence",
-  "closure_rule": "P02A cannot PASS from vendored code or imports alone; runtime mount and executable verification are mandatory"
+  "current_node": "P02A_STABILIZE_FACTORY_DEPENDENCY_INJECTION",
+  "active_gap": "Real vendored stabilize.Orchestrator mount has not yet been executed through the universal loader",
+  "next_gate": "execute actual vendored Orchestrator(queue, store), verify runtime.health and independent GitHub readback",
+  "closure_rule": "P02A cannot PASS on FakeOrchestrator tests alone; real vendored mount evidence is mandatory"
 }
