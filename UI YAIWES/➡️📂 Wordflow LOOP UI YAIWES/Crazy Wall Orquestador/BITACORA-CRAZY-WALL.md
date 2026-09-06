@@ -38,16 +38,43 @@ Esta bitácora registra progreso humano-legible. `STATE.json` registra el estado
 - Dagu/redun: donantes de patrones, no segundo runtime.
 
 ## EVENTO UI-CW-0005 — ANCLAS CREADAS
-- `UI YAIWES/README arquitectura UI YAIWES.md` creado.
+- README backend inicial creado.
 - `HANDOFF.md` creado.
 - `STATE.json` creado.
 - `CHECKPOINT.json` creado.
 - `RECOVERY-PATCH.md` creado.
 - Esta bitácora creada.
+- `LEDGER-ARQUITECTURA-UI-YAIWES.md` creado.
 - `Documentos proyecto UI YAIWES/` ya existía al inicio.
-- `UI YAIWES/componentes/` no existía en la comprobación inicial; queda pendiente revisar la llegada de la descarga de Codex.
+- Se creó la raíz exacta solicitada `documentos proyectos UI YAIWES/` sin borrar la histórica.
+
+## EVENTO UI-CW-0006 — RECONCILIACIÓN DEL README
+- Read-back del destino mostró que ya existía `UI YAIWES/Readme arquitectura UI YAIWES.md` con arquitectura frontend/local WebGPU/HF.
+- El README backend creado en esta ejecución difería solo por mayúsculas y generaba riesgo de doble autoridad.
+- Se preservó intacta la arquitectura frontend existente y se fusionó dentro de ese README toda la arquitectura backend/Wordflow 1:1.
+- El duplicado creado por esta ejecución fue eliminado después de la fusión.
+- README canónico único: `UI YAIWES/Readme arquitectura UI YAIWES.md`.
+
+## EVENTO UI-CW-0007 — RAÍCES DE TRABAJO REPLICADAS
+- Wordflow raíz creado: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/`.
+- Crazy Wall: creado.
+- PIPELINE: creado con 3 métodos.
+- runtime/docs: creado.
+- runtime/src/core: creado.
+- runtime/src/adapters: creado.
+- runtime/src/tasks: creado.
+- runtime/src/integration: creado.
+- runtime/tests: creado.
+
+## EVENTO UI-CW-0008 — READ-BACK REAL
+- `Wordflow` read-back: `Crazy Wall Orquestador`, `HANDOFF.md`, `PIPELINE`, `runtime` presentes.
+- `Crazy Wall` read-back: BITACORA, CHECKPOINT, LEDGER, RECOVERY y STATE presentes.
+- `runtime/src` read-back: adapters/core/integration/tasks presentes.
+- `PIPELINE` read-back: 00_METODO, FORENSIC_CODE_AUDIT y ADVANCED_ENGINEERING_STANDARD_V3 presentes.
+- `UI YAIWES/componentes/`: segunda comprobación = `404 / NOT_FOUND`.
+- Veredicto del nodo de réplica: `PASS_STRUCTURE_WITH_EXTERNAL_COMPONENTS_GAP`.
 
 ## SIGUIENTE NODO
-`CREATE_LEDGER_AND_PIPELINE_METHODS_AND_RUNTIME_ROOTS`
+`WAIT_COMPONENTS ➡️ FORENSIC_REVIEW_COMPONENTS ➡️ WIRE_STABILIZE_MEMORY_ROUTER_VALIDATOR ➡️ TEST/RECOVERY/E2E`
 
 No se declara integración backend funcional ni E2E hasta que exista evidencia real de componentes, wiring y tests.
