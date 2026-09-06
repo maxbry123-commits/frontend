@@ -27,5 +27,8 @@ Fuente `https://github.com/Kludex/starlette`, commit `0fcaff1d1e1d16a702a06b40d2
 ## UI-PLUG-0009 — P03 CLASSIFICATION
 HTTPX subnode `VERIFIED_RUNTIME_LOCAL`; Starlette `CLOSED_UNVERIFIED_WITH_VERSION_FLAG`; P03 global `PARTIAL_VERIFIED`. Stabilize sigue siendo único workflow owner.
 
-## UI-PLUG-0010 — SIGUIENTE NODO
-`P04_BULKMAN_RESILIENT_CIRCUIT` ACTIVE. Solo resiliencia; no workflow ownership.
+## UI-PLUG-0010 — P04 BULKMAN + RESILIENT-CIRCUIT
+P04 quedó `CLOSED_UNVERIFIED_WITH_EXECUTION_FLAGS`. Commit `b7545ca41ae0012e658d3ab8334cbe5aa98c077b`. Resilient-circuit: fuente `https://github.com/rodmena-limited/resilient-circuit`, commit `c9d80c845df771a9b9d63f9a48e6f24e6ed0b94a`, versión `0.7.0`, vendor tree `61ada5ed0ecf9bad6059645264c9fd5549669715`, adapter injection PASS; ejecución vendor real pendiente. Bulkman: fuente `https://github.com/rodmena-limited/bulkman`, commit `99607f7e1b881a68cc99305ab233299c57469414`, versión `2.0.3`, vendor tree `c964f8b80bb8e9f5492c5a87a3eeb0bdc43f21af`, adapter injection PASS; ejecución vendor real pendiente. Compatibilidad declarada `resilient-circuit>=0.5,<0.8` satisfecha por 0.7.0. Nunca se declara VERIFIED_CLOSED sin ejecución real.
+
+## UI-PLUG-0011 — P05 ACTIVE
+`P05_STRUCTLOG_OPENTELEMETRY` es el nodo activo conforme a STATE/CHECKPOINT/PLAN. Preflight obligatorio de reutilización: componentes UI → frontend completo → agentes → `router-universal-router-inteligente-` → `osquestador-auditor`; luego arquitectura/fuentes de verdad. Structlog/OpenTelemetry son logging/observabilidad read-only y no pueden gobernar el workflow. `stabilize_core` permanece como único owner.
