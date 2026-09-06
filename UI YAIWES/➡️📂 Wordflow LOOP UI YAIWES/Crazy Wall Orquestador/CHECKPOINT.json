@@ -1,0 +1,39 @@
+{
+  "checkpoint_id": "UIYAIWES-ARCH-0001",
+  "contract": "tel.workflow/v3",
+  "status": "ARCHITECTURE_ANCHORS_PARTIAL",
+  "current_node": "CREATE_CHECKPOINT_RECOVERY_CRAZYWALL_PIPELINE",
+  "readme_anchor": "UI YAIWES/README arquitectura UI YAIWES.md",
+  "handoff_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/HANDOFF.md",
+  "state_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/STATE.json",
+  "recovery_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/RECOVERY-PATCH.md",
+  "crazy_wall_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/BITACORA-CRAZY-WALL.md",
+  "ledger_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/LEDGER-ARQUITECTURA-UI-YAIWES.md",
+  "source_wordflow": "https://github.com/maxbry123-commits/agentes/tree/main/%E2%9E%A1%EF%B8%8F%F0%9F%93%82%20Wordflow%20LOOP%20Yaiwes",
+  "source_evidence": {
+    "source_tree_sha": "4d0ed5e0910ca6fe573b7b3dac83d2c451ba49b3",
+    "source_state_blob": "bb0d1608c2b899eccf64fa0dd52d7eb9e26ee3e9",
+    "source_checkpoint_blob": "5bfa8f5d1f355972714a8a0959ba888ecc8f70b2",
+    "source_handoff_blob": "d2a5b8383082bfef4f1451ebfea857cd39908fd9",
+    "method_commit": "8024e57606cedc34592ef18b3565c624b1e6d676",
+    "forensic_commit": "2072d535920573550a443cf9a3967ab66b50375c",
+    "engineering_commit": "7bc798ad4173f39f758abd3d4e6cbc2d909658e6"
+  },
+  "completed": [
+    "CREATE_CANONICAL_README",
+    "CREATE_HANDOFF",
+    "CREATE_STATE"
+  ],
+  "pending": [
+    "CREATE_RECOVERY",
+    "CREATE_CRAZY_WALL",
+    "CREATE_LEDGER",
+    "CREATE_PIPELINE_METHODS",
+    "CREATE_RUNTIME_ROOTS",
+    "VERIFY_READBACK",
+    "WAIT_AND_VERIFY_COMPONENTS",
+    "WIRE_BACKEND"
+  ],
+  "rollback": "GitHub commit history per created file",
+  "closure_rule": "No VERIFIED_CLOSED until paths exist, read-back passes and backend wiring/tests produce evidence"
+}
