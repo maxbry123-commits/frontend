@@ -1,23 +1,30 @@
 {
-  "checkpoint_id": "UIYAIWES-P01-PROVENANCE-0008",
-  "previous_checkpoint_id": "UIYAIWES-PLUGIN-INTEGRATION-0007",
+  "checkpoint_id": "UIYAIWES-P01-VERIFIED-CLOSED-0009",
+  "previous_checkpoint_id": "UIYAIWES-P01-PROVENANCE-0008",
   "contract": "tel.workflow/v3",
-  "status": "P01_VERIFY_FINAL_PENDING",
-  "verified_so_far": {
+  "status": "P01_VERIFIED_CLOSED",
+  "verified": {
     "root_scattered_component_dirs": 0,
     "central_component_count": 14,
     "component_root_tree_sha": "4318b69193b6ba0dedda81e601e174fefa3c5cf7",
+    "inventory_rows": 14,
     "source_url_rows": 14,
     "source_commit_rows": 14,
     "destination_dedup_rows": 14,
     "code_root_review_rows": 14,
+    "independent_component_map_readback": true,
     "universal_plugin_readback": true,
     "universal_plugin_local_test": "PASS_5_OF_5",
     "stabilize_vendor_readback": true,
     "stabilize_mounted": false
   },
-  "evidence_commits": ["7614673cbfe8a3fb9ee634350ef3028b9a7040b7", "4960005c12668e9ef843e1a42b842989cca6e338", "50342c5d60a78928a3cc6ef723bac66c915b629b"],
-  "next_check": "read back COMPONENT-CODE-MAP and count/compare 14 rows before advancing",
-  "next_if_pass": "P02A_STABILIZE_FACTORY_DEPENDENCY_INJECTION",
-  "closure_rule": "No P02 advance until independent read-back confirms P01 14/14 provenance/destination/dedup matrix"
+  "evidence_commits": [
+    "7614673cbfe8a3fb9ee634350ef3028b9a7040b7",
+    "4960005c12668e9ef843e1a42b842989cca6e338",
+    "50342c5d60a78928a3cc6ef723bac66c915b629b",
+    "acd82ef941ae8c6ce46d91dce456c3c74f7c03f3"
+  ],
+  "next_node": "P02A_STABILIZE_FACTORY_DEPENDENCY_INJECTION",
+  "next_gate": "factory + Queue/WorkflowStore injection + registry/mount/health executable evidence",
+  "closure_rule": "P02A cannot PASS from vendored code or imports alone; runtime mount and executable verification are mandatory"
 }
