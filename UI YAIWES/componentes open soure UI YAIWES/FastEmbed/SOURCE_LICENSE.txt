@@ -1,0 +1,2 @@
+https://github.com/qdrant/fastembed/blob/a34e7bcc42306937dc94c9fef6facd41c327989f/LICENSE
+https://github.com/qdrant/fastembed/blob/a34e7bcc42306937dc94c9fef6facd41c327989f/NOTICE
