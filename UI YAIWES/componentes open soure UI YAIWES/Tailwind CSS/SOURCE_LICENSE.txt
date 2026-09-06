@@ -1,0 +1,3 @@
+https://github.com/tailwindlabs/tailwindcss/blob/f723e834ad032aa0f42405f95f684be3cfcac8ef/LICENSE
+https://github.com/tailwindlabs/tailwindcss/blob/f723e834ad032aa0f42405f95f684be3cfcac8ef/crates/ignore/COPYING
+https://github.com/tailwindlabs/tailwindcss/blob/f723e834ad032aa0f42405f95f684be3cfcac8ef/crates/ignore/LICENSE-MIT
