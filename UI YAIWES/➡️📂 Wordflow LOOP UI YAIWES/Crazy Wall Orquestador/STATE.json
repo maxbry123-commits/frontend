@@ -2,11 +2,14 @@
   "contract": "tel.workflow/v3",
   "project": "Wordflow LOOP UI YAIWES",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "ROOTS_AND_METHODS_REPLICATION_VERIFIED",
-  "current_node": "ROOT_REPLICATION_VERIFIED",
+  "status": "PROGRAMMING_INTEGRATION_PLAN_ACTIVE",
+  "current_node": "P01_COMPONENT_PHYSICAL_INVENTORY",
   "workflow_owner": "Stabilize CORE",
   "frontend_owner": "Grok",
   "canonical_architecture_readme": "UI YAIWES/Readme arquitectura UI YAIWES.md",
+  "architecture_catalog": "UI YAIWES/readme arquitectura UI YAIWES/README.md",
+  "architecture_programming_doc": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md",
+  "architecture_programming_commit": "54a295799c270123f2826beb9d61bec148ad9205",
   "canonical_wordflow_readme": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/➡️📂 readme wordflow loop UI YAIWES.md",
   "handoff": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/HANDOFF.md",
   "crazy_wall": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/BITACORA-CRAZY-WALL.md",
@@ -15,10 +18,16 @@
   "ledger": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/LEDGER-ARQUITECTURA-UI-YAIWES.md",
   "documents_backend_root": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Documentos proyectos wordflow backend UI YAIWES",
   "documents_visible_root": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES",
+  "component_root": "UI YAIWES/componentes open soure UI YAIWES",
+  "previous_closed_node": {
+    "status": "ROOTS_AND_METHODS_REPLICATION_VERIFIED",
+    "checkpoint_id": "UIYAIWES-ROOT-MIRROR-0005",
+    "closure_scope": "roots/method replication only"
+  },
   "source_replication": {
     "repository": "maxbry123-commits/agentes",
     "source_root": "➡️📂 Wordflow LOOP Yaiwes",
-    "source_tree_sha": "4d0ed5e0910ca6fe573b7b3dac83d2c451ba49b3",
+    "historical_source_tree_sha": "4d0ed5e0910ca6fe573b7b3dac83d2c451ba49b3",
     "excluded_by_director": ["📂 archivos download"],
     "excluded_path_readback": "404_NOT_FOUND",
     "exact_tree_sha_matches": {
@@ -32,15 +41,42 @@
     "runtime_src_root_coverage": "PASS_15_OF_15",
     "runtime_project_extras": ["adapters", "tasks", "integration"]
   },
-  "pipeline_methods": {
-    "method_commit": "8024e57606cedc34592ef18b3565c624b1e6d676",
-    "forensic_commit": "2072d535920573550a443cf9a3967ab66b50375c",
-    "engineering_commit": "7bc798ad4173f39f758abd3d4e6cbc2d909658e6",
-    "readback": "PASS_3_OF_3"
+  "source_revalidation_2026_09_06": {
+    "handoff_blob": "d2a5b8383082bfef4f1451ebfea857cd39908fd9",
+    "state_blob": "bb0d1608c2b899eccf64fa0dd52d7eb9e26ee3e9",
+    "checkpoint_blob": "5bfa8f5d1f355972714a8a0959ba888ecc8f70b2",
+    "pipeline_paths_in_source_main": "GAP_404_OR_NOT_FOUND",
+    "pipeline_resolution": "USE_CANONICAL_HISTORICAL_COMMITS_ALREADY_RECOVERED_IN_UI",
+    "persistence_open_mythos_readback": "PASS_FILE_BLOBS_MATCH_SOURCE",
+    "policy": "NO_INVENTED_SOURCE_CONTENT"
   },
-  "wordflow_loop_source_gap": {
-    "declared_in_source_readme_but_absent_in_source_tree": ["runner.py", "layers/", "tests/"],
-    "policy": "NOT_INVENTED_FAIL_CLOSED"
+  "pipeline_methods": {
+    "method_historical_commit": "8024e57606cedc34592ef18b3565c624b1e6d676",
+    "forensic_historical_commit": "2072d535920573550a443cf9a3967ab66b50375c",
+    "engineering_historical_commit": "7bc798ad4173f39f758abd3d4e6cbc2d909658e6",
+    "ui_method_constitution_sync_commit": "a94586bb3cc72a1ffc1b6eb2dbbd8525646a2256",
+    "readback": "PASS_HISTORICAL_3_OF_3_PLUS_CURRENT_CONSTITUTION_DELTA"
+  },
+  "constitution": {
+    "one_instruction_one_node": true,
+    "read_input_literal_no_reinterpret": true,
+    "queue": "1x1",
+    "no_scope_escalation": true,
+    "no_stop_while_gap": true,
+    "input_goals": 12,
+    "output_goals": 12,
+    "post_output_checks": 20,
+    "document_audit_goals": 12,
+    "total_checks_before_coda": 56,
+    "ask_consilio": 12,
+    "coda_goals": 6,
+    "instruction_audit_passes": 3,
+    "refutations": 3,
+    "research_solution_paths_on_gap": 10,
+    "solution_candidates_target_on_gap": 20,
+    "repeat_check_max": 10,
+    "retry_requires_distinct_strategy_delta": true,
+    "verify_final_independent": true
   },
   "existing_systems": {
     "router": "EXISTING_TO_ADAPT",
@@ -48,11 +84,27 @@
   },
   "selected_backend_stack": ["Stabilize CORE", "Pydantic", "Bulkman", "resilient-circuit", "rule-engine", "Starlette", "HTTPX_CONDITIONAL", "structlog", "OpenTelemetry", "pytest", "Hypothesis"],
   "pattern_donors": ["Dagu", "redun"],
-  "component_delivery_observation": {
-    "ui_yaiwes_top_level_component_directories_observed": true,
-    "dedicated_UI_YAIWES_components_directory": "NOT_OBSERVED",
-    "action": "DO_NOT_RELOCATE_WITHOUT_SEPARATE_AUTHORIZED_NODE"
-  },
+  "programming_priorities": [
+    "P1 close minimum Chat→Contract→Stabilize→Router/Memory adapters→Validator/Judge→StateDelta→Checkpoint path with real tests",
+    "P2 extend Work/Artifacts, hybrid Memory, parallelism, sandbox and Virtual Computer only after core gates"
+  ],
+  "pending_programming_chain": [
+    {"id": "P01", "name": "COMPONENT_PHYSICAL_INVENTORY", "status": "READY"},
+    {"id": "P02", "name": "FUNCTION_COMPONENT_REUSE_MATRIX", "status": "BLOCKED_BY_P01"},
+    {"id": "P03", "name": "TYPED_CONTRACTS_V1", "status": "BLOCKED_BY_P02"},
+    {"id": "P04", "name": "CHAT_API_STREAM_CANCEL_STATUS", "status": "BLOCKED_BY_P03"},
+    {"id": "P05", "name": "STABILIZE_WORKFLOW_WIRING", "status": "BLOCKED_BY_P03"},
+    {"id": "P06", "name": "ROUTER_ADAPTER_MODEL_REGISTRY_HEALTH", "status": "BLOCKED_BY_P03"},
+    {"id": "P07", "name": "MEMORY_ADAPTER_V1", "status": "BLOCKED_BY_P03"},
+    {"id": "P08", "name": "VALIDATOR_AUDIT_JUDGE_STRATEGY_DELTA", "status": "BLOCKED_BY_P03"},
+    {"id": "P09", "name": "CONSOLIDATOR_COVERAGE_FINAL_JUDGE", "status": "BLOCKED_BY_P08"},
+    {"id": "P10", "name": "WORK_ARTIFACTS_FILES_TASKS_UI", "status": "BLOCKED_BY_P04_P09"},
+    {"id": "P11", "name": "PARALLELISM_AND_SANDBOX", "status": "BLOCKED_BY_CORE_E2E"},
+    {"id": "P12", "name": "VIRTUAL_COMPUTER_MULTIPLATFORM", "status": "SEPARATE_LATE_PHASE_BLOCKED_BY_CORE"},
+    {"id": "P13", "name": "SECURITY_HARDENING", "status": "CROSS_CUTTING"},
+    {"id": "P14", "name": "TEST_SUITE_AND_FINAL_CLOSE", "status": "CONTINUOUS"}
+  ],
   "evidence_policy": "NO_VERIFIED_CLAIM_WITHOUT_REAL_EVIDENCE",
-  "next_node": "COMPONENT_INVENTORY_AND_BACKEND_WIRING_PENDING_SEPARATE_NODE"
+  "component_delivery_policy": "NO_DOWNLOAD_OR_MOVE_WITHOUT_FUNCTION_GAP_SOURCE_URL_SHA_DESTINATION_AND_DEDUP_CHECK",
+  "next_node": "P01_COMPONENT_PHYSICAL_INVENTORY"
 }
