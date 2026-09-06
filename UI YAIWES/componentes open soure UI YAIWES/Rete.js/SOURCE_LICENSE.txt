@@ -1,0 +1,1 @@
+https://github.com/retejs/rete/blob/2aae19950180dc12725306f06c0440f64473bd21/LICENSE
