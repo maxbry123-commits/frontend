@@ -1,38 +1,30 @@
 {
-  "checkpoint_id": "UIYAIWES-P02B-FLAG-P02C-0012",
-  "previous_checkpoint_id": "UIYAIWES-P02A-FLAG-P02B-0011",
+  "checkpoint_id": "UIYAIWES-P02C-FLAG-P03-0013",
+  "previous_checkpoint_id": "UIYAIWES-P02B-FLAG-P02C-0012",
   "contract": "tel.workflow/v3",
-  "status": "P02B_CLOSED_UNVERIFIED_WITH_FLAG_P02C_ACTIVE",
+  "status": "P02C_CLOSED_UNVERIFIED_WITH_FLAG_P03_ACTIVE",
   "verified": {
     "p01_verified_closed": true,
     "p02a_adapter_wired": true,
-    "p02a_real_vendor_mount": false,
-    "p02b_five_reuse_searches": true,
-    "pydantic_source_tree_present": true,
-    "pydantic_core_source_tree_present": true,
-    "p02b_non_monolithic_adapter_present": true,
-    "p02b_code_only_vendor_present": true,
-    "p02b_local_logic_tests": "PASS_4_OF_4",
-    "p02b_github_readback": true,
-    "p02b_real_runtime_compatible": false
+    "p02b_adapter_and_vendor_present": true,
+    "p02c_five_reuse_searches": true,
+    "p02c_source_version": "5.0.3",
+    "p02c_adapter_present": true,
+    "p02c_code_only_vendor_present": true,
+    "p02c_local_logic_tests": "PASS_5_OF_5",
+    "p02c_github_readback": true,
+    "p02c_real_vendor_execution": false
   },
   "flags": [
-    {
-      "id": "P02A-FLAG-REAL-VENDOR-EXECUTION",
-      "reason": "local DNS blocks independent materialization/execution of target vendor"
-    },
-    {
-      "id": "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
-      "expected": "pydantic 2.14.0b1 / pydantic-core 2.48.0",
-      "actual_local": "pydantic 2.13.4 / pydantic-core 2.46.4",
-      "behavior": "factory fails closed"
-    }
+    "P02A-FLAG-REAL-VENDOR-EXECUTION",
+    "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
+    "P02C-FLAG-REAL-VENDOR-EXECUTION"
   ],
   "evidence_commits": [
-    "9cc1d0a2e5876b0f87a36a297c65c422be36b7e6",
-    "c01b4ddbefd29b760dc5a54327cbe39a15ce54a1",
-    "c01d224664e7960f95a2a8b932ce74c884627597"
+    "a1e6e4a4ac595a7c29e04bbdb150e3c226d116f5",
+    "8659c89a2e968e06258643ef5e65b5ad63a4485d",
+    "9ae3397a8e4541ce1ca2059aa60d780db1bf73ba"
   ],
-  "current_node": "P02C_RULE_ENGINE_POLICY_PLUGIN",
-  "closure_rule": "flags remain open and visible; P02C may continue only as an isolated safe plugin that does not depend on a live P02A/P02B runtime"
+  "current_node": "P03_HTTPX_STARLETTE_ADAPTERS",
+  "closure_rule": "previous flags remain visible; P03 may proceed only with separate transport/server adapters and must not change stabilize_core workflow ownership"
 }
