@@ -15,10 +15,15 @@ Repos fuente permanecen centralizados con provenance. Runtime solo recibe subár
 Commit `4960005c12668e9ef843e1a42b842989cca6e338` materializa `runtime/src/plugins/{contract,catalog,registry,mount_guard,loader}.py` y manifest separado. Factories explícitas, no import arbitrario, componentes `enabled=False` por defecto, donor/test bloqueados en producción, Stabilize único owner. Prueba determinista local: 5/5 PASS; GitHub file read-back PASS; no se afirma CI/deploy.
 
 ## Stabilize code-only
-`src/stabilize/` tree `35c7f5b60ee6cf8fd5ae3187d6e92fe15012499b` está copiado a `runtime/vendor/stabilize/` sin basura upstream. El API real expone `Orchestrator(queue, store=None)`; por eso queda `VENDORED_NOT_MOUNTED` hasta factory/dependency injection y health test.
+`src/stabilize/` tree `35c7f5b60ee6cf8fd5ae3187d6e92fe15012499b` está copiado a `runtime/vendor/stabilize/` sin basura upstream. El API real expone `Orchestrator(queue, store=None)`.
+
+## P02A — factory + dependency injection
+Commit `88b424424d62db798da8ea2406992d043e3a23fc` añade una capa separada, no monolítica: `activation.py` conserva el catálogo inerte y habilita solo factories aprobadas; `stabilize_adapter/dependencies.py` define Queue/WorkflowStore; `factory.py` construye el único owner; `runtime.py` verifica identidad de dependencias; tests separados prueban loader/health/fail-closed. Suite determinista: 5/5 PASS y read-back GitHub PASS.
+
+Estado de integración: `P02A_ACTIVE_LOOP_VERIFY_FINAL_PENDING`. Los tests de wiring usan un `FakeOrchestrator` para demostrar el contrato de enchufe e inyección sin fingir que el runtime vendorizado ya ejecutó. Falta montar el `stabilize.Orchestrator` real vendorizado mediante el mismo `PluginLoader` y verificar health ejecutable antes de `VERIFIED_CLOSED`.
 
 ## Concurrencia protegida
-El sentinela escribió `50342c5d60a78928a3cc6ef723bac66c915b629b` durante el nodo. No se hizo force; este delta se reinyecta encima y completa el GAP que el sentinela detectó (URL/SHA/destino/dedup 14/14).
+No se usa force sobre `main`. Cada delta se reconcilia sobre el HEAD vigente y conserva historial/evidencia.
 
 ## Siguiente gate
-Read-back independiente de la matriz P01. Solo si pasa: `P02A_STABILIZE_FACTORY_DEPENDENCY_INJECTION`.
+`P02A`: ejecutar el factory contra el `Orchestrator(queue, store=None)` vendorizado real, verificar `queue/store` + health + read-back independiente; si falla, persistir GAP y aplicar StrategyDelta distinto. Solo después puede cerrarse P02A y avanzar al siguiente nodo autorizado.
