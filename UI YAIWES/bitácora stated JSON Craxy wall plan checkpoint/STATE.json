@@ -2,11 +2,13 @@
   "contract": "tel.workflow/v3",
   "project": "UI YAIWES modular component integration",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "P04_CLOSED_UNVERIFIED_WITH_FLAGS_P05_ACTIVE",
-  "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
+  "status": "P05_P08_STAGED_MAIN_RECONCILIATION_BLOCKED",
+  "current_node": "RECONCILE_STAGING_AFTER_UIYAIWES_124",
   "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY",
-  "component_count": 14,
+  "component_count_canonical": 14,
   "workflow_owner": "stabilize_core",
+  "staging_branch": "yaiwes-runtime-staging-20260906",
+  "staging_commit": "c16100b7c340dcd437cbd7495f2af319e7a2f4ce",
   "p03": {
     "status": "PARTIAL_VERIFIED_WITH_STARLETTE_FLAG",
     "commit": "85a3f758a4a6228e0d5d030a544365ccdef0a198",
@@ -23,7 +25,7 @@
       "vendor_tree": "61ada5ed0ecf9bad6059645264c9fd5549669715",
       "factory_key": "resilient_circuit.breaker",
       "adapter_logic": "PASS_INJECTION",
-      "real_vendor_execution": "NOT_PROVEN_LOCAL_PACKAGE_MISSING"
+      "real_vendor_execution": "NOT_PROVEN"
     },
     "bulkman": {
       "source_url": "https://github.com/rodmena-limited/bulkman",
@@ -31,11 +33,73 @@
       "source_version": "2.0.3",
       "vendor_tree": "c964f8b80bb8e9f5492c5a87a3eeb0bdc43f21af",
       "factory_key": "bulkman.bulkhead",
-      "dependency": "resilient-circuit>=0.5,<0.8; selected vendor 0.7.0 compatible",
+      "dependency": "resilient-circuit>=0.5,<0.8; selected 0.7.0",
       "adapter_logic": "PASS_INJECTION",
-      "real_vendor_execution": "NOT_PROVEN_LOCAL_PACKAGE_MISSING"
+      "real_vendor_execution": "NOT_PROVEN"
+    }
+  },
+  "p05": {
+    "status": "STAGED_CLOSED_UNVERIFIED_WITH_EXECUTION_FLAGS",
+    "commit": "c16100b7c340dcd437cbd7495f2af319e7a2f4ce",
+    "structlog": {
+      "source_url": "https://github.com/hynek/structlog",
+      "source_commit": "73393f34b40c15688b3fdd0982889b225f11b59b",
+      "vendor_tree": "d64c15da142a3dae10dd1559661c53dd70a521e2",
+      "factory_key": "structlog.logging",
+      "adapter_logic": "PASS_INJECTION",
+      "real_vendor_execution": "NOT_PROVEN"
     },
-    "github_readback": "PASS"
+    "opentelemetry_api": {
+      "source_url": "https://github.com/open-telemetry/opentelemetry-python",
+      "source_commit": "96df63add12f6e0453b265ac34c5c07ec7b9267e",
+      "source_version": "1.45.0.dev",
+      "vendor_api_tree": "6b978f11923255b723f51a93168fa5c2d9752b4d",
+      "factory_key": "opentelemetry.api",
+      "adapter_logic": "PASS_INJECTION",
+      "real_vendor_execution": "NOT_PROVEN_LOCAL_VERSION_MISMATCH"
+    },
+    "opentelemetry_sdk": {
+      "source_version": "1.45.0.dev",
+      "semantic_conventions_version": "0.66b0.dev",
+      "sdk_tree": "d66e8dc3239455464c9272b08e8af9f43ddc1b66",
+      "semantic_conventions_tree": "bae82a5be2e454781dc9f3ad0efd52c931880eb2",
+      "factory_key": "opentelemetry.sdk",
+      "activation": "PREPARED_NOT_ALLOWLISTED",
+      "adapter_logic": "PASS_INJECTION"
+    },
+    "observability_can_govern_workflow": false
+  },
+  "p06": {
+    "status": "STAGED_GATE_PASS",
+    "components": ["pytest", "hypothesis"],
+    "production_mount": "REJECTED_BY_MOUNT_GUARD",
+    "test": "PASS_LOCAL_DETERMINISTIC"
+  },
+  "p07": {
+    "status": "STAGED_GATE_PASS",
+    "components": ["dagu", "redun"],
+    "production_mount": "REJECTED_BY_MOUNT_GUARD",
+    "test": "PASS_LOCAL_DETERMINISTIC"
+  },
+  "p08": {
+    "status": "STAGED_CLOSED_UNVERIFIED_WITH_DEPENDENCY_FLAG",
+    "commit": "c16100b7c340dcd437cbd7495f2af319e7a2f4ce",
+    "source_url": "https://github.com/apache/casbin-pycasbin",
+    "source_commit": "bf5a94be899c3eb14e9d9509904a3b38d9f2cf71",
+    "source_version": "2.6.1",
+    "vendor_tree": "ec2e719085272a06bc13a275c226f767f2202682",
+    "factory_key": "casbin.authorization",
+    "dependencies": ["simpleeval>=1.0.3", "wcmatch>=10.1"],
+    "adapter_logic": "PASS_INJECTION",
+    "real_vendor_execution": "NOT_PROVEN_DEPENDENCIES_MISSING"
+  },
+  "concurrent_acquisition": {
+    "workflow_run": 34060401131,
+    "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131",
+    "status": "IN_PROGRESS",
+    "step": "Process 124 components sequentially with pinned source SHA",
+    "main_mutation": true,
+    "dedup_destructive_actions_allowed": false
   },
   "active_flags": [
     "P02A-FLAG-REAL-VENDOR-EXECUTION",
@@ -43,7 +107,11 @@
     "P02C-FLAG-REAL-VENDOR-EXECUTION",
     "P03-FLAG-STARLETTE-VERSION-MISMATCH",
     "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
-    "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
+    "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION",
+    "P05-FLAG-STRUCTLOG-REAL-VENDOR-EXECUTION",
+    "P05-FLAG-OTEL-VERSION-MISMATCH",
+    "P08-FLAG-PYCASBIN-RUNTIME-DEPENDENCIES",
+    "P01-STALE-BY-CONCURRENT-124-ACQUISITION"
   ],
-  "next_gate": "P05: five reuse searches; mount structlog logging and OpenTelemetry observability as read-only adapters; observability must never govern workflow"
+  "next_gate": "when workflow 34060401131 stops mutating main: reconcile canonical component inventory/dedup, compare staging against final main, apply only non-duplicated runtime delta, then run real vendor tests before VERIFIED_CLOSED"
 }
