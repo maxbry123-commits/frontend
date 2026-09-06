@@ -1,0 +1,11 @@
+https://github.com/BerriAI/litellm/blob/168a0055a244acdcf97c330c52e085ab40b1424c/LICENSE
+https://github.com/BerriAI/litellm/blob/168a0055a244acdcf97c330c52e085ab40b1424c/enterprise/LICENSE.md
+https://github.com/BerriAI/litellm/blob/168a0055a244acdcf97c330c52e085ab40b1424c/license_cache.json
+https://github.com/BerriAI/litellm/blob/168a0055a244acdcf97c330c52e085ab40b1424c/litellm-proxy-extras/LICENSE
+https://github.com/BerriAI/litellm/blob/168a0055a244acdcf97c330c52e085ab40b1424c/terraform/provider/LICENSE
+https://github.com/BerriAI/litellm/blob/168a0055a244acdcf97c330c52e085ab40b1424c/tests/code_coverage_tests/license_cache.json
+https://github.com/BerriAI/litellm/blob/168a0055a244acdcf97c330c52e085ab40b1424c/tests/e2e/ui/tests/proxy-admin/license.spec.ts
+https://github.com/BerriAI/litellm/blob/168a0055a244acdcf97c330c52e085ab40b1424c/ui/litellm-dashboard/src/components/LicenseExpiryBanner.test.tsx
+https://github.com/BerriAI/litellm/blob/168a0055a244acdcf97c330c52e085ab40b1424c/ui/litellm-dashboard/src/components/LicenseExpiryBanner.tsx
+https://github.com/BerriAI/litellm/blob/168a0055a244acdcf97c330c52e085ab40b1424c/ui/litellm-dashboard/src/utils/licenseUtils.test.ts
+https://github.com/BerriAI/litellm/blob/168a0055a244acdcf97c330c52e085ab40b1424c/ui/litellm-dashboard/src/utils/licenseUtils.ts
