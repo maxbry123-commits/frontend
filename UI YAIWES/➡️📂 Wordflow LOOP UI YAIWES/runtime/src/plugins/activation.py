@@ -10,6 +10,7 @@ from .registry import PluginRegistry
 _APPROVED_FACTORY_KEYS: dict[str, str] = {
     "stabilize_core": "stabilize.orchestrator",
     "pydantic": "pydantic.contracts",
+    "rule_engine": "rule_engine.policy",
 }
 
 
@@ -18,11 +19,7 @@ class ActivationRejectedError(ValueError):
 
 
 def build_runtime_registry(enabled_names: Iterable[str] = ()) -> PluginRegistry:
-    """Build an explicit runtime registry from the inert component catalog.
-
-    The catalog remains fail-closed. A component can become mountable only when
-    its name is present in the local approval map and is explicitly requested.
-    """
+    """Build an explicit runtime registry from the inert component catalog."""
 
     requested = frozenset(enabled_names)
     unknown = requested.difference(_APPROVED_FACTORY_KEYS)
