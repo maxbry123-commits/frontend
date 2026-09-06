@@ -1,26 +1,44 @@
 {
-  "checkpoint_id": "UIYAIWES-P04-FLAGS-P05-0015",
-  "previous_checkpoint_id": "UIYAIWES-P03-PARTIAL-P04-0014",
+  "checkpoint_id": "UIYAIWES-P05-P08-STAGING-0016",
+  "previous_checkpoint_id": "UIYAIWES-P04-FLAGS-P05-0015",
   "contract": "tel.workflow/v3",
-  "status": "P04_CLOSED_UNVERIFIED_WITH_FLAGS_P05_ACTIVE",
+  "status": "P05_P08_STAGED_MAIN_RECONCILIATION_BLOCKED",
+  "branch": "yaiwes-runtime-staging-20260906",
+  "staging_commit": "c16100b7c340dcd437cbd7495f2af319e7a2f4ce",
   "verified": {
-    "p04_five_reuse_searches": true,
-    "resilient_circuit_source_version": "0.7.0",
-    "resilient_circuit_vendor_present": true,
-    "resilient_circuit_factory_readback": true,
-    "bulkman_source_version": "2.0.3",
-    "bulkman_vendor_present": true,
-    "bulkman_factory_readback": true,
-    "bulkman_resilient_version_range_compatible": true,
-    "adapter_injection_checks": "PASS",
+    "p03_httpx_starlette_adapters_present_on_main": true,
+    "p04_bulkman_resilient_adapters_present_on_main": true,
+    "p05_structlog_adapter_readback": true,
+    "p05_opentelemetry_api_adapter_readback": true,
+    "p05_opentelemetry_sdk_separate_adapter_readback": true,
+    "p05_otel_sdk_vendor_version_readback": "1.45.0.dev",
+    "p08_pycasbin_adapter_readback": true,
+    "p06_p07_non_mountable_gate_test_present": true,
+    "canonical_loader_catalog_guard_test": "PASS_6_OF_6_LOCAL_DETERMINISTIC",
     "workflow_owner_unchanged": "stabilize_core",
-    "real_vendor_execution": false
+    "otel_sdk_activation_allowlisted": false,
+    "real_vendor_execution_all": false
+  },
+  "vendor_trees": {
+    "structlog": "d64c15da142a3dae10dd1559661c53dd70a521e2",
+    "opentelemetry_composite": "bdaa12dcd2a5a5309f5f8b03aede043b5a580f96",
+    "opentelemetry_api": "6b978f11923255b723f51a93168fa5c2d9752b4d",
+    "opentelemetry_sdk": "d66e8dc3239455464c9272b08e8af9f43ddc1b66",
+    "opentelemetry_semconv": "bae82a5be2e454781dc9f3ad0efd52c931880eb2",
+    "pycasbin": "ec2e719085272a06bc13a275c226f767f2202682"
   },
   "flags": [
-    "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
-    "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
+    "P05-FLAG-STRUCTLOG-REAL-VENDOR-EXECUTION",
+    "P05-FLAG-OTEL-VERSION-MISMATCH",
+    "P08-FLAG-PYCASBIN-RUNTIME-DEPENDENCIES",
+    "P01-STALE-BY-CONCURRENT-124-ACQUISITION"
   ],
-  "evidence_commits": ["b7545ca41ae0012e658d3ab8334cbe5aa98c077b","887b4afca32b9c442f4d527df804c7ada1e82afc"],
-  "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
-  "closure_rule": "P04 cannot become VERIFIED_CLOSED until both vendored packages execute; P05 may proceed independently as read-only observability/logging"
+  "external_blocker": {
+    "workflow_run": 34060401131,
+    "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131",
+    "last_observed_status": "in_progress",
+    "last_observed_step": "Process 124 components sequentially with pinned source SHA"
+  },
+  "current_node": "RECONCILE_STAGING_AFTER_UIYAIWES_124",
+  "closure_rule": "Do not merge or deduplicate while workflow 34060401131 mutates main. After it stops, compare final main with staging; apply only missing runtime delta; rerun real-vendor checks; flags never become PASS without execution evidence."
 }
