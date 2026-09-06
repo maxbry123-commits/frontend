@@ -1,0 +1,11 @@
+https://github.com/tree-sitter/tree-sitter/blob/f430449ab978c9c4abe021e3e7dff71a0c2447fa/LICENSE
+https://github.com/tree-sitter/tree-sitter/blob/f430449ab978c9c4abe021e3e7dff71a0c2447fa/crates/cli/LICENSE
+https://github.com/tree-sitter/tree-sitter/blob/f430449ab978c9c4abe021e3e7dff71a0c2447fa/crates/config/LICENSE
+https://github.com/tree-sitter/tree-sitter/blob/f430449ab978c9c4abe021e3e7dff71a0c2447fa/crates/generate/LICENSE
+https://github.com/tree-sitter/tree-sitter/blob/f430449ab978c9c4abe021e3e7dff71a0c2447fa/crates/highlight/LICENSE
+https://github.com/tree-sitter/tree-sitter/blob/f430449ab978c9c4abe021e3e7dff71a0c2447fa/crates/language/LICENSE
+https://github.com/tree-sitter/tree-sitter/blob/f430449ab978c9c4abe021e3e7dff71a0c2447fa/crates/loader/LICENSE
+https://github.com/tree-sitter/tree-sitter/blob/f430449ab978c9c4abe021e3e7dff71a0c2447fa/crates/tags/LICENSE
+https://github.com/tree-sitter/tree-sitter/blob/f430449ab978c9c4abe021e3e7dff71a0c2447fa/lib/LICENSE
+https://github.com/tree-sitter/tree-sitter/blob/f430449ab978c9c4abe021e3e7dff71a0c2447fa/lib/src/unicode/LICENSE
+https://github.com/tree-sitter/tree-sitter/blob/f430449ab978c9c4abe021e3e7dff71a0c2447fa/lib/src/wasm-stdlib/libc/LICENSE
