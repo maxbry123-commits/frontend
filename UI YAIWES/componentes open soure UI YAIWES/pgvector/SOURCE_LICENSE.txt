@@ -1,0 +1,1 @@
+https://github.com/pgvector/pgvector/blob/e48241b4dcc045b18902914f668d03d1d399dfbe/LICENSE
