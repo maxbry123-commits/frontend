@@ -78,6 +78,21 @@
     "retry_requires_distinct_strategy_delta": true,
     "verify_final_independent": true
   },
+  "watchdogs": {
+    "primary": {
+      "title": "Watchdog LOOP UI YAIWES",
+      "status": "ACTIVE_HOURLY",
+      "queue_synced": "P01_TO_P14",
+      "loop_policy": "LOOP1_PLUS_LOOP2"
+    },
+    "replica": {
+      "title": "Sentinela Reconciliación UI YAIWES",
+      "status": "ACTIVE_HOURLY",
+      "purpose": "anchor_and_queue_reconciliation"
+    },
+    "connector_policy": "NO_GOOGLE_OR_OTHER_EXTERNAL_CONNECTOR_REQUEST_WITHOUT_EXPLICIT_DIRECTOR_ORDER",
+    "google_connectors": "FORBIDDEN_UNLESS_EXPLICITLY_REQUESTED"
+  },
   "existing_systems": {
     "router": "EXISTING_TO_ADAPT",
     "memory": "EXISTING_TO_ADAPT"
