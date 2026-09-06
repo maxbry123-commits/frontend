@@ -1,0 +1,61 @@
+{
+  "contract": "tel.workflow/v3",
+  "project": "Wordflow LOOP UI YAIWES",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "ARCHITECTURE_REPLICATED_IN_PROGRESS",
+  "current_node": "INITIAL_STRUCTURE_AND_BACKEND_WIRING",
+  "workflow_owner": "Stabilize CORE",
+  "frontend_owner": "Grok",
+  "canonical_readme": "UI YAIWES/README arquitectura UI YAIWES.md",
+  "handoff": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/HANDOFF.md",
+  "crazy_wall": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/BITACORA-CRAZY-WALL.md",
+  "checkpoint": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/CHECKPOINT.json",
+  "recovery": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/RECOVERY-PATCH.md",
+  "ledger": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/LEDGER-ARQUITECTURA-UI-YAIWES.md",
+  "documents_root": "UI YAIWES/Documentos proyecto UI YAIWES",
+  "components_root_expected": "UI YAIWES/componentes",
+  "components_root_observed": "NOT_FOUND_AT_INITIAL_CHECK",
+  "existing_systems": {
+    "router": "EXISTING_TO_ADAPT",
+    "memory": "EXISTING_TO_ADAPT"
+  },
+  "selected_stack": [
+    "Stabilize",
+    "Pydantic",
+    "Bulkman",
+    "resilient-circuit",
+    "rule-engine",
+    "Starlette",
+    "HTTPX_CONDITIONAL",
+    "structlog",
+    "OpenTelemetry",
+    "pytest",
+    "Hypothesis"
+  ],
+  "pattern_donors": ["Dagu", "redun"],
+  "pipeline": ["SHERIFF", "VALIDATOR", "RESEARCH", "RANK", "EXECUTE", "SENTINEL", "VERIFY", "JUDGE", "CODA", "VERIFY_FINAL"],
+  "research_funnel": ["chat_historial", "codigo_oficial", "comunidad", "filtrar", "deduplicar", "rankear_url_fecha"],
+  "one_instruction_one_node": true,
+  "queue": "1x1",
+  "no_scope_escalation": true,
+  "retry_requires_distinct_delta": true,
+  "repeat_check": {
+    "real_or_flaky_max_runs": 10,
+    "pure_deterministic_runs": 1
+  },
+  "closure_states": ["VERIFIED_CLOSED", "CLOSED_UNVERIFIED", "INCONCLUSIVE"],
+  "evidence_policy": "NO_VERIFIED_CLAIM_WITHOUT_REAL_EVIDENCE",
+  "runtime_progress": {
+    "architecture_readme": "CREATED",
+    "handoff": "CREATED",
+    "state": "CREATED",
+    "checkpoint": "PENDING_CREATE",
+    "recovery": "PENDING_CREATE",
+    "crazy_wall": "PENDING_CREATE",
+    "pipeline_methods": "PENDING_CREATE",
+    "runtime_roots": "PENDING_CREATE",
+    "component_wiring": "PENDING_COMPONENT_ARRIVAL",
+    "e2e": "NOT_RUN"
+  },
+  "next_node": "CREATE_CHECKPOINT_RECOVERY_CRAZYWALL_PIPELINE"
+}
