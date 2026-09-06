@@ -2,37 +2,42 @@
   "contract": "tel.workflow/v3",
   "project": "UI YAIWES modular component integration",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "P02A_FLAG_P02B_FLAG_P02C_FLAG_P03_ACTIVE",
-  "current_node": "P03_HTTPX_STARLETTE_ADAPTERS",
+  "status": "P02A_FLAG_P02B_FLAG_P02C_FLAG_P03_PARTIAL_P04_ACTIVE",
+  "current_node": "P04_BULKMAN_RESILIENT_CIRCUIT",
   "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY",
   "component_count": 14,
   "workflow_owner": "stabilize_core",
-  "p02a": {
-    "status": "CLOSED_UNVERIFIED_WITH_FLAG",
-    "flag": "TARGET_RUNTIME_EXECUTION_BLOCKED_BY_LOCAL_DNS",
-    "wiring_commit": "88b424424d62db798da8ea2406992d043e3a23fc"
-  },
-  "p02b": {
-    "status": "CLOSED_UNVERIFIED_WITH_VERSION_FLAG",
-    "commit": "9cc1d0a2e5876b0f87a36a297c65c422be36b7e6",
-    "flag": "PYDANTIC_CORE_VERSION_MISMATCH"
-  },
-  "p02c": {
-    "status": "CLOSED_UNVERIFIED_WITH_EXECUTION_FLAG",
-    "commit": "a1e6e4a4ac595a7c29e04bbdb150e3c226d116f5",
-    "architecture_commit": "8659c89a2e968e06258643ef5e65b5ad63a4485d",
-    "factory_key": "rule_engine.policy",
-    "source_commit": "c166666f66acabfa42856639812a3c20ae04da60",
-    "source_version": "5.0.3",
-    "vendor_tree": "3ca8717fb4ce3561b1e76053afc487061c76cfe3",
-    "local_logic_tests": "PASS_5_OF_5",
-    "github_readback": "PASS",
-    "real_vendor_execution": "BLOCKED_BY_LOCAL_DNS"
+  "p02a": {"status":"CLOSED_UNVERIFIED_WITH_FLAG","commit":"88b424424d62db798da8ea2406992d043e3a23fc"},
+  "p02b": {"status":"CLOSED_UNVERIFIED_WITH_VERSION_FLAG","commit":"9cc1d0a2e5876b0f87a36a297c65c422be36b7e6"},
+  "p02c": {"status":"CLOSED_UNVERIFIED_WITH_EXECUTION_FLAG","commit":"a1e6e4a4ac595a7c29e04bbdb150e3c226d116f5"},
+  "p03": {
+    "status": "PARTIAL_VERIFIED_WITH_STARLETTE_FLAG",
+    "commit": "85a3f758a4a6228e0d5d030a544365ccdef0a198",
+    "httpx": {
+      "status": "VERIFIED_RUNTIME_LOCAL",
+      "source_url": "https://github.com/encode/httpx",
+      "source_commit": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+      "source_version": "0.28.1",
+      "vendor_tree": "21eaf49210613909be2f7a864389a312a484d0eb",
+      "local_version": "0.28.1",
+      "real_mocktransport_request": "PASS"
+    },
+    "starlette": {
+      "status": "CLOSED_UNVERIFIED_WITH_VERSION_FLAG",
+      "source_url": "https://github.com/Kludex/starlette",
+      "source_commit": "0fcaff1d1e1d16a702a06b40d20092cc9d84d4a3",
+      "source_version": "1.6.0",
+      "vendor_tree": "820b2cdde800811062b2be43abd909e27b38854f",
+      "local_version": "0.50.0",
+      "behavior": "factory rejects mismatch fail-closed"
+    },
+    "github_readback": "PASS"
   },
   "active_flags": [
     "P02A-FLAG-REAL-VENDOR-EXECUTION",
     "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
-    "P02C-FLAG-REAL-VENDOR-EXECUTION"
+    "P02C-FLAG-REAL-VENDOR-EXECUTION",
+    "P03-FLAG-STARLETTE-VERSION-MISMATCH"
   ],
-  "next_gate": "P03: execute five mandatory reuse searches, audit HTTPX/Starlette source APIs and dependencies, then mount separate transport/server adapters without workflow ownership"
+  "next_gate": "P04: execute five reuse searches and mount Bulkman/resilient-circuit as isolated resilience adapters only"
 }
