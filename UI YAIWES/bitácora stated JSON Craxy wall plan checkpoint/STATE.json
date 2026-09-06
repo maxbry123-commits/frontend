@@ -12,13 +12,14 @@
   "p04": {"status":"CLOSED_UNVERIFIED_WITH_EXECUTION_FLAGS","commit":"b7545ca41ae0012e658d3ab8334cbe5aa98c077b","github_readback":"PASS"},
   "p05": {
     "status": "STAGED_UNVERIFIED",
-    "commit": "f26b1c87c6e4f873fdade6e14959e882d4704142",
+    "code_commit": "f26b1c87c6e4f873fdade6e14959e882d4704142",
     "structlog": {"source_url":"https://github.com/hynek/structlog","source_commit":"73393f34b40c15688b3fdd0982889b225f11b59b","catalog_tree":"5393fcee00ae1ed638601ed9915c78dd862988d5","code_tree":"d64c15da142a3dae10dd1559661c53dd70a521e2","factory_key":"structlog.logging","license":"MIT OR Apache-2.0","read_only":true},
     "opentelemetry": {"source_url":"https://github.com/open-telemetry/opentelemetry-python","source_commit":"96df63add12f6e0453b265ac34c5c07ec7b9267e","catalog_tree":"2a74339d862124f2637247862f53497448619d49","api_code_tree":"6b978f11923255b723f51a93168fa5c2d9752b4d","factory_key":"opentelemetry.observability","license":"Apache-2.0","read_only":true},
     "github_readback": "PASS",
-    "runtime_tests": "NOT_EXECUTED",
-    "main_merge": "BLOCKED_BY_CONCURRENT_ACQUISITION"
+    "injection_socket_checks": "3/3 PASS",
+    "real_vendor_tests": "NOT_EXECUTED",
+    "main_merge": "NOT_ATTEMPTED"
   },
-  "active_flags": ["P02A-FLAG-REAL-VENDOR-EXECUTION","P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH","P02C-FLAG-REAL-VENDOR-EXECUTION","P03-FLAG-STARLETTE-VERSION-MISMATCH","P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION","P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION","P05-FLAG-RUNTIME-TESTS-NOT-EXECUTED","P05-FLAG-MAIN-CONCURRENT-ACQUISITION","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
-  "next_gate": "Execute P05 runtime tests against staged code; reconcile moving main without force; only then classify/merge and persist read-back."
+  "active_flags": ["P02A-FLAG-REAL-VENDOR-EXECUTION","P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH","P02C-FLAG-REAL-VENDOR-EXECUTION","P03-FLAG-STARLETTE-VERSION-MISMATCH","P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION","P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION","P05-FLAG-REAL-VENDOR-TESTS-NOT-EXECUTED","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
+  "next_gate": "Execute real-vendored P05 tests from staging; re-check main HEAD; fast-forward only if ancestry is unchanged, otherwise reconcile preserving both histories."
 }

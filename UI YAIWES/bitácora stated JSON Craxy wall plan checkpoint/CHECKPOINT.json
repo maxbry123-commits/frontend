@@ -1,23 +1,11 @@
 {
-  "checkpoint_id": "UIYAIWES-P05-STAGING-0016",
-  "previous_checkpoint_id": "UIYAIWES-P04-FLAGS-P05-0015",
+  "checkpoint_id": "UIYAIWES-P05-STAGING-0017",
+  "previous_checkpoint_id": "UIYAIWES-P05-STAGING-0016",
   "contract": "tel.workflow/v3",
   "status": "P05_STAGED_UNVERIFIED",
-  "verified": {
-    "p05_five_reuse_searches": true,
-    "structlog_provenance": true,
-    "opentelemetry_provenance": true,
-    "code_only_vendor_trees": true,
-    "licenses_preserved": true,
-    "separate_adapters": true,
-    "activation_keys_registered": true,
-    "workflow_owner_unchanged": "stabilize_core",
-    "github_readback": true,
-    "runtime_tests": false,
-    "main_merge": false
-  },
-  "flags": ["P05-FLAG-RUNTIME-TESTS-NOT-EXECUTED","P05-FLAG-MAIN-CONCURRENT-ACQUISITION","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
-  "evidence_commits": ["f26b1c87c6e4f873fdade6e14959e882d4704142"],
+  "verified": {"p05_five_reuse_searches":true,"structlog_provenance":true,"opentelemetry_provenance":true,"code_only_vendor_trees":true,"licenses_preserved":true,"separate_adapters":true,"activation_keys_registered":true,"workflow_owner_unchanged":"stabilize_core","github_readback":true,"injection_socket_checks":"3/3 PASS","real_vendor_tests":false,"main_merge":false},
+  "flags": ["P05-FLAG-REAL-VENDOR-TESTS-NOT-EXECUTED","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
+  "evidence_commits": ["f26b1c87c6e4f873fdade6e14959e882d4704142","0e68f1e4cd79e019f951ba91013177bfd645afc5"],
   "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
-  "closure_rule": "No VERIFIED_CLOSED until staged real-vendor tests pass, branch is reconciled with current main without force, evidence is synchronized, and final read-back passes."
+  "closure_rule": "Injection/socket PASS is not real-vendor execution. No VERIFIED_CLOSED until vendored Structlog/OpenTelemetry tests pass and main integration/read-back is proven."
 }
