@@ -6,7 +6,7 @@ Contrato: `tel.workflow/v3`
 Este método replica el patrón canónico de YAIWES y lo adapta al backend de `frontend/UI YAIWES/` sin crear una arquitectura paralela.
 
 ## Fuentes que gobiernan
-1. `UI YAIWES/README arquitectura UI YAIWES.md`
+1. `UI YAIWES/Readme arquitectura UI YAIWES.md`
 2. `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/HANDOFF.md`
 3. `Crazy Wall Orquestador/STATE.json`
 4. `Crazy Wall Orquestador/CHECKPOINT.json`
