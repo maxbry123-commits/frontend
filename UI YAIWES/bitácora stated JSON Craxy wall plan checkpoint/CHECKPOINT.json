@@ -1,27 +1,26 @@
 {
-  "checkpoint_id": "UIYAIWES-P03-PARTIAL-P04-0014",
-  "previous_checkpoint_id": "UIYAIWES-P02C-FLAG-P03-0013",
+  "checkpoint_id": "UIYAIWES-P04-FLAGS-P05-0015",
+  "previous_checkpoint_id": "UIYAIWES-P03-PARTIAL-P04-0014",
   "contract": "tel.workflow/v3",
-  "status": "P03_PARTIAL_VERIFIED_P04_ACTIVE",
+  "status": "P04_CLOSED_UNVERIFIED_WITH_FLAGS_P05_ACTIVE",
   "verified": {
-    "p03_five_reuse_searches": true,
-    "httpx_source_version": "0.28.1",
-    "httpx_local_version": "0.28.1",
-    "httpx_real_mocktransport_request": "PASS",
-    "httpx_adapter_and_vendor_readback": true,
-    "starlette_source_version": "1.6.0",
-    "starlette_local_version": "0.50.0",
-    "starlette_version_gate": "PASS_FAIL_CLOSED",
-    "starlette_adapter_and_vendor_readback": true,
-    "workflow_owner_unchanged": "stabilize_core"
+    "p04_five_reuse_searches": true,
+    "resilient_circuit_source_version": "0.7.0",
+    "resilient_circuit_vendor_present": true,
+    "resilient_circuit_factory_readback": true,
+    "bulkman_source_version": "2.0.3",
+    "bulkman_vendor_present": true,
+    "bulkman_factory_readback": true,
+    "bulkman_resilient_version_range_compatible": true,
+    "adapter_injection_checks": "PASS",
+    "workflow_owner_unchanged": "stabilize_core",
+    "real_vendor_execution": false
   },
   "flags": [
-    "P02A-FLAG-REAL-VENDOR-EXECUTION",
-    "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
-    "P02C-FLAG-REAL-VENDOR-EXECUTION",
-    "P03-FLAG-STARLETTE-VERSION-MISMATCH"
+    "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
+    "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
   ],
-  "evidence_commits": ["85a3f758a4a6228e0d5d030a544365ccdef0a198","09e5ec39cb2b05cce0e5e6216be58322e55956f7"],
-  "current_node": "P04_BULKMAN_RESILIENT_CIRCUIT",
-  "closure_rule": "HTTPX subnode is executable PASS; P03 overall remains partial until Starlette 1.6.0 executes"
+  "evidence_commits": ["b7545ca41ae0012e658d3ab8334cbe5aa98c077b","887b4afca32b9c442f4d527df804c7ada1e82afc"],
+  "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
+  "closure_rule": "P04 cannot become VERIFIED_CLOSED until both vendored packages execute; P05 may proceed independently as read-only observability/logging"
 }
