@@ -1,0 +1,101 @@
+name: release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout code
+        uses: actions/checkout@v7
+
+      - run: |
+          echo "GIT_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      -
+        name: Docker meta
+        id: docker_meta
+        uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9
+        with:
+          images: |
+            ghcr.io/tus/tusd
+            tusproject/tusd
+          tags: |
+            type=sha
+            type=semver,pattern=v{{version}}
+            type=semver,pattern=v{{major}}.{{minor}}
+            type=semver,pattern=v{{major}}
+
+      -
+        name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5
+        with:
+          install: true
+
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ github.token }}
+
+      -
+        name: Login to Docker Container Registry
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      -
+        name: Build and push
+        id: build
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf
+        with:
+          push: true
+          builder: ${{ steps.buildx.outputs.name }}
+          tags: ${{ steps.docker_meta.outputs.tags }}
+          labels: ${{ steps.docker_meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha
+          build-args: |
+            GIT_VERSION=${{ env.GIT_VERSION }}
+            GIT_COMMIT=${{ github.sha }}
+          platforms: linux/amd64,linux/arm64/v8
+
+  build-binary:
+    runs-on: ubuntu-latest
+    permissions:
+      # Required for gh release create / gh release upload
+      contents: write
+    steps:
+      -
+        name: Checkout code
+        uses: actions/checkout@v7
+
+      -
+        name: Install Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: 'stable'
+
+      -
+        name: Build TUSD
+        run: ./scripts/build_all.sh
+
+      -
+        name: GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          gh release create "$TAG" --title "$TAG" --generate-notes || true
+          gh release upload "$TAG" tusd_*.* --clobber
