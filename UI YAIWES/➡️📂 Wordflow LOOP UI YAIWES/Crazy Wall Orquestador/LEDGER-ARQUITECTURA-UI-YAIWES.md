@@ -6,7 +6,7 @@ Modo: FAIL-CLOSED
 ## Autoridades
 1. Instrucciones literales del Director en el chat actual.
 2. Arquitectura de trabajo fuente: `maxbry123-commits/agentes/➡️📂 Wordflow LOOP Yaiwes`.
-3. README backend de este destino: `UI YAIWES/README arquitectura UI YAIWES.md`.
+3. README canónico destino: `UI YAIWES/Readme arquitectura UI YAIWES.md`.
 4. STATE/CHECKPOINT/RECOVERY/Crazy Wall del destino.
 
 ## Evidencia fuente recuperada
@@ -40,10 +40,17 @@ Blob leído: `5c4f0d8b22880af6f5677d6da5d9ae8f24604b53`
 - Grok se encarga del frontend.
 - Este árbol se limita a backend/Wordflow/integración.
 
+## Reconciliación README
+- Existía `UI YAIWES/Readme arquitectura UI YAIWES.md` con arquitectura frontend/local/HF.
+- Se creó temporalmente un README backend con diferencia solo de mayúsculas.
+- El backend 1:1 fue fusionado dentro del README existente.
+- El duplicado temporal fue eliminado después de la fusión.
+- Resultado: un único README canónico conserva frontend + backend.
+
 ## Estado inicial de componentes
 Ruta esperada: `UI YAIWES/componentes/`.
-Comprobación inicial: `404 / NOT_FOUND`.
-Interpretación: descarga de Codex todavía no visible en esa lectura; no se declara fallo del proceso de Codex, solo ausencia observable en ese instante.
+Comprobación inicial y read-back posterior: `404 / NOT_FOUND`.
+Interpretación: descarga de Codex todavía no visible en esa ruta durante estas lecturas; no se declara fallo del proceso de Codex, solo ausencia observable.
 
 ## Regla de ledger
 Un evento pasado no se reescribe como si nunca hubiera ocurrido. Correcciones posteriores se agregan como eventos/deltas nuevos con evidencia.
