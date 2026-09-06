@@ -1,8 +1,8 @@
 {
-  "checkpoint_id": "UIYAIWES-ARCH-0003",
+  "checkpoint_id": "UIYAIWES-ARCH-0004",
   "contract": "tel.workflow/v3",
-  "status": "WORK_ROOTS_REPLICATED_PENDING_FINAL_READBACK",
-  "current_node": "VERIFY_DESTINATION_TREE_AND_COMPONENTS",
+  "status": "PASS_STRUCTURE_WITH_EXTERNAL_COMPONENTS_GAP",
+  "current_node": "WAIT_COMPONENTS",
   "readme_anchor": "UI YAIWES/Readme arquitectura UI YAIWES.md",
   "handoff_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/HANDOFF.md",
   "state_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/STATE.json",
@@ -12,15 +12,12 @@
   "source_wordflow": "https://github.com/maxbry123-commits/agentes/tree/main/%E2%9E%A1%EF%B8%8F%F0%9F%93%82%20Wordflow%20LOOP%20Yaiwes",
   "source_evidence": {
     "source_tree_sha": "4d0ed5e0910ca6fe573b7b3dac83d2c451ba49b3",
-    "source_state_blob": "bb0d1608c2b899eccf64fa0dd52d7eb9e26ee3e9",
-    "source_checkpoint_blob": "5bfa8f5d1f355972714a8a0959ba888ecc8f70b2",
-    "source_handoff_blob": "d2a5b8383082bfef4f1451ebfea857cd39908fd9",
     "method_commit": "8024e57606cedc34592ef18b3565c624b1e6d676",
     "forensic_commit": "2072d535920573550a443cf9a3967ab66b50375c",
     "engineering_commit": "7bc798ad4173f39f758abd3d4e6cbc2d909658e6"
   },
   "completed": [
-    "CREATE_AND_MERGE_CANONICAL_README",
+    "MERGE_BACKEND_1A1_INTO_CANONICAL_README",
     "REMOVE_SESSION_DUPLICATE_README",
     "CREATE_HANDOFF",
     "CREATE_STATE",
@@ -30,26 +27,31 @@
     "CREATE_LEDGER",
     "CREATE_PIPELINE_METHODS",
     "CREATE_RUNTIME_ROOTS",
-    "CREATE_EXACT_DOCUMENTS_ROOT"
+    "CREATE_EXACT_DOCUMENTS_ROOT",
+    "READBACK_WORDFLOW_ROOT",
+    "READBACK_CRAZY_WALL_5_OF_5",
+    "READBACK_PIPELINE_3_OF_3",
+    "READBACK_RUNTIME_SRC_4_OF_4"
   ],
-  "runtime_roots": [
-    "runtime/docs",
-    "runtime/src/core",
-    "runtime/src/adapters",
-    "runtime/src/tasks",
-    "runtime/src/integration",
-    "runtime/tests"
-  ],
+  "readback": {
+    "wordflow_root": "PASS",
+    "crazy_wall": "PASS_5_OF_5",
+    "pipeline": "PASS_3_OF_3",
+    "runtime": "PASS",
+    "runtime_src": "PASS_4_OF_4",
+    "components_root": "GAP_404_AFTER_SECOND_CHECK"
+  },
   "pending": [
-    "VERIFY_READBACK_FULL_TREE",
-    "VERIFY_COMPONENTS_ROOT",
+    "COMPONENTS_ARRIVAL",
     "FORENSIC_REVIEW_DOWNLOADED_COMPONENTS",
     "WIRE_STABILIZE_CORE",
     "WIRE_MEMORY_ADAPTER",
     "WIRE_ROUTER_ADAPTER",
     "WIRE_VALIDATOR_JUDGE",
-    "RUN_RECOVERY_AND_E2E_TESTS"
+    "RUN_RECOVERY_TESTS",
+    "RUN_E2E_TESTS"
   ],
+  "next_node": "FORENSIC_REVIEW_COMPONENTS_WHEN_PRESENT",
   "rollback": "GitHub commit history per created/updated file",
-  "closure_rule": "No VERIFIED_CLOSED until component code is present, reviewed, wired and tests/recovery/E2E pass with evidence"
+  "closure_rule": "No VERIFIED_CLOSED until downloaded component code exists in destination, is reviewed/wired and recovery/E2E tests pass with evidence"
 }
