@@ -1,0 +1,100 @@
+"""
+Configuration for the queue processor.
+
+This module provides the QueueProcessorConfig dataclass with
+values that can be loaded from environment variables via HandlerConfig.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import timedelta
+
+from stabilize.resilience.config import HandlerConfig, get_handler_config
+
+
+@dataclass
+class QueueProcessorConfig:
+    """Configuration for the queue processor.
+
+    Values can be loaded from environment variables via HandlerConfig.
+    See HandlerConfig documentation for environment variable names.
+    """
+
+    # How often to poll the queue (milliseconds)
+    poll_frequency_ms: int = 50
+
+    # Maximum number of concurrent message handlers
+    max_workers: int = 10
+
+    # Delay before reprocessing a failed message
+    retry_delay: timedelta = timedelta(seconds=15)
+
+    # Whether to stop on unhandled exceptions
+    stop_on_error: bool = False
+
+    # Enable message deduplication for idempotency
+    enable_deduplication: bool = True
+
+    # Trust bloom-filter negatives to skip the durable is_message_processed()
+    # check. Only safe when this process is the ONLY writer to the store's
+    # processed_messages (single-process deployments): another worker marking
+    # a message processed after this bloom was hydrated would make a negative
+    # falsely conclusive. Off by default — every message is confirmed against
+    # the durable store.
+    dedup_trust_negative_cache: bool = False
+
+    # Renew the queue message lock (heartbeat) while a handler is executing,
+    # so a task that outlives the queue's lock_duration is not redelivered to
+    # another worker and executed twice. The lock lapses naturally when this
+    # worker dies. Requires the queue to support extend_lock(). For
+    # multi-process deployments also consider the distributed TaskLease
+    # (RunTaskHandler(task_lease=...)) which fences duplicate task execution
+    # across workers even when messages are re-queued by recovery.
+    enable_lock_heartbeat: bool = True
+    # Seconds between heartbeats. None derives half the queue's lock_duration.
+    lock_heartbeat_interval_seconds: float | None = None
+
+    # Seconds between poison-message sweeps in the polling loop: messages
+    # past max_attempts are moved to the DLQ so they stay visible instead of
+    # stalling invisibly (poll skips them but size() still counts them).
+    # 0 disables the periodic sweep (process_all() still sweeps per drain).
+    dlq_check_interval_seconds: float = 30.0
+
+    # Opt-in retention sweep for the processed_messages dedup table, which
+    # otherwise accrues one row per message for the life of the database.
+    # Disabled by default: deleting dedup records narrows the redelivery
+    # window they guard, so enabling it is an operator decision.
+    retention_sweep_interval_seconds: float = 0.0
+    processed_messages_max_age_hours: float = 24.0
+
+    # --- Automatic crash recovery (opt-in; all default to disabled) ---
+    # Run a one-shot recovery sweep when start() is called. This re-queues
+    # workflows that were interrupted by a crash/restart. Requires a store.
+    recover_on_start: bool = False
+    # If > 0, run periodic recovery sweeps on a background thread every N
+    # seconds (for long-running / distributed deployments where a peer worker
+    # may have died). 0 disables periodic recovery. Relies on the same
+    # idempotent recovery path as recover_on_start.
+    recovery_interval_seconds: float = 0.0
+    # Optional application filter for recovery sweeps.
+    recovery_application: str | None = None
+    # Only recover workflows started within this many hours.
+    recovery_max_age_hours: float = 24.0
+
+    @classmethod
+    def from_handler_config(cls, handler_config: HandlerConfig | None = None) -> QueueProcessorConfig:
+        """Create QueueProcessorConfig from HandlerConfig.
+
+        Args:
+            handler_config: HandlerConfig to use. If None, loads from environment.
+
+        Returns:
+            QueueProcessorConfig with values from HandlerConfig
+        """
+        config = handler_config or get_handler_config()
+        return cls(
+            poll_frequency_ms=config.poll_frequency_ms,
+            max_workers=config.max_workers,
+            retry_delay=timedelta(seconds=config.handler_retry_delay_seconds),
+        )

@@ -1,0 +1,17 @@
+version: 1
+name: ui-yaiwes-universal-plugin-socket
+contract: tel.workflow/v3
+mode: FAIL_CLOSED
+registry: src.plugins.catalog:build_registry
+loader: src.plugins.loader:PluginLoader
+mount_guard: src.plugins.mount_guard:MountGuard
+workflow_owner: stabilize_core
+policy:
+  arbitrary_import_strings: false
+  mount_disabled_by_default: true
+  donor_mount_production: false
+  test_plugin_mount_production: false
+  source_tree_sha_required: true
+  unique_workflow_owner_required: true
+  evidence_required_for_enable: true
+status: SOCKET_IMPLEMENTED_COMPONENTS_NOT_YET_MOUNTED
