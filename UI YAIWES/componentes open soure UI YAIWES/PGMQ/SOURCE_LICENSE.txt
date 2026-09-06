@@ -1,0 +1,2 @@
+https://github.com/pgmq/pgmq/blob/390c1ed3811cca973b6af607d87d64ce90511bae/LICENSE
+https://github.com/pgmq/pgmq/blob/390c1ed3811cca973b6af607d87d64ce90511bae/pgmq-rs/LICENSE
