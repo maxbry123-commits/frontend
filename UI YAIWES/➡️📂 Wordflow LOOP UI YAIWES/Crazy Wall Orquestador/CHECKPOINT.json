@@ -36,9 +36,18 @@
       "source_gap": "PIPELINE paths declared by current HANDOFF are absent from source main; UI uses recovered canonical historical commits"
     },
     "S2_P3_PLAN_REGISTRATION": {
-      "status": "PASS_ANCHORS_UPDATED_IN_PROGRESS",
+      "status": "PASS_ANCHORS_UPDATED",
       "crazy_wall_commit": "3d81da7661c5f2ece964c3f62f64841cd7e782ba",
-      "state_commit": "735d97c785094ac7fa6422f80df28484be937769"
+      "state_commit": "735d97c785094ac7fa6422f80df28484be937769",
+      "checkpoint_commit": "8acdbaebad341534783226339b36c190a0049453"
+    },
+    "S2_P4_WATCHDOGS": {
+      "status": "PASS_TWO_ACTIVE_HOURLY_WATCHDOGS",
+      "primary": "Watchdog LOOP UI YAIWES",
+      "replica": "Sentinela Reconciliación UI YAIWES",
+      "primary_queue": "P01_TO_P14",
+      "connector_policy": "NO_GOOGLE_OR_UNREQUESTED_EXTERNAL_CONNECTORS",
+      "state_sync_commit": "0fe1a43c74ec547dba514753f068e1fb14c40af2"
     }
   },
   "constitution": {
@@ -79,6 +88,11 @@
     "goal": "enumerate physically present components and deduplicate against audited catalog before any new download/move/integration",
     "destination": "UI YAIWES/componentes open soure UI YAIWES",
     "closure_evidence": ["directory readback", "component list", "source/destination mapping", "duplicate classification", "URLs/SHA when available"]
+  },
+  "external_connector_policy": {
+    "google": "FORBIDDEN_UNLESS_EXPLICITLY_REQUESTED_BY_DIRECTOR",
+    "other_unrequested_connectors": "FORBIDDEN",
+    "on_missing_access": "GAP_OR_INCONCLUSIVE_NO_ELICITATION"
   },
   "next_node": "P01_COMPONENT_PHYSICAL_INVENTORY",
   "rollback": "GitHub commit history",
