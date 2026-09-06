@@ -25,4 +25,13 @@ Commit `4960005c12668e9ef843e1a42b842989cca6e338`. `runtime/src/plugins/` dividi
 Durante el registro, `main` avanzó a `50342c5d60a78928a3cc6ef723bac66c915b629b` por el sentinela `reconcile P01 physical inventory evidence`. No se hizo force. Ese delta pidió URL/SHA/destino/dedup 14/14; esta bitácora y `COMPONENT-CODE-MAP.md` satisfacen ese GAP con datos físicos.
 
 ## UI-PLUG-0009 — GATE
-P01 evidencia 14/14 preparada; requiere read-back independiente del nuevo commit antes de PASS final. P02A no se ejecuta hasta ese read-back.
+P01 evidencia 14/14 preparada; requería read-back independiente antes de PASS final.
+
+## UI-PLUG-0010 — VERIFY_FINAL P01 PASS
+Read-back independiente ejecutado sobre `COMPONENT-INVENTORY.md`, `COMPONENT-CODE-MAP.md`, `STATE.json`, `CHECKPOINT.json` y raíz física. Coinciden 14 filas físicas y 14 filas de provenance con SOURCE_URL/SOURCE_COMMIT/tree/code-root/destino/dedup; P01 pasa a `VERIFIED_CLOSED`. STATE actualizado en commit `acd82ef941ae8c6ce46d91dce456c3c74f7c03f3`; CHECKPOINT actualizado en `54f843d5b7a6f7ef1460697ab527368e8db888ad`.
+
+## UI-PLUG-0011 — BÚSQUEDA REUSE PRE-P02A
+Se revisaron obligatoriamente: (1) raíz central de componentes UI; (2) raíces de frontend; (3) raíz de `agentes`; (4) raíz de `router-universal-router-inteligente-`; (5) raíz de `osquestador-auditor`. Hallazgo seguro: no reutilizar nada todavía sin inspeccionar el code-root exacto del nodo P02A; Stabilize ya está vendorizado y sigue siendo el único owner.
+
+## UI-PLUG-0012 — SIGUIENTE NODO
+`P02A_STABILIZE_FACTORY_DEPENDENCY_INJECTION` queda READY. Gate: factory separada + Queue/WorkflowStore inyectados + registry/mount/health con evidencia ejecutable. `vendor present ≠ integrated`; no se marca PASS hasta prueba real.
