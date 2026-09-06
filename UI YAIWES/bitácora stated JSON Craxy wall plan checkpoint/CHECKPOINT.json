@@ -1,30 +1,27 @@
 {
-  "checkpoint_id": "UIYAIWES-P02C-FLAG-P03-0013",
-  "previous_checkpoint_id": "UIYAIWES-P02B-FLAG-P02C-0012",
+  "checkpoint_id": "UIYAIWES-P03-PARTIAL-P04-0014",
+  "previous_checkpoint_id": "UIYAIWES-P02C-FLAG-P03-0013",
   "contract": "tel.workflow/v3",
-  "status": "P02C_CLOSED_UNVERIFIED_WITH_FLAG_P03_ACTIVE",
+  "status": "P03_PARTIAL_VERIFIED_P04_ACTIVE",
   "verified": {
-    "p01_verified_closed": true,
-    "p02a_adapter_wired": true,
-    "p02b_adapter_and_vendor_present": true,
-    "p02c_five_reuse_searches": true,
-    "p02c_source_version": "5.0.3",
-    "p02c_adapter_present": true,
-    "p02c_code_only_vendor_present": true,
-    "p02c_local_logic_tests": "PASS_5_OF_5",
-    "p02c_github_readback": true,
-    "p02c_real_vendor_execution": false
+    "p03_five_reuse_searches": true,
+    "httpx_source_version": "0.28.1",
+    "httpx_local_version": "0.28.1",
+    "httpx_real_mocktransport_request": "PASS",
+    "httpx_adapter_and_vendor_readback": true,
+    "starlette_source_version": "1.6.0",
+    "starlette_local_version": "0.50.0",
+    "starlette_version_gate": "PASS_FAIL_CLOSED",
+    "starlette_adapter_and_vendor_readback": true,
+    "workflow_owner_unchanged": "stabilize_core"
   },
   "flags": [
     "P02A-FLAG-REAL-VENDOR-EXECUTION",
     "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
-    "P02C-FLAG-REAL-VENDOR-EXECUTION"
+    "P02C-FLAG-REAL-VENDOR-EXECUTION",
+    "P03-FLAG-STARLETTE-VERSION-MISMATCH"
   ],
-  "evidence_commits": [
-    "a1e6e4a4ac595a7c29e04bbdb150e3c226d116f5",
-    "8659c89a2e968e06258643ef5e65b5ad63a4485d",
-    "9ae3397a8e4541ce1ca2059aa60d780db1bf73ba"
-  ],
-  "current_node": "P03_HTTPX_STARLETTE_ADAPTERS",
-  "closure_rule": "previous flags remain visible; P03 may proceed only with separate transport/server adapters and must not change stabilize_core workflow ownership"
+  "evidence_commits": ["85a3f758a4a6228e0d5d030a544365ccdef0a198","09e5ec39cb2b05cce0e5e6216be58322e55956f7"],
+  "current_node": "P04_BULKMAN_RESILIENT_CIRCUIT",
+  "closure_rule": "HTTPX subnode is executable PASS; P03 overall remains partial until Starlette 1.6.0 executes"
 }
