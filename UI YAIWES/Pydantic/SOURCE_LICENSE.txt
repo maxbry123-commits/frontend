@@ -1,0 +1,1 @@
+https://github.com/pydantic/pydantic/blob/c23cb86ef197693fc016437614f174252a3d189a/LICENSE

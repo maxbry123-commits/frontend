@@ -1,0 +1,1 @@
+https://github.com/apache/casbin-pycasbin/blob/bf5a94be899c3eb14e9d9509904a3b38d9f2cf71/LICENSE

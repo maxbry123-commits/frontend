@@ -1,0 +1,3 @@
+https://github.com/hynek/structlog/blob/73393f34b40c15688b3fdd0982889b225f11b59b/COPYRIGHT
+https://github.com/hynek/structlog/blob/73393f34b40c15688b3fdd0982889b225f11b59b/LICENSE-APACHE
+https://github.com/hynek/structlog/blob/73393f34b40c15688b3fdd0982889b225f11b59b/LICENSE-MIT

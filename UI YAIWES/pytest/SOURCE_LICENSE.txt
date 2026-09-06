@@ -1,0 +1,1 @@
+https://github.com/pytest-dev/pytest/blob/1f787563f0a174f938ad3415c2ecd90ae35f03e2/LICENSE
