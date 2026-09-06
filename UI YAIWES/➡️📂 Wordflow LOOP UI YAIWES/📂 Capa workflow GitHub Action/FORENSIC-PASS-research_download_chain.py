@@ -88,7 +88,6 @@ run(['git','config','--local','filter.lfs.clean','cat'])
 run(['git','config','--local','filter.lfs.smudge','cat'])
 run(['git','config','--local','filter.lfs.process',''])
 run(['git','config','--local','filter.lfs.required','false'])
-run(['git','config','--local','core.compression','0'])
 DEST.mkdir(parents=True,exist_ok=True); SRC.mkdir(parents=True,exist_ok=True); PACK.mkdir(parents=True,exist_ok=True)
 batch=batch_no=0; skipped=[]
 CLONE=['git','-c','filter.lfs.smudge=','-c','filter.lfs.clean=','-c','filter.lfs.process=','-c','filter.lfs.required=false','clone','--depth','1','--single-branch','--no-tags']
