@@ -1,8 +1,8 @@
 {
-  "checkpoint_id": "UIYAIWES-ARCH-0001",
+  "checkpoint_id": "UIYAIWES-ARCH-0002",
   "contract": "tel.workflow/v3",
-  "status": "ARCHITECTURE_ANCHORS_PARTIAL",
-  "current_node": "CREATE_CHECKPOINT_RECOVERY_CRAZYWALL_PIPELINE",
+  "status": "WORK_ROOTS_REPLICATED_PENDING_COMPONENT_WIRING",
+  "current_node": "VERIFY_DESTINATION_TREE_AND_COMPONENTS",
   "readme_anchor": "UI YAIWES/README arquitectura UI YAIWES.md",
   "handoff_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/HANDOFF.md",
   "state_anchor": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/STATE.json",
@@ -22,18 +22,33 @@
   "completed": [
     "CREATE_CANONICAL_README",
     "CREATE_HANDOFF",
-    "CREATE_STATE"
-  ],
-  "pending": [
+    "CREATE_STATE",
+    "CREATE_CHECKPOINT",
     "CREATE_RECOVERY",
     "CREATE_CRAZY_WALL",
     "CREATE_LEDGER",
     "CREATE_PIPELINE_METHODS",
     "CREATE_RUNTIME_ROOTS",
-    "VERIFY_READBACK",
-    "WAIT_AND_VERIFY_COMPONENTS",
-    "WIRE_BACKEND"
+    "CREATE_EXACT_DOCUMENTS_ROOT"
   ],
-  "rollback": "GitHub commit history per created file",
-  "closure_rule": "No VERIFIED_CLOSED until paths exist, read-back passes and backend wiring/tests produce evidence"
+  "runtime_roots": [
+    "runtime/docs",
+    "runtime/src/core",
+    "runtime/src/adapters",
+    "runtime/src/tasks",
+    "runtime/src/integration",
+    "runtime/tests"
+  ],
+  "pending": [
+    "VERIFY_READBACK_FULL_TREE",
+    "VERIFY_COMPONENTS_ROOT",
+    "FORENSIC_REVIEW_DOWNLOADED_COMPONENTS",
+    "WIRE_STABILIZE_CORE",
+    "WIRE_MEMORY_ADAPTER",
+    "WIRE_ROUTER_ADAPTER",
+    "WIRE_VALIDATOR_JUDGE",
+    "RUN_RECOVERY_AND_E2E_TESTS"
+  ],
+  "rollback": "GitHub commit history per created/updated file",
+  "closure_rule": "No VERIFIED_CLOSED until component code is present, reviewed, wired and tests/recovery/E2E pass with evidence"
 }
