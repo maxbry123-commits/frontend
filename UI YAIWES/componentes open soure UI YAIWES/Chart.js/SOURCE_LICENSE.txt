@@ -1,0 +1,1 @@
+https://github.com/chartjs/Chart.js/blob/cb02e1d207bd4c4c40b20c259017f85f26f1e30a/LICENSE.md
