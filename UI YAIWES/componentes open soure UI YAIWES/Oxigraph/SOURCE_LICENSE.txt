@@ -1,0 +1,3 @@
+https://github.com/oxigraph/oxigraph/blob/7ce152a1d910d5662027a5bcbe7c32cee0a4e059/LICENSE-APACHE
+https://github.com/oxigraph/oxigraph/blob/7ce152a1d910d5662027a5bcbe7c32cee0a4e059/LICENSE-MIT
+https://github.com/oxigraph/oxigraph/blob/7ce152a1d910d5662027a5bcbe7c32cee0a4e059/testsuite/serd-tests/LICENSE
