@@ -3,10 +3,10 @@
   "project": "Wordflow LOOP UI YAIWES",
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ARCHITECTURE_WORK_ROOTS_REPLICATED",
-  "current_node": "WAIT_VERIFY_COMPONENTS_THEN_WIRE_BACKEND",
+  "current_node": "VERIFY_DESTINATION_TREE_AND_COMPONENTS",
   "workflow_owner": "Stabilize CORE",
   "frontend_owner": "Grok",
-  "canonical_readme": "UI YAIWES/README arquitectura UI YAIWES.md",
+  "canonical_readme": "UI YAIWES/Readme arquitectura UI YAIWES.md",
   "handoff": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/HANDOFF.md",
   "crazy_wall": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/BITACORA-CRAZY-WALL.md",
   "checkpoint": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/CHECKPOINT.json",
@@ -53,7 +53,8 @@
     "engineering_commit": "7bc798ad4173f39f758abd3d4e6cbc2d909658e6"
   },
   "runtime_progress": {
-    "architecture_readme": "CREATED",
+    "architecture_readme": "MERGED_INTO_EXISTING_CANONICAL_README",
+    "duplicate_readme": "REMOVED_AFTER_MERGE",
     "handoff": "CREATED",
     "state": "CREATED_AND_RECONCILED",
     "checkpoint": "CREATED",
