@@ -1,0 +1,801 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { memo, useState, useCallback, useEffect, useRef, useMemo } from 'react'
+import type { UIMessage, ChatStatus } from 'ai'
+import { RenderMarkdown } from './RenderMarkdown'
+import { cn } from '@/lib/utils'
+import { formatDuration } from '@/lib/utils'
+import {
+  activeToolPart,
+  subagentActivityLabel,
+  usedSkillNames,
+  type ActivityLabel,
+} from '@/lib/agentActivity'
+import type { SubagentRun } from '@/types/coworkSession'
+import { Loader } from 'lucide-react'
+
+/** How close to the cap the step counter becomes visible. */
+const BUDGET_WARN_STEPS = 5
+import { ChainOfThoughtGroup } from './message/ChainOfThoughtGroup'
+import {
+  CHAT_STATUS,
+  CONTENT_TYPE,
+  type MessagePartLike,
+  type PartEntry,
+} from './message/types'
+import { CopyButton } from './CopyButton'
+import { useTranslation } from '@/i18n/react-i18next-compat'
+import { formatDate } from '@/utils/formatDate'
+import { useModelProvider } from '@/hooks/useModelProvider'
+import { useInterfaceSettings } from '@/hooks/useInterfaceSettings'
+import { useMessageErrors } from '@/stores/message-errors'
+import {
+  IconRefresh,
+  IconPlayerPlay,
+  IconPaperclip,
+  IconAlertTriangle,
+  IconChevronLeft,
+  IconChevronRight,
+} from '@tabler/icons-react'
+import { EditMessageDialog } from '@/containers/dialogs/EditMessageDialog'
+import { DeleteMessageDialog } from '@/containers/dialogs/DeleteMessageDialog'
+import TokenSpeedIndicator from '@/containers/TokenSpeedIndicator'
+import { extractFilesFromPrompt, FileMetadata } from '@/lib/fileMetadata'
+import { Button } from '@/components/ui/button'
+import { PromptProgress } from '@/components/PromptProgress'
+import { useServiceHub } from '@/hooks/useServiceHub'
+import { useToolApprovalRequests } from '@/hooks/useToolApprovalRequests'
+import { parseCitationsFromToolOutput } from '@/lib/citation-parser'
+import type { RagCitation, WebCitation } from '@/components/Citations'
+import { useGroundingStore } from '@/stores/grounding-store'
+import { useWebCitationStore } from '@/stores/web-citation-store'
+import { WebSourcesRow } from '@/components/WebSourcesRow'
+import { injectCitationMarkers } from '@/lib/grounding'
+
+export type MessageItemProps = {
+  message: UIMessage
+  isFirstMessage: boolean
+  isLastMessage: boolean
+  status: ChatStatus
+  reasoningContainerRef?: React.RefObject<HTMLDivElement | null>
+  isReasoningAtBottom?: boolean
+  onReasoningScroll?: () => void
+  onReasoningScrollToBottom?: () => void
+  onRegenerate?: (messageId: string) => void
+  onContinue?: (messageId: string) => void
+  onEdit?: (messageId: string, newText: string) => void
+  onDelete?: (messageId: string) => void
+  versionInfo?: { index: number; count: number }
+  onSwitchVersion?: (messageId: string, dir: -1 | 1) => void
+  // Cowork only: the session's background subagent runs. Omitted in regular
+  // chat threads, which never spawn subagents.
+  subagents?: SubagentRun[]
+  /** Cowork only: step budget for the running turn. Rendered next to the
+   * activity label, and only once it is close to the cap — a counter that is
+   * always visible is noise for the 95% of turns that never approach it. */
+  budget?: { step: number; max: number }
+  isAnimating?: boolean
+  hideActions?: boolean
+}
+
+export const MessageItem = memo(
+  ({
+    message,
+    isFirstMessage,
+    isLastMessage,
+    status,
+    isAnimating,
+    hideActions,
+    subagents,
+    budget,
+    reasoningContainerRef,
+    isReasoningAtBottom,
+    onReasoningScroll,
+    onReasoningScrollToBottom,
+    onRegenerate,
+    onContinue,
+    onEdit,
+    onDelete,
+    versionInfo,
+    onSwitchVersion,
+  }: MessageItemProps) => {
+    const { t } = useTranslation()
+    const selectedModel = useModelProvider((state) => state.selectedModel)
+    const coloredUserBubble = useInterfaceSettings((s) => s.coloredUserBubble)
+    const metadata = message.metadata as Record<string, unknown> | undefined
+    const messageError = useMessageErrors((s) => s.errors[message.id])
+    const createdAt = (metadata?.createdAt as Date) ?? new Date()
+    const [previewImage, setPreviewImage] = useState<{
+      url: string
+      filename?: string
+    } | null>(null)
+
+
+    const handleRegenerate = useCallback(() => {
+      onRegenerate?.(message.id)
+    }, [onRegenerate, message.id])
+
+    const handleContinue = useCallback(() => {
+      onContinue?.(message.id)
+    }, [onContinue, message.id])
+
+    const isStopped = metadata?.stopped === true
+
+    const handleEdit = useCallback(
+      (newText: string) => {
+        onEdit?.(message.id, newText)
+      },
+      [onEdit, message.id]
+    )
+
+    const handleDelete = useCallback(() => {
+      onDelete?.(message.id)
+    }, [onDelete, message.id])
+
+    // Get image URLs from file parts for the edit dialog
+    const imageUrls = useMemo(() => {
+      return message.parts
+        .filter((part) => {
+          if (part.type !== 'file') return false
+          const filePart = part as { type: 'file'; url?: string; mediaType?: string }
+          return filePart.url && filePart.mediaType?.startsWith('image/')
+        })
+        .map((part) => (part as { url: string }).url)
+    }, [message.parts])
+
+    // A tool part is "pending" until it reaches a terminal state. While any
+    // tool on the last assistant message is still pending the turn isn't
+    // done — the model will resume once the tool result arrives, even if the
+    // SDK briefly reports status as 'ready' between the tool-call stream and
+    // the follow-up request.
+    const hasPendingToolCall = useMemo(() => {
+      if (!isLastMessage || message.role !== 'assistant') return false
+      return message.parts.some((part) => {
+        if (!part.type?.startsWith('tool-')) return false
+        const state = (part as { state?: string }).state
+        return (
+          state !== 'output-available' &&
+          state !== 'output-error' &&
+          state !== 'output-denied'
+        )
+      })
+    }, [isLastMessage, message.role, message.parts])
+
+    const pendingApprovals = useToolApprovalRequests((s) => s.pending)
+    const awaitingApproval = useMemo(() => {
+      if (!hasPendingToolCall) return false
+      return message.parts.some((part) => {
+        const toolCallId = (part as { toolCallId?: string }).toolCallId
+        return Boolean(toolCallId && pendingApprovals[toolCallId])
+      })
+    }, [hasPendingToolCall, message.parts, pendingApprovals])
+
+    // Tool parts carry no start timestamp; track first-seen time per
+    // toolCallId locally so the elapsed-time readout is stable across
+    // re-renders (not reset every render, not reused across a new call
+    // with the same id after a session reset -- cleared once a step
+    // becomes non-pending in the effect below).
+    const toolStartedAtRef = useRef<Map<string, number>>(new Map())
+
+    const pendingTool = useMemo(() => {
+      if (!isLastMessage || message.role !== 'assistant') return null
+      return activeToolPart(message.parts as never)
+    }, [isLastMessage, message.role, message.parts])
+    const usedSkills = useMemo(
+      () => usedSkillNames(message.parts as never),
+      [message.parts]
+    )
+
+    useEffect(() => {
+      const map = toolStartedAtRef.current
+      if (pendingTool) {
+        // Keep only the current pending id; purge any stale entry that may
+        // have lingered from a previous tool with a different toolCallId.
+        map.forEach((_, key) => {
+          if (key !== pendingTool.toolCallId) map.delete(key)
+        })
+        if (!map.has(pendingTool.toolCallId)) {
+          map.set(pendingTool.toolCallId, Date.now())
+        }
+      } else {
+        map.clear()
+      }
+    }, [pendingTool])
+
+    const subagentLabel = useMemo<ActivityLabel>(() => {
+      if (!subagents || subagents.length === 0) return null
+      return subagentActivityLabel(subagents)
+    }, [subagents])
+
+    // `await_subagent` is only the parent's blocking wrapper; the child is the
+    // work actually in progress. Show its live activity instead of the
+    // misleading "Await subagent" label. Other parent tools retain priority.
+    // Memoized so the reference is stable for the elapsed-time interval effect.
+    const activityLabel = useMemo<ActivityLabel>(() => {
+      if (pendingTool?.toolName === 'await_subagent' && subagentLabel) {
+        return subagentLabel
+      }
+      if (pendingTool) {
+        return {
+          text: pendingTool.text,
+          startedAt:
+            toolStartedAtRef.current.get(pendingTool.toolCallId) ?? Date.now(),
+        }
+      }
+      return subagentLabel
+    }, [pendingTool, subagentLabel])
+
+    // Re-render once a second while a label is showing, purely to advance the
+    // elapsed-time readout -- no state carried, just a tick.
+    const [, forceTick] = useState(0)
+    useEffect(() => {
+      if (!activityLabel) return
+      const id = setInterval(() => forceTick((n) => n + 1), 1000)
+      return () => clearInterval(id)
+    }, [activityLabel])
+
+    const isStreaming =
+      (isLastMessage &&
+        (status === CHAT_STATUS.STREAMING ||
+          status === CHAT_STATUS.SUBMITTED)) ||
+      hasPendingToolCall
+
+    // Aggregate RAG citations in part order and record each rag tool part's
+    // base offset, so its card numbers/anchors continue the same global
+    // sequence the inline superscript markers use.
+    const { ragCitations, citationOffsets, webCitations } = useMemo(() => {
+      const out: RagCitation[] = []
+      const web: WebCitation[] = []
+      const offsets = new Map<number, number>()
+      if (message.role === 'assistant') {
+        const parts = message.parts as any[]
+        for (let i = 0; i < parts.length; i++) {
+          const part = parts[i]
+          if (!part.type?.startsWith('tool-')) continue
+          if (part.state !== 'output-available') continue
+          const parsed = parseCitationsFromToolOutput(part.output)
+          if (parsed?.kind === 'rag') {
+            offsets.set(i, out.length)
+            out.push(...parsed.citations)
+          } else if (parsed?.kind === 'web') {
+            web.push(...parsed.citations)
+          }
+        }
+      }
+      return { ragCitations: out, citationOffsets: offsets, webCitations: web }
+    }, [message.parts, message.role])
+
+    const serviceHub = useServiceHub()
+    const grounding = useGroundingStore((s) => s.byMessageId[message.id])
+    const ensureGrounding = useGroundingStore((s) => s.ensure)
+
+    const assistantText = useMemo(() => {
+      if (message.role !== 'assistant') return ''
+      return (message.parts as any[])
+        .filter((p) => p.type === CONTENT_TYPE.TEXT && p.text)
+        .map((p) => p.text)
+        .join('\n')
+    }, [message.parts, message.role])
+
+    useEffect(() => {
+      if (isStreaming) return
+      if (!assistantText || !ragCitations.length) return
+      const rag = serviceHub.rag()
+      if (!rag.embed) return
+      ensureGrounding(
+        message.id,
+        assistantText,
+        ragCitations,
+        rag.embed.bind(rag)
+      )
+    }, [
+      isStreaming,
+      assistantText,
+      ragCitations,
+      message.id,
+      ensureGrounding,
+      serviceHub,
+    ])
+
+    const setWebCitations = useWebCitationStore((s) => s.setForMessage)
+    useEffect(() => {
+      if (!webCitations.length) return
+      setWebCitations(message.id, webCitations)
+    }, [webCitations, message.id, setWebCitations])
+
+    // Extract file metadata from message text (for user messages with attachments)
+    const attachedFiles = useMemo(() => {
+      if (message.role !== 'user') return []
+
+      const textParts = message.parts.filter(
+        (part): part is { type: 'text'; text: string } =>
+          part.type === CONTENT_TYPE.TEXT
+      )
+
+      if (textParts.length === 0) return []
+
+      const { files } = extractFilesFromPrompt(textParts[0].text)
+      return files
+    }, [message.parts, message.role])
+
+    // Get full text content for copy button
+    const getFullTextContent = useCallback(() => {
+      return message.parts
+        .filter(
+          (part): part is { type: 'text'; text: string } =>
+            part.type === CONTENT_TYPE.TEXT
+        )
+        .map((part) => part.text)
+        .join('\n')
+    }, [message.parts])
+
+    const renderTextPart = (
+      part: { type: 'text'; text: string },
+      partIndex: number
+    ) => {
+      if (!part.text || part.text.trim() === '') {
+        return null
+      }
+
+      const isLastPart = partIndex === message.parts.length - 1
+
+      // For user messages, extract and clean the text from file metadata
+      const displayText =
+        message.role === 'user'
+          ? extractFilesFromPrompt(part.text).cleanPrompt
+          : part.text
+
+      if (
+        !displayText.trim() &&
+        message.role === 'user' &&
+        attachedFiles.length === 0
+      ) {
+        return null
+      }
+
+      return (
+        <div key={`${message.id}-${partIndex}`} className="w-full">
+          {message.role === 'user' ? (
+            <div className="flex justify-end w-full h-full text-start wrap-break-word whitespace-normal">
+              <div
+                className={cn(
+                  'relative p-2 rounded-md inline-block max-w-[80%]',
+                  coloredUserBubble
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary text-foreground'
+                )}
+              >
+                {/* Show attached files if any */}
+                {attachedFiles.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {attachedFiles.map((file: FileMetadata, idx: number) => (
+                      <div
+                        key={`file-${idx}-${file.id}`}
+                        className="flex items-center gap-1.5 px-2 py-1 rounded-sm bg-secondary text-secondary-foreground border text-xs"
+                      >
+                        <IconPaperclip
+                          size={14}
+                          className="text-muted-foreground"
+                        />
+                        <span className="font-medium">{file.name}</span>
+                        {file.injectionMode && (
+                          <span className="text-muted-foreground">
+                            ({file.injectionMode})
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {displayText && (
+                  <div dir="auto" className="select-text whitespace-pre-wrap">
+                    {displayText}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <>
+              <RenderMarkdown
+                content={
+                  grounding && !isStreaming
+                    ? injectCitationMarkers(
+                        part.text,
+                        grounding.sentenceCitations,
+                        `cite-${message.id}`
+                      )
+                    : part.text
+                }
+                isStreaming={isStreaming && isLastPart}
+                messageId={message.id}
+                isAnimating={isAnimating}
+              />
+            </>
+          )}
+        </div>
+      )
+    }
+
+    const renderFilePart = (part: MessagePartLike, partIndex: number) => {
+      const isImage = part.mediaType?.startsWith('image/')
+      const isAudio =
+        part.mediaType === 'audio/wav' || part.mediaType === 'audio/mpeg'
+      const isVideo = part.mediaType?.startsWith('video/')
+
+      if (isAudio && part.url) {
+        const justify =
+          message.role === 'user' ? 'justify-end' : 'justify-start'
+        return (
+          <div
+            key={`${message.id}-${partIndex}`}
+            className={`flex ${justify} w-full my-2`}
+          >
+            <audio
+              controls
+              src={part.url}
+              className="max-w-[80%] rounded-md"
+            />
+          </div>
+        )
+      }
+
+      if (isVideo && part.url) {
+        const justify =
+          message.role === 'user' ? 'justify-end' : 'justify-start'
+        return (
+          <div
+            key={`${message.id}-${partIndex}`}
+            className={`flex ${justify} w-full my-2`}
+          >
+            <video
+              controls
+              src={part.url}
+              className="max-w-[80%] max-h-80 rounded-md border"
+            />
+          </div>
+        )
+      }
+
+      if (message.role === 'user' && isImage && part.url) {
+        return (
+          <div
+            key={`${message.id}-${partIndex}`}
+            className="flex justify-end w-full my-2"
+          >
+            <div className="flex flex-wrap gap-2 max-w-[80%] justify-end">
+              <div className="relative">
+                <img
+                  src={part.url}
+                  alt={part.filename || 'Uploaded attachment'}
+                  className="size-20 rounded-lg object-cover border cursor-pointer"
+                  onClick={() =>
+                    setPreviewImage({ url: part.url!, filename: part.filename })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        )
+      }
+
+      if (message.role === 'assistant' && isImage && part.url) {
+        return (
+          <div key={`${message.id}-${partIndex}`} className="my-2">
+            <img
+              src={part.url}
+              alt={part.filename || 'Generated image'}
+              className="max-w-full rounded-md cursor-pointer"
+              onClick={() =>
+                setPreviewImage({ url: part.url!, filename: part.filename })
+              }
+            />
+          </div>
+        )
+      }
+
+      return null
+    }
+
+    const renderedParts = useMemo(() => {
+      const parts = message.parts as MessagePartLike[]
+      const elements: React.ReactNode[] = []
+      const isCotPart = (t: string) =>
+        t === CONTENT_TYPE.REASONING || t.startsWith('tool-')
+
+      // Walk parts sequentially and flush the reasoning/tool trace whenever a
+      // non-empty answer (text/file) interrupts it, so content emitted between
+      // two reasoning blocks renders as a normal message.
+      let cotEntries: PartEntry[] = []
+      let groupSeq = 0
+      const flushCot = (hasFollowing: boolean) => {
+        if (cotEntries.length === 0) return
+        elements.push(
+          <ChainOfThoughtGroup
+            key={`${message.id}-cot-${groupSeq++}`}
+            entries={cotEntries}
+            messageId={message.id}
+            totalParts={parts.length}
+            isStreaming={isStreaming}
+            hasFollowingContent={hasFollowing}
+            awaitingApproval={awaitingApproval}
+            citationOffsets={citationOffsets}
+            reasoningContainerRef={reasoningContainerRef}
+            isReasoningAtBottom={isReasoningAtBottom}
+            onReasoningScroll={onReasoningScroll}
+            onReasoningScrollToBottom={onReasoningScrollToBottom}
+          />
+        )
+        cotEntries = []
+      }
+
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i]
+        const t = part.type
+        if (isCotPart(t)) {
+          cotEntries.push({ part, index: i })
+          continue
+        }
+        if (t === CONTENT_TYPE.TEXT) {
+          if (!part.text || part.text.trim() === '') continue
+          flushCot(true)
+          elements.push(
+            renderTextPart(part as { type: 'text'; text: string }, i)
+          )
+          continue
+        }
+        if (t === CONTENT_TYPE.FILE) {
+          flushCot(true)
+          elements.push(renderFilePart(part, i))
+        }
+      }
+      flushCot(false)
+      return elements
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [
+      message.parts,
+      isStreaming,
+      isReasoningAtBottom,
+      grounding,
+      awaitingApproval,
+      citationOffsets,
+    ])
+
+    const versionNav =
+      versionInfo && versionInfo.count > 1 && onSwitchVersion ? (
+        <div className="flex items-center gap-0.5 text-muted-foreground">
+          <button
+            type="button"
+            className="hover:text-foreground disabled:opacity-40"
+            disabled={versionInfo.index <= 1}
+            onClick={() => onSwitchVersion(message.id, -1)}
+            title="Previous version"
+          >
+            <IconChevronLeft size={14} />
+          </button>
+          <span className="tabular-nums">
+            {versionInfo.index}/{versionInfo.count}
+          </span>
+          <button
+            type="button"
+            className="hover:text-foreground disabled:opacity-40"
+            disabled={versionInfo.index >= versionInfo.count}
+            onClick={() => onSwitchVersion(message.id, 1)}
+            title="Next version"
+          >
+            <IconChevronRight size={14} />
+          </button>
+        </div>
+      ) : null
+
+    return (
+      <div
+        className={cn(
+          'w-full mb-4 group/message',
+          message.role === 'user' && !isFirstMessage && 'mt-8'
+        )}
+      >
+
+        {/* Render message parts */}
+        {renderedParts}
+
+        {message.role === 'assistant' && !isStreaming && webCitations.length > 0 && (
+          <WebSourcesRow citations={webCitations} />
+        )}
+
+        {message.role === 'assistant' && !isStreaming && usedSkills.length > 0 && (
+          <div
+            aria-label={t('common:skillsUsedLabel')}
+            className="mt-2 inline-flex rounded-full border border-border bg-muted/40 px-2.5 py-1 text-xs font-medium text-muted-foreground"
+          >
+            {t('common:skillsUsed', { skills: usedSkills.join(', ') })}
+          </div>
+        )}
+
+        {isLastMessage &&
+          message.role === 'assistant' &&
+          !awaitingApproval &&
+          (hasPendingToolCall || status === CHAT_STATUS.SUBMITTED || activityLabel) && (
+            <div className="mt-2">
+              {activityLabel ? (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="flex items-center gap-2 text-xs"
+                >
+                  <Loader className="animate-spin w-3.5 h-3.5 text-primary shrink-0" />
+                  <span className="font-medium text-foreground">
+                    {activityLabel.text}
+                  </span>
+                  <span className="text-muted-foreground tabular-nums">
+                    {formatDuration(activityLabel.startedAt)}
+                  </span>
+                  {budget && budget.step >= budget.max - BUDGET_WARN_STEPS && (
+                    <span className="ml-auto text-muted-foreground tabular-nums">
+                      {t('common:budget.steps', {
+                        step: budget.step,
+                        max: budget.max,
+                      })}
+                    </span>
+                  )}
+                </div>
+              ) : (
+                <PromptProgress hideIdle={hasPendingToolCall} />
+              )}
+            </div>
+          )}
+
+        {typeof messageError === 'string' && messageError.length > 0 && (
+          <div className="mt-2 flex items-start gap-2 rounded-md border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm">
+            <IconAlertTriangle
+              size={16}
+              className="mt-0.5 shrink-0 text-destructive"
+            />
+            <div className="flex-1 min-w-0">
+              <div className="font-medium text-destructive">
+                Generation failed
+              </div>
+              <div className="text-muted-foreground break-words">
+                {messageError}
+              </div>
+            </div>
+            {selectedModel && onRegenerate && status !== CHAT_STATUS.STREAMING &&
+              status !== CHAT_STATUS.SUBMITTED && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRegenerate}
+                  className="shrink-0"
+                >
+                  <IconRefresh size={14} />
+                  <span>Regenerate</span>
+                </Button>
+              )}
+          </div>
+        )}
+
+        {/* Message actions for user messages */}
+        {message.role === 'user' && !hideActions && (
+          <div className="flex items-center justify-end gap-1 text-muted-foreground text-xs opacity-0 transition-opacity group-hover/message:opacity-100 focus-within:opacity-100">
+            <span className="text-muted-foreground">
+              {formatDate(createdAt)}
+            </span>
+            {versionNav}
+            <CopyButton text={getFullTextContent()} />
+
+            {onEdit && status !== CHAT_STATUS.STREAMING &&
+              status !== CHAT_STATUS.SUBMITTED && (
+              <EditMessageDialog
+                message={getFullTextContent()}
+                imageUrls={imageUrls.length > 0 ? imageUrls : undefined}
+                onSave={handleEdit}
+              />
+            )}
+
+            {onDelete && status !== CHAT_STATUS.STREAMING &&
+              status !== CHAT_STATUS.SUBMITTED && (
+              <DeleteMessageDialog onDelete={handleDelete} />
+            )}
+          </div>
+        )}
+
+        {/* Message actions for assistant messages (non-tool) */}
+        {message.role === 'assistant' && (
+            <div className="flex items-center gap-2 text-muted-foreground text-xs">
+              {!isStreaming && (
+                <span className="text-muted-foreground">
+                  {formatDate(createdAt)}
+                </span>
+              )}
+              <div
+                className={cn(
+                  'flex items-center gap-1',
+                  (isStreaming || hideActions) && 'hidden'
+                )}
+              >
+                {versionNav}
+                <CopyButton text={getFullTextContent()} />
+
+                {onEdit && !isStreaming && (
+                  <EditMessageDialog
+                    message={getFullTextContent()}
+                    onSave={handleEdit}
+                  />
+                )}
+
+                {onDelete && !isStreaming && (
+                  <DeleteMessageDialog onDelete={handleDelete} />
+                )}
+
+                {selectedModel &&
+                  onContinue &&
+                  !isStreaming &&
+                  isLastMessage &&
+                  isStopped && (
+                    <Button
+                      variant="ghost"
+                      size="icon-xs"
+                      onClick={handleContinue}
+                      title={t('chat:actions.continue')}
+                    >
+                      <IconPlayerPlay size={16} />
+                    </Button>
+                  )}
+
+                {selectedModel && onRegenerate && !isStreaming && isLastMessage && (
+                  <Button
+                    variant="ghost"
+                    size="icon-xs"
+                    onClick={handleRegenerate}
+                    title={t('chat:actions.regenerate')}
+                  >
+                    <IconRefresh size={16} />
+                  </Button>
+                )}
+              </div>
+
+              <TokenSpeedIndicator
+                streaming={isStreaming}
+                metadata={metadata}
+              />
+            </div>
+          )}
+
+        {/* Image Preview Dialog */}
+        {previewImage && (
+          <div
+            className="fixed inset-0 z-100 bg-black/50 backdrop-blur-md flex items-center justify-center cursor-pointer"
+            onClick={() => setPreviewImage(null)}
+          >
+            <img
+              src={previewImage.url}
+              alt={previewImage.filename || 'Preview'}
+              className="max-h-[90vh] max-w-[90vw] object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        )}
+      </div>
+    )
+  },
+  (prevProps, nextProps) => {
+    // Always re-render if the last message is in-flight (streaming or submitted)
+    if (
+      nextProps.isLastMessage &&
+      (nextProps.status === CHAT_STATUS.STREAMING ||
+        nextProps.status === CHAT_STATUS.SUBMITTED)
+    ) {
+      return false
+    }
+
+    return (
+      prevProps.message === nextProps.message &&
+      prevProps.isFirstMessage === nextProps.isFirstMessage &&
+      prevProps.isLastMessage === nextProps.isLastMessage &&
+      prevProps.status === nextProps.status &&
+      prevProps.hideActions === nextProps.hideActions &&
+      prevProps.versionInfo?.index === nextProps.versionInfo?.index &&
+      prevProps.versionInfo?.count === nextProps.versionInfo?.count
+    )
+  }
+)
+
+MessageItem.displayName = 'MessageItem'

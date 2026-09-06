@@ -1,0 +1,3 @@
+https://github.com/janhq/jan/blob/e2185dbc7db3a002da35b3688b57910ec6fd87b2/LICENSE
+https://github.com/janhq/jan/blob/e2185dbc7db3a002da35b3688b57910ec6fd87b2/src-tauri/gen/android/app/src/main/assets/resources/LICENSE
+https://github.com/janhq/jan/blob/e2185dbc7db3a002da35b3688b57910ec6fd87b2/src-tauri/resources/LICENSE
