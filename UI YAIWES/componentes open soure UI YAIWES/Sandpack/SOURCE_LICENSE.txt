@@ -1,0 +1,2 @@
+https://github.com/codesandbox/sandpack/blob/7d60a4334980eef304d53b1c3df371ed6dbcf491/LICENSE
+https://github.com/codesandbox/sandpack/blob/7d60a4334980eef304d53b1c3df371ed6dbcf491/website/codesandbox-theme-docs/LICENSE
