@@ -1,0 +1,2 @@
+https://github.com/zeroSteiner/rule-engine/blob/c166666f66acabfa42856639812a3c20ae04da60/LICENSE
+https://github.com/zeroSteiner/rule-engine/blob/c166666f66acabfa42856639812a3c20ae04da60/lib/rule_engine/_vendor/ply/LICENSE
