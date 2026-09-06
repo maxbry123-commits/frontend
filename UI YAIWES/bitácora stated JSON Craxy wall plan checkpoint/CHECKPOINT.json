@@ -1,26 +1,23 @@
 {
-  "checkpoint_id": "UIYAIWES-P04-FLAGS-P05-0015",
-  "previous_checkpoint_id": "UIYAIWES-P03-PARTIAL-P04-0014",
+  "checkpoint_id": "UIYAIWES-P05-STAGING-0016",
+  "previous_checkpoint_id": "UIYAIWES-P04-FLAGS-P05-0015",
   "contract": "tel.workflow/v3",
-  "status": "P04_CLOSED_UNVERIFIED_WITH_FLAGS_P05_ACTIVE",
+  "status": "P05_STAGED_UNVERIFIED",
   "verified": {
-    "p04_five_reuse_searches": true,
-    "resilient_circuit_source_version": "0.7.0",
-    "resilient_circuit_vendor_present": true,
-    "resilient_circuit_factory_readback": true,
-    "bulkman_source_version": "2.0.3",
-    "bulkman_vendor_present": true,
-    "bulkman_factory_readback": true,
-    "bulkman_resilient_version_range_compatible": true,
-    "adapter_injection_checks": "PASS",
+    "p05_five_reuse_searches": true,
+    "structlog_provenance": true,
+    "opentelemetry_provenance": true,
+    "code_only_vendor_trees": true,
+    "licenses_preserved": true,
+    "separate_adapters": true,
+    "activation_keys_registered": true,
     "workflow_owner_unchanged": "stabilize_core",
-    "real_vendor_execution": false
+    "github_readback": true,
+    "runtime_tests": false,
+    "main_merge": false
   },
-  "flags": [
-    "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
-    "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
-  ],
-  "evidence_commits": ["b7545ca41ae0012e658d3ab8334cbe5aa98c077b","887b4afca32b9c442f4d527df804c7ada1e82afc"],
+  "flags": ["P05-FLAG-RUNTIME-TESTS-NOT-EXECUTED","P05-FLAG-MAIN-CONCURRENT-ACQUISITION","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
+  "evidence_commits": ["f26b1c87c6e4f873fdade6e14959e882d4704142"],
   "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
-  "closure_rule": "P04 cannot become VERIFIED_CLOSED until both vendored packages execute; P05 may proceed independently as read-only observability/logging"
+  "closure_rule": "No VERIFIED_CLOSED until staged real-vendor tests pass, branch is reconciled with current main without force, evidence is synchronized, and final read-back passes."
 }
