@@ -2,8 +2,8 @@
   "contract": "tel.workflow/v3",
   "project": "Wordflow LOOP UI YAIWES",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "ARCHITECTURE_WORK_ROOTS_REPLICATED",
-  "current_node": "VERIFY_DESTINATION_TREE_AND_COMPONENTS",
+  "status": "PASS_STRUCTURE_WITH_EXTERNAL_COMPONENTS_GAP",
+  "current_node": "WAIT_COMPONENTS",
   "workflow_owner": "Stabilize CORE",
   "frontend_owner": "Grok",
   "canonical_readme": "UI YAIWES/Readme arquitectura UI YAIWES.md",
@@ -15,7 +15,7 @@
   "documents_root_exact": "UI YAIWES/documentos proyectos UI YAIWES",
   "documents_root_historical": "UI YAIWES/Documentos proyecto UI YAIWES",
   "components_root_expected": "UI YAIWES/componentes",
-  "components_root_observed": "NOT_FOUND_AT_INITIAL_CHECK",
+  "components_root_observed": "NOT_FOUND_AFTER_SECOND_CHECK",
   "existing_systems": {
     "router": "EXISTING_TO_ADAPT",
     "memory": "EXISTING_TO_ADAPT"
@@ -52,19 +52,27 @@
     "forensic_commit": "2072d535920573550a443cf9a3967ab66b50375c",
     "engineering_commit": "7bc798ad4173f39f758abd3d4e6cbc2d909658e6"
   },
+  "readback": {
+    "wordflow_root": "PASS",
+    "crazy_wall_anchors": "PASS_5_OF_5",
+    "pipeline_methods": "PASS_3_OF_3",
+    "runtime_root": "PASS",
+    "runtime_src_roots": "PASS_4_OF_4",
+    "components_root": "GAP_NOT_FOUND"
+  },
   "runtime_progress": {
     "architecture_readme": "MERGED_INTO_EXISTING_CANONICAL_README",
     "duplicate_readme": "REMOVED_AFTER_MERGE",
-    "handoff": "CREATED",
-    "state": "CREATED_AND_RECONCILED",
-    "checkpoint": "CREATED",
-    "recovery": "CREATED",
-    "crazy_wall": "CREATED",
-    "ledger": "CREATED",
-    "pipeline_methods": "CREATED_FROM_CANONICAL_HISTORICAL_COMMITS",
-    "runtime_roots": "CREATED",
+    "handoff": "CREATED_AND_RECONCILED",
+    "state": "CURRENT",
+    "checkpoint": "CURRENT",
+    "recovery": "CREATED_AND_RECONCILED",
+    "crazy_wall": "CURRENT",
+    "ledger": "CREATED_AND_RECONCILED",
+    "pipeline_methods": "CREATED_AND_READBACK_PASS",
+    "runtime_roots": "CREATED_AND_READBACK_PASS",
     "documents_root_exact": "CREATED",
-    "component_wiring": "PENDING_COMPONENT_ARRIVAL_AND_CODE_REVIEW",
+    "component_wiring": "BLOCKED_ON_COMPONENT_ARRIVAL_AND_CODE_REVIEW",
     "e2e": "NOT_RUN"
   },
   "runtime_roots": [
@@ -75,5 +83,5 @@
     "runtime/src/integration",
     "runtime/tests"
   ],
-  "next_node": "VERIFY_DESTINATION_TREE_AND_COMPONENTS"
+  "next_node": "FORENSIC_REVIEW_COMPONENTS_WHEN_PRESENT"
 }
