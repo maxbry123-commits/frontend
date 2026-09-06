@@ -1,0 +1,2 @@
+https://github.com/Delgan/loguru/blob/48acf77ac2b3296acc67069511b99cc3ca3d0c41/LICENSE
+https://github.com/Delgan/loguru/blob/48acf77ac2b3296acc67069511b99cc3ca3d0c41/docs/project/license.rst
