@@ -181,3 +181,12 @@ No se autoriza saltar directamente a P03–P14 sin cerrar o justificar formalmen
 - Watchdog réplica adicional debe concentrarse en reconciliación de anclas + P01→P14, detectar GAPs y registrar evidencia.
 - Cada actualización de plan/estado debe reflejarse en Watchdogs activos + Crazy Wall + STATE + CHECKPOINT.
 - No se considera implementada ninguna tarea P01–P14 por estar escrita aquí.
+
+## EVENTO UI-CW-0015 — SALIDA 2 PASO 4 / WATCHDOGS ACTIVOS
+- `Watchdog LOOP UI YAIWES`: actualizado y activo con frecuencia horaria; lee el checkpoint `UIYAIWES-PROGRAMMING-0006` y la cola P01→P14 antes de crear tareas nuevas.
+- `Sentinela Reconciliación UI YAIWES`: creado y activo con frecuencia horaria; reconcilia arquitectura, Crazy Wall, STATE, CHECKPOINT, código/componentes y evidencias del nodo activo.
+- Ambos aplican LOOP1+LOOP2, 56 checks GOALS, Council12, C01–C06, auditoría de instrucciones, 3 refutaciones, cross-check, CODA y `verify_final`.
+- Política añadida por orden literal del Director: `NO_GOOGLE_OR_UNREQUESTED_EXTERNAL_CONNECTORS`; Gmail, Calendar, Drive, Contacts u otros conectores externos quedan prohibidos salvo orden explícita posterior.
+- Si falta acceso suficiente, el watchdog debe registrar `GAP/INCONCLUSIVE`; no puede solicitar una conexión adicional por iniciativa propia.
+- STATE sincronizado en commit `0fe1a43c74ec547dba514753f068e1fb14c40af2`.
+- CHECKPOINT sincronizado para registrar el cierre del Paso 4; el siguiente nodo funcional continúa siendo `P01_COMPONENT_PHYSICAL_INVENTORY`.
