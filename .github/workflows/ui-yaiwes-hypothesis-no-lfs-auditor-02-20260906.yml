@@ -51,6 +51,7 @@ jobs:
           set -euo pipefail
           # Base: skills/skills Github acción/assets/FORENSIC-PASS-research-download-chain-final.yml
           # Pinned by Director: c789e5fe635e220230ffc759d86dc3bbb8e261d4
+          # Watchdog delta 02: binary-safe pointer detection only.
           base='https://raw.githubusercontent.com/maxbry123-commits/agentes/'"$SKILL_COMMIT"'/skills/skills%20Github%20acci%C3%B3n/assets/FORENSIC-PASS-research-download-chain-final.yml'
           curl -fsSL --retry 3 "$base" -o /tmp/pinned-skill.yml
           test "$(git hash-object /tmp/pinned-skill.yml)" = "$SKILL_YAML_BLOB"
@@ -59,7 +60,6 @@ jobs:
           test -d "$DEST"
           test "$(git -C "$SRC" rev-parse HEAD)" = "$SOURCE_COMMIT"
 
-          # PASS 1: source/destination path coverage and byte verification.
           source_count=0
           missing=0
           mismatch=0
@@ -91,7 +91,6 @@ jobs:
             fi
           done < <(find "$SRC" -type f ! -path "$SRC/.git/*" -print0)
 
-          # PASS 2: reject any pointer stored in destination; source has exactly the known 10 pointer records.
           dest_pointers=0
           while IFS= read -r -d '' p; do
             if LC_ALL=C grep -a -m1 -Fxq 'version https://git-lfs.github.com/spec/v1' "$p"; then
@@ -102,7 +101,6 @@ jobs:
           test "$pointers" -eq 10
           test "$dest_pointers" -eq 0
 
-          # PASS 3: no source path may be missing/mismatched; traceability required by the pinned skill.
           test "$source_count" -eq 8094
           test "$missing" -eq 0
           test "$mismatch" -eq 0
@@ -113,7 +111,6 @@ jobs:
           test "$(tr -d '\r\n' < "$DEST/SOURCE_COMMIT.txt")" = "$SOURCE_COMMIT"
           (cd "$DEST" && sha256sum -c SOURCE_SHA256SUMS.txt)
 
-          # PASS 4: read-back is this fresh checkout; reject unrelated active/queued runs.
           in_progress="$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' \
             "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs?status=in_progress&per_page=100")"
           queued="$(curl -fsSL -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' \
