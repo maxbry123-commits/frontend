@@ -1,32 +1,31 @@
-# RECOVERY PATCH — UIYAIWES-P02C-FLAG-P03-0013
+# RECOVERY PATCH — UIYAIWES-P03-PARTIAL-P04-0014
 
 Contrato: `tel.workflow/v3`
 Modo: `FAIL_CLOSED_LOOP`
 Owner único: `stabilize_core`
-Nodo actual: `P03_HTTPX_STARLETTE_ADAPTERS`
+Nodo actual: `P04_BULKMAN_RESILIENT_CIRCUIT`
 
 ## Estado reconciliado
-- P01 `VERIFIED_CLOSED`: inventario/provenance/dedup canónico 14/14.
-- P02A `CLOSED_UNVERIFIED_WITH_FLAG`: adapter Stabilize cableado; ejecución real pendiente por DNS local.
-- P02B `CLOSED_UNVERIFIED_WITH_VERSION_FLAG`: Pydantic adapter/vendor presente; versión runtime incompatible.
-- P02C `CLOSED_UNVERIFIED_WITH_EXECUTION_FLAG`: Rule Engine adapter/vendor 5.0.3, lógica 5/5 y GitHub read-back PASS; ejecución real pendiente por DNS local.
-- P03 `ACTIVE`: HTTPX/Starlette deben montarse como adapters separados; ninguno puede tomar ownership del workflow.
+- P01 `VERIFIED_CLOSED`.
+- P02A `CLOSED_UNVERIFIED_WITH_FLAG` — ejecución real vendor pendiente.
+- P02B `CLOSED_UNVERIFIED_WITH_VERSION_FLAG` — Pydantic/core mismatch.
+- P02C `CLOSED_UNVERIFIED_WITH_EXECUTION_FLAG` — Rule Engine read-back/lógica PASS, ejecución real pendiente.
+- P03 `PARTIAL_VERIFIED_WITH_STARLETTE_FLAG` — HTTPX 0.28.1 ejecutó request real con MockTransport PASS; Starlette fuente 1.6.0 vs local 0.50.0, factory fail-closed. Commit P03 `85a3f758a4a6228e0d5d030a544365ccdef0a198`.
+- P04 `ACTIVE` — Bulkman/resilient-circuit solo como resiliencia aislada; sin workflow ownership.
 
-## Evidencia P03
-- HTTPX SOURCE_COMMIT `b5addb64f0161ff6bfe94c124ef76f6a1fba5254`; code-root `httpx/` tree `21eaf49210613909be2f7a864389a312a484d0eb`; versión fuente `0.28.1`.
-- Starlette SOURCE_COMMIT `0fcaff1d1e1d16a702a06b40d20092cc9d84d4a3`; code-root `starlette/` tree `820b2cdde800811062b2be43abd909e27b38854f`; versión fuente `1.6.0`.
-- Cinco búsquedas obligatorias ejecutadas en componentes UI, frontend, agentes, router inteligente universal y osquestador auditor; no apareció adapter HTTPX/Starlette reutilizable listo.
+## P04 preflight obligatorio
+Cinco búsquedas ejecutadas antes de programar: componentes UI, todas las raíces de frontend, agentes, router inteligente universal y osquestador auditor. No apareció adapter canónico Bulkman/resilient-circuit listo para reutilizar.
 
 ## GAP concurrente
-El workflow `UI YAIWES 124` run `34060401131` sigue `in_progress` y escribe componentes en `main`. Durante la corrida aparecieron duplicados de adquisición (`PyCasbin/`, `rule-engine/`) con SOURCE_COMMIT idénticos a los canónicos. No borrar ni reescribir esas rutas mientras el workflow siga activo; no consumirlas como nuevas fuentes canónicas.
+Workflow `UI YAIWES 124` run `34060401131` observado `in_progress`; escribe componentes en `main`. No borrar/mover/deduplicar rutas de adquisición mientras siga activo. Revalidar al finalizar y preservar ambos historiales.
 
 ## Recovery 1×1
-1. Releer `main`, STATE, CHECKPOINT, PLAN, BITACORA y esta RECOVERY.
-2. Confirmar que el workflow concurrente terminó antes de deduplicar adquisición.
-3. Revalidar component root y SOURCE_COMMIT de duplicados; si code-root es idéntico, conservar una sola ruta canónica sin perder provenance.
-4. Para P03, usar únicamente los code-root SHA canónicos ya fijados de HTTPX y Starlette.
-5. Cablear adapters separados mediante registry/loader/guard; prohibido monolito.
-6. Ejecutar tests reales/health; version mismatch o dependencia ausente => flag, nunca PASS falso.
-7. Persistir StrategyDelta y continuar solo con siguiente tarea segura independiente.
+1. Releer HEAD, STATE, CHECKPOINT, PLAN, BITACORA y RECOVERY.
+2. Auditar SOURCE_URL/SOURCE_COMMIT/licencia/code-root de Bulkman y resilient-circuit.
+3. Reutilizar solo código útil; omitir `.github`, docs, examples, tests upstream y release automation del runtime.
+4. Separar `bulkman_adapter` y `resilient_circuit_adapter` con dependencies/runtime/factory/registry/loader/guards/tests.
+5. Mantener `stabilize_core` como único owner.
+6. Ejecutar health/tests reales; cualquier incompatibilidad queda flag, nunca PASS falso.
+7. Persistir evidencia/checkpoint/StrategyDelta antes de avanzar P05.
 
-Rollback: historial GitHub; nunca `force` sobre `main` ni borrar cambios concurrentes sin read-back final.
+Rollback: historial GitHub; nunca force sobre `main`.
