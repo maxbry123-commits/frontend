@@ -1,0 +1,65 @@
+{
+  "contract": "tel.workflow/v3",
+  "purpose": "Apply only the non-duplicated P05/P06/P07/P08 runtime delta after UI YAIWES 124 stops mutating main",
+  "source_branch": "yaiwes-runtime-staging-20260906",
+  "source_head_at_manifest_creation": "47432fb2e42fe0a017aa01c3115ad4335328b11f",
+  "staging_code_commit": "c16100b7c340dcd437cbd7495f2af319e7a2f4ce",
+  "main_base_used_for_staging": "829d716eb1a8d17a4864e9760dd5d1376e2a587d",
+  "last_observed_main_before_manifest": "3afb3674da83eed4dde50319bafe8ff00617ae8d",
+  "blocking_workflow_run": 34060401131,
+  "rules": {
+    "force_update_main": false,
+    "merge_while_workflow_in_progress": false,
+    "destructive_component_dedup_while_workflow_in_progress": false,
+    "recheck_final_main_before_apply": true,
+    "skip_path_if_final_main_already_contains_equivalent_delta": true,
+    "stabilize_remains_only_workflow_owner": true,
+    "opentelemetry_sdk_allowlisted": false,
+    "test_and_donor_production_mount_allowed": false
+  },
+  "runtime_paths": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/activation.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/structlog_adapter/__init__.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/structlog_adapter/dependencies.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/structlog_adapter/factory.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/structlog_adapter/runtime.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/structlog_adapter/README.md",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/opentelemetry_api_adapter/__init__.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/opentelemetry_api_adapter/dependencies.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/opentelemetry_api_adapter/factory.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/opentelemetry_api_adapter/runtime.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/opentelemetry_api_adapter/README.md",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/opentelemetry_sdk_adapter/__init__.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/opentelemetry_sdk_adapter/dependencies.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/opentelemetry_sdk_adapter/factory.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/opentelemetry_sdk_adapter/runtime.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/opentelemetry_sdk_adapter/README.md",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/pycasbin_adapter/__init__.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/pycasbin_adapter/dependencies.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/pycasbin_adapter/factory.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/pycasbin_adapter/runtime.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/pycasbin_adapter/README.md",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_observability_adapters.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_pycasbin_adapter.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_non_mountable_kinds.py"
+  ],
+  "vendor_trees": {
+    "runtime/vendor/structlog": "d64c15da142a3dae10dd1559661c53dd70a521e2",
+    "runtime/vendor/opentelemetry": "bdaa12dcd2a5a5309f5f8b03aede043b5a580f96",
+    "runtime/vendor/casbin": "ec2e719085272a06bc13a275c226f767f2202682"
+  },
+  "evidence_paths": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/P05-P08-real-vendor-attempt-20260906.md",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CHECKPOINT.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/PLAN-TAREAS.md"
+  ],
+  "verify_before_apply": [
+    "workflow run 34060401131 is no longer mutating main",
+    "fetch final refs/heads/main immediately before commit",
+    "compare every runtime path against final main",
+    "apply only missing paths/deltas with non-force fast-forward ancestry",
+    "read back activation allowlist and all adapter factories",
+    "run real vendor tests before any VERIFIED_CLOSED promotion"
+  ]
+}
