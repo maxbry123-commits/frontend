@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from hashlib import sha256
 from pathlib import Path
 import sys
 from typing import Any
@@ -9,6 +10,7 @@ from .dependencies import StructlogDependencies
 from .runtime import EXPECTED_STRUCTLOG_SOURCE_COMMIT, StructlogProvenanceError, StructlogRuntime
 
 FACTORY_KEY = "structlog.logging"
+EXPECTED_STRUCTLOG_INIT_SHA256 = "b3a3b13bc1a1c338a326fe9aeb0b4434f6d5a3e56f29b403a73b4d223efaa092"
 
 
 class StructlogBootstrapError(RuntimeError):
@@ -29,6 +31,22 @@ def _is_under(path: str | None, root: Path) -> bool:
         return False
 
 
+def _sha256_file(path: Path) -> str:
+    digest = sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _verify_vendor_integrity(package_init: Path) -> None:
+    observed = _sha256_file(package_init)
+    if observed != EXPECTED_STRUCTLOG_INIT_SHA256:
+        raise StructlogBootstrapError(
+            f"vendored structlog integrity mismatch: expected {EXPECTED_STRUCTLOG_INIT_SHA256}, got {observed}"
+        )
+
+
 def _resolve_dependencies(dependencies: StructlogDependencies | None) -> tuple[Callable[..., Any], str]:
     dependencies = dependencies or StructlogDependencies()
     if dependencies.get_logger is not None:
@@ -39,6 +57,7 @@ def _resolve_dependencies(dependencies: StructlogDependencies | None) -> tuple[C
     package_init = root / "structlog" / "__init__.py"
     if not package_init.is_file():
         raise StructlogBootstrapError(f"vendored structlog missing: {package_init}")
+    _verify_vendor_integrity(package_init)
     value = str(root)
     if value not in sys.path:
         sys.path.insert(0, value)
