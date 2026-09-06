@@ -35,3 +35,12 @@ Se revisaron obligatoriamente: (1) raíz central de componentes UI; (2) raíces 
 
 ## UI-PLUG-0012 — SIGUIENTE NODO
 `P02A_STABILIZE_FACTORY_DEPENDENCY_INJECTION` queda READY. Gate: factory separada + Queue/WorkflowStore inyectados + registry/mount/health con evidencia ejecutable. `vendor present ≠ integrated`; no se marca PASS hasta prueba real.
+
+## UI-PLUG-0013 — P02A FACTORY WIRING
+Commit `88b424424d62db798da8ea2406992d043e3a23fc`: se añadió `activation.py` con allowlist explícita, `stabilize_adapter/` separado en dependencies/factory/runtime y `test_stabilize_integration.py`. El catálogo base permanece inerte (`enabled=False`) y Stabilize sigue siendo el único workflow owner.
+
+## UI-PLUG-0014 — P02A TEST EXECUTION
+Suite determinista del adapter ejecutada: 5/5 PASS para activación explícita, rechazo fail-closed de componente no autorizado, Queue obligatoria, identidad Queue/Store y montaje por `PluginLoader` con health positivo. Read-back GitHub de factory y test: PASS.
+
+## UI-PLUG-0015 — GAP VERIFY_FINAL P02A
+No se declara `VERIFIED_CLOSED`: los tests de esta iteración usan `FakeOrchestrator` para probar el enchufe/DI. Falta ejecutar el mismo factory/loader contra el `stabilize.Orchestrator` vendorizado real y verificar `runtime.health`. CHECKPOINT `UIYAIWES-P02A-FACTORY-WIRING-0010`; el mismo nodo continúa ACTIVE_LOOP.
