@@ -1,6 +1,6 @@
 {
-  "checkpoint_id": "UIYAIWES-P05-P08-STAGING-0016",
-  "previous_checkpoint_id": "UIYAIWES-P04-FLAGS-P05-0015",
+  "checkpoint_id": "UIYAIWES-P05-P08-STAGING-0017",
+  "previous_checkpoint_id": "UIYAIWES-P05-P08-STAGING-0016",
   "contract": "tel.workflow/v3",
   "status": "P05_P08_STAGED_MAIN_RECONCILIATION_BLOCKED",
   "branch": "yaiwes-runtime-staging-20260906",
@@ -27,6 +27,13 @@
     "opentelemetry_semconv": "bae82a5be2e454781dc9f3ad0efd52c931880eb2",
     "pycasbin": "ec2e719085272a06bc13a275c226f767f2202682"
   },
+  "real_vendor_attempt": {
+    "evidence_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/P05-P08-real-vendor-attempt-20260906.md",
+    "evidence_commit": "33740a712d21c2f404ab98a6206b35da0df5d52b",
+    "structlog_pinned_source_checkout": "BLOCKED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "pycasbin_local_dependencies": "MISSING_CASBIN_SIMPLEEVAL_WCMATCH",
+    "result": "NOT_PROVEN_NO_PASS_PROMOTION"
+  },
   "flags": [
     "P05-FLAG-STRUCTLOG-REAL-VENDOR-EXECUTION",
     "P05-FLAG-OTEL-VERSION-MISMATCH",
@@ -37,7 +44,9 @@
     "workflow_run": 34060401131,
     "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131",
     "last_observed_status": "in_progress",
-    "last_observed_step": "Process 124 components sequentially with pinned source SHA"
+    "last_observed_step": "Process 124 components sequentially with pinned source SHA",
+    "last_observed_component": "017/124 React",
+    "last_observed_main_commit": "5d8a3d8871f79bbc9193533962f265509bb0f7dd"
   },
   "current_node": "RECONCILE_STAGING_AFTER_UIYAIWES_124",
   "closure_rule": "Do not merge or deduplicate while workflow 34060401131 mutates main. After it stops, compare final main with staging; apply only missing runtime delta; rerun real-vendor checks; flags never become PASS without execution evidence."
