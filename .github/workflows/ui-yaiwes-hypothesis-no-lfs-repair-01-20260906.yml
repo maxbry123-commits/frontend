@@ -1,0 +1,171 @@
+name: UI YAIWES Hypothesis NO-LFS Repair 01
+run-name: UI YAIWES Hypothesis NO-LFS Repair 01 • ${{ github.event_name }} • ${{ github.sha }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ui-yaiwes-hypothesis-no-lfs-repair-01-20260906.yml'
+
+permissions:
+  contents: write
+  actions: write
+
+env:
+  GIT_TERMINAL_PROMPT: "0"
+  SKILL_COMMIT: c789e5fe635e220230ffc759d86dc3bbb8e261d4
+  SKILL_YAML_BLOB: 9ffd682ec9491741a8f49e4a7f8bb385aa62c2ee
+  SKILL_PY_BLOB: b629f9a7844a4752ff7c28b844b83e7f1d99ccb1
+  SOURCE_COMMIT: a8dcd7422a325926693b5464f73349e361562b7c
+  DEST: UI YAIWES/componentes open soure UI YAIWES/Hypothesis
+
+concurrency:
+  group: frontend-ui-yaiwes-hypothesis-no-lfs-repair-01
+  cancel-in-progress: false
+
+jobs:
+  repair-hypothesis:
+    name: Materialize 10 source objects as normal Git blobs
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout destination main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Checkout fixed official Hypothesis source
+        uses: actions/checkout@v4
+        with:
+          repository: HypothesisWorks/hypothesis
+          ref: ${{ env.SOURCE_COMMIT }}
+          path: _repair_source/hypothesis
+          fetch-depth: 1
+          lfs: false
+
+      - name: Execute deterministic NO-LFS repair chain
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # Copied structure from the Director-pinned skill asset; only operation/source/ref/routes/tests changed.
+          # skills/skills Github acción/assets/FORENSIC-PASS-research-download-chain-final.yml
+          # c789e5fe635e220230ffc759d86dc3bbb8e261d4
+          base_yml='https://raw.githubusercontent.com/maxbry123-commits/agentes/'"$SKILL_COMMIT"'/skills/skills%20Github%20acci%C3%B3n/assets/FORENSIC-PASS-research-download-chain-final.yml'
+          base_py='https://raw.githubusercontent.com/maxbry123-commits/agentes/'"$SKILL_COMMIT"'/skills/skills%20Github%20acci%C3%B3n/assets/FORENSIC-PASS-research_download_chain.py'
+          curl -fsSL --retry 3 "$base_yml" -o /tmp/pinned-skill.yml
+          curl -fsSL --retry 3 "$base_py" -o /tmp/pinned-skill.py
+          test "$(git hash-object /tmp/pinned-skill.yml)" = "$SKILL_YAML_BLOB"
+          test "$(git hash-object /tmp/pinned-skill.py)" = "$SKILL_PY_BLOB"
+
+          # Git LFS is prohibited: never invoke git-lfs. Neutralize inherited filters only in this runner.
+          git config --local filter.lfs.clean cat
+          git config --local filter.lfs.smudge cat
+          git config --local filter.lfs.process ''
+          git config --local filter.lfs.required false
+          git config --local core.compression 0
+
+          SRC='_repair_source/hypothesis'
+          test "$(git -C "$SRC" rev-parse HEAD)" = "$SOURCE_COMMIT"
+          test -d "$DEST"
+
+          # Preflight: discover the real GAP directly from the fixed source checkout.
+          : > /tmp/lfs-pointer-records.tsv
+          while IFS= read -r -d '' p; do
+            if test "$(head -n 1 "$p" 2>/dev/null || true)" = 'version https://git-lfs.github.com/spec/v1'; then
+              rel="${p#"$SRC/"}"
+              oid="$(awk '/^oid sha256:/{sub("sha256:","",$2);print $2}' "$p")"
+              size="$(awk '/^size /{print $2}' "$p")"
+              test -n "$oid" && test -n "$size"
+              printf '%s\t%s\t%s\n' "$rel" "$oid" "$size" >> /tmp/lfs-pointer-records.tsv
+            fi
+          done < <(find "$SRC" -type f ! -path "$SRC/.git/*" -size -1025c -print0)
+          pointer_count="$(wc -l < /tmp/lfs-pointer-records.tsv)"
+          test "$pointer_count" -eq 10
+
+          # Materialize the official bytes through GitHub media HTTP; no git-lfs command/fetch/pull is used.
+          repaired=0
+          while IFS=$'\t' read -r rel oid expected_size; do
+            tmp="$(mktemp)"
+            url="https://media.githubusercontent.com/media/HypothesisWorks/hypothesis/$SOURCE_COMMIT/$rel"
+            curl -fL --retry 3 --retry-delay 2 --connect-timeout 20 --max-time 180 "$url" -o "$tmp"
+            test "$(stat -c %s "$tmp")" = "$expected_size"
+            test "$(sha256sum "$tmp" | awk '{print $1}')" = "$oid"
+            test "$(head -n 1 "$tmp" 2>/dev/null || true)" != 'version https://git-lfs.github.com/spec/v1'
+            test "$(stat -c %s "$tmp")" -lt 104857600
+            out="$DEST/$rel"
+            mkdir -p "$(dirname "$out")"
+            if test -e "$out"; then
+              cmp -s "$tmp" "$out" || { echo "COLLISION_BLOCKED $rel"; exit 31; }
+            else
+              cp -a "$tmp" "$out"
+            fi
+            rm -f "$tmp"
+            repaired=$((repaired+1))
+          done < /tmp/lfs-pointer-records.tsv
+          test "$repaired" -eq 10
+
+          # Gate: no actual pointer may exist anywhere in the delivered Hypothesis tree.
+          dest_pointers=0
+          while IFS= read -r -d '' p; do
+            if test "$(head -n 1 "$p" 2>/dev/null || true)" = 'version https://git-lfs.github.com/spec/v1'; then
+              echo "DEST_LFS_POINTER $p"
+              dest_pointers=$((dest_pointers+1))
+            fi
+          done < <(find "$DEST" -type f -size -1025c -print0)
+          test "$dest_pointers" -eq 0
+
+          # Required traceability from the pinned skill.
+          printf '%s\n' 'https://github.com/HypothesisWorks/hypothesis' > "$DEST/SOURCE_URL.txt"
+          printf '%s\n' "$SOURCE_COMMIT" > "$DEST/SOURCE_COMMIT.txt"
+          cp "$SRC/LICENSE.txt" "$DEST/SOURCE_LICENSE.txt"
+          checkpoint="$DEST/SOURCE_REPAIR_CHECKPOINT.json"
+          cat > "$checkpoint" <<EOF
+          {"task_id":"UI-YAIWES-HYPOTHESIS-NO-LFS-REPAIR-01","mode":"DOWNLOAD+EXTRACTED_TREE/repair","source_url":"https://github.com/HypothesisWorks/hypothesis","source_commit":"$SOURCE_COMMIT","destination":"$DEST","repaired_objects":10,"git_lfs_invocations":0,"destination_lfs_pointers":0,"skill_commit":"$SKILL_COMMIT","skill_yaml_blob":"$SKILL_YAML_BLOB","skill_py_blob":"$SKILL_PY_BLOB","status":"EXTRACTED_VERIFIED"}
+          EOF
+          (cd "$DEST" && find . -type f ! -name SOURCE_SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > SOURCE_SHA256SUMS.txt)
+          (cd "$DEST" && sha256sum -c SOURCE_SHA256SUMS.txt)
+
+          # Stage the 10 materialized files as normal Git blobs with filters bypassed, exactly as skill §14 permits.
+          while IFS=$'\t' read -r rel oid expected_size; do
+            out="$DEST/$rel"
+            attr="$(git check-attr filter -- "$out" || true)"
+            echo "SOURCE_ATTRIBUTE $attr ; effective staging=--no-filters"
+            blob="$(git hash-object -w --no-filters "$out")"
+            git update-index --add --cacheinfo 100644 "$blob" "$out"
+            staged_prefix="$(git show ":$out" | head -n 1 2>/dev/null || true)"
+            test "$staged_prefix" != 'version https://git-lfs.github.com/spec/v1'
+            test "$(git show ":$out" | sha256sum | awk '{print $1}')" = "$oid"
+          done < /tmp/lfs-pointer-records.tsv
+          git add -- "$DEST/SOURCE_URL.txt" "$DEST/SOURCE_COMMIT.txt" "$DEST/SOURCE_LICENSE.txt" "$DEST/SOURCE_REPAIR_CHECKPOINT.json" "$DEST/SOURCE_SHA256SUMS.txt"
+
+          test -n "$(git diff --cached --name-only)"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix(yaiwes): materialize Hypothesis without LFS'
+          git fetch origin main
+          git rebase --autostash origin/main
+          git push --no-verify origin HEAD:main
+
+          # Read-back from remote main: all 10 delivered blobs must equal the official OID/size and not be pointers.
+          git fetch origin main
+          while IFS=$'\t' read -r rel oid expected_size; do
+            out="$DEST/$rel"
+            test "$(git show "origin/main:$out" | sha256sum | awk '{print $1}')" = "$oid"
+            test "$(git show "origin/main:$out" | wc -c)" = "$expected_size"
+            test "$(git show "origin/main:$out" | head -n 1 2>/dev/null || true)" != 'version https://git-lfs.github.com/spec/v1'
+          done < /tmp/lfs-pointer-records.tsv
+          echo 'REPAIR_READ_BACK=PASS repaired=10 destination_lfs_pointers=0'
+
+          # Chain only the new independent auditor; never reactivate an old workflow.
+          payload="$(jq -nc --arg run "$GITHUB_RUN_ID" '{event_type:"ui-yaiwes-hypothesis-no-lfs-repair-01-complete",client_payload:{repair_run_id:$run}}')"
+          curl -fsSL -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/dispatches" \
+            -d "$payload"
+          echo 'AUDITOR_DISPATCH=PASS'
