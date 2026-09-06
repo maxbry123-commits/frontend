@@ -1,0 +1,486 @@
+/**
+ * File module for WordprocessingML documents.
+ *
+ * The File class is the main entry point for creating DOCX documents.
+ * It manages all document parts including content, styles, numbering, and media.
+ *
+ * @module
+ */
+import { AppProperties } from "./app-properties/app-properties";
+import { ContentTypes } from "./content-types/content-types";
+import { CoreProperties, type IPropertiesOptions } from "./core-properties";
+import { CustomProperties } from "./custom-properties";
+import { HeaderFooterReferenceType, type ISectionPropertiesOptions } from "./document/body/section-properties";
+import { DocumentWrapper } from "./document-wrapper";
+import { EndnotesWrapper } from "./endnotes-wrapper";
+import type { FileChild } from "./file-child";
+import { FontWrapper } from "./fonts/font-wrapper";
+import { FooterWrapper, type IDocumentFooter } from "./footer-wrapper";
+import { FootnotesWrapper } from "./footnotes-wrapper";
+import type { Footer, Header } from "./header";
+import { HeaderWrapper, type IDocumentHeader } from "./header-wrapper";
+import { Media } from "./media";
+import { Numbering } from "./numbering";
+import { Comments } from "./paragraph/run/comment-run";
+import { CommentsExtended, CommentsIds } from "./paragraph/run/comments-extended";
+import { Relationships } from "./relationships";
+import { Settings } from "./settings";
+import { Styles } from "./styles";
+import { ExternalStylesFactory } from "./styles/external-styles-factory";
+import { DefaultStylesFactory } from "./styles/factory";
+
+/**
+ * Options for a document section.
+ *
+ * Each section can have its own headers, footers, and page properties.
+ *
+ * @property headers - Optional header definitions for the section
+ * @property headers.default - Default header for all pages (when first/even not specified)
+ * @property headers.first - Header for the first page of the section
+ * @property headers.even - Header for even-numbered pages
+ * @property footers - Optional footer definitions for the section
+ * @property footers.default - Default footer for all pages (when first/even not specified)
+ * @property footers.first - Footer for the first page of the section
+ * @property footers.even - Footer for even-numbered pages
+ * @property properties - Section properties such as page size, margins, and orientation
+ * @property children - Array of content elements (paragraphs, tables, etc.) for this section
+ */
+export type ISectionOptions = {
+    /** Optional header definitions for the section. */
+    readonly headers?: {
+        /** Default header for all pages (when first/even not specified). */
+        readonly default?: Header;
+        /** Header for the first page of the section. */
+        readonly first?: Header;
+        /** Header for even-numbered pages. */
+        readonly even?: Header;
+    };
+    /** Optional footer definitions for the section. */
+    readonly footers?: {
+        /** Default footer for all pages (when first/even not specified). */
+        readonly default?: Footer;
+        /** Footer for the first page of the section. */
+        readonly first?: Footer;
+        /** Footer for even-numbered pages. */
+        readonly even?: Footer;
+    };
+    /** Section properties such as page size, margins, and orientation. */
+    readonly properties?: ISectionPropertiesOptions;
+    /** Array of content elements (paragraphs, tables, etc.) for this section. */
+    readonly children: readonly FileChild[];
+};
+
+/**
+ * Represents a Word document file.
+ *
+ * The File class (exported as `Document`) is the main entry point for creating DOCX documents.
+ * It manages all document components including content, styles, numbering, headers/footers,
+ * and media. Documents are organized into sections, each of which can have its own page
+ * settings, headers, and footers.
+ *
+ * This class handles the assembly of all OOXML parts required for a valid .docx file,
+ * including relationships, content types, and document properties.
+ *
+ * @publicApi
+ *
+ * @example
+ * ```typescript
+ * // Simple document with one section
+ * const doc = new Document({
+ *   sections: [{
+ *     children: [
+ *       new Paragraph("Hello World"),
+ *     ],
+ *   }],
+ * });
+ *
+ * // Document with multiple sections and headers/footers
+ * const doc = new Document({
+ *   creator: "John Doe",
+ *   sections: [
+ *     {
+ *       headers: {
+ *         default: new Header({
+ *           children: [new Paragraph("Header Text")],
+ *         }),
+ *       },
+ *       children: [
+ *         new Paragraph("Section 1 content"),
+ *       ],
+ *     },
+ *     {
+ *       children: [
+ *         new Paragraph("Section 2 content"),
+ *       ],
+ *     },
+ *   ],
+ * });
+ *
+ * // Document with custom styles and numbering
+ * const doc = new Document({
+ *   styles: {
+ *     paragraphStyles: [
+ *       {
+ *         id: "MyHeading",
+ *         name: "My Heading",
+ *         basedOn: "Heading1",
+ *         run: { bold: true, color: "FF0000" },
+ *       },
+ *     ],
+ *   },
+ *   numbering: {
+ *     config: [
+ *       {
+ *         reference: "my-numbering",
+ *         levels: [
+ *           { level: 0, format: "decimal", text: "%1.", alignment: "left" },
+ *         ],
+ *       },
+ *     ],
+ *   },
+ *   sections: [{
+ *     children: [new Paragraph("Content")],
+ *   }],
+ * });
+ * ```
+ */
+export class File {
+    // eslint-disable-next-line functional/prefer-readonly-type
+    private currentRelationshipId: number = 1;
+
+    private readonly documentWrapper: DocumentWrapper;
+    // eslint-disable-next-line functional/prefer-readonly-type
+    private readonly headers: IDocumentHeader[] = [];
+    // eslint-disable-next-line functional/prefer-readonly-type
+    private readonly footers: IDocumentFooter[] = [];
+    private readonly coreProperties: CoreProperties;
+    private readonly numbering: Numbering;
+    private readonly media: Media;
+    private readonly fileRelationships: Relationships;
+    private readonly footnotesWrapper: FootnotesWrapper;
+    private readonly endnotesWrapper: EndnotesWrapper;
+    private readonly settings: Settings;
+    private readonly contentTypes: ContentTypes;
+    private readonly customProperties: CustomProperties;
+    private readonly appProperties: AppProperties;
+    private readonly styles: Styles;
+    private readonly comments: Comments;
+    /** Extended comment data for reply threading and resolved state (word/commentsExtended.xml). */
+    private readonly commentsExtended?: CommentsExtended;
+    /** Durable comment id mapping (word/commentsIds.xml). */
+    private readonly commentsIds?: CommentsIds;
+    private readonly fontWrapper: FontWrapper;
+
+    public constructor(options: IPropertiesOptions) {
+        this.coreProperties = new CoreProperties({
+            ...options,
+            creator: options.creator ?? "Un-named",
+            revision: options.revision ?? 1,
+            lastModifiedBy: options.lastModifiedBy ?? "Un-named",
+        });
+
+        this.numbering = new Numbering(options.numbering ? options.numbering : { config: [] });
+
+        this.comments = new Comments(options.comments ?? { children: [] });
+        // Build commentsExtended.xml when comments use reply threading (parentId)
+        if (this.comments.ThreadData) {
+            this.commentsExtended = new CommentsExtended(this.comments.ThreadData);
+        }
+        // Build commentsIds.xml when comments carry a durableId
+        if (this.comments.CommentIdsData) {
+            this.commentsIds = new CommentsIds(this.comments.CommentIdsData);
+        }
+        this.fileRelationships = new Relationships();
+        this.customProperties = new CustomProperties(options.customProperties ?? []);
+        this.appProperties = new AppProperties();
+        this.footnotesWrapper = new FootnotesWrapper();
+        this.endnotesWrapper = new EndnotesWrapper();
+        this.contentTypes = new ContentTypes();
+        this.documentWrapper = new DocumentWrapper({ background: options.background });
+        this.settings = new Settings({
+            compatibilityModeVersion: options.compatabilityModeVersion,
+            compatibility: options.compatibility,
+            evenAndOddHeaders: options.evenAndOddHeaderAndFooters ? true : false,
+            trackRevisions: options.features?.trackRevisions,
+            updateFields: options.features?.updateFields,
+            defaultTabStop: options.defaultTabStop,
+            hyphenation: {
+                autoHyphenation: options.hyphenation?.autoHyphenation,
+                hyphenationZone: options.hyphenation?.hyphenationZone,
+                consecutiveHyphenLimit: options.hyphenation?.consecutiveHyphenLimit,
+                doNotHyphenateCaps: options.hyphenation?.doNotHyphenateCaps,
+            },
+        });
+
+        this.media = new Media();
+
+        if (options.externalStyles !== undefined) {
+            const defaultFactory = new DefaultStylesFactory();
+            const defaultStyles = defaultFactory.newInstance(options.styles?.default);
+            const externalFactory = new ExternalStylesFactory();
+            const externalStyles = externalFactory.newInstance(options.externalStyles);
+            this.styles = new Styles({
+                ...externalStyles,
+                importedStyles: [...defaultStyles.importedStyles!, ...externalStyles.importedStyles!],
+            });
+        } else if (options.styles) {
+            const stylesFactory = new DefaultStylesFactory();
+            const defaultStyles = stylesFactory.newInstance(options.styles.default);
+            this.styles = new Styles({
+                ...defaultStyles,
+                ...options.styles,
+            });
+        } else {
+            const stylesFactory = new DefaultStylesFactory();
+            this.styles = new Styles(stylesFactory.newInstance());
+        }
+
+        this.addDefaultRelationships();
+
+        for (const section of options.sections) {
+            this.addSection(section);
+        }
+
+        if (options.footnotes) {
+            // eslint-disable-next-line guard-for-in
+            for (const key in options.footnotes) {
+                this.footnotesWrapper.View.createFootNote(parseFloat(key), options.footnotes[key].children);
+            }
+        }
+
+        if (options.endnotes) {
+            // eslint-disable-next-line guard-for-in
+            for (const key in options.endnotes) {
+                this.endnotesWrapper.View.createEndnote(parseFloat(key), options.endnotes[key].children);
+            }
+        }
+
+        this.fontWrapper = new FontWrapper(options.fonts ?? []);
+    }
+
+    private addSection({ headers = {}, footers = {}, children, properties }: ISectionOptions): void {
+        this.documentWrapper.View.Body.addSection({
+            ...properties,
+            headerWrapperGroup: {
+                default: headers.default ? this.createHeader(headers.default) : undefined,
+                first: headers.first ? this.createHeader(headers.first) : undefined,
+                even: headers.even ? this.createHeader(headers.even) : undefined,
+            },
+            footerWrapperGroup: {
+                default: footers.default ? this.createFooter(footers.default) : undefined,
+                first: footers.first ? this.createFooter(footers.first) : undefined,
+                even: footers.even ? this.createFooter(footers.even) : undefined,
+            },
+        });
+
+        for (const child of children) {
+            this.documentWrapper.View.add(child);
+        }
+    }
+
+    private createHeader(header: Header): HeaderWrapper {
+        // eslint-disable-next-line functional/immutable-data
+        const wrapper = new HeaderWrapper(this.media, this.currentRelationshipId++);
+
+        for (const child of header.options.children) {
+            wrapper.add(child);
+        }
+
+        this.addHeaderToDocument(wrapper);
+        return wrapper;
+    }
+
+    private createFooter(footer: Footer): FooterWrapper {
+        // eslint-disable-next-line functional/immutable-data
+        const wrapper = new FooterWrapper(this.media, this.currentRelationshipId++);
+
+        for (const child of footer.options.children) {
+            wrapper.add(child);
+        }
+
+        this.addFooterToDocument(wrapper);
+        return wrapper;
+    }
+
+    private addHeaderToDocument(
+        header: HeaderWrapper,
+        type: (typeof HeaderFooterReferenceType)[keyof typeof HeaderFooterReferenceType] = HeaderFooterReferenceType.DEFAULT,
+    ): void {
+        // eslint-disable-next-line functional/immutable-data
+        this.headers.push({ header, type });
+        this.documentWrapper.Relationships.addRelationship(
+            header.View.ReferenceId,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header",
+            `header${this.headers.length}.xml`,
+        );
+        this.contentTypes.addHeader(this.headers.length);
+    }
+
+    private addFooterToDocument(
+        footer: FooterWrapper,
+        type: (typeof HeaderFooterReferenceType)[keyof typeof HeaderFooterReferenceType] = HeaderFooterReferenceType.DEFAULT,
+    ): void {
+        // eslint-disable-next-line functional/immutable-data
+        this.footers.push({ footer, type });
+        this.documentWrapper.Relationships.addRelationship(
+            footer.View.ReferenceId,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer",
+            `footer${this.footers.length}.xml`,
+        );
+        this.contentTypes.addFooter(this.footers.length);
+    }
+
+    private addDefaultRelationships(): void {
+        this.fileRelationships.addRelationship(
+            1,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+            "word/document.xml",
+        );
+        this.fileRelationships.addRelationship(
+            2,
+            "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
+            "docProps/core.xml",
+        );
+        this.fileRelationships.addRelationship(
+            3,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
+            "docProps/app.xml",
+        );
+        this.fileRelationships.addRelationship(
+            4,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
+            "docProps/custom.xml",
+        );
+
+        this.documentWrapper.Relationships.addRelationship(
+            // eslint-disable-next-line functional/immutable-data
+            this.currentRelationshipId++,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles",
+            "styles.xml",
+        );
+        this.documentWrapper.Relationships.addRelationship(
+            // eslint-disable-next-line functional/immutable-data
+            this.currentRelationshipId++,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering",
+            "numbering.xml",
+        );
+        this.documentWrapper.Relationships.addRelationship(
+            // eslint-disable-next-line functional/immutable-data
+            this.currentRelationshipId++,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes",
+            "footnotes.xml",
+        );
+        this.documentWrapper.Relationships.addRelationship(
+            // eslint-disable-next-line functional/immutable-data
+            this.currentRelationshipId++,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
+            "endnotes.xml",
+        );
+        this.documentWrapper.Relationships.addRelationship(
+            // eslint-disable-next-line functional/immutable-data
+            this.currentRelationshipId++,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings",
+            "settings.xml",
+        );
+        this.documentWrapper.Relationships.addRelationship(
+            // eslint-disable-next-line functional/immutable-data
+            this.currentRelationshipId++,
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments",
+            "comments.xml",
+        );
+
+        if (this.commentsExtended) {
+            this.documentWrapper.Relationships.addRelationship(
+                // eslint-disable-next-line functional/immutable-data
+                this.currentRelationshipId++,
+                "http://schemas.microsoft.com/office/2011/relationships/commentsExtended",
+                "commentsExtended.xml",
+            );
+            this.contentTypes.addCommentsExtended();
+        }
+
+        if (this.commentsIds) {
+            this.documentWrapper.Relationships.addRelationship(
+                // eslint-disable-next-line functional/immutable-data
+                this.currentRelationshipId++,
+                "http://schemas.microsoft.com/office/2016/09/relationships/commentsIds",
+                "commentsIds.xml",
+            );
+            this.contentTypes.addCommentsIds();
+        }
+    }
+
+    public get Document(): DocumentWrapper {
+        return this.documentWrapper;
+    }
+
+    public get Styles(): Styles {
+        return this.styles;
+    }
+
+    public get CoreProperties(): CoreProperties {
+        return this.coreProperties;
+    }
+
+    public get Numbering(): Numbering {
+        return this.numbering;
+    }
+
+    public get Media(): Media {
+        return this.media;
+    }
+
+    public get FileRelationships(): Relationships {
+        return this.fileRelationships;
+    }
+
+    public get Headers(): readonly HeaderWrapper[] {
+        return this.headers.map((item) => item.header);
+    }
+
+    public get Footers(): readonly FooterWrapper[] {
+        return this.footers.map((item) => item.footer);
+    }
+
+    public get ContentTypes(): ContentTypes {
+        return this.contentTypes;
+    }
+
+    public get CustomProperties(): CustomProperties {
+        return this.customProperties;
+    }
+
+    public get AppProperties(): AppProperties {
+        return this.appProperties;
+    }
+
+    public get FootNotes(): FootnotesWrapper {
+        return this.footnotesWrapper;
+    }
+
+    public get Endnotes(): EndnotesWrapper {
+        return this.endnotesWrapper;
+    }
+
+    public get Settings(): Settings {
+        return this.settings;
+    }
+
+    public get Comments(): Comments {
+        return this.comments;
+    }
+
+    /** Extended comments part for reply threading. Undefined when no comment threads exist. */
+    public get CommentsExtended(): CommentsExtended | undefined {
+        return this.commentsExtended;
+    }
+
+    /** Durable comment id part. Undefined when no comment carries a durableId. */
+    public get CommentsIds(): CommentsIds | undefined {
+        return this.commentsIds;
+    }
+
+    public get FontTable(): FontWrapper {
+        return this.fontWrapper;
+    }
+}
