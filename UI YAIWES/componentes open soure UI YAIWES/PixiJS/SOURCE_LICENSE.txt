@@ -1,0 +1,1 @@
+https://github.com/pixijs/pixijs/blob/d3a17517b3e2cac837df1239f9d1923d4ca12a21/LICENSE
