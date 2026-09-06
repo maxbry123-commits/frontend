@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+from hashlib import sha256
 from pathlib import Path
 import sys
 from typing import Any
@@ -9,6 +10,7 @@ from .dependencies import PyCasbinDependencies
 from .runtime import EXPECTED_PYCASBIN_VERSION, PyCasbinRuntime, PyCasbinVersionError
 
 FACTORY_KEY = "casbin.authorization"
+EXPECTED_PYCASBIN_INIT_SHA256 = "51a574bb630a86bcb5c10a93fd193b2875f3ca72b4693dec277f639f0332b420"
 
 
 class PyCasbinBootstrapError(RuntimeError):
@@ -29,6 +31,22 @@ def _is_under(path: str | None, root: Path) -> bool:
         return False
 
 
+def _sha256_file(path: Path) -> str:
+    digest = sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _verify_vendor_integrity(package_init: Path) -> None:
+    observed = _sha256_file(package_init)
+    if observed != EXPECTED_PYCASBIN_INIT_SHA256:
+        raise PyCasbinBootstrapError(
+            f"vendored casbin integrity mismatch: expected {EXPECTED_PYCASBIN_INIT_SHA256}, got {observed}"
+        )
+
+
 def _resolve_dependencies(dependencies: PyCasbinDependencies | None) -> tuple[type[Any], str]:
     dependencies = dependencies or PyCasbinDependencies()
     if dependencies.enforcer_type is not None:
@@ -39,6 +57,7 @@ def _resolve_dependencies(dependencies: PyCasbinDependencies | None) -> tuple[ty
     package_init = root / "casbin" / "__init__.py"
     if not package_init.is_file():
         raise PyCasbinBootstrapError(f"vendored casbin missing: {package_init}")
+    _verify_vendor_integrity(package_init)
     value = str(root)
     if value not in sys.path:
         sys.path.insert(0, value)
