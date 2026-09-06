@@ -2,10 +2,9 @@
   "contract": "tel.workflow/v3",
   "project": "UI YAIWES modular component integration",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "P02A_FLAG_P02B_FLAG_P02C_SAFE_ACTIVE",
-  "current_node": "P02C_RULE_ENGINE_POLICY_PLUGIN",
+  "status": "P02A_FLAG_P02B_FLAG_P02C_FLAG_P03_ACTIVE",
+  "current_node": "P03_HTTPX_STARLETTE_ADAPTERS",
   "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY",
-  "component_root": "UI YAIWES/componentes open soure UI YAIWES",
   "component_count": 14,
   "workflow_owner": "stabilize_core",
   "p02a": {
@@ -16,26 +15,24 @@
   "p02b": {
     "status": "CLOSED_UNVERIFIED_WITH_VERSION_FLAG",
     "commit": "9cc1d0a2e5876b0f87a36a297c65c422be36b7e6",
-    "architecture_commit": "c01b4ddbefd29b760dc5a54327cbe39a15ce54a1",
-    "factory_key": "pydantic.contracts",
-    "source_commit": "c23cb86ef197693fc016437614f174252a3d189a",
-    "source_version": "2.14.0b1",
-    "required_core_version": "2.48.0",
-    "local_pydantic_version": "2.13.4",
-    "local_core_version": "2.46.4",
-    "local_logic_tests": "PASS_4_OF_4",
+    "flag": "PYDANTIC_CORE_VERSION_MISMATCH"
+  },
+  "p02c": {
+    "status": "CLOSED_UNVERIFIED_WITH_EXECUTION_FLAG",
+    "commit": "a1e6e4a4ac595a7c29e04bbdb150e3c226d116f5",
+    "architecture_commit": "8659c89a2e968e06258643ef5e65b5ad63a4485d",
+    "factory_key": "rule_engine.policy",
+    "source_commit": "c166666f66acabfa42856639812a3c20ae04da60",
+    "source_version": "5.0.3",
+    "vendor_tree": "3ca8717fb4ce3561b1e76053afc487061c76cfe3",
+    "local_logic_tests": "PASS_5_OF_5",
     "github_readback": "PASS",
-    "runtime_mount": "FAIL_CLOSED_EXPECTED_VERSION_MISMATCH"
+    "real_vendor_execution": "BLOCKED_BY_LOCAL_DNS"
   },
   "active_flags": [
     "P02A-FLAG-REAL-VENDOR-EXECUTION",
-    "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH"
+    "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
+    "P02C-FLAG-REAL-VENDOR-EXECUTION"
   ],
-  "p02b_vendor": {
-    "pydantic_tree": "c04b6070f1a19b5c7dfdecc10ce28ba1a4afee9b",
-    "pydantic_core_tree": "8a42ba89d1cf33ad1b9996f348283ef3f8058554",
-    "core_rust_src_tree": "2c9531d1b3d5b52c71aca633ab254070fd16b0dc",
-    "core_python_tree": "7405da25070a0d3c601ac02c3bb22fa48c1d8bdc"
-  },
-  "next_gate": "execute the five mandatory searches for Rule Engine, then build only an isolated deterministic policy/rules plugin; do not change workflow ownership"
+  "next_gate": "P03: execute five mandatory reuse searches, audit HTTPX/Starlette source APIs and dependencies, then mount separate transport/server adapters without workflow ownership"
 }
