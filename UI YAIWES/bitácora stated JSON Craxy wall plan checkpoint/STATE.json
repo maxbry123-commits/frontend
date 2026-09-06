@@ -2,45 +2,48 @@
   "contract": "tel.workflow/v3",
   "project": "UI YAIWES modular component integration",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "P01_VERIFIED_CLOSED_P02A_ACTIVE_LOOP",
-  "current_node": "P02A_STABILIZE_FACTORY_DEPENDENCY_INJECTION",
+  "status": "P02A_CLOSED_UNVERIFIED_FLAG_P02B_SAFE_ACTIVE",
+  "current_node": "P02B_PYDANTIC_CONTRACT_PLUGIN",
+  "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY",
   "component_root": "UI YAIWES/componentes open soure UI YAIWES",
   "component_root_tree_sha": "4318b69193b6ba0dedda81e601e174fefa3c5cf7",
   "component_count": 14,
-  "root_scattered_components_observed": 0,
-  "provenance_matrix": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/COMPONENT-CODE-MAP.md",
-  "p01_verify_final": {
-    "status": "PASS",
-    "inventory_rows": 14,
-    "provenance_rows": 14,
-    "independent_readback": true
-  },
-  "universal_plugin_socket": {
-    "base_commit": "4960005c12668e9ef843e1a42b842989cca6e338",
-    "p02a_commit": "88b424424d62db798da8ea2406992d043e3a23fc",
-    "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins",
-    "catalog_default_enabled": 0,
-    "runtime_activation": "EXPLICIT_ALLOWLIST_ONLY",
-    "workflow_owner": "stabilize_core"
-  },
+  "workflow_owner": "stabilize_core",
   "p02a": {
+    "wiring_commit": "88b424424d62db798da8ea2406992d043e3a23fc",
+    "guard_test_commit": "2887aa1db2c8d7e21213931b55181969581c1b52",
+    "adapter_readme_commit": "4ce6ae36e6a15a12f3adc20e9f78217abc7332f4",
+    "architecture_delta_commit": "27cae7621cdd8f444d81fad469310e4a35a98c72",
     "factory_key": "stabilize.orchestrator",
     "adapter_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/stabilize_adapter",
     "queue_required": true,
     "store_injected": true,
-    "loader_mount_test": "PASS",
-    "dependency_identity_health_test": "PASS",
-    "local_deterministic_tests": "PASS_5_OF_5",
+    "fake_orchestrator_tests": "PASS_5_OF_5",
+    "guard_tests_added": 3,
     "github_readback": "PASS",
-    "actual_vendored_orchestrator_mount": "PENDING_VERIFY_FINAL"
+    "actual_vendored_orchestrator_mount": "BLOCKED_BY_LOCAL_DNS",
+    "closure": "CLOSED_UNVERIFIED_WITH_FLAG"
   },
-  "reuse_searches": {
+  "active_flags": [
+    {
+      "id": "P02A-FLAG-REAL-VENDOR-EXECUTION",
+      "reason": "local execution environment cannot resolve github.com to materialize the target runtime for an independent real-vendor mount",
+      "evidence": "git clone failed with Could not resolve host: github.com",
+      "retry_policy": "retry when executable environment/network is available; do not mark VERIFIED_CLOSED before real vendored Orchestrator mount"
+    }
+  ],
+  "reuse_searches_p02a": {
     "component_root": "DONE",
     "frontend_all_roots": "DONE",
-    "agentes": "DONE",
-    "router_inteligente_universal": "DONE",
-    "osquestador_auditor": "DONE"
+    "agentes": "DONE_PATTERN_ADAPTER_LAYER_FOUND",
+    "router_inteligente_universal": "DONE_NO_ALTERNATE_OWNER_ADOPTED",
+    "osquestador_auditor": "DONE_NO_ALTERNATE_OWNER_ADOPTED"
   },
-  "active_gap": "P02A requires executable mount against the real vendored stabilize.Orchestrator before VERIFIED_CLOSED",
-  "next_gate": "execute real vendored Orchestrator(queue, store) through universal loader, verify health/readback, then close P02A or apply StrategyDelta"
+  "source_truth_review": {
+    "architecture_passes": 4,
+    "canonical_unique_documents": 4,
+    "later_instruction_link_count": 3,
+    "status": "DOCUMENT_COUNT_GAP_RECORDED_NO_INVENTED_TRIO"
+  },
+  "next_gate": "P02B may proceed only as an independent disabled contract plugin; it must not claim P02A VERIFIED_CLOSED or depend on a live Stabilize runtime"
 }
