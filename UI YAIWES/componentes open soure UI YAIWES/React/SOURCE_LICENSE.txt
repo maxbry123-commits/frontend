@@ -1,0 +1,3 @@
+https://github.com/facebook/react/blob/f1f7ed2ac267a21dd2e3e67c4a606b9cf56e360b/LICENSE
+https://github.com/facebook/react/blob/f1f7ed2ac267a21dd2e3e67c4a606b9cf56e360b/compiler/packages/react-forgive/LICENSE
+https://github.com/facebook/react/blob/f1f7ed2ac267a21dd2e3e67c4a606b9cf56e360b/packages/eslint-plugin-react-hooks/src/code-path-analysis/LICENSE
