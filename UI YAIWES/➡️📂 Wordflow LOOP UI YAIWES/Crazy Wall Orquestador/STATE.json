@@ -2,8 +2,8 @@
   "contract": "tel.workflow/v3",
   "project": "Wordflow LOOP UI YAIWES",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "ARCHITECTURE_REPLICATED_IN_PROGRESS",
-  "current_node": "INITIAL_STRUCTURE_AND_BACKEND_WIRING",
+  "status": "ARCHITECTURE_WORK_ROOTS_REPLICATED",
+  "current_node": "WAIT_VERIFY_COMPONENTS_THEN_WIRE_BACKEND",
   "workflow_owner": "Stabilize CORE",
   "frontend_owner": "Grok",
   "canonical_readme": "UI YAIWES/README arquitectura UI YAIWES.md",
@@ -12,7 +12,8 @@
   "checkpoint": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/CHECKPOINT.json",
   "recovery": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/RECOVERY-PATCH.md",
   "ledger": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/Crazy Wall Orquestador/LEDGER-ARQUITECTURA-UI-YAIWES.md",
-  "documents_root": "UI YAIWES/Documentos proyecto UI YAIWES",
+  "documents_root_exact": "UI YAIWES/documentos proyectos UI YAIWES",
+  "documents_root_historical": "UI YAIWES/Documentos proyecto UI YAIWES",
   "components_root_expected": "UI YAIWES/componentes",
   "components_root_observed": "NOT_FOUND_AT_INITIAL_CHECK",
   "existing_systems": {
@@ -45,17 +46,33 @@
   },
   "closure_states": ["VERIFIED_CLOSED", "CLOSED_UNVERIFIED", "INCONCLUSIVE"],
   "evidence_policy": "NO_VERIFIED_CLAIM_WITHOUT_REAL_EVIDENCE",
+  "source_replication_evidence": {
+    "wordflow_tree_sha": "4d0ed5e0910ca6fe573b7b3dac83d2c451ba49b3",
+    "method_commit": "8024e57606cedc34592ef18b3565c624b1e6d676",
+    "forensic_commit": "2072d535920573550a443cf9a3967ab66b50375c",
+    "engineering_commit": "7bc798ad4173f39f758abd3d4e6cbc2d909658e6"
+  },
   "runtime_progress": {
     "architecture_readme": "CREATED",
     "handoff": "CREATED",
-    "state": "CREATED",
-    "checkpoint": "PENDING_CREATE",
-    "recovery": "PENDING_CREATE",
-    "crazy_wall": "PENDING_CREATE",
-    "pipeline_methods": "PENDING_CREATE",
-    "runtime_roots": "PENDING_CREATE",
-    "component_wiring": "PENDING_COMPONENT_ARRIVAL",
+    "state": "CREATED_AND_RECONCILED",
+    "checkpoint": "CREATED",
+    "recovery": "CREATED",
+    "crazy_wall": "CREATED",
+    "ledger": "CREATED",
+    "pipeline_methods": "CREATED_FROM_CANONICAL_HISTORICAL_COMMITS",
+    "runtime_roots": "CREATED",
+    "documents_root_exact": "CREATED",
+    "component_wiring": "PENDING_COMPONENT_ARRIVAL_AND_CODE_REVIEW",
     "e2e": "NOT_RUN"
   },
-  "next_node": "CREATE_CHECKPOINT_RECOVERY_CRAZYWALL_PIPELINE"
+  "runtime_roots": [
+    "runtime/docs",
+    "runtime/src/core",
+    "runtime/src/adapters",
+    "runtime/src/tasks",
+    "runtime/src/integration",
+    "runtime/tests"
+  ],
+  "next_node": "VERIFY_DESTINATION_TREE_AND_COMPONENTS"
 }
