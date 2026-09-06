@@ -1,0 +1,17 @@
+.idea/
+node_modules/
+lib/
+.sass-cache/
+npm-debug.log
+coverage/
+yarn-error.log
+.DS_STORE
+cjs/
+esm/
+dist/
+.cache
+/addons
+.nyc_output
+cypress/videos/*
+cypress/screenshots/*
+.husky

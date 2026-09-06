@@ -1,0 +1,1 @@
+https://github.com/fkhadra/react-toastify/blob/769ce82f1c72cde5ee681068194adfa88a0c81c9/LICENSE

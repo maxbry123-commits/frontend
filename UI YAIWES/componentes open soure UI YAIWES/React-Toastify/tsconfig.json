@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "esModuleInterop": true,
+    "lib": ["es2018", "dom"],
+    "baseUrl": ".",
+    "paths": {
+      "react-toastify": ["./src/index.ts"]
+    },
+    "ignoreDeprecations": "6.0"
+  }
+}
