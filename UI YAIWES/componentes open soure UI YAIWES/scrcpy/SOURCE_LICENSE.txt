@@ -1,0 +1,1 @@
+https://github.com/Genymobile/scrcpy/blob/19c1261d2e2cbf2b5e6a71a8b64cc1dd3ede06ac/LICENSE
