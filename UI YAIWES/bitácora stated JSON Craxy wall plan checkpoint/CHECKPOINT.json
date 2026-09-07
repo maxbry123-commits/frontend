@@ -1,6 +1,6 @@
 {
-  "checkpoint_id": "UIYAIWES-V3-POST124-PGVECTOR-0022",
-  "previous_checkpoint_id": "UIYAIWES-V3-POST124-LIBDATACHANNEL-0021",
+  "checkpoint_id": "UIYAIWES-V3-POST124-PYTEST-0023",
+  "previous_checkpoint_id": "UIYAIWES-V3-POST124-PGVECTOR-0022",
   "contract": "tel.workflow/v3",
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_LOOP_POST_124_CANCELLED_REVALIDATION",
@@ -17,15 +17,13 @@
     "P03_httpx_real_local_pass": true,
     "P04_adapters_and_vendor_readback": true,
     "gVisor_physical_provenance_verified": true,
-    "gVisor_integrated": false,
     "gfxstream_physical_provenance_verified": true,
-    "gfxstream_integrated": false,
     "jsPDF_physical_provenance_verified": true,
-    "jsPDF_integrated": false,
     "libdatachannel_physical_provenance_verified": true,
-    "libdatachannel_integrated": false,
     "pgvector_physical_provenance_verified": true,
-    "pgvector_integrated": false
+    "pytest_physical_presence_verified": true,
+    "pytest_declared_provenance_verified": false,
+    "pytest_integrated": false
   },
   "post_124_evidence": {
     "run_id": 34060401131,
@@ -39,27 +37,30 @@
     "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131"
   },
   "last_1x1_result": {
-    "entry": "pgvector",
-    "classification": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED",
-    "tree_sha": "dee3af44e7c2b6779d02fa1372c89c9b89809679",
-    "source_url": "https://github.com/pgvector/pgvector",
-    "source_commit": "e48241b4dcc045b18902914f668d03d1d399dfbe",
-    "license": "PostgreSQL",
-    "license_blob": "fc5f177fa5d9c0d20a949f4b4faa028999977008",
-    "candidate_code_roots": ["src", "sql"],
+    "entry": "pytest",
+    "classification": "PARTIAL_PROVENANCE_MISMATCH_TEST_ONLY",
+    "source_url": "https://github.com/pytest-dev/pytest",
+    "declared_source_commit": "1f787563f0a174f938ad3415c2ecd90ae35f03e2",
+    "declared_source_tree": "aa19de18166fd2225a0884e809e11a6ef1f0a87c",
+    "license": "MIT",
+    "license_blob": "c3f1657fce94589bd1ec7cead810639047f3d359",
+    "physical_evidence_file": "src/_pytest/nodeid.py",
+    "physical_evidence_blob": "f859b15347567130b8537a06604f5b2e16cdfbb2",
+    "later_upstream_commit": "431f3e1f5fd70b9b0f8afa2d20a10421542e5c6a",
+    "later_upstream_tree": "978c5d48fd273d69326a6cd0861198a50c42c62e",
     "integration": "NOT_WIRED",
     "closure": "NOT_VERIFIED_CLOSED"
   },
   "blocked_claims": {
     "P01_freshness": "BLOCKED_UNTIL_POST_CANCEL_INVENTORY_REVALIDATED",
-    "P05_publication": "BLOCKED_UNTIL_P01_POST124_RECONCILIATION"
+    "P05_publication": "BLOCKED_UNTIL_P01_POST124_RECONCILIATION",
+    "pytest_duplicate_alias": "BLOCKED_UNTIL_EXACT_PHYSICAL_SNAPSHOT_COMMIT_TREE_IDENTIFIED"
   },
   "queue_1x1": [
-    "advance to post124 pytest after pgvector",
-    "compare SOURCE_COMMIT/tree/code-root against baseline pytest",
-    "classify duplicate alias or independent materialization",
-    "persist evidence without mounting donor code",
-    "update inventory/code-map/state/checkpoint/plan/recovery/architecture",
+    "advance to redun after pytest provenance mismatch was persisted",
+    "repeat five mandatory searches",
+    "verify SOURCE_URL/SOURCE_COMMIT/license/code-root/tree",
+    "classify and persist without mounting donor code",
     "revalidate P01 only after complete destination reconciliation"
   ],
   "closure_rule": "file, import, repository, staging or partial acquisition never equals VERIFIED_CLOSED without route/diff/SHA/log/test/URL evidence"
