@@ -2,7 +2,7 @@
   "contract": "tel.workflow/v3",
   "project": "UI YAIWES modular component integration",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "P05_VENDOR_TESTS_VERIFIED_STAGING",
+  "status": "P05_VENDOR_TESTS_VERIFIED_RECONCILIATION_BLOCKED",
   "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
   "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY",
   "component_count": 14,
@@ -11,7 +11,7 @@
   "p03": {"status":"PARTIAL_VERIFIED_WITH_STARLETTE_FLAG","commit":"85a3f758a4a6228e0d5d030a544365ccdef0a198","httpx":"VERIFIED_RUNTIME_LOCAL","starlette":"CLOSED_UNVERIFIED_WITH_VERSION_FLAG"},
   "p04": {"status":"CLOSED_UNVERIFIED_WITH_EXECUTION_FLAGS","commit":"b7545ca41ae0012e658d3ab8334cbe5aa98c077b","github_readback":"PASS"},
   "p05": {
-    "status": "VENDOR_TESTS_VERIFIED_STAGING_NOT_MERGED",
+    "status": "VENDOR_TESTS_VERIFIED_STAGING_PR_CONFLICT",
     "code_commit": "f26b1c87c6e4f873fdade6e14959e882d4704142",
     "verification_workflow_commit": "de6c819f53f74f71b193f331be605b92590008af",
     "verification_run_id": 34076616213,
@@ -24,9 +24,10 @@
     "real_vendor_tests": "5/5 PASS",
     "main_head_observed": "66145a1ab53b78b3d03618fc2f3e919de685c19c",
     "merge_base": "3e91c8f65bef6ec3b6e0c48f889eda35f8017130",
-    "main_compare": {"status":"diverged","ahead_by":11,"behind_by":28},
-    "main_merge": "NOT_ATTEMPTED"
+    "main_compare": {"status":"diverged","ahead_by":17,"behind_by":28},
+    "reconciliation_pr": {"number":6,"url":"https://github.com/maxbry123-commits/frontend/pull/6","draft":true,"mergeable":false,"head":"20caf8542441f4d3e19acdd4045991226face2df","base":"66145a1ab53b78b3d03618fc2f3e919de685c19c"},
+    "main_merge": "BLOCKED_CONFLICT"
   },
-  "active_flags": ["P02A-FLAG-REAL-VENDOR-EXECUTION","P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH","P02C-FLAG-REAL-VENDOR-EXECUTION","P03-FLAG-STARLETTE-VERSION-MISMATCH","P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION","P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION","P05-FLAG-MAIN-DIVERGED-11-AHEAD-28-BEHIND","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
-  "next_gate": "Real vendored P05 tests PASS in GitHub Actions. Do not declare VERIFIED_CLOSED until main↔staging is reconciled without force, both histories are preserved, P05 code is integrated on the target history, and independent read-back/tests PASS again."
+  "active_flags": ["P02A-FLAG-REAL-VENDOR-EXECUTION","P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH","P02C-FLAG-REAL-VENDOR-EXECUTION","P03-FLAG-STARLETTE-VERSION-MISMATCH","P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION","P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION","P05-FLAG-MAIN-DIVERGED-17-AHEAD-28-BEHIND","P05-FLAG-PR6-MERGE-CONFLICT","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
+  "next_gate": "Resolve PR #6 conflicts without force while preserving both histories and only authorized P05 deltas; then independent read-back and real 5/5 tests on reconciled target history before VERIFIED_CLOSED."
 }
