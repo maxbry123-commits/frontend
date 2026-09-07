@@ -15,7 +15,10 @@ Contrato `tel.workflow/v3`; `FAIL_CLOSED_LOOP`.
 `structlog_adapter/{dependencies,factory,runtime}` y `opentelemetry_adapter/{dependencies,factory,runtime}`; vendor code-only `runtime/vendor/`; licencias `runtime/vendor/_licenses/`; tests `runtime/tests/test_observability_adapters.py`.
 
 ## Gates
-Código staging `f26b1c87c6e4f873fdade6e14959e882d4704142`; GitHub read-back PASS; chequeo injection/socket `3/3 PASS`. Los real-vendor tests todavía NO se ejecutaron, por tanto P05 = `STAGED_UNVERIFIED`, nunca VERIFIED_CLOSED.
+Código staging `f26b1c87c6e4f873fdade6e14959e882d4704142`; GitHub read-back PASS; chequeo injection/socket `3/3 PASS`. El intento de ejecución real fue bloqueado antes de correr tests por DNS del entorno (`Could not resolve host: github.com`), por lo que no constituye PASS ni FAIL funcional. Compare contra main observado `04ad9bc66ea4d71fac5a827937a9107aeae1f72c` mostró divergencia desde merge-base `3e91c8f65bef6ec3b6e0c48f889eda35f8017130` (`ahead 3 / behind 4` antes de los commits de evidencia de este watchdog). Bajo FAIL_CLOSED no se rebasea/mergea/forcea hasta ejecutar vendor real y reconciliar ambos historiales. P05 sigue `STAGED_UNVERIFIED`.
+
+## StrategyDelta activo
+Usar ejecución residente en repositorio o checkout materializado desde blobs/trees accesibles, evitando dependencia del DNS local. Después repetir tests reales, comparar HEADs de nuevo y reconciliar main↔staging preservando ambos historiales antes del read-back final.
 
 ## Fuentes de verdad
 Arquitectura canónica enumera cuatro documentos únicos del Director aunque la orden actual diga tres. StrategyDelta fail-closed: conservar/revisar los cuatro como superset y mantener el GAP hasta reconciliación explícita.
