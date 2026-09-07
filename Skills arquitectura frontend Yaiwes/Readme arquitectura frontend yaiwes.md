@@ -51,6 +51,26 @@ https://github.com/maxbry123-commits/frontend/tree/main/UI%20YAIWES
 
 Orden posterior: dejar de hacer contrato. Seguir el trabajo real.
 
+### I04 — Biblioteca de code modular, lotes de 10, no monolítico
+
+Orden literal:
+
+- No puedes hacer bloques monolíticos. Divides y conectas. 1 ventana = 1 archivo. 1 función = 1 archivo.
+- Todo en archivos con code descargable.
+- Si se usan repos open source: 1) enlace empaquetado ZIP para descargar; 2) el Director lo sube; 3) el agente convierte, divide, extrae, solo cambia diseño y color.
+- Crear lotes de archivos separados. Lotes de 10. Al final de cada lote, enlace.
+- Crear raíz dentro de Skills arquitectura frontend Yaiwes / llamada biblioteca code frontend Maxbry Yaiwes/
+- Al final de cada salida, enlace para que el Director suba lo creado.
+- No resumir ni omitir. Escribir code primero en sandbox, verificación cruzada con la fuente en LOOP hasta que el archivo esté completo.
+- Archivos listos para desplegar: si mañana se copian o mueven, solo hay que cablear. Sirven como biblioteca del panel de configuración del sistema modular.
+
+Ejecutado 2026-09-07:
+
+- Carpeta: `Skills arquitectura frontend Yaiwes/biblioteca code frontend Maxbry Yaiwes/`
+- Lote 01 (10 archivos núcleo host): `.../lote-01-nucleo-host/`
+- ZIP open source Ribbon 2010 (NO extraído hasta que el Director lo suba): https://github.com/OkGoDoIt/Office-Ribbon-2010/archive/refs/heads/master.zip
+- ZIP skills Anthropic (NO extraído hasta que el Director lo suba): https://github.com/anthropics/skills/archive/refs/heads/main.zip
+
 ### I03 — Diseño modular del skill (esta sesión)
 
 - El Director va a pasar lo ya hecho (arquitectura, diseño, colores, parte de la tarea).
@@ -334,3 +354,4 @@ Entrega:
 | Fecha | Qué se anotó | Validado |
 | --- | --- | --- |
 | 2026-09-07 | I01 I02 I03, definición modular, investigación Office 2007–2013, enlaces skills, mapa de carpetas, puente con README UI YAIWES | SÍ — este archivo en main |
+| 2026-09-07 | I04 biblioteca code, lote-01 10 archivos núcleo, ZIP OSS pendientes de subida | SÍ — carpeta en main |
