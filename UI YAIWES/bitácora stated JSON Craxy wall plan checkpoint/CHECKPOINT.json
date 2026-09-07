@@ -1,26 +1,48 @@
 {
-  "checkpoint_id": "UIYAIWES-P04-FLAGS-P05-0015",
-  "previous_checkpoint_id": "UIYAIWES-P03-PARTIAL-P04-0014",
-  "contract": "tel.workflow/v3",
-  "status": "P04_CLOSED_UNVERIFIED_WITH_FLAGS_P05_ACTIVE",
-  "verified": {
-    "p04_five_reuse_searches": true,
-    "resilient_circuit_source_version": "0.7.0",
-    "resilient_circuit_vendor_present": true,
-    "resilient_circuit_factory_readback": true,
-    "bulkman_source_version": "2.0.3",
-    "bulkman_vendor_present": true,
-    "bulkman_factory_readback": true,
-    "bulkman_resilient_version_range_compatible": true,
-    "adapter_injection_checks": "PASS",
-    "workflow_owner_unchanged": "stabilize_core",
-    "real_vendor_execution": false
+  "checkpoint_id": "UIYAIWES-V4-GUIDE-HANDOFF-0016",
+  "previous_checkpoint_id": "UIYAIWES-P04-FLAGS-P05-0015",
+  "contract": "tel.workflow/v4",
+  "status": "ACTIVE_LOOP_WITH_CONCURRENT_124_ACQUISITION",
+  "master_guide": {
+    "path": "UI YAIWES/readme arquitectura UI YAIWES/GUIA-MAESTRA-EJECUCION-LOOP-SOL-UI-YAIWES.md",
+    "commit": "3c2752b9cd74b404cc8d44379b37535a6a295203"
   },
-  "flags": [
-    "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
-    "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
-  ],
-  "evidence_commits": ["b7545ca41ae0012e658d3ab8334cbe5aa98c077b","887b4afca32b9c442f4d527df804c7ada1e82afc"],
+  "last_verified_closed": "P01 initial 14-component inventory/provenance baseline",
   "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
-  "closure_rule": "P04 cannot become VERIFIED_CLOSED until both vendored packages execute; P05 may proceed independently as read-only observability/logging"
+  "verified_state": {
+    "universal_socket_present": true,
+    "workflow_owner": "stabilize_core",
+    "P02A_adapter_wired": true,
+    "P02B_adapter_wired": true,
+    "P02C_adapter_wired": true,
+    "P03_httpx_real_local_pass": true,
+    "P03_starlette_version_flag": true,
+    "P04_adapters_and_vendor_readback": true
+  },
+  "prepared_not_equivalent_to_main_closed": {
+    "P05": "observability work advanced/prepared; reconcile against main before claiming publication",
+    "P06": "test-only production rejection gate prepared",
+    "P07": "donor-only production rejection gate prepared",
+    "P08": "PyCasbin policy work prepared; reconcile after Action 124 aliases/dedup"
+  },
+  "concurrent_action": {
+    "run_id": 34060401131,
+    "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131",
+    "job": "queue-124",
+    "last_verified_status": "in_progress",
+    "active_step": 4,
+    "active_step_name": "Process 124 components sequentially with pinned source SHA",
+    "final_destination_verification": "pending"
+  },
+  "recovery_priority": [
+    "read master guide",
+    "read STATE/PLAN/RECOVERY/BITACORA",
+    "check main HEAD",
+    "check Action 124 status",
+    "if complete verify destination and revalidate P01 inventory/dedup",
+    "if still active continue only independent runtime work",
+    "reconcile P05-P08 without duplicate implementations",
+    "return to inherited execution/version flags when compatible runtime evidence is available"
+  ],
+  "closure_rule": "files, mocks, injection tests, staging or prepared work never equal VERIFIED_CLOSED without the evidence required by the master guide"
 }
