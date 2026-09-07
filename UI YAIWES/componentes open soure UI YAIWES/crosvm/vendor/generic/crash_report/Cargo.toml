@@ -1,0 +1,18 @@
+[package]
+name = "crash_report"
+version = "0.1.0"
+authors = ["The ChromiumOS Authors"]
+edition = "2021"
+license = "BSD-3-Clause"
+
+[features]
+crash-report = []
+perfetto-system-backend = []
+
+[dependencies]
+anyhow = { workspace = true }
+base = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+
+[target.'cfg(windows)'.dependencies]
+win_util = { path = "../../../win_util" }

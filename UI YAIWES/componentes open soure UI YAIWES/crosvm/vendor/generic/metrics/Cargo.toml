@@ -1,0 +1,15 @@
+[package]
+name = "metrics_generic"
+version = "0.1.0"
+authors = ["The ChromiumOS Authors"]
+edition = "2021"
+license = "BSD-3-Clause"
+
+[features]
+default = []
+experimental = []
+collect = []
+
+[dependencies]
+base = { workspace = true }
+metrics_events = { workspace = true }

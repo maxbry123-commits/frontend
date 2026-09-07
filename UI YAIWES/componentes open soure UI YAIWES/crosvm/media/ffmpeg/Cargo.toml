@@ -1,0 +1,15 @@
+[package]
+name = "ffmpeg"
+version = "0.1.0"
+authors = ["The ChromiumOS Authors"]
+edition = "2021"
+license = "BSD-3-Clause"
+
+[dependencies]
+anyhow = { workspace = true }
+libc = { workspace = true }
+thiserror = { workspace = true }
+
+[build-dependencies]
+bindgen = "0.63"
+pkg-config = "0.3"

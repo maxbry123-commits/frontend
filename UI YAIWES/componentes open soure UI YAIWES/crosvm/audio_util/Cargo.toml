@@ -1,0 +1,12 @@
+[package]
+name = "audio_util"
+version = "0.1.0"
+authors = ["The ChromiumOS Authors"]
+edition = "2021"
+license = "BSD-3-Clause"
+
+[dependencies]
+audio_streams = { workspace = true }
+async-trait = "0.1.36"
+base = { workspace = true }
+thiserror = { workspace = true }

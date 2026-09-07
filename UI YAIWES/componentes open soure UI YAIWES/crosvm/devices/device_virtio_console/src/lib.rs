@@ -1,0 +1,323 @@
+// Copyright 2020 The ChromiumOS Authors
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+//! Virtio console device.
+
+pub mod control;
+pub mod device;
+pub mod input;
+pub mod output;
+pub mod port;
+pub mod worker;
+
+mod sys;
+
+use std::collections::BTreeMap;
+
+use anyhow::Context;
+#[cfg(any(target_os = "android", target_os = "linux"))]
+use base::info;
+use base::Event;
+use base::RawDescriptor;
+use hypervisor::ProtectionType;
+use snapshot::AnySnapshot;
+use vm_memory::GuestMemory;
+
+#[cfg(any(target_os = "android", target_os = "linux"))]
+pub mod vhost_user;
+
+use devices::serial::sys::InStreamType;
+use devices::virtio::DeviceType;
+use devices::virtio::Interrupt;
+use devices::virtio::Queue;
+use devices::virtio::VirtioDevice;
+use devices::PciAddress;
+use devices::SerialParameters;
+#[cfg(any(target_os = "android", target_os = "linux"))]
+use devices::SerialType;
+use devices::VirtioDeviceArgs;
+use devices::VirtioDeviceModule;
+
+use crate::device::ConsoleDevice;
+use crate::device::ConsoleSnapshot;
+use crate::port::ConsolePort;
+
+const QUEUE_SIZE: u16 = 256;
+
+/// Virtio console device.
+pub struct Console {
+    console: ConsoleDevice,
+    max_queue_sizes: Vec<u16>,
+    pci_address: Option<PciAddress>,
+}
+
+impl Console {
+    fn new(
+        protection_type: ProtectionType,
+        input: Option<InStreamType>,
+        output: Option<Box<dyn std::io::Write + Send>>,
+        keep_rds: Vec<RawDescriptor>,
+        pci_address: Option<PciAddress>,
+        max_queue_sizes: Option<Vec<u16>>,
+    ) -> Console {
+        let port = ConsolePort::new(input, output, None, keep_rds);
+        let console = ConsoleDevice::new_single_port(protection_type, port);
+        let max_queue_sizes =
+            max_queue_sizes.unwrap_or_else(|| vec![QUEUE_SIZE; console.max_queues()]);
+
+        // TODO: Move these checks into cmdline validation or something so it is more user
+        // friendly when it fails.
+        assert_eq!(max_queue_sizes.len(), console.max_queues());
+        for qs in &max_queue_sizes {
+            assert!(qs.is_power_of_two());
+        }
+
+        Console {
+            console,
+            max_queue_sizes,
+            pci_address,
+        }
+    }
+}
+
+impl VirtioDevice for Console {
+    fn keep_rds(&self) -> Vec<RawDescriptor> {
+        self.console.keep_rds()
+    }
+
+    fn features(&self) -> u64 {
+        self.console.features()
+    }
+
+    fn device_type(&self) -> DeviceType {
+        DeviceType::Console
+    }
+
+    fn queue_max_sizes(&self) -> &[u16] {
+        &self.max_queue_sizes
+    }
+
+    fn read_config(&self, offset: u64, data: &mut [u8]) {
+        self.console.read_config(offset, data);
+    }
+
+    fn on_device_sandboxed(&mut self) {
+        self.console.start_input_threads();
+    }
+
+    fn activate(
+        &mut self,
+        _mem: GuestMemory,
+        _interrupt: Interrupt,
+        queues: BTreeMap<usize, Queue>,
+    ) -> anyhow::Result<()> {
+        for (idx, queue) in queues.into_iter() {
+            self.console.start_queue(idx, queue)?
+        }
+        Ok(())
+    }
+
+    fn pci_address(&self) -> Option<PciAddress> {
+        self.pci_address
+    }
+
+    fn reset(&mut self) -> anyhow::Result<()> {
+        self.console.reset()
+    }
+
+    fn virtio_sleep(&mut self) -> anyhow::Result<Option<BTreeMap<usize, Queue>>> {
+        // Stop and collect all the queues.
+        let mut queues = BTreeMap::new();
+        for idx in 0..self.console.max_queues() {
+            if let Some(queue) = self
+                .console
+                .stop_queue(idx)
+                .with_context(|| format!("failed to stop queue {idx}"))?
+            {
+                queues.insert(idx, queue);
+            }
+        }
+
+        if !queues.is_empty() {
+            Ok(Some(queues))
+        } else {
+            Ok(None)
+        }
+    }
+
+    fn virtio_wake(
+        &mut self,
+        queues_state: Option<(GuestMemory, Interrupt, BTreeMap<usize, Queue>)>,
+    ) -> anyhow::Result<()> {
+        if let Some((_mem, _interrupt, queues)) = queues_state {
+            for (idx, queue) in queues.into_iter() {
+                self.console.start_queue(idx, queue)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn virtio_snapshot(&mut self) -> anyhow::Result<AnySnapshot> {
+        let snap = self.console.snapshot()?;
+        AnySnapshot::to_any(snap).context("failed to snapshot virtio console")
+    }
+
+    fn virtio_restore(&mut self, data: AnySnapshot) -> anyhow::Result<()> {
+        let snap: ConsoleSnapshot =
+            AnySnapshot::from_any(data).context("failed to deserialize virtio console")?;
+        self.console.restore(&snap)
+    }
+}
+
+#[derive(serde::Serialize, serde::Deserialize)]
+pub struct VirtioConsoleModule(pub SerialParameters);
+
+impl VirtioDeviceModule for VirtioConsoleModule {
+    fn sort_name(&self) -> &'static str {
+        "console"
+    }
+
+    fn create(&self, args: &mut VirtioDeviceArgs<'_>) -> anyhow::Result<Box<dyn VirtioDevice>> {
+        let mut keep_rds = Vec::new();
+        let evt = Event::new().context("failed to create event")?;
+        Ok(Box::new(
+            self.0
+                .create_serial_device::<Console>(args.protection_type, &evt, &mut keep_rds)
+                .context("failed to create console device")?,
+        ))
+    }
+
+    #[cfg(any(target_os = "android", target_os = "linux"))]
+    fn create_jail(
+        &self,
+        jail_config: &jail::JailConfig,
+    ) -> anyhow::Result<Option<minijail::Minijail>> {
+        create_jail(
+            &self.0,
+            jail_config,
+            &devices::virtio::VirtioDeviceType::Regular.seccomp_policy_file("serial"),
+        )
+    }
+}
+
+#[cfg(any(target_os = "android", target_os = "linux"))]
+pub fn create_jail(
+    params: &SerialParameters,
+    jail_config: &jail::JailConfig,
+    policy: &str,
+) -> anyhow::Result<Option<minijail::Minijail>> {
+    let mut config = jail::SandboxConfig::new(jail_config, policy);
+    config.bind_mounts = true;
+    let mut jail = jail::create_sandbox_minijail(
+        &jail_config.pivot_root,
+        jail::MAX_OPEN_FILES_DEFAULT,
+        &config,
+    )?;
+    if let Some(path) = &params.path {
+        if let SerialType::SystemSerialType = params.type_ {
+            if let Some(parent) = path.as_path().parent() {
+                if parent.exists() {
+                    info!("Bind mounting dir {}", parent.display());
+                    jail.mount_bind(parent, parent, true)
+                        .context("failed to add bind mounts for console device")?;
+                }
+            }
+        }
+    }
+    Ok(Some(jail))
+}
+
+#[cfg(test)]
+mod tests {
+    #[cfg(windows)]
+    use base::windows::named_pipes;
+    use devices::suspendable_virtio_tests;
+    use tempfile::tempfile;
+
+    use super::*;
+
+    struct ConsoleContext {
+        #[cfg(windows)]
+        #[allow(dead_code)]
+        input_pipe_client: named_pipes::PipeConnection,
+    }
+
+    fn modify_device(_context: &mut ConsoleContext, b: &mut Console) {
+        let input_buffer = b.console.ports[0].clone_input_buffer();
+        input_buffer.lock().push_back(0);
+    }
+
+    #[cfg(any(target_os = "android", target_os = "linux"))]
+    fn create_device() -> (ConsoleContext, Console) {
+        let input = Box::new(tempfile().unwrap());
+        let output = Box::new(tempfile().unwrap());
+
+        let console = Console::new(
+            hypervisor::ProtectionType::Unprotected,
+            Some(input),
+            Some(output),
+            Vec::new(),
+            None,
+            None,
+        );
+
+        let context = ConsoleContext {};
+        (context, console)
+    }
+
+    #[cfg(windows)]
+    fn create_device() -> (ConsoleContext, Console) {
+        let (input_pipe_server, input_pipe_client) = named_pipes::pair(
+            &named_pipes::FramingMode::Byte,
+            &named_pipes::BlockingMode::NoWait,
+            0,
+        )
+        .unwrap();
+
+        let input = Box::new(input_pipe_server);
+        let output = Box::new(tempfile().unwrap());
+
+        let console = Console::new(
+            hypervisor::ProtectionType::Unprotected,
+            Some(input),
+            Some(output),
+            Vec::new(),
+            None,
+            None,
+        );
+
+        let context = ConsoleContext { input_pipe_client };
+
+        (context, console)
+    }
+
+    suspendable_virtio_tests!(console, create_device, 2, modify_device);
+
+    #[test]
+    fn test_inactive_sleep_resume() {
+        let (_ctx, mut device) = create_device();
+
+        let input_buffer = device.console.ports[0].clone_input_buffer();
+
+        // Initialize the device, starting the input thread, but don't activate any queues.
+        device.on_device_sandboxed();
+
+        // No queues were started, so `virtio_sleep()` should return `None`.
+        let sleep_result = device.virtio_sleep().expect("failed to sleep");
+        assert!(sleep_result.is_none());
+
+        // Inject some input data.
+        input_buffer.lock().extend(b"Hello".iter());
+
+        // Ensure snapshot does not fail and contains the buffered input data.
+        let snapshot = device.virtio_snapshot().expect("failed to snapshot");
+        let snapshot: ConsoleSnapshot =
+            AnySnapshot::from_any(snapshot).expect("failed to deserialize snapshot");
+
+        assert_eq!(snapshot.ports[0].input_buffer, b"Hello");
+
+        // Wake up the device, which should start the input thread again.
+        device.virtio_wake(None).expect("failed to wake");
+    }
+}

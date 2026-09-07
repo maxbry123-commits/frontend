@@ -1,0 +1,9 @@
+[package]
+name = "baremetal"
+version = "0.1.0"
+edition = "2021"
+license = "BSD-3-Clause"
+
+[dependencies]
+com_logger = "0.1"
+log = "0.4"

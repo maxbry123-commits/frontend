@@ -1,0 +1,15 @@
+[package]
+name = "base_event_token_derive"
+version = "0.1.0"
+authors = ["The ChromiumOS Authors"]
+edition = "2021"
+license = "BSD-3-Clause"
+include = ["*.rs", "Cargo.toml"]
+
+[lib]
+proc-macro = true
+
+[dependencies]
+proc-macro2 = "^1"
+quote = "^1"
+syn = "2"

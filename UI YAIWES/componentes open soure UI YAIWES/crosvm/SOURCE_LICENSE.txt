@@ -1,0 +1,6 @@
+https://github.com/google/crosvm/blob/9d4dc5fedc493bfcb1e983970fcec79cf4cf9c6c/LICENSE
+https://github.com/google/crosvm/blob/9d4dc5fedc493bfcb1e983970fcec79cf4cf9c6c/common/data_model/LICENSE
+https://github.com/google/crosvm/blob/9d4dc5fedc493bfcb1e983970fcec79cf4cf9c6c/third_party/libslirp-rs/LICENSE
+https://github.com/google/crosvm/blob/9d4dc5fedc493bfcb1e983970fcec79cf4cf9c6c/third_party/vmm_vhost/LICENSE
+https://github.com/google/crosvm/blob/9d4dc5fedc493bfcb1e983970fcec79cf4cf9c6c/third_party/vmm_vhost/LICENSE-BSD-3-Clause
+https://github.com/google/crosvm/blob/9d4dc5fedc493bfcb1e983970fcec79cf4cf9c6c/third_party/vmm_vhost/LICENSE-BSD-Chromium
