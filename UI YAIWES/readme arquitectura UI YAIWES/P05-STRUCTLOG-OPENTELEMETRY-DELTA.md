@@ -15,11 +15,11 @@ Contrato `tel.workflow/v3`; `FAIL_CLOSED_LOOP`.
 `structlog_adapter/{dependencies,factory,runtime}` y `opentelemetry_adapter/{dependencies,factory,runtime}`; vendor code-only `runtime/vendor/`; licencias `runtime/vendor/_licenses/`; tests `runtime/tests/test_observability_adapters.py`.
 
 ## Gates verificados
-Código staging `f26b1c87c6e4f873fdade6e14959e882d4704142`; GitHub read-back PASS; chequeo injection/socket `3/3 PASS`.
-StrategyDelta repo-resident `de6c819f53f74f71b193f331be605b92590008af` creó verificación con sparse checkout runtime-only (`blob:none`, `lfs:false`). Run https://github.com/maxbry123-commits/frontend/actions/runs/34076616213 / job `101603870455` completó SUCCESS: cinco tests reales, incluidos bootstrap vendored Structlog y OpenTelemetry, `5/5 PASS` en 0.553s. El GAP DNS queda cerrado para P05.
+Código staging `f26b1c87c6e4f873fdade6e14959e882d4704142`; GitHub read-back PASS; injection/socket `3/3 PASS`.
+Workflow `de6c819f53f74f71b193f331be605b92590008af`; run https://github.com/maxbry123-commits/frontend/actions/runs/34076616213 / job `101603870455` = SUCCESS; cinco tests reales, incluido bootstrap vendored Structlog/OpenTelemetry, `5/5 PASS` en 0.553s.
 
-## Gate restante
-P05 sigue sin `VERIFIED_CLOSED` porque staging y main divergen. Main observado `66145a1ab53b78b3d03618fc2f3e919de685c19c`; merge-base `3e91c8f65bef6ec3b6e0c48f889eda35f8017130`; staging `ahead 11 / behind 28` antes de los commits documentales posteriores. No merge/rebase/force ejecutado. El siguiente paso es reconciliar ambos historiales sin force, integrar únicamente deltas P05 autorizados y repetir read-back + 5/5 tests sobre la historia reconciliada.
+## Gate de reconciliación
+P05 NO es `VERIFIED_CLOSED`. Compare fresco: main `66145a1ab53b78b3d03618fc2f3e919de685c19c`, merge-base `3e91c8f65bef6ec3b6e0c48f889eda35f8017130`, staging `ahead 17 / behind 28`. Draft PR #6 https://github.com/maxbry123-commits/frontend/pull/6 preserva ambos historiales sin force pero GitHub reporta `mergeable=false`; se registra `P05-FLAG-PR6-MERGE-CONFLICT`. No merge/rebase/force ciego. Resolver conflictos aplicando únicamente deltas P05 autorizados sobre historia fresca de main, preservar provenance/licencias y repetir read-back + suite real 5/5 antes de cierre.
 
 ## Fuentes de verdad
-Arquitectura canónica enumera cuatro documentos únicos del Director aunque la orden actual diga tres. StrategyDelta fail-closed: conservar/revisar los cuatro como superset y mantener el GAP hasta reconciliación explícita.
+Arquitectura canónica enumera cuatro documentos únicos del Director aunque la orden actual diga tres. StrategyDelta fail-closed: revisar el superset de cuatro y mantener el GAP hasta reconciliación explícita.
