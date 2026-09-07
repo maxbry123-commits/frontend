@@ -1,0 +1,26 @@
+/* 02-tokens-little.css
+ * FUENTE: 01-DESIGN-TOKENS-THEMES-IMMUTABLE.md §2 Theme 2 — Little (Warm)
+ * 1 función: tokens Little. No mezclar con Matte/Blanco.
+ * Cablear: <link rel="stylesheet" href="./02-tokens-little.css">
+ * data-theme="little"
+ */
+
+:root[data-theme="little"],
+html[data-theme="little"] {
+  --bg:            #1C1B1A;
+  --surface:       #2A2927;
+  --card:          #2A2927;
+  --card-hover:    #353330;
+
+  --border:        rgba(255,255,255,0.1);
+  --border-strong: rgba(255,255,255,0.18);
+
+  --text-bright:   #F5F4F0;
+  --text-primary:  #F5F4F0;
+  --text-secondary:#A8A29E;
+  --text-tertiary: #9C9590;
+
+  --accent:        #C65D3B;
+  --accent-hover:  #b05031;
+  --accent-light:  rgba(198,93,59,0.15);
+}

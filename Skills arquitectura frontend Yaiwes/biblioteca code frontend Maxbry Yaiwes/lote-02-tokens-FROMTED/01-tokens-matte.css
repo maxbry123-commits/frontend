@@ -1,0 +1,29 @@
+/* 01-tokens-matte.css
+ * FUENTE: 01-DESIGN-TOKENS-THEMES-IMMUTABLE.md §1 Theme 1 — Negro + Grises (Matte)
+ * 1 función: tokens Matte. No inventar paleta. LOCKED 2026-08-23.
+ * Cablear: <link rel="stylesheet" href="./01-tokens-matte.css">
+ * data-theme="matte"
+ */
+
+:root,
+:root[data-theme="matte"],
+html[data-theme="matte"] {
+  --pure:        #000000;
+  --bg:          #0a0a0d;
+  --surface:     #141417;
+  --panel:       #1a1a1e;
+  --card:        #202025;
+  --card-hover:  #282830;
+
+  --border:       #2a2a33;
+  --border-light: #3f3f4e;
+
+  --text-bright:   #ffffff;
+  --text-primary:  #e4e4e7;
+  --text-secondary:#a1a1aa;
+  --text-tertiary: #71717a;
+  --text-muted:    #52525b;
+
+  --blue:   #2563eb;
+  --orange: #ff5500;
+}

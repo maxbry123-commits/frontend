@@ -1,0 +1,92 @@
+/* 09-i18n-en-fr-pt.js
+ * FUENTE: FROMTED-ARCHITECTURE-AND-DESIGN-BASE.md §3 (locales en, fr, pt obligatorios)
+ * 1 función: diccionarios en/fr/pt de las mismas keys que es.
+ * Cablear: import { en, fr, pt } from "./09-i18n-en-fr-pt.js";
+ */
+
+export const en = Object.freeze({
+  "brand": "FROMTED",
+  "nav.chat": "Chat",
+  "nav.files": "Files",
+  "nav.explore": "Explore",
+  "nav.home": "Home",
+  "files.title": "Files",
+  "files.search": "Search file...",
+  "files.empty": "No files",
+  "files.empty.sub": "Upload or create a document to start",
+  "action.open": "Open",
+  "action.duplicate": "Duplicate",
+  "action.download": "Download",
+  "action.close": "Close",
+  "action.apply": "Apply",
+  "sheet.directory": "Directory",
+  "quick.camera": "Camera",
+  "mode.fast": "Fast",
+  "mode.fast.sub": "Instant answers",
+  "mode.think": "Think",
+  "mode.think.sub": "Deep reasoning",
+  "mode.balanced": "Balanced",
+  "mode.balanced.sub": "Speed/depth balance",
+  "mode.auto": "Auto",
+  "mode.auto.sub": "Adaptive routing",
+  "toast.pinned": "File pinned",
+  "settings.darkWarm": "Warm dark theme"
+});
+
+export const fr = Object.freeze({
+  "brand": "FROMTED",
+  "nav.chat": "Chat",
+  "nav.files": "Fichiers",
+  "nav.explore": "Explorer",
+  "nav.home": "Accueil",
+  "files.title": "Fichiers",
+  "files.search": "Rechercher un fichier...",
+  "files.empty": "Aucun fichier",
+  "files.empty.sub": "Téléversez ou créez un document pour commencer",
+  "action.open": "Ouvrir",
+  "action.duplicate": "Dupliquer",
+  "action.download": "Télécharger",
+  "action.close": "Fermer",
+  "action.apply": "Appliquer",
+  "sheet.directory": "Répertoire",
+  "quick.camera": "Caméra",
+  "mode.fast": "Rapide",
+  "mode.fast.sub": "Réponses instantanées",
+  "mode.think": "Réfléchir",
+  "mode.think.sub": "Raisonnement profond",
+  "mode.balanced": "Équilibré",
+  "mode.balanced.sub": "Équilibre vitesse/profondeur",
+  "mode.auto": "Auto",
+  "mode.auto.sub": "Routage adaptatif",
+  "toast.pinned": "Fichier épinglé",
+  "settings.darkWarm": "Thème sombre chaud"
+});
+
+export const pt = Object.freeze({
+  "brand": "FROMTED",
+  "nav.chat": "Chat",
+  "nav.files": "Arquivos",
+  "nav.explore": "Explorar",
+  "nav.home": "Início",
+  "files.title": "Arquivos",
+  "files.search": "Buscar arquivo...",
+  "files.empty": "Sem arquivos",
+  "files.empty.sub": "Envie ou crie um documento para começar",
+  "action.open": "Abrir",
+  "action.duplicate": "Duplicar",
+  "action.download": "Baixar",
+  "action.close": "Fechar",
+  "action.apply": "Aplicar",
+  "sheet.directory": "Diretório",
+  "quick.camera": "Câmera",
+  "mode.fast": "Rápido",
+  "mode.fast.sub": "Respostas instantâneas",
+  "mode.think": "Pensar",
+  "mode.think.sub": "Raciocínio profundo",
+  "mode.balanced": "Equilibrado",
+  "mode.balanced.sub": "Equilíbrio velocidade/profundidade",
+  "mode.auto": "Auto",
+  "mode.auto.sub": "Roteamento adaptativo",
+  "toast.pinned": "Arquivo fixado",
+  "settings.darkWarm": "Tema escuro warm"
+});

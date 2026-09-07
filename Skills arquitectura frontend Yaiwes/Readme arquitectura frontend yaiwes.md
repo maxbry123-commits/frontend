@@ -106,6 +106,45 @@ No es ventana. No es botón. No restyle.
 
 Lote 01 (núcleo host) **no** es backend y **no** es UI extraída del Director. Es kernel de cableado escrito por el agente. Las ventanas/backend reales salen de lo que el Director suba.
 
+### I06 — Pack FROMTED Design Skills (fuente del Director, 2026-09-07)
+
+Orden: “Este es el skills.”
+
+Inventario de adjuntos (clasificados, no omitidos):
+
+**UI / skill (producto FROMTED — Matte · Little · Blanco):**
+
+1. `01-DESIGN-TOKENS-THEMES-IMMUTABLE.md` — tokens locked
+2. `02-UI-COMPONENT-CATALOG-SKILL.md` — 15 componentes
+3. `03-FUNCTIONAL-INTERACTION-SKILL.md` — JS ejecutable
+4. `04-AGENT-PROTOCOL-SKILL.md` — protocolo agentes
+5. `README.md` — índice pack
+6. `FROMTED-ARCHITECTURE-AND-DESIGN-BASE.md` — módulos 1–7 + i18n es/en/fr/pt
+7. `FROMTED-FRONTEND-IMMUTABLE-LAW.json` — ley máquina
+
+**IDENTIFICADO BACKEND / OPS (I05 — no mezclar con ventanas):**
+
+8. `GUIA_CUENTA_B_REMOTE.md`
+9. `GUIA_CUENTAS_REMOTE.md`
+10. `GUIA-DESPLIEGUE-ZIP-UNIVERSAL.md`
+11. `METODO-DE-TRABAJO.md`
+
+Reglas tomadas de la fuente (no inventadas):
+
+- Temas inmutables: `matte` | `little` | `blanco`. Cuarta paleta = REJECT.
+- Lime `#d9ff43` / Operator = paneles internos, no chrome producto FROMTED.
+- Matte: azul solo selección; naranja solo texto Descargar/Cargar.
+- Little: terracota `#C65D3B` solo CTA primario.
+- Blanco: azul selección + link Descargar; body no `#000000`.
+- Geometría: 24 / 12 / 10 / 28.
+- Lote 01 paleta `#3ddc97` **no es FROMTED**. Superada por Lote 02.
+
+Ejecutado:
+
+- Lote 02 (10 archivos tokens FROMTED): `biblioteca code frontend Maxbry Yaiwes/lote-02-tokens-FROMTED/`
+- HEX cruzado vs skill 01: PASS
+- BACKEND de esta subida: pendiente copiar fiel a `lote-BACKEND/` (siguiente lote, no mezclado aquí)
+
 ### I03 — Diseño modular del skill (esta sesión)
 
 - El Director va a pasar lo ya hecho (arquitectura, diseño, colores, parte de la tarea).
@@ -391,3 +430,4 @@ Entrega:
 | 2026-09-07 | I01 I02 I03, definición modular, investigación Office 2007–2013, enlaces skills, mapa de carpetas, puente con README UI YAIWES | SÍ — este archivo en main |
 | 2026-09-07 | I04 biblioteca code, lote-01 10 archivos núcleo, ZIP OSS pendientes de subida | SÍ — carpeta en main |
 | 2026-09-07 | I05 backend en la UI se incluye, carpeta lote-NN-BACKEND identificada, no mezclar con ventanas | SÍ — este archivo |
+| 2026-09-07 | I06 pack FROMTED skills; lote-02 tokens Matte/Little/Blanco extraídos de skill 01; HEX PASS | SÍ — lote-02 en main |

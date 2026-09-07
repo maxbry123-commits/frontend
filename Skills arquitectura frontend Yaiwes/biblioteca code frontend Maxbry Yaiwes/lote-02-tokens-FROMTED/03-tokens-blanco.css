@@ -1,0 +1,25 @@
+/* 03-tokens-blanco.css
+ * FUENTE: 01-DESIGN-TOKENS-THEMES-IMMUTABLE.md §3 Theme 3 — Blanco (Light)
+ * 1 función: tokens Blanco. Títulos #18181b, no body #000000.
+ * Cablear: <link rel="stylesheet" href="./03-tokens-blanco.css">
+ * data-theme="blanco"
+ */
+
+:root[data-theme="blanco"],
+html[data-theme="blanco"] {
+  --bg:            #f4f4f5;
+  --surface:       #ffffff;
+  --card:          #ffffff;
+  --card-hover:    #f8f8f9;
+
+  --border:        #e4e4e7;
+  --border-strong: #d4d4d8;
+
+  --text-bright:   #18181b;
+  --text-primary:  #3f3f46;
+  --text-secondary:#71717a;
+  --text-tertiary: #a1a1aa;
+
+  --blue:          #2563eb;
+  --blue-soft:     rgba(37,99,235,0.08);
+}
