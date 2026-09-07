@@ -145,6 +145,37 @@ Ejecutado:
 - HEX cruzado vs skill 01: PASS
 - BACKEND de esta subida: pendiente copiar fiel a `lote-BACKEND/` (siguiente lote, no mezclado aquí)
 
+### I07 — Búsqueda de HTML de diseños previos (otros chats)
+
+Pregunta del Director: si el agente tiene la idea del diseño, y si consigue HTML de diseños hechos en otros chats.
+
+Idea de diseño (confirmada, de I06):
+
+- Producto: phone 390, header, tabs, cards, sheet, bottom-nav, composer.
+- Temas locked: Matte / Little / Blanco. Geometría 24/12/10/28.
+- No lime Operator en chrome producto. No paleta cuarta.
+
+Búsqueda 2026-09-07 — **otros chats Grok: no accesibles** desde este sandbox. Se buscó en GitHub.
+
+Resultado:
+
+| Dónde | HTML producto FROMTED (phone/matte) | Qué hay |
+| --- | --- | --- |
+| Este chat / attachments | NO | skills MD, no HTML ejecutable |
+| `frontend` | NO | 146 HTML = OSS (WebLLM, Tika, Docling, Chart.js, CodeMirror, Excalidraw, Dagu) |
+| `nct-hub` | NO (otro sistema) | chat iOS/Claude, `#0a0a0a`, emojis 🧠 |
+| `comand-Center` | NO | panel ops `#7c3aed` (no FROMTED) |
+| `Agentes-motores-Wordflow-YAIWES` | NO | HTML de Agent-Zero (OSS) |
+
+Candidatos previos (no FROMTED, no copiar a biblioteca producto sin mapear tokens):
+
+- https://github.com/maxbry123-commits/nct-hub/blob/main/index.html
+- https://github.com/maxbry123-commits/nct-hub/blob/main/index-local.html
+- https://github.com/maxbry123-commits/nct-hub/blob/main/src/index.html
+- https://github.com/maxbry123-commits/comand-Center/blob/main/control-layer/command-center/index.html
+
+GAP: HTML FROMTED de otros chats **no está en el repo**. Hace falta que el Director lo suba.
+
 ### I03 — Diseño modular del skill (esta sesión)
 
 - El Director va a pasar lo ya hecho (arquitectura, diseño, colores, parte de la tarea).
@@ -431,3 +462,4 @@ Entrega:
 | 2026-09-07 | I04 biblioteca code, lote-01 10 archivos núcleo, ZIP OSS pendientes de subida | SÍ — carpeta en main |
 | 2026-09-07 | I05 backend en la UI se incluye, carpeta lote-NN-BACKEND identificada, no mezclar con ventanas | SÍ — este archivo |
 | 2026-09-07 | I06 pack FROMTED skills; lote-02 tokens Matte/Little/Blanco extraídos de skill 01; HEX PASS | SÍ — lote-02 en main |
+| 2026-09-07 | I07 búsqueda HTML previos: otros chats no accesibles; nct-hub y comand-Center existen pero no son FROMTED | SÍ — este archivo |
