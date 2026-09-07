@@ -1,0 +1,6 @@
+https://github.com/paullouisageneau/libdatachannel/blob/51085b8de4e6185dc019e3705c88b87933d7c3f6/LICENSE
+https://github.com/paullouisageneau/libdatachannel/blob/51085b8de4e6185dc019e3705c88b87933d7c3f6/examples/signaling-server-nodejs/LICENSE
+https://github.com/paullouisageneau/libdatachannel/blob/51085b8de4e6185dc019e3705c88b87933d7c3f6/examples/signaling-server-python/LICENSE
+https://github.com/paullouisageneau/libdatachannel/blob/51085b8de4e6185dc019e3705c88b87933d7c3f6/examples/signaling-server-qt/LICENSE
+https://github.com/paullouisageneau/libdatachannel/blob/51085b8de4e6185dc019e3705c88b87933d7c3f6/examples/signaling-server-rust/LICENSE
+https://github.com/paullouisageneau/libdatachannel/blob/51085b8de4e6185dc019e3705c88b87933d7c3f6/examples/web/LICENSE
