@@ -1,48 +1,46 @@
 {
-  "checkpoint_id": "UIYAIWES-V4-GUIDE-HANDOFF-0016",
-  "previous_checkpoint_id": "UIYAIWES-P04-FLAGS-P05-0015",
-  "contract": "tel.workflow/v4",
-  "status": "ACTIVE_LOOP_WITH_CONCURRENT_124_ACQUISITION",
-  "master_guide": {
-    "path": "UI YAIWES/readme arquitectura UI YAIWES/GUIA-MAESTRA-EJECUCION-LOOP-SOL-UI-YAIWES.md",
-    "commit": "3c2752b9cd74b404cc8d44379b37535a6a295203"
-  },
+  "checkpoint_id": "UIYAIWES-V3-POST124-CANCELLED-0017",
+  "previous_checkpoint_id": "UIYAIWES-V4-GUIDE-HANDOFF-0016",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "ACTIVE_LOOP_POST_124_CANCELLED_REVALIDATION",
   "last_verified_closed": "P01 initial 14-component inventory/provenance baseline",
-  "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
+  "current_node": "P01_POST_124_INVENTORY_REVALIDATION",
+  "workflow_owner": "stabilize_core",
+  "canonical_architecture": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md",
   "verified_state": {
     "universal_socket_present": true,
-    "workflow_owner": "stabilize_core",
+    "P01_initial_14_verified": true,
     "P02A_adapter_wired": true,
     "P02B_adapter_wired": true,
     "P02C_adapter_wired": true,
     "P03_httpx_real_local_pass": true,
-    "P03_starlette_version_flag": true,
     "P04_adapters_and_vendor_readback": true
   },
-  "prepared_not_equivalent_to_main_closed": {
-    "P05": "observability work advanced/prepared; reconcile against main before claiming publication",
-    "P06": "test-only production rejection gate prepared",
-    "P07": "donor-only production rejection gate prepared",
-    "P08": "PyCasbin policy work prepared; reconcile after Action 124 aliases/dedup"
-  },
-  "concurrent_action": {
+  "post_124_evidence": {
     "run_id": 34060401131,
-    "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131",
-    "job": "queue-124",
-    "last_verified_status": "in_progress",
-    "active_step": 4,
-    "active_step_name": "Process 124 components sequentially with pinned source SHA",
-    "final_destination_verification": "pending"
+    "job_id": 101559786309,
+    "run_status": "completed",
+    "run_conclusion": "cancelled",
+    "process_step": "cancelled",
+    "final_destination_verification": "failure",
+    "fail_closed_until_124_verified": "failure",
+    "completed_at": "2026-09-07T02:43:53Z",
+    "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131"
   },
-  "recovery_priority": [
-    "read master guide",
-    "read STATE/PLAN/RECOVERY/BITACORA",
-    "check main HEAD",
-    "check Action 124 status",
-    "if complete verify destination and revalidate P01 inventory/dedup",
-    "if still active continue only independent runtime work",
-    "reconcile P05-P08 without duplicate implementations",
-    "return to inherited execution/version flags when compatible runtime evidence is available"
+  "blocked_claims": {
+    "P01_freshness": "BLOCKED_UNTIL_POST_CANCEL_INVENTORY_REVALIDATED",
+    "P05_publication": "BLOCKED_UNTIL_P01_POST124_RECONCILIATION"
+  },
+  "queue_1x1": [
+    "enumerate physical component destination after cancelled run",
+    "compare queue/manifests/checkpoints with physical entries",
+    "verify SOURCE_URL/SOURCE_COMMIT/license for materialized entries",
+    "classify missing/partial/duplicate entries",
+    "deduplicate only with source commit plus code-root/tree evidence",
+    "update COMPONENT-INVENTORY and COMPONENT-CODE-MAP",
+    "revalidate P01",
+    "resume P05 reconciliation"
   ],
-  "closure_rule": "files, mocks, injection tests, staging or prepared work never equal VERIFIED_CLOSED without the evidence required by the master guide"
+  "closure_rule": "file, import, repository, staging or partial acquisition never equals VERIFIED_CLOSED without route/diff/SHA/log/test/URL evidence"
 }
