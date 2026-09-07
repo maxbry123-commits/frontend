@@ -30,14 +30,15 @@ Arquitectura canónica: `UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PR
 ## Cola 1×1 vigente
 
 CURRENT — P01_POST_124_INVENTORY_REVALIDATION
-1. `gVisor` reconciliado: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; provenance/tree verificados, integración `NOT_WIRED`; no copiar/montar.
-2. Avanzar al siguiente componente físico seguro post-124.
-3. Cruzar manifest/checkpoint disponible con destino.
-4. Verificar `SOURCE_URL`, `SOURCE_COMMIT`, licencia y code-root/tree.
-5. Clasificar `MATERIALIZED_OK | PARTIAL | MISSING | DUPLICATE_ALIAS | INCONCLUSIVE` más rol `DONOR_ONLY` cuando corresponda.
-6. Deduplicar solo con source commit + code-root/tree; nunca por nombre.
-7. Actualizar `COMPONENT-INVENTORY.md` y `COMPONENT-CODE-MAP.md` + STATE/CHECKPOINT/RECOVERY/BITACORA/arquitectura.
-8. Revalidar P01 únicamente tras completar reconciliación post-124; después retomar P05.
+1. `gVisor` reconciliado: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; integración `NOT_WIRED`.
+2. `gfxstream` reconciliado: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; tree `e696264983a685fb44a7b9706bcf35383fd67159`; source commit `681d81edd2ec597b055c2fbe99a742d95545722a`; integración `NOT_WIRED`.
+3. Avanzar al siguiente componente físico seguro post-124 después de `gfxstream`.
+4. Cruzar manifest/checkpoint disponible con destino.
+5. Verificar `SOURCE_URL`, `SOURCE_COMMIT`, licencia y code-root/tree.
+6. Clasificar `MATERIALIZED_OK | PARTIAL | MISSING | DUPLICATE_ALIAS | INCONCLUSIVE` más rol `DONOR_ONLY` cuando corresponda.
+7. Deduplicar solo con source commit + code-root/tree; nunca por nombre.
+8. Actualizar `COMPONENT-INVENTORY.md` y `COMPONENT-CODE-MAP.md` + STATE/CHECKPOINT/RECOVERY/BITACORA/arquitectura.
+9. Revalidar P01 únicamente tras completar reconciliación post-124; después retomar P05.
 
 ## Preflight obligatorio para cada nodo
 
