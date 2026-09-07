@@ -177,7 +177,70 @@ Regla:
 
 Estado: **ESPERANDO SUBIDA**.
 
-### I03 — Diseño modular del skill (esta sesión)
+
+### I10 — Vista previa no abre
+
+Orden literal: “Esa vista previa no funciona no abre”
+
+Causa (no es el HTML vacío):
+
+1. Un `.html` en el chat o en GitHub blob **no se ejecuta** como página. GitHub muestra código.
+2. Abrir `file://` bloquea `crypto.subtle` (hace falta HTTPS).
+3. El CSS original ocultaba rail + inspect bajo 1100px, así que en el preview estrecho parecía “no abre”.
+4. El iframe `./01-ventana-chat-p01.html` falla si se abre solo el host.
+
+Corrección 2026-09-07:
+
+- Rail visible en móvil.
+- Clave `YAIWES-CONFIG` también en texto plano si no hay SubtleCrypto.
+- Preview live Vercel (abre en el navegador):
+  - https://fromted-yaiwes-review-ejiyk6vlt-maxbry123-8833s-projects.vercel.app
+  - Alias: https://fromted-yaiwes-review-maxbry123-8833s-projects.vercel.app
+- HTML local descargable: `FROMTED-GROK-BUILD-REVIEW.html`
+- ZIP lote-03: `lote-03-ventanas-FROMTED-review.zip`
+
+Cómo abrir si no usas Vercel: descarga el HTML y ábrelo con un servidor local (`python3 -m http.server`), no con doble clic file://.
+
+### I09 — Revisa y usando el skills crea un diseño con Grok Build para revisarlo
+
+Orden literal del Director (2026-09-07):
+
+> Revisa y usando el skills crea un diseño con usando build grock para revisarlo
+
+Fuente usada (subida en este chat, no inventada):
+
+- Pack tokens: `01-DESIGN-TOKENS-THEMES-IMMUTABLE.md` → lote-02
+- Mockups HTML: `FROMTED-UI-SOURCE-CODES.md` → lote-03 (10 ventanas 1:1)
+- Código funcional extra: FROMTED / YAIWES / MAXBRY / CASCADE / ROUTER MD — **no mezclado** en este preview de producto. Queda en biblioteca para lotes siguientes. Bridges Python = IDENTIFICADO BACKEND (I05).
+
+Qué se construyó para revisar:
+
+1. Host Grok Build (chrome + teléfono 390 + temas + clave):
+   - `biblioteca-code-frontend-Maxbry-Yaiwes/lote-03-ventanas-FROMTED-review/00-host-review.html`
+   - Copia de revisión en raíz artifacts: `FROMTED-GROK-BUILD-REVIEW.html`
+2. Diez ventanas ya extraídas (p01, p02, p03, p04, p05, p06, p08, p09, v2-01, v2-03).
+3. ZIP lote-03: `lote-03-ventanas-FROMTED-review.zip`
+4. Panel config: clave default `YAIWES-CONFIG` (lote-01). Fail-closed. Añade botón a slot de la ventana activa sin reescribir handlers.
+
+HEX cruzado host vs skill 01:
+
+| Token | Skill 01 | Host |
+| --- | --- | --- |
+| Matte bg | `#0a0a0d` | `#0a0a0d` PASS |
+| Matte orange text | `#ff5500` | `#ff5500` PASS |
+| Matte blue selection | `#2563eb` | `#2563eb` PASS |
+| Little accent | `#C65D3B` | `#C65D3B` PASS |
+| Blanco bg | `#f4f4f5` | `#f4f4f5` PASS |
+| Lime `#d9ff43` en chrome producto | prohibido | ausente PASS |
+
+No hecho en este lote (siguiente, no omitido):
+
+- Copiar guías ops a `lote-BACKEND/` fiel (I05): GUIA_CUENTA_B, GUIA_CUENTAS, GUIA-DESPLIEGUE, METODO-DE-TRABAJO.
+- Extraer paneles operativos MAXBRY / YAIWES / CASCADE a lotes 04+ (1 panel = 1 archivo), restyle tokens FROMTED, no lime de Operator en chrome producto.
+- Push GitHub solo si el Director aprueba path.
+
+---
+
 
 - El Director va a pasar lo ya hecho (arquitectura, diseño, colores, parte de la tarea).
 - La parte final del diseño del skill no debe ser un bloque monolítico.
@@ -464,4 +527,6 @@ Entrega:
 | 2026-09-07 | I05 backend en la UI se incluye, carpeta lote-NN-BACKEND identificada, no mezclar con ventanas | SÍ — este archivo |
 | 2026-09-07 | I06 pack FROMTED skills; lote-02 tokens Matte/Little/Blanco extraídos de skill 01; HEX PASS | SÍ — lote-02 en main |
 | 2026-09-07 | I07 HTML de otros chats Grok Build: no accesibles; 0 html en sandbox; Vercel 0 proyectos | SÍ — este archivo |
-| 2026-09-07 | I08 recuperar diseño desde MD que suba el Director + skills FROMTED; esperando archivos | SÍ — este archivo |
+| 2026-09-07 | I10 preview no abre; Vercel live URL; CSS móvil + clave file:// | SÍ — este archivo |
+| 2026-09-07 | I09 host Grok Build `00-host-review.html` + copia `FROMTED-GROK-BUILD-REVIEW.html`; lote-03 zip; HEX PASS vs skill 01 | SÍ — este archivo |
+
