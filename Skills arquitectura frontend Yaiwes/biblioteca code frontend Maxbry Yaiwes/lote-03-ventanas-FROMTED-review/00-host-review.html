@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="matte">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="fromted-theme" content="matte"/>
+<meta name="fromted-source" content="lote-02 tokens + lote-03 ventanas + 01-DESIGN-TOKENS-THEMES-IMMUTABLE.md"/>
+<title>FROMTED · Grok Build review · host YAIWES</title>
+<style>
+/* TOKENS LOCKED — lote-02. No lime. No #3ddc97. */
+:root, :root[data-theme="matte"], html[data-theme="matte"] {
+  --pure:#000000; --bg:#0a0a0d; --surface:#141417; --panel:#1a1a1e;
+  --card:#202025; --card-hover:#282830; --border:#2a2a33; --border-light:#3f3f4e;
+  --text-bright:#ffffff; --text-primary:#e4e4e7; --text-secondary:#a1a1aa;
+  --text-tertiary:#71717a; --text-muted:#52525b; --blue:#2563eb; --orange:#ff5500;
+  --accent:#ff5500; --send-bg:#e8e8e8; --send-fg:#111111; --notify:#71717a;
+  --host-rail:#0a0a0d;
+}
+html[data-theme="little"] {
+  --pure:#141312; --bg:#1C1B1A; --surface:#2A2927; --panel:#2A2927;
+  --card:#2A2927; --card-hover:#353330; --border:rgba(255,255,255,0.1);
+  --border-light:rgba(255,255,255,0.18);
+  --text-bright:#F5F4F0; --text-primary:#F5F4F0; --text-secondary:#A8A29E;
+  --text-tertiary:#9C9590; --text-muted:#9C9590; --blue:#C65D3B; --orange:#C65D3B;
+  --accent:#C65D3B; --send-bg:#C65D3B; --send-fg:#1C1B1A; --notify:#9C9590;
+  --host-rail:#1C1B1A;
+}
+html[data-theme="blanco"] {
+  --pure:#e4e4e7; --bg:#f4f4f5; --surface:#ffffff; --panel:#ffffff;
+  --card:#ffffff; --card-hover:#f8f8f9; --border:#e4e4e7; --border-strong:#d4d4d8;
+  --border-light:#d4d4d8;
+  --text-bright:#18181b; --text-primary:#3f3f46; --text-secondary:#71717a;
+  --text-tertiary:#a1a1aa; --text-muted:#a1a1aa; --blue:#2563eb; --orange:#2563eb;
+  --accent:#18181b; --send-bg:#18181b; --send-fg:#f4f4f5; --notify:#16a34a;
+  --host-rail:#ffffff;
+}
+:root {
+  --phone-radius:24px; --card-radius:12px; --button-radius:10px; --sheet-radius-top:28px;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html, body { height:100%; }
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--pure);
+  color: var(--text-primary);
+  display:grid;
+  grid-template-columns: 280px 1fr 320px;
+  min-height:100dvh;
+}
+@media (max-width:1100px) {
+  body { grid-template-columns:1fr; }
+  .rail { max-height:42dvh; min-height:auto; border-right:0; border-bottom:1px solid var(--border); }
+  .inspect { border-left:0; border-top:1px solid var(--border); }
+}
+button { font-family:inherit; cursor:pointer; }
+.rail {
+  background: var(--host-rail);
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column; min-height:100dvh;
+}
+.brand {
+  padding:16px 16px 12px;
+  border-bottom:1px solid var(--border);
+}
+.brand .kicker {
+  font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--text-tertiary);
+}
+.brand h1 { font-size:15px; color:var(--text-bright); font-weight:600; margin-top:4px; }
+.brand p { font-size:11px; color:var(--text-secondary); margin-top:4px; line-height:1.4; }
+.themes { display:flex; gap:6px; padding:12px 16px; border-bottom:1px solid var(--border); }
+.themes button {
+  flex:1; height:32px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text-secondary); font-size:11px;
+}
+.themes button.on { color:var(--blue); border-color:var(--border-light); background:var(--card); }
+.winlist { flex:1; overflow:auto; padding:10px; display:flex; flex-direction:column; gap:4px; }
+.winlist button {
+  text-align:left; border:1px solid transparent; background:transparent;
+  color:var(--text-secondary); border-radius:10px; padding:10px 10px;
+}
+.winlist button.on { background:var(--card); color:var(--blue); border-color:var(--border); }
+.winlist .id { font-size:10px; color:var(--text-tertiary); letter-spacing:.06em; }
+.winlist .lb { font-size:13px; color:inherit; }
+.rail foot, .rail .hint {
+  padding:12px 16px; font-size:11px; color:var(--text-tertiary); border-top:1px solid var(--border);
+  line-height:1.45;
+}
+.stage {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:24px 16px; background:var(--bg); min-height:100dvh;
+}
+.phone-wrap {
+  width:min(390px, 100%);
+  border-radius:var(--phone-radius);
+  border:1px solid var(--border);
+  background:var(--bg);
+  overflow:hidden;
+  min-height:720px;
+  max-height:88dvh;
+  display:flex; flex-direction:column;
+  box-shadow:0 24px 80px rgba(0,0,0,.45);
+}
+.phone-wrap iframe { flex:1; width:100%; border:0; background:var(--bg); min-height:680px; }
+.screen { display:none; flex:1; flex-direction:column; min-height:680px; }
+.screen.on { display:flex; }
+.top {
+  display:flex; align-items:center; gap:8px; padding:12px 14px;
+  border-bottom:1px solid var(--border); min-height:52px;
+}
+.top .ghost {
+  border:0; background:transparent; color:var(--text-secondary);
+  width:36px; height:36px; display:grid; place-items:center;
+}
+.top h2 { flex:1; text-align:center; font-size:15px; font-weight:600; color:var(--text-bright); }
+.top .dl {
+  border:0; background:transparent; color:var(--orange); font-weight:600; font-size:13px; padding:6px 8px;
+}
+.hero { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px 20px; text-align:center; }
+.hero h3 { font-size:22px; font-weight:500; letter-spacing:-.02em; color:var(--text-bright); margin-bottom:28px; }
+.box { width:100%; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:14px; text-align:left; }
+.hint { color:var(--text-secondary); font-size:14px; margin-bottom:14px; }
+.row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.chip {
+  display:inline-flex; align-items:center; gap:6px; padding:6px 10px;
+  border-radius:10px; background:var(--card); color:var(--text-secondary); font-size:13px; border:0;
+}
+.chip.sel { color:var(--blue); }
+.send {
+  margin-left:auto; width:36px; height:36px; border-radius:50%; border:0;
+  background:var(--send-bg); color:var(--send-fg); display:grid; place-items:center; font-weight:700;
+}
+.tools { display:flex; gap:8px; margin-top:12px; width:100%; justify-content:center; flex-wrap:wrap; }
+.tools button {
+  display:inline-flex; align-items:center; gap:6px; padding:10px 14px;
+  border-radius:12px; background:var(--surface); border:1px solid var(--border);
+  color:var(--text-secondary); font-size:13px;
+}
+.status { text-align:center; font-size:11px; color:var(--notify); padding:10px; }
+.search {
+  margin:12px 14px; display:flex; gap:8px; align-items:center;
+  background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 12px;
+}
+.search input { flex:1; border:0; background:transparent; color:var(--text-primary); outline:0; font-size:14px; }
+.seg { display:flex; margin:0 14px 12px; background:var(--surface); border-radius:10px; padding:3px; border:1px solid var(--border); }
+.seg button { flex:1; border:0; background:transparent; color:var(--text-secondary); padding:8px; font-size:13px; border-radius:8px; }
+.seg button.on { background:var(--card); color:var(--blue); }
+.grid { padding:0 14px 14px; display:grid; grid-template-columns:1fr 1fr; gap:12px; flex:1; align-content:start; }
+.card {
+  background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px; min-height:110px;
+  display:flex; flex-direction:column;
+}
+.card.sel { box-shadow:inset 0 0 0 1px var(--blue); }
+.card .n { font-size:14px; font-weight:500; color:var(--text-bright); }
+.card .s { font-size:11px; color:var(--text-tertiary); margin-top:4px; }
+.ico { width:40px; height:40px; border-radius:10px; background:var(--card); margin-bottom:10px; }
+.bar { display:flex; gap:8px; padding:14px; border-top:1px solid var(--border); }
+.bar .neu {
+  flex:1; padding:12px; border-radius:12px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text-bright); font-size:13px;
+}
+.bar .orange-text { border:0; background:transparent; color:var(--orange); font-weight:600; flex:1; }
+.list { flex:1; overflow:auto; padding:12px; display:flex; flex-direction:column; gap:8px; }
+.item {
+  display:flex; align-items:center; gap:12px; padding:12px;
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+}
+.item .thumb { width:40px; height:48px; border-radius:6px; background:var(--card); }
+.sheet {
+  margin:12px; flex:1; border:1px solid var(--border); border-radius:16px;
+  background:var(--surface); overflow:hidden; display:flex; flex-direction:column;
+}
+.split { display:grid; grid-template-columns:100px 1fr; min-height:140px; border-bottom:1px solid var(--border); }
+.left { background:var(--panel); padding:10px 6px; border-right:1px solid var(--border); }
+.left .lbl { font-size:10px; color:var(--text-tertiary); letter-spacing:.08em; text-transform:uppercase; padding:4px 8px; }
+.left .pi { padding:10px 8px; font-size:13px; color:var(--text-tertiary); border-radius:8px; }
+.left .pi.sel { color:var(--blue); background:var(--card); }
+.model { padding:12px; border-radius:12px; margin:6px 12px; border:1px solid transparent; }
+.model.sel { border-color:var(--border); background:var(--card); }
+.model .n { font-size:14px; display:flex; justify-content:space-between; color:var(--text-bright); }
+.model .n .check { color:var(--blue); }
+.model .s { font-size:12px; color:var(--text-tertiary); margin-top:4px; }
+.block { padding:14px; border-top:1px solid var(--border); }
+.block h4 { font-size:11px; color:var(--text-tertiary); letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px; }
+.foot { display:flex; gap:8px; padding:12px; border-top:1px solid var(--border); }
+.foot button {
+  flex:1; padding:12px; border-radius:12px; font-size:13px;
+  background:var(--card); border:1px solid var(--border); color:var(--text-bright);
+}
+.thread { flex:1; padding:18px 16px; overflow:auto; }
+.msg { font-size:15px; line-height:1.55; margin-bottom:16px; color:var(--text-primary); }
+.msg.user { background:var(--card); padding:12px 14px; border-radius:14px; color:var(--text-secondary); }
+.composer {
+  margin:12px; background:var(--surface); border:1px solid var(--border);
+  border-radius:20px; padding:10px 12px; display:flex; align-items:center; gap:8px;
+}
+.toggle {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+  background:var(--card); margin:0 12px 8px; font-size:12px;
+}
+.inspect {
+  border-left:1px solid var(--border); background:var(--host-rail);
+  padding:16px; display:flex; flex-direction:column; gap:12px;
+}
+.inspect h3 { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-tertiary); }
+.inspect .cardx {
+  border:1px solid var(--border); border-radius:12px; padding:12px; background:var(--surface); font-size:12px; line-height:1.5;
+}
+.inspect code { font-size:11px; color:var(--text-secondary); }
+.keyrow { display:flex; gap:6px; }
+.keyrow input {
+  flex:1; height:36px; border-radius:10px; border:1px solid var(--border);
+  background:var(--card); color:var(--text-primary); padding:0 10px; font-size:12px;
+}
+.keyrow button {
+  height:36px; padding:0 12px; border-radius:10px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text-bright); font-size:12px;
+}
+.ok { color:var(--blue); }
+.err { color:var(--orange); }
+#cfg { display:none; }
+#cfg.open { display:block; }
+</style>
+</head>
+<body>
+<aside class="rail">
+  <div class="brand">
+    <div class="kicker">YAIWES · biblioteca</div>
+    <h1>FROMTED review</h1>
+    <p>Host Grok Build. Tokens lote-02. Ventanas lote-03. 1 ventana = 1 archivo.</p>
+  </div>
+  <div class="themes" role="tablist" aria-label="Tema FROMTED">
+    <button type="button" class="on" data-theme-btn="matte">Matte</button>
+    <button type="button" data-theme-btn="little">Little</button>
+    <button type="button" data-theme-btn="blanco">Blanco</button>
+  </div>
+  <nav class="winlist" id="winlist"></nav>
+  <div class="hint">Naranja solo Cargar/Descargar. Azul solo selección. Sin botones rellenos de marca. Geometría 24/12/10/28.</div>
+</aside>
+
+<main class="stage">
+  <div class="phone-wrap" id="phone">
+    <!-- S01 chat p01 -->
+    <section class="screen on" data-screen="p01">
+      <div class="top">
+        <button class="ghost" type="button" aria-label="cerrar">✕</button>
+        <h2>FROMTED</h2>
+        <button class="dl" type="button">Descargar</button>
+      </div>
+      <div class="hero">
+        <h3>FROMTED hace tu trabajo más fácil</h3>
+        <div class="box">
+          <div class="hint">Escribe o usa / para skills</div>
+          <div class="row">
+            <button class="chip" type="button">+</button>
+            <button class="chip sel" type="button">Thinking</button>
+            <button class="chip" type="button">Qwen Omni ▾</button>
+            <button class="send" type="button">↑</button>
+          </div>
+        </div>
+        <div class="tools">
+          <button type="button">Documento</button>
+          <button type="button">Website</button>
+          <button type="button">Imagen</button>
+        </div>
+      </div>
+      <p class="status">● Conectado · datos en tu dispositivo</p>
+    </section>
+
+    <!-- S02 docs p02 -->
+    <section class="screen" data-screen="p02">
+      <div class="top">
+        <button class="ghost" type="button">‹</button>
+        <h2>Archivos</h2>
+        <button class="ghost" type="button">···</button>
+      </div>
+      <div class="seg">
+        <button class="on" type="button">Íconos</button>
+        <button type="button">Lista</button>
+        <button type="button">Columnas</button>
+      </div>
+      <div class="search"><input placeholder="Buscar"/></div>
+      <div class="grid">
+        <div class="card sel"><div class="ico"></div><div class="n">Proyectos</div><div class="s">12 elementos</div></div>
+        <div class="card"><div class="ico"></div><div class="n">plan.md</div><div class="s">Documento</div></div>
+        <div class="card"><div class="ico"></div><div class="n">mock.png</div><div class="s">Imagen</div></div>
+        <div class="card"><div class="ico"></div><div class="n">spec.pdf</div><div class="s">PDF</div></div>
+      </div>
+      <div class="bar">
+        <button class="neu" type="button">Seleccionar</button>
+        <button class="orange-text" type="button">Descargar</button>
+      </div>
+      <p class="status">● Solo en tu dispositivo</p>
+    </section>
+
+    <!-- S03 p04 sheet add -->
+    <section class="screen" data-screen="p04">
+      <div class="top"><button class="ghost" type="button">✕</button><h2>Agregar al chat</h2><span style="width:36px"></span></div>
+      <div class="list">
+        <div class="item"><div class="thumb"></div><div><div class="n">Fotos</div><div class="s">Biblioteca del dispositivo</div></div></div>
+        <div class="item"><div class="thumb"></div><div><div class="n">Archivos</div><div class="s">plan.md · spec.pdf</div></div></div>
+        <div class="item"><div class="thumb"></div><div><div class="n">Cámara</div><div class="s">Captura nueva</div></div></div>
+      </div>
+      <div class="bar"><button class="neu" type="button">Cancelar</button><button class="orange-text" type="button">Cargar</button></div>
+    </section>
+
+    <!-- S04 p05 tools -->
+    <section class="screen" data-screen="p05">
+      <div class="top"><button class="ghost" type="button">✕</button><h2>Herramientas</h2><span style="width:36px"></span></div>
+      <label class="toggle"><span>Deep Research</span><span class="ok">ON</span></label>
+      <label class="toggle"><span>Web Search</span><span class="ok">ON</span></label>
+      <label class="toggle"><span>Crear imagen</span><span>OFF</span></label>
+      <label class="toggle"><span>Crear video</span><span>OFF</span></label>
+      <label class="toggle"><span>Artifacts</span><span>OFF</span></label>
+      <p class="status">Sentinel valida tools allowlist</p>
+    </section>
+
+    <!-- S05 p06 project -->
+    <section class="screen" data-screen="p06">
+      <div class="top"><button class="ghost" type="button">‹</button><h2>FROMTED</h2><button class="dl" type="button">Descargar</button></div>
+      <div class="thread">
+        <div class="msg">Privado · la memoria del proyecto aparece después de algunas conversaciones.</div>
+        <div class="msg">Capacidad del proyecto 0%.</div>
+        <div class="msg user">Agregar conocimiento e instrucciones personalizadas.</div>
+      </div>
+      <div class="bar"><button class="neu" type="button">+ Nuevo chat</button></div>
+    </section>
+
+    <!-- S06 p08 artifacts -->
+    <section class="screen" data-screen="p08">
+      <div class="top"><button class="ghost" type="button">☰</button><h2>Artefactos</h2><button class="ghost" type="button">+</button></div>
+      <div class="list">
+        <div class="item"><div class="thumb"></div><div><div class="n">fromted-shell</div><div class="s">Código · TS</div></div></div>
+        <div class="item"><div class="thumb"></div><div><div class="n">plan-v2</div><div class="s">Documento · MD</div></div></div>
+        <div class="item"><div class="thumb"></div><div><div class="n">MCP tools</div><div class="s">JSON</div></div></div>
+      </div>
+      <div class="composer"><button class="chip" type="button">Expert ▾</button><button class="send" type="button">↑</button></div>
+    </section>
+
+    <!-- S07 p09 mode -->
+    <section class="screen" data-screen="p09">
+      <div class="top"><button class="ghost" type="button">✕</button><h2>Mode</h2><span style="width:36px"></span></div>
+      <div class="list">
+        <div class="item sel" style="box-shadow:inset 0 0 0 1px var(--blue)"><div><div class="n">Heavy</div><div class="s">Máxima calidad</div></div></div>
+        <div class="item"><div><div class="n">Expert</div><div class="s">Equilibrio</div></div></div>
+        <div class="item"><div><div class="n">Fast</div><div class="s">Latencia</div></div></div>
+        <div class="item"><div><div class="n">Auto</div><div class="s">El router elige</div></div></div>
+      </div>
+    </section>
+
+    <!-- S08 v2-01 chat -->
+    <section class="screen" data-screen="v201">
+      <div class="top"><button class="ghost" type="button">‹</button><h2>FROMTED</h2><button class="dl" type="button">Descargar</button></div>
+      <div class="thread">
+        <div class="msg">Formato de lectura. Software de orquestación determinista multi-agente.</div>
+        <div class="msg user">Necesito los documentos en HTML con estos colores.</div>
+      </div>
+      <p class="status">● Matte · naranja solo Descargar</p>
+      <div class="composer"><button class="chip" type="button">+ Modelo ▾</button><button class="send" type="button">↑</button></div>
+    </section>
+
+    <!-- S09 v2-03 settings -->
+    <section class="screen" data-screen="v203">
+      <div class="top"><button class="ghost" type="button">☰</button><h2>FROMTED</h2><button class="ghost" type="button">⌕</button></div>
+      <div class="sheet">
+        <div class="split">
+          <div class="left">
+            <div class="lbl">Proveedor</div>
+            <div class="pi sel">OpenRouter</div>
+            <div class="pi">Local</div>
+            <div class="pi">LiteLLM</div>
+          </div>
+          <div>
+            <div class="model sel"><div class="n">Qwen Omni <span class="check">✓</span></div><div class="s">Multimodal</div></div>
+            <div class="model"><div class="n">Gemma E2B Q4</div><div class="s">On-device</div></div>
+          </div>
+        </div>
+        <div class="block">
+          <h4>Speed</h4>
+          <div class="seg" style="margin:0">
+            <button class="on" type="button">Default</button>
+            <button type="button">Fast</button>
+            <button type="button">Standard</button>
+            <button type="button">Auto</button>
+          </div>
+        </div>
+        <div class="foot">
+          <button type="button">Descartar</button>
+          <button type="button">Guardar</button>
+        </div>
+      </div>
+      <p class="status">Botones neutros. Naranja solo <b style="color:var(--orange)">Cargar</b> / <b style="color:var(--orange)">Descargar</b>.</p>
+    </section>
+
+    <!-- S10 iframe source files -->
+    <section class="screen" data-screen="iframe">
+      <iframe id="frame" title="ventana fuente lote-03" src="./01-ventana-chat-p01.html"></iframe>
+    </section>
+  </div>
+</main>
+
+<aside class="inspect">
+  <h3>Revisión</h3>
+  <div class="cardx">
+    Fuente visual: <code>FROMTED-UI-SOURCE-CODES.md</code><br/>
+    Tokens: <code>lote-02</code> Matte #0a0a0d / Little #C65D3B / Blanco #f4f4f5<br/>
+    Archivos 1:1: <code>lote-03-ventanas-FROMTED-review/</code>
+  </div>
+  <div class="cardx">
+    <b>Config UI · access key</b><br/>
+    Clave default lote-01: <code>YAIWES-CONFIG</code>
+    <div class="keyrow" style="margin-top:8px">
+      <input id="key" type="password" placeholder="clave" autocomplete="off"/>
+      <button type="button" id="unlock">Abrir</button>
+    </div>
+    <div id="keymsg" class="s" style="margin-top:6px"></div>
+    <div id="cfg">
+      <p class="s" style="margin:8px 0">Ribbon model: añadir botón al slot existente. No muta handlers.</p>
+      <button type="button" class="neu" id="addslot" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text-bright)">+ botón en toolbar de esta ventana</button>
+      <pre id="manifest" style="margin-top:8px;font-size:10px;color:var(--text-secondary);white-space:pre-wrap"></pre>
+    </div>
+  </div>
+  <div class="cardx" id="notes">
+    Política acento Matte: azul = selección; naranja = texto Descargar/Cargar; send = gris papel, no naranja relleno.
+  </div>
+</aside>
+
+<script>
+const WINDOWS = [
+  { id:"p01", label:"p01 Chat MiniMax", file:"01-ventana-chat-p01.html" },
+  { id:"p02", label:"p02 Docs móvil", file:"02-ventana-docs-p02.html" },
+  { id:"p04", label:"p04 Agregar al chat", file:"04-ventana-sheet-agregar-p04.html" },
+  { id:"p05", label:"p05 Herramientas", file:"05-ventana-sheet-herramientas-p05.html" },
+  { id:"p06", label:"p06 Proyecto", file:"06-ventana-proyecto-p06.html" },
+  { id:"p08", label:"p08 Artefactos", file:"07-ventana-artefactos-p08.html" },
+  { id:"p09", label:"p09 Mode", file:"08-ventana-mode-p09.html" },
+  { id:"v201", label:"v2-01 Chat Grok", file:"09-ventana-chat-v2-01.html" },
+  { id:"v203", label:"v2-03 Settings", file:"10-ventana-settings-v2-03.html" },
+  { id:"iframe", label:"Fuente HTML lote-03", file:"01-ventana-chat-p01.html", source:true }
+];
+
+const list = document.getElementById("winlist");
+let current = "p01";
+WINDOWS.forEach((w) => {
+  const b = document.createElement("button");
+  b.type = "button";
+  b.dataset.id = w.id;
+  b.innerHTML = `<div class="id">${w.file}</div><div class="lb">${w.label}</div>`;
+  if (w.id === current) b.classList.add("on");
+  b.onclick = () => select(w);
+  list.appendChild(b);
+});
+
+function select(w) {
+  current = w.id;
+  document.querySelectorAll(".winlist button").forEach((x) => x.classList.toggle("on", x.dataset.id === w.id));
+  document.querySelectorAll(".screen").forEach((s) => s.classList.toggle("on", s.dataset.screen === w.id));
+  if (w.id === "iframe") {
+    document.getElementById("frame").src = "./" + w.file;
+  }
+  document.getElementById("notes").innerHTML =
+    "Ventana activa: <code>" + w.file + "</code>. Estructura de " + w.label + ". Solo cambia tema (tokens). Handlers no se reescriben.";
+}
+
+document.querySelectorAll("[data-theme-btn]").forEach((btn) => {
+  btn.onclick = () => {
+    const t = btn.getAttribute("data-theme-btn");
+    document.documentElement.setAttribute("data-theme", t);
+    document.documentElement.lang = t === "blanco" ? "pt" : "es";
+    document.querySelectorAll("[data-theme-btn]").forEach((x) => x.classList.toggle("on", x === btn));
+  };
+});
+
+async function sha256(text) {
+  if (window.crypto && window.crypto.subtle) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+    return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2,"0")).join("");
+  }
+  return "plain:" + text;
+}
+
+const DEFAULT_HINT = "YAIWES-CONFIG";
+document.getElementById("unlock").onclick = async () => {
+  const v = document.getElementById("key").value;
+  const ok = v === DEFAULT_HINT || (await sha256(v)) === (await sha256(DEFAULT_HINT));
+  const msg = document.getElementById("keymsg");
+  const cfg = document.getElementById("cfg");
+  if (!ok) {
+    msg.textContent = "FAIL-CLOSED · clave no coincide";
+    msg.className = "err";
+    cfg.classList.remove("open");
+    return;
+  }
+  msg.textContent = "UNLOCK · panel configuración UI";
+  msg.className = "ok";
+  cfg.classList.add("open");
+};
+
+const extra = [];
+document.getElementById("addslot").onclick = () => {
+  extra.push({
+    id: "btn_" + String(extra.length + 1).padStart(2,"0"),
+    targetSlot: current + ".toolbar",
+    kind: "button",
+    label: "Acción " + (extra.length + 1),
+    action: "noop",
+    theme: document.documentElement.getAttribute("data-theme")
+  });
+  document.getElementById("manifest").textContent = JSON.stringify({ dag:"LOCKED", slots: extra }, null, 2);
+};
+</script>
+</body>
+</html>
