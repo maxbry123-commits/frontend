@@ -1,13 +1,14 @@
 {
-  "checkpoint_id": "UIYAIWES-P05-VERIFY-0019",
-  "previous_checkpoint_id": "UIYAIWES-P05-STAGING-0018",
+  "checkpoint_id": "UIYAIWES-P05-RECONCILE-0020",
+  "previous_checkpoint_id": "UIYAIWES-P05-VERIFY-0019",
   "contract": "tel.workflow/v3",
-  "status": "P05_VENDOR_TESTS_VERIFIED_STAGING",
-  "verified": {"p05_five_reuse_searches":true,"structlog_provenance":true,"opentelemetry_provenance":true,"code_only_vendor_trees":true,"licenses_preserved":true,"separate_adapters":true,"activation_keys_registered":true,"workflow_owner_unchanged":"stabilize_core","github_readback":true,"injection_socket_checks":"3/3 PASS","real_vendor_tests":"5/5 PASS","main_merge":false,"main_divergence_detected":true},
-  "flags": ["P05-FLAG-MAIN-DIVERGED-11-AHEAD-28-BEHIND","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
-  "evidence_commits": ["f26b1c87c6e4f873fdade6e14959e882d4704142","de6c819f53f74f71b193f331be605b92590008af","784c7227fd4220ee5955aecd4fb4741efc619d3f"],
+  "status": "P05_VENDOR_TESTS_VERIFIED_RECONCILIATION_BLOCKED",
+  "verified": {"p05_five_reuse_searches":true,"structlog_provenance":true,"opentelemetry_provenance":true,"code_only_vendor_trees":true,"licenses_preserved":true,"separate_adapters":true,"activation_keys_registered":true,"workflow_owner_unchanged":"stabilize_core","github_readback":true,"injection_socket_checks":"3/3 PASS","real_vendor_tests":"5/5 PASS","main_merge":false,"main_divergence_detected":true,"reconciliation_pr_open":true},
+  "flags": ["P05-FLAG-MAIN-DIVERGED-17-AHEAD-28-BEHIND","P05-FLAG-PR6-MERGE-CONFLICT","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
+  "evidence_commits": ["f26b1c87c6e4f873fdade6e14959e882d4704142","de6c819f53f74f71b193f331be605b92590008af","20caf8542441f4d3e19acdd4045991226face2df","fb892806137b5b2b83f5154ccf96f12f82f17720"],
   "verification": {"workflow":".github/workflows/ui-yaiwes-p05-observability-verify.yml","run_id":34076616213,"job_id":101603870455,"result":"SUCCESS","tests":"5/5 PASS","duration":"0.553s"},
-  "main_observed": {"head":"66145a1ab53b78b3d03618fc2f3e919de685c19c","merge_base":"3e91c8f65bef6ec3b6e0c48f889eda35f8017130","compare":"diverged","ahead_by":11,"behind_by":28},
+  "main_observed": {"head":"66145a1ab53b78b3d03618fc2f3e919de685c19c","merge_base":"3e91c8f65bef6ec3b6e0c48f889eda35f8017130","compare":"diverged","ahead_by":17,"behind_by":28},
+  "reconciliation": {"pr":6,"url":"https://github.com/maxbry123-commits/frontend/pull/6","draft":true,"mergeable":false},
   "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
-  "closure_rule": "Vendor execution gate is satisfied on staging, but P05 is not VERIFIED_CLOSED until non-force reconciliation with main preserves both histories and independent post-integration read-back/tests PASS."
+  "closure_rule": "P05 remains fail-closed until PR #6 conflicts are resolved without force, target read-back confirms integration, and real 5/5 tests PASS on reconciled history."
 }
