@@ -1,0 +1,16 @@
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/android/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/astc-encoder/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/drm/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/fuchsia/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/glm/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/glm/include/glm/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/opengl/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/qnx/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/renderdoc/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/stb/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/stb/include/stb/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/vulkan/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/vulkan_docs/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/x11/LICENSE
+https://github.com/google/gfxstream/blob/681d81edd2ec597b055c2fbe99a742d95545722a/third_party/xcb/LICENSE
