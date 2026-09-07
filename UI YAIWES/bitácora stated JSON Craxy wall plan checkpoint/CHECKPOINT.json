@@ -1,11 +1,13 @@
 {
-  "checkpoint_id": "UIYAIWES-P05-STAGING-0017",
-  "previous_checkpoint_id": "UIYAIWES-P05-STAGING-0016",
+  "checkpoint_id": "UIYAIWES-P05-STAGING-0018",
+  "previous_checkpoint_id": "UIYAIWES-P05-STAGING-0017",
   "contract": "tel.workflow/v3",
   "status": "P05_STAGED_UNVERIFIED",
-  "verified": {"p05_five_reuse_searches":true,"structlog_provenance":true,"opentelemetry_provenance":true,"code_only_vendor_trees":true,"licenses_preserved":true,"separate_adapters":true,"activation_keys_registered":true,"workflow_owner_unchanged":"stabilize_core","github_readback":true,"injection_socket_checks":"3/3 PASS","real_vendor_tests":false,"main_merge":false},
-  "flags": ["P05-FLAG-REAL-VENDOR-TESTS-NOT-EXECUTED","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
-  "evidence_commits": ["f26b1c87c6e4f873fdade6e14959e882d4704142","0e68f1e4cd79e019f951ba91013177bfd645afc5"],
+  "verified": {"p05_five_reuse_searches":true,"structlog_provenance":true,"opentelemetry_provenance":true,"code_only_vendor_trees":true,"licenses_preserved":true,"separate_adapters":true,"activation_keys_registered":true,"workflow_owner_unchanged":"stabilize_core","github_readback":true,"injection_socket_checks":"3/3 PASS","real_vendor_tests":false,"main_merge":false,"main_divergence_detected":true,"runtime_attempt_recorded":true},
+  "flags": ["P05-FLAG-REAL-VENDOR-TESTS-NOT-EXECUTED","P05-FLAG-RUNNER-DNS-RESOLUTION","P05-FLAG-MAIN-DIVERGED-3-AHEAD-4-BEHIND","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
+  "evidence_commits": ["f26b1c87c6e4f873fdade6e14959e882d4704142","0e68f1e4cd79e019f951ba91013177bfd645afc5","189db9198409defb8ae1a7ad48882e6948d40847"],
+  "runtime_attempt": {"result":"BLOCKED_BEFORE_TEST","log":"git clone failed: Could not resolve host: github.com"},
+  "main_observed": {"head":"04ad9bc66ea4d71fac5a827937a9107aeae1f72c","merge_base":"3e91c8f65bef6ec3b6e0c48f889eda35f8017130","compare":"diverged","ahead_by":3,"behind_by":4},
   "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
-  "closure_rule": "Injection/socket PASS is not real-vendor execution. No VERIFIED_CLOSED until vendored Structlog/OpenTelemetry tests pass and main integration/read-back is proven."
+  "closure_rule": "No VERIFIED_CLOSED until vendored Structlog/OpenTelemetry tests actually run PASS and main integration/read-back is proven; presence, injection checks, or branch read-back alone are insufficient."
 }
