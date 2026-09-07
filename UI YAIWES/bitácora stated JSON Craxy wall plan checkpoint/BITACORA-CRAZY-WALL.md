@@ -17,3 +17,6 @@ Branch `ui-yaiwes-p05-observability-20260906`, base `3e91c8f65bef6ec3b6e0c48f889
 
 ## UI-PLUG-0013 — P05 INJECTION/SOCKET CHECK
 Chequeo determinista local de contrato equivalente: Structlog emit/delegation, OpenTelemetry tracer+meter delegation y mount por registry/loader conservando `stabilize_core` como único workflow owner: `3/3 PASS`. Este chequeo NO demuestra import/ejecución real de los vendors; `P05-FLAG-REAL-VENDOR-TESTS-NOT-EXECUTED` permanece activo. Main no fue modificado.
+
+## UI-PLUG-0014 — P05 WATCHDOG / STRATEGYDELTA
+Repetidas las búsquedas P05 en frontend/agentes/router/osquestador sin implementación alternativa. Test real intentado desde checkout aislado pero bloqueado antes de ejecución por `Could not resolve host: github.com`; no se marca FAIL funcional. Compare GitHub detectó staging `ahead 3 / behind 4` frente a main `04ad9bc66ea4d71fac5a827937a9107aeae1f72c`, merge-base `3e91c8f65bef6ec3b6e0c48f889eda35f8017130`; no merge/rebase/force ejecutado. StrategyDelta siguiente: ejecución residente/materializada y reconciliación explícita preservando historiales.
