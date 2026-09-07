@@ -1,6 +1,6 @@
 {
-  "checkpoint_id": "UIYAIWES-V3-POST124-LIBDATACHANNEL-0021",
-  "previous_checkpoint_id": "UIYAIWES-V3-POST124-JSPDF-0020",
+  "checkpoint_id": "UIYAIWES-V3-POST124-PGVECTOR-0022",
+  "previous_checkpoint_id": "UIYAIWES-V3-POST124-LIBDATACHANNEL-0021",
   "contract": "tel.workflow/v3",
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_LOOP_POST_124_CANCELLED_REVALIDATION",
@@ -23,7 +23,9 @@
     "jsPDF_physical_provenance_verified": true,
     "jsPDF_integrated": false,
     "libdatachannel_physical_provenance_verified": true,
-    "libdatachannel_integrated": false
+    "libdatachannel_integrated": false,
+    "pgvector_physical_provenance_verified": true,
+    "pgvector_integrated": false
   },
   "post_124_evidence": {
     "run_id": 34060401131,
@@ -37,14 +39,14 @@
     "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131"
   },
   "last_1x1_result": {
-    "entry": "libdatachannel",
+    "entry": "pgvector",
     "classification": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED",
-    "tree_sha": "dce2a5f7a935d249b0130cb2c944bee4f06e7016",
-    "source_url": "https://github.com/paullouisageneau/libdatachannel",
-    "source_commit": "51085b8de4e6185dc019e3705c88b87933d7c3f6",
-    "source_tree": "22d0552fdb095035c0f35049ad04bb5af1982d91",
-    "license": "MPL-2.0",
-    "candidate_code_roots": ["include", "src"],
+    "tree_sha": "dee3af44e7c2b6779d02fa1372c89c9b89809679",
+    "source_url": "https://github.com/pgvector/pgvector",
+    "source_commit": "e48241b4dcc045b18902914f668d03d1d399dfbe",
+    "license": "PostgreSQL",
+    "license_blob": "fc5f177fa5d9c0d20a949f4b4faa028999977008",
+    "candidate_code_roots": ["src", "sql"],
     "integration": "NOT_WIRED",
     "closure": "NOT_VERIFIED_CLOSED"
   },
@@ -53,9 +55,9 @@
     "P05_publication": "BLOCKED_UNTIL_P01_POST124_RECONCILIATION"
   },
   "queue_1x1": [
-    "advance to pgvector after libdatachannel",
-    "compare manifest/provenance/license/code-root",
-    "classify materialized/partial/missing/duplicate/inconclusive",
+    "advance to post124 pytest after pgvector",
+    "compare SOURCE_COMMIT/tree/code-root against baseline pytest",
+    "classify duplicate alias or independent materialization",
     "persist evidence without mounting donor code",
     "update inventory/code-map/state/checkpoint/plan/recovery/architecture",
     "revalidate P01 only after complete destination reconciliation"
