@@ -1,43 +1,47 @@
 {
-  "contract": "tel.workflow/v3",
+  "contract": "tel.workflow/v4",
   "project": "UI YAIWES modular component integration",
-  "mode": "FAIL_CLOSED_LOOP",
-  "status": "P04_CLOSED_UNVERIFIED_WITH_FLAGS_P05_ACTIVE",
+  "mode": "FAIL_CLOSED_EXECUTION_LOOP",
+  "status": "ACTIVE_LOOP_WITH_CONCURRENT_124_ACQUISITION",
   "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
-  "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY",
-  "component_count": 14,
+  "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY_INITIAL_14",
   "workflow_owner": "stabilize_core",
-  "p03": {
-    "status": "PARTIAL_VERIFIED_WITH_STARLETTE_FLAG",
-    "commit": "85a3f758a4a6228e0d5d030a544365ccdef0a198",
-    "httpx": "VERIFIED_RUNTIME_LOCAL",
-    "starlette": "CLOSED_UNVERIFIED_WITH_VERSION_FLAG"
+  "master_guide": {
+    "path": "UI YAIWES/readme arquitectura UI YAIWES/GUIA-MAESTRA-EJECUCION-LOOP-SOL-UI-YAIWES.md",
+    "commit": "3c2752b9cd74b404cc8d44379b37535a6a295203",
+    "role": "canonical execution/handoff/recovery guide for Sol chats"
   },
-  "p04": {
-    "status": "CLOSED_UNVERIFIED_WITH_EXECUTION_FLAGS",
-    "commit": "b7545ca41ae0012e658d3ab8334cbe5aa98c077b",
-    "resilient_circuit": {
-      "source_url": "https://github.com/rodmena-limited/resilient-circuit",
-      "source_commit": "c9d80c845df771a9b9d63f9a48e6f24e6ed0b94a",
-      "source_version": "0.7.0",
-      "vendor_tree": "61ada5ed0ecf9bad6059645264c9fd5549669715",
-      "factory_key": "resilient_circuit.breaker",
-      "adapter_logic": "PASS_INJECTION",
-      "real_vendor_execution": "NOT_PROVEN_LOCAL_PACKAGE_MISSING"
-    },
-    "bulkman": {
-      "source_url": "https://github.com/rodmena-limited/bulkman",
-      "source_commit": "99607f7e1b881a68cc99305ab233299c57469414",
-      "source_version": "2.0.3",
-      "vendor_tree": "c964f8b80bb8e9f5492c5a87a3eeb0bdc43f21af",
-      "factory_key": "bulkman.bulkhead",
-      "dependency": "resilient-circuit>=0.5,<0.8; selected vendor 0.7.0 compatible",
-      "adapter_logic": "PASS_INJECTION",
-      "real_vendor_execution": "NOT_PROVEN_LOCAL_PACKAGE_MISSING"
-    },
-    "github_readback": "PASS"
+  "inventory": {
+    "initial_verified_count": 14,
+    "freshness": "STALE_BY_CONCURRENT_124_ACQUISITION",
+    "rule": "do not destructively deduplicate component root until Action 124 final verification completes"
   },
+  "nodes": {
+    "P01": "INITIAL_14_VERIFIED_CLOSED_REVALIDATION_REQUIRED_AFTER_124",
+    "P02A": "CLOSED_UNVERIFIED_REAL_VENDOR_EXECUTION_FLAG",
+    "P02B": "CLOSED_UNVERIFIED_PYDANTIC_CORE_VERSION_FLAG",
+    "P02C": "CLOSED_UNVERIFIED_REAL_VENDOR_EXECUTION_FLAG",
+    "P03": "PARTIAL_VERIFIED_HTTPX_REAL_LOCAL_STARLETTE_VERSION_FLAG",
+    "P04": "CLOSED_UNVERIFIED_VENDOR_EXECUTION_FLAGS",
+    "P05": "ACTIVE_RESEARCH_AND_PREPARED_WORK_REQUIRES_MAIN_RECONCILIATION",
+    "P06": "PREPARED_TEST_ONLY_GATES_NOT_CLAIMED_CLOSED",
+    "P07": "PREPARED_DONOR_ONLY_GATES_NOT_CLAIMED_CLOSED",
+    "P08": "PREPARED_PYCASBIN_POLICY_WORK_REQUIRES_MAIN_RECONCILIATION"
+  },
+  "concurrent_processes": [
+    {
+      "type": "github_action",
+      "name": "UI YAIWES 124",
+      "run_id": 34060401131,
+      "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131",
+      "last_verified_status": "in_progress",
+      "job": "queue-124",
+      "last_verified_step": "Process 124 components sequentially with pinned source SHA",
+      "final_destination_verification": "pending"
+    }
+  ],
   "active_flags": [
+    "P01-FRESHNESS-STALE-AFTER-124-ACQUISITION",
     "P02A-FLAG-REAL-VENDOR-EXECUTION",
     "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
     "P02C-FLAG-REAL-VENDOR-EXECUTION",
@@ -45,5 +49,12 @@
     "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
     "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
   ],
-  "next_gate": "P05: five reuse searches; mount structlog logging and OpenTelemetry observability as read-only adapters; observability must never govern workflow"
+  "operational_incidents": [
+    {
+      "id": "INCIDENT-TEMP-WRITE-MAIN",
+      "status": "CLEANED",
+      "rule_added": "never probe write permission by creating temporary files in main"
+    }
+  ],
+  "next_delta": "verify Action 124 completion and final destination; if still active, continue only independent runtime work; when complete revalidate inventory/dedup and then reconcile P05-P08 work without duplicates"
 }
