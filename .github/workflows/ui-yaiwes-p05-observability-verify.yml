@@ -1,0 +1,23 @@
+name: UI YAIWES P05 Observability Verify
+on:
+  push:
+    branches:
+      - ui-yaiwes-p05-observability-20260906
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-p05:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout staging branch
+        uses: actions/checkout@v4
+        with:
+          ref: ui-yaiwes-p05-observability-20260906
+          fetch-depth: 1
+      - name: Verify real vendored observability adapters
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_observability_adapters.py" -v
