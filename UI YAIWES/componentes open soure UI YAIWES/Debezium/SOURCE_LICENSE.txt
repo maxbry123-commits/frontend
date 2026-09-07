@@ -1,0 +1,2 @@
+https://github.com/debezium/debezium/blob/447059396546d4819f5c99c34e3af928935a4c0c/LICENSE-3rd-PARTIES.txt
+https://github.com/debezium/debezium/blob/447059396546d4819f5c99c34e3af928935a4c0c/LICENSE.txt
