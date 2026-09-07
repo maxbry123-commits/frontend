@@ -15,8 +15,8 @@
     "initial_verified_count": 14,
     "freshness": "STALE_POST_CANCELLED_124_ACQUISITION",
     "rule": "revalidate physical destination, provenance and dedup before advancing integration claims",
-    "post124_revalidated_entries": 1,
-    "last_revalidated_entry": "gVisor"
+    "post124_revalidated_entries": 2,
+    "last_revalidated_entry": "gfxstream"
   },
   "nodes": {
     "P01": "INITIAL_14_VERIFIED_CLOSED_REVALIDATION_ACTIVE_AFTER_CANCELLED_124",
@@ -51,12 +51,24 @@
       "candidate_code_roots": ["pkg", "runsc", "sandboxexec", "shim"],
       "integration": "NOT_WIRED",
       "decision": "retain provenance; do not copy/mount until universal-socket contract+adapter+registry+loader+guard+tests exist"
+    },
+    "gfxstream": {
+      "classification": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED",
+      "tree_sha": "e696264983a685fb44a7b9706bcf35383fd67159",
+      "source_url": "https://github.com/google/gfxstream",
+      "source_commit": "681d81edd2ec597b055c2fbe99a742d95545722a",
+      "source_tree": "89e6b402afabac2ac63dd293da5c5b643c77c57b",
+      "license_blob": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
+      "candidate_code_roots": ["host", "guest", "common", "codegen"],
+      "integration": "NOT_WIRED",
+      "decision": "retain provenance; do not copy/mount graphics virtualization donor until a scoped universal-socket contract+adapter+registry+loader+guard+tests route is justified"
     }
   },
   "active_flags": [
     "P01-FRESHNESS-STALE-POST-CANCELLED-124",
     "ACTION124-FINAL-DESTINATION-VERIFY-FAILED",
     "GVISOR-DONOR-ONLY-UNMAPPED-NOT-WIRED",
+    "GFXSTREAM-DONOR-ONLY-UNMAPPED-NOT-WIRED",
     "P02A-FLAG-REAL-VENDOR-EXECUTION",
     "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
     "P02C-FLAG-REAL-VENDOR-EXECUTION",
@@ -64,5 +76,5 @@
     "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
     "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
   ],
-  "next_delta": "advance to the next safe post-124 physical entry; compare manifest/provenance/license/code-root; classify without integrating donor code; refresh inventory/code-map/state evidence; revalidate P01 only after complete destination reconciliation"
+  "next_delta": "advance to the next safe post-124 physical entry after gfxstream; compare manifest/provenance/license/code-root; classify without integrating donor code; refresh inventory/code-map/state evidence; revalidate P01 only after complete destination reconciliation"
 }
