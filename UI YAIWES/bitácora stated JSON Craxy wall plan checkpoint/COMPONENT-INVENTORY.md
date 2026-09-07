@@ -21,8 +21,9 @@
 
 | Entrada | Clasificación | Evidencia | Decisión |
 |---|---|---|---|
-|gVisor|MATERIALIZED_OK / DONOR_ONLY_UNMAPPED|tree `fa6b9f1ca81285907f24d71ef100410ef48aac1f`; source `https://github.com/google/gvisor`; commit `0a1316b0d180600212bd607aa0ccfe2a9b09a899`; LICENSE blob `f7a006d10464cfe9724b5d687c0013bf982cc66a`; roots `pkg/`, `runsc/`, `sandboxexec/`, `shim/`|Conservar como donor/provenance. NO copiar ni montar en runtime hasta existir contract+adapter+registry+loader+guard+test y ruta universal verificable. Metadata/CI/dev upstream no entra al hot path.|
+|gVisor|MATERIALIZED_OK / DONOR_ONLY_UNMAPPED|tree `fa6b9f1ca81285907f24d71ef100410ef48aac1f`; source `https://github.com/google/gvisor`; commit `0a1316b0d180600212bd607aa0ccfe2a9b09a899`; LICENSE blob `f7a006d10464cfe9724b5d687c0013bf982cc66a`; roots `pkg/`, `runsc/`, `sandboxexec/`, `shim/`|Conservar como donor/provenance. NO copiar ni montar en runtime hasta existir contract+adapter+registry+loader+guard+test y ruta universal verificable.|
+|gfxstream|MATERIALIZED_OK / DONOR_ONLY_UNMAPPED|tree `e696264983a685fb44a7b9706bcf35383fd67159`; source `https://github.com/google/gfxstream`; commit `681d81edd2ec597b055c2fbe99a742d95545722a`; upstream tree `89e6b402afabac2ac63dd293da5c5b643c77c57b`; LICENSE blob `7a4a3ea2424c09fbe48d455aed1eaa94d9124835`; manifest blob `7dd9632e9ee34d352169ca2af5f7efd141b1686b`; roots `host/`, `guest/`, `common/`, `codegen/`|Conservar como donor/provenance. NO copiar ni montar al hot path sin contrato gráfico explícito y enchufe universal completo; metadata/build/CI/docs/tests/third_party no se copian por defecto.|
 
-P01 permanece abierto: esta fila verifica una entrada física, no el inventario post-124 completo.
+P01 permanece abierto: estas filas verifican entradas físicas, no el inventario post-124 completo.
 
 Regla de depuración: no copiar `.github`, `.agents`, `.buildkite`, `.claude`, changelogs, badges, docs, release automation ni tests upstream al runtime salvo que el nodo de prueba los necesite. Mantener source URL/SHA/license/provenance en evidencia; una licencia requerida no se clasifica como basura.
