@@ -145,36 +145,23 @@ Ejecutado:
 - HEX cruzado vs skill 01: PASS
 - BACKEND de esta subida: pendiente copiar fiel a `lote-BACKEND/` (siguiente lote, no mezclado aquí)
 
-### I07 — Búsqueda de HTML de diseños previos (otros chats)
+### I07 — HTML de chats Grok Build previos (NO GitHub)
 
-Pregunta del Director: si el agente tiene la idea del diseño, y si consigue HTML de diseños hechos en otros chats.
+Orden 2: “busca en los otros chat unos archivos html… No busques en Github porque no fue desplegado. Solo me lo hiciste en el chat y me diste los archivos lo hiciste con grok build.”
 
-Idea de diseño (confirmada, de I06):
+Idea de diseño: SÍ (pack FROMTED I06). Phone 390, header, tabs, cards, sheet, bottom-nav. Matte / Little / Blanco. 24/12/10/28. Sin lime.
 
-- Producto: phone 390, header, tabs, cards, sheet, bottom-nav, composer.
-- Temas locked: Matte / Little / Blanco. Geometría 24/12/10/28.
-- No lime Operator en chrome producto. No paleta cuarta.
+Búsqueda 2026-09-07 (sin GitHub):
 
-Búsqueda 2026-09-07 — **otros chats Grok: no accesibles** desde este sandbox. Se buscó en GitHub.
+| Dónde | Resultado |
+| --- | --- |
+| Este sandbox | 0 `.html` de producto |
+| `/workspace/attachments` | solo skills MD/JSON |
+| `/tmp/sessions` | logs de **esta** sesión |
+| Vercel `maxbry123-8833s-projects` | 0 proyectos |
+| Otros chats Grok Build | **no accesibles** desde este sandbox |
 
-Resultado:
-
-| Dónde | HTML producto FROMTED (phone/matte) | Qué hay |
-| --- | --- | --- |
-| Este chat / attachments | NO | skills MD, no HTML ejecutable |
-| `frontend` | NO | 146 HTML = OSS (WebLLM, Tika, Docling, Chart.js, CodeMirror, Excalidraw, Dagu) |
-| `nct-hub` | NO (otro sistema) | chat iOS/Claude, `#0a0a0a`, emojis 🧠 |
-| `comand-Center` | NO | panel ops `#7c3aed` (no FROMTED) |
-| `Agentes-motores-Wordflow-YAIWES` | NO | HTML de Agent-Zero (OSS) |
-
-Candidatos previos (no FROMTED, no copiar a biblioteca producto sin mapear tokens):
-
-- https://github.com/maxbry123-commits/nct-hub/blob/main/index.html
-- https://github.com/maxbry123-commits/nct-hub/blob/main/index-local.html
-- https://github.com/maxbry123-commits/nct-hub/blob/main/src/index.html
-- https://github.com/maxbry123-commits/comand-Center/blob/main/control-layer/command-center/index.html
-
-GAP: HTML FROMTED de otros chats **no está en el repo**. Hace falta que el Director lo suba.
+Estado: **NO ENCONTRADO**. No se inventa el HTML previo. El Director re-sube esos archivos del chat.
 
 ### I03 — Diseño modular del skill (esta sesión)
 
