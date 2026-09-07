@@ -1,0 +1,6 @@
+https://github.com/google/gvisor/blob/0a1316b0d180600212bd607aa0ccfe2a9b09a899/LICENSE
+https://github.com/google/gvisor/blob/0a1316b0d180600212bd607aa0ccfe2a9b09a899/pkg/safecopy/LICENSE
+https://github.com/google/gvisor/blob/0a1316b0d180600212bd607aa0ccfe2a9b09a899/pkg/sentry/time/LICENSE
+https://github.com/google/gvisor/blob/0a1316b0d180600212bd607aa0ccfe2a9b09a899/pkg/sync/LICENSE
+https://github.com/google/gvisor/blob/0a1316b0d180600212bd607aa0ccfe2a9b09a899/tools/licensecheck/licensecheck.go
+https://github.com/google/gvisor/blob/0a1316b0d180600212bd607aa0ccfe2a9b09a899/tools/licensecheck/licensecheck_test.go
