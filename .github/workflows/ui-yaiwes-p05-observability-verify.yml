@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - ui-yaiwes-p05-observability-20260906
+      - main
     paths:
       - '.github/workflows/ui-yaiwes-p05-observability-verify.yml'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/**'
@@ -17,7 +18,7 @@ jobs:
       - name: Sparse checkout P05 runtime only
         uses: actions/checkout@v4
         with:
-          ref: ui-yaiwes-p05-observability-20260906
+          ref: ${{ github.sha }}
           fetch-depth: 1
           filter: blob:none
           sparse-checkout: |
