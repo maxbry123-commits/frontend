@@ -15,8 +15,8 @@
     "initial_verified_count": 14,
     "freshness": "STALE_POST_CANCELLED_124_ACQUISITION",
     "rule": "revalidate physical destination, provenance and dedup before advancing integration claims",
-    "post124_revalidated_entries": 3,
-    "last_revalidated_entry": "jsPDF"
+    "post124_revalidated_entries": 4,
+    "last_revalidated_entry": "libdatachannel"
   },
   "nodes": {
     "P01": "INITIAL_14_VERIFIED_CLOSED_REVALIDATION_ACTIVE_AFTER_CANCELLED_124",
@@ -42,49 +42,11 @@
     "completed_at": "2026-09-07T02:43:53Z"
   },
   "post124_entries": {
-    "gVisor": {
-      "classification": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED",
-      "tree_sha": "fa6b9f1ca81285907f24d71ef100410ef48aac1f",
-      "source_url": "https://github.com/google/gvisor",
-      "source_commit": "0a1316b0d180600212bd607aa0ccfe2a9b09a899",
-      "license_blob": "f7a006d10464cfe9724b5d687c0013bf982cc66a",
-      "candidate_code_roots": ["pkg", "runsc", "sandboxexec", "shim"],
-      "integration": "NOT_WIRED"
-    },
-    "gfxstream": {
-      "classification": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED",
-      "tree_sha": "e696264983a685fb44a7b9706bcf35383fd67159",
-      "source_url": "https://github.com/google/gfxstream",
-      "source_commit": "681d81edd2ec597b055c2fbe99a742d95545722a",
-      "source_tree": "89e6b402afabac2ac63dd293da5c5b643c77c57b",
-      "license_blob": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
-      "candidate_code_roots": ["host", "guest", "common", "codegen"],
-      "integration": "NOT_WIRED"
-    },
-    "jsPDF": {
-      "classification": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED",
-      "tree_sha": "b85b001772c33639db82c4c0b64313a37522bbc0",
-      "source_url": "https://github.com/parallax/jsPDF",
-      "source_commit": "a3930ce03a585a26b2c76d12a0f413ce96f6d1a3",
-      "source_tree": "baf4d90e2f5a40eb9f558f616b803dc3fd50f095",
-      "license_blob": "dc7d3a9fa305defebad6cb88ba4cd9776f26fcd3",
-      "candidate_code_roots": ["src", "dist", "types"],
-      "integration": "NOT_WIRED",
-      "decision": "retain provenance; do not copy/mount PDF donor until a scoped export contract+adapter+registry+loader+guard+tests route is justified"
-    }
+    "gVisor": {"classification":"MATERIALIZED_OK_DONOR_ONLY_UNMAPPED","tree_sha":"fa6b9f1ca81285907f24d71ef100410ef48aac1f","source_url":"https://github.com/google/gvisor","source_commit":"0a1316b0d180600212bd607aa0ccfe2a9b09a899","license_blob":"f7a006d10464cfe9724b5d687c0013bf982cc66a","candidate_code_roots":["pkg","runsc","sandboxexec","shim"],"integration":"NOT_WIRED"},
+    "gfxstream": {"classification":"MATERIALIZED_OK_DONOR_ONLY_UNMAPPED","tree_sha":"e696264983a685fb44a7b9706bcf35383fd67159","source_url":"https://github.com/google/gfxstream","source_commit":"681d81edd2ec597b055c2fbe99a742d95545722a","source_tree":"89e6b402afabac2ac63dd293da5c5b643c77c57b","license_blob":"7a4a3ea2424c09fbe48d455aed1eaa94d9124835","candidate_code_roots":["host","guest","common","codegen"],"integration":"NOT_WIRED"},
+    "jsPDF": {"classification":"MATERIALIZED_OK_DONOR_ONLY_UNMAPPED","tree_sha":"b85b001772c33639db82c4c0b64313a37522bbc0","source_url":"https://github.com/parallax/jsPDF","source_commit":"a3930ce03a585a26b2c76d12a0f413ce96f6d1a3","source_tree":"baf4d90e2f5a40eb9f558f616b803dc3fd50f095","license_blob":"dc7d3a9fa305defebad6cb88ba4cd9776f26fcd3","candidate_code_roots":["src","dist","types"],"integration":"NOT_WIRED"},
+    "libdatachannel": {"classification":"MATERIALIZED_OK_DONOR_ONLY_UNMAPPED","tree_sha":"dce2a5f7a935d249b0130cb2c944bee4f06e7016","source_url":"https://github.com/paullouisageneau/libdatachannel","source_commit":"51085b8de4e6185dc019e3705c88b87933d7c3f6","source_tree":"22d0552fdb095035c0f35049ad04bb5af1982d91","license":"MPL-2.0","license_blob":"14e2f777f6c395e7e04ab4aa306bbcc4b0c1120e","candidate_code_roots":["include","src"],"integration":"NOT_WIRED","decision":"retain provenance; do not copy/mount WebRTC donor until a scoped media/transport contract plus adapter/registry/loader/guard/tests route is justified"}
   },
-  "active_flags": [
-    "P01-FRESHNESS-STALE-POST-CANCELLED-124",
-    "ACTION124-FINAL-DESTINATION-VERIFY-FAILED",
-    "GVISOR-DONOR-ONLY-UNMAPPED-NOT-WIRED",
-    "GFXSTREAM-DONOR-ONLY-UNMAPPED-NOT-WIRED",
-    "JSPDF-DONOR-ONLY-UNMAPPED-NOT-WIRED",
-    "P02A-FLAG-REAL-VENDOR-EXECUTION",
-    "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
-    "P02C-FLAG-REAL-VENDOR-EXECUTION",
-    "P03-FLAG-STARLETTE-VERSION-MISMATCH",
-    "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
-    "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
-  ],
-  "next_delta": "advance to the next safe post-124 physical entry after jsPDF; compare manifest/provenance/license/code-root; classify without integrating donor code; refresh inventory/code-map/state evidence; revalidate P01 only after complete destination reconciliation"
+  "active_flags": ["P01-FRESHNESS-STALE-POST-CANCELLED-124","ACTION124-FINAL-DESTINATION-VERIFY-FAILED","GVISOR-DONOR-ONLY-UNMAPPED-NOT-WIRED","GFXSTREAM-DONOR-ONLY-UNMAPPED-NOT-WIRED","JSPDF-DONOR-ONLY-UNMAPPED-NOT-WIRED","LIBDATACHANNEL-DONOR-ONLY-UNMAPPED-NOT-WIRED","P02A-FLAG-REAL-VENDOR-EXECUTION","P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH","P02C-FLAG-REAL-VENDOR-EXECUTION","P03-FLAG-STARLETTE-VERSION-MISMATCH","P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION","P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"],
+  "next_delta": "advance to pgvector after libdatachannel; compare manifest/provenance/license/code-root; classify without integrating donor code; refresh inventory/code-map/state evidence; revalidate P01 only after complete destination reconciliation"
 }
