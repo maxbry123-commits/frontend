@@ -1,47 +1,47 @@
 {
-  "contract": "tel.workflow/v4",
+  "contract": "tel.workflow/v3",
   "project": "UI YAIWES modular component integration",
-  "mode": "FAIL_CLOSED_EXECUTION_LOOP",
-  "status": "ACTIVE_LOOP_WITH_CONCURRENT_124_ACQUISITION",
-  "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "ACTIVE_LOOP_POST_124_CANCELLED_REVALIDATION",
+  "current_node": "P01_POST_124_INVENTORY_REVALIDATION",
   "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY_INITIAL_14",
   "workflow_owner": "stabilize_core",
-  "master_guide": {
-    "path": "UI YAIWES/readme arquitectura UI YAIWES/GUIA-MAESTRA-EJECUCION-LOOP-SOL-UI-YAIWES.md",
-    "commit": "3c2752b9cd74b404cc8d44379b37535a6a295203",
-    "role": "canonical execution/handoff/recovery guide for Sol chats"
+  "master_architecture": {
+    "path": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md",
+    "contract": "tel.workflow/v3",
+    "mode": "FAIL_CLOSED_LOOP"
   },
   "inventory": {
     "initial_verified_count": 14,
-    "freshness": "STALE_BY_CONCURRENT_124_ACQUISITION",
-    "rule": "do not destructively deduplicate component root until Action 124 final verification completes"
+    "freshness": "STALE_POST_CANCELLED_124_ACQUISITION",
+    "rule": "revalidate physical destination, provenance and dedup before advancing integration claims"
   },
   "nodes": {
-    "P01": "INITIAL_14_VERIFIED_CLOSED_REVALIDATION_REQUIRED_AFTER_124",
+    "P01": "INITIAL_14_VERIFIED_CLOSED_REVALIDATION_ACTIVE_AFTER_CANCELLED_124",
     "P02A": "CLOSED_UNVERIFIED_REAL_VENDOR_EXECUTION_FLAG",
     "P02B": "CLOSED_UNVERIFIED_PYDANTIC_CORE_VERSION_FLAG",
     "P02C": "CLOSED_UNVERIFIED_REAL_VENDOR_EXECUTION_FLAG",
     "P03": "PARTIAL_VERIFIED_HTTPX_REAL_LOCAL_STARLETTE_VERSION_FLAG",
     "P04": "CLOSED_UNVERIFIED_VENDOR_EXECUTION_FLAGS",
-    "P05": "ACTIVE_RESEARCH_AND_PREPARED_WORK_REQUIRES_MAIN_RECONCILIATION",
+    "P05": "PREPARED_BLOCKED_BY_POST_124_RECONCILIATION",
     "P06": "PREPARED_TEST_ONLY_GATES_NOT_CLAIMED_CLOSED",
     "P07": "PREPARED_DONOR_ONLY_GATES_NOT_CLAIMED_CLOSED",
-    "P08": "PREPARED_PYCASBIN_POLICY_WORK_REQUIRES_MAIN_RECONCILIATION"
+    "P08": "PREPARED_PYCASBIN_POLICY_WORK_REQUIRES_POST_124_DEDUP"
   },
-  "concurrent_processes": [
-    {
-      "type": "github_action",
-      "name": "UI YAIWES 124",
-      "run_id": 34060401131,
-      "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131",
-      "last_verified_status": "in_progress",
-      "job": "queue-124",
-      "last_verified_step": "Process 124 components sequentially with pinned source SHA",
-      "final_destination_verification": "pending"
-    }
-  ],
+  "acquisition_124": {
+    "run_id": 34060401131,
+    "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131",
+    "status": "completed",
+    "conclusion": "cancelled",
+    "job_id": 101559786309,
+    "process_step": "cancelled",
+    "final_destination_verification": "failure",
+    "fail_closed_step": "failure",
+    "completed_at": "2026-09-07T02:43:53Z"
+  },
   "active_flags": [
-    "P01-FRESHNESS-STALE-AFTER-124-ACQUISITION",
+    "P01-FRESHNESS-STALE-POST-CANCELLED-124",
+    "ACTION124-FINAL-DESTINATION-VERIFY-FAILED",
     "P02A-FLAG-REAL-VENDOR-EXECUTION",
     "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
     "P02C-FLAG-REAL-VENDOR-EXECUTION",
@@ -49,12 +49,5 @@
     "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
     "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
   ],
-  "operational_incidents": [
-    {
-      "id": "INCIDENT-TEMP-WRITE-MAIN",
-      "status": "CLEANED",
-      "rule_added": "never probe write permission by creating temporary files in main"
-    }
-  ],
-  "next_delta": "verify Action 124 completion and final destination; if still active, continue only independent runtime work; when complete revalidate inventory/dedup and then reconcile P05-P08 work without duplicates"
+  "next_delta": "enumerate post-cancel component destination; compare queue/manifests/provenance; identify materialized, missing and partial entries; deduplicate only by source commit plus code-root/tree evidence; refresh inventory/code-map; revalidate P01 before P05 publication"
 }
