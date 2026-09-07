@@ -1,0 +1,1 @@
+https://github.com/taskiq-python/taskiq/blob/c4b8666d9143f6f9f64569a463c57e14908043cd/LICENSE
