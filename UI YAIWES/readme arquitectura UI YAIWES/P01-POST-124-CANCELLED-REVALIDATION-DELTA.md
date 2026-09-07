@@ -33,50 +33,30 @@ P05 Structlog/OpenTelemetry queda preparado pero bloqueado para publicación/cie
 7. Revalidar P01.
 8. Reanudar P05 mediante enchufe universal sin duplicar adapters/plugins existentes.
 
-## Delta ejecutado — gVisor
+## Deltas ejecutados
 
-Ruta: `UI YAIWES/componentes open soure UI YAIWES/gVisor`
-Tree: `fa6b9f1ca81285907f24d71ef100410ef48aac1f`
-SOURCE_URL: `https://github.com/google/gvisor`
-SOURCE_COMMIT: `0a1316b0d180600212bd607aa0ccfe2a9b09a899`
-LICENSE blob: `f7a006d10464cfe9724b5d687c0013bf982cc66a`
-Candidate code-roots: `pkg/`, `runsc/`, `sandboxexec/`, `shim/`.
-Clasificación: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; `integration=NOT_WIRED`. No se copia código al runtime.
+gVisor, gfxstream y jsPDF permanecen `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`, `integration=NOT_WIRED`; su provenance está preservada y no autorizan runtime mount.
 
-## Delta ejecutado — gfxstream
+## Delta ejecutado — libdatachannel
 
-Preflight: búsquedas obligatorias ejecutadas sobre la carpeta de componentes UI, raíces completas `frontend`, `agentes`, `router-universal-router-inteligente-` y `osquestador-auditor`; no se localizó wiring gfxstream alternativo reutilizable. Arquitectura y fuentes del Director fueron reconciliadas en cuatro pasadas lógicas de invariantes/ownership, contratos/seguridad, sandbox/virtualización y closure/evidence, manteniendo el GAP documental ya registrado sobre el conteo de fuentes únicas.
+Preflight: repetidas las cinco búsquedas obligatorias en componentes UI YAIWES, raíces completas de `frontend`, `agentes`, `router-universal-router-inteligente-` y `osquestador-auditor`; no se localizó wiring libdatachannel reutilizable. Cuatro pasadas lógicas aplicadas sobre arquitectura/fuentes: ownership e invariantes; contratos/permisos; sandbox/media/transport; closure/evidence.
 
-Ruta: `UI YAIWES/componentes open soure UI YAIWES/gfxstream`
-Tree destino: `e696264983a685fb44a7b9706bcf35383fd67159`
-SOURCE_URL: `https://github.com/google/gfxstream`
-SOURCE_COMMIT: `681d81edd2ec597b055c2fbe99a742d95545722a`
-Upstream tree: `89e6b402afabac2ac63dd293da5c5b643c77c57b`
-LICENSE: Apache-2.0; blob `7a4a3ea2424c09fbe48d455aed1eaa94d9124835`
-Candidate roots: `host/`, `guest/`, `common/`, `codegen/`.
+Ruta: `UI YAIWES/componentes open soure UI YAIWES/libdatachannel`
+Tree destino: `dce2a5f7a935d249b0130cb2c944bee4f06e7016`
+SOURCE_URL: `https://github.com/paullouisageneau/libdatachannel`
+SOURCE_COMMIT: `51085b8de4e6185dc019e3705c88b87933d7c3f6`
+Upstream tree: `22d0552fdb095035c0f35049ad04bb5af1982d91`
+LICENSE: MPL-2.0; blob `14e2f777f6c395e7e04ab4aa306bbcc4b0c1120e`
+Candidate roots: `include/`=`f982e6717e2b7e39ab9cc5722dae4d0d57948144`; `src/`=`80b183c05737c47114dc322346fbb473b4dc1999`.
+
+Refutaciones: (1) checkout WebRTC presente no demuestra integración; (2) `include/src` no prueban compatibilidad con el enchufe universal; (3) `.github`, examples, pages, test, cmake/build metadata no entra al hot path sin nodo explícito.
+
 Clasificación: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; `integration=NOT_WIRED`; no `VERIFIED_CLOSED`.
-StrategyDelta: conservar provenance y no copiar/montar gfxstream.
-
-## Delta ejecutado — jsPDF
-
-Preflight: repetidas las búsquedas obligatorias en componentes UI YAIWES, raíces completas de `frontend`, `agentes`, `router-universal-router-inteligente-` y `osquestador-auditor`; no se localizó wiring jsPDF alternativo reutilizable. Las cuatro pasadas lógicas se aplicaron a invariantes/ownership, contratos/seguridad, interfaz/exportación y closure/evidence; se conserva el GAP documental previo sobre el conteo de fuentes de verdad únicas.
-
-Ruta: `UI YAIWES/componentes open soure UI YAIWES/jsPDF`
-Tree destino: `b85b001772c33639db82c4c0b64313a37522bbc0`
-SOURCE_URL: `https://github.com/parallax/jsPDF`
-SOURCE_COMMIT: `a3930ce03a585a26b2c76d12a0f413ce96f6d1a3`
-Upstream tree: `baf4d90e2f5a40eb9f558f616b803dc3fd50f095`
-LICENSE: MIT; blob `dc7d3a9fa305defebad6cb88ba4cd9776f26fcd3`
-Candidate roots: `src/`=`0d1aa3d5dd1af4349b757198f69ff892261d85f6`, `dist/`=`26ba428becd4bc63059e091bf0a4aa2867fe650b`, `types/`=`c6567c5a822bfcf0728665675b4f6c0a5b6d9d24`.
-
-Refutaciones: (1) checkout/materialización PDF no demuestra integración; (2) `src/dist/types` no demuestran compatibilidad con el enchufe universal; (3) `.github`, docs, examples, test, build/release upstream no pertenecen al hot path sin nodo explícito. Clasificación: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; `integration=NOT_WIRED`; no `VERIFIED_CLOSED`.
-
-StrategyDelta: conservar provenance y no copiar/montar jsPDF. Avanzar al siguiente componente físico seguro post-124 y repetir clasificación fail-closed.
+StrategyDelta: conservar provenance y no copiar/montar libdatachannel. Siguiente entrada 1×1: `pgvector`.
 
 ## Invariantes
 
 - `tel.workflow/v3` y `FAIL_CLOSED_LOOP` son autoridad vigente.
-- La guía/handoff v4 previa queda como historial cuando contradiga el contrato vigente.
 - código monolítico prohibido;
 - contratos/adapters/plugins/registry/loader/guards/tests separados;
 - secrets solo `secret_ref`;
