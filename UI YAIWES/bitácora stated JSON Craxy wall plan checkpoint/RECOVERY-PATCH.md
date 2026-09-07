@@ -1,35 +1,22 @@
-# RECOVERY PATCH — UIYAIWES-P04-FLAGS-P05-0015
+# RECOVERY PATCH — UIYAIWES-P05-RECONCILE-0022
 
-Contrato: `tel.workflow/v3`
-Modo: `FAIL_CLOSED_LOOP`
-Owner único: `stabilize_core`
-Nodo actual: `P05_STRUCTLOG_OPENTELEMETRY`
+Contrato: `tel.workflow/v3` · modo: `FAIL_CLOSED_LOOP` · owner único: `stabilize_core`.
+Nodo actual: `P05_STRUCTLOG_OPENTELEMETRY`; branch seguro: `ui-yaiwes-p05-observability-20260906`.
 
-## Estado reconciliado
-- P01 `VERIFIED_CLOSED`.
-- P02A `CLOSED_UNVERIFIED_WITH_FLAG` — ejecución real vendor pendiente.
-- P02B `CLOSED_UNVERIFIED_WITH_VERSION_FLAG` — Pydantic/core mismatch.
-- P02C `CLOSED_UNVERIFIED_WITH_EXECUTION_FLAG` — Rule Engine read-back/lógica PASS, ejecución real pendiente.
-- P03 `PARTIAL_VERIFIED_WITH_STARLETTE_FLAG` — HTTPX 0.28.1 ejecución local PASS; Starlette fuente 1.6.0 vs local 0.50.0, fail-closed.
-- P04 `CLOSED_UNVERIFIED_WITH_EXECUTION_FLAGS` — resilient-circuit 0.7.0 y Bulkman 2.0.3 con adapter injection/read-back PASS; ejecución real de ambos vendors no probada.
-- P05 `ACTIVE` — Structlog + OpenTelemetry solo como logging/observabilidad read-only; no workflow ownership.
+## Evidencia P05
+- Cinco búsquedas obligatorias completadas/repetidas en componentes UI, frontend, agentes, router-universal-router-inteligente- y osquestador-auditor; no apareció adapter canónico alternativo.
+- Structlog: https://github.com/hynek/structlog @ `73393f34b40c15688b3fdd0982889b225f11b59b`; code-only tree `d64c15da142a3dae10dd1559661c53dd70a521e2`; MIT OR Apache-2.0.
+- OpenTelemetry Python: https://github.com/open-telemetry/opentelemetry-python @ `96df63add12f6e0453b265ac34c5c07ec7b9267e`; API code-only tree `6b978f11923255b723f51a93168fa5c2d9752b4d`; Apache-2.0.
+- Código P05 `f26b1c87c6e4f873fdade6e14959e882d4704142`; adapters/factories/activation/vendor/licenses/tests separados; read-back PASS; injection/socket `3/3 PASS`.
+- Workflow `.github/workflows/ui-yaiwes-p05-observability-verify.yml` commit base `de6c819f53f74f71b193f331be605b92590008af`; run https://github.com/maxbry123-commits/frontend/actions/runs/34076616213, job `101603870455`: `5/5 PASS` en 0.553s con bootstrap real vendored Structlog/OpenTelemetry.
+- Hardening `fa2bd785a1690d18e51c7c45bfdf47a22f0a75c3`: workflow cubre staging+main y checkout del `github.sha` exacto.
+- Arquitectura reconciliada en `aa0497ede19c57984053b4c3f95a83cb017eef6c`.
+- PR #6: https://github.com/maxbry123-commits/frontend/pull/6; `mergeable=true`, `draft=true`, base/main `66145a1ab53b78b3d03618fc2f3e919de685c19c`.
+- Compare fresco observado antes de esta sincronización: `diverged`, `ahead 30 / behind 28`; staging `aa0497ede19c57984053b4c3f95a83cb017eef6c`; merge-base `3e91c8f65bef6ec3b6e0c48f889eda35f8017130`.
 
-## Flags heredados
-- `P02A-FLAG-REAL-VENDOR-EXECUTION`
-- `P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH`
-- `P02C-FLAG-REAL-VENDOR-EXECUTION`
-- `P03-FLAG-STARLETTE-VERSION-MISMATCH`
-- `P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION`
-- `P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION`
+## Flags / StrategyDelta
+1. Cerrados para P05: vendor-not-executed, DNS runner y conflicto de merge previamente reportado.
+2. Activos: `P05-FLAG-MAIN-DIVERGED-30-AHEAD-28-BEHIND`, `P05-FLAG-PR6-DRAFT-GATE`, `P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4`.
+3. StrategyDelta: nunca merge/rebase ciego ni force; no fusionar mientras PR #6 sea draft; después de integración autorizada repetir read-back + 5/5 real vendor tests sobre main antes de cierre.
 
-## P05 preflight obligatorio
-Antes de programar: buscar/reconciliar en (1) `UI YAIWES/componentes open soure UI YAIWES/`; (2) todas las raíces de `frontend`; (3) `agentes`; (4) `router-universal-router-inteligente-`; (5) `osquestador-auditor`. Después revisar arquitectura y fuentes de verdad. Reutilizar únicamente código útil con URL/SHA/licencia/destino/dedup.
-
-## Recovery 1×1
-1. Confirmar provenance y code roots exactos de Structlog/OpenTelemetry existentes en el catálogo.
-2. Confirmar que ninguna de las otras cuatro búsquedas contiene adapter canónico reutilizable.
-3. Cablear, solo si el preflight queda completo, adapters separados de Structlog y OpenTelemetry mediante contrato/registry/loader/guards; observabilidad read-only.
-4. Ejecutar tests/health contra implementación real disponible; fake/injection aislado no equivale a VERIFIED_CLOSED.
-5. Persistir evidencia en STATE/CHECKPOINT/BITACORA/PLAN/arquitectura y hacer read-back independiente.
-
-Rollback: historial GitHub; nunca force sobre `main`.
+Rollback: cerrar PR #6 y abandonar staging; `main` queda intacto. Nunca force.

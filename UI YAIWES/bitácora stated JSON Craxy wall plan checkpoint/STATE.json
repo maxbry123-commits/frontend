@@ -2,48 +2,35 @@
   "contract": "tel.workflow/v3",
   "project": "UI YAIWES modular component integration",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "P04_CLOSED_UNVERIFIED_WITH_FLAGS_P05_ACTIVE",
+  "status": "P05_VENDOR_TESTS_VERIFIED_PR_MERGEABLE_DRAFT_GATE",
   "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
   "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY",
   "component_count": 14,
   "workflow_owner": "stabilize_core",
-  "p03": {
-    "status": "PARTIAL_VERIFIED_WITH_STARLETTE_FLAG",
-    "commit": "85a3f758a4a6228e0d5d030a544365ccdef0a198",
-    "httpx": "VERIFIED_RUNTIME_LOCAL",
-    "starlette": "CLOSED_UNVERIFIED_WITH_VERSION_FLAG"
+  "staging_branch": "ui-yaiwes-p05-observability-20260906",
+  "p03": {"status":"PARTIAL_VERIFIED_WITH_STARLETTE_FLAG","commit":"85a3f758a4a6228e0d5d030a544365ccdef0a198","httpx":"VERIFIED_RUNTIME_LOCAL","starlette":"CLOSED_UNVERIFIED_WITH_VERSION_FLAG"},
+  "p04": {"status":"CLOSED_UNVERIFIED_WITH_EXECUTION_FLAGS","commit":"b7545ca41ae0012e658d3ab8334cbe5aa98c077b","github_readback":"PASS"},
+  "p05": {
+    "status": "VENDOR_TESTS_VERIFIED_PR_MERGEABLE_DRAFT_GATE",
+    "code_commit": "f26b1c87c6e4f873fdade6e14959e882d4704142",
+    "verification_workflow_commit": "de6c819f53f74f71b193f331be605b92590008af",
+    "verification_hardening_commit": "fa2bd785a1690d18e51c7c45bfdf47a22f0a75c3",
+    "architecture_reconciliation_commit": "aa0497ede19c57984053b4c3f95a83cb017eef6c",
+    "verification_run_id": 34076616213,
+    "verification_job_id": 101603870455,
+    "verification_result": "5/5 PASS",
+    "structlog": {"source_url":"https://github.com/hynek/structlog","source_commit":"73393f34b40c15688b3fdd0982889b225f11b59b","catalog_tree":"5393fcee00ae1ed638601ed9915c78dd862988d5","code_tree":"d64c15da142a3dae10dd1559661c53dd70a521e2","factory_key":"structlog.logging","license":"MIT OR Apache-2.0","read_only":true},
+    "opentelemetry": {"source_url":"https://github.com/open-telemetry/opentelemetry-python","source_commit":"96df63add12f6e0453b265ac34c5c07ec7b9267e","catalog_tree":"2a74339d862124f2637247862f53497448619d49","api_code_tree":"6b978f11923255b723f51a93168fa5c2d9752b4d","factory_key":"opentelemetry.observability","license":"Apache-2.0","read_only":true},
+    "github_readback": "PASS",
+    "injection_socket_checks": "3/3 PASS",
+    "real_vendor_tests": "5/5 PASS",
+    "main_head_observed": "66145a1ab53b78b3d03618fc2f3e919de685c19c",
+    "staging_head_observed_before_sync": "aa0497ede19c57984053b4c3f95a83cb017eef6c",
+    "merge_base": "3e91c8f65bef6ec3b6e0c48f889eda35f8017130",
+    "main_compare": {"status":"diverged","ahead_by":30,"behind_by":28},
+    "reconciliation_pr": {"number":6,"url":"https://github.com/maxbry123-commits/frontend/pull/6","draft":true,"mergeable":true,"head_observed":"aa0497ede19c57984053b4c3f95a83cb017eef6c","base":"66145a1ab53b78b3d03618fc2f3e919de685c19c"},
+    "main_merge": "BLOCKED_DRAFT_AND_POST_INTEGRATION_TEST_GATE"
   },
-  "p04": {
-    "status": "CLOSED_UNVERIFIED_WITH_EXECUTION_FLAGS",
-    "commit": "b7545ca41ae0012e658d3ab8334cbe5aa98c077b",
-    "resilient_circuit": {
-      "source_url": "https://github.com/rodmena-limited/resilient-circuit",
-      "source_commit": "c9d80c845df771a9b9d63f9a48e6f24e6ed0b94a",
-      "source_version": "0.7.0",
-      "vendor_tree": "61ada5ed0ecf9bad6059645264c9fd5549669715",
-      "factory_key": "resilient_circuit.breaker",
-      "adapter_logic": "PASS_INJECTION",
-      "real_vendor_execution": "NOT_PROVEN_LOCAL_PACKAGE_MISSING"
-    },
-    "bulkman": {
-      "source_url": "https://github.com/rodmena-limited/bulkman",
-      "source_commit": "99607f7e1b881a68cc99305ab233299c57469414",
-      "source_version": "2.0.3",
-      "vendor_tree": "c964f8b80bb8e9f5492c5a87a3eeb0bdc43f21af",
-      "factory_key": "bulkman.bulkhead",
-      "dependency": "resilient-circuit>=0.5,<0.8; selected vendor 0.7.0 compatible",
-      "adapter_logic": "PASS_INJECTION",
-      "real_vendor_execution": "NOT_PROVEN_LOCAL_PACKAGE_MISSING"
-    },
-    "github_readback": "PASS"
-  },
-  "active_flags": [
-    "P02A-FLAG-REAL-VENDOR-EXECUTION",
-    "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
-    "P02C-FLAG-REAL-VENDOR-EXECUTION",
-    "P03-FLAG-STARLETTE-VERSION-MISMATCH",
-    "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
-    "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
-  ],
-  "next_gate": "P05: five reuse searches; mount structlog logging and OpenTelemetry observability as read-only adapters; observability must never govern workflow"
+  "active_flags": ["P02A-FLAG-REAL-VENDOR-EXECUTION","P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH","P02C-FLAG-REAL-VENDOR-EXECUTION","P03-FLAG-STARLETTE-VERSION-MISMATCH","P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION","P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION","P05-FLAG-MAIN-DIVERGED-30-AHEAD-28-BEHIND","P05-FLAG-PR6-DRAFT-GATE","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
+  "next_gate": "PR #6 is mergeable but remains draft; do not force or false-close. Preserve both histories; after authorized integration require independent target read-back plus real 5/5 tests on reconciled main before VERIFIED_CLOSED."
 }

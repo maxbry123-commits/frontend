@@ -1,0 +1,31 @@
+name: UI YAIWES P05 Observability Verify
+on:
+  push:
+    branches:
+      - ui-yaiwes-p05-observability-20260906
+      - main
+    paths:
+      - '.github/workflows/ui-yaiwes-p05-observability-verify.yml'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-p05:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Sparse checkout P05 runtime only
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: |
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime
+          sparse-checkout-cone-mode: false
+      - name: Verify real vendored observability adapters
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_observability_adapters.py" -v
