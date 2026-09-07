@@ -71,6 +71,41 @@ Ejecutado 2026-09-07:
 - ZIP open source Ribbon 2010 (NO extraído hasta que el Director lo suba): https://github.com/OkGoDoIt/Office-Ribbon-2010/archive/refs/heads/master.zip
 - ZIP skills Anthropic (NO extraído hasta que el Director lo suba): https://github.com/anthropics/skills/archive/refs/heads/main.zip
 
+### I05 — Backend que venga dentro de la UI: incluirlo, separado, identificado
+
+Orden literal:
+
+> Anota también si hay backend en la ui la incluyes pero me la pones separada identificada
+
+Regla operativa:
+
+- Si un modelo UI, ZIP o repo trae backend (API, FastAPI, Starlette, workers, Stabilize, router, memory, DB, WS), **no se omite**.
+- **No se mezcla** con ventanas ni botones.
+- Se coloca en carpeta propia, nombre que identifique BACKEND, 1 servicio/archivo o 1 endpoint = 1 archivo.
+- El chrome UI solo cablea URLs. No se funde handler de servidor dentro de `yaiwes-button` / ventanas.
+- Restyle (colores) no aplica a backend. Backend se copia fiel; solo se etiqueta y se separa.
+
+Ruta canónica:
+
+```text
+Skills arquitectura frontend Yaiwes/biblioteca code frontend Maxbry Yaiwes/
+├── lote-NN-ventanas/          ← UI, 1 ventana = 1 archivo
+├── lote-NN-funciones/         ← UI, 1 función/botón = 1 archivo
+└── lote-NN-BACKEND/           ← BACKEND, identificado
+    ├── 00-IDENTIFICADO-BACKEND.md
+    └── <servicio o endpoint>.py|.js|.ts
+```
+
+En cada archivo de backend, cabecera obligatoria:
+
+```text
+IDENTIFICADO: BACKEND
+Origen: <ruta o repo fuente>
+No es ventana. No es botón. No restyle.
+```
+
+Lote 01 (núcleo host) **no** es backend y **no** es UI extraída del Director. Es kernel de cableado escrito por el agente. Las ventanas/backend reales salen de lo que el Director suba.
+
 ### I03 — Diseño modular del skill (esta sesión)
 
 - El Director va a pasar lo ya hecho (arquitectura, diseño, colores, parte de la tarea).
@@ -355,3 +390,4 @@ Entrega:
 | --- | --- | --- |
 | 2026-09-07 | I01 I02 I03, definición modular, investigación Office 2007–2013, enlaces skills, mapa de carpetas, puente con README UI YAIWES | SÍ — este archivo en main |
 | 2026-09-07 | I04 biblioteca code, lote-01 10 archivos núcleo, ZIP OSS pendientes de subida | SÍ — carpeta en main |
+| 2026-09-07 | I05 backend en la UI se incluye, carpeta lote-NN-BACKEND identificada, no mezclar con ventanas | SÍ — este archivo |
