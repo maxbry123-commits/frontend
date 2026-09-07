@@ -1,0 +1,8 @@
+https://github.com/valkey-io/valkey/blob/85d02f6388805948a638c8f3375db63a9800b8d9/COPYING
+https://github.com/valkey-io/valkey/blob/85d02f6388805948a638c8f3375db63a9800b8d9/deps/fpconv/LICENSE.txt
+https://github.com/valkey-io/valkey/blob/85d02f6388805948a638c8f3375db63a9800b8d9/deps/gtest-parallel/LICENSE
+https://github.com/valkey-io/valkey/blob/85d02f6388805948a638c8f3375db63a9800b8d9/deps/hdr_histogram/COPYING.txt
+https://github.com/valkey-io/valkey/blob/85d02f6388805948a638c8f3375db63a9800b8d9/deps/hdr_histogram/LICENSE.txt
+https://github.com/valkey-io/valkey/blob/85d02f6388805948a638c8f3375db63a9800b8d9/deps/jemalloc/COPYING
+https://github.com/valkey-io/valkey/blob/85d02f6388805948a638c8f3375db63a9800b8d9/deps/libvalkey/COPYING
+https://github.com/valkey-io/valkey/blob/85d02f6388805948a638c8f3375db63a9800b8d9/deps/lz4/LICENSE
