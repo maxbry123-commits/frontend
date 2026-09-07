@@ -1,0 +1,42 @@
+[package]
+name = "tokio-vsock"
+version = "0.7.2"
+authors = ["fsyncd", "rust-vsock"]
+description = "Asynchronous Virtio socket support for Rust"
+repository = "https://github.com/rust-vsock/tokio-vsock"
+homepage = "https://github.com/rust-vsock/tokio-vsock"
+readme = "README.md"
+license = "Apache-2.0"
+edition = "2018"
+exclude = ["test_fixture"]
+
+[dependencies]
+bytes = "1.11.1"
+futures = "0.3.32"
+libc = "0.2.182"
+vsock = "0.5.4"
+# Keep version in sync with [dev-dependencies]
+tokio = { version = "1.50.0", features = ["net", "sync"] }
+tonic05 = { package = "tonic", version = "0.5", optional = true }
+tonic06 = { package = "tonic", version = "0.6", optional = true }
+tonic07 = { package = "tonic", version = "0.7", optional = true }
+tonic08 = { package = "tonic", version = "0.8", optional = true }
+tonic09 = { package = "tonic", version = "0.9", optional = true }
+tonic010 = { package = "tonic", version = "0.10", optional = true }
+tonic011 = { package = "tonic", version = "0.11", optional = true }
+tonic012 = { package = "tonic", version = "0.12", optional = true }
+tonic013 = { package = "tonic", version = "0.13", optional = true }
+tonic014 = { package = "tonic", version = "0.14", optional = true }
+axum08 = { package = "axum", version = "0.8", optional = true, default-features = false, features = [
+    "tokio",
+    "http1",
+] }
+
+[dev-dependencies]
+sha2 = "0.11.0"
+rand = "0.10.0"
+tokio = { version = "1.50.0", features = ["macros", "rt", "io-util"] }
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
