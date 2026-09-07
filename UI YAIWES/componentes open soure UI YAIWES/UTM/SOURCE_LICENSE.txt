@@ -1,0 +1,3 @@
+https://github.com/utmapp/UTM/blob/b6f7475be54f9cb542c46b131319454b83489ced/LICENSE
+https://github.com/utmapp/UTM/blob/b6f7475be54f9cb542c46b131319454b83489ced/Platform/iOS/Settings.bundle/License.plist
+https://github.com/utmapp/UTM/blob/b6f7475be54f9cb542c46b131319454b83489ced/Renderer/LICENSE.txt
