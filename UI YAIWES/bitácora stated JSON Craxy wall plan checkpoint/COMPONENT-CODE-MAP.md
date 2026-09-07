@@ -1,8 +1,8 @@
-# COMPONENT CODE MAP — P01 evidencia canónica 14/14
+# COMPONENT CODE MAP — P01 baseline 14 + revalidación post-124
 
 Destino central físico: `UI YAIWES/componentes open soure UI YAIWES/`
-Tree raíz destino: `4318b69193b6ba0dedda81e601e174fefa3c5cf7`
-Dedup global: en el read-back de `UI YAIWES/` se observaron 0 carpetas de componente sueltas; `_adquisicion` contiene JSON y no es código de componente.
+Tree raíz destino actual: `4be4e359804da7fe59e8874c057a45a0a2967f63`
+Regla: presencia física o checkout no equivale a integración; dedup solo por SOURCE_COMMIT + code-root/tree.
 
 |#|Componente|SOURCE_URL|SOURCE_COMMIT|Tree físico|Code root / tree|Destino/dedup|
 |---|---|---|---|---|---|---|
@@ -20,6 +20,7 @@ Dedup global: en el read-back de `UI YAIWES/` se observaron 0 carpetas de compon
 |12|redun|https://github.com/insitro/redun|49a299b223bc345b999aaa40daa6876f105089e1|e301e8967ebdcb0b27734a820bd2608999b08541|`redun/` / 8970f694f1984aa3e623ce1b2e66ea35cf1cf8ba|CENTRAL DONOR_ONLY; no scheduler mount|
 |13|resilient-circuit|https://github.com/rodmena-limited/resilient-circuit|c9d80c845df771a9b9d63f9a48e6f24e6ed0b94a|32c7a96fee897e44e20a85b6e78995cc9bd5a9e3|`resilient_circuit/` / 61ada5ed0ecf9bad6059645264c9fd5549669715|CENTRAL_ONLY; resilience pending|
 |14|structlog|https://github.com/hynek/structlog|73393f34b40c15688b3fdd0982889b225f11b59b|5393fcee00ae1ed638601ed9915c78dd862988d5|`src/structlog/` / d64c15da142a3dae10dd1559661c53dd70a521e2|CENTRAL_ONLY; observability pending|
+|post124-087|gVisor|https://github.com/google/gvisor|0a1316b0d180600212bd607aa0ccfe2a9b09a899|fa6b9f1ca81285907f24d71ef100410ef48aac1f|candidate donor roots: `pkg/` `2e15553944e5bd392ab69a2faf41c433c5bf6042`; `runsc/` `a489b273ef32786f6dc0e8edc8075fcabc51a2bb`; `sandboxexec/` `dda911c234771df1b581d0c13b4e4c83cc8875be`; `shim/` `e90125b59e26256156dff536285e26601448e8e6`|MATERIALIZED_OK + DONOR_ONLY_UNMAPPED; NO runtime copy/mount until universal-socket contract+adapter+registry+loader+guard+tests exist|
 
 ## Regla code-only
-No copiar repos completos al runtime. Se omiten `.github`, changelogs, docs, examples, release automation y tests upstream del hot path. Licencias/SOURCE_URL/SOURCE_COMMIT/hashes permanecen en la fuente central como provenance. `vendor code present ≠ INTEGRATED`.
+No copiar repos completos al runtime. Se omiten `.github`, `.agents`, `.buildkite`, `.claude`, changelogs, docs, examples, release automation y tests upstream del hot path. Licencias/SOURCE_URL/SOURCE_COMMIT/hashes permanecen en la fuente central como provenance. `vendor code present ≠ INTEGRATED`.

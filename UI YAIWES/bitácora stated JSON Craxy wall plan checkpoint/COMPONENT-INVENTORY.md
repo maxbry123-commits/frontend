@@ -1,4 +1,4 @@
-# INVENTARIO FÍSICO — 14 componentes
+# INVENTARIO FÍSICO — baseline 14 + revalidación post-124
 
 | # | Componente | Tree SHA en destino | Rol inicial |
 |---|---|---|---|
@@ -17,4 +17,12 @@
 |13|resilient-circuit|32c7a96fee897e44e20a85b6e78995cc9bd5a9e3|Circuit breaker|
 |14|structlog|5393fcee00ae1ed638601ed9915c78dd862988d5|Structured logging|
 
-Regla de depuración: no copiar `.github`, changelogs, badges, docs, release automation ni tests upstream al runtime salvo que el nodo de prueba los necesite. Mantener source URL/SHA/license/provenance en evidencia; una licencia requerida no se clasifica como basura.
+## Revalidación post-124 — cola 1×1
+
+| Entrada | Clasificación | Evidencia | Decisión |
+|---|---|---|---|
+|gVisor|MATERIALIZED_OK / DONOR_ONLY_UNMAPPED|tree `fa6b9f1ca81285907f24d71ef100410ef48aac1f`; source `https://github.com/google/gvisor`; commit `0a1316b0d180600212bd607aa0ccfe2a9b09a899`; LICENSE blob `f7a006d10464cfe9724b5d687c0013bf982cc66a`; roots `pkg/`, `runsc/`, `sandboxexec/`, `shim/`|Conservar como donor/provenance. NO copiar ni montar en runtime hasta existir contract+adapter+registry+loader+guard+test y ruta universal verificable. Metadata/CI/dev upstream no entra al hot path.|
+
+P01 permanece abierto: esta fila verifica una entrada física, no el inventario post-124 completo.
+
+Regla de depuración: no copiar `.github`, `.agents`, `.buildkite`, `.claude`, changelogs, badges, docs, release automation ni tests upstream al runtime salvo que el nodo de prueba los necesite. Mantener source URL/SHA/license/provenance en evidencia; una licencia requerida no se clasifica como basura.

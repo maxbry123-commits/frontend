@@ -1,6 +1,6 @@
 {
-  "checkpoint_id": "UIYAIWES-V3-POST124-CANCELLED-0017",
-  "previous_checkpoint_id": "UIYAIWES-V4-GUIDE-HANDOFF-0016",
+  "checkpoint_id": "UIYAIWES-V3-POST124-GVISOR-0018",
+  "previous_checkpoint_id": "UIYAIWES-V3-POST124-CANCELLED-0017",
   "contract": "tel.workflow/v3",
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_LOOP_POST_124_CANCELLED_REVALIDATION",
@@ -11,11 +11,8 @@
   "verified_state": {
     "universal_socket_present": true,
     "P01_initial_14_verified": true,
-    "P02A_adapter_wired": true,
-    "P02B_adapter_wired": true,
-    "P02C_adapter_wired": true,
-    "P03_httpx_real_local_pass": true,
-    "P04_adapters_and_vendor_readback": true
+    "gVisor_physical_provenance_verified": true,
+    "gVisor_integrated": false
   },
   "post_124_evidence": {
     "run_id": 34060401131,
@@ -28,19 +25,26 @@
     "completed_at": "2026-09-07T02:43:53Z",
     "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131"
   },
+  "last_1x1_result": {
+    "entry": "gVisor",
+    "classification": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED",
+    "tree_sha": "fa6b9f1ca81285907f24d71ef100410ef48aac1f",
+    "source_url": "https://github.com/google/gvisor",
+    "source_commit": "0a1316b0d180600212bd607aa0ccfe2a9b09a899",
+    "integration": "NOT_WIRED",
+    "closure": "NOT_VERIFIED_CLOSED"
+  },
   "blocked_claims": {
     "P01_freshness": "BLOCKED_UNTIL_POST_CANCEL_INVENTORY_REVALIDATED",
     "P05_publication": "BLOCKED_UNTIL_P01_POST124_RECONCILIATION"
   },
   "queue_1x1": [
-    "enumerate physical component destination after cancelled run",
-    "compare queue/manifests/checkpoints with physical entries",
-    "verify SOURCE_URL/SOURCE_COMMIT/license for materialized entries",
-    "classify missing/partial/duplicate entries",
-    "deduplicate only with source commit plus code-root/tree evidence",
-    "update COMPONENT-INVENTORY and COMPONENT-CODE-MAP",
-    "revalidate P01",
-    "resume P05 reconciliation"
+    "advance to next safe physical component after gVisor",
+    "compare manifest/provenance/license/code-root",
+    "classify materialized/partial/missing/duplicate/inconclusive",
+    "persist evidence without mounting donor code",
+    "update inventory/code-map/state/checkpoint/plan/recovery/architecture",
+    "revalidate P01 only after complete destination reconciliation"
   ],
   "closure_rule": "file, import, repository, staging or partial acquisition never equals VERIFIED_CLOSED without route/diff/SHA/log/test/URL evidence"
 }

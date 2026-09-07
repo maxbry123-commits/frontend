@@ -14,7 +14,9 @@
   "inventory": {
     "initial_verified_count": 14,
     "freshness": "STALE_POST_CANCELLED_124_ACQUISITION",
-    "rule": "revalidate physical destination, provenance and dedup before advancing integration claims"
+    "rule": "revalidate physical destination, provenance and dedup before advancing integration claims",
+    "post124_revalidated_entries": 1,
+    "last_revalidated_entry": "gVisor"
   },
   "nodes": {
     "P01": "INITIAL_14_VERIFIED_CLOSED_REVALIDATION_ACTIVE_AFTER_CANCELLED_124",
@@ -39,9 +41,22 @@
     "fail_closed_step": "failure",
     "completed_at": "2026-09-07T02:43:53Z"
   },
+  "post124_entries": {
+    "gVisor": {
+      "classification": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED",
+      "tree_sha": "fa6b9f1ca81285907f24d71ef100410ef48aac1f",
+      "source_url": "https://github.com/google/gvisor",
+      "source_commit": "0a1316b0d180600212bd607aa0ccfe2a9b09a899",
+      "license_blob": "f7a006d10464cfe9724b5d687c0013bf982cc66a",
+      "candidate_code_roots": ["pkg", "runsc", "sandboxexec", "shim"],
+      "integration": "NOT_WIRED",
+      "decision": "retain provenance; do not copy/mount until universal-socket contract+adapter+registry+loader+guard+tests exist"
+    }
+  },
   "active_flags": [
     "P01-FRESHNESS-STALE-POST-CANCELLED-124",
     "ACTION124-FINAL-DESTINATION-VERIFY-FAILED",
+    "GVISOR-DONOR-ONLY-UNMAPPED-NOT-WIRED",
     "P02A-FLAG-REAL-VENDOR-EXECUTION",
     "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
     "P02C-FLAG-REAL-VENDOR-EXECUTION",
@@ -49,5 +64,5 @@
     "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
     "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
   ],
-  "next_delta": "enumerate post-cancel component destination; compare queue/manifests/provenance; identify materialized, missing and partial entries; deduplicate only by source commit plus code-root/tree evidence; refresh inventory/code-map; revalidate P01 before P05 publication"
+  "next_delta": "advance to the next safe post-124 physical entry; compare manifest/provenance/license/code-root; classify without integrating donor code; refresh inventory/code-map/state evidence; revalidate P01 only after complete destination reconciliation"
 }

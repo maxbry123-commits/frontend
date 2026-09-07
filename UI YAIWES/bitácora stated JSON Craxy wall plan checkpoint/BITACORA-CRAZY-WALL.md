@@ -72,3 +72,11 @@ URL: https://github.com/maxbry123-commits/frontend/actions/runs/34060401131
 Contrato canónico reconciliado a `tel.workflow/v3` + `FAIL_CLOSED_LOOP` conforme a `ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md` y la instrucción vigente del Director. Los estados v4 previos quedan como historial, no como autoridad actual.
 Nodo actual: `P01_POST_124_INVENTORY_REVALIDATION`. P05 queda preparado/bloqueado para publicación hasta verificar destino físico, provenance y dedup post-cancelación.
 StrategyDelta: enumerar destino → cruzar queue/manifiestos/checkpoints → validar URL/SHA/licencia → clasificar materializado/parcial/ausente/alias → dedup por source commit + code-root/tree → actualizar inventory/code-map → revalidar P01 → retomar P05.
+
+## UI-PLUG-0019 — GVISOR REVALIDADO COMO DONOR_ONLY_UNMAPPED
+Búsquedas obligatorias ejecutadas antes del delta: componentes UI, raíces frontend, `agentes`, `router-universal-router-inteligente-`, `osquestador-auditor`; no apareció implementación gVisor/universal-socket reutilizable en las otras raíces.
+Arquitectura y tres fuentes del Director revisadas en cuatro pasadas lógicas: invariantes/ownership, contratos/seguridad, sandbox/virtualización y closure/evidence.
+Evidencia física: `UI YAIWES/componentes open soure UI YAIWES/gVisor`, tree `fa6b9f1ca81285907f24d71ef100410ef48aac1f`; SOURCE_URL `https://github.com/google/gvisor`; SOURCE_COMMIT `0a1316b0d180600212bd607aa0ccfe2a9b09a899`; LICENSE blob `f7a006d10464cfe9724b5d687c0013bf982cc66a`.
+Code roots candidatos: `pkg/`=`2e15553944e5bd392ab69a2faf41c433c5bf6042`, `runsc/`=`a489b273ef32786f6dc0e8edc8075fcabc51a2bb`, `sandboxexec/`=`dda911c234771df1b581d0c13b4e4c83cc8875be`, `shim/`=`e90125b59e26256156dff536285e26601448e8e6`.
+Refutaciones: (1) repo presente no prueba wiring; (2) roots de ejecución no prueban compatibilidad con enchufe universal; (3) metadata/CI/dev upstream no entra al hot path. Resultado `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`, `integration=NOT_WIRED`; no VERIFIED_CLOSED.
+StrategyDelta: conservar provenance y NO copiar/montar gVisor; avanzar al siguiente componente seguro post-124 y repetir manifest→provenance→license→code-root→clasificación. P01 sigue abierto.

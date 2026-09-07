@@ -30,14 +30,14 @@ Arquitectura canónica: `UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PR
 ## Cola 1×1 vigente
 
 CURRENT — P01_POST_124_INVENTORY_REVALIDATION
-1. Enumerar físicamente `UI YAIWES/componentes open soure UI YAIWES/`.
-2. Cruzar lo materializado contra queue/manifiestos/checkpoints de la Action 124.
-3. Verificar por entrada `SOURCE_URL`, `SOURCE_COMMIT`, licencia y code-root/tree cuando exista.
-4. Clasificar `MATERIALIZED_OK | PARTIAL | MISSING | DUPLICATE_ALIAS | INCONCLUSIVE`.
-5. Deduplicar solo por evidencia de source commit + code-root/tree; nunca por nombre.
-6. Actualizar `COMPONENT-INVENTORY.md` y `COMPONENT-CODE-MAP.md`.
-7. Revalidar P01; sin esto no hay frescura VERIFIED_CLOSED.
-8. Después retomar P05 y reconciliar cualquier staging/main sin force.
+1. `gVisor` reconciliado: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; provenance/tree verificados, integración `NOT_WIRED`; no copiar/montar.
+2. Avanzar al siguiente componente físico seguro post-124.
+3. Cruzar manifest/checkpoint disponible con destino.
+4. Verificar `SOURCE_URL`, `SOURCE_COMMIT`, licencia y code-root/tree.
+5. Clasificar `MATERIALIZED_OK | PARTIAL | MISSING | DUPLICATE_ALIAS | INCONCLUSIVE` más rol `DONOR_ONLY` cuando corresponda.
+6. Deduplicar solo con source commit + code-root/tree; nunca por nombre.
+7. Actualizar `COMPONENT-INVENTORY.md` y `COMPONENT-CODE-MAP.md` + STATE/CHECKPOINT/RECOVERY/BITACORA/arquitectura.
+8. Revalidar P01 únicamente tras completar reconciliación post-124; después retomar P05.
 
 ## Preflight obligatorio para cada nodo
 
@@ -48,7 +48,7 @@ CURRENT — P01_POST_124_INVENTORY_REVALIDATION
 5. `router-universal-router-inteligente-`;
 6. `osquestador-auditor`;
 7. arquitectura ×4;
-8. cuatro fuentes de verdad enumeradas por la arquitectura ×4;
+8. tres fuentes de verdad indicadas por el Director ×4; registrar como GAP documental que la arquitectura consolidada enumera cuatro documentos únicos efectivos;
 9. dedup/rank;
 10. ejecutar delta mínimo seguro;
 11. auditoría instrucciones ×3;

@@ -1,4 +1,4 @@
-# RECOVERY PATCH — UIYAIWES-V3-POST124-CANCELLED-0017
+# RECOVERY PATCH — UIYAIWES-V3-POST124-GVISOR-0018
 
 Contrato: `tel.workflow/v3`
 Modo: `FAIL_CLOSED_LOOP`
@@ -15,45 +15,39 @@ Arquitectura canónica: `UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PR
 6. Ejecutar solo el delta 1×1 seguro.
 7. Persistir evidencia y StrategyDelta ante GAP.
 
-## Cambio crítico recuperado
+## Estado recuperado Action 124
 
-La Action 124 `34060401131` ya no está activa.
-- status: `completed`
-- conclusion: `cancelled`
-- job: `101559786309`
-- step adquisición: `cancelled`
-- verify final destination: `failure`
-- fail-closed-until-124-verified: `failure`
-
+Run `34060401131`: `completed/cancelled`; job `101559786309`; adquisición cancelada; verify final destino `failure`; fail-closed `failure`.
 URL: https://github.com/maxbry123-commits/frontend/actions/runs/34060401131
 
-Por tanto queda invalidado cualquier estado que diga `in_progress` o que permita asumir 124/124 materializados.
+## Último delta 1×1
+
+Entrada: `gVisor`.
+- destino: `UI YAIWES/componentes open soure UI YAIWES/gVisor`
+- tree: `fa6b9f1ca81285907f24d71ef100410ef48aac1f`
+- source: `https://github.com/google/gvisor`
+- commit: `0a1316b0d180600212bd607aa0ccfe2a9b09a899`
+- licencia: conservada; LICENSE blob `f7a006d10464cfe9724b5d687c0013bf982cc66a`
+- candidate roots: `pkg`, `runsc`, `sandboxexec`, `shim`
+- clasificación: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`
+- integración: `NOT_WIRED`
+
+StrategyDelta aplicado: no copiar ni montar repo/code-root al runtime. Conservar provenance. Metadata/CI/dev upstream queda fuera del hot path. La existencia de sandbox code no satisface por sí sola contract→adapter→registry→loader→guard→test→read-back.
 
 ## Nodo recuperado
 
 `P01_POST_124_INVENTORY_REVALIDATION`.
+P01 conserva baseline histórico 14/14, pero sigue STALE hasta completar toda la reconciliación post-cancelación. P05 permanece bloqueado.
 
-P01 conserva únicamente un baseline histórico inicial 14/14; su inventario actual no puede llamarse fresco hasta terminar esta revalidación.
-P05 queda preparado/bloqueado para publicación mientras se resuelve el inventario post-cancelación.
+## Próximo paso seguro
 
-## StrategyDelta actual
-
-NO repetir ni reiniciar ciegamente la descarga.
-NO borrar aliases por nombre.
-NO continuar P05 como si la Action hubiera finalizado correctamente.
-
-Hacer:
-1. enumerar destino físico;
-2. cruzar con queue/manifiestos/checkpoints;
-3. validar provenance URL/SHA/licencia;
-4. clasificar materializados/parciales/ausentes;
-5. deduplicar por source commit + code-root/tree;
-6. actualizar inventario/code-map;
-7. revalidar P01;
-8. retomar P05 sin duplicar implementaciones.
+Avanzar al siguiente componente físico post-124 y repetir: manifest → SOURCE_URL/SOURCE_COMMIT → licencia → code-root/tree → classify → persist. Si un donor no tiene ruta universal verificable, marcarlo `DONOR_ONLY_UNMAPPED` y continuar sin copiarlo.
 
 ## Flags heredados
 
+- `P01-FRESHNESS-STALE-POST-CANCELLED-124`
+- `ACTION124-FINAL-DESTINATION-VERIFY-FAILED`
+- `GVISOR-DONOR-ONLY-UNMAPPED-NOT-WIRED`
 - P02A real Stabilize vendor execution.
 - P02B Pydantic/core exact-version mismatch.
 - P02C Rule Engine real-vendor execution.
@@ -62,10 +56,9 @@ Hacer:
 
 ## Concurrencia
 
-Refrescar HEAD antes de cada escritura. Usar el SHA actual del archivo. Si otro commit toca el mismo estado, reconciliar y preservar ambos historiales. Nunca force `main`.
+Refrescar HEAD antes de cada escritura. Si otro commit toca el mismo estado, reconciliar y preservar ambos historiales. Nunca force `main`.
 
 ## Cierre
 
 `SOURCE+SHA → adapter/factory → activation → registry → mount_guard → loader → test/health → read-back → STATE/CHECKPOINT/RECOVERY/BITACORA → JUDGE`.
-
 Sin ruta/diff/SHA/log/test/URL no hay `VERIFIED_CLOSED`.
