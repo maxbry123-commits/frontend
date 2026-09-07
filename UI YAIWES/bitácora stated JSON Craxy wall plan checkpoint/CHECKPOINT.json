@@ -1,14 +1,14 @@
 {
-  "checkpoint_id": "UIYAIWES-P05-RECONCILE-0022",
-  "previous_checkpoint_id": "UIYAIWES-P05-RECONCILE-0021",
+  "checkpoint_id": "UIYAIWES-P05-RECONCILE-0023",
+  "previous_checkpoint_id": "UIYAIWES-P05-RECONCILE-0022",
   "contract": "tel.workflow/v3",
-  "status": "P05_VENDOR_TESTS_VERIFIED_PR_MERGEABLE_DRAFT_GATE",
-  "verified": {"p05_five_reuse_searches":true,"structlog_provenance":true,"opentelemetry_provenance":true,"code_only_vendor_trees":true,"licenses_preserved":true,"separate_adapters":true,"activation_keys_registered":true,"workflow_owner_unchanged":"stabilize_core","github_readback":true,"injection_socket_checks":"3/3 PASS","real_vendor_tests":"5/5 PASS","main_merge":false,"main_divergence_detected":true,"reconciliation_pr_open":true,"reconciliation_pr_mergeable":true,"reconciliation_pr_draft":true},
-  "flags": ["P05-FLAG-MAIN-DIVERGED-30-AHEAD-28-BEHIND","P05-FLAG-PR6-DRAFT-GATE","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
-  "evidence_commits": ["f26b1c87c6e4f873fdade6e14959e882d4704142","de6c819f53f74f71b193f331be605b92590008af","fa2bd785a1690d18e51c7c45bfdf47a22f0a75c3","aa0497ede19c57984053b4c3f95a83cb017eef6c","253faa8ce3c99ef982f430516bb52920bd2cde7c"],
+  "status": "P05_VENDOR_TESTS_VERIFIED_PR_CONFLICT_DRAFT_GATE",
+  "verified": {"p05_five_reuse_searches":true,"structlog_provenance":true,"opentelemetry_provenance":true,"code_only_vendor_trees":true,"licenses_preserved":true,"separate_adapters":true,"activation_keys_registered":true,"workflow_owner_unchanged":"stabilize_core","github_readback":true,"injection_socket_checks":"3/3 PASS","real_vendor_tests":"5/5 PASS","main_merge":false,"main_divergence_detected":true,"reconciliation_pr_open":true,"reconciliation_pr_mergeable":false,"reconciliation_pr_draft":true},
+  "flags": ["P05-FLAG-MAIN-DIVERGED-35-AHEAD-40-BEHIND","P05-FLAG-PR6-MERGE-CONFLICT","P05-FLAG-PR6-DRAFT-GATE","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
+  "evidence_commits": ["f26b1c87c6e4f873fdade6e14959e882d4704142","de6c819f53f74f71b193f331be605b92590008af","fa2bd785a1690d18e51c7c45bfdf47a22f0a75c3","aa0497ede19c57984053b4c3f95a83cb017eef6c","253faa8ce3c99ef982f430516bb52920bd2cde7c","b06f1c7890c933b14052b1a7f34a7fe186085894"],
   "verification": {"workflow":".github/workflows/ui-yaiwes-p05-observability-verify.yml","run_id":34076616213,"job_id":101603870455,"result":"SUCCESS","tests":"5/5 PASS","duration":"0.553s","post_merge_trigger_ready":true},
-  "main_observed": {"head":"66145a1ab53b78b3d03618fc2f3e919de685c19c","merge_base":"3e91c8f65bef6ec3b6e0c48f889eda35f8017130","compare":"diverged","ahead_by":30,"behind_by":28},
-  "reconciliation": {"pr":6,"url":"https://github.com/maxbry123-commits/frontend/pull/6","draft":true,"mergeable":true,"head_observed_before_sync":"aa0497ede19c57984053b4c3f95a83cb017eef6c"},
+  "main_observed": {"head":"3f1c71da16abccc8a3bc62d1c848f5c3d9044162","merge_base":"3e91c8f65bef6ec3b6e0c48f889eda35f8017130","compare":"diverged","ahead_by":35,"behind_by":40},
+  "reconciliation": {"pr":6,"url":"https://github.com/maxbry123-commits/frontend/pull/6","draft":true,"mergeable":false,"head_observed_before_sync":"fae3a13c07f0ac6cda7731bf5ee14e4898291a26"},
   "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
-  "closure_rule": "P05 remains fail-closed while PR #6 is draft and until reconciled main read-back plus real 5/5 post-integration tests PASS."
+  "closure_rule": "P05 remains fail-closed while PR #6 is draft or mergeable=false and until reconciled main read-back plus real 5/5 post-integration tests PASS."
 }
