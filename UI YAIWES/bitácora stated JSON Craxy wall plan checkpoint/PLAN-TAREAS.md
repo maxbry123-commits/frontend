@@ -31,14 +31,15 @@ Arquitectura canónica: `UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PR
 
 CURRENT — P01_POST_124_INVENTORY_REVALIDATION
 1. `gVisor` reconciliado: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; integración `NOT_WIRED`.
-2. `gfxstream` reconciliado: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; tree `e696264983a685fb44a7b9706bcf35383fd67159`; source commit `681d81edd2ec597b055c2fbe99a742d95545722a`; integración `NOT_WIRED`.
-3. Avanzar al siguiente componente físico seguro post-124 después de `gfxstream`.
-4. Cruzar manifest/checkpoint disponible con destino.
-5. Verificar `SOURCE_URL`, `SOURCE_COMMIT`, licencia y code-root/tree.
-6. Clasificar `MATERIALIZED_OK | PARTIAL | MISSING | DUPLICATE_ALIAS | INCONCLUSIVE` más rol `DONOR_ONLY` cuando corresponda.
-7. Deduplicar solo con source commit + code-root/tree; nunca por nombre.
-8. Actualizar `COMPONENT-INVENTORY.md` y `COMPONENT-CODE-MAP.md` + STATE/CHECKPOINT/RECOVERY/BITACORA/arquitectura.
-9. Revalidar P01 únicamente tras completar reconciliación post-124; después retomar P05.
+2. `gfxstream` reconciliado: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; integración `NOT_WIRED`.
+3. `jsPDF` reconciliado: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; tree `b85b001772c33639db82c4c0b64313a37522bbc0`; source commit `a3930ce03a585a26b2c76d12a0f413ce96f6d1a3`; upstream tree `baf4d90e2f5a40eb9f558f616b803dc3fd50f095`; integración `NOT_WIRED`.
+4. Avanzar al siguiente componente físico seguro después de `jsPDF`.
+5. Cruzar manifest/checkpoint disponible con destino.
+6. Verificar `SOURCE_URL`, `SOURCE_COMMIT`, licencia y code-root/tree.
+7. Clasificar `MATERIALIZED_OK | PARTIAL | MISSING | DUPLICATE_ALIAS | INCONCLUSIVE` más rol `DONOR_ONLY` cuando corresponda.
+8. Deduplicar solo con source commit + code-root/tree; nunca por nombre.
+9. Actualizar `COMPONENT-INVENTORY.md` y `COMPONENT-CODE-MAP.md` + STATE/CHECKPOINT/RECOVERY/BITACORA/arquitectura.
+10. Revalidar P01 únicamente tras completar reconciliación post-124; después retomar P05.
 
 ## Preflight obligatorio para cada nodo
 
