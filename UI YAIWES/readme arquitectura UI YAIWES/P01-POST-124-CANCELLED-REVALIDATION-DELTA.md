@@ -41,7 +41,6 @@ SOURCE_URL: `https://github.com/google/gvisor`
 SOURCE_COMMIT: `0a1316b0d180600212bd607aa0ccfe2a9b09a899`
 LICENSE blob: `f7a006d10464cfe9724b5d687c0013bf982cc66a`
 Candidate code-roots: `pkg/`, `runsc/`, `sandboxexec/`, `shim/`.
-
 Clasificación: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; `integration=NOT_WIRED`. No se copia código al runtime.
 
 ## Delta ejecutado — gfxstream
@@ -54,12 +53,25 @@ SOURCE_URL: `https://github.com/google/gfxstream`
 SOURCE_COMMIT: `681d81edd2ec597b055c2fbe99a742d95545722a`
 Upstream tree: `89e6b402afabac2ac63dd293da5c5b643c77c57b`
 LICENSE: Apache-2.0; blob `7a4a3ea2424c09fbe48d455aed1eaa94d9124835`
-SOURCE_SHA256SUMS blob: `7dd9632e9ee34d352169ca2af5f7efd141b1686b`
-Candidate roots: `host/`=`ce2543e6f3e9081301038bb15df622680d0822c6`, `guest/`=`2b0d33b34683343880b91242a64f6082dab37752`, `common/`=`e7974867451c2efb45c8502173af4692475dd28f`, `codegen/`=`5ba6e816546248ab1c650fec0406f588d76d7f9a`.
+Candidate roots: `host/`, `guest/`, `common/`, `codegen/`.
+Clasificación: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; `integration=NOT_WIRED`; no `VERIFIED_CLOSED`.
+StrategyDelta: conservar provenance y no copiar/montar gfxstream.
 
-Refutaciones: (1) checkout/materialización gráfica no demuestra integración; (2) roots host/guest/common no demuestran compatibilidad con el enchufe universal; (3) build/CI/docs/tests/third_party upstream no pertenece al hot path sin nodo explícito. Clasificación: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; `integration=NOT_WIRED`; no `VERIFIED_CLOSED`.
+## Delta ejecutado — jsPDF
 
-StrategyDelta: conservar provenance y no copiar/montar gfxstream. Avanzar al siguiente componente físico seguro post-124 y repetir clasificación fail-closed.
+Preflight: repetidas las búsquedas obligatorias en componentes UI YAIWES, raíces completas de `frontend`, `agentes`, `router-universal-router-inteligente-` y `osquestador-auditor`; no se localizó wiring jsPDF alternativo reutilizable. Las cuatro pasadas lógicas se aplicaron a invariantes/ownership, contratos/seguridad, interfaz/exportación y closure/evidence; se conserva el GAP documental previo sobre el conteo de fuentes de verdad únicas.
+
+Ruta: `UI YAIWES/componentes open soure UI YAIWES/jsPDF`
+Tree destino: `b85b001772c33639db82c4c0b64313a37522bbc0`
+SOURCE_URL: `https://github.com/parallax/jsPDF`
+SOURCE_COMMIT: `a3930ce03a585a26b2c76d12a0f413ce96f6d1a3`
+Upstream tree: `baf4d90e2f5a40eb9f558f616b803dc3fd50f095`
+LICENSE: MIT; blob `dc7d3a9fa305defebad6cb88ba4cd9776f26fcd3`
+Candidate roots: `src/`=`0d1aa3d5dd1af4349b757198f69ff892261d85f6`, `dist/`=`26ba428becd4bc63059e091bf0a4aa2867fe650b`, `types/`=`c6567c5a822bfcf0728665675b4f6c0a5b6d9d24`.
+
+Refutaciones: (1) checkout/materialización PDF no demuestra integración; (2) `src/dist/types` no demuestran compatibilidad con el enchufe universal; (3) `.github`, docs, examples, test, build/release upstream no pertenecen al hot path sin nodo explícito. Clasificación: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; `integration=NOT_WIRED`; no `VERIFIED_CLOSED`.
+
+StrategyDelta: conservar provenance y no copiar/montar jsPDF. Avanzar al siguiente componente físico seguro post-124 y repetir clasificación fail-closed.
 
 ## Invariantes
 
