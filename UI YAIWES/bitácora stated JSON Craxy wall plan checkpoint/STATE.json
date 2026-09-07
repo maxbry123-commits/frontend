@@ -13,13 +13,19 @@
   "p05": {
     "status": "STAGED_UNVERIFIED",
     "code_commit": "f26b1c87c6e4f873fdade6e14959e882d4704142",
+    "evidence_head": "189db9198409defb8ae1a7ad48882e6948d40847",
     "structlog": {"source_url":"https://github.com/hynek/structlog","source_commit":"73393f34b40c15688b3fdd0982889b225f11b59b","catalog_tree":"5393fcee00ae1ed638601ed9915c78dd862988d5","code_tree":"d64c15da142a3dae10dd1559661c53dd70a521e2","factory_key":"structlog.logging","license":"MIT OR Apache-2.0","read_only":true},
     "opentelemetry": {"source_url":"https://github.com/open-telemetry/opentelemetry-python","source_commit":"96df63add12f6e0453b265ac34c5c07ec7b9267e","catalog_tree":"2a74339d862124f2637247862f53497448619d49","api_code_tree":"6b978f11923255b723f51a93168fa5c2d9752b4d","factory_key":"opentelemetry.observability","license":"Apache-2.0","read_only":true},
     "github_readback": "PASS",
     "injection_socket_checks": "3/3 PASS",
     "real_vendor_tests": "NOT_EXECUTED",
+    "runtime_attempt": "BLOCKED_BEFORE_TEST_BY_DNS_RESOLUTION",
+    "runtime_log": "git clone failed: Could not resolve host: github.com",
+    "main_head_observed": "04ad9bc66ea4d71fac5a827937a9107aeae1f72c",
+    "merge_base": "3e91c8f65bef6ec3b6e0c48f889eda35f8017130",
+    "main_compare": {"status":"diverged","ahead_by":3,"behind_by":4},
     "main_merge": "NOT_ATTEMPTED"
   },
-  "active_flags": ["P02A-FLAG-REAL-VENDOR-EXECUTION","P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH","P02C-FLAG-REAL-VENDOR-EXECUTION","P03-FLAG-STARLETTE-VERSION-MISMATCH","P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION","P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION","P05-FLAG-REAL-VENDOR-TESTS-NOT-EXECUTED","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
-  "next_gate": "Execute real-vendored P05 tests from staging; re-check main HEAD; fast-forward only if ancestry is unchanged, otherwise reconcile preserving both histories."
+  "active_flags": ["P02A-FLAG-REAL-VENDOR-EXECUTION","P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH","P02C-FLAG-REAL-VENDOR-EXECUTION","P03-FLAG-STARLETTE-VERSION-MISMATCH","P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION","P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION","P05-FLAG-REAL-VENDOR-TESTS-NOT-EXECUTED","P05-FLAG-RUNNER-DNS-RESOLUTION","P05-FLAG-MAIN-DIVERGED-3-AHEAD-4-BEHIND","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
+  "next_gate": "Do not merge. Execute real-vendored P05 tests using repository-resident execution or a materialized checkout that does not depend on container DNS; then reconcile main↔staging preserving both histories and re-run read-back."
 }
