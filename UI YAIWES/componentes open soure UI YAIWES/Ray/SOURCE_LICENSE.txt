@@ -1,0 +1,5 @@
+https://github.com/ray-project/ray/blob/317c2888eade3c294c4fdb46eff9d9ec290b08f2/LICENSE
+https://github.com/ray-project/ray/blob/317c2888eade3c294c4fdb46eff9d9ec290b08f2/python/LICENSE.txt
+https://github.com/ray-project/ray/blob/317c2888eade3c294c4fdb46eff9d9ec290b08f2/python/ray/_private/thirdparty/dacite/LICENSE
+https://github.com/ray-project/ray/blob/317c2888eade3c294c4fdb46eff9d9ec290b08f2/python/ray/_private/thirdparty/pathspec/LICENSE
+https://github.com/ray-project/ray/blob/317c2888eade3c294c4fdb46eff9d9ec290b08f2/python/ray/dashboard/client/public/speedscope-1.5.3/LICENSE
