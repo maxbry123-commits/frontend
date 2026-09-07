@@ -16,10 +16,11 @@ Contrato `tel.workflow/v3`; `FAIL_CLOSED_LOOP`.
 
 ## Gates verificados
 Código staging `f26b1c87c6e4f873fdade6e14959e882d4704142`; GitHub read-back PASS; injection/socket `3/3 PASS`.
-Workflow `de6c819f53f74f71b193f331be605b92590008af`; run https://github.com/maxbry123-commits/frontend/actions/runs/34076616213 / job `101603870455` = SUCCESS; cinco tests reales, incluido bootstrap vendored Structlog/OpenTelemetry, `5/5 PASS` en 0.553s.
+Workflow base `de6c819f53f74f71b193f331be605b92590008af`; run https://github.com/maxbry123-commits/frontend/actions/runs/34076616213 / job `101603870455` = SUCCESS; cinco tests reales, incluido bootstrap vendored Structlog/OpenTelemetry, `5/5 PASS` en 0.553s.
+Hardening `fa2bd785a1690d18e51c7c45bfdf47a22f0a75c3`: el workflow verifica staging y main y usa el SHA exacto del evento para que la validación post-integración pruebe la historia objetivo, no una rama fija.
 
 ## Gate de reconciliación
-P05 NO es `VERIFIED_CLOSED`. Compare fresco: main `66145a1ab53b78b3d03618fc2f3e919de685c19c`, merge-base `3e91c8f65bef6ec3b6e0c48f889eda35f8017130`, staging `ahead 17 / behind 28`. Draft PR #6 https://github.com/maxbry123-commits/frontend/pull/6 preserva ambos historiales sin force pero GitHub reporta `mergeable=false`; se registra `P05-FLAG-PR6-MERGE-CONFLICT`. No merge/rebase/force ciego. Resolver conflictos aplicando únicamente deltas P05 autorizados sobre historia fresca de main, preservar provenance/licencias y repetir read-back + suite real 5/5 antes de cierre.
+P05 NO es `VERIFIED_CLOSED`. Compare fresco: main `66145a1ab53b78b3d03618fc2f3e919de685c19c`, merge-base `3e91c8f65bef6ec3b6e0c48f889eda35f8017130`, staging `ahead 23 / behind 28`. Draft PR #6 https://github.com/maxbry123-commits/frontend/pull/6 preserva ambos historiales sin force y GitHub ahora reporta `mergeable=true`; el flag de conflicto previo queda refutado. El PR continúa `draft=true`, por lo que no se fusiona. Tras integración autorizada/posible: read-back independiente del target + suite real `5/5 PASS` sobre main son obligatorios antes de cierre.
 
 ## Fuentes de verdad
 Arquitectura canónica enumera cuatro documentos únicos del Director aunque la orden actual diga tres. StrategyDelta fail-closed: revisar el superset de cuatro y mantener el GAP hasta reconciliación explícita.
