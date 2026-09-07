@@ -163,6 +163,20 @@ Búsqueda 2026-09-07 (sin GitHub):
 
 Estado: **NO ENCONTRADO**. No se inventa el HTML previo. El Director re-sube esos archivos del chat.
 
+### I08 — Recuperar diseño desde MD previos + skills (el Director sube)
+
+Orden: los HTML no aparecen. El Director pasa los MD que el agente hizo antes, más el skills. Con eso se recupera el diseño. Empieza a subir archivos.
+
+Regla:
+
+- Fuente de estructura = MD que suba el Director (no inventar pantallas).
+- Fuente de color = pack FROMTED I06 (Matte / Little / Blanco).
+- 1 ventana = 1 archivo. 1 función = 1 archivo. Lotes de 10.
+- Si un MD trae backend → `lote-BACKEND/` identificado (I05).
+- No generar HTML “recuperado” hasta que el archivo MD esté en este chat.
+
+Estado: **ESPERANDO SUBIDA**.
+
 ### I03 — Diseño modular del skill (esta sesión)
 
 - El Director va a pasar lo ya hecho (arquitectura, diseño, colores, parte de la tarea).
@@ -449,4 +463,5 @@ Entrega:
 | 2026-09-07 | I04 biblioteca code, lote-01 10 archivos núcleo, ZIP OSS pendientes de subida | SÍ — carpeta en main |
 | 2026-09-07 | I05 backend en la UI se incluye, carpeta lote-NN-BACKEND identificada, no mezclar con ventanas | SÍ — este archivo |
 | 2026-09-07 | I06 pack FROMTED skills; lote-02 tokens Matte/Little/Blanco extraídos de skill 01; HEX PASS | SÍ — lote-02 en main |
-| 2026-09-07 | I07 búsqueda HTML previos: otros chats no accesibles; nct-hub y comand-Center existen pero no son FROMTED | SÍ — este archivo |
+| 2026-09-07 | I07 HTML de otros chats Grok Build: no accesibles; 0 html en sandbox; Vercel 0 proyectos | SÍ — este archivo |
+| 2026-09-07 | I08 recuperar diseño desde MD que suba el Director + skills FROMTED; esperando archivos | SÍ — este archivo |
