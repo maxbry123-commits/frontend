@@ -11,6 +11,11 @@
   "verified_state": {
     "universal_socket_present": true,
     "P01_initial_14_verified": true,
+    "P02A_adapter_wired": true,
+    "P02B_adapter_wired": true,
+    "P02C_adapter_wired": true,
+    "P03_httpx_real_local_pass": true,
+    "P04_adapters_and_vendor_readback": true,
     "gVisor_physical_provenance_verified": true,
     "gVisor_integrated": false
   },
