@@ -42,9 +42,24 @@ SOURCE_COMMIT: `0a1316b0d180600212bd607aa0ccfe2a9b09a899`
 LICENSE blob: `f7a006d10464cfe9724b5d687c0013bf982cc66a`
 Candidate code-roots: `pkg/`, `runsc/`, `sandboxexec/`, `shim/`.
 
-La arquitectura requiere sandbox como frontera de ejecución, pero no autoriza montar un checkout completo como plugin. Las búsquedas obligatorias no localizaron un adapter/contract/registry/loader/guard existente para gVisor. Por tanto se clasifica `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; `integration=NOT_WIRED`; no se copia código al runtime y P01 permanece abierto.
+Clasificación: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; `integration=NOT_WIRED`. No se copia código al runtime.
 
-Refutaciones: (1) presencia física ≠ integración; (2) code-root ejecutable ≠ compatibilidad con enchufe universal; (3) metadata/CI/dev upstream no forma parte del hot path. StrategyDelta: conservar provenance y continuar con la siguiente entrada segura.
+## Delta ejecutado — gfxstream
+
+Preflight: búsquedas obligatorias ejecutadas sobre la carpeta de componentes UI, raíces completas `frontend`, `agentes`, `router-universal-router-inteligente-` y `osquestador-auditor`; no se localizó wiring gfxstream alternativo reutilizable. Arquitectura y fuentes del Director fueron reconciliadas en cuatro pasadas lógicas de invariantes/ownership, contratos/seguridad, sandbox/virtualización y closure/evidence, manteniendo el GAP documental ya registrado sobre el conteo de fuentes únicas.
+
+Ruta: `UI YAIWES/componentes open soure UI YAIWES/gfxstream`
+Tree destino: `e696264983a685fb44a7b9706bcf35383fd67159`
+SOURCE_URL: `https://github.com/google/gfxstream`
+SOURCE_COMMIT: `681d81edd2ec597b055c2fbe99a742d95545722a`
+Upstream tree: `89e6b402afabac2ac63dd293da5c5b643c77c57b`
+LICENSE: Apache-2.0; blob `7a4a3ea2424c09fbe48d455aed1eaa94d9124835`
+SOURCE_SHA256SUMS blob: `7dd9632e9ee34d352169ca2af5f7efd141b1686b`
+Candidate roots: `host/`=`ce2543e6f3e9081301038bb15df622680d0822c6`, `guest/`=`2b0d33b34683343880b91242a64f6082dab37752`, `common/`=`e7974867451c2efb45c8502173af4692475dd28f`, `codegen/`=`5ba6e816546248ab1c650fec0406f588d76d7f9a`.
+
+Refutaciones: (1) checkout/materialización gráfica no demuestra integración; (2) roots host/guest/common no demuestran compatibilidad con el enchufe universal; (3) build/CI/docs/tests/third_party upstream no pertenece al hot path sin nodo explícito. Clasificación: `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`; `integration=NOT_WIRED`; no `VERIFIED_CLOSED`.
+
+StrategyDelta: conservar provenance y no copiar/montar gfxstream. Avanzar al siguiente componente físico seguro post-124 y repetir clasificación fail-closed.
 
 ## Invariantes
 
