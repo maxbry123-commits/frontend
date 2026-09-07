@@ -2,7 +2,7 @@
   "contract": "tel.workflow/v3",
   "project": "UI YAIWES modular component integration",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "P05_VENDOR_TESTS_VERIFIED_RECONCILIATION_BLOCKED",
+  "status": "P05_VENDOR_TESTS_VERIFIED_PR_MERGEABLE_DRAFT_GATE",
   "current_node": "P05_STRUCTLOG_OPENTELEMETRY",
   "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY",
   "component_count": 14,
@@ -11,9 +11,10 @@
   "p03": {"status":"PARTIAL_VERIFIED_WITH_STARLETTE_FLAG","commit":"85a3f758a4a6228e0d5d030a544365ccdef0a198","httpx":"VERIFIED_RUNTIME_LOCAL","starlette":"CLOSED_UNVERIFIED_WITH_VERSION_FLAG"},
   "p04": {"status":"CLOSED_UNVERIFIED_WITH_EXECUTION_FLAGS","commit":"b7545ca41ae0012e658d3ab8334cbe5aa98c077b","github_readback":"PASS"},
   "p05": {
-    "status": "VENDOR_TESTS_VERIFIED_STAGING_PR_CONFLICT",
+    "status": "VENDOR_TESTS_VERIFIED_PR_MERGEABLE_DRAFT_GATE",
     "code_commit": "f26b1c87c6e4f873fdade6e14959e882d4704142",
     "verification_workflow_commit": "de6c819f53f74f71b193f331be605b92590008af",
+    "verification_hardening_commit": "fa2bd785a1690d18e51c7c45bfdf47a22f0a75c3",
     "verification_run_id": 34076616213,
     "verification_job_id": 101603870455,
     "verification_result": "5/5 PASS",
@@ -24,10 +25,10 @@
     "real_vendor_tests": "5/5 PASS",
     "main_head_observed": "66145a1ab53b78b3d03618fc2f3e919de685c19c",
     "merge_base": "3e91c8f65bef6ec3b6e0c48f889eda35f8017130",
-    "main_compare": {"status":"diverged","ahead_by":17,"behind_by":28},
-    "reconciliation_pr": {"number":6,"url":"https://github.com/maxbry123-commits/frontend/pull/6","draft":true,"mergeable":false,"head":"20caf8542441f4d3e19acdd4045991226face2df","base":"66145a1ab53b78b3d03618fc2f3e919de685c19c"},
-    "main_merge": "BLOCKED_CONFLICT"
+    "main_compare": {"status":"diverged","ahead_by":23,"behind_by":28},
+    "reconciliation_pr": {"number":6,"url":"https://github.com/maxbry123-commits/frontend/pull/6","draft":true,"mergeable":true,"head":"fa2bd785a1690d18e51c7c45bfdf47a22f0a75c3","base":"66145a1ab53b78b3d03618fc2f3e919de685c19c"},
+    "main_merge": "BLOCKED_DRAFT_AND_POST_INTEGRATION_TEST_GATE"
   },
-  "active_flags": ["P02A-FLAG-REAL-VENDOR-EXECUTION","P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH","P02C-FLAG-REAL-VENDOR-EXECUTION","P03-FLAG-STARLETTE-VERSION-MISMATCH","P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION","P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION","P05-FLAG-MAIN-DIVERGED-17-AHEAD-28-BEHIND","P05-FLAG-PR6-MERGE-CONFLICT","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
-  "next_gate": "Resolve PR #6 conflicts without force while preserving both histories and only authorized P05 deltas; then independent read-back and real 5/5 tests on reconciled target history before VERIFIED_CLOSED."
+  "active_flags": ["P02A-FLAG-REAL-VENDOR-EXECUTION","P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH","P02C-FLAG-REAL-VENDOR-EXECUTION","P03-FLAG-STARLETTE-VERSION-MISMATCH","P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION","P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION","P05-FLAG-MAIN-DIVERGED-23-AHEAD-28-BEHIND","P05-FLAG-PR6-DRAFT-GATE","P05-GAP-DIRECTOR-SOURCE-COUNT-3-VS-CANONICAL-4"],
+  "next_gate": "PR #6 is mergeable but remains draft; do not force or false-close. Once merge is authorized/possible, preserve both histories, integrate P05, then require independent target read-back plus real 5/5 tests on reconciled main before VERIFIED_CLOSED."
 }
