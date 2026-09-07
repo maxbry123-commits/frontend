@@ -1,6 +1,6 @@
 {
-  "checkpoint_id": "UIYAIWES-V3-POST124-GVISOR-0018",
-  "previous_checkpoint_id": "UIYAIWES-V3-POST124-CANCELLED-0017",
+  "checkpoint_id": "UIYAIWES-V3-POST124-GFXSTREAM-0019",
+  "previous_checkpoint_id": "UIYAIWES-V3-POST124-GVISOR-0018",
   "contract": "tel.workflow/v3",
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_LOOP_POST_124_CANCELLED_REVALIDATION",
@@ -17,7 +17,9 @@
     "P03_httpx_real_local_pass": true,
     "P04_adapters_and_vendor_readback": true,
     "gVisor_physical_provenance_verified": true,
-    "gVisor_integrated": false
+    "gVisor_integrated": false,
+    "gfxstream_physical_provenance_verified": true,
+    "gfxstream_integrated": false
   },
   "post_124_evidence": {
     "run_id": 34060401131,
@@ -31,11 +33,12 @@
     "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131"
   },
   "last_1x1_result": {
-    "entry": "gVisor",
+    "entry": "gfxstream",
     "classification": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED",
-    "tree_sha": "fa6b9f1ca81285907f24d71ef100410ef48aac1f",
-    "source_url": "https://github.com/google/gvisor",
-    "source_commit": "0a1316b0d180600212bd607aa0ccfe2a9b09a899",
+    "tree_sha": "e696264983a685fb44a7b9706bcf35383fd67159",
+    "source_url": "https://github.com/google/gfxstream",
+    "source_commit": "681d81edd2ec597b055c2fbe99a742d95545722a",
+    "source_tree": "89e6b402afabac2ac63dd293da5c5b643c77c57b",
     "integration": "NOT_WIRED",
     "closure": "NOT_VERIFIED_CLOSED"
   },
@@ -44,7 +47,7 @@
     "P05_publication": "BLOCKED_UNTIL_P01_POST124_RECONCILIATION"
   },
   "queue_1x1": [
-    "advance to next safe physical component after gVisor",
+    "advance to next safe physical component after gfxstream",
     "compare manifest/provenance/license/code-root",
     "classify materialized/partial/missing/duplicate/inconclusive",
     "persist evidence without mounting donor code",
