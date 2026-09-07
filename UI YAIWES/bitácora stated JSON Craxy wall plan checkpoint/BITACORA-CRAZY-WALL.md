@@ -25,10 +25,13 @@ Workflow repo-resident con sparse checkout runtime-only y `lfs:false`, sin tocar
 Workflow commit `de6c819f53f74f71b193f331be605b92590008af`; run `34076616213`, job `101603870455`: cinco tests reales = `5/5 PASS`, 0.553s. Se cierran flags DNS/vendor-not-executed de P05.
 
 ## UI-PLUG-0016 — P05 RECONCILIATION GATE
-Compare fresco main↔staging observado antes de esta sincronización: `diverged`, `ahead 30 / behind 28`, merge-base `3e91c8f65bef6ec3b6e0c48f889eda35f8017130`, main `66145a1ab53b78b3d03618fc2f3e919de685c19c`, staging `aa0497ede19c57984053b4c3f95a83cb017eef6c`. Draft PR #6 https://github.com/maxbry123-commits/frontend/pull/6 permanece `mergeable=true` y `draft=true`; no merge, no force, no falso cierre.
+Compare fresco main↔staging observado antes de esta sincronización: `diverged`, `ahead 30 / behind 28`, merge-base `3e91c8f65bef6ec3b6e0c48f889eda35f8017130`, main `66145a1ab53b78b3d03618fc2f3e919de685c19c`, staging `aa0497ede19c57984053b4c3f95a83cb017eef6c`. Draft PR #6 https://github.com/maxbry123-commits/frontend/pull/6 permanecía `mergeable=true` y `draft=true`; no merge, no force, no falso cierre.
 
 ## UI-PLUG-0017 — P05 POST-MERGE VERIFY READY
 Commit `fa2bd785a1690d18e51c7c45bfdf47a22f0a75c3` endurece `.github/workflows/ui-yaiwes-p05-observability-verify.yml`: verifica staging y main y hace checkout del `github.sha` exacto. Tras integración autorizada exigir read-back independiente + `5/5 PASS` sobre main reconciliado antes de VERIFIED_CLOSED.
 
 ## UI-PLUG-0018 — P05 WATCHDOG RECONCILIATION
-Reejecutadas las búsquedas obligatorias de reuse para Structlog/OpenTelemetry en frontend, agentes, router-universal-router-inteligente- y osquestador-auditor; no apareció adapter canónico alternativo. Arquitectura/STATE/CHECKPOINT reconciliados; checkpoint `UIYAIWES-P05-RECONCILE-0022`. P05 sigue ACTIVE_LOOP por draft gate.
+Reejecutadas las búsquedas obligatorias de reuse para Structlog/OpenTelemetry en frontend, agentes, router-universal-router-inteligente- y osquestador-auditor; no apareció adapter canónico alternativo. Arquitectura/STATE/CHECKPOINT reconciliados; checkpoint `UIYAIWES-P05-RECONCILE-0022`. P05 siguió ACTIVE_LOOP por draft gate.
+
+## UI-PLUG-0019 — P05 PR CONFLICT DETECTED
+Nueva reconciliación: `main` avanzó a `3f1c71da16abccc8a3bc62d1c848f5c3d9044162`; compare `main...ui-yaiwes-p05-observability-20260906` = `diverged`, `ahead 35 / behind 40`, merge-base `3e91c8f65bef6ec3b6e0c48f889eda35f8017130`. PR #6 sigue `open`, `draft=true`, pero ahora `mergeable=false`; se activa `P05-FLAG-PR6-MERGE-CONFLICT`. No merge, no force. Reuse search repetida en frontend/agentes/router/osquestador sin adapter alternativo. Checkpoint `UIYAIWES-P05-RECONCILE-0023`.
