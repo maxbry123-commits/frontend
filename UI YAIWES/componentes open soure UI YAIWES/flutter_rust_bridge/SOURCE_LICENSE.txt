@@ -1,0 +1,13 @@
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/LICENSE
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/frb_dart/LICENSE
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/frb_example/flutter_package/LICENSE
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/frb_example/flutter_package/cargokit/LICENSE
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/frb_example/flutter_package_native_assets/LICENSE
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/frb_example/flutter_via_create/rust_builder/cargokit/LICENSE
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/frb_example/flutter_via_integrate/rust_builder/cargokit/LICENSE
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/frb_example/gallery/rust_builder/cargokit/LICENSE
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/frb_example/integrate_third_party/rust_builder/cargokit/LICENSE
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/frb_example/rust_ui_counter/ui/rust_builder/cargokit/LICENSE
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/frb_example/rust_ui_todo_list/ui/rust_builder/cargokit/LICENSE
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/frb_hooks/LICENSE
+https://github.com/fzyzcjy/flutter_rust_bridge/blob/f74a83c48f13b542a9b80ebf0d5b3b411f39fbae/frb_utils/LICENSE

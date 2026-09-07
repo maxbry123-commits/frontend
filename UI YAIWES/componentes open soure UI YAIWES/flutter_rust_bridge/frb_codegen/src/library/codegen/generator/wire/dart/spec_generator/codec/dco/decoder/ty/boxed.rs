@@ -1,0 +1,71 @@
+use crate::codegen::generator::wire::dart::spec_generator::codec::dco::base::*;
+use crate::codegen::generator::wire::dart::spec_generator::codec::dco::decoder::misc::gen_decode_simple_type_cast;
+use crate::codegen::generator::wire::dart::spec_generator::codec::dco::decoder::ty::WireDartCodecDcoGeneratorDecoderTrait;
+use crate::codegen::ir::mir::ty::delegate::MirTypeDelegate;
+use crate::codegen::ir::mir::ty::primitive::MirTypePrimitive;
+use crate::codegen::ir::mir::ty::MirType;
+use crate::codegen::ir::mir::ty::MirType::*;
+use crate::library::codegen::ir::mir::ty::MirTypeTrait;
+
+impl WireDartCodecDcoGeneratorDecoderTrait for BoxedWireDartCodecDcoGenerator<'_> {
+    // the function signature is not covered while the whole body is covered - looks like a bug in coverage tool
+    // frb-coverage:ignore-start
+    fn generate_impl_decode_body(&self) -> String {
+        // frb-coverage:ignore-end
+        match &*self.mir.inner {
+            StructRef(_)
+            | Record(_)
+            | DartOpaque(_)
+            | RustOpaque(_)
+            | MirType::Delegate(MirTypeDelegate::RustAutoOpaqueExplicit(_))
+            | RustAutoOpaqueImplicit(_)
+            | EnumRef(_)
+            | Primitive(
+                MirTypePrimitive::I64
+                | MirTypePrimitive::Isize
+                | MirTypePrimitive::U64
+                | MirTypePrimitive::Usize
+                | MirTypePrimitive::U8
+                | MirTypePrimitive::I8
+                | MirTypePrimitive::U16
+                | MirTypePrimitive::I16
+                | MirTypePrimitive::U32
+                | MirTypePrimitive::I32,
+            )
+            | Delegate(MirTypeDelegate::Array(_) | MirTypeDelegate::PrimitiveEnum { .. }) => {
+                format!("return dco_decode_{}(raw);", self.mir.inner.safe_ident())
+            }
+            // TODO merge with above
+            Delegate(MirTypeDelegate::Time(time)) => {
+                format!("return dco_decode_Chrono_{time}(raw);")
+            }
+            _ => gen_decode_simple_type_cast(self.mir.clone().into(), self.context),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::codegen::generator::wire::dart::spec_generator::codec::dco::decoder::ty::test_utils;
+    use crate::codegen::ir::mir::ty::boxed::MirTypeBoxed;
+
+    /// Delegates boxed 64-bit integers to their dedicated decoder.
+    #[test]
+    fn boxed_decoder_delegates_i64_to_inner_decoder() {
+        let pack = test_utils::pack();
+        let config = test_utils::config();
+        let generator = BoxedWireDartCodecDcoGenerator::new(
+            MirTypeBoxed {
+                exist_in_real_api: true,
+                inner: Box::new(MirType::Primitive(MirTypePrimitive::I64)),
+            },
+            test_utils::context(&pack, &config),
+        );
+
+        assert_eq!(
+            generator.generate_impl_decode_body(),
+            "return dco_decode_i_64(raw);"
+        );
+    }
+}
