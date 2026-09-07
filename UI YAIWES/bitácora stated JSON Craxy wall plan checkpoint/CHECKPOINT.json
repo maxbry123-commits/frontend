@@ -1,6 +1,6 @@
 {
-  "checkpoint_id": "UIYAIWES-V3-POST124-GFXSTREAM-0019",
-  "previous_checkpoint_id": "UIYAIWES-V3-POST124-GVISOR-0018",
+  "checkpoint_id": "UIYAIWES-V3-POST124-JSPDF-0020",
+  "previous_checkpoint_id": "UIYAIWES-V3-POST124-GFXSTREAM-0019",
   "contract": "tel.workflow/v3",
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_LOOP_POST_124_CANCELLED_REVALIDATION",
@@ -19,7 +19,9 @@
     "gVisor_physical_provenance_verified": true,
     "gVisor_integrated": false,
     "gfxstream_physical_provenance_verified": true,
-    "gfxstream_integrated": false
+    "gfxstream_integrated": false,
+    "jsPDF_physical_provenance_verified": true,
+    "jsPDF_integrated": false
   },
   "post_124_evidence": {
     "run_id": 34060401131,
@@ -33,12 +35,12 @@
     "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131"
   },
   "last_1x1_result": {
-    "entry": "gfxstream",
+    "entry": "jsPDF",
     "classification": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED",
-    "tree_sha": "e696264983a685fb44a7b9706bcf35383fd67159",
-    "source_url": "https://github.com/google/gfxstream",
-    "source_commit": "681d81edd2ec597b055c2fbe99a742d95545722a",
-    "source_tree": "89e6b402afabac2ac63dd293da5c5b643c77c57b",
+    "tree_sha": "b85b001772c33639db82c4c0b64313a37522bbc0",
+    "source_url": "https://github.com/parallax/jsPDF",
+    "source_commit": "a3930ce03a585a26b2c76d12a0f413ce96f6d1a3",
+    "source_tree": "baf4d90e2f5a40eb9f558f616b803dc3fd50f095",
     "integration": "NOT_WIRED",
     "closure": "NOT_VERIFIED_CLOSED"
   },
@@ -47,7 +49,7 @@
     "P05_publication": "BLOCKED_UNTIL_P01_POST124_RECONCILIATION"
   },
   "queue_1x1": [
-    "advance to next safe physical component after gfxstream",
+    "advance to next safe physical component after jsPDF",
     "compare manifest/provenance/license/code-root",
     "classify materialized/partial/missing/duplicate/inconclusive",
     "persist evidence without mounting donor code",
