@@ -22,61 +22,45 @@ HTTPX: fuente 0.28.1; adapter publicado; prueba local real sin red mediante Mock
 Resilient-circuit 0.7.0 + Bulkman 2.0.3; adapters/vendor publicados; compatibilidad declarada satisfecha; injection/read-back PASS; ejecución real vendors pendiente. Estado `CLOSED_UNVERIFIED_WITH_EXECUTION_FLAGS`.
 
 ## UI-PLUG-0008 — P05/P06/P07/P08 AVANCE PREPARADO
-Durante el LOOP se avanzó investigación/diseño/pruebas para:
-- P05 Structlog + OpenTelemetry, separados y read-only;
-- P06 pytest + Hypothesis como TEST_ONLY;
-- P07 Dagu + redun como DONOR_ONLY;
-- P08 PyCasbin policy.
-Regla: trabajo preparado/staging no se considera publicado en `main` ni VERIFIED_CLOSED hasta reconciliación/read-back.
+Durante el LOOP se avanzó investigación/diseño/pruebas para P05 Structlog+OpenTelemetry, P06 pytest+Hypothesis, P07 Dagu+redun y P08 PyCasbin. Trabajo preparado/staging no equivale a cierre.
 
 ## UI-PLUG-0009 — ACTION 124
-Workflow: `.github/workflows/ui-yaiwes-124-download-extract-20260906.yml`.
-Run: https://github.com/maxbry123-commits/frontend/actions/runs/34060401131
-Job: `queue-124`.
-Última verificación histórica: `in_progress`; steps 1–3 completados; step 4 activo; verify final destino pendiente en ese momento.
+Workflow `.github/workflows/ui-yaiwes-124-download-extract-20260906.yml`; run https://github.com/maxbry123-commits/frontend/actions/runs/34060401131.
 
 ## UI-PLUG-0010 — INVENTARIO STALE POR CONCURRENCIA
-La Action 124 introdujo nuevas carpetas/aliases en la raíz de componentes mientras P01 había sido verificado sobre 14 componentes. Clasificación: `P01-FRESHNESS-STALE-AFTER-124-ACQUISITION`. No borra la evidencia histórica, pero obliga a revalidar inventario/dedup post-Action.
+La Action 124 introdujo nuevas carpetas/aliases mientras P01 había sido verificado sobre 14 componentes. No borra evidencia histórica; obliga a revalidar inventario/dedup post-Action.
 
 ## UI-PLUG-0011 — LEY DE CONCURRENCIA
-Cuando otro watchdog/chat publica código equivalente:
-1. refrescar HEAD;
-2. inspeccionar commit;
-3. adoptar si cumple contrato;
-4. no duplicar;
-5. añadir solo gates faltantes;
-6. no force.
-Esta regla evitó duplicar adapters durante P02C/P03/P04.
+Refrescar HEAD; inspeccionar commit; adoptar si cumple; no duplicar; añadir solo gates faltantes; no force.
 
 ## UI-PLUG-0012 — ANTI-STALL HISTÓRICO
-Se registró la regla operativa `ENTENDER MINIMO → DELTA REAL → VERIFY → PERSIST → NEXT`. No sustituye el contrato arquitectónico vigente del Director.
+`ENTENDER MINIMO → DELTA REAL → VERIFY → PERSIST → NEXT` no sustituye el contrato vigente.
 
 ## UI-PLUG-0013 — GUIA MAESTRA HISTÓRICA
-Publicada `UI YAIWES/readme arquitectura UI YAIWES/GUIA-MAESTRA-EJECUCION-LOOP-SOL-UI-YAIWES.md`, commit `3c2752b9cd74b404cc8d44379b37535a6a295203`. Su referencia `tel.workflow/v4` queda tratada como artefacto de handoff histórico cuando contradiga `ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md` y la instrucción vigente del Director, ambas `tel.workflow/v3`.
+`GUIA-MAESTRA-EJECUCION-LOOP-SOL-UI-YAIWES.md` queda como handoff histórico cuando contradiga `tel.workflow/v3`.
 
 ## UI-PLUG-0014 — STATE/CHECKPOINT/PLAN/RECOVERY HISTÓRICOS
-Se registraron actualizaciones v4 previas. La reconciliación vigente corrige ese drift hacia `tel.workflow/v3` sin borrar historial.
+Estados v4 previos quedan como historial; autoridad actual `tel.workflow/v3`.
 
 ## UI-PLUG-0015 — INCIDENTE TEMP WRITE
-Durante una comprobación operativa se crearon accidentalmente archivos temporales `NOOP` y `TEMP` en `main`; fueron eliminados. Regla permanente: nunca probar permisos/escritura creando archivos temporales en `main`.
+Archivos temporales accidentales fueron eliminados; no usar writes temporales en `main`.
 
 ## UI-PLUG-0016 — RUTA DE REINYECCION HISTÓRICA
-`check Action 124 → verify final destino → inventory/dedup fresco → revalidar P01 → reconcile P05 → gates P06/P07 → reconcile P08 → resolver flags heredados → contratos dominio → chat API → Stabilize workflow → Router/Memory adapters → health/observability → E2E → recovery tests → repeat checks → verify_final global`.
+`verify Action124 → inventory/dedup → P01 → P05 → P06/P07/P08 → flags → dominios → chat API → Stabilize → Router/Memory → E2E → verify_final`.
 
 ## UI-PLUG-0017 — REGLA DE HANDOFF
-Un chat nuevo debe continuar leyendo arquitectura consolidada + STATE + CHECKPOINT + PLAN + RECOVERY + BITACORA + HEAD real + Actions; no rehacer investigación ya sustentada.
+Continuar leyendo arquitectura consolidada + STATE + CHECKPOINT + PLAN + RECOVERY + BITACORA + HEAD real + Actions.
 
 ## UI-PLUG-0018 — ACTION 124 CANCELLED / FAIL_CLOSED / v3 RECONCILIADO
-Evidencia nueva: run `34060401131` terminó `completed/cancelled` el `2026-09-07T02:43:53Z`; job `101559786309`. Step 4 `Process 124 components sequentially with pinned source SHA` = `cancelled`; step 5 `Verify final destination and independent read-back snapshot` = `failure`; step 7 `Fail closed until 124 verified` = `failure`.
-URL: https://github.com/maxbry123-commits/frontend/actions/runs/34060401131
-Contrato canónico reconciliado a `tel.workflow/v3` + `FAIL_CLOSED_LOOP` conforme a `ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md` y la instrucción vigente del Director. Los estados v4 previos quedan como historial, no como autoridad actual.
-Nodo actual: `P01_POST_124_INVENTORY_REVALIDATION`. P05 queda preparado/bloqueado para publicación hasta verificar destino físico, provenance y dedup post-cancelación.
-StrategyDelta: enumerar destino → cruzar queue/manifiestos/checkpoints → validar URL/SHA/licencia → clasificar materializado/parcial/ausente/alias → dedup por source commit + code-root/tree → actualizar inventory/code-map → revalidar P01 → retomar P05.
+Run `34060401131` terminó `completed/cancelled` el `2026-09-07T02:43:53Z`; job `101559786309`; step adquisición `cancelled`, verify final `failure`, fail-closed `failure`. Nodo `P01_POST_124_INVENTORY_REVALIDATION`.
 
 ## UI-PLUG-0019 — GVISOR REVALIDADO COMO DONOR_ONLY_UNMAPPED
-Búsquedas obligatorias ejecutadas antes del delta: componentes UI, raíces frontend, `agentes`, `router-universal-router-inteligente-`, `osquestador-auditor`; no apareció implementación gVisor/universal-socket reutilizable en las otras raíces.
-Arquitectura y tres fuentes del Director revisadas en cuatro pasadas lógicas: invariantes/ownership, contratos/seguridad, sandbox/virtualización y closure/evidence.
-Evidencia física: `UI YAIWES/componentes open soure UI YAIWES/gVisor`, tree `fa6b9f1ca81285907f24d71ef100410ef48aac1f`; SOURCE_URL `https://github.com/google/gvisor`; SOURCE_COMMIT `0a1316b0d180600212bd607aa0ccfe2a9b09a899`; LICENSE blob `f7a006d10464cfe9724b5d687c0013bf982cc66a`.
-Code roots candidatos: `pkg/`=`2e15553944e5bd392ab69a2faf41c433c5bf6042`, `runsc/`=`a489b273ef32786f6dc0e8edc8075fcabc51a2bb`, `sandboxexec/`=`dda911c234771df1b581d0c13b4e4c83cc8875be`, `shim/`=`e90125b59e26256156dff536285e26601448e8e6`.
-Refutaciones: (1) repo presente no prueba wiring; (2) roots de ejecución no prueban compatibilidad con enchufe universal; (3) metadata/CI/dev upstream no entra al hot path. Resultado `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`, `integration=NOT_WIRED`; no VERIFIED_CLOSED.
-StrategyDelta: conservar provenance y NO copiar/montar gVisor; avanzar al siguiente componente seguro post-124 y repetir manifest→provenance→license→code-root→clasificación. P01 sigue abierto.
+Búsquedas obligatorias ejecutadas; arquitectura y fuentes del Director revisadas. `gVisor` tree `fa6b9f1ca81285907f24d71ef100410ef48aac1f`; source `https://github.com/google/gvisor`; commit `0a1316b0d180600212bd607aa0ccfe2a9b09a899`; licencia preservada. Resultado `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`, integración `NOT_WIRED`.
+
+## UI-PLUG-0020 — GFXSTREAM REVALIDADO COMO DONOR_ONLY_UNMAPPED
+Búsquedas obligatorias ejecutadas antes del delta: componente físico `gfxstream`, raíces completas de `frontend`, y repos `agentes`, `router-universal-router-inteligente-`, `osquestador-auditor`; no apareció wiring alternativo reutilizable.
+Arquitectura revisada en cuatro pasadas lógicas y fuentes de verdad del Director reconciliadas con el GAP documental ya registrado: ownership/invariantes, contratos/seguridad, sandbox/virtualización, closure/evidence.
+Evidencia: `UI YAIWES/componentes open soure UI YAIWES/gfxstream`, tree `e696264983a685fb44a7b9706bcf35383fd67159`; SOURCE_URL `https://github.com/google/gfxstream`; SOURCE_COMMIT `681d81edd2ec597b055c2fbe99a742d95545722a`; upstream commit existe y apunta a tree `89e6b402afabac2ac63dd293da5c5b643c77c57b`; LICENSE Apache-2.0 blob `7a4a3ea2424c09fbe48d455aed1eaa94d9124835`; `SOURCE_SHA256SUMS.txt` blob `7dd9632e9ee34d352169ca2af5f7efd141b1686b`.
+Candidate code roots físicos: `host/`=`ce2543e6f3e9081301038bb15df622680d0822c6`, `guest/`=`2b0d33b34683343880b91242a64f6082dab37752`, `common/`=`e7974867451c2efb45c8502173af4692475dd28f`, `codegen/`=`5ba6e816546248ab1c650fec0406f588d76d7f9a`.
+Refutaciones: (1) repo gráfico presente ≠ integration; (2) host/guest/common ejecutables ≠ contrato del enchufe universal; (3) build/CI/docs/tests/third_party upstream no entra al hot path sin nodo explícito. Resultado `MATERIALIZED_OK_DONOR_ONLY_UNMAPPED`, `integration=NOT_WIRED`; no VERIFIED_CLOSED.
+StrategyDelta: conservar provenance y NO copiar/montar gfxstream; avanzar al siguiente componente físico seguro y repetir manifest→provenance→license→code-root→clasificación. P01 sigue abierto.
