@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 4,
+  "processed": 5,
   "records": [
     {
       "bytes": 312360273,
@@ -53,11 +53,24 @@
       "source_url": "https://github.com/moby/moby",
       "status": "COMPLETE",
       "tree_sha256": "05073eb376b3f934dc7ac79b40da763f6f589cd800f8348949d73df130620fc2"
+    },
+    {
+      "bytes": 75900556,
+      "destination": "OpenBao",
+      "error": "READ_BACK_HASH_GAP:c599374948adf5f4fc58129b878f00c3582287b78b587e6cee72994e95367446!=b9313af6f1319ef37270d03247dc298a0aaf47d4fc7ab561adf39a92c7c924b4",
+      "files": 5360,
+      "index": 5,
+      "n": 92,
+      "name": "OpenBao",
+      "source_commit": "1859768bdb897d92723c68f8457128c9fd707a98",
+      "source_url": "https://github.com/openbao/openbao",
+      "status": "GAP",
+      "tree_sha256": "b9313af6f1319ef37270d03247dc298a0aaf47d4fc7ab561adf39a92c7c924b4"
     }
   ],
   "states": {
     "COMPLETE": 3,
-    "GAP": 1,
+    "GAP": 2,
     "VERIFIED_EXISTING": 0
   }
 }
