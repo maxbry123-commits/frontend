@@ -1,11 +1,11 @@
 # RECOVERY PATCH MAESTRO — UI YAIWES — V5
 
-**Checkpoint objetivo:** `UIYAIWES-V5-XRAY-ACTION124-0025`
+**Checkpoint objetivo:** `UIYAIWES-V5-XRAY-ACTION124-0026`
 **Contrato runtime:** `tel.workflow/v3`
 **Modo:** `FAIL_CLOSED_LOOP`
 **Owner:** `stabilize_core`
 
-Este parche permite que otro chat Sol retome desde el estado real sin reconstruir 48 horas de historia.
+Este parche permite retomar desde el estado real sin reconstruir el historial.
 
 ---
 
@@ -21,9 +21,6 @@ Este parche permite que otro chat Sol retome desde el estado real sin reconstrui
 8. Leer `GAPS-ACTION124-RECOVERY-V5.md`.
 9. Refrescar HEAD real.
 10. Revisar Actions concurrentes antes de escribir.
-
-Mensaje operativo esperado:
-`Estado recuperado → P01 post124 activo → artifact 124 diagnosticado → CURRENT=A02/A03 recovery queue → inicio delta`.
 
 ---
 
@@ -51,7 +48,7 @@ Bulkman 2.0.3 + resilient-circuit 0.7.0. Injection/read-back PASS, vendor real p
 Structlog + OpenTelemetry preparados. Recovery: no publicar como integrado hasta confirmar provenance/versions y tests read-only.
 
 ## P06
-pytest/Hypothesis TEST_ONLY. pytest tiene provenance mismatch; Hypothesis no fue intentado por Action124 porque index 9 aparece al final del array.
+pytest/Hypothesis TEST_ONLY. pytest tiene provenance mismatch; Hypothesis no fue intentado por Action124 porque index 9 aparece al final del array histórico.
 
 ## P07
 Dagu/redun DONOR_ONLY. redun revalidado post124; nunca owner.
@@ -79,6 +76,13 @@ Cifras recuperadas:
 - 20 partial checkpoints;
 - 6 provider gaps sin checkpoint.
 
+## A02 classification — DONE
+`ACTION124-RECOVERY-CLASSIFICATION-V5.json` cubre 124 índices únicos en C1/C2/C3/C4/C5; C6 es flag secundario.
+
+## A03 queue integrity — DONE
+`ACTION124-QUEUE-INTEGRITY-V5.json` registra queue blob `f8283c50395a63d5f8d5d3e127d86c2be75a0176`, set esperado `1..124`, 124 índices primarios únicos y anomalía histórica: Hypothesis index9 después de 124.
+La cola histórica NO se modifica. Recovery usa vista ordenada `director_index ASC`.
+
 ## No repetir
 - no rerun completo ciego;
 - no borrar directorios que ya tengan evidencia;
@@ -86,26 +90,22 @@ Cifras recuperadas:
 - no cambiar fuentes por mirrors sin registrar supersede;
 - no convertir checkpoint del writer en auditoría independiente.
 
-## StrategyDelta
-Crear una recovery queue derivada de:
-`QUEUE original + artifact checkpoints + gaps.tsv + destination HEAD actual`.
-
-### Recovery class C1
+## Recovery class C1
 50 complete/no-gap → auditor read-only, luego preservar.
 
-### C2
+## C2
 10 complete+repair gap → investigar exit code y gates, no redownload automático.
 
-### C3
+## C3
 20 partial → continuar faltantes únicamente.
 
-### C4
-6 provider gaps → adapters para googlesource/GitLab.
+## C4
+6 provider gaps → paths específicos por proveedor preservando fuente original.
 
-### C5
-38 unattempted → procesar; ordenar director_index.
+## C5
+38 unattempted → procesar desde recovery view ordenada; incluye Hypothesis index9.
 
-### C6
+## C6
 pytest provenance → exact snapshot forensic.
 
 ---
@@ -133,7 +133,7 @@ Si HEAD cambia:
 2. inspeccionar commit;
 3. comparar rutas tocadas;
 4. si contiene nuestro delta correcto: adoptarlo;
-5. si es independiente: rebase/recrear tree encima;
+5. si es independiente: reconciliar encima sin borrar historia;
 6. si colisiona: merge lógico por blob/read-back;
 7. nunca force.
 
@@ -144,7 +144,7 @@ Si aparece alias:
 
 # 6. RECOVERY DE STALL
 
-Si un Sol realiza 5 lecturas sin delta:
+Si una ejecución realiza 5 lecturas sin delta:
 - declarar `STALL_DETECTED`;
 - CURRENT en 1 frase;
 - escoger el menor delta seguro;
@@ -164,8 +164,6 @@ No responder con otro plan largo.
 4. decidir: provisionar runtime compatible o aprobar actualización de source como nuevo nodo;
 5. ejecutar test real;
 6. Judge.
-
-Aplicable a Pydantic/core, Starlette, OTel y cualquier vendor versionado.
 
 ---
 
@@ -188,10 +186,7 @@ Para promover:
 Si hay contradicción entre documentos:
 `real state > STATE/CHECKPOINT > source authority > summary`.
 
-No borrar originales. Registrar ContradictionRecord con source refs, timestamps y decisión.
-
-Si LLM propone memory update:
-`proposal → normalizer → schema → auditor → StateDelta → canonical store`.
+No borrar originales. Registrar ContradictionRecord con source refs y decisión.
 
 ---
 
@@ -234,34 +229,33 @@ iOS queda capability-driven.
 
 # 13. NEXT EXACT
 
-CURRENT después de publicar este patch:
-`P01_POST124_RECOVERY_QUEUE_BUILD`.
+CURRENT=`P01_POST124_C1_INDEPENDENT_AUDIT`.
 
 Delta siguiente:
-1. materializar clasificación 124 desde artifact + QUEUE;
-2. validar indices 1..124 y ordenar;
-3. generar recovery queue sin reintentar C1;
-4. validar recovery queue con Sheriff/Validator;
-5. ejecutar por clases y persistir checkpoint por componente.
+1. tomar solo los 50 índices C1 de `ACTION124-RECOVERY-CLASSIFICATION-V5.json`;
+2. auditar destino actual read-only, sin redownload;
+3. verificar URL/SOURCE_COMMIT/SOURCE_SHA256SUMS/licencia/tree por componente;
+4. registrar PASS/GAP por índice;
+5. no promover P01 hasta completar C1–C6 y auditor independiente 124/124.
 
-Si ese delta queda bloqueado, siguiente tarea independiente segura: completar documentación/source map de C1/C2/C3, NO saltar a afirmar P05 cerrado.
+Si C1 queda bloqueado, continuar únicamente una tarea independiente segura documentada por FAIL_CLOSED_LOOP.
 
 ---
 
 # 14. FINAL RECOVERY CHECKLIST
 
-- [ ] master contract leído
-- [ ] HEAD fresco
-- [ ] Actions revisadas
-- [ ] STATE/CHECKPOINT coherentes
-- [ ] CURRENT único
-- [ ] evidence expected definido
-- [ ] no-force
-- [ ] rollback definido
-- [ ] strategy fingerprint distinto si retry
-- [ ] source provenance preservada
-- [ ] read-back real
-- [ ] Judge honesto
-- [ ] bitácora/plan/recovery actualizados
+- [x] master contract reconciliado
+- [x] queue anomaly evidenciada
+- [x] A02 124-index classification
+- [x] A03 deterministic recovery ordering
+- [ ] A04 C1 independent audit
+- [ ] C2 repair investigation
+- [ ] C3 partial resume
+- [ ] C4 provider paths
+- [ ] C5 unattempted
+- [ ] C6 provenance
+- [ ] final read-back real
+- [ ] independent 124/124 auditor
+- [ ] P01 fresh Judge
 
 Cualquier casilla crítica ausente → no `VERIFIED_CLOSED`.
