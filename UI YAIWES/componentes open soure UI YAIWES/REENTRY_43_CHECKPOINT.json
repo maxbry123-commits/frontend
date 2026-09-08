@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 23,
+  "processed": 24,
   "records": [
     {
       "bytes": 312360273,
@@ -297,11 +297,24 @@
       "source_url": "https://github.com/grafana/grafana",
       "status": "GAP",
       "tree_sha256": "94e11f1b228bdcca326e5e50c97c5b8c98cc722465896793889a68469d61444f"
+    },
+    {
+      "bytes": 358589376,
+      "destination": "Loki",
+      "error": "READ_BACK_HASH_GAP:ebe1b497496628f788c98ec51c7d452599b92dcae94ace9aaaf4f47eed029dc4!=b2f494f5201e2cca990ec78a6deca912dd77b9a01d3f020069aae570f4c28887",
+      "files": 18119,
+      "index": 24,
+      "n": 111,
+      "name": "Loki",
+      "source_commit": "8b806487034c36de949b89c000696681a89143d6",
+      "source_url": "https://github.com/grafana/loki",
+      "status": "GAP",
+      "tree_sha256": "b2f494f5201e2cca990ec78a6deca912dd77b9a01d3f020069aae570f4c28887"
     }
   ],
   "states": {
     "COMPLETE": 14,
-    "GAP": 9,
+    "GAP": 10,
     "VERIFIED_EXISTING": 0
   }
 }
