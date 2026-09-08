@@ -1,0 +1,32 @@
+{
+  "schema": "yaiwes.extraction.guardian.v2",
+  "run_id": "34291214591",
+  "archive_groups": 51,
+  "processed": [
+    {
+      "slug": "Syft",
+      "target": "UI YAIWES/componentes open soure UI YAIWES/Syft",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Syft_0001.zip": "2dfeacb1ac02dc680870115edec0529327b9f9c881184651ac084ae32fb792f9"
+      },
+      "copied": 2968,
+      "mirrors": [],
+      "files": 2966,
+      "bytes": 33752079,
+      "tree_sha256": "04dca2d9caec40b06723a722462bc2ae82351ec71901baf8b08323f4a8026191"
+    }
+  ],
+  "failures": [],
+  "remaining_gaps": [],
+  "retryable_gaps": [],
+  "blocked_gaps": [],
+  "counts": {
+    "remaining": 0,
+    "retryable": 0,
+    "blocked": 0,
+    "processed": 1
+  },
+  "verdict": "VERIFIED_CLOSED"
+}
