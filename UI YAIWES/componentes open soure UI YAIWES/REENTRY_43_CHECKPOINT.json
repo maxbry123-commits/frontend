@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 19,
+  "processed": 20,
   "records": [
     {
       "bytes": 312360273,
@@ -245,10 +245,23 @@
       "source_url": "https://github.com/livekit/livekit",
       "status": "COMPLETE",
       "tree_sha256": "c040d748319696903b84359a8713c8c987516a85d0abd36a073cb2cbd55e70e1"
+    },
+    {
+      "bytes": 22172087,
+      "destination": "ntfy",
+      "files": 615,
+      "index": 20,
+      "n": 107,
+      "name": "ntfy",
+      "read_back": "PASS",
+      "source_commit": "10cb6506f836dbb00bb77e3b52669f6ace37f555",
+      "source_url": "https://github.com/binwiederhier/ntfy",
+      "status": "COMPLETE",
+      "tree_sha256": "452e04c8ac505158f2c61aac3e31d8555be8a506f1515bd3e602ff9060da1ce2"
     }
   ],
   "states": {
-    "COMPLETE": 12,
+    "COMPLETE": 13,
     "GAP": 7,
     "VERIFIED_EXISTING": 0
   }
