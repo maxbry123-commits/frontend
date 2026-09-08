@@ -1,0 +1,28 @@
+import { Pressable, type PressableProps } from "react-native";
+import { useActionBarEdit } from "@assistant-ui/core/react";
+
+export type ActionBarEditProps = Omit<
+  PressableProps,
+  "onPress" | "children"
+> & {
+  children: PressableProps["children"];
+};
+
+export const ActionBarEdit = ({
+  children,
+  disabled: disabledProp,
+  ...pressableProps
+}: ActionBarEditProps) => {
+  const { edit, disabled } = useActionBarEdit();
+
+  return (
+    <Pressable
+      onPress={edit}
+      disabled={disabledProp ?? disabled}
+      accessibilityRole="button"
+      {...pressableProps}
+    >
+      {children}
+    </Pressable>
+  );
+};
