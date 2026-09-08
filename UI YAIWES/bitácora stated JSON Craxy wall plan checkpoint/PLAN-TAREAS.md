@@ -4,6 +4,7 @@
 **Modo:** `FAIL_CLOSED_LOOP`
 **Owner:** `stabilize_core`
 **Fuente operativa:** `CONTRATO-MAESTRO-FORENSE-XRAY-50-GOALS-UI-YAIWES.md`
+**Handoff operativo:** `UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md`
 
 ---
 
