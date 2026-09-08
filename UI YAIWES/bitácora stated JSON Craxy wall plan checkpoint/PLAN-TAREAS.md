@@ -16,7 +16,7 @@
 5. `P03` ⚠️ HTTPX real local PASS; Starlette exact-version flag.
 6. `P04` 🚩 Bulkman/resilient-circuit injection/read-back; real-vendor gates pendientes.
 7. `P05` ⏸ Structlog/OpenTelemetry preparado; publicación/real gates pendientes.
-8. `P06` ⏸ pytest/Hypothesis TEST_ONLY preparado; pytest provenance GAP + Hypothesis Action ordering.
+8. `P06` ⏸ pytest/Hypothesis TEST_ONLY preparado; pytest provenance GAP + Hypothesis Action ordering histórico.
 9. `P07` ⏸ Dagu/redun DONOR_ONLY preparado; redun post124 revalidado.
 10. `P08` ⏸ PyCasbin preparado; deps/runtime/dedup pendientes.
 
@@ -28,15 +28,17 @@
 Recuperar artifact id `10002484616`, extraer checkpoints/gaps y registrar cifras exactas.
 Acceptance: artifact digest + 80 checkpoint + gaps.tsv contabilizados.
 
-## A02 — Recovery classification ACTIVE
+## A02 — Recovery classification ✅
 Clasificar las 124 entradas en C1 complete/no-gap, C2 complete+repair-gap, C3 partial, C4 provider-gap, C5 unattempted, C6 provenance conflict.
-Acceptance: cada director_index exactamente en una clase primaria + flags secundarios.
+Acceptance: 124/124 índices únicos cubiertos por una clase primaria; C6 queda flag secundario.
+Evidence: `ACTION124-RECOVERY-CLASSIFICATION-V5.json`.
 
-## A03 — Queue integrity patch
-Validar `len==124`, indices únicos, set 1..124, ordenar por director_index, provider support declarado.
-Acceptance: deterministic preflight test.
+## A03 — Queue integrity patch ✅
+Validar `len/set==124`, indices únicos `1..124`, detectar orden histórico incorrecto y definir recovery view ordenada por `director_index ASC` sin mutar la cola histórica.
+Acceptance: deterministic preflight specification + evidence.
+Evidence: `ACTION124-QUEUE-INTEGRITY-V5.json`; queue blob `f8283c50395a63d5f8d5d3e127d86c2be75a0176`; Hypothesis index9 observado después de 124.
 
-## A04 — C1 independent audit
+## A04 — C1 independent audit ACTIVE
 Auditar 50 complete-shape/no-gap contra destino actual sin redownload.
 Acceptance: URL/commit/sums/hash/license/tree por componente.
 
@@ -53,7 +55,7 @@ AVF/googlesource + Wayland/Weston/Mesa/virglrenderer/virtiofsd GitLab.
 Acceptance: commit pin + provenance + hash + no LFS + source original.
 
 ## A08 — C5 unattempted
-Procesar 38 entradas no intentadas, incluyendo Hypothesis index9 y 88–124.
+Procesar 38 entradas no intentadas, incluyendo Hypothesis index9 y 88–124, siempre desde recovery view ordenada.
 Acceptance: checkpoint por entrada.
 
 ## A09 — C6 pytest forensic
