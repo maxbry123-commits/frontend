@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 41,
+  "processed": 42,
   "records": [
     {
       "bytes": 312360273,
@@ -516,11 +516,20 @@
       "name": "Mesa",
       "source_url": "https://gitlab.freedesktop.org/mesa/mesa",
       "status": "GAP"
+    },
+    {
+      "destination": "virglrenderer",
+      "error": "SOURCE_SHA_GAP:warning:",
+      "index": 42,
+      "n": 74,
+      "name": "virglrenderer",
+      "source_url": "https://gitlab.freedesktop.org/virgl/virglrenderer",
+      "status": "GAP"
     }
   ],
   "states": {
     "COMPLETE": 22,
-    "GAP": 19,
+    "GAP": 20,
     "VERIFIED_EXISTING": 0
   }
 }

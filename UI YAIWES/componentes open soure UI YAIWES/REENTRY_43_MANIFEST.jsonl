@@ -75,3 +75,4 @@
 {"destination": "Wayland", "error": "SOURCE_SHA_GAP:warning:", "index": 39, "n": 70, "name": "Wayland", "source_url": "https://gitlab.freedesktop.org/wayland/wayland", "status": "GAP"}
 {"destination": "Weston-libweston", "error": "SOURCE_SHA_GAP:warning:", "index": 40, "n": 71, "name": "Weston/libweston", "source_url": "https://gitlab.freedesktop.org/wayland/weston", "status": "GAP"}
 {"destination": "Mesa", "error": "SOURCE_SHA_GAP:warning:", "index": 41, "n": 72, "name": "Mesa", "source_url": "https://gitlab.freedesktop.org/mesa/mesa", "status": "GAP"}
+{"destination": "virglrenderer", "error": "SOURCE_SHA_GAP:warning:", "index": 42, "n": 74, "name": "virglrenderer", "source_url": "https://gitlab.freedesktop.org/virgl/virglrenderer", "status": "GAP"}
