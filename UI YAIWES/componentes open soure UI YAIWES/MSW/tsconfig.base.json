@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": false,
+    "verbatimModuleSyntax": true,
+    "paths": {
+      "#core": ["./src/core"],
+      "#core/*": ["./src/core/*"]
+    }
+  },
+  "include": ["./global.d.ts"],
+  "exclude": ["node_modules", "lib"]
+}

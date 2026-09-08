@@ -1,0 +1,24 @@
+__*
+.DS_*
+node_modules
+/lib
+tmp
+*-error.log
+*.tsbuildinfo
+/package-lock.json
+/yarn.lock
+stats.html
+.vscode
+.idea
+msw-*.tgz
+.husky/_
+.env
+**/test-results
+/test/modules/node/node-esm-tests
+*.tsbuildinfo
+
+# Smoke test temporary files.
+/package.json.copy
+/examples
+/test/modules/node/node-esm-tests
+*.vitest-temp.json
