@@ -1,0 +1,71 @@
+import type { ChangeEvent, FocusEvent } from 'react';
+import { Checkbox } from '@fluentui/react-components';
+import type { FormContextType, RJSFSchema, StrictRJSFSchema, WidgetProps } from '@rjsf/utils';
+import { ariaDescribedByIds, descriptionId, getTemplate, schemaRequiresTrueValue } from '@rjsf/utils';
+
+/** The `CheckBoxWidget` is a widget for rendering boolean properties.
+ *  It is typically used to represent a boolean.
+ *
+ * @param props - The `WidgetProps` for this component
+ */
+export default function CheckboxWidget<
+  T = any,
+  S extends StrictRJSFSchema = RJSFSchema,
+  F extends FormContextType = any,
+>(props: WidgetProps<T, S, F>) {
+  const {
+    schema,
+    id,
+    htmlName,
+    value,
+    disabled,
+    readonly,
+    label,
+    hideLabel,
+    autofocus,
+    onChange,
+    onBlur,
+    onFocus,
+    registry,
+    options,
+    uiSchema,
+    required,
+  } = props;
+  const DescriptionFieldTemplate = getTemplate<'DescriptionFieldTemplate', T, S, F>(
+    'DescriptionFieldTemplate',
+    registry,
+    options,
+  );
+  const handleChange = ({ target: { checked } }: ChangeEvent<HTMLInputElement>) => onChange(checked);
+  const handleBlur = ({ target }: FocusEvent<HTMLInputElement>) => onBlur(id, target?.checked);
+  const handleFocus = ({ target }: FocusEvent<HTMLInputElement>) => onFocus(id, target?.checked);
+  const description = options.description ?? schema.description;
+  const trueValueRequired = schemaRequiresTrueValue(schema) && required;
+
+  return (
+    <>
+      {!hideLabel && description && (
+        <DescriptionFieldTemplate
+          id={descriptionId(id)}
+          description={description}
+          schema={schema}
+          uiSchema={uiSchema}
+          registry={registry}
+        />
+      )}
+      <Checkbox
+        id={id}
+        name={htmlName || id}
+        label={label}
+        checked={typeof value === 'undefined' ? false : Boolean(value)}
+        required={trueValueRequired}
+        disabled={disabled || readonly}
+        autoFocus={autofocus}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        aria-describedby={ariaDescribedByIds(id)}
+      />
+    </>
+  );
+}

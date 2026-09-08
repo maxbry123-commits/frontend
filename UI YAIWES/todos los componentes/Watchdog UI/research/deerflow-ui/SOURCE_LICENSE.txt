@@ -1,0 +1,4 @@
+SOURCE_LICENSE_FILES
+b23dff4d4bac8d17b6efaaa7e88c2b730149c4dda45699ce676b719cfdffe7e1  LICENSE
+0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  skills/public/frontend-design/LICENSE.txt
+58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  skills/public/skill-creator/LICENSE.txt

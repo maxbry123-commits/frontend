@@ -1,0 +1,43 @@
+import { getTestRegistry } from '@rjsf/core';
+import type { WidgetProps, RJSFSchema } from '@rjsf/utils';
+
+import BaseInputTemplate from '../../src/BaseInputTemplate/index.ts';
+import Templates from '../../src/Templates/index.ts';
+
+const mockSchema: RJSFSchema = {
+  type: 'array',
+  items: {
+    type: 'string',
+  },
+};
+
+const mockEventHandlers = (): void => undefined;
+
+function mockRegistry() {
+  return getTestRegistry({ templates: Templates, rootSchema: mockSchema, widgets: { TextWidget: BaseInputTemplate } });
+}
+
+export function makeWidgetMockProps(props: Partial<WidgetProps> = {}): WidgetProps {
+  return {
+    uiSchema: {},
+    schema: mockSchema,
+    required: true,
+    disabled: false,
+    readonly: true,
+    autofocus: true,
+    label: 'Some simple label',
+    onChange: mockEventHandlers,
+    onBlur: mockEventHandlers,
+    onFocus: mockEventHandlers,
+    multiple: false,
+    rawErrors: [''],
+    value: 'value',
+    options: {},
+    formContext: {},
+    id: '_id',
+    name: '_name',
+    placeholder: '',
+    registry: mockRegistry(),
+    ...props,
+  };
+}

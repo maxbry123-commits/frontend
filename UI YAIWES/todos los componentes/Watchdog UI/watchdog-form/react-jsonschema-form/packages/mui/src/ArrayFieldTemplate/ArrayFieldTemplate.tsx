@@ -1,0 +1,129 @@
+import type { BoxProps } from '@mui/material/Box';
+import Box from '@mui/material/Box';
+import type { GridProps } from '@mui/material/Grid';
+import Grid from '@mui/material/Grid';
+import type { PaperProps } from '@mui/material/Paper';
+import Paper from '@mui/material/Paper';
+import type {
+  ArrayFieldTemplateProps,
+  FormContextType,
+  RJSFSchema,
+  StrictRJSFSchema,
+  GenericObjectType,
+} from '@rjsf/utils';
+import { getTemplate, getUiOptions, buttonId } from '@rjsf/utils';
+
+import { computeSxProps, getMuiProps } from '../util.ts';
+
+/** Properties available for the `rjsfSlotProps` target of the ArrayFieldTemplate. */
+export interface ArrayFieldTemplateMuiProps extends GenericObjectType {
+  /** RJSF-specific slot props for targeting child elements of the ArrayFieldTemplate. */
+  rjsfSlotProps?: {
+    /** Props applied to the wrapper `Paper` material. */
+    arrayPaper?: PaperProps;
+    /** Props applied to the primary `Box` container. */
+    arrayBox?: BoxProps;
+    /** Props applied to the wrapper `Grid` container next to the Add Button. */
+    arrayAddButtonGridContainer?: GridProps;
+    /** Props applied to the `Grid` item containing the Add Button. */
+    arrayAddButtonGridItem?: GridProps;
+    /** Props applied to the `Box` containing the Add Button. */
+    arrayAddButtonBox?: BoxProps;
+  };
+}
+
+/** The `ArrayFieldTemplate` component is the template used to render all items in an array.
+ *
+ * @param props - The `ArrayFieldTemplateProps` props for the component
+ */
+export default function ArrayFieldTemplate<
+  T = any,
+  S extends StrictRJSFSchema = RJSFSchema,
+  F extends FormContextType = any,
+>(props: ArrayFieldTemplateProps<T, S, F>) {
+  const {
+    canAdd,
+    disabled,
+    fieldPathId,
+    uiSchema,
+    items,
+    optionalDataControl,
+    onAddClick,
+    readonly,
+    registry,
+    required,
+    schema,
+    title,
+  } = props;
+  const uiOptions = getUiOptions<T, S, F>(uiSchema);
+  const ArrayFieldDescriptionTemplate = getTemplate<'ArrayFieldDescriptionTemplate', T, S, F>(
+    'ArrayFieldDescriptionTemplate',
+    registry,
+    uiOptions,
+  );
+  const ArrayFieldTitleTemplate = getTemplate<'ArrayFieldTitleTemplate', T, S, F>(
+    'ArrayFieldTitleTemplate',
+    registry,
+    uiOptions,
+  );
+  const showOptionalDataControlInTitle = !readonly && !disabled;
+  // Button templates are not overridden in the uiSchema
+  const {
+    ButtonTemplates: { AddButton },
+  } = registry.templates;
+
+  const {
+    rjsfSlotProps: {
+      arrayPaper,
+      arrayBox,
+      arrayAddButtonGridContainer,
+      arrayAddButtonGridItem,
+      arrayAddButtonBox,
+    } = {},
+  } = getMuiProps<T, S, F, ArrayFieldTemplateMuiProps>(uiOptions);
+
+  return (
+    <Paper elevation={2} {...arrayPaper}>
+      <Box {...arrayBox} sx={computeSxProps<BoxProps>({ p: 2 }, arrayBox)}>
+        <ArrayFieldTitleTemplate
+          fieldPathId={fieldPathId}
+          title={uiOptions.title || title}
+          schema={schema}
+          uiSchema={uiSchema}
+          required={required}
+          registry={registry}
+          optionalDataControl={showOptionalDataControlInTitle ? optionalDataControl : undefined}
+        />
+        <ArrayFieldDescriptionTemplate
+          fieldPathId={fieldPathId}
+          description={uiOptions.description || schema.description}
+          schema={schema}
+          uiSchema={uiSchema}
+          registry={registry}
+        />
+        {!showOptionalDataControlInTitle ? optionalDataControl : undefined}
+        {items}
+        {canAdd && (
+          <Grid
+            container
+            {...arrayAddButtonGridContainer}
+            sx={computeSxProps<GridProps>({ justifyContent: 'flex-end' }, arrayAddButtonGridContainer)}
+          >
+            <Grid {...arrayAddButtonGridItem}>
+              <Box {...arrayAddButtonBox} sx={computeSxProps<BoxProps>({ mt: 2 }, arrayAddButtonBox)}>
+                <AddButton
+                  id={buttonId(fieldPathId, 'add')}
+                  className='rjsf-array-item-add'
+                  onClick={onAddClick}
+                  disabled={disabled || readonly}
+                  uiSchema={uiSchema}
+                  registry={registry}
+                />
+              </Box>
+            </Grid>
+          </Grid>
+        )}
+      </Box>
+    </Paper>
+  );
+}

@@ -1,0 +1,15 @@
+{
+  "extends": "../../../tsconfig.test.json",
+  "include": ["./"],
+  "compilerOptions": {
+    "skipLibCheck": true
+  },
+  "references": [
+    {
+      "path": ".."
+    },
+    {
+      "path": "../../snapshot-tests"
+    }
+  ]
+}

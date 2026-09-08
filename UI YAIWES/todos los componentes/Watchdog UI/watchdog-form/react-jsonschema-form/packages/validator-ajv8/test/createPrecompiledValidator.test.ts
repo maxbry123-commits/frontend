@@ -1,0 +1,59 @@
+import createPrecompiledValidator from '../src/createPrecompiledValidator.ts';
+import type { Localizer } from '../src/index.ts';
+import AJV8PrecompiledValidator from '../src/precompiledValidator.ts';
+import { compileSuperSchema, superSchema } from './harness/compileSuperSchema.ts';
+
+vi.mock('../src/precompiledValidator');
+
+interface TestType {
+  foo: string;
+  bar: boolean;
+}
+
+const validateFns = compileSuperSchema();
+const rootSchema = superSchema;
+const mockedValidator = vi.mocked(AJV8PrecompiledValidator);
+
+describe('createPrecompiledValidator()', () => {
+  describe('passing validatorFns and rootSchema to createPrecompiledValidator', () => {
+    let custom: any;
+    beforeAll(() => {
+      mockedValidator.mockClear();
+      custom = createPrecompiledValidator<TestType>(validateFns, rootSchema);
+    });
+    it('precompiled validator was created', () => {
+      expect(custom).toBeInstanceOf(AJV8PrecompiledValidator);
+    });
+    it('precompiledValidator was constructed with validateFns and rootSchema', () => {
+      expect(AJV8PrecompiledValidator).toHaveBeenCalledWith(validateFns, rootSchema, undefined, undefined);
+    });
+  });
+  describe('passing validatorFns, rootSchema and localizer to createPrecompiledValidator', () => {
+    let custom: any;
+    let localizer: Localizer;
+    beforeAll(() => {
+      localizer = vi.fn();
+      mockedValidator.mockClear();
+      custom = createPrecompiledValidator<TestType>(validateFns, rootSchema, localizer);
+    });
+    it('precompiled validator was created', () => {
+      expect(custom).toBeInstanceOf(AJV8PrecompiledValidator);
+    });
+    it('defaultValidator was constructed with validateFns, rootSchema and the localizer', () => {
+      expect(AJV8PrecompiledValidator).toHaveBeenCalledWith(validateFns, rootSchema, localizer, undefined);
+    });
+  });
+  describe('passing suppressDuplicateFiltering to createPrecompiledValidator', () => {
+    let custom: any;
+    beforeAll(() => {
+      mockedValidator.mockClear();
+      custom = createPrecompiledValidator<TestType>(validateFns, rootSchema, undefined, 'all');
+    });
+    it('precompiled validator was created', () => {
+      expect(custom).toBeInstanceOf(AJV8PrecompiledValidator);
+    });
+    it('precompiledValidator was constructed with validateFns, rootSchema, undefined, and suppressDuplicateFiltering', () => {
+      expect(AJV8PrecompiledValidator).toHaveBeenCalledWith(validateFns, rootSchema, undefined, 'all');
+    });
+  });
+});

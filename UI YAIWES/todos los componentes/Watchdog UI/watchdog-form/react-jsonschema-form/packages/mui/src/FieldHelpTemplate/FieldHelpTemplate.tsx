@@ -1,0 +1,45 @@
+import type { FormHelperTextProps } from '@mui/material/FormHelperText';
+import FormHelperText from '@mui/material/FormHelperText';
+import { RichHelp } from '@rjsf/core';
+import type { FieldHelpProps, FormContextType, RJSFSchema, StrictRJSFSchema, GenericObjectType } from '@rjsf/utils';
+import { helpId, getUiOptions } from '@rjsf/utils';
+
+import { computeSxProps, getMuiProps } from '../util.ts';
+
+/** Properties available for the `rjsfSlotProps` target of the FieldHelpTemplate. */
+export interface FieldHelpTemplateMuiProps extends GenericObjectType {
+  /** RJSF-specific slot props for targeting child elements of the FieldHelpTemplate. */
+  rjsfSlotProps?: {
+    /** Props applied to the `FormHelperText` used for help text. */
+    helpFormHelperText?: FormHelperTextProps;
+  };
+}
+
+/** The `FieldHelpTemplate` component renders any help desired for a field
+ *
+ * @param props - The `FieldHelpProps` to be rendered
+ */
+export default function FieldHelpTemplate<
+  T = any,
+  S extends StrictRJSFSchema = RJSFSchema,
+  F extends FormContextType = any,
+>(props: FieldHelpProps<T, S, F>) {
+  const { fieldPathId, help, uiSchema, registry } = props;
+  if (!help) {
+    return null;
+  }
+
+  const uiOptions = getUiOptions<T, S, F>(uiSchema);
+  const { rjsfSlotProps: { helpFormHelperText } = {} } = getMuiProps<T, S, F, FieldHelpTemplateMuiProps>(uiOptions);
+
+  return (
+    <FormHelperText
+      component='div'
+      id={helpId(fieldPathId)}
+      {...helpFormHelperText}
+      sx={computeSxProps<FormHelperTextProps>({ mt: 0.625 }, helpFormHelperText)}
+    >
+      <RichHelp help={help} registry={registry} uiSchema={uiSchema} />
+    </FormHelperText>
+  );
+}

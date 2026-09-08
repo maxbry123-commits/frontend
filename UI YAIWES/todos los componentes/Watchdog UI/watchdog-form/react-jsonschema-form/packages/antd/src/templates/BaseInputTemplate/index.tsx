@@ -1,0 +1,123 @@
+import type { ChangeEvent, FocusEvent, MouseEvent } from 'react';
+import { useCallback } from 'react';
+import { SchemaExamples } from '@rjsf/core';
+import type {
+  BaseInputTemplateProps,
+  FormContextType,
+  GenericObjectType,
+  RJSFSchema,
+  StrictRJSFSchema,
+} from '@rjsf/utils';
+import { ariaDescribedByIds, examplesId, getInputProps } from '@rjsf/utils';
+import { Input, InputNumber } from 'antd';
+
+const INPUT_STYLE = {
+  width: '100%',
+};
+
+/** The `BaseInputTemplate` is the template to use to render the basic `<input>` component for the `core` theme.
+ * It is used as the template for rendering many of the <input> based widgets that differ by `type` and callbacks only.
+ * It can be customized/overridden for other themes or individual implementations as needed.
+ *
+ * @param props - The `WidgetProps` for this template
+ */
+export default function BaseInputTemplate<
+  T = any,
+  S extends StrictRJSFSchema = RJSFSchema,
+  F extends FormContextType = any,
+>(props: BaseInputTemplateProps<T, S, F>) {
+  const {
+    disabled,
+    registry,
+    id,
+    htmlName,
+    onBlur,
+    onChange,
+    onChangeOverride,
+    onFocus,
+    options,
+    placeholder,
+    readonly,
+    required,
+    schema,
+    value,
+    type,
+  } = props;
+  const { formContext } = registry;
+  // InputNumber doesn't use a native <input type="number"> directly - it wraps it and controls the stepping behavior
+  // through its own props. The step prop in Ant Design expects a number, not the string "any"
+  const inputProps = getInputProps<T, S, F>(schema, type, options, false);
+  const { readonlyAsDisabled = true } = formContext as GenericObjectType;
+  const { ClearButton } = registry.templates.ButtonTemplates;
+
+  const handleNumberChange = (nextValue: number | null) =>
+    onChange(nextValue === null ? options.emptyValue : nextValue);
+
+  const handleTextChange =
+    onChangeOverride ||
+    (({ target }: ChangeEvent<HTMLInputElement>) => onChange(target.value === '' ? options.emptyValue : target.value));
+
+  const handleBlur = ({ target }: FocusEvent<HTMLInputElement>) => onBlur(id, target?.value);
+
+  const handleFocus = ({ target }: FocusEvent<HTMLInputElement>) => onFocus(id, target?.value);
+
+  const handleClear = useCallback(
+    (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onChange(options.emptyValue);
+    },
+    [onChange, options.emptyValue],
+  );
+
+  const { min, max, ...restInputProps } = inputProps;
+
+  const input =
+    inputProps.type === 'number' || inputProps.type === 'integer' ? (
+      <InputNumber
+        disabled={disabled || (readonlyAsDisabled && readonly)}
+        id={id}
+        name={htmlName || id}
+        onBlur={!readonly ? handleBlur : undefined}
+        onChange={!readonly ? handleNumberChange : undefined}
+        onFocus={!readonly ? handleFocus : undefined}
+        placeholder={placeholder}
+        required={required}
+        style={INPUT_STYLE}
+        changeOnWheel={false}
+        list={schema.examples ? examplesId(id) : undefined}
+        {...restInputProps}
+        min={typeof min === 'number' ? min : undefined}
+        max={typeof max === 'number' ? max : undefined}
+        type={undefined}
+        value={value}
+        aria-describedby={ariaDescribedByIds(id, !!schema.examples)}
+      />
+    ) : (
+      <Input
+        disabled={disabled || (readonlyAsDisabled && readonly)}
+        id={id}
+        name={htmlName || id}
+        onBlur={!readonly ? handleBlur : undefined}
+        onChange={!readonly ? handleTextChange : undefined}
+        onFocus={!readonly ? handleFocus : undefined}
+        placeholder={placeholder}
+        required={required}
+        style={INPUT_STYLE}
+        list={schema.examples ? examplesId(id) : undefined}
+        {...inputProps}
+        value={value}
+        aria-describedby={ariaDescribedByIds(id, !!schema.examples)}
+      />
+    );
+
+  return (
+    <>
+      {input}
+      {options.allowClearTextInputs && !readonly && !disabled && value && (
+        <ClearButton registry={registry} onClick={handleClear} />
+      )}
+      <SchemaExamples id={id} schema={schema} />
+    </>
+  );
+}

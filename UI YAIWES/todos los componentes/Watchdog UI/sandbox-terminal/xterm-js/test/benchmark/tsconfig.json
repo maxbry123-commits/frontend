@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "es2021",
+    ],
+    "outDir": "../../out-test/benchmark",
+    "types": [
+      "../../node_modules/@types/node"
+    ],
+    "moduleResolution": "nodenext",
+    "strict": false,
+    "target": "es2021",
+    "module": "nodenext",
+    "paths": {
+      "common/*": ["../../src/common/*"],
+      "browser/*": ["../../src/browser/*"]
+    }
+  },
+  "include": [
+    "./**/*",
+    "../../typings/xterm.d.ts"
+  ],
+  "exclude": [
+    "../../**/*test.ts"
+  ],
+  "references": [
+    { "path": "../../src/common" },
+    { "path": "../../src/browser" },
+  ]
+}
