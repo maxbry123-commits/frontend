@@ -1,68 +1,73 @@
 {
-  "checkpoint_id": "UIYAIWES-V3-POST124-REDUN-0024",
-  "previous_checkpoint_id": "UIYAIWES-V3-POST124-PYTEST-0023",
+  "checkpoint_id": "UIYAIWES-V5-XRAY-ACTION124-0025",
+  "previous_checkpoint_id": "UIYAIWES-V3-POST124-REDUN-0024",
   "contract": "tel.workflow/v3",
+  "guide_revision": "v5",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "ACTIVE_LOOP_POST_124_CANCELLED_REVALIDATION",
-  "last_verified_closed": "P01 initial 14-component inventory/provenance baseline",
-  "current_node": "P01_POST_124_INVENTORY_REVALIDATION",
+  "status": "ACTIVE_LOOP_POST124_RECOVERY_FORENSIC",
+  "current_node": "P01_POST124_RECOVERY_QUEUE_BUILD",
+  "last_verified_closed": "P01 initial 14-component inventory/provenance baseline (historical; freshness now stale)",
   "workflow_owner": "stabilize_core",
-  "canonical_architecture": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md",
-  "verified_state": {
-    "universal_socket_present": true,
-    "P01_initial_14_verified": true,
-    "P02A_adapter_wired": true,
-    "P02B_adapter_wired": true,
-    "P02C_adapter_wired": true,
-    "P03_httpx_real_local_pass": true,
-    "P04_adapters_and_vendor_readback": true,
-    "gVisor_physical_provenance_verified": true,
-    "gfxstream_physical_provenance_verified": true,
-    "jsPDF_physical_provenance_verified": true,
-    "libdatachannel_physical_provenance_verified": true,
-    "pgvector_physical_provenance_verified": true,
-    "pytest_physical_presence_verified": true,
-    "pytest_declared_provenance_verified": false,
-    "pytest_integrated": false,
-    "redun_physical_provenance_verified": true,
-    "redun_integrated": false
+  "head_observed": "fa3aff93da530cb76c009b0493886c4dcbf0729b",
+  "new_forensic_evidence": {
+    "artifact_id": 10002484616,
+    "artifact_digest": "sha256:680861bb0f9b48dae398ccd56c95add5d44bd0bc45510a9a7cab17a55ee10683",
+    "artifact_files": 81,
+    "checkpoint_json": 80,
+    "gaps_tsv": true,
+    "verify_final_json": false,
+    "expected": 124,
+    "attempted": 86,
+    "unattempted": 38,
+    "gap_entries": 36,
+    "complete_checkpoint_shape": 60,
+    "complete_shape_no_gap": 50,
+    "complete_shape_with_repair_gap": 10,
+    "partial_checkpoint": 20,
+    "provider_gap_without_checkpoint": 6,
+    "hypothesis_index9_placed_after_124": true
   },
-  "post_124_evidence": {
-    "run_id": 34060401131,
-    "job_id": 101559786309,
-    "run_status": "completed",
-    "run_conclusion": "cancelled",
-    "process_step": "cancelled",
-    "final_destination_verification": "failure",
-    "fail_closed_until_124_verified": "failure",
-    "completed_at": "2026-09-07T02:43:53Z",
-    "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131"
+  "crosscheck_sources": {
+    "memory_wordflow_yaiwes": "AUDITED",
+    "max_system_100x": "AUDITED",
+    "block0_nct": "METHOD_ONLY_DO_NOT_MIX_FUNCTIONAL_ARCHITECTURE",
+    "virtual_computer_yaiwes": "AUDITED_FROM_REPO",
+    "command_center_yaiwes": "AUDITED_FROM_REPO"
   },
-  "last_1x1_result": {
-    "entry": "redun",
-    "classification": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED",
-    "source_url": "https://github.com/insitro/redun",
-    "source_commit": "49a299b223bc345b999aaa40daa6876f105089e1",
-    "source_tree": "ba480953fd001959c2aebfa70614c693f90f5333",
-    "destination_tree": "e301e8967ebdcb0b27734a820bd2608999b08541",
-    "license": "Apache-2.0",
-    "license_blob": "d645695673349e3947e8e5ae42332d0ac3164cd7",
-    "code_root": "redun",
-    "integration": "NOT_WIRED",
-    "closure": "NOT_VERIFIED_CLOSED"
+  "councils": {
+    "architecture_ownership": "DEFINED_PENDING_FINAL_PASS",
+    "evidence_coverage": "DEFINED_PENDING_FINAL_PASS",
+    "execution_recovery": "DEFINED_PENDING_FINAL_PASS"
+  },
+  "refutations": {
+    "r1_action124_presence_is_success": "REFUTED",
+    "r2_adapter_mock_equals_integration": "REFUTED",
+    "r3_nct_block0_is_yaiwes_functional_source": "REFUTED"
+  },
+  "goals": {
+    "count": 50,
+    "ledger": "GOALS-50-ENTRADA-SALIDA-V5.md",
+    "final_goal": "G50 Final E2E / Final Judge"
   },
   "blocked_claims": {
-    "P01_freshness": "BLOCKED_UNTIL_POST_CANCEL_INVENTORY_REVALIDATED",
-    "P05_publication": "BLOCKED_UNTIL_P01_POST124_RECONCILIATION",
-    "pytest_duplicate_alias": "BLOCKED_UNTIL_EXACT_PHYSICAL_SNAPSHOT_COMMIT_TREE_IDENTIFIED",
-    "redun_integration": "BLOCKED_UNTIL_SCOPED_CONTRACT_ADAPTER_REGISTRY_LOADER_GUARDS_TESTS_ROUTE_IS_JUSTIFIED"
+    "P01_freshness": "BLOCKED_UNTIL_ACTION124_RECOVERY_AND_FULL_POST124_RECONCILIATION",
+    "P05_publication": "BLOCKED_UNTIL_P01_FRESH_OR_EXPLICIT_SAFE_INDEPENDENCE_REVALIDATED",
+    "action124_124_of_124": "FALSE_NO_FINAL_PASS",
+    "pytest_provenance": "BLOCKED_UNTIL_EXACT_PHYSICAL_SNAPSHOT_IDENTIFIED"
   },
   "queue_1x1": [
-    "advance to resilient-circuit after redun provenance classification was persisted",
-    "repeat five mandatory searches",
-    "verify SOURCE_URL/SOURCE_COMMIT/license/code-root/tree",
-    "classify and persist without mounting donor code",
-    "revalidate P01 only after complete destination reconciliation"
+    "build recovery classification from artifact and current destination",
+    "sort and validate director_index set 1..124",
+    "audit C1 complete/no-gap without redownload",
+    "investigate C2 repair_rc despite complete shape",
+    "resume C3 partial checkpoints",
+    "add authorized provider acquisition path for C4",
+    "process C5 unattempted including Hypothesis",
+    "resolve C6 provenance conflicts",
+    "produce final read-back artifact",
+    "run independent 124/124 auditor",
+    "only then refresh P01 closure and continue P05-P08"
   ],
-  "closure_rule": "file, import, repository, staging or partial acquisition never equals VERIFIED_CLOSED without route/diff/SHA/log/test/URL evidence"
+  "recovery_anchor": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/RECOVERY-PATCH.md",
+  "closure_rule": "no VERIFIED_CLOSED without required real evidence and Judge"
 }

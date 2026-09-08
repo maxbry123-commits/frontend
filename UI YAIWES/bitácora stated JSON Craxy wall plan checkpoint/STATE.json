@@ -1,55 +1,110 @@
 {
   "contract": "tel.workflow/v3",
+  "guide_revision": "v5",
   "project": "UI YAIWES modular component integration",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "ACTIVE_LOOP_POST_124_CANCELLED_REVALIDATION",
-  "current_node": "P01_POST_124_INVENTORY_REVALIDATION",
+  "status": "ACTIVE_LOOP_POST124_RECOVERY_FORENSIC",
+  "current_node": "P01_POST124_RECOVERY_QUEUE_BUILD",
   "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY_INITIAL_14",
   "workflow_owner": "stabilize_core",
-  "master_architecture": {
-    "path": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md",
-    "contract": "tel.workflow/v3",
-    "mode": "FAIL_CLOSED_LOOP"
+  "head_at_forensic_consolidation": "fa3aff93da530cb76c009b0493886c4dcbf0729b",
+  "canonical_docs": {
+    "master_contract": "UI YAIWES/readme arquitectura UI YAIWES/CONTRATO-MAESTRO-FORENSE-XRAY-50-GOALS-UI-YAIWES.md",
+    "source_crosscheck": "UI YAIWES/readme arquitectura UI YAIWES/CROSSCHECK-FUENTES-VERDAD-XRAY-UI-YAIWES.md",
+    "architecture_index": "UI YAIWES/readme arquitectura UI YAIWES/README-V5-CANONICO.md",
+    "functional_architecture": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md",
+    "historical_loop_guide": "UI YAIWES/readme arquitectura UI YAIWES/GUIA-MAESTRA-EJECUCION-LOOP-SOL-UI-YAIWES.md",
+    "goals_50": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/GOALS-50-ENTRADA-SALIDA-V5.md",
+    "action124_recovery": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/GAPS-ACTION124-RECOVERY-V5.md"
+  },
+  "source_authority": {
+    "functional_yaiwes": [
+      "MAX-SYSTEM-100X-FINAL-1",
+      "Memoria Wordflow YAIWES",
+      "Virtual Computer YAIWES",
+      "Command Center Chat YAIWES"
+    ],
+    "method_only_attachment": "Bloque 0 NCT — use process discipline only; source explicitly forbids mixing NCT with YAIWES",
+    "authority_rule": "real repo/runtime evidence > STATE/CHECKPOINT > runtime contract > approved functional sources > historical guide > inference"
+  },
+  "goals": {
+    "total": 50,
+    "ledger": "GOALS-50-ENTRADA-SALIDA-V5.md",
+    "rule": "SPECIFIED is not implemented; PREPARED is not published; PARTIAL is not closed; only fresh evidence can promote to VERIFIED"
   },
   "inventory": {
     "initial_verified_count": 14,
     "freshness": "STALE_POST_CANCELLED_124_ACQUISITION",
-    "rule": "revalidate physical destination, provenance and dedup before advancing integration claims",
     "post124_revalidated_entries": 7,
-    "last_revalidated_entry": "redun"
+    "last_revalidated_entry": "redun",
+    "next_revalidation_after_recovery_plan": "resilient-circuit or next classified queue item based on artifact/current destination",
+    "rule": "complete post124 destination/provenance/dedup reconciliation before fresh P01 closure"
   },
-  "nodes": {
-    "P01": "INITIAL_14_VERIFIED_CLOSED_REVALIDATION_ACTIVE_AFTER_CANCELLED_124",
-    "P02A": "CLOSED_UNVERIFIED_REAL_VENDOR_EXECUTION_FLAG",
-    "P02B": "CLOSED_UNVERIFIED_PYDANTIC_CORE_VERSION_FLAG",
-    "P02C": "CLOSED_UNVERIFIED_REAL_VENDOR_EXECUTION_FLAG",
-    "P03": "PARTIAL_VERIFIED_HTTPX_REAL_LOCAL_STARLETTE_VERSION_FLAG",
-    "P04": "CLOSED_UNVERIFIED_VENDOR_EXECUTION_FLAGS",
-    "P05": "PREPARED_BLOCKED_BY_POST_124_RECONCILIATION",
-    "P06": "PREPARED_TEST_ONLY_GATES_NOT_CLAIMED_CLOSED",
-    "P07": "PREPARED_DONOR_ONLY_GATES_NOT_CLAIMED_CLOSED",
-    "P08": "PREPARED_PYCASBIN_POLICY_WORK_REQUIRES_POST_124_DEDUP"
-  },
-  "acquisition_124": {
+  "action124": {
+    "workflow": ".github/workflows/ui-yaiwes-124-download-extract-20260906.yml",
     "run_id": 34060401131,
+    "job_id": 101559786309,
     "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34060401131",
     "status": "completed",
     "conclusion": "cancelled",
-    "job_id": 101559786309,
-    "process_step": "cancelled",
-    "final_destination_verification": "failure",
-    "fail_closed_step": "failure",
-    "completed_at": "2026-09-07T02:43:53Z"
+    "artifact_id": 10002484616,
+    "artifact_digest": "sha256:680861bb0f9b48dae398ccd56c95add5d44bd0bc45510a9a7cab17a55ee10683",
+    "expected": 124,
+    "attempted": 86,
+    "unattempted": 38,
+    "checkpoint_files": 80,
+    "provider_gaps_no_checkpoint": 6,
+    "gaps_tsv_entries": 36,
+    "complete_checkpoint_shape": 60,
+    "complete_shape_without_gap_tsv": 50,
+    "complete_shape_with_repair_gap": 10,
+    "partial_checkpoints": 20,
+    "final_124_verified": false,
+    "verify_final_present_in_recovered_artifact": false,
+    "queue_anomaly": "Hypothesis director_index 9 is placed after director_index 124 and was not attempted before cancellation",
+    "provider_gaps": ["AVF","Wayland","Weston-libweston","Mesa","virglrenderer","virtiofsd"],
+    "next_strategy": "build sorted unique recovery queue from artifact + current destination; audit complete checkpoints, resume partials, use provider adapters, process unattempted, then independent 124/124 verification"
+  },
+  "nodes": {
+    "P01": "ACTIVE_REVALIDATION_POST124_CANCELLED",
+    "P02A": "CLOSED_UNVERIFIED_REAL_VENDOR_EXECUTION_FLAG",
+    "P02B": "BLOCKED_EXACT_PYDANTIC_CORE_VERSION_FLAG",
+    "P02C": "CLOSED_UNVERIFIED_REAL_VENDOR_EXECUTION_FLAG",
+    "P03": "PARTIAL_VERIFIED_HTTPX_REAL_LOCAL_STARLETTE_VERSION_FLAG",
+    "P04": "CLOSED_UNVERIFIED_VENDOR_EXECUTION_FLAGS",
+    "P05": "PREPARED_BLOCKED_BY_P01_FRESHNESS",
+    "P06": "PREPARED_TEST_ONLY_WITH_PYTEST_PROVENANCE_GAP",
+    "P07": "PREPARED_DONOR_ONLY",
+    "P08": "PREPARED_PYCASBIN_POLICY_REQUIRES_DEDUP_AND_REAL_DEPS",
+    "P09_PLUS": "PENDING_PER_50_GOAL_DEPENDENCY_GRAPH"
   },
   "post124_entries": {
-    "gVisor": {"classification":"MATERIALIZED_OK_DONOR_ONLY_UNMAPPED","tree_sha":"fa6b9f1ca81285907f24d71ef100410ef48aac1f","source_url":"https://github.com/google/gvisor","source_commit":"0a1316b0d180600212bd607aa0ccfe2a9b09a899","license_blob":"f7a006d10464cfe9724b5d687c0013bf982cc66a","candidate_code_roots":["pkg","runsc","sandboxexec","shim"],"integration":"NOT_WIRED"},
-    "gfxstream": {"classification":"MATERIALIZED_OK_DONOR_ONLY_UNMAPPED","tree_sha":"e696264983a685fb44a7b9706bcf35383fd67159","source_url":"https://github.com/google/gfxstream","source_commit":"681d81edd2ec597b055c2fbe99a742d95545722a","source_tree":"89e6b402afabac2ac63dd293da5c5b643c77c57b","license_blob":"7a4a3ea2424c09fbe48d455aed1eaa94d9124835","candidate_code_roots":["host","guest","common","codegen"],"integration":"NOT_WIRED"},
-    "jsPDF": {"classification":"MATERIALIZED_OK_DONOR_ONLY_UNMAPPED","tree_sha":"b85b001772c33639db82c4c0b64313a37522bbc0","source_url":"https://github.com/parallax/jsPDF","source_commit":"a3930ce03a585a26b2c76d12a0f413ce96f6d1a3","source_tree":"baf4d90e2f5a40eb9f558f616b803dc3fd50f095","license_blob":"dc7d3a9fa305defebad6cb88ba4cd9776f26fcd3","candidate_code_roots":["src","dist","types"],"integration":"NOT_WIRED"},
-    "libdatachannel": {"classification":"MATERIALIZED_OK_DONOR_ONLY_UNMAPPED","tree_sha":"dce2a5f7a935d249b0130cb2c944bee4f06e7016","source_url":"https://github.com/paullouisageneau/libdatachannel","source_commit":"51085b8de4e6185dc019e3705c88b87933d7c3f6","source_tree":"22d0552fdb095035c0f35049ad04bb5af1982d91","license":"MPL-2.0","license_blob":"14e2f777f6c395e7e04ab4aa306bbcc4b0c1120e","candidate_code_roots":["include","src"],"integration":"NOT_WIRED","decision":"retain provenance; do not copy/mount WebRTC donor until a scoped media/transport contract plus adapter/registry/loader/guard/tests route is justified"},
-    "pgvector": {"classification":"MATERIALIZED_OK_DONOR_ONLY_UNMAPPED","tree_sha":"dee3af44e7c2b6779d02fa1372c89c9b89809679","source_url":"https://github.com/pgvector/pgvector","source_commit":"e48241b4dcc045b18902914f668d03d1d399dfbe","license":"PostgreSQL","license_blob":"fc5f177fa5d9c0d20a949f4b4faa028999977008","candidate_code_roots":["src","sql"],"integration":"NOT_WIRED","decision":"retain provenance; do not copy/mount vector extension until a scoped memory/retrieval contract plus adapter/registry/loader/guard/tests route is justified"},
-    "pytest": {"classification":"PARTIAL_PROVENANCE_MISMATCH_TEST_ONLY","source_url":"https://github.com/pytest-dev/pytest","declared_source_commit":"1f787563f0a174f938ad3415c2ecd90ae35f03e2","declared_source_tree":"aa19de18166fd2225a0884e809e11a6ef1f0a87c","license":"MIT","license_blob":"c3f1657fce94589bd1ec7cead810639047f3d359","evidence_file":"src/_pytest/nodeid.py","evidence_blob":"f859b15347567130b8537a06604f5b2e16cdfbb2","later_upstream_commit":"431f3e1f5fd70b9b0f8afa2d20a10421542e5c6a","later_upstream_tree":"978c5d48fd273d69326a6cd0861198a50c42c62e","integration":"NOT_WIRED","decision":"declared SOURCE_COMMIT is stale relative to physical content; do not treat as duplicate alias or verified provenance until exact physical snapshot commit/tree is identified"},
-    "redun": {"classification":"MATERIALIZED_OK_DONOR_ONLY_UNMAPPED","tree_sha":"e301e8967ebdcb0b27734a820bd2608999b08541","source_url":"https://github.com/insitro/redun","source_commit":"49a299b223bc345b999aaa40daa6876f105089e1","source_tree":"ba480953fd001959c2aebfa70614c693f90f5333","license":"Apache-2.0","license_blob":"d645695673349e3947e8e5ae42332d0ac3164cd7","candidate_code_roots":["redun"],"integration":"NOT_WIRED","decision":"retain provenance only; five mandatory searches found no justified universal-socket wiring, so donor remains unmapped and no runtime code is mounted"}
+    "gVisor": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED_NOT_WIRED",
+    "gfxstream": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED_NOT_WIRED",
+    "jsPDF": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED_NOT_WIRED",
+    "libdatachannel": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED_NOT_WIRED",
+    "pgvector": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED_NOT_WIRED",
+    "pytest": "PARTIAL_PROVENANCE_MISMATCH_TEST_ONLY_NOT_WIRED",
+    "redun": "MATERIALIZED_OK_DONOR_ONLY_UNMAPPED_NOT_WIRED"
   },
-  "active_flags": ["P01-FRESHNESS-STALE-POST-CANCELLED-124","ACTION124-FINAL-DESTINATION-VERIFY-FAILED","GVISOR-DONOR-ONLY-UNMAPPED-NOT-WIRED","GFXSTREAM-DONOR-ONLY-UNMAPPED-NOT-WIRED","JSPDF-DONOR-ONLY-UNMAPPED-NOT-WIRED","LIBDATACHANNEL-DONOR-ONLY-UNMAPPED-NOT-WIRED","PGVECTOR-DONOR-ONLY-UNMAPPED-NOT-WIRED","PYTEST-PROVENANCE-SOURCE-COMMIT-MISMATCH","REDUN-DONOR-ONLY-UNMAPPED-NOT-WIRED","P02A-FLAG-REAL-VENDOR-EXECUTION","P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH","P02C-FLAG-REAL-VENDOR-EXECUTION","P03-FLAG-STARLETTE-VERSION-MISMATCH","P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION","P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"],
-  "next_delta": "advance to resilient-circuit after persisting redun as MATERIALIZED_OK_DONOR_ONLY_UNMAPPED; repeat mandatory five-location search and exact SOURCE_COMMIT/tree/code-root verification"
+  "active_flags": [
+    "P01-FRESHNESS-STALE-POST-CANCELLED-124",
+    "ACTION124-RUN-CANCELLED",
+    "ACTION124-FINAL-DESTINATION-VERIFY-FAILED",
+    "ACTION124-38-UNATTEMPTED",
+    "ACTION124-36-GAPS",
+    "ACTION124-20-PARTIAL-CHECKPOINTS",
+    "ACTION124-10-COMPLETE-SHAPE-WITH-REPAIR-GAP",
+    "ACTION124-6-NON-GITHUB-PROVIDER-GAPS",
+    "ACTION124-HYPOTHESIS-QUEUE-ORDER-ANOMALY",
+    "PYTEST-PROVENANCE-SOURCE-COMMIT-MISMATCH",
+    "P02A-FLAG-REAL-VENDOR-EXECUTION",
+    "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
+    "P02C-FLAG-REAL-VENDOR-EXECUTION",
+    "P03-FLAG-STARLETTE-VERSION-MISMATCH",
+    "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
+    "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
+  ],
+  "next_delta": "materialize Action124 recovery queue specification sorted by director_index and classify C1/C2/C3/C4/C5/C6 without re-downloading proven content",
+  "closure_rule": "file/import/repository/checkpoint/staging/download never equals VERIFIED_CLOSED without required route+SHA+readback+test/log/URL evidence and Judge"
 }
