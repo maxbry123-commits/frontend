@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 33,
+  "processed": 34,
   "records": [
     {
       "bytes": 312360273,
@@ -427,10 +427,23 @@
       "source_url": "https://github.com/paradedb/paradedb",
       "status": "GAP",
       "tree_sha256": "9c514b2740b075ac47141e85e4e3be08315e5834e5b337a28b6a20cccfddb9c0"
+    },
+    {
+      "bytes": 20612965,
+      "destination": "LanceDB",
+      "files": 719,
+      "index": 34,
+      "n": 121,
+      "name": "LanceDB",
+      "read_back": "PASS",
+      "source_commit": "2e205ac9bbea030e23db06fdb5ff1278b0100596",
+      "source_url": "https://github.com/lancedb/lancedb",
+      "status": "COMPLETE",
+      "tree_sha256": "c03cc8abd4411990cfda0fc13f9b276ddb424919a6f297f86067131c023475e2"
     }
   ],
   "states": {
-    "COMPLETE": 19,
+    "COMPLETE": 20,
     "GAP": 14,
     "VERIFIED_EXISTING": 0
   }
