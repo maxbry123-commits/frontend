@@ -1,0 +1,57 @@
+# AI assistants
+.claude/
+.cursor/
+CLAUDE.local.md
+CLAUDE.md
+
+# Build artifacts
+target/
+*.deb
+
+# Code coverage
+*.profraw
+
+# Credentials
+*.pem
+*-key.json
+*credentials*.json
+*service-account*.json
+
+# Development environments
+.direnv/
+.pgrx/
+.env
+
+# Editors and IDEs
+.idea/
+.vscode/
+*.iml
+*.swp
+
+# Generated documentation tests
+.github/scripts/verify/
+
+# macOS
+.DS_Store
+
+# Nix artifacts
+result*
+
+# Node.js
+node_modules/
+package-lock.json
+package.json
+
+# Patch artifacts
+*.orig
+*.rej
+
+# Profiling
+profile.json*
+
+# Property testing
+*.proptest-regressions
+
+# Python
+.ruff_cache/
+__pycache__/

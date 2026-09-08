@@ -1,0 +1,113 @@
+{
+  self,
+  buildPgrxExtension,
+  cargo-pgrx,
+  fetchurl,
+  lib,
+  lld,
+  nix-update-script,
+  pkg-config,
+  postgresql,
+}:
+
+let
+  # Attribute set representing the Cargo.toml file in the root
+  rootCargoToml = builtins.fromTOML (builtins.readFile ../Cargo.toml);
+
+  # Get the current Lindera version from the root Cargo.lock
+  linderaVersion =
+    (builtins.head (
+      builtins.filter (p: p.name == "lindera")
+        (builtins.fromTOML (builtins.readFile ../Cargo.lock)).package
+    )).version;
+
+  linderaWebsite = "https://lindera.dev";
+
+  # pg_search's tokenizer uses several language dictionaries used by the Lindera crate
+  dictionaries = {
+    # https://github.com/lindera/lindera/blob/v5.0.1/lindera-ko-dic/build.rs#L15-L22
+    lindera-ko-dic = rec {
+      language = "Korean";
+      filename = "mecab-ko-dic-2.1.1-20180720.tar.gz";
+      source = fetchurl {
+        url = "${linderaWebsite}/${filename}";
+        hash = "sha256-cCztIcYWfp2a68Z0q17lSvWNREOXXylA030FZ8AgWRo=";
+      };
+    };
+
+    # https://github.com/lindera/lindera/blob/v5.0.1/lindera-cc-cedict/build.rs#L15-L22
+    lindera-cc-cedict = rec {
+      language = "Chinese";
+      filename = "CC-CEDICT-MeCab-0.1.0-20200409.tar.gz";
+      source = fetchurl {
+        url = "${linderaWebsite}/${filename}";
+        hash = "sha256-7Tz54+yKgGR/DseD3Ana1DuMytLplPXqtv8TpB0JFsg=";
+      };
+    };
+
+    # https://github.com/lindera/lindera/blob/v5.0.1/lindera-ipadic/build.rs#L15-L22
+    lindera-ipadic = rec {
+      language = "Japanese";
+      filename = "mecab-ipadic-2.7.0-20250920.tar.gz";
+      source = fetchurl {
+        url = "${linderaWebsite}/${filename}";
+        hash = "sha256-p7qfZF/+cJTlauHEqB0QDfj7seKLvheSYi6XKOFi2z0=";
+      };
+    };
+  };
+in
+buildPgrxExtension (finalAttrs: {
+  pname = "pg_search";
+  version = rootCargoToml.workspace.package.version;
+  src = self;
+
+  # This hash needs to change any time the Rust dependencies are updated.
+  # If maintainers forget to do so, Nix will throw an error message that begins
+  # like this and then provides the correct new hash:
+  # error: hash mismatch in fixed-output derivation '...'
+  cargoHash = "sha256-Zg/gq7yZOcBIkqET80tIfa0RRDcZAA4eyx2+v+PiUxs=";
+
+  inherit cargo-pgrx postgresql;
+
+  # Lindera dictionaries are copied to a temporary directory and the
+  # LINDERA_BUILD_DICTIONARY_CACHE_DIR environment variable prevents the
+  # build.rs files in the Lindera crates from downloading their dictionary
+  # from an external URL, which doesn't work in the Nix sandbox.
+  preConfigure = ''
+    export LINDERA_BUILD_DICTIONARY_CACHE_DIR=$TMPDIR/lindera-cache
+    mkdir -p $LINDERA_BUILD_DICTIONARY_CACHE_DIR/${linderaVersion}
+
+    ${lib.concatMapStringsSep "\n" (dict: ''
+      echo "Copying ${dict.language} dictionary to Lindera cache"
+      cp ${dict.source} $LINDERA_BUILD_DICTIONARY_CACHE_DIR/${linderaVersion}/${dict.filename}
+    '') (lib.attrValues dictionaries)}
+
+    echo "Lindera cache prepared at $LINDERA_BUILD_DICTIONARY_CACHE_DIR"
+  '';
+
+  cargoPgrxFlags = [
+    "--package"
+    "pg_search"
+  ];
+
+  # .cargo/config.toml links Linux builds with LLD.
+  nativeBuildInputs = [
+    lld
+    pkg-config
+  ];
+
+  # pgrx tests try to install the extension into postgresql nix store
+  doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Search without a second system. One Postgres for your application data, full-text search, vector retrieval, and aggregations.";
+    homepage = "https://paradedb.com";
+    changelog = "https://github.com/paradedb/paradedb/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    # ../Cargo.toml#L14-L18
+    broken = lib.versionOlder postgresql.version "15";
+    platforms = postgresql.meta.platforms;
+  };
+})

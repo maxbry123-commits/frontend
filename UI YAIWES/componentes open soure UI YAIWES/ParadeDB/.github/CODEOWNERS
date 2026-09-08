@@ -1,0 +1,15 @@
+# Order is important. The last matching pattern has the most precedence
+
+/.cargo/                                                       @paradedb/pg_search-maintainers
+/.github/                                                      @paradedb/pg_search-maintainers
+/benchmarks/                                                   @paradedb/pg_search-maintainers
+/docker/                                                       @paradedb/pg_search-maintainers
+/docs/                                                         @paradedb/pg_search-maintainers
+/dst/                                                          @paradedb/pg_search-maintainers
+/macros/                                                       @paradedb/pg_search-maintainers
+/nix/                                                          @paradedb/pg_search-maintainers
+/pg_search/                                                    @paradedb/pg_search-maintainers
+/scripts/                                                      @paradedb/pg_search-maintainers
+/stressgres/                                                   @paradedb/pg_search-maintainers
+/tests/                                                        @paradedb/pg_search-maintainers
+/tokenizers/                                                   @paradedb/pg_search-maintainers

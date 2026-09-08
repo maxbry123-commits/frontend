@@ -1,0 +1,1284 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+//! JoinScan execution state: DataFusion plan construction, optimizer pipeline,
+//! and result streaming.
+//!
+//! See the [JoinScan README](README.md) for the full architecture overview.
+//!
+//! # Parallel Partitioning Strategy & Correctness
+//!
+//! `JoinScan` implements parallel execution using a **Massively Parallel Processing (MPP)**
+//! architecture. Instead of hardcoding which table is partitioned and which is replicated,
+//! the physical plan is evaluated by DataFusion, which dynamically hash-partitions tables by
+//! join key and shuffles intermediate rows between workers. This ensures that every row is
+//! scanned exactly once while achieving distributed execution.
+//!
+
+use std::sync::Arc;
+
+use datafusion::catalog::Session;
+use datafusion::common::{DataFusionError, Result};
+use datafusion::logical_expr::{Expr, col};
+use datafusion::physical_plan::coalesce_partitions::CoalescePartitionsExec;
+use datafusion::physical_plan::{ExecutionPlan, ExecutionPlanProperties};
+use datafusion::prelude::{DataFrame, SessionConfig, SessionContext};
+use futures::future::{FutureExt, LocalBoxFuture};
+use pgrx::pg_sys;
+
+use super::planning::get_source_attno_by_name;
+use crate::api::{NullTestKind, OrderByFeature, SortDirection};
+use crate::index::fast_fields_helper::WhichFastField;
+use crate::postgres::customscan::datafusion::memory::{build_runtime_env, create_memory_pool};
+use crate::postgres::customscan::joinscan::build::{
+    self as build, CtidColumn, JoinCSClause, JoinSource, RelNode, RelationAlias,
+};
+use datafusion::execution::TaskContext;
+use datafusion::physical_optimizer::filter_pushdown::FilterPushdown;
+
+use crate::index::reader::index::SearchIndexManifest;
+use crate::postgres::customscan::CustomScanState;
+use crate::postgres::customscan::datafusion::translator::{
+    ColumnMapper, CombinedMapper, PredicateTranslator, apply_join_level_filter,
+    apply_relnode_unnest, build_join_df_with_filter, make_col, make_source_col,
+    make_source_score_col, make_source_unnested_col, translate_pg_node_string,
+};
+use crate::postgres::customscan::joinscan::privdat::{
+    OutputColumnInfo, PrivateData, SCORE_COL_NAME,
+};
+use crate::postgres::customscan::solve_expr::SolvePostgresExpressions;
+use crate::postgres::heap::VisibilityChecker;
+use crate::postgres::rel::PgSearchRelation;
+use crate::scan::{PgSearchTableProvider, VisibilityMode};
+use async_trait::async_trait;
+use datafusion::execution::context::QueryPlanner;
+use datafusion::execution::session_state::SessionStateBuilder;
+use datafusion::functions_aggregate::expr_fn::min;
+use datafusion::physical_planner::{DefaultPhysicalPlanner, PhysicalPlanner};
+
+/// Resolve a PostgreSQL Var (`rti`, `attno`) to a DataFusion column expression (`col("...")`).
+///
+/// Uses `output_sources()` rather than `sources()` to ensure only output-visible relations
+/// are targeted. For pruned relations (e.g. the pruned RHS of an Anti Join or pruned full join
+/// inputs), their columns do not exist in the DataFusion plan schema and resolving against
+/// them would trigger `FieldNotFound` schema errors during optimization or execution.
+///
+/// Returns `None` if no source maps the var — the caller decides whether to
+/// fall back to a literal or propagate the absence.
+fn resolve_var_to_df_col(
+    join_clause: &JoinCSClause,
+    rti: pg_sys::Index,
+    attno: pg_sys::AttrNumber,
+) -> Option<Expr> {
+    if let Some(unnest_info) = join_clause.plan.find_lateral_unnest(rti) {
+        let source = join_clause
+            .plan
+            .sources()
+            .into_iter()
+            .find(|s| s.contains_rti(unnest_info.source_rti.0))?;
+        return Some(make_source_unnested_col(source, &unnest_info.field_name));
+    }
+    join_clause.plan.output_sources().iter().find_map(|source| {
+        let mapped = source.map_var(rti, attno)?;
+        let field = source.column_name(mapped)?;
+        Some(make_source_col(source, &field))
+    })
+}
+
+/// Adapter that lets `PredicateTranslator` resolve Vars against a
+/// `JoinCSClause` by delegating to [`resolve_var_to_df_col`].
+struct JoinClauseMapper<'a> {
+    join_clause: &'a JoinCSClause,
+}
+
+impl<'a> ColumnMapper for JoinClauseMapper<'a> {
+    fn map_var(&self, varno: pg_sys::Index, varattno: pg_sys::AttrNumber) -> Option<Expr> {
+        resolve_var_to_df_col(self.join_clause, varno, varattno)
+    }
+}
+
+/// Translate a `ChildProjection::Expression` via `PredicateTranslator`.
+///
+/// Known `pg_catalog` functions (length, upper, abs, etc.) map to native
+/// DataFusion functions; unknown functions fall back to `PgExprUdf` via
+/// `try_wrap_as_udf`.
+unsafe fn translate_child_projection_expr(
+    pg_expr_string: &str,
+    join_clause: &JoinCSClause,
+) -> Result<Expr> {
+    let sources = join_clause.plan.sources();
+    let mapper = JoinClauseMapper { join_clause };
+    translate_pg_node_string(
+        pg_expr_string,
+        &sources,
+        Box::new(mapper),
+        "ChildProjection::Expression",
+    )
+}
+
+/// Query planner that lowers JoinScan's custom logical nodes
+/// (`LateMaterializeNode`, `VisibilityFilterNode`) into executable plans.
+///
+/// JoinScan uses one `SessionContext` configuration for both logical planning
+/// and execution. The optimized logical plan is still serialized between those
+/// steps so EXPLAIN, the leader, and workers can all reconstruct the same
+/// canonical plan. Execution-only bindings are still injected separately during
+/// deserialization.
+#[derive(Debug, Default)]
+pub struct PgSearchQueryPlanner;
+
+#[async_trait]
+impl QueryPlanner for PgSearchQueryPlanner {
+    async fn create_physical_plan(
+        &self,
+        logical_plan: &datafusion::logical_expr::LogicalPlan,
+        session_state: &dyn Session,
+    ) -> Result<Arc<dyn ExecutionPlan>> {
+        let mut extension_planners: Vec<
+            Arc<dyn datafusion::physical_planner::ExtensionPlanner + Send + Sync>,
+        > = vec![Arc::new(
+            crate::scan::late_materialization::LateMaterializePlanner {},
+        )];
+        extension_planners.push(Arc::new(
+            super::visibility_filter::VisibilityExtensionPlanner::new(),
+        ));
+        let physical_planner = DefaultPhysicalPlanner::with_extension_planners(extension_planners);
+        physical_planner
+            .create_physical_plan(logical_plan, session_state)
+            .await
+    }
+}
+
+/// Execution state for a single base relation in a join.
+pub struct RelationState {
+    /// Keeps the relation open and locked during the scan.
+    /// The relation is closed/unlocked when this struct is dropped.
+    pub _heaprel: PgSearchRelation,
+    pub visibility_checker: VisibilityChecker,
+    pub fetch_slot: *mut pg_sys::TupleTableSlot,
+    /// Index of the CTID column for this relation in the result RecordBatch.
+    pub ctid_col_idx: Option<usize>,
+}
+
+crate::impl_safe_drop!(RelationState, |self| {
+    unsafe {
+        if crate::postgres::utils::IsTransactionState() && !self.fetch_slot.is_null() {
+            pg_sys::ExecDropSingleTupleTableSlot(self.fetch_slot);
+            self.fetch_slot = std::ptr::null_mut();
+        }
+    }
+});
+
+/// The execution state for the JoinScan.
+#[derive(Default)]
+pub struct JoinScanState {
+    /// The join clause from planning.
+    pub join_clause: JoinCSClause,
+
+    /// Pristine copy of the join clause as it came from planning, with any
+    /// PostgresExpression/Param-backed SearchQueryInputs still unresolved.
+    /// `None` for plans with no such nodes — see `create_custom_scan_state`, which is the
+    /// only writer. Callers that need the unsolved clause (`init_search_query_input`, rescan)
+    /// match on this instead of relying on a comment to remember it may be empty.
+    pub base_join_clause: Option<JoinCSClause>,
+
+    /// nodeToString'd custom_exprs snapshot from planning (pre-setrefs), used
+    /// to re-bake the DataFusion logical plan for MPP after solving. See
+    /// PrivateData::custom_exprs_string.
+    pub custom_exprs_string: Option<String>,
+
+    /// Map of source index (in plan.sources()) to relation execution state.
+    pub relations: crate::api::HashMap<usize, RelationState>,
+
+    /// Result tuple slot.
+    pub result_slot: Option<*mut pg_sys::TupleTableSlot>,
+
+    // === DataFusion State ===
+    pub datafusion_stream: Option<datafusion::execution::SendableRecordBatchStream>,
+    pub runtime: Option<tokio::runtime::Runtime>,
+    pub current_batch: Option<arrow_array::RecordBatch>,
+    pub batch_index: usize,
+
+    /// Mapping of output column positions to their source (outer/inner) and original attribute numbers.
+    /// Populated from PrivateData during create_custom_scan_state.
+    pub output_columns: Vec<OutputColumnInfo>,
+
+    /// Index of each output column in the result RecordBatch, populated once physical_plan is available.
+    pub output_batch_col_indices: Vec<Option<usize>>,
+
+    /// Serialized DataFusion LogicalPlan from planning phase.
+    pub logical_plan: Option<bytes::Bytes>,
+
+    /// Retained executed physical plan for EXPLAIN ANALYZE metrics extraction.
+    pub physical_plan: Option<Arc<dyn ExecutionPlan>>,
+
+    /// Per-phase MPP launch timing, filled during exec when the query runs distributed, for
+    /// `EXPLAIN ANALYZE`. `None` when the query ran serially (no launch).
+    pub launch_timing: Option<crate::postgres::customscan::mpp::glue::MppLaunchTiming>,
+
+    /// When the distributed stream was built, used to time the first batch out (worker decode
+    /// plus first scan plus the network hop to the leader).
+    pub stream_built_at: Option<std::time::Instant>,
+
+    /// Captured source manifests held by the leader. Serves two purposes:
+    /// 1. Provides the segment views `launch_mpp` needs (via `ParallelScanArgs`) to size
+    ///    and populate the shared `ParallelScanState` in DSM.
+    /// 2. Keeps the underlying Tantivy buffer pins alive for the full duration of the
+    ///    scan, preventing background merges from recycling the canonical segments.
+    ///
+    /// Must live on `JoinScanState` (not as a local in the launch) because the
+    /// buffer pins must survive from DSM population through `exec_custom_scan`,
+    /// where workers reopen the same segments via `MvccSatisfies::ParallelWorker(view)`.
+    /// Dropping manifests early would release the pins and allow segment recycling
+    /// before workers can open them.
+    pub source_manifests: Vec<SearchIndexManifest>,
+
+    /// Where MPP sits in its launch lifecycle for this scan: marked pending at begin, launched
+    /// on first exec after runtime expressions are resolved and the built plan's stages are
+    /// committed (#5667: the plan comes first; workers spawn only after it exists). Stays
+    /// `Inactive` on the serial path.
+    pub mpp: crate::postgres::customscan::mpp::launch::MppLifecycle,
+
+    /// Captured from PostgreSQL's statement-wide `PlannerGlobal.parallelModeOK`. When false, this
+    /// scan may still use DataFusion, but it must never launch MPP producer workers.
+    pub parallel_mode_ok: bool,
+}
+
+impl JoinScanState {
+    /// Reset the scan state for a rescan. Also restores `join_clause` from
+    /// `base_join_clause` when the plan has Param/SubPlan-backed SearchQueryInputs, so a
+    /// correlated re-execution (e.g. this JoinScan sits under a lateral/subplan and runs once
+    /// per outer row) re-solves against the new outer values instead of reusing whatever the
+    /// previous row's `exec_custom_scan` already solved and rebaked into `join_clause` and
+    /// `logical_plan`.
+    ///
+    /// Without this, `maybe_solve_and_rebake`'s gate
+    /// (`source_queries_need_executor_state`) checks the *already-solved* `join_clause` on the
+    /// next exec, finds no more Param/PostgresExpression nodes (they were replaced with
+    /// resolved constants last time), and skips solving — silently re-running the previous
+    /// row's stale plan.
+    pub fn reset(&mut self) {
+        self.datafusion_stream = None;
+        self.runtime = None;
+        self.current_batch = None;
+        self.batch_index = 0;
+        self.physical_plan = None;
+        self.output_batch_col_indices.clear();
+        self.launch_timing = None;
+        self.stream_built_at = None;
+
+        // base_join_clause is only populated (in create_custom_scan_state) when the plan
+        // actually has parameters/postgres expressions; None means there's nothing to
+        // restore, so the compiler-enforced match replaces the old "left at default and
+        // never read" comment with an actual guard.
+        if let Some(base) = &self.base_join_clause {
+            self.join_clause = base.clone();
+            // Deliberately NOT clearing logical_plan here: exec_custom_scan reads it
+            // unconditionally (`.expect("Logical plan is required")`) before
+            // maybe_solve_and_rebake's gate is checked, so nulling it out would panic. Restoring
+            // join_clause above is what makes that gate see unsolved expressions again and
+            // re-run rebake_for_mpp, which overwrites logical_plan with the freshly-resolved
+            // bytes before it's read.
+        }
+    }
+}
+
+impl CustomScanState for JoinScanState {
+    fn init_exec_method(&mut self, _cstate: *mut pg_sys::CustomScanState) {
+        // No special initialization needed for the plain exec method
+    }
+}
+
+impl SolvePostgresExpressions for JoinScanState {
+    fn init_search_query_input(&mut self) {
+        self.join_clause = self
+            .base_join_clause
+            .as_ref()
+            .expect("runtime expression solving requires a pristine JoinScan clause")
+            .clone();
+    }
+    fn has_postgres_expressions(&mut self) -> bool {
+        self.join_clause.has_postgres_expressions()
+    }
+    fn has_parameters(&mut self) -> bool {
+        self.join_clause.has_parameters()
+    }
+    fn init_postgres_expressions(&mut self, planstate: *mut pg_sys::PlanState) {
+        self.join_clause.init_postgres_expressions(planstate);
+    }
+    fn solve_postgres_expressions(&mut self, expr_context: *mut pg_sys::ExprContext) {
+        self.join_clause.solve_postgres_expressions(expr_context);
+    }
+}
+
+/// Build the shared core of a DataFusion [`SessionStateBuilder`] with:
+/// - Visibility filtering (logical + physical)
+/// - Late materialization
+/// - `PgSearchQueryPlanner`
+pub fn build_base_session(config: SessionConfig) -> SessionStateBuilder {
+    use super::visibility_filter::VisibilityFilterOptimizerRule;
+    use crate::scan::propagate_empty_unnest_rule::PropagateEmptyUnnestRule;
+    use crate::scan::visibility_ctid_resolver_rule::VisibilityCtidResolverRule;
+
+    let mut builder = SessionStateBuilder::new()
+        .with_config(config)
+        .with_default_features();
+
+    // Inject visibility before late materialization so ctid lineage is analyzed
+    // while DeferredCtid columns are still present in the logical plan.
+    builder = builder
+        .with_optimizer_rule(Arc::new(VisibilityFilterOptimizerRule::new()))
+        .with_optimizer_rule(Arc::new(
+            super::range_partitioning_rule::RangePartitioningRule::new(),
+        ))
+        .with_optimizer_rule(Arc::new(
+            crate::scan::late_materialization::LateMaterializationRule,
+        ))
+        .with_optimizer_rule(Arc::new(PropagateEmptyUnnestRule));
+
+    builder = builder.with_query_planner(Arc::new(PgSearchQueryPlanner));
+
+    builder
+        .with_physical_optimizer_rule(Arc::new(
+            super::range_partitioning_rule::RangeCoPartitionedJoinRule,
+        ))
+        .with_physical_optimizer_rule(Arc::new(VisibilityCtidResolverRule))
+}
+
+/// Creates a DataFusion [`SessionContext`] with visibility filtering, late materialization,
+/// `PgSearchQueryPlanner`, topk dynamic filtering, range partitioning, and post-optimization filter pushdown.
+pub fn create_datafusion_session_context() -> SessionContext {
+    use crate::scan::visibility_ctid_resolver_rule::VisibilityCtidResolverRule;
+
+    let mut config = SessionConfig::new().with_target_partitions(1);
+
+    // Configure dynamic filter pushdown thresholds from our GUCs
+    config
+        .options_mut()
+        .optimizer
+        .hash_join_inlist_pushdown_max_size =
+        crate::gucs::hash_join_inlist_pushdown_max_size() as usize;
+    // 0 is also DataFusion's kill switch: HashJoinExec rejects InList
+    // materialization when num_of_distinct_key() > max_distinct_values, and
+    // any non-empty build side has at least one distinct key. So setting
+    // the GUC to 0 disables the InList path on both sides of the boundary
+    // — paradedb's try_convert_in_list_to_query and DataFusion's hash-join
+    // pushdown agree on disable semantics.
+    config
+        .options_mut()
+        .optimizer
+        .hash_join_inlist_pushdown_max_distinct_values =
+        crate::gucs::hash_join_inlist_pushdown_max_distinct_values() as usize;
+    config
+        .options_mut()
+        .optimizer
+        .enable_topk_dynamic_filter_pushdown = true;
+
+    let mut builder = build_base_session(config);
+
+    builder = builder
+        .with_physical_optimizer_rule(Arc::new(
+            crate::scan::segmented_topk_rule::SegmentedTopKRule,
+        ))
+        // SegmentedTopKRule absorbs VisibilityFilterExec and creates a fresh
+        // AbsorbedVisibilityData with empty ctid resolvers.  We must run
+        // VisibilityCtidResolverRule again here, *after* SegmentedTopKRule, so
+        // that it wires resolvers into the STK node rather than the (now-removed)
+        // VisibilityFilterExec node.
+        .with_physical_optimizer_rule(Arc::new(VisibilityCtidResolverRule))
+        .with_physical_optimizer_rule(Arc::new(FilterPushdown::new_post_optimization()));
+
+    SessionContext::new_with_state(builder.build())
+}
+
+/// Build the DataFusion logical plan for the join.
+/// Returns a LogicalPlan that can be serialized with datafusion_proto.
+///
+/// `force_serial`: bake every source with `mpp_source_idx = None` regardless of
+/// `mpp_is_active()`. See `bake_logical_plan`'s doc comment for why this exists.
+pub async fn build_joinscan_logical_plan(
+    join_clause: &JoinCSClause,
+    private_data: &PrivateData,
+    custom_exprs: *mut pg_sys::List,
+    force_serial: bool,
+) -> Result<datafusion::logical_expr::LogicalPlan> {
+    let ctx = create_datafusion_session_context();
+    let is_parallel = !force_serial && crate::postgres::customscan::mpp::glue::mpp_is_active();
+    let df = build_clause_df(&ctx, join_clause, private_data, custom_exprs, is_parallel).await?;
+    df.into_optimized_plan()
+}
+
+/// Convert a LogicalPlan to an ExecutionPlan.
+///
+/// The input logical plan is already fully optimized (visibility + late materialization
+/// nodes injected at planning time). Physical planning reuses the shared
+/// `SessionContext` configuration and lowers the stored plan after execution
+/// has injected whatever runtime-only bindings are required during decode.
+/// Register a [`PgSearchTableProvider`] under `alias` and return the resulting
+/// [`DataFrame`].
+///
+/// Wraps the provider in an `Arc`, registers it on `ctx`, and awaits
+/// `ctx.table(alias)`. Callers must finish configuring the provider
+/// (deferred outputs, MPP source index, etc.) before handing it in;
+/// this helper does not select or alias any columns.
+///
+/// Shared by JoinScan and AggregateScan `build_source_df` implementations.
+pub async fn register_source_table(
+    ctx: &SessionContext,
+    alias: &str,
+    provider: crate::scan::PgSearchTableProvider,
+) -> Result<DataFrame> {
+    let provider = Arc::new(provider);
+    ctx.register_table(alias, provider)?;
+    ctx.table(alias).await
+}
+
+/// Build a DataFusion physical plan from a logical plan.
+///
+/// Uses the session context's query planner and wraps multi-partition
+/// output with `CoalescePartitionsExec`. Shared by JoinScan and AggregateScan.
+pub async fn build_physical_plan(
+    ctx: &SessionContext,
+    plan: datafusion::logical_expr::LogicalPlan,
+) -> Result<Arc<dyn ExecutionPlan>> {
+    let state = ctx.state();
+
+    let plan = state
+        .query_planner()
+        .create_physical_plan(&plan, &state)
+        .await?;
+
+    if plan.output_partitioning().partition_count() > 1 {
+        Ok(Arc::new(CoalescePartitionsExec::new(plan)) as Arc<dyn ExecutionPlan>)
+    } else {
+        Ok(plan)
+    }
+}
+
+/// Build the `TaskContext` used to execute a DataFusion physical plan.
+///
+/// Sizes a `PanicOnOOMMemoryPool` against the supplied `work_mem_bytes` and
+/// `hash_mem_multiplier` (typically PostgreSQL's `work_mem * 1024` and
+/// `hash_mem_multiplier` GUCs), bundles it into a fresh `RuntimeEnv`, and
+/// pairs that with the session config from `ctx`.
+///
+/// Shared by JoinScan and AggregateScan; both call this immediately before
+/// `physical_plan.execute(0, task_ctx)`.
+pub fn build_task_context(
+    ctx: &SessionContext,
+    plan: &Arc<dyn ExecutionPlan>,
+    work_mem_bytes: usize,
+    hash_mem_multiplier: f64,
+) -> Arc<TaskContext> {
+    let memory_pool = create_memory_pool(plan, work_mem_bytes, hash_mem_multiplier);
+    Arc::new(
+        TaskContext::default()
+            .with_session_config(ctx.state().config().clone())
+            .with_runtime(build_runtime_env(memory_pool)),
+    )
+}
+
+/// Context borrowed for the duration of a [`build_relnode_df`] traversal.
+///
+/// Bundles the references that don't change between recursive calls so the
+/// recursion sites stay readable. Construct one at the entry point in
+/// `build_clause_df` and pass it down by reference.
+struct RelNodeBuildCtx<'a> {
+    ctx: &'a SessionContext,
+    is_parallel: bool,
+    join_clause: &'a JoinCSClause,
+    translated_exprs: &'a [Expr],
+    custom_expr_idx: &'a std::cell::Cell<usize>,
+    output_columns: &'a [OutputColumnInfo],
+    lateral_unnests: &'a [build::LateralUnnestInfo],
+}
+
+/// Recursively lowers a `RelNode` tree into a DataFusion `DataFrame`.
+///
+/// This traversal maps the abstract relation operators (Scan, Join, Filter, Unnest) onto DataFusion's
+/// logical planning APIs:
+/// - **Scan**: Instantiates a `PgSearchTableProvider` containing the Tantivy index boundaries and
+///   the set of required fields for a single relation, wrapping it in an aliased context.
+/// - **Join**: Recursively executes left/right sub-trees, collecting separated `equi_keys` and
+///   dynamically ensuring `Expr::eq(Expr)` assignments map left-bound columns to the left side
+///   of the equality expression to avoid `SchemaError`s in DataFusion.
+/// - **Filter**: Maps complex, cross-table PostgreSQL scalar expressions down to the DataFusion
+///   engine for row-level execution.
+/// - **Unnest**: Expands multi-valued array fast fields into rows via DataFusion's `unnest_columns_with_options`.
+///
+/// All references that don't change between recursive calls are bundled into
+/// [`RelNodeBuildCtx`] so the recursive sites can stay terse.
+fn build_relnode_df<'a>(
+    rctx: &'a RelNodeBuildCtx<'a>,
+    node: &'a RelNode,
+) -> LocalBoxFuture<'a, Result<DataFrame>> {
+    let f = async move {
+        match node {
+            RelNode::Scan(source) => {
+                let plan_position = source.plan_position;
+                let is_parallel = rctx.is_parallel;
+
+                let mut df = build_source_df(
+                    rctx.ctx,
+                    source,
+                    plan_position,
+                    rctx.join_clause,
+                    is_parallel,
+                )
+                .await?;
+                let alias =
+                    RelationAlias::new(source.scan_info.alias.as_deref()).execution(plan_position);
+                df = df.alias(&alias)?;
+                Ok(df)
+            }
+            RelNode::Join(join) => {
+                let left_df = build_relnode_df(rctx, &join.left).await?;
+                let right_df = build_relnode_df(rctx, &join.right).await?;
+                let mut sources = join.left.sources();
+                sources.extend(join.right.sources());
+                build_join_df_with_filter(
+                    left_df,
+                    right_df,
+                    join,
+                    &sources,
+                    rctx.output_columns,
+                    rctx.lateral_unnests,
+                )
+            }
+            RelNode::Filter(filter) => {
+                let df = build_relnode_df(rctx, &filter.input).await?;
+                let sources = filter.input.sources();
+                // `custom_expr_idx` must be tracked and advanced across nested `RelNode::Filter`
+                // nodes so that each join filter level consumes its own translated expressions
+                // from `rctx.translated_exprs` instead of repeatedly consuming from index 0.
+                let mut idx = rctx.custom_expr_idx.get();
+                let df = apply_join_level_filter(
+                    df,
+                    &filter.predicate,
+                    rctx.translated_exprs,
+                    &mut idx,
+                    &sources,
+                    /* handle_mark = */ true,
+                )?;
+                rctx.custom_expr_idx.set(idx);
+                Ok(df)
+            }
+            RelNode::Unnest(unnest) => {
+                let df = build_relnode_df(rctx, &unnest.input).await?;
+                apply_relnode_unnest(df, unnest)
+            }
+        }
+    };
+    f.boxed_local()
+}
+
+/// Maps relation and attribute or field to a `col_N` alias after a DISTINCT-style
+/// GROUP BY rewrite. The score column uses sentinel `attno = 0` in `vars`. When
+/// DISTINCT is not active the map is empty and downstream stages preserve their
+/// original qualified column references.
+#[derive(Default, Debug)]
+struct DistinctColMap {
+    vars: crate::api::HashMap<(pg_sys::Index, pg_sys::AttrNumber), String>,
+    fields: crate::api::HashMap<(pg_sys::Index, String), String>,
+}
+
+impl DistinctColMap {
+    fn is_empty(&self) -> bool {
+        self.vars.is_empty() && self.fields.is_empty()
+    }
+}
+
+enum DistinctColEntry {
+    Var(pg_sys::Index, pg_sys::AttrNumber),
+    Field(pg_sys::Index, String),
+}
+
+fn build_clause_df<'a>(
+    ctx: &'a SessionContext,
+    join_clause: &'a JoinCSClause,
+    private_data: &'a PrivateData,
+    custom_exprs: *mut pg_sys::List,
+    is_parallel: bool,
+) -> LocalBoxFuture<'a, Result<DataFrame>> {
+    let f = async move {
+        let plan_sources = join_clause.plan.sources();
+        if plan_sources.is_empty() {
+            return Err(DataFusionError::Internal(
+                "JoinScan requires at least 1 source".into(),
+            ));
+        }
+
+        let lateral_unnests: Vec<build::LateralUnnestInfo> = join_clause
+            .plan
+            .lateral_unnests()
+            .into_iter()
+            .cloned()
+            .collect();
+        let mapper = CombinedMapper {
+            sources: &plan_sources,
+            output_columns: &private_data.output_columns,
+            lateral_unnests: &lateral_unnests,
+        };
+        let translator = PredicateTranslator::new(&plan_sources).with_mapper(Box::new(mapper));
+        let translated_exprs = unsafe { translate_custom_exprs(&translator, custom_exprs)? };
+        // Drop the translator (and its borrow on `plan_sources`) before downstream
+        // stages re-borrow `plan_sources` for projection / output assembly.
+        drop(translator);
+
+        let custom_expr_idx = std::cell::Cell::new(0);
+        let rctx = RelNodeBuildCtx {
+            ctx,
+            is_parallel,
+            join_clause,
+            translated_exprs: &translated_exprs,
+            custom_expr_idx: &custom_expr_idx,
+            output_columns: &private_data.output_columns,
+            lateral_unnests: &lateral_unnests,
+        };
+        let df = build_relnode_df(&rctx, &join_clause.plan).await?;
+
+        // 4. Apply DISTINCT via GROUP BY
+        let (df, distinct_col_map) = apply_distinct_group_by(df, join_clause)?;
+
+        // 5. Apply Sort
+        let df = apply_sort(df, join_clause, &distinct_col_map)?;
+
+        // 6. Apply Limit (only when the value is statically known at planning
+        // time). Parameterized LIMIT/OFFSET are injected at execution time in
+        // `JoinScan::exec_custom_scan` after `EState` becomes available.
+        let df = if let Some(lo) = &join_clause.limit_offset {
+            if let Some(fetch) = lo.static_fetch() {
+                df.limit(0, Some(fetch))?
+            } else {
+                df
+            }
+        } else {
+            df
+        };
+
+        // 7. Apply Output Projection
+        apply_output_projection(df, join_clause, &distinct_col_map, &plan_sources)
+    };
+    f.boxed_local()
+}
+
+/// Translate every clause in `custom_exprs` (a Postgres `List*`) into a
+/// DataFusion `Expr` using the provided `PredicateTranslator`.
+unsafe fn translate_custom_exprs(
+    translator: &PredicateTranslator,
+    custom_exprs: *mut pg_sys::List,
+) -> Result<Vec<Expr>> {
+    use pgrx::PgList;
+    let mut translated = Vec::new();
+    let expr_list = PgList::<pg_sys::Node>::from_pg(custom_exprs);
+    for (i, expr_node) in expr_list.iter_ptr().enumerate() {
+        let expr = translator.translate(expr_node).ok_or_else(|| {
+            DataFusionError::Internal(format!(
+                "Failed to translate custom expression at index {}",
+                i
+            ))
+        })?;
+        translated.push(expr);
+    }
+    Ok(translated)
+}
+
+/// Helper to yield the names of ctid columns that survived schema pruning
+/// (e.g., were not discarded by a Semi/Anti join).
+fn surviving_ctid_columns<'a>(
+    schema: &'a datafusion::common::DFSchema,
+    num_sources: usize,
+) -> impl Iterator<Item = String> + 'a {
+    (0..num_sources).filter_map(move |i| {
+        let ctid_name = CtidColumn::new(i).to_string();
+        if schema.field_with_unqualified_name(&ctid_name).is_ok() {
+            Some(ctid_name)
+        } else {
+            None
+        }
+    })
+}
+
+/// Apply a DISTINCT rewrite as `GROUP BY` over `output_projection`, taking the
+/// MIN of each ctid column as a stable representative. Returns the rewritten
+/// `DataFrame` plus the populated [`DistinctColMap`] used by the sort and
+/// projection stages to resolve column references against the new aliases.
+///
+/// When DISTINCT is not active (or there is no `output_projection`) the input
+/// frame is returned unchanged with an empty map.
+fn apply_distinct_group_by(
+    df: DataFrame,
+    join_clause: &JoinCSClause,
+) -> Result<(DataFrame, DistinctColMap)> {
+    let mut distinct_col_map: DistinctColMap = Default::default();
+
+    if !join_clause.has_distinct() {
+        return Ok((df, distinct_col_map));
+    }
+    let Some(projection) = &join_clause.output_projection else {
+        return Ok((df, distinct_col_map));
+    };
+
+    let mut group_exprs: Vec<Expr> = Vec::new();
+
+    for (i, proj) in projection.iter().enumerate() {
+        let col_alias = format!("col_{}", i + 1);
+
+        let (expr, map_key) = match proj {
+            build::ChildProjection::Expression { pg_expr_string, .. } => {
+                let e = unsafe { translate_child_projection_expr(pg_expr_string, join_clause)? };
+                // Expressions don't participate in sort-step column mapping
+                (e, None)
+            }
+            build::ChildProjection::Score { rti } => {
+                let e = build_projection_expr(proj, join_clause);
+                (e, Some(DistinctColEntry::Var(*rti, 0)))
+            }
+            build::ChildProjection::Column { rti, attno } => {
+                let e = build_projection_expr(proj, join_clause);
+                (e, Some(DistinctColEntry::Var(*rti, *attno)))
+            }
+            build::ChildProjection::IndexedExpression { rti, field_name } => {
+                let e = build_projection_expr(proj, join_clause);
+                (e, Some(DistinctColEntry::Field(*rti, field_name.clone())))
+            }
+            build::ChildProjection::Unnested { function_rti, .. } => {
+                let e = build_projection_expr(proj, join_clause);
+                (e, Some(DistinctColEntry::Var(function_rti.0, 1)))
+            }
+        };
+
+        group_exprs.push(expr.alias(&col_alias));
+
+        if let Some(key) = map_key {
+            match key {
+                DistinctColEntry::Var(rti, attno) => {
+                    distinct_col_map.vars.insert((rti, attno), col_alias);
+                }
+                DistinctColEntry::Field(rti, field_name) => {
+                    distinct_col_map.fields.insert((rti, field_name), col_alias);
+                }
+            }
+        }
+    }
+
+    // Postgres needs the ctids to fetch the actual tuples after DataFusion
+    // completes. Since GROUP BY collapses multiple rows into one, we use
+    // min(ctid) to arbitrarily select one representative tuple for the group.
+    //
+    // Note that we must filter out any ctids that no longer exist in the schema.
+    // In operations like SEMI JOIN or ANTI JOIN, the inner table's columns
+    // (including its ctid) are discarded from the output frame once the join
+    // condition is evaluated. Attempting to aggregate them would result in a
+    // DataFusion SchemaError.
+    let agg_exprs: Vec<Expr> =
+        surviving_ctid_columns(df.schema(), join_clause.plan.sources().len())
+            .map(|ctid_name| min(col(&ctid_name)).alias(&ctid_name))
+            .collect();
+
+    let df = df.aggregate(group_exprs, agg_exprs)?;
+    Ok((df, distinct_col_map))
+}
+
+/// Resolve a column reference after the DISTINCT GROUP BY has rewritten every
+/// projection into a `col_N` alias. Score lookups try the exact RTI first, and
+/// fall back to iterating the map (rather than exact-match) because the parse-time
+/// `rti` may not survive cross-table OR predicate handling.
+fn resolve_distinct_col(
+    distinct_col_map: &DistinctColMap,
+    is_score: bool,
+    rti: pg_sys::Index,
+    attno: pg_sys::AttrNumber,
+) -> Option<Expr> {
+    if is_score {
+        distinct_col_map
+            .vars
+            .get(&(rti, 0))
+            .or_else(|| {
+                distinct_col_map
+                    .vars
+                    .iter()
+                    .find(|((_, a), _)| *a == 0)
+                    .map(|(_, alias)| alias)
+            })
+            .map(|alias| col(alias.as_str()))
+    } else {
+        distinct_col_map
+            .vars
+            .get(&(rti, attno))
+            .map(|alias| col(alias.as_str()))
+    }
+}
+
+fn resolve_distinct_field(
+    distinct_col_map: &DistinctColMap,
+    rti: pg_sys::Index,
+    field_name: &str,
+) -> Option<Expr> {
+    distinct_col_map
+        .fields
+        .get(&(rti, field_name.to_string()))
+        .or_else(|| {
+            let bare_name = field_name
+                .split_once('.')
+                .map(|(_, col)| col.trim_matches('"'))?;
+            distinct_col_map.fields.get(&(rti, bare_name.to_string()))
+        })
+        .map(|alias| col(alias.as_str()))
+}
+
+/// Resolve a non-NullTest `OrderByFeature` to a DataFusion `Expr`.
+fn resolve_orderby_feature(
+    feature: &OrderByFeature,
+    join_clause: &JoinCSClause,
+    distinct_col_map: &DistinctColMap,
+) -> Result<Expr> {
+    match feature {
+        OrderByFeature::Score { rti } => {
+            if !distinct_col_map.is_empty() {
+                resolve_distinct_col(distinct_col_map, true, *rti, 0).ok_or_else(|| {
+                    DataFusionError::Plan(format!(
+                        "JoinScan: could not resolve DISTINCT score column for RTI {rti}"
+                    ))
+                })
+            } else {
+                join_clause
+                    .plan
+                    .output_sources()
+                    .iter()
+                    .find(|s| s.scan_info.heap_rti == *rti)
+                    .map(|source| make_source_score_col(source))
+                    .ok_or_else(|| {
+                        DataFusionError::Plan(format!(
+                            "JoinScan: could not find source for score RTI {rti}"
+                        ))
+                    })
+            }
+        }
+        OrderByFeature::ScoreSum { rtis } => {
+            let score_cols: Result<Vec<Expr>> = rtis
+                .iter()
+                .map(|rti| {
+                    if !distinct_col_map.is_empty() {
+                        resolve_distinct_col(distinct_col_map, true, *rti, 0).ok_or_else(|| {
+                            DataFusionError::Plan(format!(
+                                "JoinScan: could not resolve DISTINCT score column for RTI {rti} in score sum"
+                            ))
+                        })
+                    } else {
+                        join_clause
+                            .plan
+                            .output_sources()
+                            .iter()
+                            .find(|s| s.scan_info.heap_rti == *rti)
+                            .map(|source| make_source_score_col(source))
+                            .ok_or_else(|| {
+                                DataFusionError::Plan(format!(
+                                    "JoinScan: could not find source for score sum RTI {rti}"
+                                ))
+                            })
+                    }
+                })
+                .collect();
+
+            score_cols?
+                .into_iter()
+                .reduce(|acc, col_expr| acc + col_expr)
+                .ok_or_else(|| {
+                    DataFusionError::Plan("JoinScan: empty RTI list in ScoreSum".to_string())
+                })
+        }
+        OrderByFeature::Field { name, rti } => {
+            if !distinct_col_map.is_empty() {
+                resolve_distinct_field(distinct_col_map, *rti, name.as_ref()).ok_or_else(|| {
+                    DataFusionError::Plan(format!(
+                        "JoinScan: could not resolve DISTINCT field column for RTI {rti}, field '{name}'"
+                    ))
+                })
+            } else {
+                join_clause
+                    .plan
+                    .output_sources()
+                    .iter()
+                    .find(|s| s.contains_rti(*rti))
+                    .map(|source| make_source_col(source, name.as_ref()))
+                    .ok_or_else(|| {
+                        DataFusionError::Plan(format!(
+                            "JoinScan: could not find source for RTI {rti} when building sort expression for field '{name}'"
+                        ))
+                    })
+            }
+        }
+        OrderByFeature::Var { rti, attno, .. } => {
+            if !distinct_col_map.is_empty() {
+                resolve_distinct_col(distinct_col_map, false, *rti, *attno).ok_or_else(|| {
+                    DataFusionError::Plan(format!(
+                        "JoinScan: could not resolve DISTINCT var column for RTI {rti}, attno {attno}"
+                    ))
+                })
+            } else {
+                resolve_var_to_df_col(join_clause, *rti, *attno).ok_or_else(|| {
+                    DataFusionError::Plan(format!(
+                        "JoinScan: could not resolve var column for RTI {rti}, attno {attno}"
+                    ))
+                })
+            }
+        }
+        OrderByFeature::NullTest { .. } => {
+            unreachable!("NullTest is handled by apply_sort directly")
+        }
+        OrderByFeature::VectorDistance { .. } => {
+            unimplemented!("Vector distance ORDER BY is not supported in JoinScan")
+        }
+    }
+}
+
+/// Apply the join clause's `ORDER BY` to the data frame, choosing column
+/// references from `distinct_col_map` when DISTINCT is active and from the
+/// per-source resolution paths otherwise.
+fn apply_sort(
+    df: DataFrame,
+    join_clause: &JoinCSClause,
+    distinct_col_map: &DistinctColMap,
+) -> Result<DataFrame> {
+    if join_clause.order_by.is_empty() {
+        return Ok(df);
+    }
+
+    let mut sort_exprs = Vec::new();
+    for info in &join_clause.order_by {
+        let expr = match &info.feature {
+            OrderByFeature::NullTest {
+                inner,
+                nulltesttype,
+            } => {
+                let inner_expr = resolve_orderby_feature(inner, join_clause, distinct_col_map)?;
+                match nulltesttype {
+                    NullTestKind::IsNull => inner_expr.is_null(),
+                    NullTestKind::IsNotNull => inner_expr.is_not_null(),
+                }
+            }
+            other => resolve_orderby_feature(other, join_clause, distinct_col_map)?,
+        };
+
+        let asc = matches!(
+            info.direction,
+            SortDirection::AscNullsFirst | SortDirection::AscNullsLast
+        );
+        let nulls_first = matches!(
+            info.direction,
+            SortDirection::AscNullsFirst | SortDirection::DescNullsFirst
+        );
+        sort_exprs.push(expr.sort(asc, nulls_first));
+    }
+    df.sort(sort_exprs)
+}
+
+/// Build the final SELECT list. When `output_projection` is set, every
+/// projected column is aliased to `col_{i+1}` (the convention the result
+/// builder expects), and any CTID columns still present in the schema are
+/// carried forward unchanged. Without an `output_projection`, the entire
+/// schema is selected as-is.
+fn apply_output_projection(
+    df: DataFrame,
+    join_clause: &JoinCSClause,
+    distinct_col_map: &DistinctColMap,
+    plan_sources: &[&JoinSource],
+) -> Result<DataFrame> {
+    let mut final_cols = Vec::new();
+
+    if let Some(projection) = &join_clause.output_projection {
+        for (i, proj) in projection.iter().enumerate() {
+            let col_alias = format!("col_{}", i + 1);
+            let expr = if !distinct_col_map.is_empty() {
+                match proj {
+                    build::ChildProjection::Expression { .. } => col(&col_alias),
+                    build::ChildProjection::Score { rti } => {
+                        resolve_distinct_col(distinct_col_map, true, *rti, 0)
+                            .unwrap_or_else(|| col(&col_alias))
+                    }
+                    build::ChildProjection::Column { rti, attno } => {
+                        resolve_distinct_col(distinct_col_map, false, *rti, *attno)
+                            .unwrap_or_else(|| col(&col_alias))
+                    }
+                    build::ChildProjection::IndexedExpression { rti, field_name } => {
+                        resolve_distinct_field(distinct_col_map, *rti, field_name)
+                            .unwrap_or_else(|| col(&col_alias))
+                    }
+                    build::ChildProjection::Unnested { function_rti, .. } => {
+                        resolve_distinct_col(distinct_col_map, false, function_rti.0, 1)
+                            .unwrap_or_else(|| col(&col_alias))
+                    }
+                }
+            } else {
+                build_projection_expr(proj, join_clause)
+            };
+            final_cols.push(expr.alias(col_alias));
+        }
+
+        // ALWAYS carry forward all CTID columns from both sides
+        for ctid_name in surviving_ctid_columns(df.schema(), plan_sources.len()) {
+            final_cols.push(col(&ctid_name));
+        }
+    } else {
+        for field in df.schema().fields() {
+            final_cols.push(col(field.name()));
+        }
+    }
+
+    df.select(final_cols)
+}
+
+/// Builds a DataFusion projection expression for a given child projection info.
+///
+/// This maps a `ChildProjection` (referencing an RTI and attribute number) to a DataFusion
+/// column expression, taking into account aliases and special columns like scores.
+fn build_projection_expr(
+    proj: &crate::postgres::customscan::joinscan::build::ChildProjection,
+    join_clause: &JoinCSClause,
+) -> Expr {
+    use crate::postgres::customscan::joinscan::build::ChildProjection;
+
+    let plan_sources = join_clause.plan.output_sources();
+    match proj {
+        ChildProjection::Score { rti } => {
+            for source in plan_sources.iter() {
+                if let Some(attno) = source.map_var(*rti, 0) {
+                    if let Some(name) = source.column_name(attno) {
+                        return make_source_col(source, &name);
+                    } else {
+                        return make_source_score_col(source);
+                    }
+                } else if source.contains_rti(*rti) {
+                    return make_source_score_col(source);
+                }
+            }
+        }
+        ChildProjection::Column { rti, attno } => {
+            if let Some(expr) = resolve_var_to_df_col(join_clause, *rti, *attno) {
+                return expr;
+            }
+        }
+        ChildProjection::IndexedExpression { rti, field_name } => {
+            if let Some(source) = plan_sources.iter().find(|s| s.contains_rti(*rti)) {
+                return make_source_col(source, field_name);
+            }
+        }
+        ChildProjection::Unnested {
+            source_rti,
+            field_name,
+            ..
+        } => {
+            if let Some(source) = join_clause
+                .plan
+                .sources()
+                .iter()
+                .find(|s| s.contains_rti(source_rti.0))
+            {
+                let alias = RelationAlias::new(source.scan_info.alias.as_deref())
+                    .execution(source.plan_position);
+                return datafusion::logical_expr::col(format!("{}_{}", alias, field_name));
+            }
+        }
+        ChildProjection::Expression { .. } => {
+            unreachable!(
+                "Expression projections are handled via PgExprUdf in the \
+                 GROUP BY path, not through build_projection_expr"
+            );
+        }
+    }
+    datafusion::logical_expr::lit(datafusion::common::ScalarValue::Null)
+}
+
+/// Builds a DataFusion `DataFrame` for a given join source.
+///
+/// If the source is a base relation, it registers a `PgSearchTableProvider` and
+/// selects the required fields, aliasing CTID and Score columns as needed.
+/// If the source is another join, it recursively calls `build_clause_df`.
+fn build_source_df<'a>(
+    ctx: &'a SessionContext,
+    source: &'a JoinSource,
+    plan_position: usize,
+    join_clause: &'a JoinCSClause,
+    is_parallel: bool,
+) -> LocalBoxFuture<'a, Result<DataFrame>> {
+    async move {
+        let scan_info = source.scan_info.clone();
+        let alias = RelationAlias::new(source.scan_info.alias.as_deref()).execution(plan_position);
+        let fields: Vec<WhichFastField> = source
+            .scan_info
+            .fields
+            .iter()
+            .map(|f| f.field.clone())
+            .collect();
+
+        /// Insert an ORDER BY field name into `required_early`, plus — when
+        /// the same heap attno is registered under a different name — the
+        /// registered name too.
+        ///
+        /// This matters when a column is indexed twice (once aliased, once
+        /// as an unaliased expression): the ORDER BY feature carries the
+        /// expression name (e.g. "company_name"), but the attno's
+        /// schema-registered name may be the alias
+        /// (e.g. "company_name_words"). Without also marking the registered
+        /// name required-early, the table provider may defer the
+        /// alias-named output that downstream DataFusion plans expect
+        /// (#4850).
+        fn insert_field_name_required_early(
+            source: &JoinSource,
+            name: &str,
+            required_early: &mut crate::api::HashSet<String>,
+        ) {
+            required_early.insert(name.to_string());
+            let attno = unsafe { get_source_attno_by_name(source, name) };
+            if let Some(attno) = attno
+                && let Some(registered) = source.column_name(attno)
+                && registered != name
+            {
+                required_early.insert(registered);
+            }
+        }
+
+        let mut required_early: crate::api::HashSet<String> = Default::default();
+        for jk in join_clause.plan.join_keys() {
+            if source.contains_rti(jk.outer_rti)
+                && let Some(col) = source.column_name(jk.outer_attno)
+            {
+                required_early.insert(col);
+            }
+            if source.contains_rti(jk.inner_rti)
+                && let Some(col) = source.column_name(jk.inner_attno)
+            {
+                required_early.insert(col);
+            }
+        }
+        // Columns referenced by `JoinNode.filter` (e.g. a disjunctive Semi/Anti
+        // `PgExpression`) must also be materialized eagerly — the filter is
+        // evaluated per row pair before the join emits anything.
+        for (rti, attno) in join_clause.plan.filter_input_vars() {
+            if source.contains_rti(rti)
+                && let Some(col) = source.column_name(attno)
+            {
+                required_early.insert(col);
+            }
+        }
+
+        // Both MPP and PG-parallel hash join need the canonical-segment-id
+        // replication so every worker sees the full build side. The MPP
+        // per-source claim counter goes on top of that and PG-parallel doesn't
+        // want it.
+        let source_idx = if is_parallel && crate::postgres::customscan::mpp::glue::mpp_is_active() {
+            Some(plan_position)
+        } else {
+            None
+        };
+        let mut provider =
+            PgSearchTableProvider::new(scan_info.clone(), fields.clone(), source_idx);
+        if let crate::scan::ScanMode::Tagged { local_queries, .. } = &source.scan_info.mode {
+            for tq in local_queries {
+                provider.add_match_tag_column(&tq.tag_name);
+            }
+        }
+
+        // When DISTINCT is present, PostgreSQL expands the query path-keys
+        // to include all DISTINCT columns.
+        if join_clause.has_distinct() {
+            if let Some(projections) = &join_clause.output_projection {
+                for proj in projections {
+                    if let build::ChildProjection::IndexedExpression { rti, field_name } = proj
+                        && source.contains_rti(*rti)
+                    {
+                        insert_field_name_required_early(
+                            source,
+                            field_name.as_ref(),
+                            &mut required_early,
+                        );
+                    }
+                }
+            }
+            for info in &join_clause.order_by {
+                match &info.feature {
+                    OrderByFeature::Field { name, rti } => {
+                        if source.contains_rti(*rti) {
+                            insert_field_name_required_early(
+                                source,
+                                name.as_ref(),
+                                &mut required_early,
+                            );
+                        }
+                    }
+                    OrderByFeature::Var { rti, attno, .. } => {
+                        // Only insert columns belonging to THIS source
+                        if source.contains_rti(*rti)
+                            && let Some(col_name) = source.column_name(*attno)
+                        {
+                            required_early.insert(col_name);
+                        }
+                    }
+                    OrderByFeature::Score { .. }
+                    | OrderByFeature::ScoreSum { .. }
+                    | OrderByFeature::VectorDistance { .. } => {}
+                    OrderByFeature::NullTest { inner, .. } => match inner.as_ref() {
+                        OrderByFeature::Field { name, rti } if source.contains_rti(*rti) => {
+                            insert_field_name_required_early(
+                                source,
+                                name.as_ref(),
+                                &mut required_early,
+                            );
+                        }
+                        OrderByFeature::Var { rti, attno, .. } if source.contains_rti(*rti) => {
+                            if let Some(col_name) = source.column_name(*attno) {
+                                required_early.insert(col_name);
+                            }
+                        }
+                        _ => {}
+                    },
+                }
+            }
+        }
+
+        provider.configure_deferred_outputs(
+            &required_early,
+            VisibilityMode::Deferred { plan_position },
+        );
+
+        let mut df = register_source_table(ctx, alias.as_str(), provider).await?;
+
+        // Select fields AND ensure CTID is aliased uniquely
+        let mut exprs = Vec::new();
+        for df_field in df.schema().fields().iter() {
+            let name = df_field.name();
+            // NOTE: Matching on WhichFastField::Ctid specifically will fail if
+            // the field list order doesn't match the DataFrame schema field order.
+            let expr = match fields.iter().find(|w| w.name() == *name) {
+                Some(WhichFastField::Ctid) => {
+                    make_col(alias.as_str(), name).alias(CtidColumn::new(plan_position).to_string())
+                }
+                // Normalize score fast-field column name so all score references resolve
+                // through `<execution_alias>.score`.
+                Some(WhichFastField::Score) => make_col(alias.as_str(), name).alias(SCORE_COL_NAME),
+                _ => make_col(alias.as_str(), name),
+            };
+
+            exprs.push(expr);
+        }
+        df = df.select(exprs)?;
+
+        Ok(df)
+    }
+    .boxed_local()
+}

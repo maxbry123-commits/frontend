@@ -1,0 +1,220 @@
+name: Test pg_search Upgrade
+description: Test that the pg_search extension can upgrade via ALTER EXTENSION from a given prior version
+
+inputs:
+  prior_pg_search_version:
+    description: "The prior pg_search version (git tag) to upgrade from, e.g. v0.21.0"
+    required: true
+  prior_pgrx_version:
+    description: "The pgrx version compatible with the prior pg_search version, e.g. 0.16.1"
+    required: true
+  pg_version:
+    description: "The PostgreSQL major version to test against"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Preserve SQL Files
+      shell: bash
+      run: |
+        SQL_DIR="$(mktemp -d)"
+        for case_dir in "${{ github.action_path }}"/*; do
+          [ -d "$case_dir" ] && cp -R "$case_dir" "$SQL_DIR/"
+        done
+        echo "UPGRADE_SQL_DIR=$SQL_DIR" >> "$GITHUB_ENV"
+
+        # Preserve standalone helper SQL too: `git checkout <prior version>` below
+        # replaces this action's directory with the prior version's contents,
+        # which predates these files.
+        SNAPSHOT_SQL="$(mktemp --suffix=.sql)"
+        cp "${{ github.action_path }}/schema_snapshot.sql" "$SNAPSHOT_SQL"
+        echo "SCHEMA_SNAPSHOT_SQL=$SNAPSHOT_SQL" >> "$GITHUB_ENV"
+
+    # This is the pgrx version compatible with ParadeDB ${{ inputs.prior_pg_search_version }}
+    - name: Install pgrx for ParadeDB ${{ inputs.prior_pg_search_version }}
+      shell: bash
+      run: cargo install -j $(nproc) --locked cargo-pgrx --version ${{ inputs.prior_pgrx_version }} --force --debug
+
+    - name: Initialize pgrx Environment for ParadeDB ${{ inputs.prior_pg_search_version }}
+      shell: bash
+      run: cargo pgrx init "--pg${{ inputs.pg_version }}=/usr/lib/postgresql/${{ inputs.pg_version }}/bin/pg_config"
+
+    - name: Checkout ParadeDB ${{ inputs.prior_pg_search_version }}
+      shell: bash
+      run: |
+        # cleanup any local modifications the above steps may have made
+        git checkout .
+
+        # checkout the prior version of ParadeDB
+        git checkout ${{ inputs.prior_pg_search_version }}
+
+    - name: Compile & install pg_search ${{ inputs.prior_pg_search_version }}
+      working-directory: pg_search/
+      shell: bash
+      run: cargo pgrx install --sudo --pg-config="/usr/lib/postgresql/${{ inputs.pg_version }}/bin/pg_config"
+
+    - name: Add pg_search to shared_preload_libraries
+      working-directory: /home/runner/.pgrx/data-${{ inputs.pg_version }}/
+      shell: bash
+      run: echo "shared_preload_libraries = 'pg_search'" >> postgresql.conf
+
+    - name: Start Postgres via pgrx
+      working-directory: pg_search/
+      shell: bash
+      run: |
+        RUST_BACKTRACE=1 cargo pgrx start pg${{ inputs.pg_version }}
+        # Necessary for the ephemeral Postgres test to have proper permissions
+        sudo chown -R $(whoami) /var/run/postgresql/
+
+    - name: Create pg_search Extension
+      working-directory: pg_search/
+      shell: bash
+      run: |
+        set -euo pipefail
+        psql -v ON_ERROR_STOP=1 -h localhost -p 288${{ inputs.pg_version }} postgres -c 'CREATE EXTENSION IF NOT EXISTS vector;'
+        psql -v ON_ERROR_STOP=1 -h localhost -p 288${{ inputs.pg_version }} postgres -c 'CREATE EXTENSION pg_search;'
+
+    - name: Create Upgrade Test Databases
+      working-directory: pg_search/
+      shell: bash
+      run: |
+        set -euo pipefail
+        for case_dir in "$UPGRADE_SQL_DIR"/*; do
+          db="$(basename "$case_dir")"
+          createdb -h localhost -p 288${{ inputs.pg_version }} "$db"
+          psql -v ON_ERROR_STOP=1 -h localhost -p 288${{ inputs.pg_version }} "$db" -c 'CREATE EXTENSION IF NOT EXISTS vector;'
+          psql -v ON_ERROR_STOP=1 -h localhost -p 288${{ inputs.pg_version }} "$db" -c 'CREATE EXTENSION pg_search;'
+          psql -v ON_ERROR_STOP=1 -h localhost -p 288${{ inputs.pg_version }} "$db" -f "$case_dir/setup.sql"
+        done
+
+    - name: Stop Postgres via pgrx
+      working-directory: pg_search/
+      shell: bash
+      run: RUST_BACKTRACE=1 cargo pgrx stop pg${{ inputs.pg_version }}
+
+    - name: Fetch and Checkout PR Head (PR) or Pushed Commit (push)
+      shell: bash
+      run: |
+        set -euo pipefail
+        git checkout .
+
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          git fetch origin +refs/pull/${{ github.event.pull_request.number }}/head:${{ github.event.pull_request.head.ref }}
+          git checkout ${{ github.event.pull_request.head.ref }}
+        else
+          # For push (and other non-PR events), use the exact commit that triggered the workflow
+          git fetch origin ${{ github.sha }}:commit-${{ github.sha }}
+          git checkout commit-${{ github.sha }}
+        fi
+
+    # Must read the rev checked out above, not the `actions/checkout` merge ref
+    # at the top: they disagree whenever the base bumps pgrx after a PR is cut.
+    - name: Extract pgrx Version
+      id: pgrx
+      shell: bash
+      run: echo "version=$(sed -nE 's/^pgrx = "=?([^"]+)"$/\1/p' Cargo.toml)" >> $GITHUB_OUTPUT
+
+    - name: Install the pgrx version for ParadeDB
+      shell: bash
+      run: cargo install -j $(nproc) --locked cargo-pgrx --version ${{ steps.pgrx.outputs.version }} --force --debug
+
+    - name: Initialize pgrx Environment for ParadeDB
+      shell: bash
+      run: cargo pgrx init "--pg${{ inputs.pg_version }}=/usr/lib/postgresql/${{ inputs.pg_version }}/bin/pg_config"
+
+    # Assemble unreleased fragments into an upgrade script for a synthetic target version so
+    # ALTER EXTENSION pg_search UPDATE can be tested, while preserving the fragment files on disk during the test.
+    - name: Assemble SQL Upgrade Scripts
+      shell: bash
+      run: |
+        SYNTHETIC_VERSION="999.0.0"
+        ./scripts/release.sh set-version "$SYNTHETIC_VERSION" --skip-nix
+        ./scripts/release.sh sql "$SYNTHETIC_VERSION" --preserve-fragments
+
+    - name: Compile & install pg_search
+      working-directory: pg_search/
+      shell: bash
+      run: cargo pgrx install --sudo --pg-config="/usr/lib/postgresql/${{ inputs.pg_version }}/bin/pg_config"
+
+    - name: Add pg_search to shared_preload_libraries
+      working-directory: /home/runner/.pgrx/data-${{ inputs.pg_version }}/
+      shell: bash
+      run: echo "shared_preload_libraries = 'pg_search'" >> postgresql.conf
+
+    - name: Start Postgres via pgrx
+      working-directory: pg_search/
+      shell: bash
+      run: |
+        RUST_BACKTRACE=1 cargo pgrx start pg${{ inputs.pg_version }}
+        # Necessary for the ephemeral Postgres test to have proper permissions
+        sudo chown -R $(whoami) /var/run/postgresql/
+
+    - name: Alter pg_search extension to the latest version
+      working-directory: pg_search/
+      shell: bash
+      run: |
+        set -euo pipefail
+        VERSION=$(grep "^version" ../Cargo.toml | head -1 | awk -F '"' '{print $2}')
+        psql -v ON_ERROR_STOP=1 -h localhost -p 288${{ inputs.pg_version }} postgres -c "CREATE EXTENSION IF NOT EXISTS vector;"
+        psql -v ON_ERROR_STOP=1 -h localhost -p 288${{ inputs.pg_version }} postgres -c "ALTER EXTENSION pg_search UPDATE TO '$VERSION';"
+        for case_dir in "$UPGRADE_SQL_DIR"/*; do
+          db="$(basename "$case_dir")"
+          echo "Creating database $db"
+          psql -v ON_ERROR_STOP=1 -h localhost -p 288${{ inputs.pg_version }} "$db" -c "CREATE EXTENSION IF NOT EXISTS vector;"
+          psql -v ON_ERROR_STOP=1 -h localhost -p 288${{ inputs.pg_version }} "$db" -c "ALTER EXTENSION pg_search UPDATE TO '$VERSION';"
+        done
+
+    # An `ALTER EXTENSION ... UPDATE` must leave the schema identical to a fresh
+    # `CREATE EXTENSION` of the same version. If a migration delta is incomplete
+    # (e.g. an object's DDL was emitted into an already-shipped migration file, so
+    # it reaches fresh installs but not upgraders), the upgraded schema drifts from
+    # a fresh install. Diff the two and fail loudly so the gap is caught before
+    # release instead of by users.
+    - name: Verify Upgraded Schema Matches Fresh Install
+      working-directory: pg_search/
+      shell: bash
+      run: |
+        set -euo pipefail
+        PORT=288${{ inputs.pg_version }}
+
+        # `postgres` was created on the prior version and upgraded via ALTER EXTENSION above
+        psql -At -v ON_ERROR_STOP=1 -h localhost -p "$PORT" postgres -f "$SCHEMA_SNAPSHOT_SQL" > /tmp/upgraded.schema
+
+        # A brand-new database gets the full generated base schema for the new version
+        createdb -h localhost -p "$PORT" schema_parity_fresh
+        psql -v ON_ERROR_STOP=1 -h localhost -p "$PORT" schema_parity_fresh -c 'CREATE EXTENSION IF NOT EXISTS vector;'
+        psql -v ON_ERROR_STOP=1 -h localhost -p "$PORT" schema_parity_fresh -c 'CREATE EXTENSION pg_search;'
+        psql -At -v ON_ERROR_STOP=1 -h localhost -p "$PORT" schema_parity_fresh -f "$SCHEMA_SNAPSHOT_SQL" > /tmp/fresh.schema
+
+        if ! diff -u /tmp/fresh.schema /tmp/upgraded.schema; then
+          echo "::error::Upgraded pg_search schema differs from a fresh install (see diff above; '-' = only in fresh install, '+' = only after upgrade). A migration script under pg_search/sql/ is incomplete: an object is in the generated base schema but is never created on the ALTER EXTENSION UPDATE path (or vice versa). Add the missing DDL to the migration file ending in the current Cargo version."
+          exit 1
+        fi
+        echo "Upgraded schema matches a fresh install."
+
+    # We test each BM25 index after the upgrade to test for version compatibility.
+    - name: Test BM25 Index
+      working-directory: pg_search/
+      shell: bash
+      run: |
+        set -euo pipefail
+        for case_dir in "$UPGRADE_SQL_DIR"/*; do
+          db="$(basename "$case_dir")"
+          echo "Running queries against $db"
+          psql -v ON_ERROR_STOP=1 -h localhost -p 288${{ inputs.pg_version }} "$db" -f "$case_dir/queries.sql"
+        done
+
+    # We only run the integration tests since pgrx won't run the #[pg_test] unit tests in an existing database
+    - name: Run pg_search Integration Tests
+      working-directory: tests/
+      shell: bash
+      run: |
+        export DATABASE_URL=postgresql://$(whoami)@localhost:288${{ inputs.pg_version }}/postgres
+        export PG_CONFIG=/usr/lib/postgresql/${{ inputs.pg_version }}/bin/pg_config
+        RUST_BACKTRACE=1 cargo test --jobs $(nproc)
+
+    - name: Print the Postgres Logs
+      if: always()
+      shell: bash
+      run: cat ~/.pgrx/${{ inputs.pg_version }}.log

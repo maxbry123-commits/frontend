@@ -1,0 +1,4 @@
+ignored:
+  - DL3008 # Only application and extension packages are pinned; Debian utility and library versions are not.
+  - DL3009 # apt-get dist-clean preserves cryptographic state while removing cached package data.
+  - DL4006 # Avoid an inherited SHELL instruction; RUN commands set their own failure behavior.

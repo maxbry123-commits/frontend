@@ -1,0 +1,217 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+#![recursion_limit = "512"]
+// Edition 2024 turns this lint on by default. This crate is a thin Rust layer over the Postgres C
+// API, so nearly every function here is `unsafe fn` whose body is unsafe end to end; wrapping each
+// body in a blanket `unsafe {}` would add noise without adding granularity. Left as follow-up work
+// to be tightened per-module, where the wrapped region can be narrowed to something meaningful.
+#![allow(unsafe_op_in_unsafe_fn)]
+
+// Direct dep, not just via `dst`: a cdylib drops the transitively-referenced shim, so reference it
+// here to keep its `.init_array` constructor.
+#[cfg(feature = "dst")]
+use antithesis_instrumentation as _;
+
+mod aggregate;
+mod api;
+mod bootstrap;
+mod index;
+mod postgres;
+mod query;
+pub(crate) mod scan;
+mod schema;
+pub(crate) mod vector;
+
+pub mod gucs;
+pub mod parallel_worker;
+
+use self::postgres::customscan;
+use pgrx::*;
+
+/// Postgres' value for a `norm_selec` that hasn't been assigned
+const UNASSIGNED_SELECTIVITY: f64 = -1.0;
+
+/// A hardcoded value when we can't figure out a good selectivity value
+const UNKNOWN_SELECTIVITY: f64 = 0.00001;
+
+/// A hardcoded value for parameterized plan queries
+const PARAMETERIZED_SELECTIVITY: f64 = 0.10;
+
+/// The selectivity value indicating the entire relation will be returned
+const FULL_RELATION_SELECTIVITY: f64 = 1.0;
+
+/// Heuristic selectivity for fuzzy queries with distance <= 1
+const FUZZY_LOW_SELECTIVITY: f64 = 0.01;
+
+/// Heuristic selectivity for fuzzy queries with distance >= 2
+const FUZZY_HIGH_SELECTIVITY: f64 = 0.05;
+
+/// Heuristic selectivity for regex queries
+const REGEX_SELECTIVITY: f64 = 0.01;
+
+/// Heuristic selectivity for more-like-this queries
+const MORE_LIKE_THIS_SELECTIVITY: f64 = 0.01;
+
+/// Scales the heuristic match estimate into a `DocSet::cost()` for fuzzy/regex/MLT, whose
+/// real scorer is too expensive to build at plan time (#4172).
+///
+/// Tantivy costs a fuzzy/regex union as the sum of its DFA-matched terms' doc_freqs
+/// (`automaton_weight` -> `BufferedUnion`), dominated by the target term, so
+/// `cost ~= target_frequency * N`. We can't read `target_frequency` without the DFA scan we
+/// are avoiding, so this factor stands in for it: `factor = assumed_target_frequency / 0.01`
+/// (the fuzzy `selectivity_heuristic` floor). 25 => a ~25%-frequency target -- a *calibrated*
+/// default, not a derived constant: the factor-sweep showed [~18, 35] all parallelize the
+/// L<=10k cases while serializing L500k, and 25 is the center. Tunable via
+/// `paradedb.expensive_query_cost_factor`.
+const EXPENSIVE_QUERY_COST_FACTOR: f64 = 25.0;
+
+/// An arbitrary value for what it costs for a plan with one of our operators (@@@) to do whatever
+/// initial work it needs to do (open tantivy index, start the query, etc).  The value is largely
+/// meaningless but we should be honest that do _something_.
+const DEFAULT_STARTUP_COST: f64 = 10.0;
+
+/// Planning-time row estimate used when LIMIT is parameterized (resolved only at
+/// execution time). Substitutes for an unknown LIMIT in cost/cardinality math
+/// so downstream decisions like worker count don't collapse.
+const DEFAULT_PARAMETERIZED_LIMIT_ESTIMATE: f64 = 1000.0;
+
+pgrx::pg_module_magic!();
+
+extension_sql!(
+    r#"
+        -- PUBLIC needs USAGE to reference the extension's objects (types, casts,
+        -- operators, functions in `pdb`, and helpers in `paradedb`), but not
+        -- CREATE: every object in these schemas is created here at install time
+        -- by the extension owner, so granting CREATE to PUBLIC would only let
+        -- any role squat objects inside the extension's own schemas.
+        GRANT USAGE ON SCHEMA paradedb TO PUBLIC;
+        GRANT USAGE ON SCHEMA pdb TO PUBLIC;
+    "#,
+    name = "paradedb_grant_usage",
+    finalize
+);
+
+pub fn available_parallelism() -> usize {
+    use once_cell::sync::Lazy;
+
+    static AVAILABLE_PARALLELISM: Lazy<usize> = Lazy::new(|| {
+        std::thread::available_parallelism()
+            .map(|p| p.get())
+            .unwrap_or(1)
+    });
+    *AVAILABLE_PARALLELISM
+}
+
+/// Initializes option parsing
+#[allow(clippy::missing_safety_doc)]
+#[allow(non_snake_case)]
+#[pg_guard]
+pub unsafe extern "C-unwind" fn _PG_init() {
+    // Optional: initialize env_logger for dependency debug output (tantivy, lindera, etc.)
+    // Enable with: cargo build --features debug-logging
+    // Without this feature, log! macros (to stderr) in dependencies become no-ops.
+    // We can't implement our own logger that sends messages to Postgres `ereport()` because
+    // of threading concerns.
+    #[cfg(feature = "debug-logging")]
+    {
+        std::env::set_var("RUST_LOG", "warn");
+        std::env::set_var("RUST_LOG_STYLE", "never");
+        // Use try_init() because parallel workers may call _PG_init() multiple times
+        let _ = env_logger::try_init();
+    }
+
+    if !pg_sys::process_shared_preload_libraries_in_progress {
+        error!(
+            "pg_search must be loaded via shared_preload_libraries. Add 'pg_search' to shared_preload_libraries in postgresql.conf and restart Postgres."
+        );
+    }
+
+    // Register the DST assertion catalog for this process (a no-op outside `--features dst`)
+    dst::init();
+
+    postgres::options::init();
+    postgres::build_logging::init();
+    gucs::init();
+
+    // RegisterCustomRmgr can only be called during shared_preload_libraries init. If pg_search
+    // was loaded via plain CREATE EXTENSION (no preload), skip
+    if pg_sys::process_shared_preload_libraries_in_progress {
+        postgres::storage::custom_rmgr::register();
+    }
+
+    #[cfg(not(any(feature = "pg17", feature = "pg18")))]
+    postgres::fake_aminsertcleanup::register();
+
+    #[allow(static_mut_refs)]
+    #[allow(deprecated)]
+    customscan::register_rel_pathlist(customscan::basescan::BaseScan);
+    customscan::register_upper_path(customscan::aggregatescan::AggregateScan);
+    customscan::register_join_pathlist(customscan::joinscan::JoinScan);
+
+    // Register hook for SubPlan-based join opportunities (e.g. `col IN (SELECT ...) OR IS NULL`)
+    // that PostgreSQL does not flatten into joins, so `set_join_pathlist_hook` never fires.
+    customscan::register_subplan_join_pathlist();
+
+    // Register hook for tracking explain statements (so planner warnings don't error under EXPLAIN)
+    postgres::planner_warnings::register_explain_hook();
+
+    // Register global planner hook for window function support and planner warning lifecycle
+    customscan::register_planner_hook();
+
+    // Initialize the filter query builder
+    customscan::aggregatescan::filterquery::init_filter_query_builder();
+}
+
+#[pg_extern]
+fn random_words(num_words: i32) -> String {
+    use rand::RngExt;
+
+    let mut rng = rand::rng();
+    let letters = "abcdefghijklmnopqrstuvwxyz";
+    let mut result = String::new();
+
+    for _ in 0..num_words {
+        // Choose a random word length between 3 and 7.
+        let word_length = rng.random_range(3..=7);
+        let mut word = String::new();
+
+        for _ in 0..word_length {
+            // Pick a random letter from the letters string.
+            let random_index = rng.random_range(0..letters.len());
+            // Safe to use .unwrap() because the index is guaranteed to be valid.
+            let letter = letters.chars().nth(random_index).unwrap();
+            word.push(letter);
+        }
+        result.push_str(&word);
+        result.push(' ');
+    }
+    result.trim_end().to_string()
+}
+
+/// This module is required by `cargo pgrx test` invocations.
+/// It must be visible at the root of your extension crate.
+#[cfg(test)]
+pub mod pg_test {
+    pub fn setup(_options: Vec<&str>) {
+        // perform one-off initialization when the pg_test framework starts
+    }
+
+    pub fn postgresql_conf_options() -> Vec<&'static str> {
+        // return any postgresql.conf settings that are required for your tests
+        vec!["shared_preload_libraries='pg_search'"]
+    }
+}

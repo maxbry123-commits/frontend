@@ -1,0 +1,135 @@
+name: Set Up Benchmark Cluster
+description: >-
+  Install and configure the pg_search + pgvector Postgres cluster used by both benchmark snapshot
+  generation and snapshot restore. Keeping this in one place ensures the cluster that gets
+  snapshotted matches the cluster that restores it (a pgBackRest snapshot is a whole-cluster image,
+  including installed extensions and GUCs).
+
+inputs:
+  pg_version:
+    description: "PostgreSQL major version."
+    required: false
+    default: "18"
+  global_target_segment_count:
+    description: >-
+      Cluster-wide `paradedb.global_target_segment_count`. A non-zero value overrides every
+      index's own `target_segment_count`; `0` (the extension's own default) honors each index's
+      per-index value. Defaults to `0`; callers that want a fixed cluster-wide count (e.g. the
+      stackoverflow bm25 indexes, which set no per-index count) pass their own.
+    required: false
+    default: "0"
+
+runs:
+  using: composite
+  steps:
+    - name: Set Up pg_search Build Environment
+      uses: ./.github/actions/setup-pg-search-build-environment
+      with:
+        pg_version: ${{ inputs.pg_version }}
+        cache_prefix_key: "v2-benchmarks-rust-cache"
+        cache_save: "true"
+        cache_on_failure: "true"
+        extra_packages: lld libopenblas-dev postgresql-${{ inputs.pg_version }}-pgvector
+
+    - name: Compile and Install pg_search
+      shell: bash
+      run: >-
+        cargo pgrx install -p pg_search --sudo --release
+        --pg-config "/usr/lib/postgresql/${{ inputs.pg_version }}/bin/pg_config"
+        --features=pg${{ inputs.pg_version }} --no-default-features
+
+    - name: Start PostgreSQL
+      shell: bash
+      working-directory: pg_search/
+      run: cargo pgrx start pg${{ inputs.pg_version }}
+
+    - name: Configure PostgreSQL settings and machine settings
+      shell: bash
+      working-directory: /home/runner/.pgrx/data-${{ inputs.pg_version }}/
+      run: |
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM RESET ALL;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET shared_preload_libraries = pg_search,pg_stat_statements;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET maintenance_work_mem = '12GB';"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET shared_buffers = '12GB';"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET max_parallel_workers = 8;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET max_worker_processes = 8;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET max_parallel_maintenance_workers = 8;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET max_parallel_workers_per_gather = 8;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET autovacuum = off;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET max_wal_size = '100GB';"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET jit = off;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET bgwriter_lru_maxpages = 0;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET max_wal_senders = 0;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET wal_level = minimal;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET huge_pages = on;"
+        sudo sysctl -w vm.nr_hugepages=10000
+
+    - name: Restart Postgres
+      shell: bash
+      working-directory: pg_search/
+      run: |
+        cargo pgrx stop pg${{ inputs.pg_version }}
+        cargo pgrx start pg${{ inputs.pg_version }}
+
+    - name: Install pg_stat_statements
+      shell: bash
+      working-directory: /home/runner/.pgrx/data-${{ inputs.pg_version }}/
+      run: |
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "CREATE EXTENSION pg_stat_statements;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET pg_stat_statements.track_planning = on;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET pg_stat_statements.track = top ;"
+
+    - name: Install pg_search
+      shell: bash
+      working-directory: pg_search/
+      run: |
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "CREATE EXTENSION IF NOT EXISTS vector;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "CREATE EXTENSION IF NOT EXISTS pg_search;"
+        psql postgresql://localhost:288${{ inputs.pg_version }}/postgres -c "ALTER SYSTEM SET paradedb.global_target_segment_count = ${{ inputs.global_target_segment_count }};";
+
+    - name: Restart Postgres
+      shell: bash
+      working-directory: pg_search/
+      run: |
+        cargo pgrx stop pg${{ inputs.pg_version }}
+        cargo pgrx start pg${{ inputs.pg_version }}
+
+    - name: Install pgBackRest
+      shell: bash
+      run: sudo apt-get update && sudo apt-get install -y pgbackrest
+
+    # VectorChord (vchordrq) binary for the "cohere / vchord" index variant. Installs the extension
+    # only; it depends on pgvector's `vector` type (installed above). CREATE EXTENSION happens at
+    # index-build time. vchord requires `shared_preload_libraries = ...,vchord`; because a restored
+    # heap snapshot overwrites postgresql.auto.conf, the benchmark workflow re-applies that preload
+    # after restore rather than baking it in here (snapshots are shared with non-vchord runs).
+    # `vchordrq.prefilter` requires VCHORD_VERSION >= 0.4.0.
+    - name: Install VectorChord
+      shell: bash
+      env:
+        VCHORD_VERSION: "1.1.1"
+      run: |
+        set -euo pipefail
+        arch="$(dpkg --print-architecture)"   # arm64 on the benchmark runners; amd64 elsewhere
+        deb="postgresql-${{ inputs.pg_version }}-vchord_${VCHORD_VERSION}-1_${arch}.deb"
+        curl -fsSL -o "/tmp/${deb}" \
+          "https://github.com/tensorchord/VectorChord/releases/download/${VCHORD_VERSION}/${deb}"
+        sudo apt-get install -y "/tmp/${deb}"
+
+    # pgvectorscale (StreamingDiskANN) binary for the "cohere / pgvectorscale" index variant. Not on
+    # apt: it ships as a zip bundling the runtime .deb (plus a dbgsym .deb we skip). Depends on
+    # pgvector's `vector` type (installed above); unlike vchord it needs no shared_preload_libraries,
+    # so the benchmark workflow's post-restore CREATE EXTENSION is all that is required.
+    - name: Install pgvectorscale
+      shell: bash
+      env:
+        PGVECTORSCALE_VERSION: "0.9.0"
+      run: |
+        set -euo pipefail
+        arch="$(dpkg --print-architecture)"   # arm64 on the benchmark runners; amd64 elsewhere
+        zip="pgvectorscale-${PGVECTORSCALE_VERSION}-pg${{ inputs.pg_version }}-${arch}.zip"
+        curl -fsSL -o "/tmp/${zip}" \
+          "https://github.com/timescale/pgvectorscale/releases/download/${PGVECTORSCALE_VERSION}/${zip}"
+        unzip -o -d /tmp/pgvectorscale "/tmp/${zip}"
+        # Runtime package only; the `_*` glob excludes the `-dbgsym_*` debug package.
+        sudo apt-get install -y /tmp/pgvectorscale/pgvectorscale-postgresql-${{ inputs.pg_version }}_*.deb

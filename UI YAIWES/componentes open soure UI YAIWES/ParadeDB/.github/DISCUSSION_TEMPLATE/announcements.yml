@@ -1,0 +1,6 @@
+title: "[Announcements] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This discussion type is reserved for maintainers to make announcements about ParadeDB.

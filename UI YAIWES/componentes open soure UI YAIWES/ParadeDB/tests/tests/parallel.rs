@@ -1,0 +1,591 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
+
+use anyhow::Result;
+use futures::future::join_all;
+use pretty_assertions::assert_eq;
+use rand::RngExt;
+use rstest::*;
+use sqlx::{AssertSqlSafe, Row};
+use tests::fixtures::*;
+use tokio::join;
+use tokio::sync::Barrier;
+
+/// This test targets the locking functionality between Tantivy writers.
+/// With no locking implemented, a high number of concurrent writers will
+/// cause in an error when they all try to commit to the index at once.
+#[rstest]
+#[tokio::test]
+async fn test_simultaneous_commits_with_bm25(database: Db) -> Result<()> {
+    let mut conn1 = database.connection().await;
+
+    // Create table once using any of the connections.
+    r#"CREATE EXTENSION IF NOT EXISTS pg_search CASCADE;
+
+    CREATE TABLE concurrent_items (
+      id SERIAL PRIMARY KEY,
+      description TEXT,
+      category VARCHAR(255),
+      created_at TIMESTAMP DEFAULT now()
+    );
+
+    CREATE INDEX concurrent_items_bm25 ON public.concurrent_items
+    USING paradedb (id, description)
+    WITH (
+        key_field = 'id',
+        text_fields = '{
+            "description": {}
+        }'
+    );
+    "#
+    .execute(&mut conn1);
+
+    // Dynamically generate at least 100 rows for each connection
+    let mut rng = rand::rng();
+    let categories = [
+        "Category 1",
+        "Category 2",
+        "Category 3",
+        "Category 4",
+        "Category 5",
+    ];
+
+    for i in 0..5 {
+        let random_category = categories[rng.random_range(0..categories.len())];
+
+        // Create new connections for this iteration and store them in a vector
+        let mut connections = vec![];
+        for _ in 0..50 {
+            connections.push(database.connection().await);
+        }
+
+        let mut futures = vec![];
+        for (n, mut conn) in connections.into_iter().enumerate() {
+            let query = format!(
+                "INSERT INTO concurrent_items (description, category)
+                 VALUES ('Item {i} from conn{n}', '{random_category}')"
+            );
+            // Move the connection into the future, avoiding multiple borrows
+            futures.push(async move { query.execute_async(&mut conn).await });
+        }
+
+        // Await all the futures for this iteration
+        join_all(futures).await;
+    }
+
+    // Verify the number of rows in each database
+    let rows1: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM concurrent_items")
+        .fetch_one(&mut conn1)
+        .await?;
+
+    assert_eq!(rows1, 250);
+
+    Ok(())
+}
+
+#[rstest]
+#[tokio::test]
+async fn test_statement_level_locking(database: Db) -> Result<()> {
+    let mut conn = database.connection().await;
+
+    // Create tables and indexes
+    r#"CREATE EXTENSION IF NOT EXISTS pg_search CASCADE;
+    CREATE TABLE index_a (
+      id SERIAL PRIMARY KEY,
+      content TEXT
+    );
+    CREATE TABLE index_b (
+      id SERIAL PRIMARY KEY,
+      content TEXT
+    );
+
+    CREATE INDEX index_a_bm25 ON public.index_a
+    USING paradedb (id, content)
+    WITH (
+        key_field = 'id',
+        text_fields = '{
+            "content": {}
+        }'
+    );
+
+    CREATE INDEX index_b_bm25 ON public.index_b
+    USING paradedb (id, content)
+    WITH (
+        key_field = 'id',
+        text_fields = '{
+            "content": {}
+        }'
+    );
+    "#
+    .execute(&mut conn);
+
+    // Behavioral smoke test: two concurrent transactions should be able to cross-write the
+    // indexes without blocking on statement-scoped writer state from the first INSERT.
+    let mut conn_a = database.connection().await;
+    let mut conn_b = database.connection().await;
+    let barrier = Arc::new(Barrier::new(2));
+    let barrier_a = barrier.clone();
+    let barrier_b = barrier.clone();
+
+    let task_a = async move {
+        sqlx::query("SET statement_timeout = '30s'")
+            .execute(&mut conn_a)
+            .await?;
+        sqlx::query("SET lock_timeout = '2s'")
+            .execute(&mut conn_a)
+            .await?;
+        sqlx::query("BEGIN").execute(&mut conn_a).await?;
+        sqlx::query("INSERT INTO index_a (content) VALUES ('Content A1')")
+            .execute(&mut conn_a)
+            .await?;
+        barrier_a.wait().await;
+        sqlx::query("INSERT INTO index_b (content) VALUES ('Content B1 from A')")
+            .execute(&mut conn_a)
+            .await?;
+        sqlx::query("COMMIT").execute(&mut conn_a).await?;
+        Ok::<(), anyhow::Error>(())
+    };
+
+    let task_b = async move {
+        sqlx::query("SET statement_timeout = '30s'")
+            .execute(&mut conn_b)
+            .await?;
+        sqlx::query("SET lock_timeout = '2s'")
+            .execute(&mut conn_b)
+            .await?;
+        sqlx::query("BEGIN").execute(&mut conn_b).await?;
+        sqlx::query("INSERT INTO index_b (content) VALUES ('Content B2')")
+            .execute(&mut conn_b)
+            .await?;
+        barrier_b.wait().await;
+        sqlx::query("INSERT INTO index_a (content) VALUES ('Content A2 from B')")
+            .execute(&mut conn_b)
+            .await?;
+        sqlx::query("COMMIT").execute(&mut conn_b).await?;
+        Ok::<(), anyhow::Error>(())
+    };
+
+    let (result_a, result_b) = join!(task_a, task_b);
+    result_a?;
+    result_b?;
+
+    // Verify the results
+    let count_a: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM index_a")
+        .fetch_one(&mut conn)
+        .await?;
+    let count_b: i64 = sqlx::query_scalar("SELECT COUNT(*) FROM index_b")
+        .fetch_one(&mut conn)
+        .await?;
+
+    assert_eq!(count_a, 2, "Expected 2 rows in index_a");
+    assert_eq!(count_b, 2, "Expected 2 rows in index_b");
+
+    Ok(())
+}
+
+/// Test for race condition in parallel index scans with hash joins.
+///
+/// Root cause: In Parallel Hash Join scenarios, workers open their SearchIndexReader
+/// at different times than the leader. If segment merges occur between when different
+/// participants open the index, they may see different segment lists, causing panics
+/// or incorrect results.
+///
+/// The fix ensures:
+/// 1. Leader opens with Snapshot visibility and populates shared state with its segment list
+/// 2. Workers wait for leader initialization, then open with ParallelWorker visibility
+///    restricted to ONLY the segments in shared state
+#[rstest]
+#[tokio::test]
+async fn test_parallel_hash_join_race_condition(database: Db) -> Result<()> {
+    let mut conn = database.connection().await;
+
+    // Create extension and tables
+    r#"CREATE EXTENSION IF NOT EXISTS pg_search CASCADE;
+
+    DROP TABLE IF EXISTS document_text CASCADE;
+    DROP TABLE IF EXISTS core CASCADE;
+
+    CREATE TABLE core (
+        dwf_doid BIGINT PRIMARY KEY,
+        author TEXT,
+        date_time_combined TIMESTAMP WITHOUT TIME ZONE
+    );
+
+    CREATE TABLE document_text (
+        dwf_doid BIGINT PRIMARY KEY,
+        full_text TEXT
+    );
+
+    -- Create BM25 indexes BEFORE inserting data
+    CREATE INDEX idx_parade_core ON core
+    USING paradedb (dwf_doid, author)
+    WITH (key_field='dwf_doid');
+
+    CREATE INDEX idx_parade_document_text ON document_text
+    USING paradedb (dwf_doid, full_text)
+    WITH (key_field='dwf_doid');
+    "#
+    .execute(&mut conn);
+
+    // Insert data in batches to create multiple segments
+    // Each batch creates new segments which is critical for reproducing the race
+    for (start, end) in [(1, 5000), (5001, 10000), (10001, 15000), (15001, 20000)] {
+        format!(
+            r#"
+            INSERT INTO core (dwf_doid, author, date_time_combined)
+            SELECT 
+                i,
+                CASE 
+                    WHEN i % 3 = 0 THEN 'brian griffin'
+                    WHEN i % 3 = 1 THEN 'barabara pewterschmidt'
+                    ELSE 'bonnie swanson'
+                END,
+                '2024-01-01'::timestamp + (i || ' days')::interval
+            FROM generate_series({start}, {end}) i;
+
+            INSERT INTO document_text (dwf_doid, full_text)
+            SELECT i, 'This is document ' || i || ' with text containing ea'
+            FROM generate_series({start}, {end}) i;
+            "#
+        )
+        .execute(&mut conn);
+    }
+
+    // Create regular index on date (not in BM25 index)
+    "CREATE INDEX idx_date_time_combined_date ON core (DATE(date_time_combined))"
+        .execute(&mut conn);
+
+    // CRITICAL: Disable both custom-scan layers to force the native PostgreSQL
+    // parallel Index AM path. AggregateScan can otherwise satisfy COUNT over
+    // this join itself, which would bypass the parallel-hash behavior this test
+    // is specifically intended to exercise.
+    // Enable parallel workers and force parallel plans.
+    r#"
+    SET paradedb.enable_custom_scan = false;
+    SET paradedb.enable_aggregate_custom_scan = false;
+    SET max_parallel_workers_per_gather = 2;
+    SET parallel_tuple_cost = 0;
+    SET parallel_setup_cost = 0;
+    SET min_parallel_table_scan_size = 0;
+    SET min_parallel_index_scan_size = 0;
+    "#
+    .execute(&mut conn);
+
+    // Try to force parallel mode - use the appropriate GUC for each PG version
+    // PG15-17: force_parallel_mode, PG18+: debug_parallel_query
+    let _ = "SET force_parallel_mode = on".execute_result(&mut conn);
+    let _ = "SET debug_parallel_query = on".execute_result(&mut conn);
+
+    let query = r#"
+        SELECT COUNT(*)
+        FROM document_text dt
+        JOIN core c ON dt.dwf_doid = c.dwf_doid
+        WHERE dt.full_text @@@ 'ea'
+          AND (c.author @@@ paradedb.match('author', 'brian griffin')
+               OR c.author @@@ paradedb.match('author', 'barabara pewterschmidt')
+               OR c.author @@@ paradedb.match('author', 'bonnie swanson'))
+          AND DATE(c.date_time_combined) >= DATE('2001-01-01')
+          AND DATE(c.date_time_combined) <= DATE('2025-12-31')
+    "#;
+
+    // Check EXPLAIN to verify parallel workers are planned
+    let explain_query = format!("EXPLAIN (FORMAT TEXT) {}", query);
+    let explain_rows: Vec<(String,)> = explain_query.fetch(&mut conn);
+    let explain_text: String = explain_rows
+        .iter()
+        .map(|(s,)| s.as_str())
+        .collect::<Vec<_>>()
+        .join("\n");
+
+    let has_gather = explain_text.contains("Gather");
+    let has_parallel_workers = explain_text.contains("Workers Planned:");
+    let has_parallel_index_scan = explain_text.contains("Parallel Index");
+    let is_parallel = has_gather || has_parallel_workers;
+
+    println!(
+        "Parallel check: Gather={}, Workers Planned={}, Parallel Index Scan={}\nEXPLAIN:\n{}",
+        has_gather, has_parallel_workers, has_parallel_index_scan, explain_text
+    );
+
+    assert!(
+        is_parallel,
+        "Query plan should use parallel execution. EXPLAIN:\n{}",
+        explain_text
+    );
+
+    // Run the query 15 times - all should return 730
+    // Before the fix, this would intermittently return 0 due to the race condition
+    let mut counts = Vec::new();
+    for _ in 0..15 {
+        let row = sqlx::query(query).fetch_one(&mut conn).await?;
+        let count: i64 = row.get(0);
+        counts.push(count);
+    }
+
+    // Check for any zeros - the race condition symptom
+    let zeros = counts.iter().filter(|&&c| c == 0).count();
+    let expected = 730i64; // All 20000 docs match (all have 'ea', all authors match, all dates in range)
+
+    println!("Results: {:?}", counts);
+    println!("Zeros: {}, Expected: {}", zeros, expected);
+
+    // All counts should be equal and non-zero
+    assert!(
+        zeros == 0,
+        "Race condition detected! {} queries returned 0 instead of {}. Results: {:?}",
+        zeros,
+        expected,
+        counts
+    );
+
+    for (i, count) in counts.iter().enumerate() {
+        assert_eq!(
+            *count, expected,
+            "Query {} returned {} but expected {} - inconsistent results!",
+            i, count, expected
+        );
+    }
+
+    println!(
+        "All {} queries returned consistent count: {}",
+        counts.len(),
+        expected
+    );
+
+    Ok(())
+}
+
+/// Regression test for https://github.com/paradedb/paradedb/issues/5024
+///
+/// A parallel-aware BaseScan under a Gather on the inner side of a Nested Loop is
+/// rescanned once per outer row. The shared segment work queue must be reset only in
+/// ReInitializeDSMCustomScan, which PostgreSQL runs before workers are launched. The
+/// leader's ReScan callback runs *after* LaunchParallelWorkers, so resetting the queue
+/// there races with segment claims from a freshly launched worker: an already-claimed
+/// segment goes back into the pool and gets scanned twice, duplicating every row in it
+/// (COUNT(*) returned exactly 2x).
+///
+/// The race is timing-dependent (the unfixed code failed ~65% of individual runs on a
+/// release build), so the query runs repeatedly and every result must match the plain
+/// PostgreSQL baseline.
+#[rstest]
+#[tokio::test]
+async fn test_parallel_rescan_does_not_double_scan(database: Db) -> Result<()> {
+    let mut conn = database.connection().await;
+
+    r#"CREATE EXTENSION IF NOT EXISTS pg_search CASCADE;
+
+    CREATE TABLE rescan_users (id BIGINT PRIMARY KEY, name TEXT, age INTEGER);
+    CREATE TABLE rescan_products (id BIGINT PRIMARY KEY, name TEXT, age INTEGER);
+    CREATE TABLE rescan_orders (id BIGINT PRIMARY KEY, name TEXT, age INTEGER);
+
+    CREATE INDEX idx_rescan_users ON rescan_users
+    USING paradedb (id, name, age)
+    WITH (
+        key_field = 'id',
+        text_fields = '{ "name": { "tokenizer": { "type": "keyword" }, "fast": true } }',
+        numeric_fields = '{ "age": { "fast": true } }'
+    );
+    CREATE INDEX idx_rescan_products ON rescan_products
+    USING paradedb (id, name, age)
+    WITH (
+        key_field = 'id',
+        text_fields = '{ "name": { "tokenizer": { "type": "keyword" }, "fast": true } }',
+        numeric_fields = '{ "age": { "fast": true } }'
+    );
+    CREATE INDEX idx_rescan_orders ON rescan_orders
+    USING paradedb (id, name, age)
+    WITH (
+        key_field = 'id',
+        text_fields = '{ "name": { "tokenizer": { "type": "keyword" }, "fast": true } }',
+        numeric_fields = '{ "age": { "fast": true } }'
+    );
+
+    INSERT INTO rescan_users (id, name, age) VALUES
+        (1, 'bob', 20), (2, 'alice', 30), (3, 'cloe', 40), (4, 'anchovy', 50);
+    INSERT INTO rescan_products (id, name, age)
+        SELECT i, (ARRAY['red', 'green', 'blue'])[1 + i % 3], 10 + i FROM generate_series(1, 12) i;
+    INSERT INTO rescan_orders (id, name, age)
+        SELECT i, (ARRAY['red', 'green', 'blue'])[1 + i % 3], 10 + i FROM generate_series(1, 12) i;
+
+    ANALYZE rescan_users, rescan_products, rescan_orders;
+    "#
+    .execute(&mut conn);
+
+    // Ground truth from the plain PostgreSQL plan (no custom scan, `=` operators).
+    "SET paradedb.enable_custom_scan = false".execute(&mut conn);
+    let expected: i64 = sqlx::query_scalar(
+        r#"
+        SELECT COUNT(*)
+        FROM rescan_users CROSS JOIN rescan_products
+        JOIN rescan_orders ON rescan_products.name = rescan_orders.name
+        WHERE (rescan_users.name = 'bob')
+           OR ((rescan_users.id = 4) AND (rescan_orders.id = 4) AND (rescan_products.age = 20))
+        "#,
+    )
+    .fetch_one(&mut conn)
+    .await?;
+    assert!(expected > 0, "fixture should produce matching rows");
+
+    // The failing configuration from #5024: forced-parallel custom scans, so the
+    // inner side of the Nested Loop becomes a rescanned Gather over Parallel Custom
+    // Scans coordinating through the shared segment work queue.
+    r#"
+    SET paradedb.enable_custom_scan = true;
+    SET paradedb.enable_aggregate_custom_scan = false;
+    SET paradedb.enable_join_custom_scan = false;
+    SET paradedb.enable_filter_pushdown = false;
+    SET enable_seqscan = false;
+    SET enable_indexscan = true;
+    SET max_parallel_workers = 8;
+    "#
+    .execute(&mut conn);
+    // PG15: force_parallel_mode; PG16+: debug_parallel_query. On PG15 the basescan
+    // does not force a parallel worker for this plan, so the test degrades to a
+    // plain consistency check there.
+    let _ = "SET force_parallel_mode = on".execute_result(&mut conn);
+    let forced_parallel = "SET debug_parallel_query = on"
+        .execute_result(&mut conn)
+        .is_ok();
+
+    let query = r#"
+        SELECT COUNT(*)
+        FROM rescan_users CROSS JOIN rescan_products
+        JOIN rescan_orders ON rescan_products.name = rescan_orders.name
+        WHERE (rescan_users.name @@@ 'bob')
+           OR ((rescan_users.id @@@ '4') AND ((rescan_orders.id @@@ '4') AND (rescan_products.age @@@ '20')))
+    "#;
+
+    if forced_parallel {
+        // Confirm the plan has the shape that exercises the rescan path.
+        let explain_rows: Vec<(String,)> = format!("EXPLAIN (COSTS OFF) {query}").fetch(&mut conn);
+        let explain_text: String = explain_rows
+            .iter()
+            .map(|(s,)| s.as_str())
+            .collect::<Vec<_>>()
+            .join("\n");
+        assert!(
+            explain_text.contains("Parallel Custom Scan (ParadeDB Base Scan)")
+                && explain_text.contains("Gather"),
+            "plan should use a parallel BaseScan under a Gather. EXPLAIN:\n{explain_text}"
+        );
+    }
+
+    // The unfixed race loses ~65% of individual runs, so 30 iterations detect a
+    // regression with near certainty; with the fix every run is deterministic.
+    let mut counts = Vec::new();
+    for _ in 0..30 {
+        let count: i64 = sqlx::query_scalar(query).fetch_one(&mut conn).await?;
+        counts.push(count);
+    }
+
+    assert!(
+        counts.iter().all(|&c| c == expected),
+        "parallel rescan duplicated rows: expected {expected} for every run, got {counts:?}"
+    );
+
+    Ok(())
+}
+
+/// Regression test for https://github.com/paradedb/paradedb/issues/4381
+///
+/// In PG18 amestimateparallelscan sizes the DSM region based on target_segment_count. Concurrent
+/// writes can create segments beyond that target between plan and execute, causing a buffer
+/// overflow in populate() that corrupts adjacent shared memory. This test verifies that parallel
+/// scans return correct results under concurrent writes.
+#[rstest]
+#[tokio::test]
+async fn test_parallel_scan_with_segments_exceeding_target(database: Db) -> Result<()> {
+    let mut writer = database.connection().await;
+    let mut reader = database.connection().await;
+
+    // Set target segment count to 1 to lower the threshold for triggering the overflow
+    r#"
+    CREATE EXTENSION IF NOT EXISTS pg_search CASCADE;
+
+    CREATE TABLE test (
+        id SERIAL PRIMARY KEY,
+        column_a TEXT UNIQUE,
+        column_b BOOL
+    );
+
+    CREATE INDEX idx_test ON test
+    USING paradedb (column_a, column_b)
+    WITH (
+        key_field='column_a',
+        target_segment_count = 1
+    );
+    "#
+    .execute(&mut writer);
+
+    // Force reader parallel scan, through AM path
+    r#"
+    SET paradedb.enable_custom_scan = false;
+    SET paradedb.global_mutable_segment_rows TO 1;
+    SET max_parallel_workers_per_gather = 1;
+    SET parallel_tuple_cost = 0;
+    SET parallel_setup_cost = 0;
+    SET min_parallel_table_scan_size = 0;
+    SET min_parallel_index_scan_size = 0;
+    "#
+    .execute(&mut reader);
+    // Try to force parallel mode - use the appropriate GUC for each PG version
+    // PG15-17: force_parallel_mode, PG18+: debug_parallel_query
+    let _ = "SET force_parallel_mode = on".execute_result(&mut reader);
+    let _ = "SET debug_parallel_query = on".execute_result(&mut reader);
+
+    let shutdown = Arc::new(AtomicBool::new(false));
+    let writer_shutdown = shutdown.clone();
+    let writer_handle = async_std::task::spawn(async move {
+        let mut i = 0;
+        while !writer_shutdown.load(Ordering::Relaxed) {
+            let q = format!(
+                "INSERT INTO test (column_a, column_b) VALUES ('{}', true)",
+                i
+            );
+            let _ = sqlx::query(AssertSqlSafe(q)).execute(&mut writer).await;
+            i += 1;
+        }
+    });
+
+    // Originally this ran 10,000 times which took quite some time. On my machine and in CI, running 400 times seems
+    // to be enough to reliably reproduce the bug (#4381) and makes the test run much faster.
+    for _ in 0..400 {
+        let result = sqlx::query_as::<_, (i64,)>(
+            "SELECT COUNT(*) FROM test t WHERE t.column_a @@@ paradedb.all() AND t.column_b = TRUE",
+        )
+        .fetch_one(&mut reader)
+        .await;
+        if result.is_err() {
+            // DSM corruption detected
+            shutdown.store(true, Ordering::Relaxed);
+            writer_handle.await;
+            panic!(
+                "Query failed due to DSM corruption: {}",
+                result.unwrap_err()
+            );
+        }
+    }
+
+    shutdown.store(true, Ordering::Relaxed);
+    writer_handle.await;
+
+    Ok(())
+}

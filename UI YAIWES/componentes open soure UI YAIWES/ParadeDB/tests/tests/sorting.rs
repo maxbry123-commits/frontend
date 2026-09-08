@@ -1,0 +1,354 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+use pretty_assertions::assert_eq;
+use rstest::*;
+use serde_json::Value;
+use sqlx::PgConnection;
+use tests::fixtures::*;
+
+fn field_sort_fixture(conn: &mut PgConnection) -> Value {
+    // ensure our custom scan wins against our small test table
+    r#"
+        SET enable_indexscan TO off;
+        CALL paradedb.create_paradedb_test_table(table_name => 'bm25_search', schema_name => 'paradedb');
+
+        CREATE INDEX bm25_search_idx ON paradedb.bm25_search
+        USING paradedb (id, description, category, rating, in_stock, metadata, created_at, last_updated_date, latest_available_time)
+        WITH (
+            key_field = 'id',
+            text_fields = '{
+                "description": {},
+                "category": {
+                    "tokenizer": {"type": "keyword"},
+                    "fast": true,
+                    "normalizer": "lowercase"
+                }
+            }',
+            numeric_fields = '{
+                "rating": {}
+            }',
+            boolean_fields = '{
+                "in_stock": {}
+            }',
+            json_fields = '{
+                "metadata": {}
+            }'
+        );
+    "#.execute(conn);
+
+    let (plan, ) = "EXPLAIN (ANALYZE, FORMAT JSON) SELECT * FROM paradedb.bm25_search WHERE description @@@ 'keyboard OR shoes' ORDER BY lower(category) LIMIT 5".fetch_one::<(Value,)>(conn);
+    eprintln!("{plan:#?}");
+    plan
+}
+
+#[rstest]
+fn sort_by_lower(mut conn: PgConnection) {
+    let plan = field_sort_fixture(&mut conn);
+    let plan = plan
+        .pointer("/0/Plan/Plans/0")
+        .unwrap()
+        .as_object()
+        .unwrap();
+    assert_eq!(
+        plan.get("   TopK Order By"),
+        Some(&Value::String(String::from("category asc")))
+    );
+}
+
+#[rstest]
+fn sort_by_lower_parallel(mut conn: PgConnection) {
+    if pg_major_version(&mut conn) < 17 {
+        // We cannot reliably force parallel workers to be used without `debug_parallel_query`.
+        return;
+    }
+
+    "SET max_parallel_workers = 8;".execute(&mut conn);
+    "SET debug_parallel_query TO on".execute(&mut conn);
+
+    let plan = field_sort_fixture(&mut conn);
+    let plan = plan
+        .pointer("/0/Plan/Plans/0/Plans/0")
+        .unwrap()
+        .as_object()
+        .unwrap();
+    assert_eq!(
+        plan.get("   TopK Order By"),
+        Some(&Value::String(String::from("category asc")))
+    );
+}
+
+/// Regression test: a parallel `ORDER BY <fast field> ... LIMIT` (TopK) must
+/// return the same rows as plain Postgres when deleted tuples are present.
+///
+/// Reduced from a `generated_paging_small` qgen failure. Deleted tuples are
+/// filtered at query time (heap MVCC), so a TopK over the index can come up
+/// short on visible rows and re-query a deeper page with an `offset`. Under
+/// parallel execution the shared-threshold pruning optimization is kept in
+/// shared memory and only reset at scan setup. If left in-place during retries,
+/// valid tuples below the threshold will be skipped.
+#[rstest]
+fn parallel_topk_limit_visibility_retry(mut conn: PgConnection) {
+    if pg_major_version(&mut conn) < 17 {
+        // We cannot reliably force parallel workers without `debug_parallel_query`.
+        return;
+    }
+
+    // a fast `sortk` deliberately uncorrelated with `id`
+    // so the index's physical (sort_by) order differs from id order; then delete
+    // 10% of rows at the top so the TopK visibility retry actually fires.
+    r#"
+        CREATE EXTENSION IF NOT EXISTS pg_search;
+        CREATE TABLE t (id bigint NOT NULL PRIMARY KEY, name text, sortk int);
+        CREATE INDEX idx ON t USING paradedb (id, (name::pdb.literal), sortk) WITH (
+            key_field = 'id',
+            sort_by = 'sortk DESC NULLS LAST',
+            target_segment_count = 1
+        );
+        INSERT INTO t (id, name, sortk)
+        SELECT g,
+               'alice',
+               100 - g
+        FROM generate_series(1, 100) g;
+        DELETE FROM t WHERE id > 90;
+    "#
+    .execute(&mut conn);
+
+    // Ground truth straight from Postgres,
+    let expected: Vec<i64> = "SELECT id FROM t WHERE NOT (name = 'bob') \
+                 ORDER BY id DESC NULLS FIRST LIMIT 3"
+        .fetch::<(i64,)>(&mut conn)
+        .into_iter()
+        .map(|(id,)| id)
+        .collect();
+
+    // Force the parallel custom-scan TopK path. `parallel_leader_participation =
+    // off` (with `debug_parallel_query = on`) makes a single worker do the whole
+    // scan, which is the configuration that exposed the bug.
+    r#"
+        SET parallel_leader_participation TO off;
+        SET debug_parallel_query TO on;
+        SET paradedb.enable_custom_scan TO on;
+    "#
+    .execute(&mut conn);
+
+    let actual = "SELECT id FROM t WHERE NOT (name @@@ 'bob') \
+             ORDER BY id DESC NULLS FIRST LIMIT 3"
+        .fetch::<(i64,)>(&mut conn)
+        .into_iter()
+        .map(|(id,)| id)
+        .collect::<Vec<_>>();
+
+    assert_eq!(
+        expected, actual,
+        "parallel BM25 TopK disagrees with Postgres at LIMIT 3"
+    );
+}
+
+#[rstest]
+fn sort_by_raw(mut conn: PgConnection) {
+    // ensure our custom scan wins against our small test table
+    r#"
+        SET enable_indexscan TO off;
+        CALL paradedb.create_paradedb_test_table(table_name => 'bm25_search', schema_name => 'paradedb');
+
+        CREATE INDEX bm25_search_idx ON paradedb.bm25_search
+        USING paradedb (id, description, category, rating, in_stock, metadata, created_at, last_updated_date, latest_available_time)
+        WITH (
+            key_field = 'id',
+            text_fields = '{
+                "description": {},
+                "category": {
+                    "tokenizer": {"type": "keyword"},
+                    "fast": true,
+                    "normalizer": "raw"
+                }
+            }',
+            numeric_fields = '{
+                "rating": {}
+            }',
+            boolean_fields = '{
+                "in_stock": {}
+            }',
+            json_fields = '{
+                "metadata": {}
+            }'
+        );
+    "#.execute(&mut conn);
+
+    let (plan, ) = "EXPLAIN (ANALYZE, FORMAT JSON) SELECT * FROM paradedb.bm25_search WHERE description @@@ 'keyboard OR shoes' ORDER BY category LIMIT 5".fetch_one::<(Value,)>(&mut conn);
+    eprintln!("{plan:#?}");
+    let plan = plan
+        .pointer("/0/Plan/Plans/0")
+        .unwrap()
+        .as_object()
+        .unwrap();
+    assert_eq!(
+        plan.get("   TopK Order By"),
+        Some(&Value::String(String::from("category asc")))
+    );
+}
+
+#[rstest]
+#[async_std::test]
+async fn test_compound_sort(mut conn: PgConnection) {
+    "SET max_parallel_workers to 0;".execute(&mut conn);
+
+    SimpleProductsTable::setup().execute(&mut conn);
+
+    let (plan,): (Value,) = r#"
+        EXPLAIN (ANALYZE, VERBOSE, FORMAT JSON)
+        SELECT id FROM paradedb.bm25_search
+        WHERE description @@@ 'shoes' ORDER BY rating DESC, created_at DESC LIMIT 10"#
+        .fetch_one(&mut conn);
+
+    eprintln!("plan: {plan:#?}");
+
+    // Since both ORDER-BY fields are fast, they should be pushed down.
+    assert_eq!(
+        plan.pointer("/0/Plan/Plans/0/   TopK Order By"),
+        Some(&Value::String(String::from("rating desc, created_at desc")))
+    );
+}
+
+#[rstest]
+#[async_std::test]
+async fn compound_sort_expression(mut conn: PgConnection) {
+    "SET max_parallel_workers to 0;".execute(&mut conn);
+
+    SimpleProductsTable::setup().execute(&mut conn);
+
+    let (plan,): (Value,) = r#"
+        EXPLAIN (ANALYZE, VERBOSE, FORMAT JSON)
+        SELECT *, pdb.score(id) * 2 FROM paradedb.bm25_search
+        WHERE description @@@ 'shoes' ORDER BY 2, pdb.score(id) LIMIT 10"#
+        .fetch_one(&mut conn);
+
+    eprintln!("plan: {plan:#?}");
+
+    // Since the ORDER BY contains an expression, we should not attempt Top K, even if other
+    // fields could be pushed down.
+    assert_eq!(
+        plan.pointer("/0/Plan/Plans/0/Plans/0/Exec Method"),
+        Some(&Value::String(String::from("NormalScanExecState")))
+    );
+}
+
+#[rstest]
+#[async_std::test]
+async fn compound_sort_partitioned(mut conn: PgConnection) {
+    "SET max_parallel_workers to 0;".execute(&mut conn);
+
+    // Create the partitioned sales table
+    PartitionedTable::setup().execute(&mut conn);
+
+    // Insert a good size amount of random data, and then analyze.
+    r#"
+    INSERT INTO sales (sale_date, amount, description)
+    SELECT
+        (DATE '2023-01-01' + (random() * 179)::integer) AS sale_date,
+        (random() * 1000)::real AS amount,
+        ('wine '::text || md5(random()::text)) AS description
+    FROM generate_series(1, 1000);
+
+    ANALYZE;
+    "#
+    .execute(&mut conn);
+
+    let (plan,): (Value,) = r#"
+        EXPLAIN (ANALYZE, VERBOSE, FORMAT JSON)
+        SELECT id, sale_date, amount FROM sales
+        WHERE description @@@ 'wine'
+        ORDER BY sale_date, amount LIMIT 10;"#
+        .fetch_one(&mut conn);
+
+    eprintln!("plan: {plan:#?}");
+
+    // Extract the Custom Scan nodes from the JSON plan for inspection
+    let mut custom_scan_nodes = Vec::new();
+    collect_custom_scan_nodes(plan.pointer("/0/Plan").unwrap(), &mut custom_scan_nodes);
+
+    // Check that we have Custom Scan nodes that handle our search
+    assert_eq!(custom_scan_nodes.len(), 2);
+    for node in custom_scan_nodes {
+        assert_eq!(
+            node.get("   TopK Order By"),
+            Some(&Value::String(String::from("sale_date asc, amount asc")))
+        );
+    }
+}
+
+// Helper function to recursively collect Custom Scan nodes from a plan
+fn collect_custom_scan_nodes(plan: &Value, nodes: &mut Vec<Value>) {
+    // Check if this is a Custom Scan node
+    if let Some(node_type) = plan.get("Node Type").and_then(|v| v.as_str())
+        && node_type == "Custom Scan"
+    {
+        nodes.push(plan.clone());
+    }
+
+    // Recursively check child plans
+    if let Some(plans) = plan.get("Plans").and_then(|p| p.as_array()) {
+        for child_plan in plans {
+            collect_custom_scan_nodes(child_plan, nodes);
+        }
+    }
+}
+
+#[rstest]
+fn sort_partitioned_early_cutoff(mut conn: PgConnection) {
+    PartitionedTable::setup().execute(&mut conn);
+
+    // Insert matching rows into both partitions.
+    r#"
+        INSERT INTO sales (sale_date, amount, description) VALUES
+        ('2023-01-10', 150.00, 'Ergonomic metal keyboard'),
+        ('2023-04-01', 250.00, 'Cheap plastic keyboard');
+    "#
+    .execute(&mut conn);
+
+    "SET max_parallel_workers TO 0;".execute(&mut conn);
+
+    // With ORDER BY the partition key: we expect the partitions to be visited sequentially, and
+    // for cutoff to occur.
+    let (plan,): (Value,) = r#"
+        EXPLAIN (ANALYZE, FORMAT JSON)
+        SELECT description, sale_date
+        FROM sales
+        WHERE description @@@ 'keyboard'
+        ORDER BY sale_date
+        LIMIT 1;
+        "#
+    .fetch_one(&mut conn);
+    eprintln!("{plan:#?}");
+
+    // We expect both partitions to be in the plan, but for only the first one to have been
+    // executed, because the Append node was able to get enough results from the first partition.
+    let plans = plan
+        .pointer("/0/Plan/Plans/0/Plans")
+        .unwrap()
+        .as_array()
+        .unwrap();
+    assert_eq!(
+        plans[0].get("Actual Loops").unwrap(),
+        &serde_json::from_str::<Value>("1").unwrap()
+    );
+    assert_eq!(
+        plans[1].get("Actual Loops").unwrap(),
+        &serde_json::from_str::<Value>("0").unwrap()
+    );
+}

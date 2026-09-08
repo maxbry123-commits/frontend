@@ -1,0 +1,553 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+//! <https://www.postgresql.org/docs/current/custom-scan.html>
+
+#![allow(clippy::tabs_in_doc_comments)]
+
+use parking_lot::Mutex;
+use pgrx::{IntoDatum, PgList, PgMemoryContexts, direct_function_call, pg_sys};
+
+use std::ffi::{CStr, CString};
+use std::ptr::NonNull;
+use std::sync::OnceLock;
+
+pub mod aggregatescan;
+pub mod basescan;
+pub(crate) mod bitmap_intersection;
+mod builders;
+pub mod collation_semantics;
+pub mod datafusion;
+pub mod dsm;
+pub mod exec;
+pub mod explain;
+mod explainer;
+pub mod expr_eval;
+mod hook;
+pub mod joinscan;
+pub mod limit_offset;
+pub mod mpp;
+pub mod opexpr;
+pub mod orderby;
+pub mod parallel;
+pub mod parameterized_value;
+mod path;
+pub(crate) mod pg_expr_udf;
+pub mod projections;
+pub mod pullup;
+mod pushdown;
+pub mod qual_inspect;
+mod range_table;
+mod scan;
+pub mod solve_expr;
+
+use crate::api::HashMap;
+
+use crate::nodecast;
+use crate::postgres::customscan::builders::custom_path::CustomPathBuilder;
+use crate::postgres::customscan::builders::custom_scan::CustomScanBuilder;
+use crate::postgres::customscan::builders::custom_state::{
+    CustomScanStateBuilder, CustomScanStateWrapper,
+};
+use crate::postgres::customscan::explainer::Explainer;
+use crate::postgres::customscan::path::{plan_custom_path, reparameterize_custom_path_by_child};
+use crate::postgres::customscan::scan::create_custom_scan_state;
+pub use hook::{
+    register_join_pathlist, register_planner_hook, register_rel_pathlist,
+    register_subplan_join_pathlist, register_upper_path,
+};
+
+// TODO: This trait should be expanded to include a `reset` method, which would become the
+// default/only implementation of `rescan_custom_scan`.
+pub trait CustomScanState: Default {
+    fn init_exec_method(&mut self, cstate: *mut pg_sys::CustomScanState);
+}
+
+struct CustomPathMethodsWrapper(*const pg_sys::CustomPathMethods);
+
+unsafe impl Send for CustomPathMethodsWrapper {}
+unsafe impl Sync for CustomPathMethodsWrapper {}
+
+struct CustomScanMethodsWrapper(*const pg_sys::CustomScanMethods);
+
+unsafe impl Send for CustomScanMethodsWrapper {}
+unsafe impl Sync for CustomScanMethodsWrapper {}
+
+struct CustomExecMethodsWrapper(*const pg_sys::CustomExecMethods);
+
+unsafe impl Send for CustomExecMethodsWrapper {}
+unsafe impl Sync for CustomExecMethodsWrapper {}
+
+lazy_static::lazy_static! {
+    // We need to allocate the structs to define functions once, however
+    // all the methods are generic over this trait ([`CustomScan]).  Because Rust
+    // monomorphizes these functions, they're actually at different addresses per CustomScan
+    // impl. As such, we allocate them once, in Postgres "TopMemoryContext", which is **never**
+    // freed. This ensures we don't waste any more memory than we need and more importantly,
+    // ensures the returned pointer holding the function pointers lives for the life of the
+    // process, which Postgres requires of these.
+    static ref PATH_METHODS: Mutex<HashMap<&'static CStr, CustomPathMethodsWrapper>> = Mutex::default();
+    static ref SCAN_METHODS: Mutex<HashMap<&'static CStr, CustomScanMethodsWrapper>> = Mutex::default();
+    static ref EXEC_METHODS: Mutex<HashMap<&'static CStr, CustomExecMethodsWrapper>> = Mutex::default();
+}
+
+pub trait CustomScan: Default + Sized {
+    const NAME: &'static CStr;
+    type Args;
+    type State: CustomScanState;
+    type PrivateData: From<*mut pg_sys::List> + Into<*mut pg_sys::List>;
+
+    /// Returns the execution methods for this custom scan.
+    ///
+    /// This method is called exactly once per custom scan type and the result is memoized
+    /// in `TopMemoryContext`. Implementations should return a [`pg_sys::CustomExecMethods`]
+    /// struct populated with the appropriate callback functions.
+    ///
+    /// Common callback wrappers are available in the [`exec`] and [`dsm`] modules.
+    /// Scanners that implement capability traits (like [`ParallelQueryCapable` or [`MarkRestoreCapable`])
+    /// can use the generic versions of these callbacks by passing themselves as the generic
+    /// argument (e.g. `Some(exec::begin_custom_scan::<Self>)`).
+    fn exec_methods() -> pg_sys::CustomExecMethods;
+
+    fn custom_exec_methods() -> *const pg_sys::CustomExecMethods {
+        EXEC_METHODS
+            .lock()
+            .entry(Self::NAME)
+            .or_insert_with(|| {
+                CustomExecMethodsWrapper(
+                    PgMemoryContexts::TopMemoryContext
+                        .leak_and_drop_on_delete(Self::exec_methods()),
+                )
+            })
+            .0
+    }
+
+    fn custom_path_methods() -> *const pg_sys::CustomPathMethods {
+        PATH_METHODS
+            .lock()
+            .entry(Self::NAME)
+            .or_insert_with(|| {
+                CustomPathMethodsWrapper(
+                    PgMemoryContexts::TopMemoryContext.leak_and_drop_on_delete(
+                        pg_sys::CustomPathMethods {
+                            CustomName: Self::NAME.as_ptr(),
+                            PlanCustomPath: Some(plan_custom_path::<Self>),
+                            ReparameterizeCustomPathByChild: Some(
+                                reparameterize_custom_path_by_child::<Self>,
+                            ),
+                        },
+                    ),
+                )
+            })
+            .0
+    }
+
+    fn custom_scan_methods() -> *const pg_sys::CustomScanMethods {
+        SCAN_METHODS
+            .lock()
+            .entry(Self::NAME)
+            .or_insert_with(|| {
+                CustomScanMethodsWrapper(
+                    PgMemoryContexts::TopMemoryContext.leak_and_drop_on_delete(
+                        pg_sys::CustomScanMethods {
+                            CustomName: Self::NAME.as_ptr(),
+                            CreateCustomScanState: Some(create_custom_scan_state::<Self>),
+                        },
+                    ),
+                )
+            })
+            .0
+    }
+
+    fn create_custom_path(builder: CustomPathBuilder<Self>) -> Vec<pg_sys::CustomPath>;
+
+    fn plan_custom_path(builder: CustomScanBuilder<Self>) -> pg_sys::CustomScan;
+
+    fn create_custom_scan_state(
+        builder: CustomScanStateBuilder<Self, Self::PrivateData>,
+    ) -> *mut CustomScanStateWrapper<Self>;
+
+    fn explain_custom_scan(
+        state: &CustomScanStateWrapper<Self>,
+        ancestors: *mut pg_sys::List,
+        explainer: &mut Explainer,
+    );
+
+    fn begin_custom_scan(
+        state: &mut CustomScanStateWrapper<Self>,
+        estate: *mut pg_sys::EState,
+        eflags: i32,
+    );
+
+    fn rescan_custom_scan(state: &mut CustomScanStateWrapper<Self>);
+
+    fn exec_custom_scan(state: &mut CustomScanStateWrapper<Self>) -> *mut pg_sys::TupleTableSlot;
+
+    fn shutdown_custom_scan(state: &mut CustomScanStateWrapper<Self>);
+
+    fn end_custom_scan(state: &mut CustomScanStateWrapper<Self>);
+
+    /// Add a planner warning associated with this CustomScan type.
+    ///
+    /// The warning will be deduplicated and emitted at the end of the planning phase.
+    /// The category is automatically set to `Self::NAME`.
+    fn add_planner_warning<
+        S: Into<String>,
+        C: crate::postgres::planner_warnings::ToWarningContexts,
+    >(
+        message: S,
+        contexts: C,
+    ) {
+        crate::postgres::planner_warnings::add_planner_warning(
+            Self::NAME
+                .to_str()
+                .expect("CustomScan name should be valid UTF-8"),
+            message,
+            contexts,
+        )
+    }
+
+    /// Add a detailed planner warning associated with this CustomScan type.
+    ///
+    /// The warning will be deduplicated and emitted at the end of the planning phase.
+    /// The category is automatically set to `Self::NAME`.
+    fn add_detailed_planner_warning<
+        S: Into<String>,
+        C: crate::postgres::planner_warnings::ToWarningContexts,
+        D: IntoIterator<Item = String>,
+    >(
+        message: S,
+        contexts: C,
+        details: D,
+    ) {
+        crate::postgres::planner_warnings::add_detailed_planner_warning(
+            Self::NAME
+                .to_str()
+                .expect("CustomScan name should be valid UTF-8"),
+            message,
+            contexts,
+            details,
+        )
+    }
+
+    /// Clear planner warnings for the specified contexts (e.g., table aliases).
+    ///
+    /// This should be called when a CustomScan is successfully planned for a set of tables,
+    /// to suppress any "failure" warnings that might have been generated during the
+    /// exploration of alternative (rejected) paths for these tables.
+    fn mark_contexts_successful<C: crate::postgres::planner_warnings::ToWarningContexts>(
+        contexts: C,
+    ) {
+        crate::postgres::planner_warnings::mark_contexts_successful(contexts)
+    }
+}
+
+#[allow(dead_code)]
+pub trait MarkRestoreCapable
+where
+    Self: CustomScan,
+{
+    fn mark_pos_custom_scan(state: &mut CustomScanStateWrapper<Self>);
+
+    fn restr_pos_custom_scan(state: &mut CustomScanStateWrapper<Self>);
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct RelPathlistHookArgs {
+    pub root: *mut pg_sys::PlannerInfo,
+    pub rel: *mut pg_sys::RelOptInfo,
+    pub rti: pg_sys::Index,
+    pub rte: *mut pg_sys::RangeTblEntry,
+}
+
+impl RelPathlistHookArgs {
+    pub fn rel(&self) -> &pg_sys::RelOptInfo {
+        unsafe { self.rel.as_ref().expect("Args::rel should not be null") }
+    }
+
+    pub fn rte(&self) -> &pg_sys::RangeTblEntry {
+        unsafe { self.rte.as_ref().expect("Args::rte should not be null") }
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct JoinPathlistHookArgs {
+    pub root: *mut pg_sys::PlannerInfo,
+    #[allow(dead_code)]
+    pub joinrel: *mut pg_sys::RelOptInfo,
+    #[allow(dead_code)]
+    pub outerrel: *mut pg_sys::RelOptInfo,
+    #[allow(dead_code)]
+    pub innerrel: *mut pg_sys::RelOptInfo,
+    #[allow(dead_code)]
+    pub jointype: pg_sys::JoinType::Type,
+    #[allow(dead_code)]
+    pub extra: *mut pg_sys::JoinPathExtraData,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct CreateUpperPathsHookArgs {
+    pub root: *mut pg_sys::PlannerInfo,
+    pub stage: pg_sys::UpperRelationKind::Type,
+    pub input_rel: *mut pg_sys::RelOptInfo,
+    pub output_rel: *mut pg_sys::RelOptInfo,
+    #[allow(dead_code)]
+    pub extra: *mut ::std::os::raw::c_void,
+}
+
+impl CreateUpperPathsHookArgs {
+    pub fn root(&self) -> &pg_sys::PlannerInfo {
+        unsafe { self.root.as_ref().expect("Args::root should not be null") }
+    }
+
+    pub fn input_rel(&self) -> &pg_sys::RelOptInfo {
+        unsafe {
+            self.input_rel
+                .as_ref()
+                .expect("Args::input_rel should not be null")
+        }
+    }
+
+    pub fn output_rel(&self) -> &pg_sys::RelOptInfo {
+        unsafe {
+            self.output_rel
+                .as_ref()
+                .expect("Args::output_rel should not be null")
+        }
+    }
+
+    /// Estimate how many groups the GROUP BY will produce, so routing can send
+    /// high-cardinality aggregates to DataFusion (no bucket cap) and keep
+    /// low-cardinality ones on the faster Tantivy path.
+    ///
+    /// We cannot use `output_rel.rows`: at the `UPPERREL_GROUP_AGG` hook the
+    /// grouped relation's row estimate is not yet populated (it reads as ~0), so
+    /// an `output_rel.rows > max_buckets` check never fires. Instead we call
+    /// Postgres's own `estimate_num_groups` directly, seeded with the base
+    /// relation's post-restriction row count (`input_rel.rows`, which reflects
+    /// the `@@@` selectivity). That estimator draws `n_distinct` from
+    /// `pg_statistic`, which is the signal that actually predicts truncation.
+    ///
+    /// Returns `1.0` when there is no GROUP BY (a scalar aggregate cannot
+    /// truncate).
+    pub unsafe fn estimate_group_count(&self) -> f64 {
+        let parse = self.root().parse;
+        if parse.is_null() || (*parse).groupClause.is_null() {
+            return 1.0;
+        }
+
+        let group_exprs =
+            pg_sys::get_sortgrouplist_exprs((*parse).groupClause, (*parse).targetList);
+        if group_exprs.is_null() {
+            return 1.0;
+        }
+
+        pg_sys::estimate_num_groups(
+            self.root,
+            group_exprs,
+            self.input_rel().rows,
+            std::ptr::null_mut(),
+            std::ptr::null_mut(),
+        )
+    }
+
+    /// The statically-known `LIMIT + OFFSET` of the query, or `None` when there
+    /// is no LIMIT or its value is parameterized (not known at planning time).
+    pub unsafe fn limit_plus_offset(&self) -> Option<usize> {
+        limit_offset::LimitOffset::from_parse(self.root().parse).and_then(|lo| lo.static_fetch())
+    }
+
+    /// True when the query groups by exactly one column. Tantivy's bounded top-N
+    /// pushdown is only safe for a single grouping column: with several, a nested
+    /// terms level can drop whole outer groupings before they are combined, which
+    /// a LIMIT cannot recover.
+    pub unsafe fn is_single_grouping_column(&self) -> bool {
+        let parse = self.root().parse;
+        !parse.is_null()
+            && !(*parse).groupClause.is_null()
+            && PgList::<pg_sys::SortGroupClause>::from_pg((*parse).groupClause).len() == 1
+    }
+
+    /// True when the query's `ORDER BY` sorts by the single grouping key itself
+    /// (e.g. `GROUP BY cat ORDER BY cat`).
+    ///
+    /// Tantivy's bounded top-N pushdown only returns exact counts for a
+    /// key-ordered prefix. With `segment_size` capped at `max_buckets`, a group
+    /// among the first K keys is retained in every segment — at most K-1 keys
+    /// can precede it anywhere — so its count is complete. A count-ordered or
+    /// unordered `LIMIT` gives only an approximate prefix once distinct groups
+    /// exceed the cap: a high-total group thinly spread across segments can be
+    /// dropped from each segment's capped bucket list before the merge. Routing
+    /// therefore only keeps the key-ordered case on Tantivy.
+    pub unsafe fn orders_by_grouping_key(&self) -> bool {
+        let parse = self.root().parse;
+        if parse.is_null() || (*parse).sortClause.is_null() || (*parse).groupClause.is_null() {
+            return false;
+        }
+        let sort_clauses = PgList::<pg_sys::SortGroupClause>::from_pg((*parse).sortClause);
+        let group_clauses = PgList::<pg_sys::SortGroupClause>::from_pg((*parse).groupClause);
+        if sort_clauses.len() != 1 || group_clauses.len() != 1 {
+            return false;
+        }
+        match (sort_clauses.get_ptr(0), group_clauses.get_ptr(0)) {
+            (Some(sort), Some(group)) => (*sort).tleSortGroupRef == (*group).tleSortGroupRef,
+            _ => false,
+        }
+    }
+
+    /// True when the query aggregates over a NUMERIC column or groups by one,
+    /// where the column is a direct `Var` reference. Those queries must route to
+    /// the DataFusion backend: the Tantivy aggregation engine computes metrics in
+    /// f64 and cannot aggregate the decimal-bytes storage at all.
+    ///
+    /// Wrapped expressions (casts of JSON sub-fields, COALESCE) stay on the
+    /// Tantivy backend, which classifies and declines them with its own messages;
+    /// the DataFusion backend cannot take them either.
+    pub unsafe fn has_numeric_aggregate(&self) -> bool {
+        use pgrx::pg_guard;
+
+        let parse = self.root().parse;
+        if parse.is_null() || (*parse).targetList.is_null() {
+            return false;
+        }
+
+        unsafe fn is_direct_numeric_var(expr: *mut pg_sys::Node) -> bool {
+            aggregatescan::join_targetlist::unwrap_to_var(expr)
+                .is_some_and(|var| (*var).vartype == pg_sys::NUMERICOID)
+        }
+
+        struct WalkerContext {
+            found: bool,
+        }
+
+        #[pg_guard]
+        unsafe extern "C-unwind" fn numeric_aggref_walker(
+            node: *mut pg_sys::Node,
+            context: *mut core::ffi::c_void,
+        ) -> bool {
+            if node.is_null() {
+                return false;
+            }
+            let ctx = &mut *(context as *mut WalkerContext);
+            if (*node).type_ == pg_sys::NodeTag::T_Aggref {
+                let aggref = node as *mut pg_sys::Aggref;
+                let agg_args = PgList::<pg_sys::TargetEntry>::from_pg((*aggref).args);
+                for arg in agg_args.iter_ptr() {
+                    if is_direct_numeric_var((*arg).expr as *mut pg_sys::Node) {
+                        ctx.found = true;
+                        return true;
+                    }
+                }
+            }
+            pg_sys::expression_tree_walker(node, Some(numeric_aggref_walker), context)
+        }
+
+        let mut context = WalkerContext { found: false };
+        numeric_aggref_walker(
+            (*parse).targetList as *mut pg_sys::Node,
+            std::ptr::addr_of_mut!(context).cast(),
+        );
+        if context.found {
+            return true;
+        }
+
+        if !(*parse).groupClause.is_null() {
+            let group_clauses = PgList::<pg_sys::SortGroupClause>::from_pg((*parse).groupClause);
+            for gc in group_clauses.iter_ptr() {
+                let expr = pg_sys::get_sortgroupclause_expr(gc, (*parse).targetList);
+                if !expr.is_null() && is_direct_numeric_var(expr) {
+                    return true;
+                }
+            }
+        }
+
+        false
+    }
+
+    /// Returns true when a `GROUP BY` expression is `date(timestamp)` or
+    /// `date(timestamptz)`.
+    ///
+    /// This only picks the backend; the extractor decides which shapes it accepts
+    /// and names the reason for the rest.
+    pub unsafe fn has_date_group(&self) -> bool {
+        let parse = self.root().parse;
+
+        if parse.is_null() || (*parse).groupClause.is_null() || (*parse).targetList.is_null() {
+            return false;
+        }
+
+        let group_clauses = PgList::<pg_sys::SortGroupClause>::from_pg((*parse).groupClause);
+
+        for gc in group_clauses.iter_ptr() {
+            let expr = pg_sys::get_sortgroupclause_expr(gc, (*parse).targetList);
+            if expr.is_null() {
+                continue;
+            }
+
+            let Some(func_expr) = nodecast!(FuncExpr, T_FuncExpr, expr) else {
+                continue;
+            };
+
+            if matches!(
+                (*func_expr).funcid.to_u32(),
+                pg_sys::F_DATE_TIMESTAMP | pg_sys::F_DATE_TIMESTAMPTZ
+            ) {
+                return true;
+            }
+        }
+        false
+    }
+}
+
+/// Helper function for wrapping a raw [`pg_sys::CustomScanState`] pointer with something more
+/// usable by implementers
+fn wrap_custom_scan_state<CS: CustomScan>(
+    node: *mut pg_sys::CustomScanState,
+) -> NonNull<CustomScanStateWrapper<CS>> {
+    NonNull::<CustomScanStateWrapper<CS>>::new(node.cast())
+        .expect("`CustomScanState` node should not be null")
+}
+
+pub unsafe fn operator_oid(signature: &str) -> pg_sys::Oid {
+    direct_function_call::<pg_sys::Oid>(
+        pg_sys::regoperatorin,
+        &[CString::new(signature).into_datum()],
+    )
+    .expect("should be able to lookup operator signature")
+}
+
+pub fn score_funcoids() -> [pg_sys::Oid; 2] {
+    static OID_CACHE: OnceLock<[pg_sys::Oid; 2]> = OnceLock::new();
+    *OID_CACHE.get_or_init(|| {
+        [
+            unsafe {
+                direct_function_call::<pg_sys::Oid>(
+                    pg_sys::regprocedurein,
+                    &[c"pdb.score(anyelement)".into_datum()],
+                )
+                .expect("the `pdb.score(anyelement)` function should exist")
+            },
+            unsafe {
+                direct_function_call::<pg_sys::Oid>(
+                    pg_sys::regprocedurein,
+                    &[c"paradedb.score(anyelement)".into_datum()],
+                )
+                .expect("the `paradedb.score(anyelement)` function should exist")
+            },
+        ]
+    })
+}

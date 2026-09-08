@@ -1,0 +1,1250 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+pub mod exec;
+
+use std::error::Error;
+use std::ptr::NonNull;
+
+use crate::aggregate::exec::AggregationExec;
+use crate::aggregate::interrupt_collector::InterruptableCollector;
+use crate::aggregate::mvcc_collector::MVCCFilterCollector;
+use crate::api::version::VersionInfo;
+use crate::api::{HashSet, MvccVisibility};
+use crate::index::mvcc::{MvccSatisfies, SegmentView};
+use crate::index::reader::index::SearchIndexReader;
+use crate::launch_parallel_process;
+use crate::parallel_worker::ParallelStateManager;
+use crate::parallel_worker::mqueue::MessageQueueSender;
+use crate::parallel_worker::{ParallelProcess, ParallelState, ParallelStateType, ParallelWorker};
+use crate::parallel_worker::{QueryWorkerStyle, WorkerStyle, chunk_range};
+use crate::postgres::customscan::aggregatescan::aggregate_type::AggregateType;
+use crate::postgres::customscan::aggregatescan::build::{AggregateCSClause, CollectAggregations};
+use crate::postgres::customscan::aggregatescan::json_rewrite::{
+    rewrite_date_histogram_to_histogram, rewrite_json_date_histogram_to_histogram,
+};
+use crate::postgres::customscan::bitmap_intersection::BitmapExec;
+use crate::postgres::locks::{AcquiredSpinLock, Spinlock};
+use crate::postgres::rel::PgSearchRelation;
+use crate::postgres::storage::metadata::MetaPage;
+use crate::postgres::utils::ExprContextGuard;
+use crate::query::SearchQueryInput;
+use crate::query::tid_bitmap_stream::SharedBitmapHandle;
+use crate::query::tid_bitmap_stream::{BitmapCell, BitmapCursorSource};
+use crate::schema::SearchIndexSchema;
+
+use pgrx::{check_for_interrupts, pg_sys};
+use tantivy::aggregation::Key;
+use tantivy::aggregation::agg_req::Aggregations;
+use tantivy::aggregation::agg_req::{Aggregation, AggregationVariants};
+use tantivy::aggregation::agg_result::AggregationResults;
+use tantivy::aggregation::intermediate_agg_result::IntermediateAggregationResults;
+use tantivy::aggregation::{
+    AggContextParams, AggregationLimitsGuard, DistributedAggregationCollector,
+};
+use tantivy::collector::Collector;
+use tantivy::index::SegmentId;
+
+#[allow(clippy::large_enum_variant)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub enum AggregateRequest {
+    Sql(AggregateCSClause),
+    Json(Aggregations),
+}
+
+impl TryInto<Aggregations> for AggregateRequest {
+    type Error = anyhow::Error;
+
+    fn try_into(self) -> Result<Aggregations, Self::Error> {
+        match self {
+            AggregateRequest::Sql(aggregation) => aggregation.collect(),
+            AggregateRequest::Json(aggregations) => Ok(aggregations),
+        }
+    }
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+struct State {
+    // these require the Spinlock mutex for atomic access (read and write)
+    mutex: Spinlock,
+    nlaunched: usize,
+    remaining_segments: usize,
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+struct Config {
+    indexrelid: pg_sys::Oid,
+    total_segments: usize,
+    solve_mvcc: bool,
+
+    memory_limit: u64,
+    bucket_limit: u32,
+}
+
+impl State {
+    fn set_launched_workers(&mut self, nlaunched: usize) {
+        let _lock = self.mutex.acquire();
+        self.nlaunched = nlaunched;
+    }
+
+    fn launched_workers(&mut self) -> usize {
+        let _lock = self.mutex.acquire();
+        self.nlaunched
+    }
+}
+
+type NumDeletedDocs = u32;
+struct ParallelAggregation {
+    state: State,
+    config: Config,
+    query_bytes: Vec<u8>,
+    agg_req_bytes: Vec<u8>,
+    bitmap_handle_bytes: Vec<u8>,
+    segment_ids: Vec<(SegmentId, NumDeletedDocs)>,
+    ambulkdelete_epoch: u32,
+}
+
+impl ParallelStateType for State {}
+impl ParallelStateType for Config {}
+impl ParallelStateType for (SegmentId, NumDeletedDocs) {}
+
+impl ParallelProcess for ParallelAggregation {
+    fn state_values(&self) -> Vec<&dyn ParallelState> {
+        vec![
+            &self.state,
+            &self.config,
+            &self.agg_req_bytes,
+            &self.query_bytes,
+            &self.segment_ids,
+            &self.ambulkdelete_epoch,
+            &self.bitmap_handle_bytes,
+        ]
+    }
+}
+
+impl ParallelAggregation {
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        indexrelid: pg_sys::Oid,
+        query: &SearchQueryInput,
+        aggregation: &AggregateRequest,
+        solve_mvcc: bool,
+        memory_limit: u64,
+        bucket_limit: u32,
+        segment_ids: Vec<(SegmentId, NumDeletedDocs)>,
+        ambulkdelete_epoch: u32,
+        bitmap_handle: Option<SharedBitmapHandle>,
+    ) -> anyhow::Result<Self> {
+        Ok(Self {
+            state: State {
+                mutex: Spinlock::new(),
+                nlaunched: 0,
+                remaining_segments: segment_ids.len(),
+            },
+            config: Config {
+                indexrelid,
+                total_segments: segment_ids.len(),
+                solve_mvcc,
+                memory_limit,
+                bucket_limit,
+            },
+            agg_req_bytes: serde_json::to_vec(&aggregation)?,
+            query_bytes: serde_json::to_vec(query)?,
+            bitmap_handle_bytes: postcard::to_allocvec(&bitmap_handle)?,
+            segment_ids,
+            ambulkdelete_epoch,
+        })
+    }
+}
+
+struct ParallelAggregationWorker<'a> {
+    state: &'a mut State,
+    config: Config,
+    aggregation: Option<AggregateRequest>,
+    query: SearchQueryInput,
+    segment_ids: Vec<(SegmentId, NumDeletedDocs)>,
+    #[allow(dead_code)]
+    ambulkdelete_epoch: u32,
+    /// The owner's published claim table, attached lazily by bgworkers (the
+    /// leader must not re-attach the area it created).
+    bitmap_handle: Option<SharedBitmapHandle>,
+    /// The area this bgworker attached, detached at the end of `run` (cursors
+    /// are gone once aggregation finishes; the leader's own area is not ours).
+    attached_area: *mut pg_sys::dsa_area,
+}
+
+impl<'a> ParallelAggregationWorker<'a> {
+    /// bgworkers only: attach the owner's claim table so this worker's scorers
+    /// stream their (consumer, segment) cursors. The area detaches at process
+    /// exit.
+    fn attach_bitmap_handle(&mut self) {
+        if let Some(handle) = self.bitmap_handle.take() {
+            let area = unsafe { pg_sys::dsa_attach(handle.area) };
+            self.attached_area = area;
+            let cell = BitmapCell::default();
+            cell.fill(std::sync::Arc::new(BitmapCursorSource::shared(
+                area,
+                handle.table,
+            )));
+            self.query.attach_bitmap_cell(&cell);
+        }
+    }
+
+    /// Leader participation: inject the leader's existing source instead of
+    /// re-attaching the DSA area it created.
+    fn attach_bitmap_source(&mut self, source: std::sync::Arc<BitmapCursorSource>) {
+        self.bitmap_handle = None;
+        let cell = BitmapCell::default();
+        cell.fill(source);
+        self.query.attach_bitmap_cell(&cell);
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn new_local(
+        aggregation: AggregateRequest,
+        query: SearchQueryInput,
+        segment_ids: Vec<(SegmentId, NumDeletedDocs)>,
+        ambulkdelete_epoch: u32,
+        indexrelid: pg_sys::Oid,
+        solve_mvcc: bool,
+        memory_limit: u64,
+        bucket_limit: u32,
+        state: &'a mut State,
+    ) -> Self {
+        Self {
+            state,
+            config: Config {
+                indexrelid,
+                total_segments: segment_ids.len(),
+                solve_mvcc,
+                memory_limit,
+                bucket_limit,
+            },
+            aggregation: Some(aggregation),
+            query,
+            segment_ids,
+            ambulkdelete_epoch,
+            bitmap_handle: None,
+            attached_area: std::ptr::null_mut(),
+        }
+    }
+
+    fn checkout_segments(&mut self, worker_number: i32) -> HashSet<SegmentId> {
+        let nworkers = self.state.launched_workers();
+        let nsegments = self.config.total_segments;
+
+        let mut segment_ids = HashSet::default();
+
+        let (_, many_segments) = chunk_range(nsegments, nworkers, worker_number as usize);
+        let _lock = self.state.mutex.acquire();
+        while let Some(segment_id) = self.checkout_segment(&_lock) {
+            segment_ids.insert(segment_id);
+
+            if segment_ids.len() == many_segments {
+                // we have all the segments we need
+                break;
+            }
+        }
+
+        segment_ids
+    }
+
+    fn checkout_segment(&mut self, _guard: &AcquiredSpinLock) -> Option<SegmentId> {
+        if self.state.remaining_segments == 0 {
+            return None;
+        }
+        self.state.remaining_segments -= 1;
+        self.segment_ids
+            .get(self.state.remaining_segments)
+            .cloned()
+            .map(|(segment_id, _)| segment_id)
+    }
+
+    fn execute_aggregate(
+        &mut self,
+        worker_style: QueryWorkerStyle,
+        expr_context: Option<*mut pg_sys::ExprContext>,
+        planstate: Option<*mut pg_sys::PlanState>,
+    ) -> anyhow::Result<Option<IntermediateAggregationResults>> {
+        let segment_ids = self.checkout_segments(worker_style.worker_number());
+        if segment_ids.is_empty() {
+            return Ok(None);
+        }
+        let indexrel =
+            PgSearchRelation::with_lock(self.config.indexrelid, pg_sys::AccessShareLock as _);
+
+        // Use provided context if available (for non-parallel/leader execution with correlation),
+        // otherwise create a standalone context (for parallel workers)
+        let standalone_context;
+        let context_ptr = if let Some(ctx) = expr_context {
+            ctx
+        } else {
+            standalone_context = ExprContextGuard::new();
+            standalone_context.as_ptr()
+        };
+
+        let reader = SearchIndexReader::open_with_context(
+            &indexrel,
+            self.query.clone(),
+            false,
+            MvccSatisfies::ParallelWorker(SegmentView::from_unordered_ids(
+                segment_ids.iter().copied(),
+            )),
+            NonNull::new(context_ptr),
+            planstate.and_then(NonNull::new),
+            self.query.needs_tokenizer(),
+        )?;
+
+        let use_min_sentinel_fields = match self.aggregation.as_ref() {
+            Some(AggregateRequest::Sql(clause)) => clause.use_min_sentinel_fields(),
+            _ => HashSet::default(),
+        };
+        let from_sql = matches!(self.aggregation.as_ref(), Some(AggregateRequest::Sql(_)));
+        let mut aggregations: Aggregations = self.aggregation.take().unwrap().try_into()?;
+        let schema = indexrel.schema()?;
+        if from_sql {
+            // ensure GROUP BY includes a bucket for documents missing the group-by value
+            set_missing_on_terms(&mut aggregations, &schema, &use_min_sentinel_fields);
+        }
+
+        let nworkers = self.state.launched_workers();
+        let limits = AggregationLimitsGuard::new(
+            Some(self.config.memory_limit / std::cmp::max(nworkers as u64, 1)),
+            Some(self.config.bucket_limit),
+        );
+        let heaprel = indexrel
+            .heap_relation()
+            .expect("index should belong to a heap relation");
+        let (base_collector, vischeck) =
+            aggregations.plan(&reader, &heaprel, self.config.solve_mvcc, limits);
+
+        let start = std::time::Instant::now();
+        let intermediate_results = if let Some(vischeck) = vischeck {
+            let mvcc_collector = MVCCFilterCollector::new(base_collector, vischeck);
+            reader.collect(InterruptableCollector::new(mvcc_collector))
+        } else {
+            reader.collect(InterruptableCollector::new(base_collector))
+        };
+        pgrx::debug1!(
+            "Worker #{}: collected {segment_ids:?} in {:?}",
+            unsafe { pg_sys::ParallelWorkerNumber },
+            start.elapsed()
+        );
+        Ok(Some(intermediate_results))
+    }
+}
+
+impl ParallelWorker for ParallelAggregationWorker<'_> {
+    fn new_parallel_worker(state_manager: ParallelStateManager) -> Self {
+        let state = state_manager
+            .object::<State>(0)
+            .expect("wrong type for state")
+            .expect("missing state value");
+        let config = state_manager
+            .object::<Config>(1)
+            .expect("wrong type for config")
+            .expect("missing config value");
+        let agg_req_bytes = state_manager
+            .slice::<u8>(2)
+            .expect("wrong type for agg_req_bytes")
+            .expect("missing agg_req_bytes value");
+        let query_bytes = state_manager
+            .slice::<u8>(3)
+            .expect("wrong type for query_bytes")
+            .expect("missing query_bytes value");
+        let segment_ids = state_manager
+            .slice::<(SegmentId, NumDeletedDocs)>(4)
+            .expect("wrong type for segment_ids")
+            .expect("missing segment_ids value");
+        let ambulkdelete_epoch = state_manager
+            .object::<u32>(5)
+            .expect("wrong type for ambulkdelete_epoch")
+            .expect("missing ambulkdelete_epoch value");
+
+        let bitmap_handle_bytes = state_manager
+            .slice::<u8>(6)
+            .expect("wrong type for bitmap_handle_bytes")
+            .expect("missing bitmap_handle_bytes value");
+
+        let aggregation = serde_json::from_slice::<AggregateRequest>(agg_req_bytes)
+            .expect("agg_req_bytes should deserialize into an Aggregations");
+        let query = serde_json::from_slice::<SearchQueryInput>(query_bytes)
+            .expect("query_bytes should deserialize into an SearchQueryInput");
+        let bitmap_handle = postcard::from_bytes::<Option<SharedBitmapHandle>>(bitmap_handle_bytes)
+            .expect("bitmap_handle_bytes should deserialize");
+        Self {
+            state,
+            config: *config,
+            aggregation: Some(aggregation),
+            query,
+            segment_ids: segment_ids.to_vec(),
+            ambulkdelete_epoch: *ambulkdelete_epoch,
+            bitmap_handle,
+            attached_area: std::ptr::null_mut(),
+        }
+    }
+
+    fn run(mut self, mq_sender: &MessageQueueSender, worker_number: i32) -> anyhow::Result<()> {
+        self.attach_bitmap_handle();
+        // wait for all workers to launch
+        while self.state.launched_workers() == 0 {
+            check_for_interrupts!();
+            std::thread::yield_now();
+        }
+
+        let result =
+            self.execute_aggregate(QueryWorkerStyle::ParallelWorker(worker_number), None, None);
+        if !self.attached_area.is_null() {
+            unsafe { pg_sys::dsa_detach(self.attached_area) };
+            self.attached_area = std::ptr::null_mut();
+        }
+        if let Some(intermediate_results) = result? {
+            let bytes = postcard::to_allocvec(&intermediate_results)?;
+            Ok(mq_sender.send(bytes)?)
+        } else {
+            Ok(())
+        }
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn execute_aggregate(
+    index: &PgSearchRelation,
+    query: SearchQueryInput,
+    mut agg_req: AggregateRequest,
+    visibility: MvccVisibility,
+    memory_limit: u64,
+    bucket_limit: u32,
+    expr_context: *mut pg_sys::ExprContext,
+    planstate: *mut pg_sys::PlanState,
+    mut bitmap_exec: Option<&mut BitmapExec>,
+) -> Result<AggregationResults, Box<dyn Error>> {
+    // Resolve `visibility` to a single decision for this execution before anything
+    // branches on it. `threshold` estimates the query's matching row count here
+    // rather than at plan time so that the `paradedb.aggregate()` UDF, which the
+    // planner never sees, resolves the same way as the custom scan paths.
+    let solve_mvcc = visibility.resolve_filtering(index, &query);
+
+    if index.created_by_version().stores_datetimes_in_i64() {
+        // We need to rewrite date_histogram requests to regular histogram requests because we are
+        // no longer storing dates in tantivy's DateTime.
+        // We rewrite these here instead of at AggregateRequest construction time because we need
+        // the unmodified json later to decide how to rewrite the results.
+        match &mut agg_req {
+            AggregateRequest::Json(aggregations) => {
+                for agg in aggregations.values_mut() {
+                    rewrite_date_histogram_to_histogram(agg)
+                        .expect("a valid date_histogram should always be a valid histogram");
+                }
+            }
+            AggregateRequest::Sql(clause) => {
+                for agg in clause.aggregates_mut() {
+                    if let AggregateType::Custom { agg_json, .. } = agg {
+                        rewrite_json_date_histogram_to_histogram(agg_json);
+                    }
+                }
+            }
+        }
+    }
+    let agg_req = agg_req;
+
+    unsafe {
+        // Determine once whether this aggregation request originated from SQL
+        let agg_from_sql = matches!(&agg_req, AggregateRequest::Sql(_));
+        // Extract fields needing min sentinel before agg_req is moved
+        let use_min_sentinel_fields = match &agg_req {
+            AggregateRequest::Sql(clause) => clause.use_min_sentinel_fields(),
+            _ => HashSet::default(),
+        };
+        let reader = SearchIndexReader::open_with_context(
+            index,
+            query.clone(),
+            false,
+            MvccSatisfies::Snapshot,
+            NonNull::new(expr_context),
+            NonNull::new(planstate),
+            query.needs_tokenizer(),
+        )?;
+
+        // Fast path: a bare doc count without MVCC filtering is answerable by
+        // `Weight::count` — a stored-doc_freq metadata read for term queries
+        // on delete-free segments, a scoreless docset drain otherwise —
+        // skipping the aggregation framework's per-doc column iteration.
+        if !solve_mvcc
+            && matches!(&agg_req, AggregateRequest::Sql(clause) if clause.is_bare_doc_count())
+        {
+            // Serial execution: the scorers claim private cursors.
+            if let Some(bitmap_exec) = bitmap_exec.as_deref_mut()
+                && let Some(cell) = query.bitmap_cell()
+                && cell.get().is_none()
+                && let Some(source) = bitmap_exec.private_source()
+            {
+                cell.fill(source);
+            }
+            let count = reader.count_matched_docs()?;
+            let mut results = AggregationResults::default();
+            // Key "0" matches `CollectAggregations::collect`'s enumeration of
+            // the single aggregate.
+            results.0.insert(
+                "0".to_string(),
+                tantivy::aggregation::agg_result::AggregationResult::MetricResult(
+                    tantivy::aggregation::agg_result::MetricResult::Count(
+                        tantivy::aggregation::metric::SingleMetricResult {
+                            value: Some(count as f64),
+                        },
+                    ),
+                ),
+            );
+            return Ok(results);
+        }
+
+        let ambulkdelete_epoch = MetaPage::open(index).ambulkdelete_epoch();
+        let segment_ids = reader
+            .segment_readers()
+            .iter()
+            .map(|r| (r.segment_id(), r.num_deleted_docs()))
+            .collect::<Vec<_>>();
+        // Publish the bitmap claim table for the worker pool: rebuild the
+        // leader's bitmap into this scan's own DSA area, prepare one iterator
+        // state per (consumer, segment) stream, and refresh the leader's cell
+        // (cloned into `query`) with the shared view.
+        let mut leader_bitmap_source = None;
+        let bitmap_handle = bitmap_exec.and_then(|bitmap_exec| {
+            let consumers = query.bitmap_consumer_count();
+            if consumers == 0 {
+                return None;
+            }
+            let segments: Vec<SegmentId> = segment_ids.iter().map(|(id, _)| *id).collect();
+            let handle = bitmap_exec.shared_source(consumers, &segments)?;
+            if let Some(cell) = query.bitmap_cell()
+                && let Some(source) = bitmap_exec.source()
+            {
+                cell.fill(source);
+            }
+            leader_bitmap_source = bitmap_exec.source();
+            Some(handle)
+        });
+        let process = ParallelAggregation::new(
+            index.oid(),
+            &query,
+            &agg_req,
+            solve_mvcc,
+            memory_limit,
+            bucket_limit,
+            segment_ids,
+            ambulkdelete_epoch,
+            bitmap_handle,
+        )?;
+
+        // limit number of workers to the number of segments
+        let mut nworkers =
+            (pg_sys::max_parallel_workers_per_gather as usize).min(reader.segment_readers().len());
+
+        if nworkers > 0 && pg_sys::parallel_leader_participation {
+            // make sure to account for the leader being a worker too
+            nworkers -= 1;
+        }
+        pgrx::debug1!(
+            "requesting {nworkers} parallel workers, with parallel_leader_participation={}",
+            *std::ptr::addr_of!(pg_sys::parallel_leader_participation)
+        );
+        if let Some(mut process) = launch_parallel_process!(
+            ParallelAggregation<ParallelAggregationWorker>,
+            process,
+            WorkerStyle::Query,
+            nworkers,
+            16384
+        ) {
+            // signal our workers with the number of workers actually launched
+            // they need this before they can begin checking out the correct segment counts
+            let mut nlaunched = process.launched_workers();
+            pgrx::debug1!("launched {nlaunched} workers");
+            if pg_sys::parallel_leader_participation {
+                nlaunched += 1;
+                pgrx::debug1!(
+                    "with parallel_leader_participation=true, actual worker count={nlaunched}"
+                );
+            }
+
+            process
+                .state_manager_mut()
+                .object::<State>(0)?
+                .unwrap()
+                .set_launched_workers(nlaunched);
+
+            // leader participation
+            let mut agg_results = Vec::with_capacity(nlaunched);
+            if pg_sys::parallel_leader_participation {
+                let mut worker =
+                    ParallelAggregationWorker::new_parallel_worker(*process.state_manager());
+                if let Some(source) = leader_bitmap_source.clone() {
+                    worker.attach_bitmap_source(source);
+                }
+                if let Some(result) = worker.execute_aggregate(
+                    QueryWorkerStyle::ParallelLeader,
+                    Some(expr_context),
+                    Some(planstate),
+                )? {
+                    agg_results.push(Ok(result));
+                }
+            }
+
+            // wait for workers to finish, collecting their intermediate aggregate results
+            for (_worker_number, message) in process {
+                let worker_results =
+                    postcard::from_bytes::<IntermediateAggregationResults>(&message)?;
+
+                agg_results.push(Ok(worker_results));
+            }
+
+            // have tantivy finalize the intermediate results from each worker
+            let mut aggregations: Aggregations = agg_req.try_into()?;
+            // normalize missing on terms here too before merge, but only for SQL-originated requests
+            if agg_from_sql {
+                let schema = index.schema()?;
+                set_missing_on_terms(&mut aggregations, &schema, &use_min_sentinel_fields);
+            }
+            // Get the tokenizer manager from the index (has all custom tokenizers registered)
+            let tokenizer_manager = reader.searcher().index().tokenizers().clone();
+            let collector = DistributedAggregationCollector::from_aggs(
+                aggregations.clone(),
+                AggContextParams::new(
+                    AggregationLimitsGuard::new(Some(memory_limit), Some(bucket_limit)),
+                    tokenizer_manager,
+                ),
+            );
+            Ok(collector.merge_fruits(agg_results)?.into_final_result(
+                aggregations,
+                AggregationLimitsGuard::new(Some(memory_limit), Some(bucket_limit)),
+            )?)
+        } else {
+            // couldn't launch any workers, so we just execute the aggregate right here in this backend
+            let segment_ids = reader
+                .segment_readers()
+                .iter()
+                .map(|r| (r.segment_id(), r.num_deleted_docs()))
+                .collect::<Vec<_>>();
+            let mut state = State {
+                mutex: Spinlock::default(),
+                nlaunched: 1,
+                remaining_segments: segment_ids.len(),
+            };
+            let mut worker = ParallelAggregationWorker::new_local(
+                agg_req.clone(),
+                query,
+                segment_ids,
+                ambulkdelete_epoch,
+                index.oid(),
+                solve_mvcc,
+                memory_limit as _,
+                bucket_limit as _,
+                &mut state,
+            );
+
+            if let Some(agg_results) = worker.execute_aggregate(
+                QueryWorkerStyle::NonParallel,
+                Some(expr_context),
+                Some(planstate),
+            )? {
+                Ok(agg_results.into_final_result(
+                    {
+                        let mut aggregations: Aggregations = agg_req.try_into()?;
+                        if agg_from_sql {
+                            let schema = index.schema()?;
+                            set_missing_on_terms(
+                                &mut aggregations,
+                                &schema,
+                                &use_min_sentinel_fields,
+                            );
+                        }
+                        aggregations
+                    },
+                    AggregationLimitsGuard::new(Some(memory_limit), Some(bucket_limit)),
+                )?)
+            } else {
+                Ok(AggregationResults::default())
+            }
+        }
+    }
+}
+
+// Sentinel strings for NULL values in terms aggregations (used for text/json columns).
+// Using longer prefixes and extreme Unicode codepoints to minimize collision risk.
+pub const NULL_SENTINEL_MIN: &str = "\u{0000}\u{0000}\u{0000}\u{0000}__PDB_NULL__"; // Sorts BEFORE other strings
+pub const NULL_SENTINEL_MAX: &str = "\u{10FFFF}\u{10FFFF}\u{10FFFF}\u{10FFFF}__PDB_NULL__"; // Sorts AFTER other strings (max Unicode codepoint)
+
+// recursively set a `missing` bucket on all terms aggregations so NULL values produce a group
+fn set_missing_on_terms(
+    aggs: &mut Aggregations,
+    schema: &SearchIndexSchema,
+    use_min_sentinel_fields: &HashSet<String>,
+) {
+    use crate::schema::SearchFieldType;
+
+    for Aggregation {
+        agg,
+        sub_aggregation,
+    } in aggs.values_mut()
+    {
+        if let AggregationVariants::Terms(terms) = agg
+            && terms.missing.is_none()
+        {
+            // use_min determines if we use MIN sentinels (sort first) or MAX sentinels (sort last)
+            let use_min = use_min_sentinel_fields.contains(&terms.field);
+            // NOTE: We must use type-appropriate sentinels because Tantivy's terms aggregation
+            // sorts buckets by their key type. Using mismatched types (e.g., string sentinel
+            // for numeric column) would break the sort order.
+            //
+            // WARNING: Numeric sentinels (i64::MIN/MAX, u64::MAX, f64::MIN/MAX) could
+            // theoretically collide with valid data values, though this is unlikely in practice.
+            // TODO: Consider improving Tantivy's NULL handling in aggregates to avoid this.
+            let sentinel = match schema.get_field_type(&terms.field) {
+                Some(SearchFieldType::I64(_)) => {
+                    if use_min {
+                        Key::I64(i64::MIN)
+                    } else {
+                        Key::I64(i64::MAX)
+                    }
+                }
+                Some(SearchFieldType::Date(_)) => {
+                    // DateTime fields: Tantivy's terms aggregation doesn't accept Key::I64
+                    // for DateTime columns (it validates the Key type against column type).
+                    // We skip setting a missing value, which means NULL dates will be
+                    // excluded from GROUP BY results rather than appearing as a separate group.
+                    // This matches standard SQL behavior where NULLs are typically excluded
+                    // from aggregations unless explicitly handled.
+                    //
+                    // As of v0.24.1 (DATETIME_I64_STORAGE_VERSION), this is a legacy-only
+                    // codepath: new indexes store datetime values as i64 and so use the
+                    // I64 sentinel arm above.
+                    continue;
+                }
+                Some(SearchFieldType::U64(_)) => {
+                    // For U64, 0 is a common value so we use string for MIN
+                    if use_min {
+                        Key::Str(NULL_SENTINEL_MIN.to_string())
+                    } else {
+                        Key::U64(u64::MAX)
+                    }
+                }
+                Some(SearchFieldType::F64(_)) => {
+                    if use_min {
+                        Key::F64(f64::MIN)
+                    } else {
+                        Key::F64(f64::MAX)
+                    }
+                }
+                Some(SearchFieldType::Bool(_)) => {
+                    if use_min {
+                        Key::Str(NULL_SENTINEL_MIN.to_string())
+                    } else {
+                        Key::Str(NULL_SENTINEL_MAX.to_string())
+                    }
+                }
+                _ => {
+                    // Default for text/json/etc - string sentinels are safe here
+                    if use_min {
+                        Key::Str(NULL_SENTINEL_MIN.to_string())
+                    } else {
+                        Key::Str(NULL_SENTINEL_MAX.to_string())
+                    }
+                }
+            };
+            terms.missing = Some(sentinel);
+        }
+        set_missing_on_terms(sub_aggregation, schema, use_min_sentinel_fields);
+    }
+}
+
+/// True for a bucket key that stands in for NULL: the sentinels
+/// [`set_missing_on_terms`] chooses per column type.
+fn is_missing_sentinel(key: &serde_json::Value) -> bool {
+    match key {
+        serde_json::Value::String(s) => s == NULL_SENTINEL_MAX || s == NULL_SENTINEL_MIN,
+        serde_json::Value::Number(n) => {
+            n.as_i64().is_some_and(|v| v == i64::MAX || v == i64::MIN)
+                || n.as_u64().is_some_and(|v| v == u64::MAX)
+                || n.as_f64().is_some_and(|v| v == f64::MAX || v == f64::MIN)
+        }
+        _ => false,
+    }
+}
+
+/// Walk the json value looking for NULL sentinel "key" values where they would be in a
+/// `pdb.agg('{"terms":{...` agg query, and if found, replace the sentinel with null
+pub(crate) fn scrub_missing_sentinel_value(val: &mut serde_json::Value) {
+    if let Some(buckets) = val.get_mut("buckets").and_then(|v| v.as_array_mut()) {
+        for bucket in buckets.iter_mut().filter_map(|b| b.as_object_mut()) {
+            for (k, v) in bucket {
+                match (k.as_str(), &v) {
+                    ("key", key) if is_missing_sentinel(key) => {
+                        *v = serde_json::Value::Null;
+                    }
+                    (_, serde_json::Value::Object(_)) => {
+                        scrub_missing_sentinel_value(v);
+                    }
+                    _ => (),
+                }
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod scrub_missing_sentinel_value_tests {
+    use super::*;
+    use serde_json::json;
+
+    #[test]
+    fn replaces_min_sentinel_key_with_null() {
+        let mut input = json!({
+            "buckets": [
+                { "key": NULL_SENTINEL_MIN, "doc_count": 5 }
+            ]
+        });
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input["buckets"][0]["key"], serde_json::Value::Null);
+        assert_eq!(input["buckets"][0]["doc_count"], 5);
+    }
+
+    #[test]
+    fn replaces_max_sentinel_key_with_null() {
+        let mut input = json!({
+            "buckets": [
+                { "key": NULL_SENTINEL_MAX, "doc_count": 3 }
+            ]
+        });
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input["buckets"][0]["key"], serde_json::Value::Null);
+        assert_eq!(input["buckets"][0]["doc_count"], 3);
+    }
+
+    #[test]
+    fn replaces_only_sentinel_keys_in_mixed_buckets() {
+        let mut input = json!({
+            "buckets": [
+                { "key": "alpha", "doc_count": 1 },
+                { "key": NULL_SENTINEL_MAX, "doc_count": 2 },
+                { "key": "beta", "doc_count": 3 },
+                { "key": NULL_SENTINEL_MIN, "doc_count": 4 }
+            ]
+        });
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input["buckets"][0]["key"], "alpha");
+        assert_eq!(input["buckets"][1]["key"], serde_json::Value::Null);
+        assert_eq!(input["buckets"][2]["key"], "beta");
+        assert_eq!(input["buckets"][3]["key"], serde_json::Value::Null);
+    }
+
+    #[test]
+    fn leaves_normal_string_keys_unchanged() {
+        let mut input = json!({
+            "buckets": [
+                { "key": "alpha", "doc_count": 1 },
+                { "key": "", "doc_count": 2 }
+            ]
+        });
+        let original = input.clone();
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input, original);
+    }
+
+    #[test]
+    fn leaves_numeric_keys_unchanged() {
+        let mut input = json!({
+            "buckets": [
+                { "key": 42, "doc_count": 1 },
+                { "key": -1, "doc_count": 2 },
+                { "key": 3.444, "doc_count": 3 }
+            ]
+        });
+        let original = input.clone();
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input, original);
+    }
+
+    #[test]
+    fn leaves_boolean_and_null_keys_unchanged() {
+        let mut input = json!({
+            "buckets": [
+                { "key": true, "doc_count": 1 },
+                { "key": null, "doc_count": 2 }
+            ]
+        });
+        let original = input.clone();
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input, original);
+    }
+
+    #[test]
+    fn returns_unchanged_when_no_buckets_field() {
+        let mut input = json!({
+            "value": 42,
+            "other": "data"
+        });
+        let original = input.clone();
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input, original);
+    }
+
+    #[test]
+    fn returns_unchanged_when_buckets_is_not_array() {
+        let mut input = json!({ "buckets": "not an array" });
+        let original = input.clone();
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input, original);
+    }
+
+    #[test]
+    fn handles_empty_buckets_array() {
+        let mut input = json!({ "buckets": [] });
+        let original = input.clone();
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input, original);
+    }
+
+    #[test]
+    fn leaves_bucket_without_key_field_unchanged() {
+        let mut input = json!({
+            "buckets": [
+                { "doc_count": 5 }
+            ]
+        });
+        let original = input.clone();
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input, original);
+    }
+
+    #[test]
+    fn does_not_replace_sentinel_in_non_key_field() {
+        let mut input = json!({
+            "buckets": [
+                { "key": "alpha", "label": NULL_SENTINEL_MAX, "doc_count": 1 }
+            ]
+        });
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input["buckets"][0]["key"], "alpha");
+        assert_eq!(input["buckets"][0]["label"], NULL_SENTINEL_MAX);
+    }
+
+    #[test]
+    fn returns_unchanged_when_top_level_is_not_object() {
+        let mut input = json!([
+            { "buckets": [{ "key": NULL_SENTINEL_MIN }] }
+        ]);
+        let original = input.clone();
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input, original);
+    }
+
+    #[test]
+    fn recurses_into_subagg_buckets() {
+        let mut input = json!({
+            "buckets": [
+                {
+                    "key": NULL_SENTINEL_MAX,
+                    "doc_count": 1,
+                    "sub": {
+                        "buckets": [
+                            { "key": NULL_SENTINEL_MIN, "doc_count": 1 }
+                        ]
+                    }
+                }
+            ]
+        });
+        scrub_missing_sentinel_value(&mut input);
+        assert_eq!(input["buckets"][0]["key"], serde_json::Value::Null);
+        assert_eq!(
+            input["buckets"][0]["sub"]["buckets"][0]["key"],
+            serde_json::Value::Null
+        );
+    }
+}
+
+// Batch size used by both the MVCC visibility collector and the interrupt-check collector.
+//
+// This is significantly larger than COLLECT_BLOCK_BUFFER_LEN (64) to reduce the overhead
+// of visibility checks. Specifically:
+// 1. It amortizes the dynamic dispatch overhead of looking up ctids from the fast field.
+// 2. It allows `VisibilityChecker` to process ctids in sorted order, which is critical because
+//    checking visibility requires acquiring locks on the visibility map (VM) pages and potentially
+//    tuple locks on the heap. Accessing these in a sorted, batched manner reduces lock contention
+//    and random I/O.
+const COLLECTOR_BATCH_SIZE: usize = 2048;
+
+pub mod interrupt_collector {
+    use tantivy::collector::{Collector, SegmentCollector};
+    use tantivy::{DocId, Score, SegmentOrdinal, SegmentReader};
+
+    /// A collector wrapper that periodically checks for Postgres query cancellation
+    /// during Tantivy's collection loop, which otherwise runs without yielding control.
+    pub struct InterruptableCollector<C: Collector> {
+        inner: C,
+    }
+
+    impl<C: Collector> InterruptableCollector<C> {
+        pub fn new(inner: C) -> Self {
+            Self { inner }
+        }
+    }
+
+    impl<C: Collector> Collector for InterruptableCollector<C> {
+        type Fruit = C::Fruit;
+        type Child = InterruptableSegmentCollector<C::Child>;
+
+        fn for_segment(
+            &self,
+            segment_local_id: SegmentOrdinal,
+            segment: &SegmentReader,
+        ) -> tantivy::Result<Self::Child> {
+            Ok(InterruptableSegmentCollector {
+                inner: self.inner.for_segment(segment_local_id, segment)?,
+                docs_since_check: 0,
+            })
+        }
+
+        fn requires_scoring(&self) -> bool {
+            self.inner.requires_scoring()
+        }
+
+        fn merge_fruits(
+            &self,
+            segment_fruits: Vec<<Self::Child as SegmentCollector>::Fruit>,
+        ) -> tantivy::Result<Self::Fruit> {
+            self.inner.merge_fruits(segment_fruits)
+        }
+    }
+
+    pub struct InterruptableSegmentCollector<SC: SegmentCollector> {
+        inner: SC,
+        docs_since_check: usize,
+    }
+
+    impl<SC: SegmentCollector> InterruptableSegmentCollector<SC> {
+        #[inline]
+        fn maybe_check_interrupt(&mut self, docs: usize) {
+            self.docs_since_check += docs;
+            if self.docs_since_check >= super::COLLECTOR_BATCH_SIZE {
+                self.docs_since_check = 0;
+                pgrx::check_for_interrupts!();
+            }
+        }
+    }
+
+    impl<SC: SegmentCollector> SegmentCollector for InterruptableSegmentCollector<SC> {
+        type Fruit = SC::Fruit;
+
+        fn collect(&mut self, doc: DocId, score: Score) {
+            self.maybe_check_interrupt(1);
+            self.inner.collect(doc, score);
+        }
+
+        fn collect_block(&mut self, docs: &[DocId]) {
+            self.maybe_check_interrupt(docs.len());
+            self.inner.collect_block(docs);
+        }
+
+        fn harvest(self) -> Self::Fruit {
+            self.inner.harvest()
+        }
+    }
+}
+
+pub mod mvcc_collector {
+    use parking_lot::Mutex;
+    use std::sync::Arc;
+    use tantivy::collector::{Collector, SegmentCollector};
+
+    use crate::index::fast_fields_helper::FFType;
+    use crate::postgres::heap::VisibilityChecker;
+    use tantivy::{DocId, Score, SegmentOrdinal, SegmentReader};
+
+    use super::COLLECTOR_BATCH_SIZE as BATCH_SIZE;
+
+    pub struct MVCCFilterCollector<C: Collector> {
+        inner: C,
+        lock: Arc<Mutex<VisibilityChecker>>,
+    }
+
+    unsafe impl<C: Collector> Send for MVCCFilterCollector<C> {}
+    unsafe impl<C: Collector> Sync for MVCCFilterCollector<C> {}
+
+    impl<C: Collector> Collector for MVCCFilterCollector<C> {
+        type Fruit = C::Fruit;
+        type Child = MVCCFilterSegmentCollector<C::Child>;
+
+        fn for_segment(
+            &self,
+            segment_local_id: SegmentOrdinal,
+            segment: &SegmentReader,
+        ) -> tantivy::Result<Self::Child> {
+            let inner = self.inner.for_segment(segment_local_id, segment)?;
+            let requires_scoring = self.inner.requires_scoring();
+
+            Ok(MVCCFilterSegmentCollector {
+                inner,
+                lock: self.lock.clone(),
+                ctid_ff: FFType::new(segment.fast_fields(), "ctid"),
+                doc_buffer: Vec::with_capacity(BATCH_SIZE),
+                score_buffer: if requires_scoring {
+                    Vec::with_capacity(BATCH_SIZE)
+                } else {
+                    Vec::new()
+                },
+                ctids_buffer: Vec::with_capacity(BATCH_SIZE),
+                visibility_buffer: Vec::with_capacity(BATCH_SIZE),
+                filtered_doc_buffer: Vec::with_capacity(BATCH_SIZE),
+                filtered_score_buffer: if requires_scoring {
+                    Vec::with_capacity(BATCH_SIZE)
+                } else {
+                    Vec::new()
+                },
+                requires_scoring,
+            })
+        }
+
+        fn requires_scoring(&self) -> bool {
+            self.inner.requires_scoring()
+        }
+
+        fn merge_fruits(
+            &self,
+            segment_fruits: Vec<<Self::Child as SegmentCollector>::Fruit>,
+        ) -> tantivy::Result<Self::Fruit> {
+            self.inner.merge_fruits(segment_fruits)
+        }
+    }
+
+    #[allow(clippy::arc_with_non_send_sync)]
+    impl<C: Collector> MVCCFilterCollector<C> {
+        pub fn new(wrapped: C, vischeck: VisibilityChecker) -> Self {
+            Self {
+                inner: wrapped,
+                lock: Arc::new(Mutex::new(vischeck)),
+            }
+        }
+    }
+
+    pub struct MVCCFilterSegmentCollector<SC: SegmentCollector> {
+        inner: SC,
+        lock: Arc<Mutex<VisibilityChecker>>,
+        ctid_ff: FFType,
+
+        // Incoming buffers
+        doc_buffer: Vec<DocId>,
+        score_buffer: Vec<Score>,
+
+        // Processing buffers
+        ctids_buffer: Vec<Option<u64>>,
+        visibility_buffer: Vec<Option<u64>>,
+
+        // Outgoing buffers
+        filtered_doc_buffer: Vec<DocId>,
+        filtered_score_buffer: Vec<Score>,
+
+        requires_scoring: bool,
+    }
+    unsafe impl<C: SegmentCollector> Send for MVCCFilterSegmentCollector<C> {}
+    unsafe impl<C: SegmentCollector> Sync for MVCCFilterSegmentCollector<C> {}
+
+    impl<SC: SegmentCollector> MVCCFilterSegmentCollector<SC> {
+        fn flush(&mut self) {
+            if self.doc_buffer.is_empty() {
+                return;
+            }
+
+            // Get the ctids for these docs.
+            self.ctids_buffer.resize(self.doc_buffer.len(), None);
+            self.ctid_ff
+                .as_u64s(&self.doc_buffer, &mut self.ctids_buffer);
+
+            // Determine which ctids are visible.
+            let mut vischeck = self.lock.lock();
+            self.visibility_buffer.resize(self.doc_buffer.len(), None);
+            vischeck.check_batch(&self.ctids_buffer, &mut self.visibility_buffer);
+            drop(vischeck);
+
+            // Filter visible docs.
+            self.filtered_doc_buffer.clear();
+            if self.requires_scoring {
+                self.filtered_score_buffer.clear();
+            }
+
+            for (i, visible_ctid) in self.visibility_buffer.iter().enumerate() {
+                if visible_ctid.is_some() {
+                    self.filtered_doc_buffer.push(self.doc_buffer[i]);
+                    if self.requires_scoring {
+                        self.filtered_score_buffer.push(self.score_buffer[i]);
+                    }
+                }
+            }
+
+            // Pass to inner collector
+            if self.requires_scoring {
+                for (doc, score) in self
+                    .filtered_doc_buffer
+                    .iter()
+                    .zip(self.filtered_score_buffer.iter())
+                {
+                    self.inner.collect(*doc, *score);
+                }
+            } else if !self.filtered_doc_buffer.is_empty() {
+                self.inner.collect_block(&self.filtered_doc_buffer);
+            }
+
+            self.doc_buffer.clear();
+            if self.requires_scoring {
+                self.score_buffer.clear();
+            }
+        }
+    }
+
+    impl<SC: SegmentCollector> SegmentCollector for MVCCFilterSegmentCollector<SC> {
+        type Fruit = SC::Fruit;
+
+        fn collect(&mut self, doc: DocId, score: Score) {
+            self.doc_buffer.push(doc);
+            if self.requires_scoring {
+                self.score_buffer.push(score);
+            }
+
+            if self.doc_buffer.len() >= BATCH_SIZE {
+                self.flush();
+            }
+        }
+
+        fn collect_block(&mut self, docs: &[DocId]) {
+            self.doc_buffer.extend_from_slice(docs);
+            if self.requires_scoring {
+                // collect_block does not provide scores, but we must maintain score_buffer alignment.
+                // We pad with 0.0 or equivalent.
+                self.score_buffer.resize(self.doc_buffer.len(), 0.0);
+            }
+
+            if self.doc_buffer.len() >= BATCH_SIZE {
+                self.flush();
+            }
+        }
+
+        fn harvest(mut self) -> Self::Fruit {
+            self.flush();
+            self.inner.harvest()
+        }
+    }
+}

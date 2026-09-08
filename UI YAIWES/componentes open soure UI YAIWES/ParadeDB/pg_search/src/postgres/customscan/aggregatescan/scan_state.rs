@@ -1,0 +1,299 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+use crate::customscan::aggregatescan::AggregateCSClause;
+use crate::customscan::aggregatescan::exec::AggregationResultsRow;
+use crate::index::reader::index::SearchIndexManifest;
+use crate::postgres::PgSearchRelation;
+use crate::postgres::customscan::CustomScanState;
+use crate::postgres::customscan::aggregatescan::join_targetlist::JoinAggregateTargetList;
+use crate::postgres::customscan::aggregatescan::pdb_agg::PdbAggPlan;
+use crate::postgres::customscan::aggregatescan::privdat::{DataFusionTopK, FilterExpr};
+use crate::postgres::customscan::bitmap_intersection::BitmapExec;
+use crate::postgres::customscan::joinscan::build::RelNode;
+use crate::postgres::customscan::mpp::glue::MppLaunchTiming;
+use crate::postgres::customscan::mpp::launch::MppLifecycle;
+use crate::postgres::customscan::solve_expr::SolvePostgresExpressions;
+use crate::query::tid_bitmap_stream::BitmapCell;
+
+use arrow_array::RecordBatch;
+use datafusion::physical_plan::SendableRecordBatchStream;
+use pgrx::pg_sys;
+
+use super::AggIndexInfo;
+
+#[derive(Default)]
+pub enum ExecutionState {
+    #[default]
+    NotStarted,
+    Emitting(std::vec::IntoIter<AggregationResultsRow>),
+    Completed,
+}
+
+/// State for the DataFusion aggregate execution backend.
+pub struct DataFusionAggState {
+    /// The join tree.
+    pub plan: RelNode,
+    /// Original plan preserved for rescans.
+    pub base_plan: Option<RelNode>,
+    /// GROUP BY columns and aggregate functions.
+    pub targetlist: JoinAggregateTargetList,
+    /// Optional TopK sort+limit pushed down from Postgres.
+    pub topk: Option<DataFusionTopK>,
+    /// Raw PG Expr pointers from custom_exprs (after setrefs transforms
+    /// Var nodes to INDEX_VAR references). Used to translate non-@@@
+    /// cross-table predicates at execution time.
+    pub custom_exprs: *mut pg_sys::List,
+    /// The custom_scan_tlist from the CustomScan node. Used to resolve
+    /// INDEX_VAR references in custom_exprs back to original (rti, attno)
+    /// pairs during DataFusion expression translation.
+    pub custom_scan_tlist: *mut pg_sys::List,
+    /// HAVING clause filter applied after aggregation.
+    pub having_filter: Option<FilterExpr>,
+    /// Tokio runtime for async DataFusion execution.
+    pub runtime: Option<tokio::runtime::Runtime>,
+    /// The executed physical plan, kept so EXPLAIN ANALYZE can merge the worker metrics that
+    /// arrive over the mesh into its display.
+    pub physical_plan: Option<std::sync::Arc<dyn datafusion::physical_plan::ExecutionPlan>>,
+    /// DataFusion result stream.
+    pub stream: Option<SendableRecordBatchStream>,
+    /// Current batch being consumed row-by-row.
+    pub current_batch: Option<RecordBatch>,
+    /// Row index within current_batch.
+    pub batch_row_idx: usize,
+    /// Mapping from `group_columns[i]` to its 0-based column index in DataFusion's
+    /// output RecordBatch. Needed because DataFusion deduplicates grouping
+    /// expressions (e.g. metadata.brand).
+    pub group_df_indices: Vec<usize>,
+    /// The `pdb.agg()` grouping-set layout, set when the query has any such call.
+    pub pdb_plan: Option<PdbAggPlan>,
+    /// `HAVING` of a scalar `pdb.agg()` query, judged on the assembled root row.
+    pub pdb_root_having: Option<datafusion::logical_expr::Expr>,
+    /// Assembled `pdb.agg()` documents for each row of `current_batch`, which then
+    /// holds the SQL-level rows only.
+    pub pdb_agg_json: Option<Vec<Vec<serde_json::Value>>>,
+    /// Where MPP sits in its launch lifecycle for this scan: marked pending at begin, launched
+    /// on first exec once the built plan's stages are committed (#5667: the plan comes first;
+    /// workers spawn only after it exists). Stays `Inactive` on the serial path.
+    /// Applies only when parallel execution is enabled and the query qualifies (binary join +
+    /// supported aggregate).
+    pub mpp: MppLifecycle,
+    /// Captured from PostgreSQL's statement-wide `PlannerGlobal.parallelModeOK`. When false, this
+    /// scan may still use DataFusion, but it must never launch MPP producer workers.
+    pub parallel_mode_ok: bool,
+    /// Per-phase launch timing for `EXPLAIN ANALYZE`'s `MPP Launch` line. Set only when the
+    /// query launched distributed.
+    pub launch_timing: Option<MppLaunchTiming>,
+}
+
+/// State for projecting wrapped aggregate expressions through Postgres' own
+/// `ExecBuildProjectionInfo`.
+///
+/// When the targetlist contains aggregates wrapped in `FuncExpr` calls, we
+/// build a copy of the targetlist with each `FuncExpr`'s aggregate replaced by
+/// a `Const` placeholder. Before each per-row projection we mutate those
+/// `Const`s in place with the live aggregate values, so the compiled projection
+/// bakes in the current row's values. This follows the basescan pattern.
+///
+/// The `const_nodes` pointers alias into `targetlist`'s memory context — if
+/// the targetlist is freed or replaced, the const pointers become dangling.
+/// Bundling both into one struct keeps the lifetime invariant type-level so
+/// neither half can be cleared without the other.
+pub struct WrappedAggregateProjection {
+    /// Targetlist copy with `Const` placeholders for each wrapped aggregate.
+    pub targetlist: *mut pg_sys::List,
+    /// Pointers to the `Const` nodes inside `targetlist`, indexed by target
+    /// entry position (0-based). `None` for entries without a Const node.
+    pub const_nodes: Vec<Option<*mut pg_sys::Const>>,
+}
+
+#[derive(Default)]
+pub struct AggregateScanState {
+    pub state: ExecutionState,
+    pub indexrelid: pg_sys::Oid,
+    pub indexrel: Option<(pg_sys::LOCKMODE, PgSearchRelation)>,
+    pub execution_rti: pg_sys::Index,
+    pub aggregate_clause: AggregateCSClause,
+    pub base_aggregate_clause: Option<AggregateCSClause>,
+
+    /// Execution state for the child bitmap scan, if a bitmap intersection source was
+    /// harvested at plan time.
+    pub bitmap_exec: Option<BitmapExec>,
+    pub bitmap_cell: Option<BitmapCell>,
+
+    /// DataFusion backend state. When `Some`, the DataFusion path is active
+    /// and the Tantivy-specific fields above are unused.
+    pub datafusion_state: Option<DataFusionAggState>,
+
+    /// Wrapped-aggregate projection state. `Some` only when the targetlist
+    /// has aggregates inside `FuncExpr` wrappers that need per-row projection.
+    pub wrapped_projection: Option<WrappedAggregateProjection>,
+
+    /// Reusable tuple slot for aggregate result rows
+    /// Created once during begin_custom_scan and cleared/reused for each row
+    /// to avoid per-row memory allocation and leaks
+    pub scan_slot: Option<*mut pg_sys::TupleTableSlot>,
+
+    /// MPP-only: captured source manifests held by the leader. Serves two
+    /// purposes (mirrors JoinScan):
+    /// 1. Provides segment counts for DSM sizing in `estimate_dsm_custom_scan`
+    ///    and segment readers for DSM population in `initialize_dsm_custom_scan`.
+    /// 2. Keeps Tantivy buffer pins alive through `exec_custom_scan` so
+    ///    background merges don't recycle the canonical segments before
+    ///    workers can open them via `MvccSatisfies::ParallelWorker(ids)`.
+    pub source_manifests: Vec<SearchIndexManifest>,
+
+    /// A collection of things needed for result-rewriting decisions that
+    /// are expensive to look up.
+    precomputed_index_info: Option<AggIndexInfo>,
+}
+
+impl AggregateScanState {
+    pub fn open_relations(&mut self, lockmode: pg_sys::LOCKMODE) {
+        self.indexrel = Some((
+            lockmode,
+            PgSearchRelation::with_lock(self.indexrelid, lockmode),
+        ));
+        self.precomputed_index_info = Some(AggIndexInfo::from(self.indexrel()))
+    }
+
+    #[inline(always)]
+    pub fn indexrel(&self) -> &PgSearchRelation {
+        self.indexrel
+            .as_ref()
+            .map(|(_, rel)| rel)
+            .expect("BaseScanState: indexrel should be initialized")
+    }
+
+    /// Returns true if the DataFusion backend is active.
+    pub fn is_datafusion_backend(&self) -> bool {
+        self.datafusion_state.is_some()
+    }
+
+    pub fn precomputed_index_info(&self) -> Option<&AggIndexInfo> {
+        self.precomputed_index_info.as_ref()
+    }
+}
+
+impl CustomScanState for AggregateScanState {
+    fn init_exec_method(&mut self, _cstate: *mut pg_sys::CustomScanState) {
+        // TODO: Unused currently. See the comment on `trait CustomScanState` regarding making this
+        // more useful.
+    }
+}
+
+impl SolvePostgresExpressions for AggregateScanState {
+    fn has_postgres_expressions(&mut self) -> bool {
+        // Check both the Tantivy-path search queries and DataFusion-path
+        // join-level predicates for unresolved PostgresExpression nodes
+        // (prepared statement parameters like $1).
+        if let Some(ref mut df) = self.datafusion_state {
+            let mut has = false;
+            df.plan.visit_queries(&mut |q| {
+                if q.has_postgres_expressions() {
+                    has = true;
+                }
+            });
+            if has {
+                return true;
+            }
+        }
+        self.aggregate_clause.query_mut().has_postgres_expressions()
+            || self
+                .aggregate_clause
+                .aggregates_mut()
+                .any(|agg| agg.has_postgres_expressions())
+    }
+
+    fn has_parameters(&mut self) -> bool {
+        if let Some(ref mut df) = self.datafusion_state {
+            let mut has = false;
+            df.plan.visit_queries(&mut |q| {
+                if q.has_parameters() {
+                    has = true;
+                }
+            });
+            if has {
+                return true;
+            }
+        }
+        self.aggregate_clause.query_mut().has_parameters()
+            || self
+                .aggregate_clause
+                .aggregates_mut()
+                .any(|agg| agg.has_parameters())
+    }
+
+    fn init_search_query_input(&mut self) {
+        if let Some(base) = &self.base_aggregate_clause {
+            self.aggregate_clause = base.clone();
+        }
+        if let Some(ref mut df) = self.datafusion_state
+            && let Some(base) = &df.base_plan
+        {
+            df.plan = base.clone();
+        }
+    }
+
+    /// The aggregate's leader builds and streams privately; its MPP workers do
+    /// not receive a cell yet and evaluate filters directly (correct, unpruned).
+    fn bitmap_source_cell(&mut self, _planstate: *mut pg_sys::PlanState) -> Option<BitmapCell> {
+        self.bitmap_exec.as_ref()?;
+        // The cell is filled in `execute_aggregate`, which knows whether the
+        // build must be private (count fast path) or shared (worker pool) —
+        // building privately here would be thrown away by the shared rebuild.
+        Some(
+            self.bitmap_cell
+                .get_or_insert_with(BitmapCell::default)
+                .clone(),
+        )
+    }
+
+    fn attach_bitmap_cell(&mut self, cell: &BitmapCell) {
+        self.aggregate_clause.query_mut().attach_bitmap_cell(cell);
+    }
+
+    fn init_postgres_expressions(&mut self, planstate: *mut pg_sys::PlanState) {
+        if let Some(ref mut df) = self.datafusion_state {
+            df.plan.visit_queries_mut(&mut |q| {
+                q.init_postgres_expressions(planstate);
+            });
+        }
+        self.aggregate_clause
+            .query_mut()
+            .init_postgres_expressions(planstate);
+        self.aggregate_clause
+            .aggregates_mut()
+            .for_each(|agg| agg.init_postgres_expressions(planstate));
+    }
+
+    fn solve_postgres_expressions(&mut self, expr_context: *mut pg_sys::ExprContext) {
+        if let Some(ref mut df) = self.datafusion_state {
+            df.plan.visit_queries_mut(&mut |q| {
+                q.solve_postgres_expressions(expr_context);
+            });
+        }
+        if !self.is_datafusion_backend() {
+            self.aggregate_clause
+                .query_mut()
+                .solve_postgres_expressions(expr_context);
+            self.aggregate_clause
+                .aggregates_mut()
+                .for_each(|agg| agg.solve_postgres_expressions(expr_context));
+        }
+    }
+}

@@ -1,0 +1,79 @@
+CREATE EXTENSION IF NOT EXISTS vector;
+CREATE EXTENSION IF NOT EXISTS pg_search;
+
+-- Pin parallelism so regress plans don't depend on the local cluster's worker config. The value
+-- drives how much a query parallelizes, MPP or not, so a stock cluster and a tuned one would
+-- otherwise produce different plans. Tests that want more workers raise it themselves.
+DO $$
+BEGIN
+    EXECUTE format('ALTER DATABASE %I SET max_parallel_workers_per_gather = 2', current_database());
+END
+$$;
+-- Also set it for the current session, in case any subsequent setup steps rely on it
+SET max_parallel_workers_per_gather = 2;
+
+-- Regress tables are tiny by design, so the MPP size gate would keep MPP off in every
+-- suite. Pin it off here; the suite that exercises the gate itself raises it per-test.
+DO $$
+BEGIN
+    EXECUTE format('ALTER DATABASE %I SET paradedb.mpp_min_rows = 0', current_database());
+END
+$$;
+
+DROP TABLE IF EXISTS mock_items_issue_2528;
+CALL paradedb.create_paradedb_test_table(
+  schema_name => 'public',
+  table_name => 'mock_items_issue_2528'
+);
+CREATE INDEX search_idx_issue_2528 ON mock_items_issue_2528 USING paradedb (id, description, category) WITH (key_field='id');
+
+
+--
+-- a table named "regress"."mock_items" with all fields indexed, including one as an expression
+-- that all tests can use.
+--
+-- we add a new column, "sku", to the table, and populate it with a unique UUID per row
+--
+CREATE SCHEMA IF NOT EXISTS regress;
+CALL paradedb.create_paradedb_test_table(
+        schema_name => 'regress',
+        table_name => 'mock_items'
+     );
+ALTER TABLE regress.mock_items ADD COLUMN sku UUID;
+UPDATE regress.mock_items SET sku = ('da2fea21-' || lpad(to_hex( id::int4), 4, '0') || '-411b-9e8c-2cb64e471293')::uuid;
+-- These tests exercise BM25 search, not vector search, and many of them `SELECT *`.
+-- Drop the embedding column so it stays out of their expected output and row-width
+-- estimates. The VACUUM FULL below reclaims its space.
+ALTER TABLE regress.mock_items DROP COLUMN embedding;
+VACUUM FULL regress.mock_items;
+CREATE INDEX idxregress_mock_items
+    ON regress.mock_items
+        USING paradedb (id, sku, description, (lower(description)::pdb.simple('alias=description_lower')), rating, category, in_stock, metadata, created_at, last_updated_date, latest_available_time, weight_range)
+    WITH (key_field='id');
+
+
+/*
+ raises an ERROR if a is distinct from b, displaying only the message
+ */
+CREATE FUNCTION assert(a anyelement, b anyelement, message text DEFAULT '') RETURNS bool LANGUAGE plpgsql AS $$
+DECLARE
+BEGIN
+    IF a IS DISTINCT FROM b THEN
+        RAISE EXCEPTION '%', message;
+    END IF;
+    RETURN true;
+END;
+$$;
+
+/*
+ raises an ERROR if a is distinct from b, displaying the values of a, b, and message
+ */
+CREATE FUNCTION assert_verbose(a anyelement, b anyelement, message text DEFAULT '') RETURNS bool LANGUAGE plpgsql AS $$
+DECLARE
+BEGIN
+    IF a IS DISTINCT FROM b THEN
+        RAISE EXCEPTION '% <> %: %', coalesce(a, '<NULL>'), coalesce(b, '<NULL>'), message;
+    END IF;
+    RETURN true;
+END;
+$$;

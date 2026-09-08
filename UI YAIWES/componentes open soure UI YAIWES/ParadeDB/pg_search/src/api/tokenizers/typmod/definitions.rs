@@ -1,0 +1,433 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+use crate::api::tokenizers::typmod;
+use crate::api::tokenizers::typmod::validation::{PropertyRule, ValueConstraint, rule};
+use crate::api::tokenizers::typmod::{ParsedTypmod, TypmodSchema, load_typmod};
+use tokenizers::SearchNormalizer;
+use tokenizers::chinese_convert::ConvertMode;
+use tokenizers::manager::{LinderaLanguage, SearchTokenizerFilters};
+
+pub struct AliasTypmod(Option<String>);
+
+// extract typmod values without validating them
+// this is meant to be called outside of the `CREATE INDEX` path
+pub struct UncheckedTypmod {
+    parsed: ParsedTypmod,
+    filters: SearchTokenizerFilters,
+}
+
+// for typmods that do not have special parameters, like `pdb.simple`
+pub struct GenericTypmod {
+    pub filters: SearchTokenizerFilters,
+}
+
+// for pdb.jieba
+pub struct JiebaTypmod {
+    pub chinese_convert: Option<ConvertMode>,
+    pub filters: SearchTokenizerFilters,
+}
+
+// for pdb.ngram
+pub struct NgramTypmod {
+    pub min_gram: usize,
+    pub max_gram: usize,
+    pub prefix_only: bool,
+    pub positions: bool,
+    pub filters: SearchTokenizerFilters,
+}
+
+// for pdb.edge_ngram
+pub struct EdgeNgramTypmod {
+    pub min_gram: usize,
+    pub max_gram: usize,
+    pub token_chars: Vec<String>,
+    pub filters: SearchTokenizerFilters,
+}
+
+// for pdb.regex_pattern
+pub struct RegexTypmod {
+    pub pattern: regex::Regex,
+    pub filters: SearchTokenizerFilters,
+}
+
+// for pdb.lindera
+pub struct LinderaTypmod {
+    pub language: LinderaLanguage,
+    pub filters: SearchTokenizerFilters,
+    pub keep_whitespace: bool,
+    pub nfkc: bool,
+    pub reading_form: bool,
+}
+
+// for pdb.unicode_words
+pub struct UnicodeWordsTypmod {
+    pub remove_emojis: bool,
+    pub filters: SearchTokenizerFilters,
+}
+
+trait TypmodRules {
+    fn rules() -> Vec<PropertyRule>;
+
+    fn parsed(typmod: i32) -> typmod::Result<ParsedTypmod> {
+        let parsed = load_typmod(typmod)?;
+        let schema = TypmodSchema::new(Self::rules());
+        schema.validate(&parsed)?;
+
+        Ok(parsed)
+    }
+}
+
+impl TypmodRules for GenericTypmod {
+    fn rules() -> Vec<PropertyRule> {
+        vec![]
+    }
+}
+
+impl TypmodRules for JiebaTypmod {
+    fn rules() -> Vec<PropertyRule> {
+        vec![rule!(
+            "chinese_convert",
+            ValueConstraint::StringChoice(vec!["t2s", "s2t", "tw2s", "tw2sp", "s2tw", "s2twp"])
+        )]
+    }
+}
+
+impl TypmodRules for NgramTypmod {
+    fn rules() -> Vec<PropertyRule> {
+        vec![
+            rule!(
+                "min",
+                ValueConstraint::Integer {
+                    min: Some(1),
+                    max: None,
+                },
+                required,
+                positional = 0
+            ),
+            rule!(
+                "max",
+                ValueConstraint::Integer {
+                    min: Some(1),
+                    max: None,
+                },
+                required,
+                positional = 1
+            ),
+            rule!("prefix_only", ValueConstraint::Boolean),
+            rule!("positions", ValueConstraint::Boolean),
+        ]
+    }
+}
+
+impl TypmodRules for EdgeNgramTypmod {
+    fn rules() -> Vec<PropertyRule> {
+        vec![
+            rule!(
+                "min",
+                ValueConstraint::Integer {
+                    min: Some(1),
+                    max: None,
+                },
+                required,
+                positional = 0
+            ),
+            rule!(
+                "max",
+                ValueConstraint::Integer {
+                    min: Some(1),
+                    max: None,
+                },
+                required,
+                positional = 1
+            ),
+            rule!(
+                "token_chars",
+                ValueConstraint::StringChoiceMultiple(vec![
+                    "letter",
+                    "digit",
+                    "whitespace",
+                    "punctuation",
+                    "symbol"
+                ])
+            ),
+        ]
+    }
+}
+
+impl TypmodRules for RegexTypmod {
+    fn rules() -> Vec<PropertyRule> {
+        vec![rule!(
+            "pattern",
+            ValueConstraint::Regex,
+            required,
+            positional = 0
+        )]
+    }
+}
+
+impl TypmodRules for LinderaTypmod {
+    fn rules() -> Vec<PropertyRule> {
+        vec![
+            rule!(
+                "language",
+                ValueConstraint::StringChoice(vec!["chinese", "japanese", "korean"]),
+                required,
+                positional = 0
+            ),
+            rule!("keep_whitespace", ValueConstraint::Boolean),
+            rule!("nfkc", ValueConstraint::Boolean),
+            rule!("reading_form", ValueConstraint::Boolean),
+        ]
+    }
+}
+
+impl TypmodRules for UnicodeWordsTypmod {
+    fn rules() -> Vec<PropertyRule> {
+        vec![rule!(
+            "remove_emojis",
+            ValueConstraint::Boolean,
+            positional = 0
+        )]
+    }
+}
+
+impl TypmodRules for AliasTypmod {
+    fn rules() -> Vec<PropertyRule> {
+        vec![rule!(
+            "alias",
+            ValueConstraint::String,
+            required,
+            positional = 0
+        )]
+    }
+}
+
+impl TryFrom<i32> for GenericTypmod {
+    type Error = typmod::Error;
+
+    fn try_from(typmod: i32) -> Result<Self, Self::Error> {
+        let parsed = Self::parsed(typmod)?;
+        let filters = SearchTokenizerFilters::from(&parsed);
+        Ok(GenericTypmod { filters })
+    }
+}
+
+impl TryFrom<i32> for JiebaTypmod {
+    type Error = typmod::Error;
+
+    fn try_from(typmod: i32) -> Result<Self, Self::Error> {
+        let parsed = Self::parsed(typmod)?;
+        let filters = SearchTokenizerFilters::from(&parsed);
+        let chinese_convert = parsed
+            .get("chinese_convert")
+            .and_then(|p| p.as_str())
+            .map(|s| {
+                let lcase: String = s.to_lowercase();
+                match lcase.as_str() {
+                    "t2s" => ConvertMode::T2S,
+                    "s2t" => ConvertMode::S2T,
+                    "tw2s" => ConvertMode::TW2S,
+                    "tw2sp" => ConvertMode::TW2SP,
+                    "s2tw" => ConvertMode::S2TW,
+                    "s2twp" => ConvertMode::S2TWP,
+                    other => panic!("unknown chinese convert mode: {other}"),
+                }
+            });
+        Ok(JiebaTypmod {
+            chinese_convert,
+            filters,
+        })
+    }
+}
+
+impl TryFrom<i32> for NgramTypmod {
+    type Error = typmod::Error;
+
+    fn try_from(typmod: i32) -> Result<Self, Self::Error> {
+        let parsed = Self::parsed(typmod)?;
+        let filters = SearchTokenizerFilters::from(&parsed);
+        let min_gram = parsed
+            .try_get("min", 0)
+            .and_then(|p| p.as_usize())
+            .ok_or(typmod::Error::MissingKey("min"))?;
+        let max_gram = parsed
+            .try_get("max", 1)
+            .and_then(|p| p.as_usize())
+            .ok_or(typmod::Error::MissingKey("max"))?;
+        let prefix_only = parsed
+            .get("prefix_only")
+            .and_then(|p| p.as_bool())
+            .unwrap_or(false);
+        let positions = parsed
+            .get("positions")
+            .and_then(|p| p.as_bool())
+            .unwrap_or(false);
+
+        Ok(NgramTypmod {
+            min_gram,
+            max_gram,
+            prefix_only,
+            positions,
+            filters,
+        })
+    }
+}
+
+impl TryFrom<i32> for EdgeNgramTypmod {
+    type Error = typmod::Error;
+
+    fn try_from(typmod: i32) -> Result<Self, Self::Error> {
+        let parsed = Self::parsed(typmod)?;
+        let filters = SearchTokenizerFilters::from(&parsed);
+        let min_gram = parsed
+            .try_get("min", 0)
+            .and_then(|p| p.as_usize())
+            .ok_or(typmod::Error::MissingKey("min"))?;
+        let max_gram = parsed
+            .try_get("max", 1)
+            .and_then(|p| p.as_usize())
+            .ok_or(typmod::Error::MissingKey("max"))?;
+        let token_chars = parsed
+            .get("token_chars")
+            .and_then(|p| p.as_str())
+            .map(|s| s.split(',').map(|c| c.trim().to_string()).collect())
+            .unwrap_or_else(|| vec!["letter".to_string(), "digit".to_string()]);
+        Ok(EdgeNgramTypmod {
+            min_gram,
+            max_gram,
+            token_chars,
+            filters,
+        })
+    }
+}
+
+impl TryFrom<i32> for RegexTypmod {
+    type Error = typmod::Error;
+
+    fn try_from(typmod: i32) -> Result<Self, Self::Error> {
+        let parsed = Self::parsed(typmod)?;
+        let filters = SearchTokenizerFilters::from(&parsed);
+        let pattern = parsed
+            .try_get("pattern", 0)
+            .and_then(|p| p.as_regex())
+            .ok_or(typmod::Error::MissingKey("pattern"))??;
+
+        Ok(RegexTypmod { pattern, filters })
+    }
+}
+
+impl TryFrom<i32> for LinderaTypmod {
+    type Error = typmod::Error;
+
+    fn try_from(typmod: i32) -> Result<Self, Self::Error> {
+        let parsed = Self::parsed(typmod)?;
+        let filters = SearchTokenizerFilters::from(&parsed);
+        let language = parsed
+            .try_get("language", 0)
+            .map(|p| match p.as_str() {
+                None => panic!("missing language"),
+                Some(s) => {
+                    let lcase = s.to_lowercase();
+                    match lcase.as_str() {
+                        "chinese" => LinderaLanguage::Chinese,
+                        "japanese" => LinderaLanguage::Japanese,
+                        "korean" => LinderaLanguage::Korean,
+                        other => panic!("unknown lindera language: {other}"),
+                    }
+                }
+            })
+            .ok_or(typmod::Error::MissingKey("language"))?;
+        let keep_whitespace = parsed
+            .get("keep_whitespace")
+            .and_then(|v| v.as_bool())
+            .unwrap_or(false);
+        let nfkc = parsed
+            .get("nfkc")
+            .and_then(|v| v.as_bool())
+            .unwrap_or(false);
+        let reading_form = parsed
+            .get("reading_form")
+            .and_then(|v| v.as_bool())
+            .unwrap_or(false);
+        if reading_form && language == LinderaLanguage::Chinese {
+            panic!("reading_form=true is not supported for the Lindera Chinese tokenizer");
+        }
+        Ok(LinderaTypmod {
+            language,
+            filters,
+            keep_whitespace,
+            nfkc,
+            reading_form,
+        })
+    }
+}
+
+impl TryFrom<i32> for UnicodeWordsTypmod {
+    type Error = typmod::Error;
+
+    fn try_from(typmod: i32) -> Result<Self, Self::Error> {
+        let parsed = Self::parsed(typmod)?;
+        let filters = SearchTokenizerFilters::from(&parsed);
+        let remove_emojis = parsed.try_get("remove_emojis", 0).is_some();
+        Ok(UnicodeWordsTypmod {
+            remove_emojis,
+            filters,
+        })
+    }
+}
+
+impl TryFrom<i32> for UncheckedTypmod {
+    type Error = typmod::Error;
+
+    fn try_from(typmod: i32) -> Result<Self, Self::Error> {
+        let parsed = load_typmod(typmod)?;
+        let filters = SearchTokenizerFilters::from(&parsed);
+        Ok(UncheckedTypmod { parsed, filters })
+    }
+}
+
+impl TryFrom<i32> for AliasTypmod {
+    type Error = typmod::Error;
+
+    fn try_from(typmod: i32) -> Result<Self, Self::Error> {
+        let parsed = Self::parsed(typmod)?;
+        let alias = parsed
+            .try_get("alias", 0)
+            .and_then(|p| p.as_str())
+            .map(|s| s.to_string());
+        Ok(AliasTypmod(alias))
+    }
+}
+
+impl UncheckedTypmod {
+    pub fn alias(&self) -> Option<String> {
+        self.parsed
+            .get("alias")
+            .map(|p| p.as_str().unwrap().to_string())
+    }
+
+    pub fn normalizer(&self) -> Option<SearchNormalizer> {
+        self.filters.normalizer
+    }
+}
+
+impl AliasTypmod {
+    pub fn alias(&self) -> Option<String> {
+        self.0.clone()
+    }
+}

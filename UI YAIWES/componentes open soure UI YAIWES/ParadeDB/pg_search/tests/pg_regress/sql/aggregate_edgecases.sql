@@ -1,0 +1,265 @@
+-- Test aggregate edge cases
+-- 1. Large aggregation result that should error
+-- 2. Aggregation after deletion to test consistency
+
+CREATE EXTENSION IF NOT EXISTS pg_search;
+SET paradedb.enable_aggregate_custom_scan TO on;
+SET paradedb.global_mutable_segment_rows = 0;
+
+-- =====================================================================
+-- SECTION 1: Large Aggregation Error
+-- =====================================================================
+
+-- Test that a window aggregation that returns a very large result errors gracefully.
+-- We expect an error message about the result being too large.
+
+CREATE TABLE large_agg_test (
+    id SERIAL PRIMARY KEY,
+    data TEXT
+);
+
+CREATE INDEX large_agg_test_idx ON large_agg_test
+USING paradedb (id, data)
+WITH (
+    key_field = 'id',
+    text_fields = '{"data": {"fast": true}}'
+);
+
+-- Insert enough data to make the terms aggregation result > 1MB
+INSERT INTO large_agg_test (data) SELECT md5(g::text) FROM generate_series(1, 25000) g;
+INSERT INTO large_agg_test (data) SELECT md5(g::text) FROM generate_series(25001, 50000) g;
+
+ANALYZE large_agg_test;
+
+-- The `max_window_aggregate_response_bytes` size guard tested below is parallel-only
+-- by design (it bounds the DSM transport buffer during a parallel scan); a serial
+-- window agg has no such limit and would return the oversized result instead of
+-- erroring. Force parallel by making Gather free, since the cost model would
+-- otherwise serialize this small (50K-row) scan.
+SET parallel_setup_cost = 0;
+SET parallel_tuple_cost = 0;
+
+-- Test as window function
+EXPLAIN (FORMAT TEXT, COSTS OFF, TIMING OFF, VERBOSE)
+SELECT pdb.agg('{"terms": {"field": "data", "size": 50000}}'::jsonb) OVER ()
+FROM large_agg_test
+WHERE id @@@ paradedb.all()
+ORDER BY id
+LIMIT 1;
+
+SELECT pdb.agg('{"terms": {"field": "data", "size": 50000}}'::jsonb) OVER ()
+FROM large_agg_test
+WHERE id @@@ paradedb.all()
+ORDER BY id
+LIMIT 1;
+
+RESET parallel_setup_cost;
+RESET parallel_tuple_cost;
+
+DROP TABLE large_agg_test;
+
+-- =====================================================================
+-- SECTION 2: Aggregation After Deletion
+-- =====================================================================
+
+-- Test that aggregations are correct after rows are deleted.
+
+CREATE TABLE delete_agg_test (
+    id INT PRIMARY KEY,
+    name TEXT
+);
+
+CREATE INDEX delete_agg_test_idx ON delete_agg_test
+USING paradedb (id, name)
+WITH (
+    key_field = 'id',
+    text_fields = '{"name": {}}'
+);
+
+INSERT INTO delete_agg_test VALUES (1, 'a'), (2, 'b');
+INSERT INTO delete_agg_test VALUES (3, 'c'), (4, 'd'), (5, 'e');
+
+ANALYZE delete_agg_test;
+
+-- Delete all but one row
+DELETE FROM delete_agg_test WHERE id > 1;
+
+-- Test as aggregate function
+-- Should return 1
+EXPLAIN (FORMAT TEXT, COSTS OFF, TIMING OFF, VERBOSE)
+SELECT COUNT(*) FROM delete_agg_test WHERE id @@@ paradedb.all();
+SELECT COUNT(*) FROM delete_agg_test WHERE id @@@ paradedb.all();
+
+-- Should return {"value": 1.0}
+EXPLAIN (FORMAT TEXT, COSTS OFF, TIMING OFF, VERBOSE)
+SELECT pdb.agg('{"value_count": {"field": "id"}}'::jsonb) FROM delete_agg_test WHERE id @@@ paradedb.all();
+SELECT pdb.agg('{"value_count": {"field": "id"}}'::jsonb) FROM delete_agg_test WHERE id @@@ paradedb.all();
+
+-- Should return count: 1
+EXPLAIN (FORMAT TEXT, COSTS OFF, TIMING OFF, VERBOSE)
+SELECT pdb.agg('{"stats": {"field": "id"}}'::jsonb) FROM delete_agg_test WHERE id @@@ paradedb.all();
+SELECT pdb.agg('{"stats": {"field": "id"}}'::jsonb) FROM delete_agg_test WHERE id @@@ paradedb.all();
+
+
+-- Test as window function
+-- Should return 1 and {"value": 1.0}
+EXPLAIN (FORMAT TEXT, COSTS OFF, TIMING OFF, VERBOSE)
+SELECT
+    COUNT(*) OVER (),
+    pdb.agg('{"value_count": {"field": "id"}}'::jsonb) OVER ()
+FROM delete_agg_test
+WHERE id @@@ paradedb.all()
+ORDER BY id
+LIMIT 1;
+
+SELECT
+    COUNT(*) OVER (),
+    pdb.agg('{"value_count": {"field": "id"}}'::jsonb) OVER ()
+FROM delete_agg_test
+WHERE id @@@ paradedb.all()
+ORDER BY id
+LIMIT 1;
+
+DROP TABLE delete_agg_test;
+
+-- =====================================================================
+-- SECTION 3: MVCC Visibility Settings
+-- =====================================================================
+
+CREATE TABLE mvcc_agg_test (
+    id SERIAL PRIMARY KEY,
+    category TEXT
+);
+
+CREATE INDEX mvcc_agg_test_idx ON mvcc_agg_test
+USING paradedb (id, category)
+WITH (
+    key_field = 'id',
+    text_fields = '{"category": {"fast": true}}'
+);
+
+INSERT INTO mvcc_agg_test (category) VALUES ('A'), ('B');
+INSERT INTO mvcc_agg_test (category) VALUES ('A');
+
+ANALYZE mvcc_agg_test;
+
+-- Test solve_mvcc=false in standard aggregate
+EXPLAIN (FORMAT TEXT, COSTS OFF, TIMING OFF, VERBOSE)
+SELECT pdb.agg('{"value_count": {"field": "category"}}'::jsonb, false) FROM mvcc_agg_test WHERE id @@@ paradedb.all();
+SELECT pdb.agg('{"value_count": {"field": "category"}}'::jsonb, false) FROM mvcc_agg_test WHERE id @@@ paradedb.all();
+
+-- Test solve_mvcc=false with GROUP BY
+EXPLAIN (FORMAT TEXT, COSTS OFF, TIMING OFF, VERBOSE)
+SELECT category, pdb.agg('{"value_count": {"field": "id"}}'::jsonb, false) FROM mvcc_agg_test WHERE id @@@ paradedb.all() GROUP BY category ORDER BY category;
+SELECT category, pdb.agg('{"value_count": {"field": "id"}}'::jsonb, false) FROM mvcc_agg_test WHERE id @@@ paradedb.all() GROUP BY category ORDER BY category;
+
+-- Test conflicting MVCC settings (should error)
+SELECT
+    pdb.agg('{"value_count": {"field": "id"}}'::jsonb, false),
+    pdb.agg('{"value_count": {"field": "category"}}'::jsonb, true)
+FROM mvcc_agg_test WHERE id @@@ paradedb.all();
+
+DROP TABLE mvcc_agg_test;
+
+-- =====================================================================
+-- SECTION 4: pdb.agg() with ||| operator (GitHub Issue #4456)
+-- =====================================================================
+-- Tests that pdb.agg() works with the ||| (text-contains) operator,
+-- not just @@@. Previously, ||| caused AggregateScan to be rejected
+-- because the operator was not recognized in the uses_our_operator check.
+
+CREATE TABLE triple_pipe_agg_test (
+    id SERIAL PRIMARY KEY,
+    description TEXT,
+    category TEXT
+);
+
+CREATE INDEX triple_pipe_agg_test_idx ON triple_pipe_agg_test
+USING paradedb (id, description, category)
+WITH (key_field = 'id', text_fields = '{"category": {"fast": true}}');
+
+INSERT INTO triple_pipe_agg_test (description, category) VALUES
+    ('running shoes for men', 'footwear'),
+    ('running shoes for women', 'footwear');
+INSERT INTO triple_pipe_agg_test (description, category) VALUES
+    ('casual walking shoes', 'footwear'),
+    ('running shorts', 'apparel'),
+    ('running jacket', 'apparel');
+
+ANALYZE triple_pipe_agg_test;
+
+-- Test 1: ||| operator with solve_mvcc=false — the exact failing query from issue #4456
+EXPLAIN (FORMAT TEXT, COSTS OFF, TIMING OFF, VERBOSE)
+SELECT pdb.agg('{"value_count": {"field": "id"}}'::jsonb, false)
+FROM triple_pipe_agg_test
+WHERE description ||| 'running shoes';
+
+-- This SELECT is the actual proof the bug is fixed: it previously errored with
+-- "pdb.agg() must be handled by ParadeDB's custom scan..."
+SELECT pdb.agg('{"value_count": {"field": "id"}}'::jsonb, false)
+FROM triple_pipe_agg_test
+WHERE description ||| 'running shoes';
+
+-- Test 2: ||| operator with solve_mvcc=true (explicit)
+EXPLAIN (FORMAT TEXT, COSTS OFF, TIMING OFF, VERBOSE)
+SELECT pdb.agg('{"value_count": {"field": "id"}}'::jsonb, true)
+FROM triple_pipe_agg_test
+WHERE description ||| 'running shoes';
+
+SELECT pdb.agg('{"value_count": {"field": "id"}}'::jsonb, true)
+FROM triple_pipe_agg_test
+WHERE description ||| 'running shoes';
+
+-- Test 3: ||| operator with solve_mvcc=false + GROUP BY
+SELECT category, pdb.agg('{"value_count": {"field": "id"}}'::jsonb, false)
+FROM triple_pipe_agg_test
+WHERE description ||| 'running'
+GROUP BY category
+ORDER BY category;
+
+-- Test 4: ||| operator with deletion + solve_mvcc=false (verify count correctness)
+DELETE FROM triple_pipe_agg_test WHERE id = 1;
+
+SELECT pdb.agg('{"value_count": {"field": "id"}}'::jsonb, false)
+FROM triple_pipe_agg_test
+WHERE description ||| 'running shoes';
+
+-- With solve_mvcc=true, should reflect the deletion
+SELECT pdb.agg('{"value_count": {"field": "id"}}'::jsonb, true)
+FROM triple_pipe_agg_test
+WHERE description ||| 'running shoes';
+
+-- Test 5: ||| with default (single-arg) pdb.agg — should also work
+SELECT pdb.agg('{"value_count": {"field": "id"}}'::jsonb)
+FROM triple_pipe_agg_test
+WHERE description ||| 'running shoes';
+
+-- Re-insert the deleted row so counts are predictable for remaining tests
+INSERT INTO triple_pipe_agg_test (id, description, category) VALUES
+    (1, 'running shoes for men', 'footwear');
+
+-- Note: the earlier DELETE of id=1 left a ghost row in the Tantivy index.
+-- The re-insert adds a new row, so with solve_mvcc=false the index now
+-- contains 6 documents (5 original including the ghost + 1 re-inserted).
+-- This is expected: solve_mvcc=false skips visibility checks.
+-- Test 6: &&& operator with solve_mvcc=false (conjunction/AND match)
+SELECT pdb.agg('{"value_count": {"field": "id"}}'::jsonb, false)
+FROM triple_pipe_agg_test
+WHERE description &&& 'running shoes';
+
+-- Test 7: ### operator with solve_mvcc=false (phrase match)
+SELECT pdb.agg('{"value_count": {"field": "id"}}'::jsonb, false)
+FROM triple_pipe_agg_test
+WHERE description ### 'running shoes';
+
+-- Test 8: === operator with solve_mvcc=false (exact term match)
+-- === matches individual tokens, so 'running' matches tokenized terms
+SELECT pdb.agg('{"value_count": {"field": "id"}}'::jsonb, false)
+FROM triple_pipe_agg_test
+WHERE description === 'running';
+
+-- Note: ## and ##> (proximity operators) require ProximityClause objects,
+-- not plain text, so they cannot be tested with this simple pattern.
+
+DROP TABLE triple_pipe_agg_test;
+

@@ -1,0 +1,51 @@
+{
+   "name": "pg_search",
+   "abstract": "@CRATE_DESC@",
+   "description": "pg_search upgrades Postgres with a custom index for fast full-text and vector search, BM25 scoring, filtering, and aggregations. Your application data and search engine live in one database, with no second system to deploy and nothing to sync.",
+   "version": "@CRATE_VERSION@",
+   "maintainer": [
+      "ParadeDB <support@paradedb.com>"
+   ],
+   "license": "agpl_3",
+   "provides": {
+      "pg_search": {
+         "abstract": "Search without a second system",
+         "file": "pg_search/src/lib.rs",
+         "docfile": "pg_search/README.md",
+         "version": "@CRATE_VERSION@"
+      }
+   },
+   "prereqs": {
+      "runtime": {
+         "requires": {
+            "PostgreSQL": "15.0.0"
+         }
+      }
+   },
+   "resources": {
+      "bugtracker": {
+         "web": "https://github.com/paradedb/paradedb/issues/"
+      },
+      "repository": {
+         "url": "git://github.com/paradedb/paradedb.git",
+         "web": "https://github.com/paradedb/paradedb/",
+         "type": "git"
+      }
+   },
+   "generated_by": "ParadeDB",
+   "meta-spec": {
+      "version": "1.0.0",
+      "url": "https://pgxn.org/meta/spec.txt"
+   },
+   "tags": [
+      "paradedb",
+      "postgres",
+      "search",
+      "bm25",
+      "full text search",
+      "hybrid search",
+      "vector search",
+      "faceted search",
+      "aggregations"
+   ]
+}

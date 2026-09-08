@@ -1,0 +1,1054 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+mod anyenum;
+mod config;
+pub mod range;
+
+use crate::api::FieldName;
+use crate::api::HashMap;
+use crate::api::version::{Version, VersionInfo};
+use crate::postgres::catalog::{is_citext_oid, is_pgvector_oid};
+use crate::postgres::datetime::PostgresDateTime;
+use crate::postgres::options::{BM25IndexOptions, SortByDirection, SortByField};
+use crate::postgres::pdb_owned_value::PdbOwnedValue;
+use crate::postgres::types::{is_datetime_type, is_pgoid_datetime_type};
+use crate::postgres::utils::{ExtractedFieldAttribute, resolve_base_type};
+pub use crate::postgres::utils::{FieldSource, convert_pg_date_string};
+use crate::vector::metric::VectorMetric;
+pub use anyenum::AnyEnum;
+use anyhow::bail;
+pub use config::*;
+use std::cell::{Ref, RefCell};
+use std::hash::{Hash, Hasher};
+use std::rc::Rc;
+use tantivy::index::{IndexSortByField, Order};
+
+use crate::api::tokenizers::{Typmod, type_is_alias, type_is_tokenizer};
+use crate::index::utils::load_index_schema;
+use crate::postgres::catalog::is_ltree_oid;
+use crate::postgres::rel::PgSearchRelation;
+use crate::postgres::utils::extract_numeric_precision_scale;
+use crate::query::QueryError;
+use anyhow::Result;
+use decimal_bytes::MAX_DECIMAL64_NO_SCALE_PRECISION;
+use pgrx::{PgBuiltInOids, PgOid, pg_sys};
+use serde::{Deserialize, Serialize};
+use tantivy::schema::{Field, FieldEntry, FieldType, Schema};
+use thiserror::Error;
+use tokenizers::manager::SearchTokenizerFilters;
+use tokenizers::{SearchNormalizer, SearchTokenizer};
+
+/// The type of the search field.
+/// Like Tantivy's [`FieldType`](https://docs.rs/tantivy/latest/tantivy/schema/enum.FieldType.html),
+/// but with the Postgres Oid of the column that the field is based on.
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq, Serialize, Deserialize)]
+pub enum SearchFieldType {
+    Text(pg_sys::Oid),
+    Tokenized(pg_sys::Oid, Typmod, pg_sys::Oid),
+    Uuid(pg_sys::Oid),
+    Inet(pg_sys::Oid),
+    Ltree(pg_sys::Oid),
+    I64(pg_sys::Oid),
+    F64(pg_sys::Oid),
+    U64(pg_sys::Oid),
+    Bool(pg_sys::Oid),
+    Json(pg_sys::Oid),
+    Date(pg_sys::Oid),
+    Range(pg_sys::Oid),
+    /// NUMERIC with precision <= 18: stored as I64 with fixed-point scaling.
+    /// The i16 is the scale (number of decimal places).
+    Numeric64(pg_sys::Oid, i16),
+    /// NUMERIC with precision > 18 or unlimited: stored as lexicographically sortable bytes.
+    /// The `Option<i16>` is the scale (number of decimal places), or None for unlimited precision.
+    NumericBytes(pg_sys::Oid, Option<i16>),
+    /// Dense vector field (pgvector type). The usize is the number of dimensions,
+    /// and `VectorMetric` is the distance metric (default L2).
+    Vector(pg_sys::Oid, usize, VectorMetric),
+}
+
+impl SearchFieldType {
+    pub fn default_config(&self) -> SearchFieldConfig {
+        match self {
+            SearchFieldType::Text(oid) => {
+                if is_citext_oid(*oid) {
+                    let mut cfg = SearchFieldConfig::default_text();
+                    cfg.set_normalizer(Some(SearchNormalizer::Lowercase));
+                    cfg
+                } else {
+                    SearchFieldConfig::default_text()
+                }
+            }
+            SearchFieldType::Tokenized(..) => {
+                // NB:  check `search_field_config_from_type` to make sure the tokenizer is properly represented
+                panic!("CustomText fields do not have a default config")
+            }
+            SearchFieldType::Uuid(_) => SearchFieldConfig::default_uuid(),
+            SearchFieldType::Inet(_) => SearchFieldConfig::default_inet(),
+            SearchFieldType::Ltree(_) => SearchFieldConfig::default_ltree(),
+            SearchFieldType::I64(_) => SearchFieldConfig::default_numeric(),
+            SearchFieldType::F64(_) => SearchFieldConfig::default_numeric(),
+            SearchFieldType::U64(_) => SearchFieldConfig::default_numeric(),
+            SearchFieldType::Numeric64(_, scale) => SearchFieldConfig::default_numeric64(*scale),
+            SearchFieldType::NumericBytes(_, scale) => {
+                SearchFieldConfig::default_numeric_bytes(*scale)
+            }
+            SearchFieldType::Bool(_) => SearchFieldConfig::default_boolean(),
+            SearchFieldType::Json(_) => SearchFieldConfig::default_json(),
+            SearchFieldType::Date(_) => SearchFieldConfig::default_date(),
+            SearchFieldType::Range(_) => SearchFieldConfig::default_range(),
+            SearchFieldType::Vector(_, dims, _) => SearchFieldConfig::default_vector(*dims),
+        }
+    }
+
+    pub fn typeoid(&self) -> PgOid {
+        match self {
+            SearchFieldType::Text(oid) => *oid,
+            SearchFieldType::Tokenized(oid, ..) => *oid,
+            SearchFieldType::Uuid(oid) => *oid,
+            SearchFieldType::Inet(oid) => *oid,
+            SearchFieldType::Ltree(oid) => *oid,
+            SearchFieldType::I64(oid) => *oid,
+            SearchFieldType::F64(oid) => *oid,
+            SearchFieldType::U64(oid) => *oid,
+            SearchFieldType::Bool(oid) => *oid,
+            SearchFieldType::Json(oid) => *oid,
+            SearchFieldType::Date(oid) => *oid,
+            SearchFieldType::Range(oid) => *oid,
+            SearchFieldType::Numeric64(oid, _) => *oid,
+            SearchFieldType::NumericBytes(oid, _) => *oid,
+            SearchFieldType::Vector(oid, _, _) => *oid,
+        }
+        .into()
+    }
+
+    pub fn typmod(&self) -> Typmod {
+        match self {
+            SearchFieldType::Tokenized(_, typmod, ..) => *typmod,
+            _ => -1,
+        }
+    }
+
+    /// Returns the scale for Numeric64/NumericBytes fields, or None for other types.
+    pub fn numeric_scale(&self) -> Option<i16> {
+        match self {
+            SearchFieldType::Numeric64(_, scale) => Some(*scale),
+            SearchFieldType::NumericBytes(_, scale) => *scale,
+            _ => None,
+        }
+    }
+
+    /// Returns true if this is a NUMERIC type (either Numeric64 or NumericBytes).
+    pub fn is_numeric(&self) -> bool {
+        matches!(
+            self,
+            SearchFieldType::Numeric64(..) | SearchFieldType::NumericBytes(..)
+        )
+    }
+
+    /// Returns true if this field type is supported as a `top_hits.sort` key.
+    ///
+    /// Tantivy's `top_hits` sort accessor is built with numeric-or-date column types only
+    /// (`F64` / `U64` / `I64` / `DateTime`); a text-like or binary field falls back to an
+    /// empty accessor and every hit gets `"sort": [null]` with no ordering applied (see
+    /// issue #5710). Sortable types must therefore lower to one of those Arrow storage
+    /// types: `I64`, `U64`, `F64`, `Date`, and `Numeric64` (stored as scaled `Int64`) all
+    /// qualify. `NumericBytes` is excluded because it stores as `BinaryView`.
+    pub fn supports_top_hits_sort(&self) -> bool {
+        matches!(
+            self,
+            SearchFieldType::I64(_)
+                | SearchFieldType::U64(_)
+                | SearchFieldType::F64(_)
+                | SearchFieldType::Date(_)
+                | SearchFieldType::Numeric64(..)
+        )
+    }
+
+    /// Returns the Arrow DataType used to store this field type in fast fields.
+    ///
+    /// Multiple SearchFieldType variants may map to the same Arrow storage type.
+    /// For example, Text, Uuid, Inet, Json, and Range all store as Utf8View.
+    pub fn arrow_data_type(&self) -> arrow_schema::DataType {
+        match self {
+            // String-like types all store as Utf8View
+            SearchFieldType::Text(_)
+            | SearchFieldType::Tokenized(..)
+            | SearchFieldType::Uuid(_)
+            | SearchFieldType::Inet(_)
+            | SearchFieldType::Ltree(_)
+            | SearchFieldType::Json(_)
+            | SearchFieldType::Range(_) => arrow_schema::DataType::Utf8View,
+
+            // Integer types
+            SearchFieldType::I64(oid) if is_datetime_type(*oid) => {
+                // Datetime fields stored as i64 microseconds from the PG epoch (v2 storage).
+                arrow_schema::DataType::Timestamp(arrow_schema::TimeUnit::Microsecond, None)
+            }
+            SearchFieldType::I64(_) => arrow_schema::DataType::Int64,
+            SearchFieldType::U64(_) => arrow_schema::DataType::UInt64,
+
+            // Float type
+            SearchFieldType::F64(_) => arrow_schema::DataType::Float64,
+
+            // Boolean type
+            SearchFieldType::Bool(_) => arrow_schema::DataType::Boolean,
+
+            // Date stored as datetime (v1 legacy storage; tantivy `DateTime`).
+            SearchFieldType::Date(_) => {
+                arrow_schema::DataType::Timestamp(arrow_schema::TimeUnit::Microsecond, None)
+            }
+
+            // Numeric64 is stored as Int64 (scaled integer)
+            SearchFieldType::Numeric64(..) => arrow_schema::DataType::Int64,
+
+            // NumericBytes is stored as BinaryView
+            SearchFieldType::NumericBytes(..) => arrow_schema::DataType::BinaryView,
+
+            // Vector is not stored in Arrow columnar format
+            SearchFieldType::Vector(..) => arrow_schema::DataType::BinaryView,
+        }
+    }
+}
+
+/// Derive the SearchFieldType from the tantivy schema, using PostgreSQL metadata for OID/scale.
+///
+/// This function determines the correct SearchFieldType by examining what's actually
+/// stored in the tantivy schema, then augmenting with PostgreSQL metadata (OID, scale).
+///
+/// This ensures backwards compatibility: legacy indexes that stored NUMERIC as F64
+/// will be correctly identified as F64, while new indexes use Numeric64/NumericBytes
+/// based on the actual tantivy field type.
+fn derive_field_type_from_schema(
+    field_entry: &FieldEntry,
+    options: &BM25IndexOptions,
+    field_name: &FieldName,
+) -> SearchFieldType {
+    use tantivy::schema::FieldType;
+
+    // Get the computed type from options - this has the PostgreSQL metadata we need
+    let computed_type = options.get_field_type(field_name).unwrap_or_else(|| {
+        panic!("`{field_name}`'s configuration not found in index WITH options")
+    });
+
+    // For most types, the tantivy schema matches what we computed.
+    // The exceptions are:
+    // - NUMERIC, where legacy indexes used F64 but new code computes Numeric64/NumericBytes.
+    // - TIMESTAMP, TIMESTAMPTZ, TIME, TIMETZ, DATE, where legacy indexes used Date but new code computes I64
+    match (field_entry.field_type(), computed_type) {
+        // If computed type was Numeric64/NumericBytes but stored type is F64,
+        // this is a legacy index - use F64
+        (FieldType::F64(_), _) if computed_type.is_numeric() => {
+            SearchFieldType::F64(computed_type.typeoid().value())
+        }
+        // If computed_type was i64 but stored type is Date, this is a
+        // legacy index - use Date.
+        (FieldType::Date(_), SearchFieldType::I64(oid)) if is_datetime_type(oid) => {
+            SearchFieldType::Date(oid)
+        }
+        _ => {
+            // For all other types, the computed type is correct
+            computed_type
+        }
+    }
+}
+
+impl SearchFieldType {
+    pub fn try_from_type_info(
+        pg_oid: PgOid,
+        typmod: Typmod,
+        inner_typoid: pg_sys::Oid,
+        index_created_by_version: Option<Version>,
+    ) -> Result<Self, SearchIndexSchemaError> {
+        if matches!(
+            pg_oid,
+            PgOid::BuiltIn(pg_sys::BuiltinOid::JSONBARRAYOID | pg_sys::BuiltinOid::JSONARRAYOID)
+        ) {
+            return Err(SearchIndexSchemaError::JsonArraysNotYetSupported);
+        }
+
+        let (mut base_oid, _) = resolve_base_type(pg_oid)
+            .unwrap_or_else(|| pgrx::error!("Failed to resolve base type for type {:?}", pg_oid));
+
+        if matches!(base_oid, PgOid::Custom(alias_oid) if type_is_alias(alias_oid)) {
+            // For pdb.alias types, resolve the inner_typoid to get the base element type
+            // This strips array information (e.g., timestamptz[] -> timestamptz)
+            // which matches how non-alias array fields are handled
+            base_oid = resolve_base_type(PgOid::from_untagged(inner_typoid))
+                .unwrap_or_else(|| {
+                    pgrx::error!(
+                        "Failed to resolve base type for inner type {:?}",
+                        inner_typoid
+                    )
+                })
+                .0;
+        }
+
+        match &base_oid {
+            PgOid::BuiltIn(builtin) => match builtin {
+                PgBuiltInOids::TEXTOID | PgBuiltInOids::VARCHAROID => {
+                    Ok(SearchFieldType::Text((*builtin).into()))
+                }
+                PgBuiltInOids::UUIDOID => Ok(SearchFieldType::Uuid((*builtin).into())),
+                PgBuiltInOids::INETOID => Ok(SearchFieldType::Inet((*builtin).into())),
+                PgBuiltInOids::INT2OID | PgBuiltInOids::INT4OID | PgBuiltInOids::INT8OID => {
+                    Ok(SearchFieldType::I64((*builtin).into()))
+                }
+                PgBuiltInOids::OIDOID | PgBuiltInOids::XIDOID => {
+                    Ok(SearchFieldType::U64((*builtin).into()))
+                }
+                PgBuiltInOids::FLOAT4OID | PgBuiltInOids::FLOAT8OID => {
+                    Ok(SearchFieldType::F64((*builtin).into()))
+                }
+                PgBuiltInOids::NUMERICOID => {
+                    // Route NUMERIC based on precision:
+                    // - precision <= 18 with defined scale -> Numeric64 (I64 fixed-point)
+                    // - precision > 18 or unlimited -> NumericBytes (lexicographic bytes)
+                    //
+                    // The 18-digit threshold comes from decimal_bytes::MAX_DECIMAL64_NO_SCALE_PRECISION,
+                    // which is the maximum number of decimal digits that can be stored in an i64
+                    // without overflow (i64::MAX = 9,223,372,036,854,775,807, which has 19 digits,
+                    // but we need headroom for the scaled representation).
+                    //
+                    // Note: Numeric64 fields support aggregate pushdown (SUM, AVG, MIN, MAX),
+                    // while NumericBytes fields do not (Tantivy cannot aggregate on bytes columns).
+                    let (precision, scale) = extract_numeric_precision_scale(typmod);
+                    if let Some(scale) = scale
+                        && precision > 0
+                        && precision <= MAX_DECIMAL64_NO_SCALE_PRECISION as u16
+                    {
+                        return Ok(SearchFieldType::Numeric64((*builtin).into(), scale));
+                    }
+                    // Pass the scale to NumericBytes so it can format output with correct decimal places
+                    Ok(SearchFieldType::NumericBytes((*builtin).into(), scale))
+                }
+                PgBuiltInOids::BOOLOID => Ok(SearchFieldType::Bool((*builtin).into())),
+                PgBuiltInOids::JSONOID | PgBuiltInOids::JSONBOID => {
+                    Ok(SearchFieldType::Json((*builtin).into()))
+                }
+                PgBuiltInOids::INT4RANGEOID
+                | PgBuiltInOids::INT8RANGEOID
+                | PgBuiltInOids::NUMRANGEOID
+                | PgBuiltInOids::DATERANGEOID
+                | PgBuiltInOids::TSRANGEOID
+                | PgBuiltInOids::TSTZRANGEOID => Ok(SearchFieldType::Range((*builtin).into())),
+                PgBuiltInOids::TIMESTAMPOID
+                | PgBuiltInOids::TIMESTAMPTZOID
+                | PgBuiltInOids::DATEOID
+                | PgBuiltInOids::TIMEOID
+                | PgBuiltInOids::TIMETZOID => {
+                    if index_created_by_version.stores_datetimes_in_i64() {
+                        Ok(SearchFieldType::I64((*builtin).into()))
+                    } else {
+                        Ok(SearchFieldType::Date((*builtin).into()))
+                    }
+                }
+                _ => Err(SearchIndexSchemaError::InvalidPgOid(pg_oid)),
+            },
+            PgOid::Custom(custom) if unsafe { pgrx::pg_sys::type_is_enum(*custom) } => {
+                Ok(SearchFieldType::F64(*custom))
+            }
+
+            PgOid::Custom(tokenizer_oid) if type_is_tokenizer(*tokenizer_oid) => Ok(
+                SearchFieldType::Tokenized(*tokenizer_oid, typmod, inner_typoid),
+            ),
+
+            PgOid::Custom(custom) if is_pgvector_oid(*custom) => {
+                // Metric defaults to L2 here; the real value comes from
+                // the index attribute's opclass and is patched in by
+                // `extract_field_attributes` once we know which index
+                // column owns the field. Callers that build a
+                // SearchFieldType outside an index (rare) get L2.
+                let dims = if typmod > 0 { typmod as usize } else { 0 };
+                Ok(SearchFieldType::Vector(
+                    *custom,
+                    dims,
+                    VectorMetric::default(),
+                ))
+            }
+
+            PgOid::Custom(custom) => {
+                if is_citext_oid(*custom) {
+                    Ok(SearchFieldType::Text(*custom))
+                } else if is_ltree_oid(*custom) {
+                    Ok(SearchFieldType::Ltree(*custom))
+                } else {
+                    Err(SearchIndexSchemaError::InvalidPgOid(pg_oid))
+                }
+            }
+
+            _ => Err(SearchIndexSchemaError::InvalidPgOid(pg_oid)),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct CategorizedFieldData {
+    pub attno: usize,
+    pub source: FieldSource,
+    pub pg_type: PgOid,  // Original PostgreSQL type OID (e.g., pdb.alias)
+    pub base_oid: PgOid, // Resolved base type OID (e.g., integer)
+    pub is_key_field: bool,
+    pub is_array: bool,
+    pub is_json: bool,
+}
+
+#[derive(Clone)]
+pub struct SearchIndexSchema {
+    schema: Schema,
+    bm25_options: BM25IndexOptions,
+    categorized: Rc<RefCell<Vec<(SearchField, CategorizedFieldData)>>>,
+}
+
+impl From<SearchIndexSchema> for Schema {
+    fn from(search_index_schema: SearchIndexSchema) -> Self {
+        search_index_schema.schema
+    }
+}
+
+impl SearchIndexSchema {
+    pub fn open(indexrel: &PgSearchRelation) -> tantivy::Result<Self> {
+        Ok(load_index_schema(indexrel)?
+            .map(|schema| Self {
+                schema,
+                bm25_options: indexrel.options().clone(),
+                categorized: Default::default(),
+            })
+            .unwrap_or_else(|| Self {
+                schema: Schema::builder().build(),
+                bm25_options: indexrel.options().clone(),
+                categorized: Default::default(),
+            }))
+    }
+
+    pub fn tantivy_schema(&self) -> &Schema {
+        &self.schema
+    }
+
+    pub fn ctid_field(&self) -> Field {
+        self.schema
+            .get_field("ctid")
+            .expect("ctid field should be present in the index")
+    }
+
+    pub fn key_field_name(&self) -> FieldName {
+        self.bm25_options.key_field_name()
+    }
+
+    pub fn key_field_type(&self) -> SearchFieldType {
+        self.bm25_options.key_field_type()
+    }
+
+    pub fn index_search_tokenizer(&self) -> Option<SearchTokenizer> {
+        self.bm25_options.search_tokenizer()
+    }
+
+    /// Convert sort_by configuration to Tantivy's IndexSortByField.
+    ///
+    /// Validates that the sort field exists in the schema and is a fast field.
+    /// Returns None if sort_by is empty (no segment sorting).
+    ///
+    /// This is an associated function (not a method) because it's also used during
+    /// index creation when only the Tantivy Schema is available.
+    pub fn build_sort_by_field(
+        sort_by: &[SortByField],
+        schema: &Schema,
+    ) -> Option<IndexSortByField> {
+        // Empty sort_by means no segment sorting
+        if sort_by.is_empty() {
+            return None;
+        }
+
+        // Multi-field validation is done in options.rs during parsing
+        let sort_field = &sort_by[0];
+        let field_name = sort_field.field_name.as_ref();
+
+        // Validate field exists in schema
+        let field = schema.get_field(field_name).unwrap_or_else(|_| {
+            panic!(
+                "sort_by field '{}' does not exist in the index schema",
+                field_name
+            )
+        });
+
+        // Validate field is a fast field
+        let field_entry = schema.get_field_entry(field);
+        if !field_entry.is_fast() {
+            panic!(
+                "sort_by field '{}' must be a fast field. Add it to the index with 'fast: true'",
+                field_name
+            );
+        }
+
+        // Convert direction
+        let order = match sort_field.direction {
+            SortByDirection::Asc => Order::Asc,
+            SortByDirection::Desc => Order::Desc,
+        };
+
+        Some(IndexSortByField {
+            field: field_name.to_string(),
+            order,
+        })
+    }
+
+    pub fn get_field_type(&self, name: impl AsRef<str>) -> Option<SearchFieldType> {
+        self.bm25_options
+            .get_field_type(&FieldName::from(name.as_ref()))
+    }
+
+    /// The field type and declared scale of `name` when the column is NUMERIC,
+    /// else `None`. Legacy indexes that store NUMERIC as F64 land in the `None`
+    /// arm too: their column data really is `Float64`, so the native aggregates
+    /// apply.
+    ///
+    /// Callers use the variant to pick the storage-specific aggregate and the
+    /// scale to render results at the column's declared scale; `None` scale
+    /// means the column is an unbounded NUMERIC.
+    pub fn numeric_field_type(
+        &self,
+        name: impl AsRef<str>,
+    ) -> Option<(SearchFieldType, Option<i16>)> {
+        self.get_field_type(name)
+            .filter(SearchFieldType::is_numeric)
+            .map(|field_type| (field_type, field_type.numeric_scale()))
+    }
+
+    pub fn search_field(&self, name: impl AsRef<str>) -> Option<SearchField> {
+        let field_name = FieldName::from(name.as_ref());
+        match self.schema.get_field(&field_name.root()) {
+            Ok(field) => Some(SearchField::new(field, &self.bm25_options, &self.schema)),
+            Err(_) => None,
+        }
+    }
+
+    /// Check if a field supports aggregate pushdown on the Tantivy backend.
+    ///
+    /// Returns `false` for NUMERIC fields: Tantivy aggregations compute in f64
+    /// (losing precision and mishandling NaN/Infinity sentinels) and cannot read
+    /// the decimal-bytes storage at all. Standard SQL aggregates over NUMERIC
+    /// route to the DataFusion backend instead; `pdb.agg()` has no such backend
+    /// and declines. Returns `false` if the field doesn't exist.
+    pub fn supports_tantivy_aggregate(&self, name: impl AsRef<str>) -> bool {
+        self.search_field(name)
+            .is_some_and(|f| !f.field_type().is_numeric())
+    }
+
+    pub fn fields(&self) -> impl Iterator<Item = (Field, &FieldEntry)> {
+        self.schema.fields()
+    }
+
+    pub fn has_vector_field(&self) -> bool {
+        self.fields().any(|(_, field_entry)| {
+            let field_name: FieldName = field_entry.name().into();
+            matches!(
+                self.bm25_options.get_field_type(&field_name),
+                Some(SearchFieldType::Vector(..))
+            )
+        })
+    }
+
+    /// A lookup from a Postgres column name to search fields that have
+    /// marked it as their source column with the 'column' key.
+    pub fn alias_lookup(&self) -> HashMap<String, Vec<SearchField>> {
+        let mut lookup = HashMap::default();
+        let aliased_text_configs = self.bm25_options.aliased_text_configs();
+        let aliased_json_configs = self.bm25_options.aliased_json_configs();
+
+        for (alias_name, config) in aliased_text_configs {
+            let alias = config
+                .alias()
+                .expect("aliased text config must have an alias");
+            let alias_field = self
+                .search_field(alias_name)
+                .expect("aliased text config must have a search field");
+            lookup
+                .entry(alias.to_string())
+                .or_insert_with(Vec::new)
+                .push(alias_field);
+        }
+
+        for (alias_name, config) in aliased_json_configs {
+            let alias = config
+                .alias()
+                .expect("aliased json config must have an alias");
+            let alias_field = self
+                .search_field(alias_name)
+                .expect("aliased json config must have a search field");
+            lookup
+                .entry(alias.to_string())
+                .or_insert_with(Vec::new)
+                .push(alias_field);
+        }
+
+        lookup
+    }
+
+    pub fn categorized_fields(&self) -> Ref<'_, Vec<(SearchField, CategorizedFieldData)>> {
+        let is_empty = self.categorized.borrow().is_empty();
+        if is_empty {
+            let key_field_name = self.key_field_name();
+            let mut categorized = self.categorized.borrow_mut();
+            let mut alias_lookup = self.alias_lookup();
+            for (
+                attname,
+                ExtractedFieldAttribute {
+                    attno,
+                    source,
+                    pg_type,
+                    tantivy_type,
+                    inner_typoid,
+                    ..
+                },
+            ) in self.bm25_options.attributes().iter()
+            {
+                // List any indexed fields that use this column as source data.
+                let mut search_fields = alias_lookup.remove(attname.as_ref()).unwrap_or_default();
+
+                // If there's an indexed field with the same name as a this column, add it to the list.
+                if let Some(index_field) = self.search_field(attname) {
+                    search_fields.push(index_field)
+                };
+
+                for search_field in search_fields {
+                    let (base_oid, is_array) = resolve_base_type(PgOid::from_untagged(
+                        *inner_typoid,
+                    ))
+                    .unwrap_or_else(|| {
+                        pgrx::error!(
+                            "Failed to resolve base type for column {} with type {:?}",
+                            attname,
+                            tantivy_type.typeoid()
+                        )
+                    });
+                    let is_key_field = key_field_name == *search_field.field_name();
+                    let is_json = matches!(
+                        base_oid,
+                        PgOid::BuiltIn(pg_sys::BuiltinOid::JSONBOID | pg_sys::BuiltinOid::JSONOID)
+                    );
+                    categorized.push((
+                        search_field,
+                        CategorizedFieldData {
+                            attno: *attno,
+                            source: *source,
+                            pg_type: *pg_type,
+                            base_oid,
+                            is_key_field,
+                            is_array,
+                            is_json,
+                        },
+                    ));
+                }
+            }
+        }
+
+        self.categorized.borrow()
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct SearchField {
+    field: Field,
+    field_name: FieldName,
+    field_entry: FieldEntry,
+    field_type: SearchFieldType,
+    field_config: SearchFieldConfig,
+}
+
+impl Hash for SearchField {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.field.hash(state);
+    }
+}
+
+impl Eq for SearchField {}
+
+impl PartialEq for SearchField {
+    fn eq(&self, other: &Self) -> bool {
+        self.field == other.field
+    }
+}
+
+impl SearchField {
+    pub fn new(field: Field, options: &BM25IndexOptions, schema: &Schema) -> Self {
+        let field_entry = schema.get_field_entry(field).clone();
+        let field_name: FieldName = field_entry.name().into();
+        let field_config = options.field_config_or_default(&field_name);
+
+        // Derive field type from the tantivy schema, using PostgreSQL metadata for OID/scale.
+        // This ensures backwards compatibility with legacy indexes.
+        let field_type = derive_field_type_from_schema(&field_entry, options, &field_name);
+
+        Self {
+            field,
+            field_name,
+            field_entry,
+            field_type,
+            field_config,
+        }
+    }
+
+    pub fn field(&self) -> Field {
+        self.field
+    }
+
+    pub fn field_name(&self) -> &FieldName {
+        &self.field_name
+    }
+
+    pub fn field_entry(&self) -> &FieldEntry {
+        &self.field_entry
+    }
+
+    pub fn field_type(&self) -> SearchFieldType {
+        self.field_type
+    }
+
+    pub fn field_config(&self) -> &SearchFieldConfig {
+        &self.field_config
+    }
+
+    pub fn is_raw_sortable(&self) -> bool {
+        self.is_sortable(SearchNormalizer::Raw)
+    }
+
+    pub fn is_lower_sortable(&self) -> bool {
+        self.is_sortable(SearchNormalizer::Lowercase)
+    }
+
+    pub fn is_fast(&self) -> bool {
+        self.field_entry.is_fast()
+    }
+
+    pub fn is_numeric_fast(&self) -> bool {
+        match self.field_entry.field_type() {
+            FieldType::I64(options) => options.is_fast(),
+            FieldType::U64(options) => options.is_fast(),
+            FieldType::F64(options) => options.is_fast(),
+            FieldType::Bool(options) => options.is_fast(),
+            FieldType::Date(options) => options.is_fast(),
+            _ => false,
+        }
+    }
+
+    fn is_sortable(&self, desired_normalizer: SearchNormalizer) -> bool {
+        // Range fields are stored as a tantivy JSON object, so they'd otherwise fall into the
+        // `JsonObject` arm below. They are sortable via `SortByRange`, which reads the bound
+        // sub-columns and compares them the way Postgres' `range_cmp` does. Only raw sorting:
+        // range bounds are never tokenized, so there is no lowercased variant to sort by.
+        // A true here is not enough on its own: `SortByErasedType` can't read a range, so
+        // `sortable_at_position` restricts it to the leading key.
+        if matches!(self.field_type, SearchFieldType::Range(_)) {
+            return matches!(desired_normalizer, SearchNormalizer::Raw) && self.is_fast();
+        }
+
+        // NOTE: This list of supported field types must be synced with the field types which are
+        // specialized (in a few spots!) in SearchIndexReader.
+        match self.field_entry.field_type() {
+            #[allow(deprecated)]
+            FieldType::Str(options) => {
+                options.is_fast()
+                    && options.get_fast_field_tokenizer_name() == Some(desired_normalizer.name())
+            }
+            FieldType::I64(options) => options.is_fast(),
+            FieldType::U64(options) => options.is_fast(),
+            FieldType::F64(options) => options.is_fast(),
+            FieldType::Bool(options) => options.is_fast(),
+            FieldType::Date(options) => options.is_fast(),
+            FieldType::Bytes(options) => options.is_fast(),
+            // TODO: JSON fields are not yet sortable by us. Range fields are, and are handled
+            // above before this match.
+            FieldType::JsonObject(_) => false,
+            _ => false,
+        }
+    }
+
+    pub fn is_ctid(&self) -> bool {
+        self.field_name().is_ctid()
+    }
+
+    pub fn is_datetime(&self) -> bool {
+        self.field_entry.field_type().is_date()
+    }
+
+    pub fn is_text(&self) -> bool {
+        self.field_entry.field_type().is_str()
+    }
+
+    /// Returns true if this field uses NumericBytes storage (decimal-bytes column).
+    /// NumericBytes fields support direct equality/range pushdown because the
+    /// encoding is lexicographically order-preserving.
+    pub fn is_numeric_bytes(&self) -> bool {
+        matches!(self.field_type, SearchFieldType::NumericBytes(..))
+    }
+
+    pub fn with_positions(self) -> Result<Self, QueryError> {
+        if self.supports_positions() {
+            Ok(self)
+        } else {
+            let tokenizer = self
+                .field_config()
+                .tokenizer()
+                .map(|t| t.name().to_string());
+
+            Err(QueryError::TokenizerDoesNotSupportQueryType {
+                field: self.field_name().clone(),
+                tokenizer,
+            })
+        }
+    }
+
+    fn supports_positions(&self) -> bool {
+        let tokenizer = self.field_config.tokenizer();
+
+        // these tokenizers only emit one token, so they implicitly "support" positions
+        #[allow(deprecated)]
+        if matches!(
+            tokenizer,
+            Some(SearchTokenizer::Keyword)
+                | Some(SearchTokenizer::KeywordDeprecated)
+                | Some(SearchTokenizer::Raw(..))
+                | Some(SearchTokenizer::LiteralNormalized(..))
+        ) {
+            return true;
+        }
+
+        let has_positions = self
+            .field_entry
+            .field_type()
+            .get_index_record_option()
+            .map(|opt| opt.has_positions())
+            .unwrap_or(false);
+
+        let ngram_supports_positions = match tokenizer {
+            Some(SearchTokenizer::Ngram {
+                min_gram,
+                max_gram,
+                positions: true,
+                ..
+            }) => min_gram == max_gram,
+            Some(SearchTokenizer::Ngram { .. }) => false,
+            _ => true,
+        };
+
+        (self.is_text() || self.is_json()) && has_positions && ngram_supports_positions
+    }
+
+    pub fn is_json(&self) -> bool {
+        self.field_entry.field_type().is_json()
+    }
+
+    #[allow(deprecated)]
+    pub fn is_keyword(&self) -> bool {
+        self.field_config
+            .tokenizer()
+            .map(|tokenizer| {
+                (*tokenizer == SearchTokenizer::Keyword)
+                    || (*tokenizer
+                        == SearchTokenizer::Raw(SearchTokenizerFilters::keyword().clone()))
+            })
+            .unwrap_or(false)
+    }
+
+    #[allow(deprecated)]
+    pub fn uses_raw_tokenizer(&self) -> bool {
+        self.field_config
+            .tokenizer()
+            .map(|tokenizer| matches!(tokenizer, SearchTokenizer::Raw(_)))
+            .unwrap_or(false)
+    }
+
+    pub fn try_coerce(&self, value: &mut PdbOwnedValue) -> Result<()> {
+        match (self.field_entry().field_type(), value.clone()) {
+            (FieldType::Str(_), PdbOwnedValue::Str(_))
+            | (FieldType::U64(_), PdbOwnedValue::U64(_))
+            | (FieldType::I64(_), PdbOwnedValue::I64(_))
+            | (FieldType::F64(_), PdbOwnedValue::F64(_))
+            | (FieldType::Bool(_), PdbOwnedValue::Bool(_))
+            | (FieldType::Date(_), PdbOwnedValue::Date(_))
+            | (FieldType::Facet(_), PdbOwnedValue::Facet(_))
+            | (FieldType::JsonObject(_), PdbOwnedValue::Object(_)) => Ok(()),
+            (FieldType::Date(_), PdbOwnedValue::Str(s)) => {
+                let typeoid = match self.field_type {
+                    SearchFieldType::Date(oid) => PgOid::from(oid),
+                    _ => bail!(
+                        "field type mismatch: expected Date but got {:?}",
+                        self.field_type
+                    ),
+                };
+                let datetime = convert_pg_date_string(typeoid, &s);
+                *value = PdbOwnedValue::Date(datetime);
+                Ok(())
+            }
+            (FieldType::I64(_), PdbOwnedValue::Str(s))
+                if is_pgoid_datetime_type(self.field_type.typeoid()) =>
+            {
+                match self.field_type.typeoid() {
+                    PgOid::BuiltIn(pg_sys::BuiltinOid::TIMESTAMPOID) => {
+                        let pg_dt = PostgresDateTime::try_from_timestamp_str(&s)?;
+                        *value = PdbOwnedValue::I64(pg_dt.into_inner());
+                    }
+                    PgOid::BuiltIn(pg_sys::BuiltinOid::TIMESTAMPTZOID) => {
+                        let pg_dt = PostgresDateTime::try_from_timestamptz_str(&s)?;
+                        *value = PdbOwnedValue::I64(pg_dt.into_inner());
+                    }
+                    _ => unreachable!(),
+                }
+                Ok(())
+            }
+            (FieldType::U64(_), PdbOwnedValue::I64(v)) => {
+                *value = PdbOwnedValue::U64(v.try_into()?);
+                Ok(())
+            }
+            (FieldType::I64(_), PdbOwnedValue::U64(v)) => {
+                *value = PdbOwnedValue::I64(v.try_into()?);
+                Ok(())
+            }
+            _ => bail!(
+                "cannot coerce value {:?} to field type {:?}",
+                value,
+                self.field_entry().field_type()
+            ),
+        }
+    }
+}
+
+#[derive(Debug, Error)]
+pub enum SearchIndexSchemaError {
+    #[error("invalid postgres oid passed to search index schema: {0:?}")]
+    InvalidPgOid(PgOid),
+
+    #[error("json(b) arrays are not yet supported")]
+    JsonArraysNotYetSupported,
+}
+
+#[cfg(test)]
+mod tests {
+    use pgrx::{PgOid, pg_sys};
+    use rstest::rstest;
+    use tantivy::schema::{IpAddrOptions, JsonObjectOptions, NumericOptions, TextOptions};
+
+    use crate::schema::{SearchFieldConfig, SearchFieldType};
+
+    #[rstest]
+    fn test_search_text_options() {
+        let json = r#"{
+            "indexed": true,
+            "fast": false,
+            "fieldnorms": true,
+            "record": "basic",
+            "normalizer": "raw"
+        }"#;
+        let config: serde_json::Value = serde_json::from_str(json).unwrap();
+        let search_text_option: SearchFieldConfig =
+            serde_json::from_value(serde_json::json!({"Text": config})).unwrap();
+        let expected: TextOptions = search_text_option.into();
+
+        let text_options: TextOptions = SearchFieldConfig::default_text().into();
+        assert_eq!(
+            expected.get_fast_field_tokenizer_name(),
+            text_options.get_fast_field_tokenizer_name()
+        );
+
+        let text_options = text_options.set_fast("index");
+        assert_ne!(expected.is_fast(), text_options.is_fast());
+    }
+
+    #[rstest]
+    fn test_search_inet_options() {
+        let json = r#"{
+            "indexed": true,
+            "fast": true
+        }"#;
+        let config: serde_json::Value = serde_json::from_str(json).unwrap();
+        let expected: SearchFieldConfig =
+            serde_json::from_value(serde_json::json!({"Inet": config})).unwrap();
+        let inet_options: IpAddrOptions = SearchFieldConfig::default_inet().into();
+
+        assert_eq!(inet_options, expected.into());
+    }
+
+    #[rstest]
+    fn test_search_numeric_options() {
+        let json = r#"{
+            "indexed": true,
+            "fast": true
+        }"#;
+        let config: serde_json::Value = serde_json::from_str(json).unwrap();
+        let expected: SearchFieldConfig =
+            serde_json::from_value(serde_json::json!({"Numeric": config})).unwrap();
+        let int_options: NumericOptions = SearchFieldConfig::default_numeric().into();
+
+        assert_eq!(int_options, expected.into());
+    }
+
+    #[rstest]
+    fn test_search_boolean_options() {
+        let json = r#"{
+            "indexed": true,
+            "fast": true
+        }"#;
+        let config: serde_json::Value = serde_json::from_str(json).unwrap();
+        let expected: SearchFieldConfig =
+            serde_json::from_value(serde_json::json!({"Boolean": config})).unwrap();
+        let int_options: NumericOptions = SearchFieldConfig::default_numeric().into();
+
+        assert_eq!(int_options, expected.into());
+    }
+
+    #[rstest]
+    fn test_search_jsonobject_options() {
+        let json = r#"{
+            "indexed": true,
+            "fast": false,
+            "expand_dots": true,
+            "record": "basic",
+            "normalizer": "raw"
+        }"#;
+        let config: serde_json::Value = serde_json::from_str(json).unwrap();
+        let search_json_option: SearchFieldConfig =
+            serde_json::from_value(serde_json::json!({"Json": config})).unwrap();
+        let expected: JsonObjectOptions = search_json_option.into();
+
+        let json_object_options: JsonObjectOptions = SearchFieldConfig::default_json().into();
+        assert_eq!(
+            expected.get_fast_field_tokenizer_name(),
+            json_object_options.get_fast_field_tokenizer_name()
+        );
+        assert_eq!(
+            expected.is_expand_dots_enabled(),
+            json_object_options.is_expand_dots_enabled()
+        );
+
+        let text_options = json_object_options.set_fast("index");
+        assert_ne!(expected.is_fast(), text_options.is_fast());
+    }
+
+    #[rstest]
+    fn test_ltree_typeoid() {
+        // Ltree uses a custom OID; verify typeoid() extracts it correctly
+        let oid: pg_sys::Oid = 99999.into();
+        let ft = SearchFieldType::Ltree(oid);
+        assert_eq!(ft.typeoid(), PgOid::from(oid));
+    }
+
+    #[rstest]
+    fn test_default_config_ltree() {
+        let config = SearchFieldConfig::default_ltree();
+        assert!(matches!(config, SearchFieldConfig::Facet));
+    }
+}

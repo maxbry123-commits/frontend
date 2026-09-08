@@ -1,0 +1,35 @@
+name: Fetch Benchmark Sources from Main
+description: Fetch latest benchmark code and suites from `main`
+
+inputs:
+  github-token:
+    description: "GitHub token to authenticate with"
+    required: true
+
+# We manually fetch benchmark code from `main` when backfilling old commits that may predate
+# newer queries. Callers fetch composite actions separately before invoking this action.
+
+runs:
+  using: "composite"
+  steps:
+    - name: Fetch the Latest Benchmark Queries
+      uses: actions/checkout@v7
+      with:
+        repository: ${{ github.repository }}
+        path: bench-temp
+        token: ${{ inputs.github-token }}
+        fetch-depth: 1
+        ref: main
+
+    - name: Copy latest benchmarks into place
+      shell: bash
+      run: |
+        rm -rf benchmarks
+        cp -rv bench-temp/benchmarks .
+
+        echo "Copied benchmark files to benchmarks/:"
+        ls -la benchmarks/
+
+    - name: Cleanup temporary checkout
+      shell: bash
+      run: rm -rf bench-temp

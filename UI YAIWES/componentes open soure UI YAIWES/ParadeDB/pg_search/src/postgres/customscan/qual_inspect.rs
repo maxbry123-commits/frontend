@@ -1,0 +1,2640 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+use crate::api::operator::{is_anyelement_search_opoid, searchqueryinput_typoid};
+use crate::gucs;
+use crate::nodecast;
+use crate::postgres::customscan::builders::custom_path::RestrictInfoType;
+use crate::postgres::customscan::opexpr::OpExpr;
+use crate::postgres::customscan::pushdown::{PushdownField, is_complex, try_build_pushdown_qual};
+use crate::postgres::customscan::{operator_oid, score_funcoids};
+use crate::postgres::deparse::deparse_expr;
+use crate::postgres::pdb_owned_value::PdbOwnedValue;
+use crate::postgres::rel::PgSearchRelation;
+use crate::postgres::var::VarContext;
+use crate::query::SearchQueryInput;
+use crate::query::heap_field_filter::HeapFieldFilter;
+use crate::query::pdb_query::pdb;
+use pg_sys::BoolExprType;
+use pgrx::{FromDatum, IntoDatum, PgList, pg_guard, pg_sys};
+use std::ops::Bound;
+
+#[derive(Debug, Clone)]
+pub enum Qual {
+    All,
+    ExternalVar,
+    ExternalExpr,
+    OpExpr {
+        lhs: *mut pg_sys::Node,
+        opno: pg_sys::Oid,
+        val: *mut pg_sys::Const,
+        /// For ScalarArrayOpExpr (e.g., `field @@@ ANY(array)`):
+        /// - Some(true) = OR semantics (ANY)
+        /// - Some(false) = AND semantics (ALL)
+        /// - None = regular OpExpr, not a ScalarArrayOpExpr
+        scalar_array_use_or: Option<bool>,
+    },
+    /// Represents an expression which can be evaluated after planning in BeginCustomScan.
+    ///
+    /// This happens when the expression involves parameters (e.g. `$1`), other columns, or
+    /// volatile functions which are "uncorrelated": i.e., which do not come from an outer
+    /// relation.
+    ///
+    /// It is converted to `SearchQueryInput::PostgresExpression` and then solved by
+    /// `solve_postgres_expressions` before the search query is executed.
+    Expr {
+        node: *mut pg_sys::Node,
+        expr_desc: String,
+    },
+    /// Represents an expression that can be evaluated at planning time.
+    /// This typically happens when the expression is effectively constant (no vars/params).
+    /// It is evaluated immediately during conversion to `SearchQueryInput` via
+    /// `SearchQueryInput::from`.
+    PushdownExpr {
+        funcexpr: *mut pg_sys::FuncExpr,
+    },
+    /// Represents a SQL equality comparison: `bool_field = TRUE`
+    /// - NULL values are excluded (NULL is not equal to TRUE)
+    /// - Used for direct field reference equality comparisons
+    /// - Negation transforms to PushdownVarEqFalse without including NULLs
+    PushdownVarEqTrue {
+        field: PushdownField,
+    },
+    /// Represents a SQL equality comparison: `bool_field = FALSE`
+    /// - NULL values are excluded (NULL is not equal to FALSE)
+    /// - Used for direct field reference equality comparisons
+    /// - Negation transforms to PushdownVarEqTrue without including NULLs
+    PushdownVarEqFalse {
+        field: PushdownField,
+    },
+    /// Represents a SQL IS operator: `bool_field IS TRUE`
+    /// - NULL values are excluded (NULL is not TRUE)
+    /// - Different from equality in negation semantics:
+    ///   IS NOT TRUE includes both FALSE and NULL values
+    PushdownVarIsTrue {
+        field: PushdownField,
+    },
+    /// Represents a SQL IS operator: `bool_field IS FALSE`
+    /// - NULL values are excluded (NULL is not FALSE)
+    /// - Different from equality in negation semantics:
+    ///   IS NOT FALSE includes both TRUE and NULL values
+    PushdownVarIsFalse {
+        field: PushdownField,
+    },
+    PushdownIsNotNull {
+        field: PushdownField,
+    },
+    /// Represents `ltree_column <@ 'ancestor.path'::ltree`.
+    ///
+    /// PostgreSQL semantics:
+    ///   lhs <@ rhs  means lhs is a descendant of rhs, or equal to rhs.
+    ///
+    /// ParadeDB stores ltree fields as Tantivy Facet fields, so this is lowered
+    /// into a fielded ParseWithField query. `parse_with_field()` has a special
+    /// FieldType::Facet branch that converts dotted ltree text into a Tantivy
+    /// Facet term, e.g. "Top.Science" -> /Top/Science.
+    PushdownLtreeDescendant {
+        field: PushdownField,
+        ancestor: String,
+    },
+    ScoreExpr {
+        opoid: pg_sys::Oid,
+        value: *mut pg_sys::Node,
+    },
+    /// Heap-based expression evaluation for non-indexed predicates
+    /// Contains an underlying search query that must be executed first
+    HeapExpr {
+        /// The PostgreSQL expression node to evaluate
+        expr_node: *mut pg_sys::Node,
+        /// Description of the expression for debugging
+        expr_desc: String,
+        /// The search query to execute before applying the heap filter
+        /// Can be All (scan whole relation) or a more specific query
+        search_query_input: Box<SearchQueryInput>,
+    },
+    And(Vec<Qual>),
+    Or(Vec<Qual>),
+    Not(Box<Qual>),
+}
+
+impl Qual {
+    pub fn contains_all(&self) -> bool {
+        match self {
+            Qual::All => true,
+            Qual::ExternalVar => false,
+            Qual::ExternalExpr => false,
+            Qual::OpExpr { .. } => false,
+            Qual::Expr { .. } => false,
+            Qual::PushdownExpr { .. } => false,
+            Qual::PushdownVarEqTrue { .. } => false,
+            Qual::PushdownVarEqFalse { .. } => false,
+            Qual::PushdownVarIsTrue { .. } => false,
+            Qual::PushdownVarIsFalse { .. } => false,
+            Qual::PushdownIsNotNull { .. } => false,
+            Qual::PushdownLtreeDescendant { .. } => false,
+            Qual::ScoreExpr { .. } => false,
+            Qual::HeapExpr {
+                search_query_input, ..
+            } => matches!(**search_query_input, SearchQueryInput::All),
+            Qual::And(quals) => quals.iter().any(|q| q.contains_all()),
+            Qual::Or(quals) => quals.iter().any(|q| q.contains_all()),
+            Qual::Not(qual) => qual.contains_all(),
+        }
+    }
+
+    pub fn contains_external_var(&self) -> bool {
+        match self {
+            Qual::All => false,
+            Qual::ExternalVar => true,
+            Qual::ExternalExpr => true,
+            Qual::OpExpr { .. } => false,
+            Qual::Expr { .. } => false,
+            Qual::PushdownExpr { .. } => false,
+            Qual::PushdownVarEqTrue { .. } => false,
+            Qual::PushdownVarEqFalse { .. } => false,
+            Qual::PushdownVarIsTrue { .. } => false,
+            Qual::PushdownVarIsFalse { .. } => false,
+            Qual::PushdownIsNotNull { .. } => false,
+            Qual::PushdownLtreeDescendant { .. } => false,
+            Qual::ScoreExpr { .. } => false,
+            Qual::HeapExpr { .. } => false,
+            Qual::And(quals) => quals.iter().any(|q| q.contains_external_var()),
+            Qual::Or(quals) => quals.iter().any(|q| q.contains_external_var()),
+            Qual::Not(qual) => qual.contains_external_var(),
+        }
+    }
+
+    pub unsafe fn contains_correlated_param(&self, root: *mut pg_sys::PlannerInfo) -> bool {
+        match self {
+            Qual::All => false,
+            Qual::ExternalVar => false,
+            Qual::ExternalExpr => false,
+            Qual::OpExpr { .. } => false,
+            Qual::Expr { node, .. } => contains_correlated_param(root, *node),
+            Qual::PushdownExpr { .. } => false,
+            Qual::PushdownVarEqTrue { .. } => false,
+            Qual::PushdownVarEqFalse { .. } => false,
+            Qual::PushdownVarIsTrue { .. } => false,
+            Qual::PushdownVarIsFalse { .. } => false,
+            Qual::PushdownIsNotNull { .. } => false,
+            Qual::PushdownLtreeDescendant { .. } => false,
+            Qual::ScoreExpr { .. } => false,
+            Qual::HeapExpr { expr_node, .. } => contains_correlated_param(root, *expr_node),
+            Qual::And(quals) => quals.iter().any(|q| q.contains_correlated_param(root)),
+            Qual::Or(quals) => quals.iter().any(|q| q.contains_correlated_param(root)),
+            Qual::Not(qual) => qual.contains_correlated_param(root),
+        }
+    }
+
+    pub fn contains_exprs(&self) -> bool {
+        match self {
+            Qual::All => false,
+            Qual::ExternalVar => false,
+            Qual::ExternalExpr => false,
+            Qual::OpExpr { .. } => false,
+            Qual::Expr { .. } => true,
+            Qual::PushdownExpr { .. } => false,
+            Qual::PushdownVarEqTrue { .. } => true,
+            Qual::PushdownVarEqFalse { .. } => true,
+            Qual::PushdownVarIsTrue { .. } => true,
+            Qual::PushdownVarIsFalse { .. } => true,
+            Qual::PushdownIsNotNull { .. } => false,
+            Qual::PushdownLtreeDescendant { .. } => false,
+            Qual::ScoreExpr { .. } => false,
+            Qual::HeapExpr { .. } => true,
+            Qual::And(quals) => quals.iter().any(|q| q.contains_exprs()),
+            Qual::Or(quals) => quals.iter().any(|q| q.contains_exprs()),
+            Qual::Not(qual) => qual.contains_exprs(),
+        }
+    }
+
+    pub fn contains_score_exprs(&self) -> bool {
+        match self {
+            Qual::All => false,
+            Qual::ExternalVar => false,
+            Qual::ExternalExpr => false,
+            Qual::OpExpr { .. } => false,
+            Qual::Expr { .. } => false,
+            Qual::PushdownExpr { .. } => false,
+            Qual::PushdownVarEqTrue { .. } => false,
+            Qual::PushdownVarEqFalse { .. } => false,
+            Qual::PushdownVarIsTrue { .. } => false,
+            Qual::PushdownVarIsFalse { .. } => false,
+            Qual::PushdownIsNotNull { .. } => false,
+            Qual::PushdownLtreeDescendant { .. } => false,
+            Qual::ScoreExpr { .. } => true,
+            Qual::HeapExpr { .. } => false,
+            Qual::And(quals) => quals.iter().any(|q| q.contains_score_exprs()),
+            Qual::Or(quals) => quals.iter().any(|q| q.contains_score_exprs()),
+            Qual::Not(qual) => qual.contains_score_exprs(),
+        }
+    }
+
+    pub fn collect_exprs<'a>(&'a mut self, exprs: &mut Vec<&'a mut Qual>) {
+        match self {
+            Qual::Expr { .. } => exprs.push(self),
+            Qual::HeapExpr { .. } => exprs.push(self),
+            Qual::And(quals) => quals.iter_mut().for_each(|q| q.collect_exprs(exprs)),
+            Qual::Or(quals) => quals.iter_mut().for_each(|q| q.collect_exprs(exprs)),
+            Qual::Not(qual) => qual.collect_exprs(exprs),
+            _ => {}
+        }
+    }
+
+    /// Check if a Qual contains any HeapExpr (non-indexed predicates)
+    pub fn contains_heap_expr(&self) -> bool {
+        match self {
+            Qual::HeapExpr { .. } => true,
+            Qual::Not(inner) => inner.contains_heap_expr(),
+            Qual::And(quals) | Qual::Or(quals) => quals.iter().any(|q| q.contains_heap_expr()),
+            _ => false,
+        }
+    }
+}
+
+fn generic_negation(input: SearchQueryInput) -> SearchQueryInput {
+    SearchQueryInput::Boolean {
+        must: vec![SearchQueryInput::All],
+        should: Default::default(),
+        must_not: vec![input],
+        minimum_should_match: None,
+    }
+}
+
+/// Caches the index relation opened while negating a `WithIndex` query tree so
+/// schema lookups are not repeated for every negated leaf.
+struct NegationContext {
+    index_oid: Option<pg_sys::Oid>,
+    index_relation: Option<PgSearchRelation>,
+}
+
+impl NegationContext {
+    fn new() -> Self {
+        Self {
+            index_oid: None,
+            index_relation: None,
+        }
+    }
+
+    fn ensure_index(&mut self, oid: pg_sys::Oid) {
+        if self.index_oid != Some(oid) || self.index_relation.is_none() {
+            self.index_oid = Some(oid);
+            self.index_relation = Some(PgSearchRelation::with_lock(
+                oid,
+                pg_sys::AccessShareLock as pg_sys::LOCKMODE,
+            ));
+        }
+    }
+
+    fn index_relation(&self) -> Option<&PgSearchRelation> {
+        self.index_relation.as_ref()
+    }
+}
+
+/// Whether the null-preserving existence guard is valid for this field.
+///
+/// The guard equates "field absent from the index" with SQL NULL, which is only
+/// correct for scalar fast fields. Array and JSON columns can be non-NULL in
+/// SQL while having no indexed values (e.g. `'{}'::text[]`, `'{}'::jsonb`).
+fn field_supports_null_preserving_guard(
+    index_relation: &PgSearchRelation,
+    field: &crate::api::FieldName,
+) -> bool {
+    let Ok(schema) = index_relation.schema() else {
+        return false;
+    };
+    let root = field.root();
+    let Some(search_field) = schema.search_field(&root) else {
+        return false;
+    };
+    if !search_field.is_fast() {
+        return false;
+    }
+
+    let categorized = schema.categorized_fields();
+    categorized
+        .iter()
+        .find(|(sf, _)| sf.field_name().root() == root)
+        .is_none_or(|(_, data)| !data.is_array && !data.is_json)
+}
+
+/// Existence guard for null-preserving negation, scored at 0.0 so it does not
+/// shift relative rankings inside boolean `should` clauses.
+fn null_preserving_exists_guard(field: &crate::api::FieldName) -> SearchQueryInput {
+    SearchQueryInput::ConstScore {
+        query: Box::new(SearchQueryInput::FieldedQuery {
+            field: field.root().into(),
+            query: pdb::Query::Exists,
+        }),
+        score: 0.0,
+    }
+}
+
+/// Negate a `SearchQueryInput` while preserving PostgreSQL's three-valued NULL
+/// semantics.
+///
+/// For a fielded predicate, `NOT (field @@@ q)` must exclude rows where `field`
+/// is NULL (i.e. not indexed). We express this as `field exists AND NOT q`,
+/// which requires an `Exists` query on `field`. Since `Exists` is only available
+/// on fast fields, we only add the existence guard when `field` is fast;
+/// otherwise we fall back to the generic negation (the historical behavior),
+/// which keeps non-fast fields working at the cost of NULL-exactness.
+///
+/// An `Exists` query is special-cased: negating "field exists" must return the
+/// rows where the field is *missing*, so it never gets an existence guard (that
+/// would produce `exists AND NOT exists`, which is unsatisfiable).
+///
+/// `index_oid` carries the index from the enclosing `WithIndex` wrapper so the
+/// recursion can resolve whether a field is fast.
+fn negate_fielded_input(input: SearchQueryInput, ctx: &mut NegationContext) -> SearchQueryInput {
+    match input {
+        SearchQueryInput::WithIndex { oid, query } => {
+            ctx.ensure_index(oid);
+            SearchQueryInput::WithIndex {
+                oid,
+                query: Box::new(negate_fielded_input(*query, ctx)),
+            }
+        }
+        SearchQueryInput::FieldedQuery { field, query } => {
+            // Negating an existence check must return rows where the field is
+            // missing, so it never gets an existence guard. Any other fielded
+            // predicate gets the guard on eligible scalar fast fields so NULLs
+            // are excluded; otherwise we fall back to the generic negation.
+            if !matches!(query, pdb::Query::Exists)
+                && ctx
+                    .index_relation()
+                    .is_some_and(|rel| field_supports_null_preserving_guard(rel, &field))
+            {
+                SearchQueryInput::Boolean {
+                    must: vec![null_preserving_exists_guard(&field)],
+                    should: Default::default(),
+                    must_not: vec![SearchQueryInput::FieldedQuery { field, query }],
+                    minimum_should_match: None,
+                }
+            } else {
+                generic_negation(SearchQueryInput::FieldedQuery { field, query })
+            }
+        }
+        SearchQueryInput::Boolean {
+            must,
+            should,
+            must_not,
+            ..
+        } if must_not.is_empty() => {
+            if should.is_empty() {
+                SearchQueryInput::Boolean {
+                    must: Default::default(),
+                    should: must
+                        .into_iter()
+                        .map(|query| negate_fielded_input(query, ctx))
+                        .collect(),
+                    must_not: Default::default(),
+                    minimum_should_match: None,
+                }
+            } else if must.is_empty() {
+                SearchQueryInput::Boolean {
+                    must: should
+                        .into_iter()
+                        .map(|query| negate_fielded_input(query, ctx))
+                        .collect(),
+                    should: Default::default(),
+                    must_not: Default::default(),
+                    minimum_should_match: None,
+                }
+            } else {
+                generic_negation(SearchQueryInput::Boolean {
+                    must,
+                    should,
+                    must_not,
+                    minimum_should_match: None,
+                })
+            }
+        }
+        other => generic_negation(other),
+    }
+}
+
+fn negated_search_query_input(qual: &Qual) -> SearchQueryInput {
+    negated_search_query_input_with_context(qual, &mut NegationContext::new())
+}
+
+fn negated_search_query_input_with_context(
+    qual: &Qual,
+    ctx: &mut NegationContext,
+) -> SearchQueryInput {
+    match qual {
+        Qual::PushdownVarEqTrue { field } => SearchQueryInput::from(&Qual::PushdownVarEqFalse {
+            field: field.clone(),
+        }),
+        Qual::PushdownVarEqFalse { field } => SearchQueryInput::from(&Qual::PushdownVarEqTrue {
+            field: field.clone(),
+        }),
+        Qual::ExternalVar | Qual::ExternalExpr => SearchQueryInput::All,
+        Qual::Not(inner) => SearchQueryInput::from(inner.as_ref()),
+        Qual::And(quals)
+            if !qual.contains_external_var()
+                && !qual.contains_heap_expr()
+                && !qual.contains_score_exprs() =>
+        {
+            SearchQueryInput::Boolean {
+                must: Default::default(),
+                should: quals
+                    .iter()
+                    .map(|q| negated_search_query_input_with_context(q, ctx))
+                    .collect(),
+                must_not: Default::default(),
+                minimum_should_match: None,
+            }
+        }
+        Qual::Or(quals)
+            if !qual.contains_external_var()
+                && !qual.contains_heap_expr()
+                && !qual.contains_score_exprs() =>
+        {
+            SearchQueryInput::Boolean {
+                must: quals
+                    .iter()
+                    .map(|q| negated_search_query_input_with_context(q, ctx))
+                    .collect(),
+                should: Default::default(),
+                must_not: Default::default(),
+                minimum_should_match: None,
+            }
+        }
+        Qual::OpExpr { .. } => negate_fielded_input(SearchQueryInput::from(qual), ctx),
+        _ => generic_negation(SearchQueryInput::from(qual)),
+    }
+}
+
+impl From<&Qual> for SearchQueryInput {
+    #[track_caller]
+    fn from(value: &Qual) -> Self {
+        match value {
+            Qual::All => SearchQueryInput::All,
+            Qual::ExternalVar => SearchQueryInput::All,
+            Qual::ExternalExpr => SearchQueryInput::All,
+            // Handle ScalarArrayOpExpr: PostgreSQL 18+ rewrites OR clauses like
+            // `field @@@ 'a' OR field @@@ 'b'` into `field @@@ ANY(ARRAY['a','b'])`.
+            // We decode the array and convert it to a Boolean query (should/must).
+            Qual::OpExpr {
+                val,
+                opno,
+                scalar_array_use_or,
+                ..
+            } => unsafe {
+                if let Some(use_or) = *scalar_array_use_or {
+                    let elements: Vec<SearchQueryInput> = pgrx::FromDatum::from_polymorphic_datum(
+                        (**val).constvalue,
+                        (**val).constisnull,
+                        searchqueryinput_typoid(),
+                    )
+                    .expect("ScalarArrayOpExpr should not contain NULL");
+
+                    if elements.is_empty() {
+                        if use_or {
+                            SearchQueryInput::Empty
+                        } else {
+                            SearchQueryInput::All
+                        }
+                    } else {
+                        let (must, should) = if use_or {
+                            (Vec::new(), elements)
+                        } else {
+                            (elements, Vec::new())
+                        };
+
+                        SearchQueryInput::Boolean {
+                            must,
+                            should,
+                            must_not: vec![],
+                            minimum_should_match: None,
+                        }
+                    }
+                } else {
+                    match SearchQueryInput::from_datum((**val).constvalue, (**val).constisnull) {
+                        Some(input) => input,
+                        None => {
+                            let op_name = crate::api::operator::operator_name_from_oid(*opno);
+                            panic!(
+                                "query is incompatible with pg_search's `{}` operator: \
+                                the right-hand side could not be converted to a search query",
+                                op_name
+                            );
+                        }
+                    }
+                }
+            },
+            // Convert to SearchQueryInput::PostgresExpression, which will be solved by
+            // `solve_postgres_expressions`.
+            Qual::Expr { node, expr_desc } => {
+                SearchQueryInput::postgres_expression(*node, expr_desc.clone())
+            }
+            // Solve the expression immediately to produce a concrete SearchQueryInput
+            Qual::PushdownExpr { funcexpr } => unsafe {
+                let expr_state = pg_sys::ExecInitExpr((*funcexpr).cast(), std::ptr::null_mut());
+                let expr_context = pg_sys::CreateStandaloneExprContext();
+                let mut is_null = false;
+                let datum = pg_sys::ExecEvalExpr(expr_state, expr_context, &mut is_null);
+                pg_sys::FreeExprContext(expr_context, false);
+                SearchQueryInput::from_datum(datum, is_null)
+                    .expect("pushdown expression should not evaluate to NULL")
+            },
+            Qual::PushdownVarEqTrue { field } => SearchQueryInput::FieldedQuery {
+                field: field.attname(),
+                query: pdb::Query::Term {
+                    value: PdbOwnedValue::Bool(true),
+                },
+            },
+            Qual::PushdownVarEqFalse { field } => SearchQueryInput::FieldedQuery {
+                field: field.attname(),
+                query: pdb::Query::Term {
+                    value: PdbOwnedValue::Bool(false),
+                },
+            },
+            Qual::PushdownVarIsTrue { field } => SearchQueryInput::FieldedQuery {
+                field: field.attname(),
+                query: pdb::Query::Term {
+                    value: PdbOwnedValue::Bool(true),
+                },
+            },
+            Qual::PushdownVarIsFalse { field } => SearchQueryInput::FieldedQuery {
+                field: field.attname(),
+                query: pdb::Query::Term {
+                    value: PdbOwnedValue::Bool(false),
+                },
+            },
+            Qual::PushdownIsNotNull { field } => SearchQueryInput::FieldedQuery {
+                field: field.attname(),
+                query: pdb::Query::Exists,
+            },
+            Qual::PushdownLtreeDescendant { field, ancestor } => SearchQueryInput::FieldedQuery {
+                field: field.attname(),
+                query: pdb::Query::ParseWithField {
+                    query_string: ancestor.clone(),
+                    lenient: Some(false),
+                    conjunction_mode: None,
+                    fuzzy_data: None,
+                },
+            },
+            Qual::ScoreExpr { opoid, value } => unsafe {
+                let score_value = {
+                    let expr_state = pg_sys::ExecInitExpr((*value).cast(), std::ptr::null_mut());
+                    let expr_context = pg_sys::CreateStandaloneExprContext();
+                    let mut is_null = false;
+                    let datum = pg_sys::ExecEvalExpr(expr_state, expr_context, &mut is_null);
+                    pg_sys::FreeExprContext(expr_context, false);
+
+                    match pg_sys::exprType(*value) {
+                        pg_sys::FLOAT4OID => f32::from_datum(datum, is_null),
+                        pg_sys::FLOAT8OID => f64::from_datum(datum, is_null).map(|f| f as f32),
+                        _ => panic!("score expression should be float4 or float8"),
+                    }
+                }
+                .expect("score expression should not evaluate to NULL");
+
+                let mut bounds = None;
+                for rhs_type in &["float4", "float8"] {
+                    if opoid == &operator_oid(&format!("=(float4,{rhs_type})")) {
+                        bounds = Some((Bound::Included(score_value), Bound::Included(score_value)));
+                    } else if opoid == &operator_oid(&format!("<(float4,{rhs_type})")) {
+                        bounds = Some((Bound::Unbounded, Bound::Excluded(score_value)));
+                    } else if opoid == &operator_oid(&format!(">(float4,{rhs_type})")) {
+                        bounds = Some((Bound::Excluded(score_value), Bound::Unbounded));
+                    } else if opoid == &operator_oid(&format!("<=(float4,{rhs_type})")) {
+                        bounds = Some((Bound::Unbounded, Bound::Included(score_value)));
+                    } else if opoid == &operator_oid(&format!(">=(float4,{rhs_type})")) {
+                        bounds = Some((Bound::Included(score_value), Bound::Unbounded));
+                    } else if opoid == &operator_oid(&format!("<>(float4,{rhs_type})")) {
+                        bounds = Some((Bound::Excluded(score_value), Bound::Excluded(score_value)));
+                    }
+                    if bounds.is_some() {
+                        break;
+                    }
+                }
+                if bounds.is_none() {
+                    panic!("unsupported score operator: {opoid:?}");
+                }
+                let (lower, upper) = bounds.unwrap();
+
+                SearchQueryInput::ScoreFilter {
+                    bounds: vec![(lower, upper)],
+                    query: Some(Box::new(SearchQueryInput::All)),
+                }
+            },
+            Qual::HeapExpr {
+                expr_node,
+                expr_desc,
+                search_query_input,
+            } => {
+                // Create HeapFieldFilter from the PostgreSQL expression
+                let always_filters =
+                    vec![unsafe { HeapFieldFilter::new(*expr_node, expr_desc.clone()) }];
+
+                SearchQueryInput::HeapFilter {
+                    indexed_query: search_query_input.clone(),
+                    always_filters,
+                    recheck_filters: vec![],
+                    uses_tid_bitmap: false,
+                    bitmap_consumer_id: None,
+                    bitmap_cell: None,
+                }
+            }
+            Qual::And(quals) => {
+                let mut must = quals.iter().map(SearchQueryInput::from).collect::<Vec<_>>();
+                let popscore = |vec: &mut Vec<SearchQueryInput>| -> Option<SearchQueryInput> {
+                    for i in 0..vec.len() {
+                        if matches!(vec[i], SearchQueryInput::ScoreFilter { .. }) {
+                            return Some(vec.remove(i));
+                        }
+                    }
+                    None
+                };
+
+                // pull out any ScoreFilters from the `must` clauses
+                let mut must_scores = vec![];
+                while let Some(score_filter) = popscore(&mut must) {
+                    must_scores.push(score_filter);
+                }
+
+                // make the Boolean clause we intend to return (or wrap)
+                let mut boolean = SearchQueryInput::Boolean {
+                    must,
+                    should: vec![],
+                    must_not: vec![],
+                    minimum_should_match: None,
+                };
+
+                // wrap the basic boolean query, iteratively, in each of the extracted ScoreFilters
+                while let Some(SearchQueryInput::ScoreFilter { bounds, query: _ }) =
+                    must_scores.pop()
+                {
+                    boolean = SearchQueryInput::ScoreFilter {
+                        bounds,
+                        query: Some(Box::new(boolean)),
+                    }
+                }
+
+                boolean
+            }
+
+            Qual::Or(quals) => {
+                let should = quals
+                    .iter()
+                    .map(SearchQueryInput::from)
+                    // any dangling ScoreFilter clauses are non-sensical, so we'll just pretend they don't exist
+                    .filter(|query| !matches!(query, SearchQueryInput::ScoreFilter { .. }))
+                    .collect::<Vec<_>>();
+
+                match should.len() {
+                    0 => SearchQueryInput::Boolean {
+                        must: Default::default(),
+                        should: Default::default(),
+                        must_not: Default::default(),
+                        minimum_should_match: None,
+                    },
+                    _ => SearchQueryInput::Boolean {
+                        must: Default::default(),
+                        should,
+                        must_not: Default::default(),
+                        minimum_should_match: None,
+                    },
+                }
+            }
+            Qual::Not(qual) => negated_search_query_input(qual.as_ref()),
+        }
+    }
+}
+
+/// Context for extracting quals - can be either full planner context or just a query
+pub enum PlannerContext {
+    /// Full planner context with PlannerInfo (supports join qual extraction)
+    Planner(*mut pg_sys::PlannerInfo),
+    /// Query-only context (no join qual extraction, used in planner hook)
+    Query(*mut pg_sys::Query),
+}
+
+impl PlannerContext {
+    pub fn from_planner(root: *mut pg_sys::PlannerInfo) -> Self {
+        Self::Planner(root)
+    }
+
+    pub fn from_query(parse: *mut pg_sys::Query) -> Self {
+        Self::Query(parse)
+    }
+
+    /// Get the PlannerInfo pointer if available (for join qual extraction)
+    pub fn planner_info(&self) -> Option<*mut pg_sys::PlannerInfo> {
+        match self {
+            Self::Planner(root) => Some(*root),
+            Self::Query(_) => None,
+        }
+    }
+
+    pub fn query(&self) -> Option<*mut pg_sys::Query> {
+        match self {
+            Self::Planner(_) => None,
+            Self::Query(parse) => Some(*parse),
+        }
+    }
+
+    pub fn var_context(&self) -> VarContext {
+        match self {
+            Self::Planner(root) => VarContext::from_planner(*root),
+            Self::Query(parse) => VarContext::from_query(*parse),
+        }
+    }
+}
+
+#[derive(Default)]
+pub struct QualExtractState {
+    /// Set whenever a predicate is evaluated via Tantivy in any form — an indexed
+    /// pushdown, a search operator, or a heap-filtered expression that still rides
+    /// along on the Tantivy scan. It is a diagnostic/logic marker and, on its own,
+    /// does NOT justify choosing the Custom Scan.
+    pub uses_tantivy_to_query: bool,
+
+    /// Set when the query contains a predicate that genuinely belongs to the
+    /// index: a search operator (`@@@`, `pdb.score()`, `pdb.snippet()`) or a plain
+    /// PostgreSQL operator we lower into a real indexed query (e.g. `ltree <@ ltree`
+    /// becoming a Tantivy facet subtree query). This is what enables the Custom
+    /// Scan and bypasses the heap-only rejection; it must not be set for predicates
+    /// that can only be evaluated as a heap filter (like `file_size > 500`).
+    pub uses_our_operator: bool,
+
+    /// Set when a predicate against this relation could not be pushed down to the
+    /// index and must be evaluated as a PostgreSQL-side heap filter. Gated by the
+    /// `enable_filter_pushdown` GUC and only worthwhile alongside `uses_our_operator`.
+    pub uses_heap_expr: bool,
+}
+
+/// Check if a clause contains node types that extract_quals cannot handle
+/// (e.g., SubPlan from RLS policies) and thus needs plan.qual evaluation.
+pub unsafe fn is_subplan(node: *mut pg_sys::Node, root: *mut pg_sys::PlannerInfo) -> bool {
+    #[pg_guard]
+    unsafe extern "C-unwind" fn walker(
+        node: *mut pg_sys::Node,
+        _data: *mut core::ffi::c_void,
+    ) -> bool {
+        if node.is_null() {
+            return false;
+        }
+        match (*node).type_ {
+            pg_sys::NodeTag::T_SubPlan | pg_sys::NodeTag::T_AlternativeSubPlan => true,
+            // RestrictInfo is a planner node, not an expression node, so
+            // expression_tree_walker doesn't know how to handle it. Unwrap
+            // to the inner clause before recursing.
+            pg_sys::NodeTag::T_RestrictInfo => {
+                let ri = node as *mut pg_sys::RestrictInfo;
+                walker((*ri).clause.cast(), _data)
+            }
+            _ => pg_sys::expression_tree_walker(node, Some(walker), std::ptr::null_mut()),
+        }
+    }
+
+    if node.is_null() {
+        return false;
+    }
+
+    // Check if the top-level clause (after unwrapping RestrictInfo) is itself
+    // a PARAM_EXEC from an init_plan. This handles `(SELECT true)` style subqueries
+    // which PostgreSQL pulls up as InitPlans, leaving a bare PARAM_EXEC in
+    // baserestrictinfo. We only check at the top level — PARAM_EXEC nodes nested
+    // inside expressions (e.g. created_at <= (SELECT ...)) are handled differently
+    // and should NOT be treated as subplans.
+    let inner = if (*node).type_ == pg_sys::NodeTag::T_RestrictInfo {
+        let ri = node as *mut pg_sys::RestrictInfo;
+        (*ri).clause.cast::<pg_sys::Node>()
+    } else {
+        node
+    };
+
+    if !inner.is_null() && (*inner).type_ == pg_sys::NodeTag::T_Param {
+        let param = inner as *mut pg_sys::Param;
+        if (*param).paramkind == pg_sys::ParamKind::PARAM_EXEC && !root.is_null() {
+            return PgList::<pg_sys::SubPlan>::from_pg((*root).init_plans)
+                .iter_ptr()
+                .any(|subplan| pg_sys::list_member_int((*subplan).setParam, (*param).paramid));
+        }
+    }
+
+    walker(node, std::ptr::null_mut())
+}
+
+#[allow(clippy::too_many_arguments)]
+pub unsafe fn extract_quals(
+    context: &PlannerContext,
+    rti: pg_sys::Index,
+    node: *mut pg_sys::Node,
+    ri_type: RestrictInfoType,
+    indexrel: &PgSearchRelation,
+    convert_external_to_special_qual: bool,
+    state: &mut QualExtractState,
+    attempt_pushdown: bool,
+) -> Option<Qual> {
+    if node.is_null() {
+        return None;
+    }
+
+    let external_is_special =
+        convert_external_to_special_qual || matches!(ri_type, RestrictInfoType::Join);
+
+    match (*node).type_ {
+        pg_sys::NodeTag::T_FuncExpr => {
+            // Standalone FuncExprs in a WHERE clause must return boolean (e.g. ST_DWithin).
+            // This is distinct from FuncExprs used inside comparisons (e.g. pdb.score(id) > 0.5),
+            // which are handled within opexpr().
+            if contains_relation_reference(node, rti) {
+                if !gucs::enable_filter_pushdown() {
+                    return None;
+                }
+
+                state.uses_heap_expr = true;
+                state.uses_tantivy_to_query = true;
+                Some(Qual::HeapExpr {
+                    expr_node: node,
+                    expr_desc: deparse_expr(Some(context), indexrel, node),
+                    search_query_input: Box::new(SearchQueryInput::All),
+                })
+            } else {
+                None
+            }
+        }
+
+        pg_sys::NodeTag::T_List => {
+            let mut quals = list(
+                context,
+                rti,
+                node.cast(),
+                ri_type,
+                indexrel,
+                convert_external_to_special_qual,
+                state,
+                attempt_pushdown,
+            )?;
+            if quals.len() == 1 {
+                quals.pop()
+            } else {
+                Some(Qual::And(quals))
+            }
+        }
+
+        pg_sys::NodeTag::T_RestrictInfo => {
+            let ri = nodecast!(RestrictInfo, T_RestrictInfo, node)?;
+            let clause = if !(*ri).orclause.is_null() {
+                (*ri).orclause
+            } else {
+                (*ri).clause
+            };
+            extract_quals(
+                context,
+                rti,
+                clause.cast(),
+                ri_type,
+                indexrel,
+                convert_external_to_special_qual,
+                state,
+                attempt_pushdown,
+            )
+        }
+
+        pg_sys::NodeTag::T_OpExpr => opexpr(
+            context,
+            rti,
+            OpExpr::from_single(node)?,
+            ri_type,
+            indexrel,
+            convert_external_to_special_qual,
+            state,
+            attempt_pushdown,
+        ),
+
+        pg_sys::NodeTag::T_ScalarArrayOpExpr => opexpr(
+            context,
+            rti,
+            OpExpr::from_array(node)?,
+            ri_type,
+            indexrel,
+            convert_external_to_special_qual,
+            state,
+            attempt_pushdown,
+        ),
+
+        pg_sys::NodeTag::T_BoolExpr => {
+            let boolexpr = nodecast!(BoolExpr, T_BoolExpr, node)?;
+            let mut quals = list(
+                context,
+                rti,
+                (*boolexpr).args,
+                ri_type,
+                indexrel,
+                convert_external_to_special_qual,
+                state,
+                attempt_pushdown,
+            )?;
+
+            match (*boolexpr).boolop {
+                pg_sys::BoolExprType::AND_EXPR => Some(Qual::And(quals)),
+                pg_sys::BoolExprType::OR_EXPR => Some(Qual::Or(quals)),
+                pg_sys::BoolExprType::NOT_EXPR => Some(Qual::Not(Box::new(quals.pop()?))),
+                _ => panic!("unexpected `BoolExprType`: {}", (*boolexpr).boolop),
+            }
+        }
+
+        pg_sys::NodeTag::T_Var => {
+            // First, try to create a PushdownField to see if this is an indexed boolean field
+            // Note: PushdownField::try_new requires PlannerInfo
+            if let Some(root) = context.planner_info() {
+                if let Some(field) = PushdownField::try_new(root, node, indexrel) {
+                    // Check if this is a boolean field reference to our relation
+                    if field.varno() != rti {
+                        return if external_is_special {
+                            Some(Qual::ExternalVar)
+                        } else {
+                            None
+                        };
+                    }
+
+                    if let Some(search_field) =
+                        indexrel.schema().ok()?.search_field(field.attname())
+                        && search_field.is_fast()
+                    {
+                        // This is an indexed boolean field, create proper pushdown qual
+                        // T_Var alone represents "field = true"
+                        state.uses_tantivy_to_query = true;
+                        return Some(Qual::PushdownVarEqTrue { field });
+                    }
+                }
+
+                // If we reach here, the field is not indexed or not fast, so create HeapExpr
+                // T_Var nodes represent boolean field references without explicit "= true" comparison
+                // PostgreSQL parser generates T_Var for "WHERE bool_field" vs T_OpExpr for "WHERE bool_field = true"
+                // We need to handle both cases since they're semantically equivalent
+                let var_node = nodecast!(Var, T_Var, node)?;
+                if let Some(qual) = try_create_heap_expr_from_var(
+                    root,
+                    var_node,
+                    rti,
+                    indexrel,
+                    &mut state.uses_tantivy_to_query,
+                ) {
+                    Some(qual)
+                } else if external_is_special {
+                    if (*var_node).varno as pg_sys::Index != rti {
+                        Some(Qual::ExternalVar)
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                }
+            } else {
+                // Query context: We can't do full pushdown analysis without PlannerInfo,
+                // but we can still create HeapExpr if filter_pushdown is enabled
+                if !gucs::enable_filter_pushdown() {
+                    return None;
+                }
+
+                let var_node = nodecast!(Var, T_Var, node)?;
+                // Check if this var references our relation
+                if (*var_node).varno as pg_sys::Index != rti {
+                    return if external_is_special {
+                        Some(Qual::ExternalVar)
+                    } else {
+                        None
+                    };
+                }
+
+                // We're creating a HeapExpr here - this is a "guess" that it will be needed,
+                // but it's safe because filter_pushdown is enabled, which means PostgreSQL's
+                // executor will handle the filtering if this predicate can't be pushed down.
+                state.uses_heap_expr = true;
+                state.uses_tantivy_to_query = true;
+                Some(Qual::HeapExpr {
+                    expr_node: node,
+                    expr_desc: deparse_expr(Some(context), indexrel, node),
+                    search_query_input: Box::new(SearchQueryInput::All),
+                })
+            }
+        }
+
+        pg_sys::NodeTag::T_NullTest => {
+            let nulltest = nodecast!(NullTest, T_NullTest, node)?;
+            // Note: PushdownField::try_new requires PlannerInfo
+            if let Some(root) = context.planner_info() {
+                if let Some(field) = PushdownField::try_new(root, (*nulltest).arg.cast(), indexrel)
+                    && let Some(search_field) =
+                        indexrel.schema().ok()?.search_field(field.attname().root())
+                    && search_field.is_fast()
+                {
+                    if field.varno() == rti {
+                        if (*nulltest).nulltesttype == pg_sys::NullTestType::IS_NOT_NULL {
+                            return Some(Qual::PushdownIsNotNull { field });
+                        } else {
+                            return Some(Qual::Not(Box::new(Qual::PushdownIsNotNull { field })));
+                        }
+                    } else if external_is_special {
+                        // From this relation's perspective, a NullTest referencing another relation
+                        // in a join is an external variable; report as ExternalVar so the join level
+                        // can process it rather than declining the scan.
+                        return Some(Qual::ExternalVar);
+                    } else {
+                        return None;
+                    }
+                }
+                // If we reach here, try creating HeapExpr
+                if let Some(qual) = try_create_heap_expr_from_null_test(
+                    nulltest,
+                    rti,
+                    root,
+                    indexrel,
+                    &mut state.uses_tantivy_to_query,
+                ) {
+                    Some(qual)
+                } else if external_is_special {
+                    if !contains_relation_reference((*nulltest).arg.cast(), rti) {
+                        Some(Qual::ExternalVar)
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                }
+            } else {
+                // Query context: We can't do full pushdown analysis without PlannerInfo,
+                // but we can still create HeapExpr if filter_pushdown is enabled
+                if !gucs::enable_filter_pushdown() {
+                    return None;
+                }
+
+                if !contains_relation_reference((*nulltest).arg.cast(), rti) {
+                    return if external_is_special {
+                        Some(Qual::ExternalVar)
+                    } else {
+                        None
+                    };
+                }
+
+                // We're creating a HeapExpr here - this is a "guess" that it will be needed,
+                // but it's safe because filter_pushdown is enabled, which means PostgreSQL's
+                // executor will handle the filtering if this predicate can't be pushed down.
+                state.uses_heap_expr = true;
+                state.uses_tantivy_to_query = true;
+                Some(Qual::HeapExpr {
+                    expr_node: node,
+                    expr_desc: deparse_expr(Some(context), indexrel, node),
+                    search_query_input: Box::new(SearchQueryInput::All),
+                })
+            }
+        }
+
+        pg_sys::NodeTag::T_BooleanTest => {
+            booltest(context, node, rti, indexrel, external_is_special, state)
+        }
+
+        pg_sys::NodeTag::T_Const => {
+            let const_node = nodecast!(Const, T_Const, node)?;
+
+            // Check if this is a boolean constant
+            if (*const_node).consttype == pg_sys::BOOLOID {
+                let bool_value = if !(*const_node).constisnull {
+                    bool::from_datum((*const_node).constvalue, false).unwrap_or(false)
+                } else {
+                    // Convert NULL to false
+                    false
+                };
+
+                state.uses_tantivy_to_query = true;
+                if bool_value {
+                    return Some(Qual::All);
+                } else {
+                    return Some(Qual::Not(Box::new(Qual::All)));
+                }
+            }
+
+            None
+        }
+
+        // we don't understand this clause so we can't do anything
+        _ => None,
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+unsafe fn list(
+    context: &PlannerContext,
+    rti: pg_sys::Index,
+    list: *mut pg_sys::List,
+    ri_type: RestrictInfoType,
+    indexrel: &PgSearchRelation,
+    convert_external_to_special_qual: bool,
+    state: &mut QualExtractState,
+    attempt_pushdown: bool,
+) -> Option<Vec<Qual>> {
+    let args = PgList::<pg_sys::Node>::from_pg(list);
+    let mut quals = Vec::new();
+    for child in args.iter_ptr() {
+        quals.push(extract_quals(
+            context,
+            rti,
+            child,
+            ri_type,
+            indexrel,
+            convert_external_to_special_qual,
+            state,
+            attempt_pushdown,
+        )?)
+    }
+
+    Some(quals)
+}
+
+#[allow(clippy::too_many_arguments)]
+unsafe fn opexpr(
+    context: &PlannerContext,
+    rti: pg_sys::Index,
+    opexpr: OpExpr,
+    ri_type: RestrictInfoType,
+    indexrel: &PgSearchRelation,
+    convert_external_to_special_qual: bool,
+    state: &mut QualExtractState,
+    attempt_pushdown: bool,
+) -> Option<Qual> {
+    let args = opexpr.args();
+    let mut lhs = args.get_ptr(0)?;
+    let rhs = args.get_ptr(1)?;
+    let is_our_operator = is_anyelement_search_opoid(opexpr.opno());
+
+    if is_our_operator {
+        state.uses_our_operator = true;
+    }
+
+    // relabel types are essentially a cast, but for types that are directly compatible without
+    // the need for a cast function.  So if the lhs of the input node is a RelabelType, just
+    // keep chasing its arg until we get a final node type
+    while (*lhs).type_ == pg_sys::NodeTag::T_RelabelType {
+        let relabel_type = lhs as *mut pg_sys::RelabelType;
+        lhs = (*relabel_type).arg as _;
+    }
+
+    match (*lhs).type_ {
+        pg_sys::NodeTag::T_Var => node_opexpr(
+            context,
+            rti,
+            ri_type,
+            indexrel,
+            state,
+            opexpr,
+            lhs,
+            rhs,
+            convert_external_to_special_qual,
+            attempt_pushdown,
+        ),
+
+        pg_sys::NodeTag::T_FuncExpr => {
+            if crate::postgres::utils::is_search_operator(lhs, &score_funcoids()) {
+                state.uses_our_operator = true;
+
+                if is_complex(rhs) {
+                    return None;
+                }
+
+                return Some(Qual::ScoreExpr {
+                    opoid: opexpr.opno(),
+                    value: rhs,
+                });
+            }
+
+            node_opexpr(
+                context,
+                rti,
+                ri_type,
+                indexrel,
+                state,
+                opexpr,
+                lhs,
+                rhs,
+                convert_external_to_special_qual,
+                attempt_pushdown,
+            )
+        }
+
+        pg_sys::NodeTag::T_PlaceHolderVar => {
+            if crate::postgres::utils::is_search_operator(lhs, &score_funcoids()) {
+                state.uses_our_operator = true;
+
+                if is_complex(rhs) {
+                    return None;
+                }
+
+                return Some(Qual::ScoreExpr {
+                    opoid: opexpr.opno(),
+                    value: rhs,
+                });
+            }
+
+            if attempt_pushdown {
+                try_pushdown(
+                    context,
+                    rti,
+                    opexpr,
+                    indexrel,
+                    state,
+                    convert_external_to_special_qual,
+                )
+            } else {
+                None
+            }
+        }
+        pg_sys::NodeTag::T_OpExpr => node_opexpr(
+            context,
+            rti,
+            ri_type,
+            indexrel,
+            state,
+            opexpr,
+            lhs,
+            rhs,
+            convert_external_to_special_qual,
+            attempt_pushdown,
+        ),
+
+        _ if is_our_operator => node_opexpr(
+            context,
+            rti,
+            ri_type,
+            indexrel,
+            state,
+            opexpr,
+            lhs,
+            rhs,
+            convert_external_to_special_qual,
+            attempt_pushdown,
+        ),
+
+        _ if attempt_pushdown => {
+            // it doesn't use our operator.
+            // we'll try to convert it into a pushdown
+            try_pushdown(
+                context,
+                rti,
+                opexpr,
+                indexrel,
+                state,
+                convert_external_to_special_qual,
+            )
+        }
+
+        _ => None,
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+unsafe fn node_opexpr(
+    context: &PlannerContext,
+    rti: pg_sys::Index,
+    ri_type: RestrictInfoType,
+    indexrel: &PgSearchRelation,
+    state: &mut QualExtractState,
+    opexpr: OpExpr,
+    lhs: *mut pg_sys::Node,
+    mut rhs: *mut pg_sys::Node,
+    convert_external_to_special_qual: bool,
+    attempt_pushdown: bool,
+) -> Option<Qual> {
+    while let Some(relabel_target) = nodecast!(RelabelType, T_RelabelType, rhs) {
+        rhs = (*relabel_target).arg.cast();
+    }
+
+    let rhs_as_const = nodecast!(Const, T_Const, rhs);
+
+    let is_our_operator = is_anyelement_search_opoid(opexpr.opno());
+
+    if rhs_as_const.is_none() {
+        // the rhs expression is not a Const, so it's some kind of expression
+        // that we'll need to execute during query execution, if we can
+
+        if is_our_operator {
+            if contains_var(rhs) {
+                // it contains a Var, and that means some kind of sequential scan will be required
+                // so indicate we can't handle this expression at all
+                return None;
+            } else {
+                // it uses our operator, so we directly know how to handle it
+                // this is the case of:  field @@@ paradedb.xxx(EXPR) where EXPR likely includes something
+                // that's parameterized
+                state.uses_tantivy_to_query = true;
+                return Some(Qual::Expr {
+                    node: rhs,
+                    expr_desc: deparse_expr(Some(context), indexrel, rhs),
+                });
+            }
+        } else {
+            // it doesn't use our operator
+            if contains_var(rhs) {
+                // the rhs is (or contains) a Var. If it's part of a join condition,
+                // select everything in this situation
+                if convert_external_to_special_qual {
+                    return Some(Qual::ExternalVar);
+                } else {
+                    return None;
+                }
+            } else if attempt_pushdown {
+                // it doesn't use our operator.
+                // we'll try to convert it into a pushdown
+                return try_pushdown(
+                    context,
+                    rti,
+                    opexpr,
+                    indexrel,
+                    state,
+                    convert_external_to_special_qual,
+                );
+            } else {
+                return None;
+            }
+        }
+    }
+
+    let rhs = rhs_as_const?;
+    if is_our_operator {
+        // the rhs expression is a Const, so we can use it directly
+        if is_node_range_table_entry(lhs, rti) {
+            // the node comes from this range table entry, so we can use the full expression directly
+            state.uses_tantivy_to_query = true;
+            Some(Qual::OpExpr {
+                lhs,
+                opno: opexpr.opno(),
+                val: rhs,
+                scalar_array_use_or: opexpr.use_or(),
+            })
+        } else {
+            // the node comes from a different range table
+            if matches!(ri_type, RestrictInfoType::Join) {
+                // and we're doing a join, so in this case we choose to just select everything
+                Some(Qual::ExternalVar)
+            } else {
+                // the node comes from a different range table and we're not doing a join (how is that possible?!)
+                // so we don't do anything
+                None
+            }
+        }
+    } else if attempt_pushdown {
+        // it doesn't use our operator.
+        // we'll try to convert it into a pushdown
+        try_pushdown(
+            context,
+            rti,
+            opexpr,
+            indexrel,
+            state,
+            convert_external_to_special_qual,
+        )
+    } else {
+        None
+    }
+}
+
+/// Critical decision point: determines whether a predicate can be pushed down to the index
+/// or must be evaluated via heap access.
+///
+/// This function attempts to convert PostgreSQL OpExpr nodes into indexed predicates.
+/// If the predicate can be satisfied using indexed fields (fast fields, search fields),
+/// it returns an indexed Qual (OpExpr, PushdownExpr, etc.).
+/// If the predicate references non-indexed fields, it returns a HeapExpr that will
+/// evaluate the predicate against heap tuples.
+///
+/// The decision made here directly impacts query performance:
+/// - Indexed predicates: Fast evaluation using Tantivy's index structures
+/// - HeapExpr predicates: Slower evaluation requiring heap tuple access
+unsafe fn try_pushdown(
+    context: &PlannerContext,
+    rti: pg_sys::Index,
+    opexpr: OpExpr,
+    indexrel: &PgSearchRelation,
+    state: &mut QualExtractState,
+    convert_external_to_special_qual: bool,
+) -> Option<Qual> {
+    // Save the node pointer before the move so we can recreate the OpExpr later
+    let opexpr_node = match &opexpr {
+        OpExpr::Array(expr) => *expr as *mut pg_sys::Node,
+        OpExpr::Single(expr) => *expr as *mut pg_sys::Node,
+    };
+
+    // Try to convert this OpExpr into an indexed predicate (fast field, search field, etc.)
+    let pushdown_result = if context.planner_info().is_some() {
+        try_build_pushdown_qual(context, rti, opexpr, indexrel)
+    } else {
+        // Planner hook validation runs in Query context, but simple indexed predicates can still
+        // be recognized by resolving field names from the Query's range table.
+        if context.query().is_some() {
+            return try_build_pushdown_qual(context, rti, opexpr, indexrel);
+        }
+        None
+    };
+
+    if pushdown_result.is_none() {
+        let references_relation = contains_relation_reference(opexpr_node, rti);
+        let has_param = contains_param(opexpr_node);
+        // DECISION POINT: Predicate cannot be pushed down to index
+        // Check if this expression references our relation
+        if references_relation {
+            // Check if custom scan for non-indexed fields is enabled
+            if !gucs::enable_filter_pushdown() {
+                return None;
+            }
+
+            // We do use search (with heap filtering)
+            state.uses_heap_expr = true;
+            state.uses_tantivy_to_query = true;
+
+            // Create HeapExpr: predicate will be evaluated via heap access
+            // This is slower but necessary for non-indexed fields
+            Some(Qual::HeapExpr {
+                expr_node: opexpr_node,
+                expr_desc: deparse_expr(Some(context), indexrel, opexpr_node),
+                search_query_input: Box::new(SearchQueryInput::All),
+            })
+        } else if has_param {
+            // Predicate doesn't reference our relation (e.g., $2 = 0 in prepared statements)
+            // Check if it contains PARAM nodes - if so, create a HeapExpr that will be evaluated at execution
+            // This prevents qual extraction from failing entirely when we have
+            // expressions like: description @@@ $1 AND $2 = 0
+
+            // Create HeapExpr for parameter expressions
+            // These will be evaluated by PostgreSQL's executor at runtime
+            state.uses_heap_expr = true;
+            state.uses_tantivy_to_query = true;
+            Some(Qual::HeapExpr {
+                expr_node: opexpr_node,
+                expr_desc: deparse_expr(Some(context), indexrel, opexpr_node),
+                search_query_input: Box::new(SearchQueryInput::All),
+            })
+        } else if convert_external_to_special_qual {
+            Some(Qual::ExternalExpr)
+        } else {
+            // Not a parameter expression and doesn't reference our relation
+            // We can't handle this
+            None
+        }
+    } else {
+        // SUCCESS: Predicate can be pushed down to index for fast evaluation
+        state.uses_tantivy_to_query = true;
+
+        // Note: plain PostgreSQL operators we can lower into a Tantivy query (e.g.
+        // `path <@ 'Top.Science'::ltree`, lowered to a facet subtree query) set
+        // `uses_tantivy_to_query`, but NOT `uses_our_operator`. They are not
+        // operators that only we can execute, so they should not force the Custom
+        // Scan on their own -- that's left to the planner's cost decision. To force
+        // pushdown of such an operator, use `pdb.all()` or enable
+        // `paradedb.enable_custom_scan_without_operator`.
+
+        pushdown_result
+    }
+}
+
+unsafe fn is_node_range_table_entry(node: *mut pg_sys::Node, rti: pg_sys::Index) -> bool {
+    match (*node).type_ {
+        pg_sys::NodeTag::T_Var => {
+            let var = node.cast::<pg_sys::Var>();
+            (*var).varno as pg_sys::Index == rti
+        }
+        pg_sys::NodeTag::T_FuncExpr => {
+            let funcexpr = node.cast::<pg_sys::FuncExpr>();
+            PgList::<pg_sys::Node>::from_pg((*funcexpr).args)
+                .iter_ptr()
+                .all(|arg| is_node_range_table_entry(arg, rti))
+        }
+        pg_sys::NodeTag::T_OpExpr => {
+            let opexpr = node.cast::<pg_sys::OpExpr>();
+            PgList::<pg_sys::Node>::from_pg((*opexpr).args)
+                .iter_ptr()
+                .all(|arg| {
+                    is_node_range_table_entry(arg, rti)
+                        || matches!((*arg).type_, pg_sys::NodeTag::T_Const)
+                })
+        }
+        _ => false,
+    }
+}
+
+/// Returns true if the expression contains a parameter that is correlated with an outer query.
+/// Correlated parameters are `PARAM_EXEC` parameters that are not provided by an init plan.
+pub unsafe fn contains_correlated_param(
+    root: *mut pg_sys::PlannerInfo,
+    node: *mut pg_sys::Node,
+) -> bool {
+    #[pg_guard]
+    unsafe extern "C-unwind" fn walker(
+        node: *mut pg_sys::Node,
+        context: *mut core::ffi::c_void,
+    ) -> bool {
+        let root = context as *mut pg_sys::PlannerInfo;
+        if let Some(param) = nodecast!(Param, T_Param, node)
+            && (*param).paramkind == pg_sys::ParamKind::PARAM_EXEC
+        {
+            let param_is_from_init_plan = PgList::<pg_sys::SubPlan>::from_pg((*root).init_plans)
+                .iter_ptr()
+                .any(|subplan| pg_sys::list_member_int((*subplan).setParam, (*param).paramid));
+
+            if !param_is_from_init_plan {
+                // If this PARAM_EXEC param is not from any init plan, then we have to assume
+                // that it is correlated.
+                return true;
+            }
+        }
+        pg_sys::expression_tree_walker(node, Some(walker), context)
+    }
+
+    if node.is_null() {
+        return false;
+    }
+
+    walker(node, root as *mut core::ffi::c_void)
+}
+
+unsafe fn contains_param_of_kind(root: *mut pg_sys::Node, kind: pg_sys::ParamKind::Type) -> bool {
+    #[pg_guard]
+    unsafe extern "C-unwind" fn walker(
+        node: *mut pg_sys::Node,
+        data: *mut core::ffi::c_void,
+    ) -> bool {
+        let kind = &*data.cast::<pg_sys::ParamKind::Type>();
+        if let Some(param) = nodecast!(Param, T_Param, node)
+            && (*param).paramkind == *kind
+        {
+            return true;
+        }
+        pg_sys::expression_tree_walker(node, Some(walker), data)
+    }
+
+    if root.is_null() {
+        return false;
+    }
+
+    walker(root, std::ptr::from_ref(&kind).cast_mut().cast())
+}
+
+/// Returns true if the expression contains any `PARAM_EXEC` parameter.
+/// `PARAM_EXEC` parameters are evaluated at execution time, often for subqueries.
+pub unsafe fn contains_exec_param(root: *mut pg_sys::Node) -> bool {
+    contains_param_of_kind(root, pg_sys::ParamKind::PARAM_EXEC)
+}
+
+/// Returns true if the expression contains a prepared-statement parameter.
+///
+/// `PARAM_EXTERN` values are bound when a generic prepared plan executes, so a
+/// custom scan needs an executor-side contract for resolving them; planner-time
+/// translation alone is not sufficient.
+pub unsafe fn contains_extern_param(root: *mut pg_sys::Node) -> bool {
+    contains_param_of_kind(root, pg_sys::ParamKind::PARAM_EXTERN)
+}
+
+/// Flatten PostgreSQL's two representations of an implicit conjunction into
+/// individual semantic predicates.
+///
+/// `preprocess_qual_conditions()` applies `make_ands_implicit()`, which can
+/// leave a bare `T_List` where callers might otherwise expect a `BoolExpr(AND)`.
+/// Relation classification and expression translation must operate on each
+/// conjunct, never on the container. `OR` and `NOT` expressions deliberately
+/// remain intact.
+pub unsafe fn collect_implicit_and_conjuncts(
+    node: *mut pg_sys::Node,
+    conjuncts: &mut Vec<*mut pg_sys::Node>,
+) {
+    if node.is_null() {
+        return;
+    }
+
+    if (*node).type_ == pg_sys::NodeTag::T_List {
+        let list = PgList::<pg_sys::Node>::from_pg(node.cast::<pg_sys::List>());
+        for item in list.iter_ptr() {
+            collect_implicit_and_conjuncts(item, conjuncts);
+        }
+        return;
+    }
+
+    if let Some(bool_expr) = nodecast!(BoolExpr, T_BoolExpr, node)
+        && (*bool_expr).boolop == pg_sys::BoolExprType::AND_EXPR
+    {
+        let args = PgList::<pg_sys::Node>::from_pg((*bool_expr).args);
+        for arg in args.iter_ptr() {
+            collect_implicit_and_conjuncts(arg, conjuncts);
+        }
+        return;
+    }
+
+    conjuncts.push(node);
+}
+
+unsafe fn contains_var(root: *mut pg_sys::Node) -> bool {
+    #[pg_guard]
+    unsafe extern "C-unwind" fn walker(
+        node: *mut pg_sys::Node,
+        _data: *mut core::ffi::c_void,
+    ) -> bool {
+        nodecast!(Var, T_Var, node).is_some()
+            || pg_sys::expression_tree_walker(node, Some(walker), std::ptr::null_mut())
+    }
+
+    if root.is_null() {
+        return false;
+    }
+
+    walker(root, std::ptr::null_mut())
+}
+
+unsafe fn contains_param(root: *mut pg_sys::Node) -> bool {
+    #[pg_guard]
+    unsafe extern "C-unwind" fn walker(
+        node: *mut pg_sys::Node,
+        _data: *mut core::ffi::c_void,
+    ) -> bool {
+        nodecast!(Param, T_Param, node).is_some()
+            || pg_sys::expression_tree_walker(node, Some(walker), std::ptr::null_mut())
+    }
+
+    if root.is_null() {
+        return false;
+    }
+
+    walker(root, std::ptr::null_mut())
+}
+
+#[allow(clippy::too_many_arguments)]
+/// Handles SQL boolean test operators: IS TRUE, IS FALSE, IS NOT TRUE, IS NOT FALSE
+///
+/// According to SQL standards:
+/// - IS TRUE: Only returns TRUE (not NULL)
+/// - IS FALSE: Only returns FALSE (not NULL)
+/// - IS NOT TRUE: Returns FALSE and NULL
+/// - IS NOT FALSE: Returns TRUE and NULL
+///
+/// This function interprets these operators to generate the appropriate Qual variants
+/// that will correctly handle NULL values in the query.
+unsafe fn booltest(
+    context: &PlannerContext,
+    node: *mut pg_sys::Node,
+    rti: pg_sys::Index,
+    indexrel: &PgSearchRelation,
+    external_is_special: bool,
+    state: &mut QualExtractState,
+) -> Option<Qual> {
+    let booltest = nodecast!(BooleanTest, T_BooleanTest, node)?;
+    let arg = (*booltest).arg;
+
+    // We only support boolean test for simple field references (Var nodes)
+    // For complex expressions, the optimizer will evaluate the condition later
+    // Note: PushdownField::try_new requires PlannerInfo
+    let root = context.planner_info()?;
+
+    if let Some(field) = PushdownField::try_new(root, arg as *mut pg_sys::Node, indexrel) {
+        if field.varno() == rti {
+            // It's a simple field reference, handle as specific cases
+            let qual = match (*booltest).booltesttype {
+                pg_sys::BoolTestType::IS_TRUE => Some(Qual::PushdownVarIsTrue { field }),
+                pg_sys::BoolTestType::IS_NOT_FALSE => {
+                    Some(Qual::Not(Box::new(Qual::PushdownVarIsFalse { field })))
+                }
+                pg_sys::BoolTestType::IS_FALSE => Some(Qual::PushdownVarIsFalse { field }),
+                pg_sys::BoolTestType::IS_NOT_TRUE => {
+                    Some(Qual::Not(Box::new(Qual::PushdownVarIsTrue { field })))
+                }
+                _ => None,
+            };
+            if qual.is_some() {
+                state.uses_tantivy_to_query = true;
+            }
+            return qual;
+        } else if external_is_special {
+            return Some(Qual::ExternalVar);
+        } else {
+            return None;
+        }
+    }
+
+    // Fallback: If the field isn't indexed but references our relation,
+    // evaluate the boolean test via heap access instead of abandoning the custom scan.
+    if contains_relation_reference(node, rti) {
+        if gucs::enable_filter_pushdown() {
+            state.uses_heap_expr = true;
+            state.uses_tantivy_to_query = true;
+            return Some(Qual::HeapExpr {
+                expr_node: node,
+                expr_desc: deparse_expr(Some(context), indexrel, node),
+                search_query_input: Box::new(SearchQueryInput::All),
+            });
+        }
+    } else if external_is_special {
+        return Some(Qual::ExternalVar);
+    }
+    None
+}
+
+/// Extract join-level search predicates that are relevant for snippet/score generation
+/// This captures search predicates that reference specific fields but may not be
+/// pushed down to the current scan due to join conditions.
+/// Returns the entire simplified Boolean expression to preserve OR structures.
+pub unsafe fn extract_join_predicates(
+    context: &PlannerContext,
+    current_rti: pg_sys::Index,
+    indexrel: &PgSearchRelation,
+    attempt_pushdown: bool,
+) -> Option<SearchQueryInput> {
+    // Only look at the current relation's join clauses
+    // Note: This requires PlannerInfo for join clause extraction
+    let root = context.planner_info()?;
+
+    if (*root).simple_rel_array.is_null()
+        || current_rti == 0
+        || current_rti as usize >= (*root).simple_rel_array_size as usize
+    {
+        return None;
+    }
+
+    let relinfo = *(*root).simple_rel_array.add(current_rti as usize);
+    if relinfo.is_null() {
+        return None;
+    }
+
+    let joinlist = (*relinfo).joininfo;
+    if joinlist.is_null() {
+        return None;
+    }
+
+    // Check joininfo for join clauses involving our current relation
+    let joininfo = PgList::<pg_sys::RestrictInfo>::from_pg(joinlist);
+
+    for ri in joininfo.iter_ptr() {
+        // Transform the join clause by replacing expressions from other relations with TRUE
+        if let Some(simplified_node) =
+            simplify_join_clause_for_relation((*ri).clause.cast(), current_rti)
+        {
+            let mut qual_extract_state = QualExtractState::default();
+            // Extract search predicates from the simplified expression
+            if let Some(qual) = extract_quals(
+                context,
+                current_rti,
+                simplified_node.cast(),
+                RestrictInfoType::BaseRelation,
+                indexrel,
+                true,
+                &mut qual_extract_state,
+                attempt_pushdown,
+            ) && qual_extract_state.uses_our_operator
+            {
+                // Convert qual to SearchQueryInput and return the entire expression
+                let search_input = SearchQueryInput::from(&qual);
+                // Return the entire simplified expression for scoring
+                // This preserves OR structures like (TRUE OR name:"Rowling")
+                return Some(search_input);
+            }
+        }
+    }
+
+    None
+}
+
+/// Transform a join clause by replacing expressions from other relations with TRUE
+/// Returns a new node representing the simplified expression
+unsafe fn simplify_join_clause_for_relation(
+    node: *mut pg_sys::Node,
+    current_rti: pg_sys::Index,
+) -> Option<*mut pg_sys::Node> {
+    if node.is_null() {
+        return None;
+    }
+
+    match (*node).type_ {
+        pg_sys::NodeTag::T_OpExpr => simplify_node_for_relation(node, current_rti),
+
+        pg_sys::NodeTag::T_BoolExpr => {
+            let boolexpr = nodecast!(BoolExpr, T_BoolExpr, node)?;
+            let args = PgList::<pg_sys::Node>::from_pg((*boolexpr).args);
+            let mut simplified_args = Vec::new();
+
+            // Recursively simplify each argument
+            for arg in args.iter_ptr() {
+                if let Some(simplified_arg) = simplify_join_clause_for_relation(arg, current_rti) {
+                    simplified_args.push(simplified_arg);
+                }
+            }
+
+            if simplified_args.is_empty() {
+                return None;
+            }
+
+            match (*boolexpr).boolop {
+                pg_sys::BoolExprType::AND_EXPR => {
+                    // For AND: preserve the Boolean structure, keep TRUE values
+                    // This maintains the original structure like: (TRUE AND a.age @@@ '>50')
+                    match simplified_args.len() {
+                        0 => None,
+                        1 => Some(simplified_args[0]),
+                        _ => create_bool_expr(pg_sys::BoolExprType::AND_EXPR, simplified_args),
+                    }
+                }
+                pg_sys::BoolExprType::OR_EXPR => {
+                    // For OR: preserve the Boolean structure, don't simplify even if TRUE is present
+                    // This allows scoring to see search predicates like: (TRUE OR a.name @@@ 'Rowling')
+                    match simplified_args.len() {
+                        0 => None,
+                        1 => Some(simplified_args[0]),
+                        _ => create_bool_expr(pg_sys::BoolExprType::OR_EXPR, simplified_args),
+                    }
+                }
+                pg_sys::BoolExprType::NOT_EXPR => {
+                    // For NOT: apply to the single simplified argument
+                    if simplified_args.len() == 1 {
+                        let arg = simplified_args[0];
+                        if is_bool_const_true(arg) {
+                            create_bool_const_false()
+                        } else {
+                            create_bool_expr(pg_sys::BoolExprType::NOT_EXPR, simplified_args)
+                        }
+                    } else {
+                        None
+                    }
+                }
+                _ => None,
+            }
+        }
+
+        pg_sys::NodeTag::T_RestrictInfo => {
+            let ri = nodecast!(RestrictInfo, T_RestrictInfo, node)?;
+            let clause = if !(*ri).orclause.is_null() {
+                (*ri).orclause
+            } else {
+                (*ri).clause
+            };
+            simplify_join_clause_for_relation(clause.cast(), current_rti)
+        }
+
+        _ => simplify_node_for_relation(node, current_rti),
+    }
+}
+
+unsafe fn simplify_node_for_relation(
+    node: *mut pg_sys::Node,
+    current_rti: pg_sys::Index,
+) -> Option<*mut pg_sys::Node> {
+    // Check if this operation involves our current relation
+    if contains_relation_reference(node, current_rti) {
+        // Keep the original expression if it involves our relation
+        Some(node)
+    } else if contains_any_relation_reference(node) {
+        // Replace with TRUE if it only involves other relations
+        create_bool_const_true()
+    } else {
+        // Keep non-relation expressions (constants, etc.)
+        Some(node)
+    }
+}
+
+/// Create a boolean constant TRUE node
+unsafe fn create_bool_const_true() -> Option<*mut pg_sys::Node> {
+    let const_node = pg_sys::makeConst(
+        pg_sys::BOOLOID,
+        -1,
+        pg_sys::InvalidOid as pg_sys::Oid,
+        1,
+        true.into_datum().unwrap(),
+        false,
+        true,
+    );
+    Some(const_node.cast())
+}
+
+/// Create a boolean constant FALSE node
+unsafe fn create_bool_const_false() -> Option<*mut pg_sys::Node> {
+    let const_node = pg_sys::makeConst(
+        pg_sys::BOOLOID,
+        -1,
+        pg_sys::InvalidOid as pg_sys::Oid,
+        1,
+        false.into_datum().unwrap(),
+        false,
+        true,
+    );
+    Some(const_node.cast())
+}
+
+/// Check if a node is a boolean constant TRUE
+unsafe fn is_bool_const_true(node: *mut pg_sys::Node) -> bool {
+    if let Some(const_node) = nodecast!(Const, T_Const, node) {
+        (*const_node).consttype == pg_sys::BOOLOID
+            && !(*const_node).constisnull
+            && bool::from_datum((*const_node).constvalue, false).unwrap_or(false)
+    } else {
+        false
+    }
+}
+
+/// Create a boolean expression node with the given operator and arguments
+unsafe fn create_bool_expr(
+    boolop: BoolExprType::Type,
+    args: Vec<*mut pg_sys::Node>,
+) -> Option<*mut pg_sys::Node> {
+    if args.is_empty() {
+        return None;
+    }
+
+    // Create the first list item
+    let mut args_list = std::ptr::null_mut();
+    for &arg in &args {
+        args_list = pg_sys::lappend(args_list, arg.cast::<core::ffi::c_void>());
+    }
+
+    // Allocate and initialize BoolExpr node
+    let boolexpr =
+        pg_sys::palloc0(std::mem::size_of::<pg_sys::BoolExpr>()).cast::<pg_sys::BoolExpr>();
+    (*boolexpr).xpr.type_ = pg_sys::NodeTag::T_BoolExpr;
+    (*boolexpr).boolop = boolop;
+    (*boolexpr).args = args_list;
+    (*boolexpr).location = -1;
+
+    Some(boolexpr.cast())
+}
+
+/// Check if a node contains a reference to the specified relation
+unsafe fn contains_relation_reference(node: *mut pg_sys::Node, target_rti: pg_sys::Index) -> bool {
+    if node.is_null() {
+        return false;
+    }
+
+    #[pg_guard]
+    unsafe extern "C-unwind" fn walker(
+        node: *mut pg_sys::Node,
+        context: *mut core::ffi::c_void,
+    ) -> bool {
+        let target_rti = context as pg_sys::Index;
+
+        if let Some(var) = nodecast!(Var, T_Var, node)
+            && (*var).varno as pg_sys::Index == target_rti
+        {
+            return true;
+        }
+
+        pg_sys::expression_tree_walker(node, Some(walker), context)
+    }
+
+    walker(node, target_rti as *mut core::ffi::c_void)
+}
+
+/// Optimize qual tree by converting ExternalVar and ExternalExpr to HeapExpr where possible
+/// This is the second pass optimization mentioned in the implementation plan
+pub unsafe fn optimize_quals_with_heap_expr(qual: &mut Qual) {
+    match qual {
+        Qual::And(quals) => {
+            // Process each qual in the AND
+            for q in quals.iter_mut() {
+                optimize_quals_with_heap_expr(q);
+            }
+
+            // Try to optimize AND branches by pushing indexed predicates into HeapExpr search_query_input
+            optimize_and_branch_with_heap_expr(quals);
+        }
+        Qual::Or(quals) => {
+            // Process each qual in the OR
+            for q in quals.iter_mut() {
+                optimize_quals_with_heap_expr(q);
+            }
+        }
+        Qual::Not(qual) => {
+            optimize_quals_with_heap_expr(qual);
+        }
+        Qual::ExternalVar | Qual::ExternalExpr => {
+            // For ExternalVar and ExternalExpr, we cannot apply any optimization, as we don't know
+            // what the underlying predicate is.
+        }
+        _ => {
+            // Other qual types don't need optimization
+        }
+    }
+}
+
+/// Optimize AND branches by pushing indexed predicates into HeapExpr search_query_input
+unsafe fn optimize_and_branch_with_heap_expr(quals: &mut Vec<Qual>) {
+    let mut heap_expr_indices = Vec::new();
+    let mut indexed_qual_indices = Vec::new();
+
+    // Find HeapExpr and indexed quals
+    for (i, qual) in quals.iter().enumerate() {
+        match qual {
+            Qual::HeapExpr {
+                search_query_input, ..
+            } => {
+                if matches!(**search_query_input, SearchQueryInput::All) {
+                    heap_expr_indices.push(i);
+                }
+            }
+            Qual::OpExpr { .. }
+            | Qual::PushdownExpr { .. }
+            | Qual::PushdownVarEqTrue { .. }
+            | Qual::PushdownVarEqFalse { .. }
+            | Qual::PushdownVarIsTrue { .. }
+            | Qual::PushdownVarIsFalse { .. }
+            | Qual::PushdownIsNotNull { .. } => {
+                indexed_qual_indices.push(i);
+            }
+            Qual::Or(_) => {
+                indexed_qual_indices.push(i);
+            }
+            _ => {}
+        }
+    }
+
+    // If we have HeapExpr with All query and indexed predicates, optimize
+    if !heap_expr_indices.is_empty() && !indexed_qual_indices.is_empty() {
+        // First, collect the indexed queries before mutating quals
+        let indexed_queries: Vec<SearchQueryInput> = indexed_qual_indices
+            .iter()
+            .map(|&i| SearchQueryInput::from(&quals[i]))
+            .collect();
+
+        // Now update the HeapExpr search_query_input
+        for &heap_idx in &heap_expr_indices {
+            if let Qual::HeapExpr {
+                search_query_input, ..
+            } = &mut quals[heap_idx]
+                && matches!(**search_query_input, SearchQueryInput::All)
+                && !indexed_queries.is_empty()
+            {
+                **search_query_input = SearchQueryInput::Boolean {
+                    must: indexed_queries.clone(),
+                    should: vec![],
+                    must_not: vec![],
+                    minimum_should_match: None,
+                };
+            }
+        }
+
+        // Remove the indexed quals that were merged into HeapExpr
+        // We need to do this in reverse order to maintain indices
+        for &idx in indexed_qual_indices.iter().rev() {
+            quals.remove(idx);
+        }
+    }
+}
+
+/// Create a HeapExpr for a non-indexed field expression
+/// This is a common pattern for expressions that reference fields in our relation
+/// but cannot be pushed down to the index
+unsafe fn create_heap_expr_for_field_ref(
+    root: *mut pg_sys::PlannerInfo,
+    expr_node: *mut pg_sys::Node,
+    var_node: *mut pg_sys::Var,
+    rti: pg_sys::Index,
+    indexrel: &PgSearchRelation,
+    uses_tantivy_to_query: &mut bool,
+) -> Option<Qual> {
+    if (*var_node).varno as pg_sys::Index == rti {
+        // Check if custom scan for non-indexed fields is enabled
+        if !gucs::enable_filter_pushdown() {
+            return None;
+        }
+        *uses_tantivy_to_query = true;
+        let context = PlannerContext::from_planner(root);
+        Some(Qual::HeapExpr {
+            expr_node,
+            expr_desc: deparse_expr(Some(&context), indexrel, expr_node),
+            search_query_input: Box::new(SearchQueryInput::All),
+        })
+    } else {
+        None
+    }
+}
+
+/// Try to create a HeapExpr from a Var node for non-indexed fields
+unsafe fn try_create_heap_expr_from_var(
+    root: *mut pg_sys::PlannerInfo,
+    var_node: *mut pg_sys::Var,
+    rti: pg_sys::Index,
+    indexrel: &PgSearchRelation,
+    uses_tantivy_to_query: &mut bool,
+) -> Option<Qual> {
+    // Check if root and parse are valid
+    if root.is_null() || (*root).parse.is_null() {
+        return None;
+    }
+
+    create_heap_expr_for_field_ref(
+        root,
+        var_node as *mut pg_sys::Node,
+        var_node,
+        rti,
+        indexrel,
+        uses_tantivy_to_query,
+    )
+}
+
+/// Try to create a HeapExpr from a NullTest for non-indexed fields
+unsafe fn try_create_heap_expr_from_null_test(
+    nulltest: *mut pg_sys::NullTest,
+    rti: pg_sys::Index,
+    root: *mut pg_sys::PlannerInfo,
+    indexrel: &PgSearchRelation,
+    uses_tantivy_to_query: &mut bool,
+) -> Option<Qual> {
+    // Extract the field being tested
+    let arg = (*nulltest).arg;
+    // Check if the arg is a Var referencing our relation
+    if let Some(var) = nodecast!(Var, T_Var, arg) {
+        create_heap_expr_for_field_ref(
+            root,
+            nulltest as *mut pg_sys::Node,
+            var,
+            rti,
+            indexrel,
+            uses_tantivy_to_query,
+        )
+    } else {
+        None
+    }
+}
+
+unsafe fn contains_any_relation_reference(node: *mut pg_sys::Node) -> bool {
+    if node.is_null() {
+        return false;
+    }
+
+    #[pg_guard]
+    unsafe extern "C-unwind" fn walker(
+        node: *mut pg_sys::Node,
+        _context: *mut core::ffi::c_void,
+    ) -> bool {
+        if nodecast!(Var, T_Var, node).is_some() {
+            return true;
+        }
+
+        pg_sys::expression_tree_walker(node, Some(walker), std::ptr::null_mut())
+    }
+
+    walker(node, std::ptr::null_mut())
+}
+
+#[cfg(any(test, feature = "pg_test"))]
+#[pgrx::pg_schema]
+mod tests {
+    use crate::postgres::pdb_owned_value::PdbOwnedValue;
+
+    use super::*;
+    use pgrx::prelude::*;
+    use proptest::prelude::*;
+
+    #[pg_test]
+    fn test_all_variant() {
+        let got = SearchQueryInput::from(&Qual::All);
+        let want = SearchQueryInput::All;
+        assert_eq!(got, want);
+    }
+
+    #[pg_test]
+    fn test_external_var_variant() {
+        let got = SearchQueryInput::from(&Qual::ExternalVar);
+        let want = SearchQueryInput::All;
+        assert_eq!(got, want);
+    }
+
+    #[pg_test]
+    fn test_pushdown_var_eq_true() {
+        let qual = Qual::PushdownVarEqTrue {
+            field: PushdownField::new("foo"),
+        };
+        let got = SearchQueryInput::from(&qual);
+        let want = SearchQueryInput::FieldedQuery {
+            field: "foo".into(),
+            query: pdb::Query::Term {
+                value: PdbOwnedValue::Bool(true),
+            },
+        };
+        assert_eq!(got, want);
+    }
+
+    #[pg_test]
+    fn test_pushdown_var_eq_false() {
+        let qual = Qual::PushdownVarEqFalse {
+            field: PushdownField::new("bar"),
+        };
+        let got = SearchQueryInput::from(&qual);
+        let want = SearchQueryInput::FieldedQuery {
+            field: "bar".into(),
+            query: pdb::Query::Term {
+                value: PdbOwnedValue::Bool(false),
+            },
+        };
+        assert_eq!(got, want);
+    }
+
+    #[pg_test]
+    fn test_pushdown_var_is_true() {
+        let qual = Qual::PushdownVarIsTrue {
+            field: PushdownField::new("baz"),
+        };
+        let got = SearchQueryInput::from(&qual);
+        let want = SearchQueryInput::FieldedQuery {
+            field: "baz".into(),
+            query: pdb::Query::Term {
+                value: PdbOwnedValue::Bool(true),
+            },
+        };
+        assert_eq!(got, want);
+    }
+
+    #[pg_test]
+    fn test_pushdown_var_is_false() {
+        let qual = Qual::PushdownVarIsFalse {
+            field: PushdownField::new("qux"),
+        };
+        let got = SearchQueryInput::from(&qual);
+        let want = SearchQueryInput::FieldedQuery {
+            field: "qux".into(),
+            query: pdb::Query::Term {
+                value: PdbOwnedValue::Bool(false),
+            },
+        };
+        assert_eq!(got, want);
+    }
+
+    #[pg_test]
+    fn test_pushdown_is_not_null() {
+        let qual = Qual::PushdownIsNotNull {
+            field: PushdownField::new("fld"),
+        };
+        let got = SearchQueryInput::from(&qual);
+        let want = SearchQueryInput::FieldedQuery {
+            field: "fld".into(),
+            query: pdb::Query::Exists,
+        };
+        assert_eq!(got, want);
+    }
+
+    #[pg_test]
+    fn test_negated_fielded_query_adds_exists_guard() {
+        // `Exists` is only available on fast fields, so the existence guard that
+        // preserves NULL semantics should only be added when the negated field
+        // is fast. A non-fast field must fall back to the generic negation.
+        Spi::run(
+            r#"
+            CREATE TABLE exists_guard_test (
+                id SERIAL8 PRIMARY KEY,
+                color TEXT,
+                description TEXT
+            );
+            CREATE INDEX exists_guard_test_idx ON exists_guard_test
+            USING paradedb (id, color, description) WITH (
+                key_field = 'id',
+                text_fields = '{
+                    "color": {"tokenizer": {"type": "keyword"}, "fast": true},
+                    "description": {}
+                }'
+            );
+            "#,
+        )
+        .unwrap();
+
+        let index_oid =
+            Spi::get_one::<pg_sys::Oid>("SELECT 'exists_guard_test_idx'::regclass::oid;")
+                .expect("spi should succeed")
+                .expect("index oid should exist");
+
+        let negate_for = |field: &str, query: pdb::Query| -> SearchQueryInput {
+            let const_value = SearchQueryInput::WithIndex {
+                oid: index_oid,
+                query: Box::new(SearchQueryInput::FieldedQuery {
+                    field: field.into(),
+                    query,
+                }),
+            }
+            .into_datum()
+            .unwrap();
+
+            let qual = Qual::Not(Box::new(Qual::OpExpr {
+                lhs: std::ptr::null_mut(),
+                opno: pg_sys::Oid::INVALID,
+                val: unsafe {
+                    pg_sys::makeConst(
+                        searchqueryinput_typoid(),
+                        -1,
+                        pg_sys::Oid::INVALID,
+                        -1,
+                        const_value,
+                        false,
+                        false,
+                    )
+                },
+                scalar_array_use_or: None,
+            }));
+
+            SearchQueryInput::from(&qual)
+        };
+
+        let term_blue = || pdb::Query::Term {
+            value: PdbOwnedValue::Str("blue".into()),
+        };
+
+        // Fast field: the existence guard is added so NULLs are excluded.
+        let fast = negate_for("color", term_blue());
+        let want_fast = SearchQueryInput::WithIndex {
+            oid: index_oid,
+            query: Box::new(SearchQueryInput::Boolean {
+                must: vec![SearchQueryInput::ConstScore {
+                    query: Box::new(SearchQueryInput::FieldedQuery {
+                        field: "color".into(),
+                        query: pdb::Query::Exists,
+                    }),
+                    score: 0.0,
+                }],
+                should: vec![],
+                must_not: vec![SearchQueryInput::FieldedQuery {
+                    field: "color".into(),
+                    query: pdb::Query::Term {
+                        value: PdbOwnedValue::Str("blue".into()),
+                    },
+                }],
+                minimum_should_match: None,
+            }),
+        };
+        assert_eq!(fast, want_fast);
+
+        // Non-fast field: fall back to the generic negation (no existence guard).
+        let non_fast = negate_for("description", term_blue());
+        let want_non_fast = SearchQueryInput::WithIndex {
+            oid: index_oid,
+            query: Box::new(SearchQueryInput::Boolean {
+                must: vec![SearchQueryInput::All],
+                should: vec![],
+                must_not: vec![SearchQueryInput::FieldedQuery {
+                    field: "description".into(),
+                    query: pdb::Query::Term {
+                        value: PdbOwnedValue::Str("blue".into()),
+                    },
+                }],
+                minimum_should_match: None,
+            }),
+        };
+        assert_eq!(non_fast, want_non_fast);
+
+        // Negating an `Exists` query (even on a fast field) must NOT add an
+        // existence guard, otherwise the result is the unsatisfiable
+        // `exists AND NOT exists`. It should be the generic negation, which
+        // returns the rows where the field is missing.
+        let negated_exists = negate_for("color", pdb::Query::Exists);
+        let want_negated_exists = SearchQueryInput::WithIndex {
+            oid: index_oid,
+            query: Box::new(SearchQueryInput::Boolean {
+                must: vec![SearchQueryInput::All],
+                should: vec![],
+                must_not: vec![SearchQueryInput::FieldedQuery {
+                    field: "color".into(),
+                    query: pdb::Query::Exists,
+                }],
+                minimum_should_match: None,
+            }),
+        };
+        assert_eq!(negated_exists, want_negated_exists);
+    }
+
+    #[pg_test]
+    fn test_negated_and_uses_de_morgan() {
+        let qual = Qual::Not(Box::new(Qual::And(vec![
+            Qual::PushdownVarEqTrue {
+                field: PushdownField::new("a"),
+            },
+            Qual::PushdownVarIsTrue {
+                field: PushdownField::new("b"),
+            },
+        ])));
+
+        let got = SearchQueryInput::from(&qual);
+        let want = SearchQueryInput::Boolean {
+            must: vec![],
+            should: vec![
+                SearchQueryInput::FieldedQuery {
+                    field: "a".into(),
+                    query: pdb::Query::Term {
+                        value: PdbOwnedValue::Bool(false),
+                    },
+                },
+                SearchQueryInput::Boolean {
+                    must: vec![SearchQueryInput::All],
+                    should: vec![],
+                    must_not: vec![SearchQueryInput::FieldedQuery {
+                        field: "b".into(),
+                        query: pdb::Query::Term {
+                            value: PdbOwnedValue::Bool(true),
+                        },
+                    }],
+                    minimum_should_match: None,
+                },
+            ],
+            must_not: vec![],
+            minimum_should_match: None,
+        };
+        assert_eq!(got, want);
+    }
+
+    fn arb_leaf() -> impl Strategy<Value = Qual> {
+        prop_oneof![
+            Just(Qual::All),
+            "[a-z]{1,3}".prop_map(|s| Qual::PushdownVarEqTrue {
+                field: PushdownField::new(&s)
+            }),
+            "[a-z]{1,3}".prop_map(|s| Qual::PushdownVarEqFalse {
+                field: PushdownField::new(&s)
+            }),
+            "[a-z]{1,3}".prop_map(|s| Qual::PushdownVarIsTrue {
+                field: PushdownField::new(&s)
+            }),
+            "[a-z]{1,3}".prop_map(|s| Qual::PushdownVarIsFalse {
+                field: PushdownField::new(&s)
+            }),
+            "[a-z]{1,3}".prop_map(|s| Qual::PushdownIsNotNull {
+                field: PushdownField::new(&s)
+            }),
+        ]
+    }
+
+    fn arb_qual(depth: u32) -> impl Strategy<Value = Qual> {
+        arb_leaf().prop_recursive(depth, 256, 3, |inner| {
+            prop_oneof![
+                inner.clone().prop_map(|q| Qual::Not(Box::new(q))),
+                prop::collection::vec(inner.clone(), 1..4).prop_map(Qual::And),
+                prop::collection::vec(inner, 1..4).prop_map(Qual::Or),
+            ]
+        })
+    }
+
+    fn is_logical_equivalent(a: &Qual, b: &SearchQueryInput) -> bool {
+        match (a, b) {
+            // Match Qual::All with ConstScore
+            (Qual::All, SearchQueryInput::All) => true,
+
+            // Match boolean field TRUE cases
+            (
+                Qual::PushdownVarEqTrue { field } | Qual::PushdownVarIsTrue { field },
+                SearchQueryInput::FieldedQuery {
+                    field: f,
+                    query: pdb::Query::Term { value, .. },
+                },
+            ) => field.attname() == *f && matches!(value, PdbOwnedValue::Bool(true)),
+
+            // Match boolean field FALSE cases
+            (
+                Qual::PushdownVarEqFalse { field } | Qual::PushdownVarIsFalse { field },
+                SearchQueryInput::FieldedQuery {
+                    field: f,
+                    query: pdb::Query::Term { value, .. },
+                },
+            ) => field.attname() == *f && matches!(value, PdbOwnedValue::Bool(false)),
+
+            // Match IS NOT NULL
+            (
+                Qual::PushdownIsNotNull { field },
+                SearchQueryInput::FieldedQuery {
+                    field: f,
+                    query: pdb::Query::Exists,
+                },
+            ) => field.attname() == *f,
+
+            // Match AND clauses
+            (
+                Qual::And(quals),
+                SearchQueryInput::Boolean {
+                    must,
+                    should,
+                    must_not,
+                    ..
+                },
+            ) => should.is_empty() && must_not.is_empty() && quals.len() == must.len(),
+
+            // Match OR clauses
+            (
+                Qual::Or(quals),
+                SearchQueryInput::Boolean {
+                    must,
+                    should,
+                    must_not,
+                    ..
+                },
+            ) => must.is_empty() && must_not.is_empty() && quals.len() == should.len(),
+
+            // Double negation: NOT(NOT(x)) is converted directly to the
+            // conversion of x (the two negations cancel out).
+            (Qual::Not(inner), converted) if matches!(inner.as_ref(), Qual::Not(_)) => {
+                let Qual::Not(inner_inner) = inner.as_ref() else {
+                    unreachable!()
+                };
+                is_logical_equivalent(inner_inner.as_ref(), converted)
+            }
+
+            // Match negation of AND via De Morgan: NOT(a AND b) => (NOT a) OR (NOT b),
+            // represented as a Boolean with `should` clauses, one per negated child.
+            (
+                Qual::Not(inner),
+                SearchQueryInput::Boolean {
+                    must,
+                    should,
+                    must_not,
+                    ..
+                },
+            ) if matches!(inner.as_ref(), Qual::And(_)) => {
+                let Qual::And(quals) = inner.as_ref() else {
+                    unreachable!()
+                };
+                must.is_empty()
+                    && must_not.is_empty()
+                    && should.len() == quals.len()
+                    && quals.iter().zip(should.iter()).all(|(qual, sub)| {
+                        is_logical_equivalent(&Qual::Not(Box::new(qual.clone())), sub)
+                    })
+            }
+
+            // Match negation of OR via De Morgan: NOT(a OR b) => (NOT a) AND (NOT b),
+            // represented as a Boolean with `must` clauses, one per negated child.
+            (
+                Qual::Not(inner),
+                SearchQueryInput::Boolean {
+                    must,
+                    should,
+                    must_not,
+                    ..
+                },
+            ) if matches!(inner.as_ref(), Qual::Or(_)) => {
+                let Qual::Or(quals) = inner.as_ref() else {
+                    unreachable!()
+                };
+                should.is_empty()
+                    && must_not.is_empty()
+                    && must.len() == quals.len()
+                    && quals.iter().zip(must.iter()).all(|(qual, sub)| {
+                        is_logical_equivalent(&Qual::Not(Box::new(qual.clone())), sub)
+                    })
+            }
+
+            // Match negation of PushdownVarEqTrue mapping to PushdownVarEqFalse
+            (
+                Qual::Not(inner),
+                SearchQueryInput::FieldedQuery {
+                    field: f,
+                    query:
+                        pdb::Query::Term {
+                            value: PdbOwnedValue::Bool(false),
+                            ..
+                        },
+                },
+            ) if matches!(**inner, Qual::PushdownVarEqTrue { field: ref a } if a.attname() == *f) => {
+                true
+            }
+
+            // Match negation of PushdownVarEqFalse mapping to PushdownVarEqTrue
+            (
+                Qual::Not(inner),
+                SearchQueryInput::FieldedQuery {
+                    field: f,
+                    query:
+                        pdb::Query::Term {
+                            value: PdbOwnedValue::Bool(true),
+                            ..
+                        },
+                },
+            ) if matches!(**inner, Qual::PushdownVarEqFalse { field: ref a } if a.attname() == *f) => {
+                true
+            }
+
+            // Generic negation: NOT(x) => Boolean { must: [All], must_not: [x] }
+            (
+                Qual::Not(_inner),
+                SearchQueryInput::Boolean {
+                    must,
+                    should: _,
+                    must_not,
+                    ..
+                },
+            ) => must.len() == 1 && matches!(must[0], SearchQueryInput::All) && must_not.len() == 1,
+
+            _ => false,
+        }
+    }
+
+    proptest! {
+        #[pg_test]
+        fn test_qual_conversion_logical_equivalence(q in arb_qual(3)) {
+            let query = SearchQueryInput::from(&q);
+            prop_assert!(is_logical_equivalent(&q, &query), "Failed: Qual: {:?} SearchQueryInput: {:?}", q, query);
+        }
+    }
+}

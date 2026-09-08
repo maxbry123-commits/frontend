@@ -1,0 +1,2328 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+pub mod builder;
+pub mod estimate_tree;
+pub mod heap_field_filter;
+mod more_like_this;
+pub mod numeric;
+pub mod pdb_query;
+pub(crate) mod proximity;
+mod range;
+mod score;
+pub mod tid_bitmap_stream;
+
+use crate::query::tid_bitmap_stream::BitmapCell;
+use builder::{QueryBuilder, QueryOnlyBuilder, QueryTreeBuilder};
+use estimate_tree::QueryWithEstimates;
+use heap_field_filter::HeapFieldFilter;
+
+use crate::api::FieldName;
+use crate::api::HashMap;
+use crate::api::operator::searchqueryinput_typoid;
+use crate::api::version::{Version, VersionInfo};
+use crate::postgres::customscan::explain::{ExplainFormat, format_for_explain};
+use crate::postgres::datetime::PostgresDateTime;
+use crate::postgres::pdb_owned_value::PdbOwnedValue;
+use crate::query::more_like_this::MoreLikeThisQuery;
+use crate::query::pdb_query::pdb;
+use crate::query::score::ScoreFilter;
+use crate::schema::SearchIndexSchema;
+use anyhow::Result;
+use core::panic;
+use pgrx::{
+    FromDatum, IntoDatum, PgBuiltInOids, PgOid, PostgresType, pg_sys, varlena_to_byte_slice,
+};
+use serde::de::{MapAccess, Visitor};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use std::fmt::{Debug, Formatter};
+use std::ops::Bound;
+use tantivy::query::{
+    AllQuery, BooleanQuery, BoostQuery, ConstScoreQuery, DisjunctionMaxQuery, EmptyQuery,
+    Query as TantivyQuery, QueryParser, TermSetQuery,
+};
+use tantivy::{
+    Searcher, Term,
+    query_grammar::Occur,
+    schema::{DATE_TIME_PRECISION_INDEXED, Field, FieldType},
+};
+use thiserror::Error;
+
+fn is_false(value: &bool) -> bool {
+    !*value
+}
+
+#[derive(Debug, PostgresType, Deserialize, Serialize, Clone, PartialEq, Default)]
+#[serde(rename_all = "snake_case")]
+pub enum SearchQueryInput {
+    #[default]
+    Uninitialized,
+    All,
+    Boolean {
+        #[serde(default)]
+        #[serde(skip_serializing_if = "Vec::is_empty")]
+        must: Vec<SearchQueryInput>,
+
+        #[serde(default)]
+        #[serde(skip_serializing_if = "Vec::is_empty")]
+        should: Vec<SearchQueryInput>,
+
+        #[serde(default)]
+        #[serde(skip_serializing_if = "Vec::is_empty")]
+        must_not: Vec<SearchQueryInput>,
+
+        #[serde(default)]
+        #[serde(skip_serializing_if = "Option::is_none")]
+        minimum_should_match: Option<i64>,
+    },
+    Boost {
+        query: Box<SearchQueryInput>,
+        factor: f32,
+    },
+    ConstScore {
+        query: Box<SearchQueryInput>,
+        score: f32,
+    },
+    ScoreFilter {
+        bounds: Vec<(Bound<f32>, Bound<f32>)>,
+        query: Option<Box<SearchQueryInput>>,
+    },
+    DisjunctionMax {
+        disjuncts: Vec<SearchQueryInput>,
+        tie_breaker: Option<f32>,
+    },
+    Empty,
+    MoreLikeThis {
+        min_doc_frequency: Option<u64>,
+        max_doc_frequency: Option<u64>,
+        min_term_frequency: Option<usize>,
+        max_query_terms: Option<usize>,
+        min_word_length: Option<usize>,
+        max_word_length: Option<usize>,
+        boost_factor: Option<f32>,
+        stopwords: Option<Vec<String>>,
+        document: Option<Vec<(String, PdbOwnedValue)>>,
+        key_value: Option<PdbOwnedValue>,
+        fields: Option<Vec<String>>,
+    },
+    Parse {
+        query_string: String,
+        lenient: Option<bool>,
+        conjunction_mode: Option<bool>,
+    },
+    TermSet {
+        terms: Vec<TermInput>,
+    },
+    WithIndex {
+        oid: pg_sys::Oid,
+        query: Box<SearchQueryInput>,
+    },
+    PostgresExpression {
+        expr: PostgresExpression,
+    },
+    /// Mixed query with indexed search and heap field filters
+    HeapFilter {
+        indexed_query: Box<SearchQueryInput>,
+        /// Predicates the bitmap-set bitmap cannot prove: either no external index
+        /// covers them, or the covering index qual is lossy (e.g. `ST_DWithin` matched
+        /// only through its bounding-box qual). Evaluated against the heap for every
+        /// document that survives the bitmap probe -- and for every document when no
+        /// bitmap was planned.
+        always_filters: Vec<HeapFieldFilter>,
+        /// Predicates proven by exact bitmap membership: their clause matched an
+        /// external index exactly (`IndexClause.lossy == false`), so a document found
+        /// in the bitmap on an exact, non-recheck page already satisfies them.
+        /// Evaluated only when that proof breaks down: a lossy page, a recheck-flagged
+        /// page, or no bitmap set attached.
+        #[serde(default)]
+        #[serde(skip_serializing_if = "Vec::is_empty")]
+        recheck_filters: Vec<HeapFieldFilter>,
+        /// Set at plan time when an external index's bitmap covers this filter's
+        /// clauses; the cursor source itself is attached at execution time.
+        #[serde(default)]
+        #[serde(skip_serializing_if = "is_false")]
+        uses_tid_bitmap: bool,
+        /// Which claim-table consumer this node is, when covered. Serialized so
+        /// parallel workers claim the same streams the build owner prepared.
+        #[serde(default)]
+        #[serde(skip_serializing_if = "Option::is_none")]
+        bitmap_consumer_id: Option<u32>,
+        #[serde(skip)]
+        bitmap_cell: Option<BitmapCell>,
+    },
+
+    #[serde(serialize_with = "serialize_fielded_query")]
+    #[serde(deserialize_with = "deserialize_fielded_query")]
+    #[serde(untagged)]
+    FieldedQuery {
+        field: FieldName,
+        query: pdb::Query,
+    },
+}
+
+// Mutable and read-only visitors need separate signatures, but share one recursive enum walk so
+// adding a query variant cannot silently update only one traversal.
+macro_rules! visit_search_query_input {
+    ($query:expr, $visitor:expr, $visit_method:ident, $option_access:ident) => {{
+        $visitor($query);
+        match $query {
+            SearchQueryInput::Boolean {
+                must,
+                should,
+                must_not,
+                ..
+            } => {
+                for query in must_not {
+                    query.$visit_method($visitor);
+                }
+                for query in should {
+                    query.$visit_method($visitor);
+                }
+                for query in must {
+                    query.$visit_method($visitor);
+                }
+            }
+            SearchQueryInput::Boost { query, .. }
+            | SearchQueryInput::ConstScore { query, .. }
+            | SearchQueryInput::WithIndex { query, .. } => query.$visit_method($visitor),
+            SearchQueryInput::ScoreFilter { query, .. } => query
+                .$option_access()
+                .expect("ScoreFilter's query should have been set")
+                .$visit_method($visitor),
+            SearchQueryInput::DisjunctionMax { disjuncts, .. } => {
+                for query in disjuncts {
+                    query.$visit_method($visitor);
+                }
+            }
+            SearchQueryInput::HeapFilter { indexed_query, .. } => {
+                indexed_query.$visit_method($visitor);
+            }
+            SearchQueryInput::Uninitialized
+            | SearchQueryInput::All
+            | SearchQueryInput::Empty
+            | SearchQueryInput::MoreLikeThis { .. }
+            | SearchQueryInput::Parse { .. }
+            | SearchQueryInput::TermSet { .. }
+            | SearchQueryInput::PostgresExpression { .. }
+            | SearchQueryInput::FieldedQuery { .. } => {}
+        }
+    }};
+}
+
+fn serialize_fielded_query<S>(
+    field: &FieldName,
+    query: &pdb::Query,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    let mut query_json = serde_json::to_value(query).unwrap();
+
+    if let Some(map) = query_json.as_object_mut() {
+        let fielded_query_input_entry = map.values_mut().next().unwrap();
+        fielded_query_input_entry
+            .as_object_mut()
+            .unwrap()
+            .shift_insert(0, "field".into(), serde_json::to_value(field).unwrap());
+
+        query_json.serialize(serializer)
+    } else if let Some(variant_name) = query_json.as_str() {
+        let mut map = serde_json::Map::new();
+        map.insert("field".into(), serde_json::to_value(field).unwrap());
+
+        let mut object = serde_json::Map::new();
+        object.insert(variant_name.to_string(), serde_json::Value::Object(map));
+        object.serialize(serializer)
+    } else {
+        Err(<S::Error as serde::ser::Error>::custom(
+            "this does not appear to be a `pdb::Query` instance",
+        ))
+    }
+}
+
+fn deserialize_fielded_query<'de, D>(deserializer: D) -> Result<(FieldName, pdb::Query), D::Error>
+where
+    D: Deserializer<'de>,
+{
+    struct Visitor;
+    impl<'de> serde::de::Visitor<'de> for Visitor {
+        type Value = (FieldName, pdb::Query);
+
+        fn expecting(&self, formatter: &mut Formatter) -> std::fmt::Result {
+            formatter.write_str("a map")
+        }
+
+        fn visit_map<A>(self, mut map: A) -> std::result::Result<Self::Value, A::Error>
+        where
+            A: MapAccess<'de>,
+        {
+            let Some((key, mut value)) = map.next_entry::<String, serde_json::Value>()? else {
+                return Err(<A::Error as serde::de::Error>::custom(
+                    "this does not appear to be a `pdb::Query` instance",
+                ));
+            };
+
+            if let Some(field_entry) = value.as_object_mut().unwrap().remove_entry("field") {
+                // pull the field out of the object that also contains the FieldedQueryInput
+                let field = field_entry.1;
+                let field = serde_json::from_value::<FieldName>(field).unwrap();
+
+                if value.as_object_mut().unwrap().is_empty() {
+                    let field_query_input =
+                        serde_json::from_value::<pdb::Query>(serde_json::Value::String(key))
+                            .unwrap();
+                    Ok((field, field_query_input))
+                } else {
+                    let mut reconstructed = serde_json::Map::new();
+                    reconstructed.insert(key, value);
+
+                    let field_query_input = serde_json::from_value::<pdb::Query>(
+                        serde_json::Value::Object(reconstructed),
+                    )
+                    .unwrap();
+                    Ok((field, field_query_input))
+                }
+            } else {
+                Err(<A::Error as serde::de::Error>::custom(
+                    "this does not appear to be a `pdb::Query` instance",
+                ))
+            }
+        }
+    }
+    deserializer.deserialize_map(Visitor)
+}
+
+/// Cheap whitespace-based term-count estimate (avoids constructing a tokenizer/reader).
+fn estimate_term_count(s: &str) -> usize {
+    s.split_whitespace().count().max(1)
+}
+
+/// True when a query-parser string is a single *plain* term: non-empty and composed only
+/// of term characters (alphanumeric or `_`). This allowlist conservatively rejects *every*
+/// Tantivy query metacharacter -- boolean ops (`-` `!` `+`), field (`:`), grouping (`(`
+/// `)`), boost (`^`), escape (`\`), and the wildcard/regex/range/fuzzy/phrase set -- any of
+/// which can turn one whitespace token into a non-single-posting-list query (e.g. `-foo` is
+/// a negation over the whole complement). Flagged strings fall back to the (correct,
+/// slightly costlier) `DocSet::cost()` path.
+fn is_plain_single_term(s: &str) -> bool {
+    !s.is_empty() && s.chars().all(|c| c.is_alphanumeric() || c == '_')
+}
+
+impl SearchQueryInput {
+    pub fn postgres_expression(node: *mut pg_sys::Node, expr_desc: String) -> Self {
+        SearchQueryInput::PostgresExpression {
+            expr: PostgresExpression {
+                node: PostgresPointer(node.cast()),
+                expr_state: PostgresPointer::default(),
+                expr_desc,
+            },
+        }
+    }
+
+    pub fn need_scores(&self) -> bool {
+        match self {
+            SearchQueryInput::Boolean {
+                must,
+                should,
+                must_not,
+                ..
+            } => must
+                .iter()
+                .chain(should.iter())
+                .chain(must_not.iter())
+                .any(Self::need_scores),
+            SearchQueryInput::Boost { query, .. } => Self::need_scores(query),
+            SearchQueryInput::ConstScore { query, .. } => Self::need_scores(query),
+            SearchQueryInput::DisjunctionMax { disjuncts, .. } => {
+                disjuncts.iter().any(Self::need_scores)
+            }
+            SearchQueryInput::WithIndex { query, .. } => Self::need_scores(query),
+            SearchQueryInput::HeapFilter { indexed_query, .. } => Self::need_scores(indexed_query),
+            SearchQueryInput::MoreLikeThis { .. } => true,
+            SearchQueryInput::ScoreFilter { .. } => true,
+            _ => false,
+        }
+    }
+
+    pub fn index_oid(&self) -> Option<pg_sys::Oid> {
+        match self {
+            SearchQueryInput::WithIndex { oid, .. } => Some(*oid),
+            _ => None,
+        }
+    }
+
+    pub fn is_match_all(&self) -> bool {
+        match self {
+            SearchQueryInput::All => true,
+            SearchQueryInput::WithIndex { query, .. }
+            | SearchQueryInput::Boost { query, .. }
+            | SearchQueryInput::ConstScore { query, .. } => query.is_match_all(),
+            SearchQueryInput::FieldedQuery { query, .. } => {
+                matches!(query, crate::query::pdb_query::pdb::Query::All)
+            }
+            _ => false,
+        }
+    }
+
+    pub fn is_exists(&self) -> bool {
+        match self {
+            SearchQueryInput::WithIndex { query, .. }
+            | SearchQueryInput::Boost { query, .. }
+            | SearchQueryInput::ConstScore { query, .. } => query.is_exists(),
+            SearchQueryInput::FieldedQuery { query, .. } => {
+                matches!(query, crate::query::pdb_query::pdb::Query::Exists)
+            }
+            SearchQueryInput::Boolean {
+                must,
+                should,
+                must_not,
+                ..
+            } => {
+                let clauses: Vec<_> = must
+                    .iter()
+                    .chain(should.iter())
+                    .chain(must_not.iter())
+                    .collect();
+                clauses.len() == 1 && clauses[0].is_exists()
+            }
+            _ => false,
+        }
+    }
+
+    pub fn is_full_scan_query(&self) -> bool {
+        match self {
+            // All by itself is a full scan
+            SearchQueryInput::All => true,
+
+            // Boolean queries - analyze based on Boolean semantics:
+            // A document matches if it matches ALL Must AND NONE of MustNot AND at least one of (Must OR Should)
+            SearchQueryInput::Boolean {
+                must,
+                should,
+                must_not,
+                ..
+            } => {
+                // For the query to be a full scan, ALL documents must match
+
+                // Check if all Must clauses would match all documents
+                let all_must_match_all =
+                    must.is_empty() || must.iter().all(Self::is_full_scan_query);
+
+                // Check if we have at least one clause that matches all documents
+                // If we have Must clauses, the "at least one" is satisfied if all Must are full scans
+                // If we have no Must clauses, we need at least one Should to be a full scan
+                let has_matching_clause = if !must.is_empty() {
+                    // If Must clauses exist and all match all docs, then we satisfy "at least one"
+                    all_must_match_all
+                } else {
+                    // No Must clauses, so we need at least one Should to match all docs
+                    should.iter().any(Self::is_full_scan_query)
+                };
+
+                // MustNot clauses must not exclude any documents
+                // This means all MustNot clauses must be Empty (which matches nothing, so "not nothing" = everything)
+                let must_not_excludes_nothing = must_not.is_empty()
+                    || must_not
+                        .iter()
+                        .all(|q| matches!(q, SearchQueryInput::Empty));
+
+                // Only a full scan if all conditions are met
+                all_must_match_all && has_matching_clause && must_not_excludes_nothing
+            }
+
+            // DisjunctionMax - full scan if any disjunct is full scan (OR semantics)
+            SearchQueryInput::DisjunctionMax { disjuncts, .. } => {
+                disjuncts.iter().any(Self::is_full_scan_query)
+            }
+
+            // Wrapper queries - inherit from inner query
+            SearchQueryInput::WithIndex { query, .. } => Self::is_full_scan_query(query),
+            SearchQueryInput::Boost { query, .. } => Self::is_full_scan_query(query),
+            SearchQueryInput::ConstScore { query, .. } => Self::is_full_scan_query(query),
+            SearchQueryInput::ScoreFilter {
+                query: Some(query), ..
+            } => Self::is_full_scan_query(query),
+            SearchQueryInput::HeapFilter { indexed_query, .. } => {
+                Self::is_full_scan_query(indexed_query)
+            }
+
+            // All other variants are not full scans
+            _ => false,
+        }
+    }
+
+    pub fn needs_tokenizer(&self) -> bool {
+        match self {
+            SearchQueryInput::Uninitialized
+            | SearchQueryInput::All
+            | SearchQueryInput::Empty
+            | SearchQueryInput::TermSet { .. }
+            | SearchQueryInput::PostgresExpression { .. } => false,
+
+            SearchQueryInput::Parse { .. } | SearchQueryInput::MoreLikeThis { .. } => true,
+
+            SearchQueryInput::FieldedQuery { query, .. } => query.needs_tokenizer(),
+            SearchQueryInput::Boolean {
+                must,
+                should,
+                must_not,
+                ..
+            } => must
+                .iter()
+                .chain(should.iter())
+                .chain(must_not.iter())
+                .any(Self::needs_tokenizer),
+            SearchQueryInput::Boost { query, .. }
+            | SearchQueryInput::ConstScore { query, .. }
+            | SearchQueryInput::WithIndex { query, .. }
+            | SearchQueryInput::HeapFilter {
+                indexed_query: query,
+                ..
+            } => query.needs_tokenizer(),
+            SearchQueryInput::DisjunctionMax { disjuncts, .. } => {
+                disjuncts.iter().any(Self::needs_tokenizer)
+            }
+            SearchQueryInput::ScoreFilter {
+                query: Some(query), ..
+            } => query.needs_tokenizer(),
+            SearchQueryInput::ScoreFilter { query: None, .. } => false,
+        }
+    }
+
+    /// Returns `true` if constructing a Tantivy Scorer for this query would be expensive.
+    /// Used by `estimate_selectivity` to short-circuit and return a heuristic instead.
+    pub fn is_expensive_to_estimate(&self) -> bool {
+        match self {
+            SearchQueryInput::Boolean {
+                must,
+                should,
+                must_not,
+                ..
+            } => must
+                .iter()
+                .chain(should.iter())
+                .chain(must_not.iter())
+                .any(Self::is_expensive_to_estimate),
+            SearchQueryInput::Boost { query, .. } => Self::is_expensive_to_estimate(query),
+            SearchQueryInput::ConstScore { query, .. } => Self::is_expensive_to_estimate(query),
+            SearchQueryInput::DisjunctionMax { disjuncts, .. } => {
+                disjuncts.iter().any(Self::is_expensive_to_estimate)
+            }
+            SearchQueryInput::WithIndex { query, .. } => Self::is_expensive_to_estimate(query),
+            SearchQueryInput::HeapFilter { indexed_query, .. } => {
+                Self::is_expensive_to_estimate(indexed_query)
+            }
+            SearchQueryInput::ScoreFilter {
+                query: Some(query), ..
+            } => Self::is_expensive_to_estimate(query),
+
+            SearchQueryInput::MoreLikeThis { .. } => true,
+
+            SearchQueryInput::FieldedQuery { query, .. } => query.is_expensive_to_estimate(),
+
+            _ => false,
+        }
+    }
+
+    /// Returns a heuristic selectivity for this query, avoiding expensive scorer construction.
+    pub fn selectivity_heuristic(&self) -> f64 {
+        use crate::MORE_LIKE_THIS_SELECTIVITY;
+
+        match self {
+            SearchQueryInput::Boolean { must, should, .. } => {
+                // AND: product of children selectivities; OR: max of children selectivities.
+                let must_sel = must
+                    .iter()
+                    .map(Self::selectivity_heuristic)
+                    .product::<f64>();
+                let should_sel = should
+                    .iter()
+                    .map(Self::selectivity_heuristic)
+                    .reduce(f64::max)
+                    .unwrap_or(1.0);
+
+                if !must.is_empty() {
+                    must_sel * should_sel
+                } else {
+                    should_sel
+                }
+            }
+
+            SearchQueryInput::Boost { query, .. } => Self::selectivity_heuristic(query),
+            SearchQueryInput::ConstScore { query, .. } => Self::selectivity_heuristic(query),
+            SearchQueryInput::DisjunctionMax { disjuncts, .. } => disjuncts
+                .iter()
+                .map(Self::selectivity_heuristic)
+                .reduce(f64::max)
+                .unwrap_or(crate::UNKNOWN_SELECTIVITY),
+            SearchQueryInput::WithIndex { query, .. } => Self::selectivity_heuristic(query),
+            SearchQueryInput::HeapFilter { indexed_query, .. } => {
+                Self::selectivity_heuristic(indexed_query)
+            }
+            SearchQueryInput::ScoreFilter {
+                query: Some(query), ..
+            } => Self::selectivity_heuristic(query),
+
+            SearchQueryInput::MoreLikeThis { .. } => MORE_LIKE_THIS_SELECTIVITY,
+
+            SearchQueryInput::FieldedQuery { query, .. } => query.selectivity_heuristic(),
+
+            _ => crate::UNKNOWN_SELECTIVITY,
+        }
+    }
+
+    /// Whether a score-DESC TopK over this query can be Block-WAND-pruned by the
+    /// collector, making it sublinear and not worth parallelizing. Call only when the
+    /// ORDER BY is score-DESC; everything that returns false has a non-trivial docset
+    /// already weighted by Tantivy's `DocSet::cost()`.
+    ///
+    /// The reliably-cheap (Block-WAND-pruning) set is a single bare term. Transparent
+    /// wrappers (FieldedQuery, WithIndex) pass through to the inner query; the score-
+    /// modifying / filtering wrappers (Boost, ConstScore, ScoreFilter, HeapFilter) build
+    /// their OWN non-pruning weight, so they fall through to false.
+    pub(crate) fn is_topk_prunable(&self) -> bool {
+        // A bare single term keeps a SHOULD union collapsing to a prunable TermWeight.
+        fn is_bare_term(q: &SearchQueryInput) -> bool {
+            matches!(
+                q,
+                SearchQueryInput::FieldedQuery {
+                    query: pdb::Query::Term { .. },
+                    ..
+                }
+            )
+        }
+
+        match self {
+            // A FieldedQuery's prunability is its inner pdb::Query's shape: only a single
+            // posting list (a bare term, a one-token match, a plain parser string) is
+            // reliably Block-WAND-pruned. This is the one place the leaf rules live; bare
+            // pdb::Query values are checked by wrapping them in a FieldedQuery.
+            SearchQueryInput::FieldedQuery { query, .. } => match query {
+                pdb::Query::Term { .. } => true,
+
+                // A Match/MatchArray is a single posting list only when it collapses to one
+                // token with none of the modifiers that expand it into an automaton/union:
+                // fuzzy (`distance`), `prefix`, or a custom `tokenizer`.
+                pdb::Query::Match {
+                    value,
+                    tokenizer,
+                    distance,
+                    prefix,
+                    ..
+                } => {
+                    estimate_term_count(value) <= 1
+                        && distance.is_none()
+                        && *prefix != Some(true)
+                        && tokenizer.is_none()
+                }
+                pdb::Query::MatchArray {
+                    tokens,
+                    distance,
+                    prefix,
+                    ..
+                } => tokens.len() <= 1 && distance.is_none() && *prefix != Some(true),
+
+                // A single *plain* parser term parses to a TermQuery; any metacharacter
+                // (wildcard/regex/range/fuzzy/phrase) expands past one posting list. Fuzzy
+                // ParseWithField expands via automaton.
+                pdb::Query::Parse { query_string, .. }
+                | pdb::Query::ParseWithField {
+                    query_string,
+                    fuzzy_data: None,
+                    ..
+                } => is_plain_single_term(query_string),
+                pdb::Query::UnclassifiedString { string, .. } => is_plain_single_term(string),
+                pdb::Query::UnclassifiedArray { array, .. } => array.len() <= 1,
+
+                _ => false,
+            },
+
+            SearchQueryInput::WithIndex { query, .. } => query.is_topk_prunable(),
+
+            // Pure SHOULD union that collapses to a single bare term.
+            SearchQueryInput::Boolean {
+                must,
+                should,
+                must_not,
+                ..
+            } => {
+                must.is_empty()
+                    && must_not.is_empty()
+                    && should.len() <= 1
+                    && should.iter().all(is_bare_term)
+            }
+
+            SearchQueryInput::Parse { query_string, .. } => is_plain_single_term(query_string),
+
+            // Everything else -- All, Empty, TermSet, the Boost/ConstScore/ScoreFilter/
+            // HeapFilter score-modifying wrappers, DisjunctionMax, MoreLikeThis, ... -- has
+            // no reliably-pruning weight, so route to DocSet::cost().
+            _ => false,
+        }
+    }
+
+    pub fn extract_field_names(&self, field_names: &mut crate::api::HashSet<String>) {
+        match self {
+            SearchQueryInput::Boolean {
+                must,
+                should,
+                must_not,
+                ..
+            } => {
+                for q in must.iter().chain(should.iter()).chain(must_not.iter()) {
+                    q.extract_field_names(field_names);
+                }
+            }
+            SearchQueryInput::Boost { query, .. } => {
+                query.extract_field_names(field_names);
+            }
+            SearchQueryInput::ConstScore { query, .. } => {
+                query.extract_field_names(field_names);
+            }
+            SearchQueryInput::DisjunctionMax { disjuncts, .. } => {
+                for q in disjuncts {
+                    q.extract_field_names(field_names);
+                }
+            }
+            SearchQueryInput::WithIndex { query, .. } => {
+                query.extract_field_names(field_names);
+            }
+            SearchQueryInput::HeapFilter { indexed_query, .. } => {
+                indexed_query.extract_field_names(field_names);
+            }
+            SearchQueryInput::FieldedQuery { field, .. } => {
+                field_names.insert(field.root());
+            }
+            // For other query types, we can't easily extract field names
+            // This is a conservative approach - if we can't determine, we allow it
+            _ => {}
+        }
+    }
+
+    pub fn visit(&mut self, visitor: &mut impl FnMut(&mut SearchQueryInput)) {
+        visit_search_query_input!(self, visitor, visit, as_mut);
+    }
+
+    /// Read-only query-tree traversal sharing [`Self::visit`]'s recursive enum walk.
+    pub fn visit_ref(&self, visitor: &mut impl FnMut(&SearchQueryInput)) {
+        visit_search_query_input!(self, visitor, visit_ref, as_ref);
+    }
+
+    pub fn canonical_query_string(&self) -> String {
+        let mut cleaned_query = serde_json::to_value(self)
+            .unwrap_or_else(|_| serde_json::Value::String("Error serializing query".to_string()));
+        cleanup_variabilities_from_tantivy_query(&mut cleaned_query);
+        serde_json::to_string(&cleaned_query).unwrap_or_else(|_| "Error".to_string())
+    }
+}
+
+/// Remove the oid from the with_index object
+/// This helps to reduce the variability of the explain output used in regression tests
+pub fn cleanup_variabilities_from_tantivy_query(json_value: &mut serde_json::Value) {
+    match json_value {
+        serde_json::Value::Object(obj) => {
+            // Check if this is a "with_index" object and remove its "oid" if present
+            if obj.contains_key("with_index")
+                && let Some(with_index) = obj.get_mut("with_index")
+                && let Some(with_index_obj) = with_index.as_object_mut()
+            {
+                with_index_obj.remove("oid");
+            }
+
+            // Handle PostgresExpression: remove raw node (internal representation)
+            // Keep the expr_desc field which contains the human-readable SQL expression
+            if let Some(pg_expr_wrapper) = obj.get_mut("postgres_expression")
+                && let Some(wrapper_obj) = pg_expr_wrapper.as_object_mut()
+                && let Some(pg_expr) = wrapper_obj.get_mut("expr")
+                && let Some(expr_obj) = pg_expr.as_object_mut()
+            {
+                expr_obj.remove("node");
+            }
+
+            // Recursively process all values in the object
+            for (_, value) in obj.iter_mut() {
+                cleanup_variabilities_from_tantivy_query(value);
+            }
+        }
+        serde_json::Value::Array(arr) => {
+            // Recursively process all elements in the array
+            for item in arr.iter_mut() {
+                cleanup_variabilities_from_tantivy_query(item);
+            }
+        }
+        // Base cases: primitive values don't need processing
+        _ => {}
+    }
+}
+
+impl ExplainFormat for SearchQueryInput {
+    fn explain_format(&self) -> String {
+        format_for_explain(self)
+    }
+}
+
+impl SearchQueryInput {
+    pub unsafe fn from_datum(datum: pg_sys::Datum, is_null: bool) -> Option<SearchQueryInput> {
+        if is_null {
+            return None;
+        }
+
+        // First, detoast the datum if needed. This MUST happen before we try to read
+        // any varlena fields, as toasted values have a different header structure.
+        // PostgreSQL memory context handles cleanup of the detoasted copy.
+        let detoasted = pg_sys::pg_detoast_datum(datum.cast_mut_ptr());
+
+        // Now check if this is a SearchQueryInput array (ScalarArrayOpExpr case).
+        // We can safely read the ArrayType fields now that we've detoasted.
+        let array = detoasted.cast::<pg_sys::ArrayType>();
+        let is_sqi_array = (*array).ndim >= 1
+            && (*array).ndim <= pg_sys::MAXDIM as i32
+            && (*array).elemtype == searchqueryinput_typoid();
+
+        if is_sqi_array
+            && let Some(elements) = FromDatum::from_polymorphic_datum(
+                pg_sys::Datum::from(detoasted),
+                false,
+                searchqueryinput_typoid(),
+            )
+        {
+            return Some(Self::boolean_disjunction(elements));
+        }
+
+        let bytes = varlena_to_byte_slice(detoasted);
+
+        serde_cbor::from_slice::<SearchQueryInput>(bytes)
+            .or_else(|_| serde_json::from_slice::<SearchQueryInput>(bytes))
+            .ok()
+    }
+
+    pub fn boolean_disjunction(mut elements: Vec<SearchQueryInput>) -> SearchQueryInput {
+        match elements.len() {
+            0 => SearchQueryInput::Empty,
+            1 => elements.pop().unwrap(),
+            _ => SearchQueryInput::Boolean {
+                must: vec![],
+                should: elements,
+                must_not: vec![],
+                minimum_should_match: None,
+            },
+        }
+    }
+}
+
+/// Legacy wire format for [`TermInput`] kept around so that JSON inputs in the
+/// 3-element positional form `[field, value, is_datetime]` still deserialize.
+/// `is_datetime` no longer affects parsing — `PdbOwnedValue::Date` carries the
+/// datetime intent now — but the slot must exist for serde's positional
+/// (array) deserialization to accept the 3-element shape.
+#[derive(Deserialize)]
+struct TermInputWire {
+    field: FieldName,
+    value: PdbOwnedValue,
+    #[serde(default)]
+    #[allow(dead_code)]
+    is_datetime: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(from = "TermInputWire")]
+pub struct TermInput {
+    pub field: FieldName,
+    pub value: PdbOwnedValue,
+}
+impl From<TermInputWire> for TermInput {
+    fn from(wire: TermInputWire) -> Self {
+        TermInput {
+            field: wire.field,
+            value: wire.value,
+        }
+    }
+}
+
+/// Serialize a `SearchQueryInput` node to a Postgres [`pg_sys::Const`] node, palloc'd
+/// in the current memory context.
+impl From<SearchQueryInput> for *mut pg_sys::Const {
+    fn from(value: SearchQueryInput) -> Self {
+        unsafe {
+            pg_sys::makeConst(
+                searchqueryinput_typoid(),
+                -1,
+                pg_sys::Oid::INVALID,
+                -1,
+                value.into_datum().unwrap(),
+                false,
+                false,
+            )
+        }
+    }
+}
+
+fn check_range_bounds(
+    typeoid: PgOid,
+    lower_bound: Bound<PdbOwnedValue>,
+    upper_bound: Bound<PdbOwnedValue>,
+    index_created_by_version: Option<Version>,
+) -> Result<(Bound<PdbOwnedValue>, Bound<PdbOwnedValue>), QueryError> {
+    // For NUMRANGEOID, convert numeric values to hex-encoded sortable bytes
+    // to match the indexed format (see SortableDecimal in range.rs)
+    let lower_bound = convert_numrange_bound(typeoid, lower_bound, index_created_by_version);
+    let upper_bound = convert_numrange_bound(typeoid, upper_bound, index_created_by_version);
+
+    let lower_bound = match (typeoid, lower_bound.clone()) {
+        // Excluded U64 needs to be canonicalized
+        (_, Bound::Excluded(PdbOwnedValue::U64(n))) => Bound::Included(PdbOwnedValue::U64(n + 1)),
+        // Excluded I64 needs to be canonicalized
+        (_, Bound::Excluded(PdbOwnedValue::I64(n))) => Bound::Included(PdbOwnedValue::I64(n + 1)),
+        // Excluded date needs to be canonicalized
+        (
+            PgOid::BuiltIn(PgBuiltInOids::DATEOID) | PgOid::BuiltIn(PgBuiltInOids::DATERANGEOID),
+            Bound::Excluded(PdbOwnedValue::Date(date)),
+        ) => Bound::Included(PdbOwnedValue::Date(
+            date.add_days(1).map_err(|e| anyhow::anyhow!("{e:?}"))?,
+        )),
+        // String date needs parsed
+        (
+            PgOid::BuiltIn(PgBuiltInOids::DATEOID) | PgOid::BuiltIn(PgBuiltInOids::DATERANGEOID),
+            Bound::Included(PdbOwnedValue::Str(s)),
+        ) => {
+            let date = PostgresDateTime::try_from_date_str(s.as_str())
+                .map_err(|e| anyhow::anyhow!("{e:?}"))?;
+            Bound::Included(PdbOwnedValue::Date(date))
+        }
+        // String date needs parsed and excluded date needs to be canonicalized
+        (
+            PgOid::BuiltIn(PgBuiltInOids::DATEOID) | PgOid::BuiltIn(PgBuiltInOids::DATERANGEOID),
+            Bound::Excluded(PdbOwnedValue::Str(s)),
+        ) => {
+            let date = PostgresDateTime::try_from_date_str(s.as_str())
+                .map_err(|e| anyhow::anyhow!("{e:?}"))?;
+            Bound::Included(PdbOwnedValue::Date(
+                date.add_days(1).map_err(|e| anyhow::anyhow!("{e:?}"))?,
+            ))
+        }
+        // String timestamp needs to be parsed
+        (
+            PgOid::BuiltIn(PgBuiltInOids::TIMESTAMPOID)
+            | PgOid::BuiltIn(PgBuiltInOids::TIMESTAMPTZOID)
+            | PgOid::BuiltIn(PgBuiltInOids::TSRANGEOID)
+            | PgOid::BuiltIn(PgBuiltInOids::TSTZRANGEOID),
+            Bound::Included(PdbOwnedValue::Str(s)) | Bound::Excluded(PdbOwnedValue::Str(s)),
+        ) => {
+            let date = match typeoid {
+                PgOid::BuiltIn(PgBuiltInOids::TIMESTAMPOID)
+                | PgOid::BuiltIn(PgBuiltInOids::TSRANGEOID) => {
+                    PostgresDateTime::try_from_timestamp_str(s.as_str())
+                        .map_err(|e| anyhow::anyhow!("{e:?}"))?
+                }
+                PgOid::BuiltIn(PgBuiltInOids::TIMESTAMPTZOID)
+                | PgOid::BuiltIn(PgBuiltInOids::TSTZRANGEOID) => {
+                    PostgresDateTime::try_from_timestamptz_str(s.as_str())
+                        .map_err(|e| anyhow::anyhow!("{e:?}"))?
+                }
+                _ => unreachable!(),
+            };
+            match lower_bound {
+                Bound::Included(_) => Bound::Included(PdbOwnedValue::Date(date)),
+                Bound::Excluded(_) => Bound::Excluded(PdbOwnedValue::Date(date)),
+                Bound::Unbounded => unreachable!(),
+            }
+        }
+        _ => lower_bound,
+    };
+
+    let upper_bound = match (typeoid, upper_bound.clone()) {
+        // Included U64 needs to be canonicalized
+        (_, Bound::Included(PdbOwnedValue::U64(n))) => Bound::Excluded(PdbOwnedValue::U64(n + 1)),
+        // Included I64 needs to be canonicalized
+        (_, Bound::Included(PdbOwnedValue::I64(n))) => Bound::Excluded(PdbOwnedValue::I64(n + 1)),
+        // Included Date needs to be canonicalized
+        (
+            PgOid::BuiltIn(PgBuiltInOids::DATEOID) | PgOid::BuiltIn(PgBuiltInOids::DATERANGEOID),
+            Bound::Included(PdbOwnedValue::Date(date)),
+        ) => Bound::Excluded(PdbOwnedValue::Date(
+            date.add_days(1).map_err(|e| anyhow::anyhow!("{e:?}"))?,
+        )),
+        // String date needs parsed and Included Date needs to be canonicalized
+        (
+            PgOid::BuiltIn(PgBuiltInOids::DATEOID) | PgOid::BuiltIn(PgBuiltInOids::DATERANGEOID),
+            Bound::Included(PdbOwnedValue::Str(s)),
+        ) => {
+            let date = PostgresDateTime::try_from_date_str(s.as_str())
+                .map_err(|e| anyhow::anyhow!("{e:?}"))?;
+            Bound::Excluded(PdbOwnedValue::Date(
+                date.add_days(1).map_err(|e| anyhow::anyhow!("{e:?}"))?,
+            ))
+        }
+        // String date needs parsed
+        (
+            PgOid::BuiltIn(PgBuiltInOids::DATEOID) | PgOid::BuiltIn(PgBuiltInOids::DATERANGEOID),
+            Bound::Excluded(PdbOwnedValue::Str(s)),
+        ) => {
+            let date = PostgresDateTime::try_from_date_str(s.as_str())
+                .map_err(|e| anyhow::anyhow!("{e:?}"))?;
+            Bound::Excluded(PdbOwnedValue::Date(date))
+        }
+        // String timestamp needs to be parsed
+        (
+            PgOid::BuiltIn(PgBuiltInOids::TIMESTAMPOID)
+            | PgOid::BuiltIn(PgBuiltInOids::TIMESTAMPTZOID)
+            | PgOid::BuiltIn(PgBuiltInOids::TSRANGEOID)
+            | PgOid::BuiltIn(PgBuiltInOids::TSTZRANGEOID),
+            Bound::Included(PdbOwnedValue::Str(s)) | Bound::Excluded(PdbOwnedValue::Str(s)),
+        ) => {
+            let date = match typeoid {
+                PgOid::BuiltIn(PgBuiltInOids::TIMESTAMPOID)
+                | PgOid::BuiltIn(PgBuiltInOids::TSRANGEOID) => {
+                    PostgresDateTime::try_from_timestamp_str(s.as_str())
+                        .map_err(|e| anyhow::anyhow!("{e:?}"))?
+                }
+                PgOid::BuiltIn(PgBuiltInOids::TIMESTAMPTZOID)
+                | PgOid::BuiltIn(PgBuiltInOids::TSTZRANGEOID) => {
+                    PostgresDateTime::try_from_timestamptz_str(s.as_str())
+                        .map_err(|e| anyhow::anyhow!("{e:?}"))?
+                }
+                _ => unreachable!(),
+            };
+            match upper_bound {
+                Bound::Included(_) => Bound::Included(PdbOwnedValue::Date(date)),
+                Bound::Excluded(_) => Bound::Excluded(PdbOwnedValue::Date(date)),
+                Bound::Unbounded => unreachable!(),
+            }
+        }
+        _ => upper_bound,
+    };
+    Ok((lower_bound, upper_bound))
+}
+
+/// Convert numeric values in NUMRANGEOID bounds to hex-encoded sortable bytes.
+/// This matches the format used for indexing (see SortableDecimal in range.rs).
+fn convert_numrange_bound(
+    typeoid: PgOid,
+    bound: Bound<PdbOwnedValue>,
+    index_created_by_version: Option<Version>,
+) -> Bound<PdbOwnedValue> {
+    use decimal_bytes::Decimal;
+    use std::str::FromStr;
+
+    // Only process NUMRANGEOID bounds
+    if !matches!(typeoid, PgOid::BuiltIn(PgBuiltInOids::NUMRANGEOID)) {
+        return bound;
+    }
+
+    // Helper to convert a numeric value to hex-encoded bytes
+    let convert_to_hex = |value: &PdbOwnedValue| -> Option<PdbOwnedValue> {
+        let numeric_str = match value {
+            PdbOwnedValue::Str(s) => s.clone(),
+            PdbOwnedValue::F64(f) => f.to_string(),
+            PdbOwnedValue::I64(i) => i.to_string(),
+            PdbOwnedValue::U64(u) => u.to_string(),
+            _ => return None,
+        };
+
+        Decimal::from_str(&numeric_str).ok().map(|dec| {
+            PdbOwnedValue::Str(numeric::bytes_to_hex(&numeric::decimal_to_index_bytes(
+                dec,
+                index_created_by_version,
+            )))
+        })
+    };
+
+    match bound {
+        Bound::Included(ref value) => {
+            if let Some(hex_value) = convert_to_hex(value) {
+                Bound::Included(hex_value)
+            } else {
+                bound
+            }
+        }
+        Bound::Excluded(ref value) => {
+            if let Some(hex_value) = convert_to_hex(value) {
+                Bound::Excluded(hex_value)
+            } else {
+                bound
+            }
+        }
+        Bound::Unbounded => Bound::Unbounded,
+    }
+}
+
+fn coerce_bound_to_field_type(
+    bound: Bound<PdbOwnedValue>,
+    field_type: &FieldType,
+) -> Bound<PdbOwnedValue> {
+    match bound {
+        Bound::Included(PdbOwnedValue::U64(n)) if matches!(field_type, FieldType::F64(_)) => {
+            Bound::Included(PdbOwnedValue::F64(n as f64))
+        }
+        Bound::Included(PdbOwnedValue::I64(n)) if matches!(field_type, FieldType::F64(_)) => {
+            Bound::Included(PdbOwnedValue::F64(n as f64))
+        }
+        Bound::Excluded(PdbOwnedValue::U64(n)) if matches!(field_type, FieldType::F64(_)) => {
+            Bound::Excluded(PdbOwnedValue::F64(n as f64))
+        }
+        Bound::Excluded(PdbOwnedValue::I64(n)) if matches!(field_type, FieldType::F64(_)) => {
+            Bound::Excluded(PdbOwnedValue::F64(n as f64))
+        }
+        bound => bound,
+    }
+}
+
+impl SearchQueryInput {
+    #[allow(clippy::too_many_arguments)]
+    pub fn into_tantivy_query<QueryParserCtor: Fn() -> QueryParser>(
+        self,
+        schema: &SearchIndexSchema,
+        index_created_by_version: Option<Version>,
+        parser: &QueryParserCtor,
+        searcher: &Searcher,
+        index_oid: pg_sys::Oid,
+        relation_oid: Option<pg_sys::Oid>,
+        expr_context: Option<std::ptr::NonNull<pg_sys::ExprContext>>,
+        planstate: Option<std::ptr::NonNull<pg_sys::PlanState>>,
+    ) -> Result<Box<dyn TantivyQuery>> {
+        self.into_tantivy_query_generic(
+            &QueryOnlyBuilder,
+            schema,
+            index_created_by_version,
+            parser,
+            searcher,
+            index_oid,
+            relation_oid,
+            expr_context,
+            planstate,
+        )
+    }
+
+    /// Convert SearchQueryInput using the provided builder pattern.
+    #[allow(clippy::too_many_arguments)]
+    pub fn into_tantivy_query_generic<B: QueryBuilder, QueryParserCtor: Fn() -> QueryParser>(
+        self,
+        builder: &B,
+        schema: &SearchIndexSchema,
+        index_created_by_version: Option<Version>,
+        parser: &QueryParserCtor,
+        searcher: &Searcher,
+        index_oid: pg_sys::Oid,
+        relation_oid: Option<pg_sys::Oid>,
+        expr_context: Option<std::ptr::NonNull<pg_sys::ExprContext>>,
+        planstate: Option<std::ptr::NonNull<pg_sys::PlanState>>,
+    ) -> Result<B::Output> {
+        let recurse = |input: SearchQueryInput| {
+            input.into_tantivy_query_generic(
+                builder,
+                schema,
+                index_created_by_version,
+                parser,
+                searcher,
+                index_oid,
+                relation_oid,
+                expr_context,
+                planstate,
+            )
+        };
+
+        // Conditionally clone for QueryTreeBuilder estimation (zero-cost for QueryOnlyBuilder).
+        // Used by all query types (including leaf nodes like All, Empty, Parse, TermSet, etc.)
+        // to provide the original SearchQueryInput for cost estimation in EXPLAIN VERBOSE.
+        let cloned_for_estimate = if B::NEEDS_QUERY_INPUT {
+            Some(self.clone())
+        } else {
+            None
+        };
+
+        match self {
+            SearchQueryInput::Uninitialized => {
+                panic!("this `SearchQueryInput` instance is uninitialized")
+            }
+            SearchQueryInput::All => {
+                let query = Box::new(ConstScoreQuery::new(Box::new(AllQuery), 0.0));
+                Ok(builder.build_leaf(query, || "All Query".to_string(), cloned_for_estimate))
+            }
+            SearchQueryInput::Boolean {
+                must,
+                should,
+                must_not,
+                minimum_should_match,
+            } => {
+                // ---------------------------------
+                // We use B::split_for_parent() to avoid cloning for QueryOnlyBuilder.
+                //
+                // For QueryOnlyBuilder (normal queries):
+                //   - split_for_parent returns (query, None)
+                //   - No clone happens, query ownership is transferred
+                //   - *_outputs vectors stay empty (opt_output is None)
+                //
+                // For QueryTreeBuilder (EXPLAIN VERBOSE):
+                //   - split_for_parent returns (cloned_query, Some(output))
+                //   - Clone is necessary because we need both:
+                //     * The query for BooleanQuery::new()
+                //     * The output for the children closure (to build estimate tree)
+                //   - *_outputs vectors are populated for use in children closure
+                let mut subqueries = vec![];
+                let mut must_outputs = vec![];
+
+                for input in must {
+                    let output = recurse(input)?;
+                    let (query, opt_output) = B::split_for_parent(output);
+                    subqueries.push((Occur::Must, query));
+                    if let Some(out) = opt_output {
+                        must_outputs.push(out);
+                    }
+                }
+
+                let mut should_outputs = vec![];
+                for input in should {
+                    let output = recurse(input)?;
+                    let (query, opt_output) = B::split_for_parent(output);
+                    subqueries.push((Occur::Should, query));
+                    if let Some(out) = opt_output {
+                        should_outputs.push(out);
+                    }
+                }
+
+                let mut must_not_outputs = vec![];
+                for input in must_not {
+                    let output = recurse(input)?;
+                    let (query, opt_output) = B::split_for_parent(output);
+                    subqueries.push((Occur::MustNot, query));
+                    if let Some(out) = opt_output {
+                        must_not_outputs.push(out);
+                    }
+                }
+
+                let query: Box<dyn TantivyQuery> = match minimum_should_match {
+                    Some(n) => Box::new(BooleanQuery::with_minimum_required_clauses(
+                        subqueries, n as usize,
+                    )),
+                    None => Box::new(BooleanQuery::new(subqueries)),
+                };
+
+                // Children are built lazily inside the closure - QueryOnlyBuilder
+                // never calls this closure, so wrapping work is skipped entirely
+                Ok(builder.build_with_children(
+                    query,
+                    || "Boolean Query".to_string(),
+                    |b| {
+                        let mut children = Vec::new();
+                        for (idx, child) in must_outputs.into_iter().enumerate() {
+                            let child_query = B::extract_query(&child);
+                            let wrapped = b.build_with_children(
+                                child_query.box_clone(),
+                                || format!("Must Clause [{}]", idx),
+                                |_| vec![child],
+                                Some(SearchQueryInput::Empty),
+                            );
+                            children.push(wrapped);
+                        }
+                        for (idx, child) in should_outputs.into_iter().enumerate() {
+                            let child_query = B::extract_query(&child);
+                            let wrapped = b.build_with_children(
+                                child_query.box_clone(),
+                                || format!("Should Clause [{}]", idx),
+                                |_| vec![child],
+                                Some(SearchQueryInput::Empty),
+                            );
+                            children.push(wrapped);
+                        }
+                        for (idx, child) in must_not_outputs.into_iter().enumerate() {
+                            let child_query = B::extract_query(&child);
+                            let wrapped = b.build_with_children(
+                                child_query.box_clone(),
+                                || format!("MustNot Clause [{}]", idx),
+                                |_| vec![child],
+                                Some(SearchQueryInput::Empty),
+                            );
+                            children.push(wrapped);
+                        }
+                        children
+                    },
+                    cloned_for_estimate,
+                ))
+            }
+            SearchQueryInput::Boost {
+                query: inner_query,
+                factor,
+            } => {
+                let inner_output = recurse(*inner_query)?;
+                // Use split_for_parent: zero-cost for QueryOnlyBuilder
+                let (inner_tantivy, opt_output) = B::split_for_parent(inner_output);
+                let query = Box::new(BoostQuery::new(inner_tantivy, factor));
+                Ok(builder.build_with_children(
+                    query,
+                    || format!("Boost Query (factor: {})", factor),
+                    |_| opt_output.into_iter().collect(),
+                    cloned_for_estimate,
+                ))
+            }
+            SearchQueryInput::ConstScore {
+                query: inner_query,
+                score,
+            } => {
+                let inner_output = recurse(*inner_query)?;
+                // Use split_for_parent: zero-cost for QueryOnlyBuilder
+                let (inner_tantivy, opt_output) = B::split_for_parent(inner_output);
+                let query = Box::new(ConstScoreQuery::new(inner_tantivy, score));
+                Ok(builder.build_with_children(
+                    query,
+                    || format!("ConstScore Query (score: {})", score),
+                    |_| opt_output.into_iter().collect(),
+                    cloned_for_estimate,
+                ))
+            }
+            SearchQueryInput::ScoreFilter {
+                bounds,
+                query: inner_query,
+            } => {
+                let inner_output =
+                    recurse(*inner_query.expect("ScoreFilter's query should have been set"))?;
+                // Use split_for_parent: zero-cost for QueryOnlyBuilder
+                let (inner_tantivy, opt_output) = B::split_for_parent(inner_output);
+                let query = Box::new(ScoreFilter::new(bounds.clone(), inner_tantivy));
+                Ok(builder.build_with_children(
+                    query,
+                    || "ScoreFilter Query".to_string(),
+                    |_| opt_output.into_iter().collect(),
+                    cloned_for_estimate,
+                ))
+            }
+            SearchQueryInput::DisjunctionMax {
+                disjuncts,
+                tie_breaker,
+            } => {
+                let mut tantivy_disjuncts = vec![];
+                let mut disjunct_outputs = vec![];
+
+                for disjunct in disjuncts {
+                    let output = recurse(disjunct)?;
+                    // Use split_for_parent: zero-cost for QueryOnlyBuilder
+                    let (query, opt_output) = B::split_for_parent(output);
+                    tantivy_disjuncts.push(query);
+                    if let Some(out) = opt_output {
+                        disjunct_outputs.push(out);
+                    }
+                }
+
+                let query = if let Some(tie_breaker) = tie_breaker {
+                    Box::new(DisjunctionMaxQuery::with_tie_breaker(
+                        tantivy_disjuncts,
+                        tie_breaker,
+                    ))
+                } else {
+                    Box::new(DisjunctionMaxQuery::new(tantivy_disjuncts))
+                };
+
+                // Children are built lazily inside the closure
+                Ok(builder.build_with_children(
+                    query,
+                    || {
+                        if let Some(tb) = tie_breaker {
+                            format!("DisjunctionMax Query (tie_breaker: {})", tb)
+                        } else {
+                            "DisjunctionMax Query".to_string()
+                        }
+                    },
+                    |b| {
+                        disjunct_outputs
+                            .into_iter()
+                            .enumerate()
+                            .map(|(idx, output)| {
+                                let child_query = B::extract_query(&output);
+                                b.build_with_children(
+                                    child_query.box_clone(),
+                                    || format!("Disjunct [{}]", idx),
+                                    |_| vec![output],
+                                    Some(SearchQueryInput::All), // Placeholder
+                                )
+                            })
+                            .collect()
+                    },
+                    cloned_for_estimate,
+                ))
+            }
+            SearchQueryInput::Empty => {
+                let query = Box::new(EmptyQuery);
+                Ok(builder.build_leaf(query, || "Empty Query".to_string(), cloned_for_estimate))
+            }
+            SearchQueryInput::MoreLikeThis {
+                min_doc_frequency,
+                max_doc_frequency,
+                min_term_frequency,
+                max_query_terms,
+                min_word_length,
+                max_word_length,
+                boost_factor,
+                stopwords,
+                document,
+                key_value,
+                fields,
+            } => {
+                let mut mlt_builder = MoreLikeThisQuery::builder()
+                    .with_index_created_by_version(index_created_by_version);
+
+                // default min_doc_frequency to 1, Tantivy's default is 5
+                if let Some(min_doc_frequency) = min_doc_frequency {
+                    mlt_builder = mlt_builder.with_min_doc_frequency(min_doc_frequency);
+                } else {
+                    mlt_builder = mlt_builder.with_min_doc_frequency(1);
+                }
+                // default min_term_frequency to 1, Tantivy's default is 2
+                if let Some(min_term_frequency) = min_term_frequency {
+                    mlt_builder = mlt_builder.with_min_term_frequency(min_term_frequency);
+                } else {
+                    mlt_builder = mlt_builder.with_min_term_frequency(1);
+                }
+                if let Some(max_doc_frequency) = max_doc_frequency {
+                    mlt_builder = mlt_builder.with_max_doc_frequency(max_doc_frequency);
+                }
+                if let Some(max_query_terms) = max_query_terms {
+                    mlt_builder = mlt_builder.with_max_query_terms(max_query_terms);
+                }
+                if let Some(min_work_length) = min_word_length {
+                    mlt_builder = mlt_builder.with_min_word_length(min_work_length);
+                }
+                if let Some(max_work_length) = max_word_length {
+                    mlt_builder = mlt_builder.with_max_word_length(max_work_length);
+                }
+                if let Some(boost_factor) = boost_factor {
+                    mlt_builder = mlt_builder.with_boost_factor(boost_factor);
+                }
+                if let Some(stopwords_clone) = &stopwords {
+                    mlt_builder = mlt_builder.with_stop_words(stopwords_clone.clone());
+                }
+
+                let query = match (&key_value, &fields, &document) {
+                    (Some(key_value_clone), fields_ref, None) => {
+                        match mlt_builder.with_key_value(
+                            key_value_clone.clone(),
+                            fields_ref.clone(),
+                            index_oid,
+                        ) {
+                            Some(query) => Box::new(query) as Box<dyn TantivyQuery>,
+                            None => Box::new(EmptyQuery) as Box<dyn TantivyQuery>,
+                        }
+                    }
+                    (None, None, Some(doc)) => {
+                        let mut fields_map = HashMap::default();
+                        for (field, mut value) in doc.clone() {
+                            let search_field = schema
+                                .search_field(&field)
+                                .ok_or(QueryError::NonIndexedField(field.into()))?;
+                            search_field.try_coerce(&mut value)?;
+                            fields_map
+                                .entry(search_field.field())
+                                .or_insert_with(Vec::new);
+
+                            if let Some(vec) = fields_map.get_mut(&search_field.field()) {
+                                vec.push(value)
+                            }
+                        }
+                        Box::new(mlt_builder.with_document(fields_map.into_iter().collect()))
+                            as Box<dyn TantivyQuery>
+                    }
+                    _ => {
+                        panic!("more_like_this must be called with either key_value or document")
+                    }
+                };
+
+                Ok(builder.build_leaf(
+                    query,
+                    || "MoreLikeThis Query".to_string(),
+                    cloned_for_estimate,
+                ))
+            }
+            SearchQueryInput::Parse {
+                query_string,
+                lenient,
+                conjunction_mode,
+            } => {
+                let mut query_parser = parser();
+                if let Some(true) = conjunction_mode {
+                    query_parser.set_conjunction_by_default();
+                }
+
+                let query = pdb_query::parse_tantivy_query(
+                    &mut query_parser,
+                    &query_string,
+                    lenient.unwrap_or(false),
+                    schema,
+                    index_created_by_version,
+                )?;
+                Ok(builder.build_leaf(query, || "Parse Query".to_string(), cloned_for_estimate))
+            }
+            SearchQueryInput::TermSet { terms: fields } => {
+                let terms = fields
+                    .into_iter()
+                    .map(|TermInput { field, value }| {
+                        let search_field = schema
+                            .search_field(field.root())
+                            .ok_or_else(|| QueryError::NonIndexedField(field.clone()))?;
+                        let field_type = search_field.field_entry().field_type();
+
+                        // The tantivy `FieldType` can't tell a scaled `Numeric64` or an encoded
+                        // `NumericBytes` column from a plain `I64` or `Bytes` one, so the term has
+                        // to be converted from the schema-level type, same as a single `Term`.
+                        let value = numeric::convert_value_for_field(
+                            value,
+                            &search_field.field_type(),
+                            index_created_by_version,
+                        )?;
+
+                        value_to_term(
+                            search_field.field(),
+                            &value,
+                            field_type,
+                            field.path().as_deref(),
+                            index_created_by_version,
+                        )
+                    })
+                    .collect::<Result<Vec<_>>>()?;
+                let query = Box::new(TermSetQuery::new(terms));
+
+                Ok(builder.build_leaf(query, || "TermSet Query".to_string(), cloned_for_estimate))
+            }
+            SearchQueryInput::WithIndex {
+                oid: _,
+                query: inner_query,
+            } => {
+                let inner_output = recurse(*inner_query)?;
+                // Use split_for_parent: zero-cost for QueryOnlyBuilder
+                let (inner_tantivy, opt_output) = B::split_for_parent(inner_output);
+                Ok(builder.build_with_children(
+                    inner_tantivy,
+                    || "WithIndex Query".to_string(),
+                    |_| opt_output.into_iter().collect(),
+                    cloned_for_estimate,
+                ))
+            }
+            SearchQueryInput::HeapFilter {
+                indexed_query,
+                always_filters,
+                recheck_filters,
+                uses_tid_bitmap: _,
+                bitmap_consumer_id,
+                bitmap_cell,
+            } => {
+                // Convert indexed query first
+                let inner_output = recurse(*indexed_query)?;
+                // Use split_for_parent: zero-cost for QueryOnlyBuilder
+                let (indexed_tantivy_query, opt_output) = B::split_for_parent(inner_output);
+
+                // Is initialized in `begin_custom_scan` if `has_heap_filters`.
+                let expr_context = expr_context
+                    .expect("An expression context must be provided when heap filtering.");
+
+                // Create combined query with heap field filters
+                let query = Box::new(heap_field_filter::HeapFilterQuery::new(
+                    indexed_tantivy_query,
+                    always_filters.clone(),
+                    recheck_filters.clone(),
+                    bitmap_consumer_id,
+                    bitmap_cell.clone(),
+                    relation_oid.expect("relation_oid is required for HeapFilter queries"),
+                    expr_context,
+                    planstate,
+                ));
+
+                Ok(builder.build_with_children(
+                    query,
+                    || "HeapFilter Query".to_string(),
+                    |_| opt_output.into_iter().collect(),
+                    cloned_for_estimate,
+                ))
+            }
+            SearchQueryInput::PostgresExpression { .. } => {
+                panic!("postgres expressions have not been solved")
+            }
+            SearchQueryInput::FieldedQuery {
+                field,
+                query: pdb_query,
+            } => {
+                let query = pdb_query.clone().into_tantivy_query(
+                    field.clone(),
+                    schema,
+                    index_created_by_version,
+                    parser,
+                    searcher,
+                )?;
+                Ok(builder.build_leaf(
+                    Box::new(query),
+                    || format!("FieldedQuery (field: {})", field),
+                    cloned_for_estimate,
+                ))
+            }
+        }
+    }
+
+    /// Convert SearchQueryInput into both a Tantivy Query and a QueryWithEstimates tree.
+    /// This is used for EXPLAIN ANALYZE VERBOSE to show recursive cost estimates.
+    #[allow(clippy::too_many_arguments)]
+    pub fn into_tantivy_query_with_tree<QueryParserCtor: Fn() -> QueryParser>(
+        self,
+        schema: &SearchIndexSchema,
+        index_created_by_version: Option<Version>,
+        parser: &QueryParserCtor,
+        searcher: &Searcher,
+        index_oid: pg_sys::Oid,
+        relation_oid: Option<pg_sys::Oid>,
+        expr_context: Option<std::ptr::NonNull<pg_sys::ExprContext>>,
+        planstate: Option<std::ptr::NonNull<pg_sys::PlanState>>,
+    ) -> Result<(Box<dyn TantivyQuery>, QueryWithEstimates)> {
+        // Use the generic method with QueryTreeBuilder to get both query and tree
+        self.into_tantivy_query_generic(
+            &QueryTreeBuilder,
+            schema,
+            index_created_by_version,
+            parser,
+            searcher,
+            index_oid,
+            relation_oid,
+            expr_context,
+            planstate,
+        )
+    }
+}
+
+fn value_to_json_term(
+    field: Field,
+    value: &PdbOwnedValue,
+    path: Option<&str>,
+    expand_dots: bool,
+    index_created_by_version: Option<Version>,
+) -> Result<Term> {
+    let mut term = Term::from_field_json_path(field, path.unwrap_or_default(), expand_dots);
+    match value {
+        PdbOwnedValue::Str(text) => {
+            if let Ok(pgdt) = PostgresDateTime::try_from(text.as_str()) {
+                if index_created_by_version.stores_datetimes_in_i64() {
+                    term.append_type_and_fast_value(pgdt.into_inner());
+                } else {
+                    let dt: tantivy::DateTime = pgdt.try_into()?;
+                    // https://github.com/quickwit-oss/tantivy/pull/2456
+                    // It's a footgun that date needs to truncated when creating the Term
+                    term.append_type_and_fast_value(dt.truncate(DATE_TIME_PRECISION_INDEXED));
+                }
+            } else {
+                term.append_type_and_str(text);
+            }
+        }
+        PdbOwnedValue::U64(value) => {
+            if let Ok(i64_val) = (*value).try_into() {
+                term.append_type_and_fast_value::<i64>(i64_val);
+            } else {
+                term.append_type_and_fast_value(*value);
+            }
+        }
+        PdbOwnedValue::I64(value) => {
+            term.append_type_and_fast_value(*value);
+        }
+        PdbOwnedValue::F64(value) => {
+            term.append_type_and_fast_value(*value);
+        }
+        PdbOwnedValue::Bool(value) => {
+            term.append_type_and_fast_value(*value);
+        }
+        PdbOwnedValue::Date(value) => {
+            if index_created_by_version.stores_datetimes_in_i64() {
+                term.append_type_and_fast_value(value.into_inner());
+            } else {
+                let dt: tantivy::DateTime = (*value).try_into()?;
+                // https://github.com/quickwit-oss/tantivy/pull/2456
+                // It's a footgun that date needs to truncated when creating the Term
+                term.append_type_and_fast_value(dt.truncate(DATE_TIME_PRECISION_INDEXED));
+            }
+        }
+        unsupported => panic!(
+            "Tantivy PdbOwnedValue type {:?} not supported for JSON term",
+            unsupported
+        ),
+    };
+
+    Ok(term)
+}
+
+/// Converts a dot-separated path string (e.g. `"Top.Science.Biology"`) to a Tantivy `Facet`.
+pub(super) fn dot_path_to_facet(text: &str) -> tantivy::schema::Facet {
+    tantivy::schema::Facet::from_path(text.split('.'))
+}
+
+pub fn value_to_term(
+    field: Field,
+    value: &PdbOwnedValue,
+    field_type: &FieldType,
+    path: Option<&str>,
+    index_created_by_version: Option<Version>,
+) -> Result<Term> {
+    let json_options = match field_type {
+        FieldType::JsonObject(options) => Some(options),
+        _ => None,
+    };
+
+    if let Some(json_options) = json_options {
+        return value_to_json_term(
+            field,
+            value,
+            path,
+            json_options.is_expand_dots_enabled(),
+            index_created_by_version,
+        );
+    }
+
+    // For facet fields, convert string values to facet terms
+    if matches!(field_type, FieldType::Facet(_))
+        && let PdbOwnedValue::Str(text) = value
+    {
+        return Ok(Term::from_facet(field, &dot_path_to_facet(text)));
+    }
+
+    Ok(match value {
+        PdbOwnedValue::Str(text) => Term::from_field_text(field, text),
+        PdbOwnedValue::PreTokStr(_) => panic!("pre-tokenized text cannot be converted to term"),
+        PdbOwnedValue::U64(u64) => {
+            // Positive numbers seem to be automatically turned into u64s even if they are i64s,
+            // so we should use the field type to assign the term type
+            match field_type {
+                FieldType::I64(_) => Term::from_field_i64(field, *u64 as i64),
+                FieldType::U64(_) => Term::from_field_u64(field, *u64),
+                _ => panic!("invalid field type for u64 value"),
+            }
+        }
+        PdbOwnedValue::I64(i64) => Term::from_field_i64(field, *i64),
+        PdbOwnedValue::F64(f64) => Term::from_field_f64(field, *f64),
+        PdbOwnedValue::Bool(bool) => Term::from_field_bool(field, *bool),
+        PdbOwnedValue::Date(date) => {
+            if index_created_by_version.stores_datetimes_in_i64() {
+                Term::from_field_i64(field, date.into_inner())
+            } else {
+                let tantivy_date = tantivy::DateTime::try_from(*date)?;
+                Term::from_field_date(field, tantivy_date.truncate(DATE_TIME_PRECISION_INDEXED))
+            }
+        }
+        PdbOwnedValue::Facet(facet) => Term::from_facet(field, facet),
+        PdbOwnedValue::Bytes(bytes) => Term::from_field_bytes(field, bytes),
+        PdbOwnedValue::Object(_) => panic!("json cannot be converted to term"),
+        PdbOwnedValue::IpAddr(ip) => Term::from_field_ip_addr(field, *ip),
+        _ => panic!("Tantivy PdbOwnedValue type not supported"),
+    })
+}
+
+#[allow(dead_code)]
+#[derive(Debug, Error)]
+pub enum QueryError {
+    #[error("wrong field type for field: {0}")]
+    WrongFieldType(FieldName),
+    #[error("invalid field map json: {0}")]
+    FieldMapJsonValue(#[source] serde_json::Error),
+    #[error("field map json must be an object")]
+    FieldMapJsonObject,
+    #[error(
+        "field '{field}' was tokenized with '{tokenizer:?}' which does not support this query type"
+    )]
+    TokenizerDoesNotSupportQueryType {
+        field: FieldName,
+        tokenizer: Option<String>,
+    },
+    #[error(
+        "query requires fields indexed with positions; field '{field}' does not support positions"
+    )]
+    PositionsRequired { field: FieldName },
+    #[error("field '{0}' is not part of the pg_search index")]
+    NonIndexedField(FieldName),
+    #[error("wrong type given for field")]
+    FieldTypeMismatch,
+    #[error("could not build regex with pattern '{1}': {0}")]
+    RegexError(#[source] tantivy::TantivyError, String),
+    #[error(
+        r#"could not parse query string '{0}'.
+           make sure to use column:term pairs, and to capitalize AND/OR."#
+    )]
+    GrammarParseError(String),
+    #[error(
+        r#"could not parse query string '{1}'.
+           make sure to use column:term pairs, and to capitalize AND/OR."#
+    )]
+    ParseError(#[source] tantivy::query::QueryParserError, String),
+    #[error("{0}")]
+    TantivyError(#[source] tantivy::TantivyError),
+    #[error("{0}")]
+    InternalError(#[source] anyhow::Error),
+}
+
+impl From<tantivy::TantivyError> for QueryError {
+    fn from(err: tantivy::TantivyError) -> QueryError {
+        QueryError::TantivyError(err)
+    }
+}
+
+impl From<anyhow::Error> for QueryError {
+    fn from(err: anyhow::Error) -> QueryError {
+        QueryError::InternalError(err)
+    }
+}
+
+#[derive(Debug, Clone)]
+struct PostgresPointer(*mut std::os::raw::c_void);
+
+impl PartialEq for PostgresPointer {
+    fn eq(&self, other: &Self) -> bool {
+        if self.0 == other.0 {
+            return true;
+        }
+        if self.0.is_null() || other.0.is_null() {
+            return false;
+        }
+        unsafe { pg_sys::equal(self.0.cast(), other.0.cast()) }
+    }
+}
+
+// SAFETY: PostgresPointer is only used within PostgreSQL's single-threaded context
+// during query execution. The PostgresPointer serialization/deserialization handles
+// the cross-thread boundary properly via nodeToString/stringToNode.
+unsafe impl Send for PostgresPointer {}
+unsafe impl Sync for PostgresPointer {}
+
+impl Default for PostgresPointer {
+    fn default() -> Self {
+        PostgresPointer(std::ptr::null_mut())
+    }
+}
+
+impl Serialize for PostgresPointer {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        if self.0.is_null() {
+            serializer.serialize_none()
+        } else {
+            unsafe {
+                let s = pg_sys::nodeToString(self.0.cast());
+                let cstr = core::ffi::CStr::from_ptr(s)
+                    .to_str()
+                    .map_err(serde::ser::Error::custom)?;
+                let string = cstr.to_owned();
+                pg_sys::pfree(s.cast());
+                serializer.serialize_some(&string)
+            }
+        }
+    }
+}
+
+impl<'de> Deserialize<'de> for PostgresPointer {
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct NodeVisitor;
+        impl<'de2> Visitor<'de2> for NodeVisitor {
+            type Value = PostgresPointer;
+
+            fn expecting(&self, formatter: &mut Formatter) -> std::fmt::Result {
+                write!(formatter, "a string representing a Postgres node")
+            }
+
+            fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                unsafe {
+                    let cstr = std::ffi::CString::new(v).map_err(E::custom)?;
+                    let node = pg_sys::stringToNode(cstr.as_ptr());
+                    Ok(PostgresPointer(node.cast()))
+                }
+            }
+
+            fn visit_some<D>(self, deserializer: D) -> Result<Self::Value, D::Error>
+            where
+                D: Deserializer<'de2>,
+            {
+                deserializer.deserialize_str(self)
+            }
+
+            fn visit_none<E>(self) -> Result<Self::Value, E>
+            where
+                E: serde::de::Error,
+            {
+                Ok(PostgresPointer::default())
+            }
+        }
+
+        deserializer.deserialize_option(NodeVisitor)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PostgresExpression {
+    node: PostgresPointer,
+    pub expr_desc: String,
+    #[serde(skip)]
+    expr_state: PostgresPointer,
+}
+
+impl PostgresExpression {
+    pub fn new(node: *mut pg_sys::Node, expr_desc: String) -> Self {
+        Self {
+            node: PostgresPointer(node.cast()),
+            expr_state: PostgresPointer::default(),
+            expr_desc,
+        }
+    }
+
+    pub fn set_expr_state(&mut self, expr_state: *mut pg_sys::ExprState) {
+        self.expr_state = PostgresPointer(expr_state.cast())
+    }
+
+    #[inline]
+    pub fn node(&self) -> *mut pg_sys::Node {
+        self.node.0.cast()
+    }
+
+    #[inline]
+    pub fn expr_state(&self) -> *mut pg_sys::ExprState {
+        assert!(
+            !self.expr_state.0.is_null(),
+            "ExprState has not been initialized"
+        );
+        self.expr_state.0.cast()
+    }
+}
+
+#[cfg(any(test, feature = "pg_test"))]
+#[pgrx::pg_schema]
+mod tests {
+    use super::{SearchQueryInput, TermInput};
+    use crate::postgres::pdb_owned_value::PdbOwnedValue;
+    use crate::query::pdb_query::pdb;
+
+    use pgrx::prelude::*;
+
+    fn create_term_query() -> SearchQueryInput {
+        SearchQueryInput::TermSet {
+            terms: vec![TermInput {
+                field: "test".into(),
+                value: PdbOwnedValue::Str("value".to_string()),
+            }],
+        }
+    }
+
+    fn create_match_query() -> SearchQueryInput {
+        SearchQueryInput::FieldedQuery {
+            field: "test".into(),
+            query: pdb::Query::Match {
+                value: "value".to_string(),
+                tokenizer: None,
+                distance: None,
+                transposition_cost_one: None,
+                prefix: None,
+                conjunction_mode: None,
+            },
+        }
+    }
+
+    #[pg_test]
+    fn test_is_full_scan_query_base_cases() {
+        // All query is a full scan
+        assert!(SearchQueryInput::All.is_full_scan_query());
+
+        // Empty query is not a full scan
+        assert!(!SearchQueryInput::Empty.is_full_scan_query());
+
+        // Uninitialized is not a full scan
+        assert!(!SearchQueryInput::Uninitialized.is_full_scan_query());
+
+        // Term queries are not full scans
+        assert!(!create_term_query().is_full_scan_query());
+
+        // Match queries are not full scans
+        assert!(!create_match_query().is_full_scan_query());
+
+        // Exists queries are not full scans
+        assert!(
+            !SearchQueryInput::FieldedQuery {
+                field: "test".into(),
+                query: pdb::Query::Exists,
+            }
+            .is_full_scan_query()
+        );
+    }
+
+    #[pg_test]
+    fn test_is_full_scan_query_boolean_must_only() {
+        // Single Must clause with All → full scan
+        assert!(
+            SearchQueryInput::Boolean {
+                must: vec![SearchQueryInput::All],
+                should: vec![],
+                must_not: vec![],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // Multiple Must clauses with all All → full scan
+        assert!(
+            SearchQueryInput::Boolean {
+                must: vec![SearchQueryInput::All, SearchQueryInput::All],
+                should: vec![],
+                must_not: vec![],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // Must clause with All and term → not full scan (not all Must are full scan)
+        assert!(
+            !SearchQueryInput::Boolean {
+                must: vec![SearchQueryInput::All, create_term_query()],
+                should: vec![],
+                must_not: vec![],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // Must clause with only term → not full scan
+        assert!(
+            !SearchQueryInput::Boolean {
+                must: vec![create_term_query()],
+                should: vec![],
+                must_not: vec![],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+    }
+
+    #[pg_test]
+    fn test_is_full_scan_query_boolean_should_only() {
+        // Should clause with All → full scan
+        assert!(
+            SearchQueryInput::Boolean {
+                must: vec![],
+                should: vec![SearchQueryInput::All],
+                must_not: vec![],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // Should clause with All and term → full scan (any Should is full scan)
+        assert!(
+            SearchQueryInput::Boolean {
+                must: vec![],
+                should: vec![SearchQueryInput::All, create_term_query()],
+                must_not: vec![],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // Should clause with only term → not full scan
+        assert!(
+            !SearchQueryInput::Boolean {
+                must: vec![],
+                should: vec![create_term_query()],
+                must_not: vec![],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // Empty Should clause → not full scan
+        assert!(
+            !SearchQueryInput::Boolean {
+                must: vec![],
+                should: vec![],
+                must_not: vec![],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+    }
+
+    #[pg_test]
+    fn test_is_full_scan_query_boolean_must_not() {
+        // Must with All, MustNot with term → not full scan (MustNot excludes docs)
+        assert!(
+            !SearchQueryInput::Boolean {
+                must: vec![SearchQueryInput::All],
+                should: vec![],
+                must_not: vec![create_term_query()],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // Must with All, MustNot with Empty → full scan (MustNot excludes nothing)
+        assert!(
+            SearchQueryInput::Boolean {
+                must: vec![SearchQueryInput::All],
+                should: vec![],
+                must_not: vec![SearchQueryInput::Empty],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // Must with All, MustNot with multiple Empty → full scan
+        assert!(
+            SearchQueryInput::Boolean {
+                must: vec![SearchQueryInput::All],
+                should: vec![],
+                must_not: vec![SearchQueryInput::Empty, SearchQueryInput::Empty],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // Must with All, MustNot with Empty and term → not full scan (one MustNot excludes docs)
+        assert!(
+            !SearchQueryInput::Boolean {
+                must: vec![SearchQueryInput::All],
+                should: vec![],
+                must_not: vec![SearchQueryInput::Empty, create_term_query()],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+    }
+
+    #[pg_test]
+    fn test_is_full_scan_query_boolean_mixed() {
+        // Must with All, Should with term → full scan (Must satisfies "at least one")
+        assert!(
+            SearchQueryInput::Boolean {
+                must: vec![SearchQueryInput::All],
+                should: vec![create_term_query()],
+                must_not: vec![],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // Must with term, Should with All → not full scan (not all Must are full scan)
+        assert!(
+            !SearchQueryInput::Boolean {
+                must: vec![create_term_query()],
+                should: vec![SearchQueryInput::All],
+                must_not: vec![],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+    }
+
+    #[pg_test]
+    fn test_is_full_scan_query_disjunction_max() {
+        // DisjunctionMax with All → full scan
+        assert!(
+            SearchQueryInput::DisjunctionMax {
+                disjuncts: vec![SearchQueryInput::All],
+                tie_breaker: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // DisjunctionMax with All and term → full scan (any disjunct is full scan)
+        assert!(
+            SearchQueryInput::DisjunctionMax {
+                disjuncts: vec![SearchQueryInput::All, create_term_query()],
+                tie_breaker: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // DisjunctionMax with only terms → not full scan
+        assert!(
+            !SearchQueryInput::DisjunctionMax {
+                disjuncts: vec![create_term_query(), create_match_query()],
+                tie_breaker: None,
+            }
+            .is_full_scan_query()
+        );
+    }
+
+    #[pg_test]
+    fn test_is_full_scan_query_wrapper_queries() {
+        // WithIndex wrapping All → full scan
+        assert!(
+            SearchQueryInput::WithIndex {
+                oid: 12345.into(),
+                query: Box::new(SearchQueryInput::All),
+            }
+            .is_full_scan_query()
+        );
+
+        // WithIndex wrapping term → not full scan
+        assert!(
+            !SearchQueryInput::WithIndex {
+                oid: 12345.into(),
+                query: Box::new(create_term_query()),
+            }
+            .is_full_scan_query()
+        );
+
+        // Boost wrapping All → full scan
+        assert!(
+            SearchQueryInput::Boost {
+                query: Box::new(SearchQueryInput::All),
+                factor: 2.0,
+            }
+            .is_full_scan_query()
+        );
+
+        // ConstScore wrapping All → full scan
+        assert!(
+            SearchQueryInput::ConstScore {
+                query: Box::new(SearchQueryInput::All),
+                score: 1.0,
+            }
+            .is_full_scan_query()
+        );
+
+        // ScoreFilter with All → full scan
+        assert!(
+            SearchQueryInput::ScoreFilter {
+                bounds: vec![],
+                query: Some(Box::new(SearchQueryInput::All)),
+            }
+            .is_full_scan_query()
+        );
+
+        // ScoreFilter without query → not full scan
+        assert!(
+            !SearchQueryInput::ScoreFilter {
+                bounds: vec![],
+                query: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // HeapFilter with All → full scan
+        assert!(
+            SearchQueryInput::HeapFilter {
+                indexed_query: Box::new(SearchQueryInput::All),
+                always_filters: vec![],
+                recheck_filters: vec![],
+                uses_tid_bitmap: false,
+                bitmap_consumer_id: None,
+                bitmap_cell: None,
+            }
+            .is_full_scan_query()
+        );
+    }
+
+    #[pg_test]
+    fn test_is_full_scan_query_nested_queries() {
+        // Nested Boolean with All deep inside Should
+        assert!(
+            SearchQueryInput::Boolean {
+                must: vec![],
+                should: vec![SearchQueryInput::Boolean {
+                    must: vec![SearchQueryInput::All],
+                    should: vec![],
+                    must_not: vec![],
+                    minimum_should_match: None,
+                }],
+                must_not: vec![],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+
+        // Nested WithIndex(Boolean(All))
+        assert!(
+            SearchQueryInput::WithIndex {
+                oid: 12345.into(),
+                query: Box::new(SearchQueryInput::Boolean {
+                    must: vec![SearchQueryInput::All],
+                    should: vec![],
+                    must_not: vec![],
+                    minimum_should_match: None,
+                }),
+            }
+            .is_full_scan_query()
+        );
+
+        // Complex nesting that should not be full scan
+        assert!(
+            !SearchQueryInput::Boolean {
+                must: vec![SearchQueryInput::Boolean {
+                    must: vec![SearchQueryInput::All, create_term_query()], // Not all Must are full scan
+                    should: vec![],
+                    must_not: vec![],
+                    minimum_should_match: None,
+                }],
+                should: vec![],
+                must_not: vec![],
+                minimum_should_match: None,
+            }
+            .is_full_scan_query()
+        );
+    }
+
+    #[pg_test]
+    fn read_only_and_mutable_visitors_follow_the_same_nodes_in_the_same_order() {
+        let query = SearchQueryInput::Boolean {
+            must: vec![SearchQueryInput::Boost {
+                query: Box::new(SearchQueryInput::All),
+                factor: 2.0,
+            }],
+            should: vec![SearchQueryInput::ScoreFilter {
+                bounds: vec![],
+                query: Some(Box::new(SearchQueryInput::ConstScore {
+                    query: Box::new(SearchQueryInput::Empty),
+                    score: 1.0,
+                })),
+            }],
+            must_not: vec![SearchQueryInput::DisjunctionMax {
+                disjuncts: vec![SearchQueryInput::WithIndex {
+                    oid: 42.into(),
+                    query: Box::new(SearchQueryInput::HeapFilter {
+                        indexed_query: Box::new(SearchQueryInput::Parse {
+                            query_string: "term".into(),
+                            lenient: None,
+                            conjunction_mode: None,
+                        }),
+                        always_filters: vec![],
+                        recheck_filters: vec![],
+                        uses_tid_bitmap: false,
+                        bitmap_consumer_id: None,
+                        bitmap_cell: None,
+                    }),
+                }],
+                tie_breaker: None,
+            }],
+            minimum_should_match: None,
+        };
+
+        let mut read_only_order = Vec::new();
+        query.visit_ref(&mut |node| {
+            read_only_order.push(std::mem::discriminant(node));
+        });
+
+        let mut mutable_query = query.clone();
+        let mut mutable_order = Vec::new();
+        mutable_query.visit(&mut |node| {
+            mutable_order.push(std::mem::discriminant(node));
+        });
+
+        assert_eq!(read_only_order.len(), 10);
+        assert_eq!(read_only_order, mutable_order);
+        assert_eq!(query, mutable_query);
+    }
+}

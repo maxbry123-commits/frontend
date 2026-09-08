@@ -1,0 +1,497 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+//! Physical optimizer rule that injects `SegmentedTopKExec` below the deferred
+//! lookup when a `SortExec(TopK)` sorts by a deferred (late-materialized)
+//! string/bytes column.
+//!
+//! See the [JoinScan README](../../postgres/customscan/joinscan/README.md) for
+//! the full optimizer pipeline and where this rule sits in the sequence.
+//!
+//! # Plan Transformation
+//!
+//! ```text
+//! BEFORE:
+//!   SortExec(fetch=K, sort=[val ASC])
+//!     └─ TantivyDecodeExec(decode=[val])
+//!          └─ TantivyFetchExec(fetch=[val])
+//!               └─ Child
+//!
+//! AFTER:
+//!   TantivyDecodeExec(decode=[val])
+//!     └─ TantivyFetchExec(fetch=[val])
+//!          └─ SegmentedTopKExec(col=val, k=K, ASC)
+//!               └─ Child
+//! ```
+//!
+//! The rule walks the plan tree top-down. When it finds a `SortExec` with
+//! `fetch` (Top K mode), it searches its descendants for a `TantivyDecodeExec`.
+//! If the primary sort key matches one of the deferred string/bytes fields,
+//! it injects a `SegmentedTopKExec` below the lookup: under the `TantivyFetchExec`
+//! that fetches the column when there is one, so the fetch only runs for the
+//! survivors, and directly under the `TantivyDecodeExec` when the scan already
+//! resolved the ordinals.
+
+use std::sync::Arc;
+
+use datafusion::common::Result;
+use datafusion::common::config::ConfigOptions;
+use datafusion::physical_expr::expressions::Column;
+use datafusion::physical_expr::{LexOrdering, PhysicalExpr, PhysicalSortExpr};
+use datafusion::physical_optimizer::PhysicalOptimizerRule;
+use datafusion::physical_plan::sorts::sort::SortExec;
+use datafusion::physical_plan::sorts::sort_preserving_merge::SortPreservingMergeExec;
+use datafusion::physical_plan::{ChildrenPropertiesMode, ExecutionPlan, ReplaceChildrenOptions};
+
+use crate::gucs;
+use crate::postgres::customscan::joinscan::visibility_filter::VisibilityFilterExec;
+use crate::scan::filter_passthrough_exec::FilterPassthroughExec;
+use crate::scan::segmented_topk_exec::{AbsorbedVisibilityData, SegmentedTopKExec};
+use crate::scan::tantivy_decode_exec::TantivyDecodeExec;
+use crate::scan::tantivy_fetch_exec::TantivyFetchExec;
+
+#[derive(Debug)]
+pub struct SegmentedTopKRule;
+
+impl PhysicalOptimizerRule for SegmentedTopKRule {
+    fn name(&self) -> &str {
+        "SegmentedTopK"
+    }
+
+    fn schema_check(&self) -> bool {
+        true
+    }
+
+    fn optimize(
+        &self,
+        plan: Arc<dyn ExecutionPlan>,
+        _config: &ConfigOptions,
+    ) -> Result<Arc<dyn ExecutionPlan>> {
+        if !gucs::enable_segmented_topk() {
+            return Ok(plan);
+        }
+        rewrite_plan(plan)
+    }
+}
+
+/// Recursively rewrite the plan tree, injecting `SegmentedTopKExec` below the
+/// deferred lookup when a `SortExec(TopK)` sorts by a deferred column.
+fn rewrite_plan(plan: Arc<dyn ExecutionPlan>) -> Result<Arc<dyn ExecutionPlan>> {
+    // First, recursively rewrite all children.
+    let children = plan.children();
+    if !children.is_empty() {
+        let mut new_children = Vec::with_capacity(children.len());
+        let mut children_changed = false;
+        for child in &children {
+            let new_child = rewrite_plan(Arc::clone(child))?;
+            if !Arc::ptr_eq(child, &new_child) {
+                children_changed = true;
+            }
+            new_children.push(new_child);
+        }
+        let plan = if children_changed {
+            plan.replace_children(
+                new_children,
+                ReplaceChildrenOptions::new(ChildrenPropertiesMode::Recompute),
+            )?
+        } else {
+            plan
+        };
+        return try_inject_at_sort(plan);
+    }
+
+    Ok(plan)
+}
+
+/// If `plan` is a `SortExec(TopK)` sorting by at least one deferred column, inject
+/// `SegmentedTopKExec` below the deferred lookup in its subtree.
+fn try_inject_at_sort(plan: Arc<dyn ExecutionPlan>) -> Result<Arc<dyn ExecutionPlan>> {
+    let Some(sort_exec) = plan.downcast_ref::<SortExec>() else {
+        return Ok(plan);
+    };
+
+    let Some(k) = sort_exec.fetch() else {
+        return Ok(plan);
+    };
+
+    let sort_exprs = sort_exec.expr();
+
+    // Hand the SortExec's already pushed-down `DynamicFilterPhysicalExpr` to the
+    // injected `SegmentedTopKExec` so that ownership transfers cleanly when we
+    // unwrap the SortExec below. The scans have already been wired to this filter
+    // by the earlier standard `FilterPushdown` pass; updates from the STK heap
+    // therefore reach the same recipients the SortExec would have driven, and no
+    // trailing `FilterPushdown(Post)` pass is required to re-push a fresh filter.
+    // See #5635.
+    let dynamic_exprs = sort_exec.dynamic_expressions_produced();
+    debug_assert_eq!(
+        dynamic_exprs.len(),
+        1,
+        "SortExec expected to produce exactly 1 dynamic expression for Top-K, found {}",
+        dynamic_exprs.len()
+    );
+    let parent_filter = dynamic_exprs.into_iter().next();
+
+    // Walk down from SortExec to find the deferred lookup.
+    // If injection succeeds, SegmentedTopKExec now handles the final sort + limit,
+    // so we unwrap SortExec and return its child directly.
+    match try_inject_below_lookup(&plan, sort_exprs.clone(), k, parent_filter)? {
+        Some(rewritten) => {
+            let children = rewritten.children();
+            Ok(Arc::clone(children[0]))
+        }
+        None => Ok(plan),
+    }
+}
+/// Resolve the physical index in `schema` for a column reference from a SortExec.
+///
+/// Resolution strategy:
+///   - If the column name is **unique** in the schema, use `index_of` for an
+///     exact name-based lookup. This correctly handles cross-table joins where
+///     two different tables contribute differently-named columns.
+///   - If the column name appears **more than once** (self-join with duplicate
+///     field names), fall back to `col.index()` directly. DataFusion already
+///     assigned the correct physical index when it built the SortExec.
+///   - If the name is not found at all, log a debug diagnostic and fall back
+///     to `col.index()` as a last resort.
+fn resolve_physical_index(
+    col: &Column,
+    schema: &datafusion::arrow::datatypes::SchemaRef,
+) -> Option<usize> {
+    let col_name = col.name();
+    let logical_idx = col.index();
+
+    let matches: Vec<usize> = schema
+        .fields()
+        .iter()
+        .enumerate()
+        .filter_map(|(i, f)| if f.name() == col_name { Some(i) } else { None })
+        .collect();
+
+    let physical_idx = match matches.len() {
+        0 => {
+            pgrx::debug2!(
+                "SegmentedTopK: column '{}' not found in input schema",
+                col_name
+            );
+            return None;
+        }
+        1 => matches[0],
+        _ => {
+            // Duplicate names (self-join) — DataFusion already set col.index()
+            // to the correct physical position when building the SortExec.
+            // TODO: this relies on a DataFusion invariant that col.index() is
+            // correct for the duplicate-name case. It breaks for 3-way self-joins
+            // or intermediate Projections that reorder same-name groups.
+            // Proper fix: thread explicit column lineage similar to trace_column
+            // in late_materialization.rs. Tracked in issue #5093.
+            if logical_idx < schema.fields().len()
+                && schema.fields()[logical_idx].name() == col_name
+            {
+                logical_idx
+            } else {
+                return None;
+            }
+        }
+    };
+
+    if physical_idx != logical_idx {
+        pgrx::debug2!(
+            "SegmentedTopK: remapped '{}' index {} -> {}",
+            col_name,
+            logical_idx,
+            physical_idx
+        );
+    }
+    Some(physical_idx)
+}
+
+/// Recursively search below `plan` for a `TantivyDecodeExec` whose deferred
+/// fields include a sort column. If found, inject a `SegmentedTopKExec` below
+/// the lookup and rebuild the plan tree up to `plan`.
+fn try_inject_below_lookup(
+    plan: &Arc<dyn ExecutionPlan>,
+    sort_exprs: LexOrdering,
+    k: usize,
+    parent_filter: Option<Arc<dyn PhysicalExpr>>,
+) -> Result<Option<Arc<dyn ExecutionPlan>>> {
+    let children = plan.children();
+
+    for (child_idx, child) in children.iter().enumerate() {
+        if let Some(lookup) = child.downcast_ref::<TantivyDecodeExec>() {
+            // The STK goes under the fetch when one sits directly below the decode: the
+            // STK resolves ordinals for its own comparisons, so the fetch above then runs
+            // only for the survivors. The fetch keeps the schema, so the column indexes
+            // below it are the decode's input indexes either way.
+            let decode_child = Arc::clone(lookup.children()[0]);
+            let fetch_below = decode_child
+                .downcast_ref::<TantivyFetchExec>()
+                .filter(|fetch| !fetch.fetch_fields().is_empty())
+                .map(|_| Arc::clone(&decode_child));
+            let lookup_child = match &fetch_below {
+                Some(fetch) => Arc::clone(fetch.children()[0]),
+                None => Arc::clone(&decode_child),
+            };
+            let lookup_child = &lookup_child;
+            let input_schema = lookup_child.schema();
+
+            // Check if ANY sort column is one of the deferred fields, using
+            // physical index resolution to handle join-reordered schemas.
+            let has_deferred_sort_col = sort_exprs.iter().any(|expr| {
+                if let Some(col) = expr.expr.downcast_ref::<Column>() {
+                    if let Some(physical_idx) = resolve_physical_index(col, &input_schema) {
+                        lookup
+                            .deferred_fields()
+                            .iter()
+                            .any(|d| d.col_idx == physical_idx)
+                    } else {
+                        false
+                    }
+                } else {
+                    false
+                }
+            });
+
+            if has_deferred_sort_col {
+                // If the direct child of the lookup is a VisibilityFilterExec,
+                // absorb it: SegmentedTopKExec will own MVCC visibility checking and the
+                // VFExec node is removed from the plan, so dead rows never inflate the
+                // pushed-down threshold. VFExec preserves schema, so `input_schema` above
+                // is unchanged. Per `VisibilityFilterOptimizerRule`, a VFExec appears
+                // here for inner joins and for the preserved sides of any join type
+                // (e.g. Left, LeftSemi, LeftAnti); the null-supplying sides are forced
+                // to be checked inside the join, so they won't be absorbed here.
+                let (absorbed_visibility, stk_input) =
+                    if let Some(vis_exec) = lookup_child.downcast_ref::<VisibilityFilterExec>() {
+                        // The VF's child is a ctid-resolving TantivyFetchExec. Bypass it and let
+                        // the STK resolve ctids at candidate time, so a large join output does not
+                        // pay one fast-field read per row before the Top-K prune. Only a fetch
+                        // with no string columns can be dropped this way: the STK resolves ctids
+                        // itself but not string ordinals, so a fetch that also carries string
+                        // columns has to stay, at the cost of the per-row read.
+                        let vf_child = Arc::clone(vis_exec.children()[0]);
+                        let stk_input = match vf_child.downcast_ref::<TantivyFetchExec>() {
+                            Some(fetch)
+                                if !fetch.ctid_columns().is_empty()
+                                    && fetch.fetch_fields().is_empty() =>
+                            {
+                                Arc::clone(fetch.children()[0])
+                            }
+                            _ => vf_child,
+                        };
+                        (
+                            Some(Arc::new(AbsorbedVisibilityData::new(
+                                vis_exec.plan_pos_oids().to_vec(),
+                                vis_exec.table_names().to_vec(),
+                            ))),
+                            stk_input,
+                        )
+                    } else {
+                        (None, Arc::clone(lookup_child))
+                    };
+
+                // Wrap blocking nodes (e.g. SortPreservingMergeExec) so that the
+                // shared `DynamicFilterPhysicalExpr` can traverse them during the
+                // pushdown pass that reached this scan subtree.
+                let lookup_child = &wrap_blocking_nodes(stk_input)?;
+
+                // Collect all deferred columns found in the sort expressions,
+                // resolving logical → physical indices for each.
+                let mut deferred_columns = Vec::new();
+                for expr in &sort_exprs {
+                    if let Some(col) = expr.expr.downcast_ref::<Column>()
+                        && let Some(physical_idx) = resolve_physical_index(col, &input_schema)
+                        && let Some(field) = lookup
+                            .deferred_fields()
+                            .iter()
+                            .find(|d| d.col_idx == physical_idx)
+                    {
+                        deferred_columns.push(
+                            crate::scan::segmented_topk_exec::DeferredSortColumn {
+                                sort_col_idx: physical_idx,
+                                canonical: field.canonical.clone(),
+                                rebuild: field.rebuild.clone(),
+                            },
+                        );
+                    }
+                }
+
+                // If the sort requires deferred columns from multiple different indexes (tables),
+                // we cannot push the threshold down, because a single segment scanner cannot evaluate
+                // the threshold across multiple tables (it only sees its own base table).
+                // E.g. `ORDER BY f.title ASC, d.category DESC` is a multi-dimensional bound that
+                // spans across the HashJoin. We must gracefully fall back to a standard SortExec.
+                // TODO: Add support for SegmentedTopK executing the TopK, but without pushing down
+                // thresholds: see https://github.com/paradedb/paradedb/issues/4347
+                let first_indexrelid = deferred_columns.first().map(|d| d.canonical.indexrelid);
+                if let Some(id) = first_indexrelid
+                    && deferred_columns
+                        .iter()
+                        .any(|d| d.canonical.indexrelid != id)
+                {
+                    pgrx::warning!(
+                        "SegmentedTopK: ORDER BY includes string columns from multiple tables, which is not currently supported. Falling back to default execution."
+                    );
+                    return Ok(None);
+                }
+
+                let target_indexrelid = first_indexrelid.unwrap_or(0);
+                let ffhelper = match lookup.ffhelper(target_indexrelid) {
+                    Some(helper) => Arc::clone(helper),
+                    None => return Ok(None),
+                };
+
+                // Rewrite sort expressions: replace each Column's index with the
+                // resolved physical index so that SegmentedTopKExec operates on the
+                // correct field position in lookup_child's schema.
+                //
+                // col.index() is the logical index relative to the lookup's output schema.
+                // After a join the physical schema may differ (e.g. HashJoinExec emits
+                // [ctid_0, s.name, ctid_1, p.name] so p.name is at physical index 3, not 1).
+                let mut rewritten_sort_exprs = Vec::with_capacity(sort_exprs.len());
+                for sort_expr in &sort_exprs {
+                    use datafusion::common::tree_node::{Transformed, TreeNode};
+                    let input_schema_clone = Arc::clone(&input_schema);
+                    let mut resolve_failed = false;
+                    let rewritten_expr = sort_expr.expr.clone().transform(|node| {
+                        if let Some(col) = node.downcast_ref::<Column>() {
+                            if let Some(physical_idx) =
+                                resolve_physical_index(col, &input_schema_clone)
+                                && physical_idx < input_schema_clone.fields().len()
+                            {
+                                let new_col = Column::new(col.name(), physical_idx);
+                                return Ok(Transformed::yes(
+                                    Arc::new(new_col) as Arc<dyn PhysicalExpr>
+                                ));
+                            }
+                            resolve_failed = true;
+                        }
+                        Ok(Transformed::no(node))
+                    })?;
+                    if resolve_failed {
+                        pgrx::debug2!(
+                            "SegmentedTopK: sort expression references column not in lookup child schema; declining injection"
+                        );
+                        return Ok(None);
+                    }
+                    rewritten_sort_exprs.push(PhysicalSortExpr {
+                        expr: rewritten_expr.data,
+                        options: sort_expr.options,
+                    });
+                }
+
+                let rewritten_lex_ordering =
+                    LexOrdering::new(rewritten_sort_exprs).unwrap_or(sort_exprs.clone());
+
+                let segmented_topk = Arc::new(SegmentedTopKExec::new(
+                    Arc::clone(lookup_child),
+                    rewritten_lex_ordering,
+                    deferred_columns.clone(),
+                    Arc::clone(&ffhelper),
+                    k,
+                    absorbed_visibility,
+                    parent_filter.clone(),
+                ));
+
+                // Rebuild the lookup with the new child: the fetch when the STK went under
+                // it, then the decode above.
+                let new_lookup = match fetch_below {
+                    Some(fetch) => {
+                        let new_fetch = fetch.replace_children(
+                            vec![segmented_topk],
+                            ReplaceChildrenOptions::new(ChildrenPropertiesMode::Recompute),
+                        )?;
+                        Arc::clone(child).replace_children(
+                            vec![new_fetch],
+                            ReplaceChildrenOptions::new(ChildrenPropertiesMode::Recompute),
+                        )?
+                    }
+                    None => Arc::clone(child).replace_children(
+                        vec![segmented_topk],
+                        ReplaceChildrenOptions::new(ChildrenPropertiesMode::Recompute),
+                    )?,
+                };
+
+                // Rebuild the parent with the updated child.
+                let mut new_children: Vec<Arc<dyn ExecutionPlan>> =
+                    children.iter().map(|c| Arc::clone(c)).collect();
+                new_children[child_idx] = new_lookup;
+                return Ok(Some(plan.clone().replace_children(
+                    new_children,
+                    ReplaceChildrenOptions::new(ChildrenPropertiesMode::Recompute),
+                )?));
+            }
+        }
+
+        // Recurse into single-child intermediate nodes that support limit pushdown
+        // (ProjectionExec, CoalescePartitionsExec, SortPreservingMergeExec, CooperativeExec, etc.)
+        // Do not recurse into multi-child join nodes (HashJoinExec) or non-transparent barriers (AggregateExec).
+        if child.children().len() == 1
+            && child.supports_limit_pushdown()
+            && let Some(rewritten) =
+                try_inject_below_lookup(child, sort_exprs.clone(), k, parent_filter.clone())?
+        {
+            let mut new_children: Vec<Arc<dyn ExecutionPlan>> =
+                children.iter().map(|c| Arc::clone(c)).collect();
+            new_children[child_idx] = rewritten;
+            return Ok(Some(plan.clone().replace_children(
+                new_children,
+                ReplaceChildrenOptions::new(ChildrenPropertiesMode::Recompute),
+            )?));
+        }
+    }
+
+    Ok(None)
+}
+
+/// Recursively wrap `SortPreservingMergeExec` nodes with [`FilterPassthroughExec`]
+/// so that dynamic filters from `SegmentedTopKExec` can be pushed through them
+/// during the `FilterPushdown(Post)` pass.
+///
+/// Other DataFusion built-in nodes in the path (`ProjectionExec`, `CooperativeExec`)
+/// already implement filter passthrough natively.
+fn wrap_blocking_nodes(plan: Arc<dyn ExecutionPlan>) -> Result<Arc<dyn ExecutionPlan>> {
+    let children = plan.children();
+    if children.is_empty() {
+        return Ok(plan);
+    }
+
+    let mut changed = false;
+    let mut new_children = Vec::with_capacity(children.len());
+    for child in &children {
+        let new_child = wrap_blocking_nodes(Arc::clone(child))?;
+        if !Arc::ptr_eq(child, &new_child) {
+            changed = true;
+        }
+        new_children.push(new_child);
+    }
+
+    let plan = if changed {
+        plan.replace_children(
+            new_children,
+            ReplaceChildrenOptions::new(ChildrenPropertiesMode::Recompute),
+        )?
+    } else {
+        plan
+    };
+
+    if plan.is::<SortPreservingMergeExec>() {
+        return Ok(Arc::new(FilterPassthroughExec::new(plan)));
+    }
+
+    Ok(plan)
+}

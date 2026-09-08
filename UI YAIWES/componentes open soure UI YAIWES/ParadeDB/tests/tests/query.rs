@@ -1,0 +1,1476 @@
+// Copyright (c) 2023-2026 ParadeDB, Inc.
+//
+// This file is part of ParadeDB - Postgres for Search and Analytics
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+use core::panic;
+
+use pretty_assertions::assert_eq;
+use rstest::*;
+use sqlx::{PgConnection, Row};
+use tests::fixtures::*;
+
+#[rstest]
+fn boolean_tree(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+    paradedb.boolean(
+        should => ARRAY[
+            paradedb.parse('description:shoes'),
+            paradedb.phrase_prefix(field => 'description', phrases => ARRAY['book']),
+            paradedb.term(field => 'description', value => 'speaker'),
+		    paradedb.fuzzy_term(field => 'description', value => 'wolo', transposition_cost_one => false, distance => 1, prefix => true)
+        ]
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(columns.id, vec![3, 4, 5, 7, 10, 32, 33, 34, 37, 39, 41]);
+}
+
+#[rstest]
+fn fuzzy_term(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search
+    WHERE bm25_search @@@ paradedb.fuzzy_term(field => 'category', value => 'elector', prefix => true)
+    ORDER BY id"#
+    .fetch_collect(&mut conn);
+    assert_eq!(columns.id, vec![1, 2, 12, 22, 32], "wrong results");
+
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+    paradedb.term(field => 'category', value => 'electornics')
+    ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert!(columns.is_empty(), "without fuzzy field should be empty");
+
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+        paradedb.fuzzy_term(
+            field => 'description',
+            value => 'keybaord',
+            transposition_cost_one => false,
+            distance => 1,
+            prefix => true
+        ) ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert!(
+        columns.is_empty(),
+        "transposition_cost_one false should be empty"
+    );
+
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+        paradedb.fuzzy_term(
+            field => 'description',
+            value => 'keybaord',
+            transposition_cost_one => true,
+            distance => 1,
+            prefix => true
+        ) ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(
+        columns.id,
+        vec![1, 2],
+        "incorrect transposition_cost_one true"
+    );
+
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+        paradedb.fuzzy_term(
+            field => 'description',
+            value => 'keybaord',
+            prefix => true
+        ) ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.id, vec![1, 2], "incorrect defaults");
+}
+
+/// Shared assertions for the `<field> <op> ARRAY[...]::pdb.fuzzy(2)[::pdb.boost(2)]`
+/// cast chain (issue #5079). Runs the predicate three ways — fuzzy only,
+/// fuzzy-then-boost, and boost-then-fuzzy — and verifies that:
+///   * the two cast orders are commutative (identical rows and scores),
+///   * boosting never changes which rows match, and
+///   * `boost(2)` scales each score by ~2x.
+///
+/// The fix lives in the type-level casts (`boost_to_fuzzy` plus `apply_fuzzy_data`
+/// learning to recurse through `ScoreAdjusted` and rewrite `MatchArray`), so it
+/// must hold for every operator that accepts the `pdb.fuzzy`/`pdb.boost` casts —
+/// not just `&&&`.
+fn assert_fuzzy_boost_cast_chain_commutes(conn: &mut PgConnection, op: &str) {
+    let query = |casts: &str| {
+        format!(
+            "SELECT id, pdb.score(id) FROM paradedb.bm25_search \
+             WHERE description {op} ARRAY['running', 'shoes']{casts} ORDER BY id"
+        )
+    };
+
+    let fuzzy_only: Vec<(i32, f32)> = query("::pdb.fuzzy(2)").fetch(conn);
+    assert!(
+        !fuzzy_only.is_empty(),
+        "`{op}` fuzzy query should match at least one product"
+    );
+
+    let fuzzy_then_boost: Vec<(i32, f32)> = query("::pdb.fuzzy(2)::pdb.boost(2)").fetch(conn);
+    let boost_then_fuzzy: Vec<(i32, f32)> = query("::pdb.boost(2)::pdb.fuzzy(2)").fetch(conn);
+
+    assert_eq!(
+        fuzzy_then_boost, boost_then_fuzzy,
+        "`{op}`: fuzzy::boost and boost::fuzzy cast orders should be equivalent"
+    );
+    assert_eq!(
+        fuzzy_only.iter().map(|(id, _)| *id).collect::<Vec<_>>(),
+        fuzzy_then_boost
+            .iter()
+            .map(|(id, _)| *id)
+            .collect::<Vec<_>>(),
+        "`{op}`: boost should not change which rows match"
+    );
+
+    // Boost scales per-term scores, and BM25 doc scores aggregate via Tantivy's
+    // BoostQuery, so the boost factor does not multiply final doc scores
+    // exactly. Assert ordering preservation (boosted >= fuzzy_only score) and a
+    // generous proportional bound rather than f32::EPSILON.
+    for ((id, fuzzy_score), (_, boosted_score)) in fuzzy_only.iter().zip(&fuzzy_then_boost) {
+        assert!(
+            *boosted_score >= *fuzzy_score,
+            "`{op}`: boosted score for id {id} ({boosted_score}) should be >= unboosted ({fuzzy_score})"
+        );
+        let tolerance = (fuzzy_score.abs() * 2.0).max(1.0) * 1e-3;
+        assert!(
+            (boosted_score - fuzzy_score * 2.0).abs() < tolerance,
+            "`{op}`: boosted score for id {id} ({boosted_score}) should be within {tolerance} of 2x fuzzy_score ({})",
+            fuzzy_score * 2.0
+        );
+    }
+}
+
+#[rstest]
+fn match_conjunction_array_fuzzy_boost_cast_chain(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+    // `&&&` builds a conjunction `MatchArray`.
+    assert_fuzzy_boost_cast_chain_commutes(&mut conn, "&&&");
+}
+
+#[rstest]
+fn match_disjunction_array_fuzzy_boost_cast_chain(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+    // `|||` builds a disjunction `MatchArray` — same cast machinery as `&&&`.
+    assert_fuzzy_boost_cast_chain_commutes(&mut conn, "|||");
+}
+
+#[rstest]
+fn term_set_array_fuzzy_boost_cast_chain(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+    // `===` builds a `TermSet` that `apply_fuzzy_data` rewrites into a `MatchArray`,
+    // exercising the cast chain through the term operator's support function.
+    assert_fuzzy_boost_cast_chain_commutes(&mut conn, "===");
+}
+
+#[rstest]
+fn single_queries(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+
+    // All
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+    paradedb.all() ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 41);
+
+    // Boost
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+    paradedb.boost(query => paradedb.all(), factor => 1.5)
+    ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 41);
+
+    // ConstScore
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search
+    WHERE bm25_search @@@ paradedb.const_score(query => paradedb.all(), score => 3.9)
+    ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 41);
+
+    // DisjunctionMax
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+    paradedb.disjunction_max(disjuncts => ARRAY[paradedb.parse('description:shoes')])
+    ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 3);
+
+    // Empty
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@ paradedb.empty() ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 0);
+
+    // FuzzyTerm
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@ paradedb.fuzzy_term(
+        field => 'description',
+        value => 'wolo',
+        transposition_cost_one => false,
+        distance => 1,
+        prefix => true
+    ) ORDER BY ID"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 4);
+
+    // Parse
+    let columns: SimpleProductsTableVec = r#"
+        SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+        paradedb.parse('description:teddy') ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 1);
+
+    // PhrasePrefix
+    let columns: SimpleProductsTableVec = r#"
+        SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+        paradedb.phrase_prefix(field => 'description', phrases => ARRAY['har'])
+        ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 1);
+
+    // Phrase with invalid term list
+    match r#"
+        SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+        paradedb.phrase(field => 'description', phrases => ARRAY['robot'])
+        ORDER BY id"#
+        .fetch_result::<SimpleProductsTable>(&mut conn)
+    {
+        Err(err) => assert!(
+            err.to_string()
+                .contains("required to have strictly more than one term")
+        ),
+        _ => panic!("phrase prefix query should require multiple terms"),
+    }
+
+    // Phrase
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@ paradedb.phrase(
+        field => 'description',
+        phrases => ARRAY['robot', 'building', 'kit']
+    ) ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 1);
+
+    // Range
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+        paradedb.range(field => 'last_updated_date', range => '[2023-05-01,2023-05-03]'::daterange)
+    ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 7);
+
+    // Regex
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@ paradedb.regex(
+        field => 'description',
+        pattern => '(hardcover|plush|leather|running|wireless)'
+    ) ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 5);
+
+    // Test regex anchors
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@ paradedb.regex(
+        field => 'description',
+        pattern => '^running'
+    ) ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(
+        columns.len(),
+        1,
+        "start anchor ^ should match exactly one item"
+    );
+
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@ paradedb.regex(
+        field => 'description',
+        pattern => 'keyboard$'
+    ) ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 2, "end anchor $ should match two items");
+
+    // Regex Phrase
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@ paradedb.regex_phrase(
+        field => 'description',
+        regexes => ARRAY['.*bot', '.*ing', 'kit']
+    ) ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 1);
+
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+    '{
+        "regex_phrase": {
+            "field": "description",
+            "regexes": [".*eek", "shoes"],
+            "slop": 1,
+            "max_expansion": 10
+        }
+    }'::jsonb;"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 1);
+
+    // Regex Phrase
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@ paradedb.regex_phrase(
+        field => 'description',
+        regexes => ARRAY['.*bot', '.*ing', 'kit']
+    ) ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 1);
+
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+    '{
+        "regex_phrase": {
+            "field": "description",
+            "regexes": [".*eek", "shoes"],
+            "slop": 1,
+            "max_expansion": 10
+        }
+    }'::jsonb;"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 1);
+
+    // Term
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search
+    WHERE bm25_search @@@ paradedb.term(field => 'description', value => 'shoes')
+    ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 3);
+
+    //
+    // NB:  This once worked, but the capability was removed when the new "pdb.*" builder functions
+    //      were added.  The general problem is that there's no longer a clean way to indicate
+    //      the desire to "search all column"
+    //
+    // // Term with no field (should search all columns)
+    // let columns: SimpleProductsTableVec = r#"
+    // SELECT * FROM paradedb.bm25_search
+    // WHERE bm25_search @@@ paradedb.term(value => 'shoes') ORDER BY id"#
+    //     .fetch_collect(&mut conn);
+    // assert_eq!(columns.len(), 3);
+
+    // TermSet with invalid term list
+    match r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@ paradedb.term_set(
+        terms => ARRAY[
+            paradedb.regex(field => 'description', pattern => '.+')
+        ]
+    ) ORDER BY id"#
+        .fetch_result::<SimpleProductsTable>(&mut conn)
+    {
+        Err(err) => assert!(
+            err.to_string()
+                .contains("only term queries can be passed to term_set")
+        ),
+        _ => panic!("term set query should only accept terms"),
+    }
+
+    // TermSet
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search
+    WHERE bm25_search @@@ paradedb.term_set(
+        terms => ARRAY[
+            paradedb.term(field => 'description', value => 'shoes'),
+            paradedb.term(field => 'description', value => 'novel')
+        ]
+    ) ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 5);
+}
+
+#[rstest]
+fn exists_query(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+
+    // Simple exists query
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+        paradedb.exists('rating')
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 41);
+
+    // Non fast field should fail
+    match r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+        paradedb.exists('description')
+    "#
+    .execute_result(&mut conn)
+    {
+        Err(err) => assert!(err.to_string().contains("not a fast field")),
+        _ => panic!("exists() over non-fast field should fail"),
+    }
+
+    // Exists with boolean query
+    "INSERT INTO paradedb.bm25_search (id, description, rating) VALUES (42, 'shoes', NULL)"
+        .execute(&mut conn);
+
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search WHERE bm25_search @@@
+        paradedb.boolean(
+            must => ARRAY[
+                paradedb.exists('rating'),
+                paradedb.parse('description:shoes')
+            ]
+        )
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(columns.len(), 3);
+}
+
+#[rstest]
+fn more_like_this_raw(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+        id SERIAL PRIMARY KEY,
+        flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (flavour) VALUES
+        ('apple'),
+        ('banana'),
+        ('cherry'),
+        ('banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    match r#"
+    SELECT id, flavour FROM test_more_like_this_table WHERE test_more_like_this_table @@@
+        pdb.more_like_this();
+    "#
+    .fetch_result::<()>(&mut conn)
+    {
+        Err(err) => {
+            assert_eq!(
+                db_error_message(&err),
+                "error returned from database: more_like_this must be called with either key_value or document"
+            )
+        }
+        _ => panic!("key_value or document validation failed"),
+    }
+
+    let rows: Vec<(i32, String)> = r#"
+    SELECT id, flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@ pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+
+    let rows: Vec<(i32, String)> = r#"
+    SELECT id, flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@ pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        key_value => 2
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_empty(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+        id SERIAL PRIMARY KEY,
+        flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (flavour) VALUES
+        ('apple'),
+        ('banana'),
+        ('cherry'),
+        ('banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    match r#"
+    SELECT id, flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@ pdb.more_like_this()
+    ORDER BY id;
+    "#
+    .fetch_result::<()>(&mut conn)
+    {
+        Err(err) => {
+            assert_eq!(
+                db_error_message(&err),
+                "error returned from database: more_like_this must be called with either key_value or document"
+            )
+        }
+        _ => panic!("key_value or document validation failed"),
+    }
+}
+
+#[rstest]
+fn more_like_this_text(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+        id SERIAL PRIMARY KEY,
+        flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (flavour) VALUES
+        ('apple'),
+        ('banana'),
+        ('cherry'),
+        ('banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(i32, String)> = r#"
+    SELECT id, flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@ pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_boolean_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+        id BOOLEAN PRIMARY KEY,
+        flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        (true, 'apple'),
+        (false, 'banana')
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(bool, String)> = r#"
+    SELECT id, flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@
+    pdb.more_like_this(
+       min_doc_frequency => 0,
+       min_term_frequency => 0,
+       document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 1);
+}
+
+#[rstest]
+fn more_like_this_uuid_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+        id UUID PRIMARY KEY,
+        flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        ('f159c89e-2162-48cd-85e3-e42b71d2ecd0', 'apple'),
+        ('38bf27a0-1aa8-42cd-9cb0-993025e0b8d0', 'banana'),
+        ('b5faacc0-9eba-441a-81f8-820b46a3b57e', 'cherry'),
+        ('eb833eb6-c598-4042-b84a-0045828fceea', 'banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(uuid::Uuid, String)> = r#"
+    SELECT id, flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@ pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_i64_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+        id BIGINT PRIMARY KEY,
+        flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        (1, 'apple'),
+        (2, 'banana'),
+        (3, 'cherry'),
+        (4, 'banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(i64, String)> = r#"
+    SELECT id, flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@
+    pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_i32_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+        id INT PRIMARY KEY,
+        flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        (1, 'apple'),
+        (2, 'banana'),
+        (3, 'cherry'),
+        (4, 'banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(i32, String)> = r#"
+    SELECT id, flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@ pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_literal_cast(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+        id INT PRIMARY KEY,
+        year INTEGER
+    );
+
+    INSERT INTO test_more_like_this_table (id, year) VALUES
+        (1, 2012),
+        (2, 2013),
+        (3, 2014),
+        (4, 2012);
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, year)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(i32, i32)> = r#"
+    SELECT id, year FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@ pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"year": 2012}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_i16_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+        id SMALLINT PRIMARY KEY,
+        flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        (1, 'apple'),
+        (2, 'banana'),
+        (3, 'cherry'),
+        (4, 'banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(i16, String)> = r#"
+    SELECT id, flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@ pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_f32_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+        id FLOAT4 PRIMARY KEY,
+        flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        (1.1, 'apple'),
+        (2.2, 'banana'),
+        (3.3, 'cherry'),
+        (4.4, 'banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(f32, String)> = r#"
+    SELECT id, flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@ pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_f64_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+    id FLOAT8 PRIMARY KEY,
+    flavour TEXT
+    );
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        (1.1, 'apple'),
+        (2.2, 'banana'),
+        (3.3, 'cherry'),
+        (4.4, 'banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(f64, String)> = r#"
+    SELECT id, flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@
+    pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_numeric_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+    id NUMERIC PRIMARY KEY,
+    flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        (1.1, 'apple'),
+        (2.2, 'banana'),
+        (3.3, 'cherry'),
+        (4.4, 'banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(f64, String)> = r#"
+    SELECT CAST(id AS FLOAT8), flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@ pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_date_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+    id DATE PRIMARY KEY,
+    flavour TEXT
+    );
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        ('2023-05-03', 'apple'),
+        ('2023-05-04', 'banana'),
+        ('2023-05-05', 'cherry'),
+        ('2023-05-06', 'banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(String, String)> = r#"
+    SELECT CAST(id AS TEXT), flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@  pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_time_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+    id TIME PRIMARY KEY,
+    flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        ('08:09:10', 'apple'),
+        ('09:10:11', 'banana'),
+        ('10:11:12', 'cherry'),
+        ('11:12:13', 'banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(String, String)> = r#"
+    SELECT CAST(id AS TEXT), flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@
+    pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_timestamp_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+        id TIMESTAMP PRIMARY KEY,
+        flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        ('2023-05-03 08:09:10', 'apple'),
+        ('2023-05-04 09:10:11', 'banana'),
+        ('2023-05-05 10:11:12', 'cherry'),
+        ('2023-05-06 11:12:13', 'banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(String, String)> = r#"
+    SELECT CAST(id AS TEXT), flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@
+    pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_timestamptz_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+    id TIMESTAMP WITH TIME ZONE PRIMARY KEY,
+    flavour TEXT
+    );
+
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        ('2023-05-03 08:09:10 EST', 'apple'),
+        ('2023-05-04 09:10:11 PST', 'banana'),
+        ('2023-05-05 10:11:12 MST', 'cherry'),
+        ('2023-05-06 11:12:13 CST', 'banana split');
+    "#
+    .execute(&mut conn);
+
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(String, String)> = r#"
+    SELECT CAST(id AS TEXT), flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@
+    pdb.more_like_this(
+        min_doc_frequency => 0,
+        min_term_frequency => 0,
+        document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn more_like_this_timetz_key(mut conn: PgConnection) {
+    r#"
+    CREATE TABLE test_more_like_this_table (
+        id TIME WITH TIME ZONE PRIMARY KEY,
+        flavour TEXT
+    );
+    INSERT INTO test_more_like_this_table (id, flavour) VALUES
+        ('08:09:10 EST',
+        'apple'),
+        ('09:10:11 PST', 'banana'),
+        ('10:11:12 MST', 'cherry'),
+        ('11:12:13 CST', 'banana split');
+    "#
+    .execute(&mut conn);
+    r#"
+        CREATE INDEX test_more_like_this_index on test_more_like_this_table USING paradedb (id, flavour)
+        WITH (key_field='id');
+    "#
+    .execute(&mut conn);
+
+    let rows: Vec<(String, String)> = r#"
+    SELECT CAST(id AS TEXT), flavour FROM test_more_like_this_table
+    WHERE test_more_like_this_table @@@ pdb.more_like_this(
+            min_doc_frequency => 0,
+            min_term_frequency => 0,
+            document => '{"flavour": "banana"}'
+    ) ORDER BY id;
+    "#
+    .fetch_collect(&mut conn);
+    assert_eq!(rows.len(), 2);
+}
+
+#[rstest]
+fn match_query(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search
+    WHERE bm25_search @@@ paradedb.match(field => 'description', value => 'ruling shoeez', distance => 2)
+    ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.id, vec![3, 4, 5]);
+
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search
+    WHERE bm25_search @@@ paradedb.match(
+        field => 'description',
+        value => 'ruling shoeez',
+        distance => 2,
+        conjunction_mode => true
+    ) ORDER BY id"#
+        .fetch_collect(&mut conn);
+    assert_eq!(columns.id, vec![3]);
+
+    let columns: SimpleProductsTableVec = r#"
+    SELECT * FROM paradedb.bm25_search
+    WHERE bm25_search @@@ paradedb.match(field => 'description', value => 'ruling shoeez', distance => 1)
+    ORDER BY id"#
+    .fetch_collect(&mut conn);
+    assert_eq!(columns.id.len(), 0);
+}
+
+#[rstest]
+fn parse_lenient(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+
+    // With Tantivy's new behavior (commit e7c8c331), queries succeed if any default field
+    // matches, even if others fail. Test that lenient mode still provides additional tolerance.
+    // A query with valid terms should work in both modes
+    let rows_strict: Vec<(i32,)> = r#"
+    SELECT id FROM paradedb.bm25_search
+    WHERE paradedb.bm25_search.id @@@ paradedb.parse('shoes')
+    ORDER BY id;
+    "#
+    .fetch(&mut conn);
+    assert!(!rows_strict.is_empty());
+
+    // With lenient enabled, mixed valid/invalid terms should also work
+    let rows_lenient: Vec<(i32,)> = r#"
+    SELECT id FROM paradedb.bm25_search
+    WHERE paradedb.bm25_search.id @@@ paradedb.parse('shoes keyboard', lenient => true)
+    ORDER BY id;
+    "#
+    .fetch(&mut conn);
+    // Should return results matching "shoes" (keyboard is ignored as non-existent)
+    assert_eq!(rows_lenient, vec![(1,), (2,), (3,), (4,), (5,)]);
+}
+
+#[rstest]
+fn parse_conjunction(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+
+    let rows: Vec<(i32,)> = r#"
+    SELECT id FROM paradedb.bm25_search
+    WHERE paradedb.bm25_search.id @@@ paradedb.parse('description:(shoes running)', conjunction_mode => true)
+    ORDER BY id;
+    "#.fetch(&mut conn);
+    assert_eq!(rows, vec![(3,)]);
+}
+
+#[rstest]
+fn parse_with_field_conjunction(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+
+    let rows: Vec<(i32,)> = r#"
+    SELECT id FROM paradedb.bm25_search
+    WHERE paradedb.bm25_search.id @@@ paradedb.parse_with_field('description', 'shoes running', conjunction_mode => true)
+    ORDER BY id;
+    "#.fetch(&mut conn);
+    assert_eq!(rows, vec![(3,)]);
+}
+
+#[rstest]
+fn range_term(mut conn: PgConnection) {
+    r#"
+    CALL paradedb.create_paradedb_test_table(
+        schema_name => 'public',
+        table_name => 'deliveries',
+        table_type => 'Deliveries'
+    );
+
+    CREATE INDEX deliveries_idx ON deliveries
+    USING paradedb (delivery_id, weights, quantities, prices, ship_dates, facility_arrival_times, delivery_times)
+    WITH (key_field = 'delivery_id');
+    "#
+    .execute(&mut conn);
+
+    // int4range
+    let expected: Vec<(i32,)> =
+        "SELECT delivery_id FROM deliveries WHERE weights @> 1 ORDER BY delivery_id"
+            .fetch(&mut conn);
+    let result: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE delivery_id @@@ paradedb.range_term('weights', 1) ORDER BY delivery_id".fetch(&mut conn);
+    assert_eq!(result, expected);
+
+    let expected: Vec<(i32,)> =
+        "SELECT delivery_id FROM deliveries WHERE weights @> 13 ORDER BY delivery_id"
+            .fetch(&mut conn);
+    let result: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE delivery_id @@@ paradedb.range_term('weights', 13) ORDER BY delivery_id".fetch(&mut conn);
+    assert_eq!(result, expected);
+
+    // int8range
+    let expected: Vec<(i32,)> =
+        "SELECT delivery_id FROM deliveries WHERE quantities @> 17000::int8 ORDER BY delivery_id"
+            .fetch(&mut conn);
+    let result: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE delivery_id @@@ paradedb.range_term('quantities', 17000) ORDER BY delivery_id".fetch(&mut conn);
+    assert_eq!(result, expected);
+
+    // numrange
+    let expected: Vec<(i32,)> =
+        "SELECT delivery_id FROM deliveries WHERE prices @> 3.5 ORDER BY delivery_id"
+            .fetch(&mut conn);
+    let result: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE delivery_id @@@ paradedb.range_term('prices', 3.5) ORDER BY delivery_id".fetch(&mut conn);
+    assert_eq!(result, expected);
+
+    // daterange
+    let expected: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE ship_dates @> '2023-03-07'::date ORDER BY delivery_id".fetch(&mut conn);
+    let result: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE delivery_id @@@ paradedb.range_term('ship_dates', '2023-03-07'::date) ORDER BY delivery_id".fetch(&mut conn);
+    assert_eq!(result, expected);
+
+    let expected: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE ship_dates @> '2023-03-06'::date ORDER BY delivery_id".fetch(&mut conn);
+    let result: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE delivery_id @@@ paradedb.range_term('ship_dates', '2023-03-06'::date) ORDER BY delivery_id".fetch(&mut conn);
+    assert_eq!(result, expected);
+
+    // tsrange
+    let expected: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE facility_arrival_times @> '2024-05-01 14:00:00'::timestamp ORDER BY delivery_id".fetch(&mut conn);
+    let result: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE delivery_id @@@ paradedb.range_term('facility_arrival_times', '2024-05-01 14:00:00'::timestamp) ORDER BY delivery_id".fetch(&mut conn);
+    assert_eq!(result, expected);
+
+    let expected: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE facility_arrival_times @> '2024-05-01 15:00:00'::timestamp ORDER BY delivery_id".fetch(&mut conn);
+    let result: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE delivery_id @@@ paradedb.range_term('facility_arrival_times', '2024-05-01 15:00:00'::timestamp) ORDER BY delivery_id".fetch(&mut conn);
+    assert_eq!(result, expected);
+
+    // tstzrange
+    let expected: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE delivery_times @> '2024-05-01 06:31:00-04'::timestamptz ORDER BY delivery_id".fetch(&mut conn);
+    let result: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE delivery_id @@@ paradedb.range_term('delivery_times', '2024-05-01 06:31:00-04'::timestamptz) ORDER BY delivery_id".fetch(&mut conn);
+    assert_eq!(result, expected);
+
+    let expected: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE delivery_times @> '2024-05-01T11:30:00Z'::timestamptz ORDER BY delivery_id".fetch(&mut conn);
+    let result: Vec<(i32,)> = "SELECT delivery_id FROM deliveries WHERE delivery_id @@@ paradedb.range_term('delivery_times', '2024-05-01T11:30:00Z'::timestamptz) ORDER BY delivery_id".fetch(&mut conn);
+    assert_eq!(result, expected);
+}
+
+#[rstest]
+#[async_std::test]
+async fn prepared_statement_replanning(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+
+    // ensure our plan doesn't change into a sequential scan after the 5th execution
+    for _ in 0..10 {
+        let _: Vec<i32> = sqlx::query("SELECT id FROM paradedb.bm25_search WHERE id @@@ paradedb.term('rating', $1) ORDER BY id")
+            .bind(2)
+            .fetch_all(&mut conn)
+            .await
+            .unwrap()
+            .into_iter()
+            .map(|row| row.get::<i32, _>("id"))
+            .collect();
+    }
+}
+
+#[rstest]
+#[async_std::test]
+async fn direct_prepared_statement_replanning(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+
+    "PREPARE stmt(text) AS SELECT id FROM paradedb.bm25_search WHERE description @@@ $1"
+        .execute(&mut conn);
+
+    // ensure our plan doesn't change into a sequential scan after the 5th execution
+    for _ in 0..10 {
+        "EXECUTE stmt('keyboard')".fetch_one::<(i32,)>(&mut conn);
+    }
+}
+
+#[rstest]
+#[async_std::test]
+async fn direct_prepared_statement_replanning_custom_scan(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+
+    "PREPARE stmt(text) AS SELECT pdb.score(id), id FROM paradedb.bm25_search WHERE description @@@ $1 ORDER BY score desc LIMIT 10"
+        .execute(&mut conn);
+
+    // ensure our plan doesn't change into a sequential scan after the 5th execution
+    for _ in 0..10 {
+        let (score, id) = "EXECUTE stmt('keyboard')".fetch_one::<(f32, i32)>(&mut conn);
+        assert_eq!((score, id), (3.2668595, 2))
+    }
+}
+
+struct PreparedStmtTestCase<'a> {
+    stmt_name: &'a str,
+    column: &'a str,
+    operator: &'a str,
+    param_type: &'a str,
+    prepared_rhs: &'a str,
+    execute_arg: &'a str,
+    literal_rhs: &'a str,
+}
+
+/// Prepares a statement with a parameter, executes it under force_generic_plan,
+/// and verifies the result matches the equivalent literal query.
+fn verify_prepared_stmt_matches_literal(conn: &mut PgConnection, tc: PreparedStmtTestCase) {
+    let PreparedStmtTestCase {
+        stmt_name,
+        column,
+        operator,
+        param_type,
+        prepared_rhs,
+        execute_arg,
+        literal_rhs,
+    } = tc;
+    let expected: Vec<(i32,)> = format!(
+        "SELECT id FROM paradedb.bm25_search \
+         WHERE {column} {operator} {literal_rhs} ORDER BY id"
+    )
+    .fetch(conn);
+
+    format!(
+        "PREPARE {stmt_name}({param_type}) AS \
+         SELECT id FROM paradedb.bm25_search \
+         WHERE {column} {operator} {prepared_rhs} ORDER BY id"
+    )
+    .execute(conn);
+
+    let actual: Vec<(i32,)> = format!("EXECUTE {stmt_name}({execute_arg})").fetch(conn);
+
+    assert_eq!(
+        actual, expected,
+        "{stmt_name}: generic plan result must match literal query"
+    );
+
+    format!("DEALLOCATE {stmt_name}").execute(conn);
+}
+
+#[rstest]
+#[async_std::test]
+async fn generic_plan_text_and_text_array_params_issue_3900(mut conn: PgConnection) {
+    SimpleProductsTable::setup().execute(&mut conn);
+    "SET plan_cache_mode = force_generic_plan".execute(&mut conn);
+
+    for tc in [
+        // &&& with text, varchar, text[], varchar[]
+        PreparedStmtTestCase {
+            stmt_name: "stmt_and_text",
+            column: "description",
+            operator: "&&&",
+            param_type: "text",
+            prepared_rhs: "$1",
+            execute_arg: "'keyboard'",
+            literal_rhs: "'keyboard'",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_and_varchar",
+            column: "description",
+            operator: "&&&",
+            param_type: "varchar",
+            prepared_rhs: "$1",
+            execute_arg: "'keyboard'",
+            literal_rhs: "'keyboard'",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_and_text_array",
+            column: "description",
+            operator: "&&&",
+            param_type: "text[]",
+            prepared_rhs: "$1",
+            execute_arg: "ARRAY['keyboard']",
+            literal_rhs: "ARRAY['keyboard']",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_and_varchar_array",
+            column: "description",
+            operator: "&&&",
+            param_type: "varchar[]",
+            prepared_rhs: "$1",
+            execute_arg: "ARRAY['keyboard']::varchar[]",
+            literal_rhs: "ARRAY['keyboard']::varchar[]",
+        },
+        // ||| with text, varchar, text[], varchar[]
+        PreparedStmtTestCase {
+            stmt_name: "stmt_or_text",
+            column: "description",
+            operator: "|||",
+            param_type: "text",
+            prepared_rhs: "$1",
+            execute_arg: "'keyboard'",
+            literal_rhs: "'keyboard'",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_or_varchar",
+            column: "description",
+            operator: "|||",
+            param_type: "varchar",
+            prepared_rhs: "$1",
+            execute_arg: "'keyboard'",
+            literal_rhs: "'keyboard'",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_or_text_array",
+            column: "description",
+            operator: "|||",
+            param_type: "text[]",
+            prepared_rhs: "$1",
+            execute_arg: "ARRAY['keyboard']",
+            literal_rhs: "ARRAY['keyboard']",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_or_varchar_array",
+            column: "description",
+            operator: "|||",
+            param_type: "varchar[]",
+            prepared_rhs: "$1",
+            execute_arg: "ARRAY['keyboard']::varchar[]",
+            literal_rhs: "ARRAY['keyboard']::varchar[]",
+        },
+        // ### with text, varchar, text[], varchar[]
+        PreparedStmtTestCase {
+            stmt_name: "stmt_phrase_text",
+            column: "description",
+            operator: "###",
+            param_type: "text",
+            prepared_rhs: "$1",
+            execute_arg: "'ergonomic keyboard'",
+            literal_rhs: "'ergonomic keyboard'",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_phrase_varchar",
+            column: "description",
+            operator: "###",
+            param_type: "varchar",
+            prepared_rhs: "$1",
+            execute_arg: "'ergonomic keyboard'",
+            literal_rhs: "'ergonomic keyboard'",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_phrase_text_array",
+            column: "description",
+            operator: "###",
+            param_type: "text[]",
+            prepared_rhs: "$1",
+            execute_arg: "ARRAY['ergonomic', 'keyboard']",
+            literal_rhs: "ARRAY['ergonomic', 'keyboard']",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_phrase_varchar_array",
+            column: "description",
+            operator: "###",
+            param_type: "varchar[]",
+            prepared_rhs: "$1",
+            execute_arg: "ARRAY['ergonomic', 'keyboard']::varchar[]",
+            literal_rhs: "ARRAY['ergonomic', 'keyboard']::varchar[]",
+        },
+        // === with text, varchar, text[], varchar[] (already worked, confirm)
+        PreparedStmtTestCase {
+            stmt_name: "stmt_term_text",
+            column: "category",
+            operator: "===",
+            param_type: "text",
+            prepared_rhs: "$1",
+            execute_arg: "'Electronics'",
+            literal_rhs: "'Electronics'",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_term_varchar",
+            column: "category",
+            operator: "===",
+            param_type: "varchar",
+            prepared_rhs: "$1",
+            execute_arg: "'Electronics'",
+            literal_rhs: "'Electronics'",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_term_text_array",
+            column: "category",
+            operator: "===",
+            param_type: "text[]",
+            prepared_rhs: "$1",
+            execute_arg: "ARRAY['Electronics', 'Footwear']",
+            literal_rhs: "ARRAY['Electronics', 'Footwear']",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_term_varchar_array",
+            column: "category",
+            operator: "===",
+            param_type: "varchar[]",
+            prepared_rhs: "$1",
+            execute_arg: "ARRAY['Electronics', 'Footwear']::varchar[]",
+            literal_rhs: "ARRAY['Electronics', 'Footwear']::varchar[]",
+        },
+        // @@@ with text, varchar (already worked, confirm)
+        PreparedStmtTestCase {
+            stmt_name: "stmt_parse_text",
+            column: "description",
+            operator: "@@@",
+            param_type: "text",
+            prepared_rhs: "$1",
+            execute_arg: "'keyboard'",
+            literal_rhs: "'keyboard'",
+        },
+        PreparedStmtTestCase {
+            stmt_name: "stmt_parse_varchar",
+            column: "description",
+            operator: "@@@",
+            param_type: "varchar",
+            prepared_rhs: "$1",
+            execute_arg: "'keyboard'",
+            literal_rhs: "'keyboard'",
+        },
+    ] {
+        verify_prepared_stmt_matches_literal(&mut conn, tc);
+    }
+
+    "RESET plan_cache_mode".execute(&mut conn);
+}

@@ -1,0 +1,116 @@
+# workflows/publish-pg_search-schema.yml
+#
+# Publish pg_search (Schema)
+# Generates the full pg_search SQL schema via `cargo pgrx schema` and uploads it as a
+# release asset.
+
+name: Publish pg_search (Schema)
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "The version to generate the schema for (e.g. 0.22.0). Defaults to the current tag."
+        required: false
+        default: ""
+
+concurrency:
+  group: publish-pg_search-schema-${{ github.ref }}
+  cancel-in-progress: true
+
+# id-token: write lets cosign sign the schema keylessly via Sigstore.
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  publish-pg_search-schema:
+    name: Publish pg_search (Schema)
+    runs-on:
+      # Compute-optimized c-family — Rust schema generation is CPU-bound.
+      # See https://runs-on.com/configuration/job-labels/ — runs in us-east-1.
+      - runs-on=${{ github.run_id }}
+      - family=c7a+c7i
+      - cpu=8
+      - ram=16
+      - image=ubuntu24-full-x64
+    if: ${{ !contains(github.ref, '-rc.') }}
+    defaults:
+      run:
+        shell: bash -eo pipefail {0}
+    env:
+      pg_version: 18
+
+    steps:
+      - name: Checkout Git Repository
+        uses: actions/checkout@v7
+
+      - name: Extract pgrx Version
+        id: pgrx
+        run: echo "version=$(sed -nE 's/^pgrx = "=?([^"]+)"$/\1/p' Cargo.toml)" >> $GITHUB_OUTPUT
+
+      - name: Install Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          cache: false
+          rustflags: "" # Use .cargo/config.toml target-cpu flags
+
+      # Do NOT add hashFiles('**/Cargo.lock') or arch to shared-key.
+      # See test-pg_search.yml for rationale.
+      - name: Install Rust Cache
+        uses: swatinem/rust-cache@v2
+        with:
+          prefix-key: "v3-rust-cache"
+          shared-key: pg${{ env.pg_version }}
+          cache-targets: true
+          cache-all-crates: true
+
+      - name: Install & Configure PostgreSQL ${{ env.pg_version }}
+        uses: ./.github/actions/setup-postgres
+        with:
+          pg_version: ${{ env.pg_version }}
+          extra_packages: libopenblas-dev lld
+
+      - name: Install pgrx
+        run: cargo install -j $(nproc) --locked cargo-pgrx --version ${{ steps.pgrx.outputs.version }} --debug
+
+      - name: Initialize pgrx Environment
+        run: cargo pgrx init "--pg${{ env.pg_version }}=/usr/lib/postgresql/${{ env.pg_version }}/bin/pg_config"
+
+      - name: Generate pg_search Schema
+        run: cargo pgrx schema -p pg_search pg${{ env.pg_version }} > pg_search.schema.sql
+
+      - name: Determine Version
+        id: version
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=$(echo ${{ github.ref_name }} | sed 's/^v//')" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v4.1.2
+
+      # Keyless Sigstore signature over the schema. Works without GitHub Enterprise;
+      # the .cosign.bundle is uploaded next to it for `cosign verify-blob`.
+      - name: Sign Schema with Cosign (keyless)
+        env:
+          COSIGN_YES: "true"
+        run: cosign sign-blob --yes --bundle pg_search.schema.sql.cosign.bundle pg_search.schema.sql
+
+      - name: Upload Schema to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload v${{ steps.version.outputs.version }} pg_search.schema.sql pg_search.schema.sql.cosign.bundle --clobber
+
+      - name: Notify Slack on Failure
+        if: failure()
+        uses: paradedb/actions/slack-alert@v10
+        with:
+          webhook_url: ${{ secrets.SLACK_GITHUB_CHANNEL_WEBHOOK_URL }}
+          mention: "<!subteam^S0BLE20RYPM|@pg_search-maintainers>"
+          title: "${{ github.workflow }} Failed"
