@@ -1,0 +1,57 @@
+name: UI YAIWES 43 Full Repo Reentry Repair 01 Git Identity
+run-name: UI YAIWES 43 Repair 01 Git Identity • ${{ github.event_name }} • ${{ github.sha }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ui-yaiwes-43-full-repo-reentry-repair-01-git-identity-20260908.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: frontend-ui-yaiwes-43-full-repo-reentry-repair-01-git-identity-20260908
+  cancel-in-progress: false
+
+env:
+  GIT_TERMINAL_PROMPT: '0'
+
+jobs:
+  repair-writer-identity:
+    name: Repair writer identity and resume 43 complete repositories
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Checkout fresh destination main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Apply proven writer identity repair and NO-LFS policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config --local user.name 'github-actions[bot]'
+          git config --local user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config --local filter.lfs.clean cat
+          git config --local filter.lfs.smudge cat
+          git config --local filter.lfs.process ''
+          git config --local filter.lfs.required false
+          git config --local core.compression 0
+
+      - name: Resume deterministic complete-repository acquisition
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/ui_yaiwes_43_full_repo_reentry_20260908.py
+
+      - name: Repair checkpoint summary
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          p='UI YAIWES/componentes open soure UI YAIWES/REENTRY_43_CHECKPOINT.json'
+          if test -f "$p"; then cat "$p"; else echo 'CHECKPOINT_NOT_YET_PUBLISHED'; fi
