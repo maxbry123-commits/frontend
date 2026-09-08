@@ -107,9 +107,15 @@ S1 cancelación parcial→recovery queue delta; S2 version mismatch→fail close
 ## UI-PLUG-0031 — CONTRATO MAESTRO X-RAY V5
 Nuevo documento canónico aditivo: `CONTRATO-MAESTRO-FORENSE-XRAY-50-GOALS-UI-YAIWES.md`. Mantiene runtime `tel.workflow/v3`; v5 es revisión de guía, no cambio silencioso de contrato.
 
-## UI-PLUG-0032 — NEXT
-CURRENT=`P01_POST124_RECOVERY_QUEUE_BUILD`.
-Siguiente delta: construir recovery queue ordenada y validada desde QUEUE+artifact+destino actual; preservar C1, investigar C2, reanudar C3, resolver C4, ejecutar C5, cerrar C6; luego auditor 124/124 y P01 fresh.
+## UI-PLUG-0032 — RECOVERY CLASSIFICATION A02
+`ACTION124-RECOVERY-CLASSIFICATION-V5.json` materializa C1/C2/C3/C4/C5 con 124 índices primarios únicos y C6 como flag secundario. A02 queda cubierto, sin promover P01.
+
+## UI-PLUG-0033 — QUEUE INTEGRITY A03
+`ACTION124-QUEUE-INTEGRITY-V5.json` fija queue blob `f8283c50395a63d5f8d5d3e127d86c2be75a0176`; valida cobertura única `1..124`; conserva la cola histórica sin mutarla y define recovery view `director_index ASC`. Refuta falso orden correcto por `len=124`; Hypothesis index9 queda correctamente antes de 10 en recovery. A03 PASS; P01 sigue ACTIVE/STale.
+
+## UI-PLUG-0034 — NEXT
+CURRENT=`P01_POST124_C1_INDEPENDENT_AUDIT`.
+Siguiente delta: A04 auditar read-only los 50 C1 contra destino actual, sin redownload; exigir URL/commit/sums/hash/license/tree por componente.
 
 ---
 
