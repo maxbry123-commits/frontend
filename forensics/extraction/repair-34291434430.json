@@ -1,0 +1,122 @@
+{
+  "schema": "yaiwes.extraction.guardian.v2",
+  "run_id": "34291434430",
+  "archive_groups": 57,
+  "processed": [
+    {
+      "slug": "Mesa",
+      "target": "UI YAIWES/componentes open soure UI YAIWES/Mesa",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 13,
+      "part_sha256": {
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0001.zip": "34e5d51e7a5916ea9f4136c2d4ffbd2a3955083dcd222fcd69dd6dc6e4a9de6a",
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0002.zip": "604f4068c9bfc3ab57ed8e9aeb89cd83653ed55b77227509c7b717725a0fdcfb",
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0003.zip": "a3641b57c4c4fcf55b5243df5d6f4fdc5372b7d37dd027f42d15ca681c983e69",
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0004.zip": "4fdc42cd62181708405025720264f2de77f875659a4cb0e1cc3bdbb6d4608908",
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0005.zip": "16f8fcecee8aca43f19f8cf1c123e071505f6ab37e7d86e8a69d8260c288ba0b",
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0006.zip": "32e7ac4e06f5fb31902bb360350c8ded5570078cc0005c3ec146877d6a83be84",
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0007.zip": "10dd024c47dbcaae38b42de6c26f2497a5d90d39d68f21bdd0f4bf5be078d8fc",
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0008.zip": "f05a28c4c780a666e08ec1521910d785f16f228f06829cc1ac195a97156e7956",
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0009.zip": "79b73adfec6d21058c680d25fb61d209cafef542b67776a085f65d04b27265e5",
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0010.zip": "c3dd2347df5debf1d752172ac5cf015162abd25e857800b297b649186009a0a5",
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0011.zip": "9393c6428b81ec319780e5385ca52f91974958a9d2b254a8821337677aa456e2",
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0012.zip": "bcbb607f1a9c39eebebd987d09df77c000651dd8baf11ccf3d8eaf855f41d237",
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Mesa_0013.zip": "de7fb789ccdac9f1ad5235a0b094c472314dbbceab15d62986d0f0da3a928e1b"
+      },
+      "copied": 12874,
+      "mirrors": [],
+      "files": 12874,
+      "bytes": 400871495,
+      "tree_sha256": "d513a2fd5ab016186b8c40ee39723312cbe5636cc61212d4ceb2816b86d7351f"
+    },
+    {
+      "slug": "Wayland",
+      "target": "UI YAIWES/componentes open soure UI YAIWES/Wayland",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Wayland_0001.zip": "e01684a8c23ee9497dcdf8af2f5221dddd267e6b2ce4100a4f29a829a94b1db6"
+      },
+      "copied": 200,
+      "mirrors": [],
+      "files": 200,
+      "bytes": 2441325,
+      "tree_sha256": "79e66d7df0c0b7ae2dc3b779fe53192957ffe77022429f30545fe23d407adb7c"
+    },
+    {
+      "slug": "virglrenderer",
+      "target": "UI YAIWES/componentes open soure UI YAIWES/virglrenderer",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/virglrenderer_0001.zip": "f30b7d2f526682deb1fbbe13633b744a01be898b7768f2c4e59a6fc37474aa1b"
+      },
+      "copied": 390,
+      "mirrors": [],
+      "files": 390,
+      "bytes": 6434493,
+      "tree_sha256": "588b998661b4c86d9f8acb5ca117c34724683904d6ddb42d25fb1b29999821e3"
+    },
+    {
+      "slug": "virtiofsd",
+      "target": "UI YAIWES/componentes open soure UI YAIWES/virtiofsd",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/virtiofsd_0001.zip": "4c813a9fe7dc79d71ec1d24c82103302e8589c76d591740e7b8037eea8f8b37f"
+      },
+      "copied": 50,
+      "mirrors": [],
+      "files": 50,
+      "bytes": 778252,
+      "tree_sha256": "7c10dcbd24e206f1218eab638d28e6acd4fb4635c3018ddaee41dd208ca1254b"
+    },
+    {
+      "slug": "Weston-libweston",
+      "target": "UI YAIWES/componentes open soure UI YAIWES/Weston-libweston",
+      "status": "EXTRACTED_VERIFIED",
+      "parts": 1,
+      "part_sha256": {
+        "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43/Weston-libweston_0001.zip": "c40bbb6f34cf18b94ff2a7cb17a8c90ae1578e4ca00da749e1540f7376583e00"
+      },
+      "copied": 689,
+      "mirrors": [],
+      "files": 689,
+      "bytes": 9996366,
+      "tree_sha256": "f448e3f4fad5d87311257f6fde8720ad907edd34008f24bc3ec3657f5f39e4d9"
+    }
+  ],
+  "failures": [
+    {
+      "slug": "AVF",
+      "target": "UI YAIWES/componentes open soure UI YAIWES/AVF",
+      "error": "GIT_BLOB_LIMIT_GAP:[{\"path\": \"libs/apkverify/tests/data/input.272629760\", \"bytes\": 272629760}]",
+      "retryable": false
+    }
+  ],
+  "remaining_gaps": [
+    {
+      "slug": "AVF",
+      "target": "UI YAIWES/componentes open soure UI YAIWES/AVF",
+      "mirror": null
+    }
+  ],
+  "retryable_gaps": [],
+  "blocked_gaps": [
+    {
+      "slug": "AVF",
+      "target": "UI YAIWES/componentes open soure UI YAIWES/AVF",
+      "mirror": null,
+      "code": "GIT_BLOB_LIMIT_GAP",
+      "detail": "GIT_BLOB_LIMIT_GAP:[{\"path\": \"libs/apkverify/tests/data/input.272629760\", \"bytes\": 272629760}]",
+      "evidence": "current-run"
+    }
+  ],
+  "counts": {
+    "remaining": 1,
+    "retryable": 0,
+    "blocked": 1,
+    "processed": 5
+  },
+  "verdict": "GAPS_PENDING"
+}

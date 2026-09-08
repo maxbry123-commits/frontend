@@ -1,0 +1,167 @@
+/*
+ * Copyright © 2025 Collabora, Ltd.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice (including the
+ * next paragraph) shall be included in all copies or substantial
+ * portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+#include "config.h"
+
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+#include <time.h>
+#include <assert.h>
+
+#include <libweston/libweston.h>
+#include "shared/timespec-util.h"
+#include "timeline.h"
+#include "weston-trace.h"
+
+static void
+build_seat_track_name(struct weston_seat *seat, char *name, int size)
+{
+	assert(seat->track.id == 0);
+
+	snprintf(name, size, "seat: %s", seat->seat_name);
+}
+
+static void
+weston_perfetto_ensure_seat_id(struct weston_seat *seat)
+{
+	char track_name[600];
+
+	if (seat->track.id)
+		return;
+
+	build_seat_track_name(seat, track_name, sizeof(track_name));
+
+	seat->track.id = util_perfetto_new_track(track_name);
+}
+
+/**
+ * Translates a timeline point for perfetto.
+ *
+ * The TL_POINT() is a wrapper over this function, but it uses the weston_compositor
+ * instance to pass the timeline scope.
+ *
+ * @param timeline_scope the timeline scope
+ * @param tlp_name the name of the timeline point.
+ *
+ * @ingroup log
+ */
+WL_EXPORT void
+weston_timeline_perfetto(struct weston_log_scope *timeline_scope,
+			 enum timeline_point_name tlp_name, ...)
+{
+	struct weston_output *output = NULL;
+	struct weston_surface *surface = NULL;
+	struct weston_trace_surface *surf_tr = NULL;
+	struct weston_input_event *ievent = NULL;
+	struct timespec ts;
+	uint64_t now_ns;
+	uint64_t vblank_ns = 0, gpu_ns = 0;
+	va_list argp;
+
+	if (!util_perfetto_is_tracing_enabled())
+		return;
+
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+	now_ns = timespec_to_nsec(&ts);
+
+	va_start(argp, tlp_name);
+	while (1) {
+		enum timeline_type otype;
+		void *obj;
+
+		otype = va_arg(argp, enum timeline_type);
+		if (otype == TLT_END)
+			break;
+
+		obj = va_arg(argp, void *);
+		switch (otype) {
+		case TLT_OUTPUT:
+			output = obj;
+			break;
+		case TLT_SURFACE:
+			surface = obj;
+			surf_tr = &surface->trace;
+			break;
+		case TLT_VBLANK:
+			vblank_ns = timespec_to_nsec(obj);
+			break;
+		case TLT_GPU:
+			gpu_ns = timespec_to_nsec(obj);
+			break;
+		case TLT_INPUT_EVENT:
+			ievent = obj;
+			weston_perfetto_ensure_seat_id(ievent->seat);
+			break;
+		default:
+			assert(!"not reached");
+		}
+	}
+	va_end(argp);
+
+	switch (tlp_name) {
+	case TLP_CORE_REPAINT_ENTER_LOOP:
+	case TLP_CORE_REPAINT_RESTART:
+	case TLP_CORE_REPAINT_EXIT_LOOP:
+		break;
+	case TLP_CORE_FLUSH_DAMAGE:
+		WESTON_TRACE_TIMESTAMP_END(surf_tr->damage_track.id, CLOCK_MONOTONIC, now_ns);
+		WESTON_TRACE_TIMESTAMP_BEGIN("Clean", surf_tr->damage_track.id, 0, CLOCK_MONOTONIC, now_ns);
+		break;
+	case TLP_CORE_REPAINT_BEGIN:
+		WESTON_TRACE_TIMESTAMP_END(output->trace.paint_track.id, CLOCK_MONOTONIC, now_ns);
+		WESTON_TRACE_TIMESTAMP_BEGIN("Paint", output->trace.paint_track.id, 0, CLOCK_MONOTONIC, now_ns);
+		break;
+	case TLP_CORE_REPAINT_POSTED:
+		WESTON_TRACE_TIMESTAMP_END(output->trace.paint_track.id, CLOCK_MONOTONIC, now_ns);
+		WESTON_TRACE_TIMESTAMP_BEGIN("Posted", output->trace.presentation_track.id, 0, CLOCK_MONOTONIC, now_ns);
+		break;
+	case TLP_CORE_REPAINT_FINISHED:
+		WESTON_TRACE_TIMESTAMP_END(output->trace.presentation_track.id, CLOCK_MONOTONIC, vblank_ns);
+		break;
+	case TLP_CORE_REPAINT_REQ:
+		WESTON_TRACE_TIMESTAMP_BEGIN("Scheduled", output->trace.paint_track.id, 0, CLOCK_MONOTONIC, now_ns);
+		break;
+	case TLP_CORE_COMMIT_DAMAGE:
+		WESTON_TRACE_TIMESTAMP_END(surf_tr->damage_track.id, CLOCK_MONOTONIC, now_ns);
+		WESTON_TRACE_TIMESTAMP_BEGIN("Damaged", surf_tr->damage_track.id, surf_tr->flow.id, CLOCK_MONOTONIC, now_ns);
+		break;
+	case TLP_RENDERER_GPU_BEGIN:
+		WESTON_TRACE_TIMESTAMP_BEGIN("Active", output->trace.gpu_track.id, 0, CLOCK_MONOTONIC, gpu_ns);
+		break;
+	case TLP_RENDERER_GPU_END:
+		WESTON_TRACE_TIMESTAMP_END(output->trace.gpu_track.id, CLOCK_MONOTONIC, gpu_ns);
+		break;
+	case TLP_INPUT_KERNEL_TS:
+		WESTON_TRACE_BEGIN_ANNOTATION();
+		WESTON_TRACE_ANNOTATE(("seat track", &ievent->seat->track),
+				      ("event flow", &ievent->flow),
+				      ("event time", ievent->ts));
+		WESTON_TRACE_COMMIT_ANNOTATION("event");
+		break;
+	default:
+		assert(!"not reached");
+	}
+}

@@ -1,0 +1,503 @@
+/*
+ * Copyright (C) 2026 Amazon.com, Inc. or its affiliates
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice (including the
+ * next paragraph) shall be included in all copies or substantial
+ * portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+#include "config.h"
+#include <libweston/libweston.h>
+
+#include <libevdev/libevdev.h>
+#include "libweston/pixel-formats.h"
+#include "perfetto/annotations.h"
+#include "shared/string-helpers.h"
+#include "shared/timespec-util.h"
+#include "shared/weston-assert.h"
+#include "weston-trace.h"
+
+static void
+do_annotate_solid_buffer_values(struct weston_debug_annotations *annots,
+				unsigned char parent,
+				const char *key,
+				unsigned char key_size,
+				const struct weston_solid_buffer_values *values);
+
+static void
+do_annotate_buffer(struct weston_debug_annotations *annots,
+		   unsigned char parent,
+		   const char *key,
+		   unsigned char key_size,
+		   const struct weston_buffer *buffer);
+
+static void
+do_annotate_time_since(struct weston_debug_annotations *annots,
+		       unsigned char parent,
+		       const char *key,
+		       unsigned char key_size,
+		       weston_trace_time_since *since);
+
+static void
+do_annotate_bitflags(struct weston_debug_annotations *annots,
+		     unsigned char parent,
+		     const char *key,
+		     unsigned char key_size,
+		     struct weston_trace_bitflags *trace_bf);
+
+static void
+do_annotate_int(struct weston_debug_annotations *annots,
+		unsigned char parent,
+		const char *key,
+		unsigned char key_size,
+		int value)
+{
+	weston_assert_u8_gt(NULL, WESTON_MAX_DEBUG_ANNOTS, annots->count);
+	struct weston_debug_annotation *annot = &annots->annots[annots->count];
+
+	annot->type = WESTON_DEBUG_ANNOTATION_INT_VAL;
+	annot->ivalue = value;
+	annot->parent = parent;
+	annot->key = key;
+	annot->key_size = key_size;
+
+	annots->count++;
+}
+
+WL_EXPORT void
+perfetto_annotate_int(struct weston_debug_annotations *annots,
+		      const char *key,
+		      unsigned char key_size,
+		      int value)
+{
+	do_annotate_int(annots, annots->count, key, key_size, value);
+}
+
+static void
+do_annotate_bool(struct weston_debug_annotations *annots,
+		unsigned char parent,
+		const char *key,
+		unsigned char key_size, bool value)
+{
+	weston_assert_u8_gt(NULL, WESTON_MAX_DEBUG_ANNOTS, annots->count);
+	struct weston_debug_annotation *annot = &annots->annots[annots->count];
+
+	annot->type = WESTON_DEBUG_ANNOTATION_STR_VAL;
+	annot->svalue = value ? " true" : "false";
+	annot->parent = parent;
+	annot->key = key;
+	annot->key_size = key_size;
+
+	annots->count++;
+}
+
+WL_EXPORT void
+perfetto_annotate_bool(struct weston_debug_annotations *annots,
+		      const char *key,
+		      unsigned char key_size,
+		      bool value)
+{
+	do_annotate_bool(annots, annots->count, key, key_size, value);
+}
+
+static void
+do_annotate_float(struct weston_debug_annotations *annots,
+		  unsigned char parent,
+		  const char *key,
+		  unsigned char key_size,
+		  float value)
+{
+	weston_assert_u8_gt(NULL, WESTON_MAX_DEBUG_ANNOTS, annots->count);
+	struct weston_debug_annotation *annot = &annots->annots[annots->count];
+
+	annot->type = WESTON_DEBUG_ANNOTATION_FLOAT_VAL;
+	annot->fvalue = value;
+	annot->parent = parent;
+	annot->key = key;
+	annot->key_size = key_size;
+
+	annots->count++;
+}
+
+WL_EXPORT void
+perfetto_annotate_float(struct weston_debug_annotations *annots,
+			const char *key,
+			unsigned char key_size,
+			float value)
+{
+	do_annotate_float(annots, annots->count, key, key_size, value);
+}
+
+static void
+do_annotate_double(struct weston_debug_annotations *annots,
+		   unsigned char parent, const char *key,
+		   unsigned char key_size, double value)
+{
+	weston_assert_u8_gt(NULL, WESTON_MAX_DEBUG_ANNOTS, annots->count);
+	struct weston_debug_annotation *annot = &annots->annots[annots->count];
+
+	annot->type = WESTON_DEBUG_ANNOTATION_DOUBLE_VAL;
+	annot->dvalue = value;
+	annot->parent = parent;
+	annot->key = key;
+	annot->key_size = key_size;
+
+	annots->count++;
+}
+
+WL_EXPORT void
+perfetto_annotate_double(struct weston_debug_annotations *annots,
+			const char *key, unsigned char key_size,
+			double value)
+{
+	do_annotate_double(annots, annots->count, key, key_size, value);
+}
+static void
+do_annotate_string(struct weston_debug_annotations *annots,
+		   unsigned char parent,
+		   const char *key,
+		   unsigned char key_size,
+		   const char *value)
+{
+	weston_assert_u8_gt(NULL, WESTON_MAX_DEBUG_ANNOTS, annots->count);
+	struct weston_debug_annotation *annot = &annots->annots[annots->count];
+
+	annot->type = WESTON_DEBUG_ANNOTATION_STR_VAL;
+	annot->svalue = value;
+	annot->parent = parent;
+	annot->key = key;
+	annot->key_size = key_size;
+
+	annots->count++;
+}
+
+WL_EXPORT void
+perfetto_annotate_string(struct weston_debug_annotations *annots,
+			 const char *key,
+			 unsigned char key_size,
+			 const char *value)
+{
+	do_annotate_string(annots, annots->count, key, key_size, value);
+}
+
+static void
+do_annotate_flow_const(struct weston_debug_annotations *annots,
+		       unsigned char parent,
+		       const char *key,
+		       unsigned char key_size,
+		       const struct weston_trace_flow *flow)
+{
+	struct weston_debug_annotation *annot = &annots->annots[annots->count];
+
+	weston_assert_u8_gt(NULL, WESTON_MAX_DEBUG_ANNOTS, annots->count);
+	weston_assert_u64_gt(NULL, flow->id, 0);
+
+	annot->type = WESTON_DEBUG_ANNOTATION_FLOW;
+	annot->flow_value = flow->id;
+	annot->parent = parent;
+	annot->key = key;
+	annot->key_size = key_size;
+
+	annots->count++;
+}
+
+static void
+do_annotate_flow(struct weston_debug_annotations *annots,
+		 unsigned char parent,
+		 const char *key,
+		 unsigned char key_size,
+		 struct weston_trace_flow *flow)
+{
+	if (flow->id == 0)
+		weston_trace_flow_start(flow);
+
+	do_annotate_flow_const(annots, parent, key, key_size, flow);
+}
+
+static unsigned char
+create_container(struct weston_debug_annotations *annots,
+		 unsigned char parent,
+		 const char *key,
+		 unsigned char key_size)
+{
+	weston_assert_u8_gt(NULL, WESTON_MAX_DEBUG_ANNOTS, annots->count);
+	struct weston_debug_annotation *annot = &annots->annots[annots->count];
+
+	annot->type = WESTON_DEBUG_ANNOTATION_CONTAINER;
+	annot->key = key;
+	annot->key_size = key_size;
+	annot->parent = parent;
+
+	return annots->count++;
+}
+
+#define ADD(annots, parent, key, value)                                              \
+	do {                                                                         \
+		static_assert(sizeof(key) < WESTON_TRACE_MAX_KEY_LENGTH,             \
+			      "Key exceeds maximum length");                         \
+		_Generic((value),                                                    \
+			char *: do_annotate_string,                                  \
+			const char *: do_annotate_string,                            \
+			int: do_annotate_int,                                        \
+			unsigned int: do_annotate_int,                               \
+			float: do_annotate_float,                                    \
+			struct weston_buffer *:do_annotate_buffer,                   \
+			const struct weston_buffer *:do_annotate_buffer,             \
+			struct weston_solid_buffer_values *:do_annotate_solid_buffer_values,       \
+			const struct weston_solid_buffer_values *: do_annotate_solid_buffer_values,\
+			weston_trace_time_since *: do_annotate_time_since,           \
+			struct weston_trace_bitflags *: do_annotate_bitflags,        \
+			struct weston_trace_flow *: do_annotate_flow,                \
+			const struct weston_trace_flow *: do_annotate_flow_const     \
+		) (annots, parent, key, sizeof(key), value);                         \
+	} while (0)
+
+static void
+do_annotate_solid_buffer_values(struct weston_debug_annotations *annots,
+				unsigned char parent,
+				const char *key,
+				unsigned char key_size,
+				const struct weston_solid_buffer_values *values)
+{
+	unsigned char container_id = create_container(annots, parent, key, key_size);
+
+	ADD(annots, container_id, "red", values->r);
+	ADD(annots, container_id, "green", values->g);
+	ADD(annots, container_id, "blue", values->b);
+	ADD(annots, container_id, "alpha", values->a);
+}
+
+WL_EXPORT void
+perfetto_annotate_solid_buffer_values(struct weston_debug_annotations *annots,
+				      const char *key,
+				      unsigned char key_size,
+				      const struct weston_solid_buffer_values *values)
+{
+	do_annotate_solid_buffer_values(annots, annots->count, key, key_size, values);
+}
+
+static void
+do_annotate_buffer(struct weston_debug_annotations *annots,
+		   unsigned char parent,
+		   const char *key,
+		   unsigned char key_size,
+		   const struct weston_buffer *buffer)
+{
+	unsigned char container_id = create_container(annots, parent, key, key_size);
+
+	ADD(annots, container_id, "format", buffer->pixel_format->drm_format_name);
+	ADD(annots, container_id, "modifier", buffer->format_modifier_name);
+	ADD(annots, container_id, "width", buffer->width);
+	ADD(annots, container_id, "height", buffer->height);
+
+	if (buffer->type == WESTON_BUFFER_SOLID)
+		ADD(annots, container_id, "solid", &buffer->solid);
+}
+
+WL_EXPORT void
+perfetto_annotate_buffer(struct weston_debug_annotations *annots,
+			 const char *key,
+			 unsigned char key_size,
+			 const struct weston_buffer *buffer)
+{
+	if (!buffer) {
+		perfetto_annotate_string(annots, key, key_size, "None");
+		return;
+	}
+
+	do_annotate_buffer(annots, annots->count, key, key_size, buffer);
+}
+
+WL_EXPORT void
+perfetto_annotate_flow_const(struct weston_debug_annotations *annots,
+			     const char *key,
+			     unsigned char key_size,
+			     const struct weston_trace_flow *flow)
+{
+	do_annotate_flow_const(annots, annots->count, key, key_size, flow);
+}
+
+WL_EXPORT void
+perfetto_annotate_flow(struct weston_debug_annotations *annots,
+		       const char *key,
+		       unsigned char key_size,
+		       struct weston_trace_flow *flow)
+{
+	do_annotate_flow(annots, annots->count, key, key_size, flow);
+}
+
+static void
+do_annotate_time_since(struct weston_debug_annotations *annots,
+		       unsigned char parent,
+		       const char *key,
+		       unsigned char key_size,
+		       weston_trace_time_since *since)
+{
+	struct timespec now;
+	struct timespec whence = since->ts;
+	double delta;
+
+	clock_gettime(CLOCK_MONOTONIC, &now);
+	delta = timespec_sub_to_nsec(&now, &whence) / 1000.0;
+	do_annotate_double(annots, annots->count, key, key_size, delta);
+}
+
+WL_EXPORT void
+perfetto_annotate_time_since(struct weston_debug_annotations *annots,
+			     const char *key,
+			     unsigned char key_size,
+			     weston_trace_time_since *since)
+{
+	do_annotate_time_since(annots, annots->count, key, key_size, since);
+}
+
+static void
+do_annotate_time_until(struct weston_debug_annotations *annots,
+		       unsigned char parent,
+		       const char *key,
+		       unsigned char key_size,
+		       weston_trace_time_until *until)
+{
+	struct timespec now;
+	struct timespec target = until->ts;
+	double delta;
+
+	clock_gettime(CLOCK_MONOTONIC, &now);
+	delta = timespec_sub_to_nsec(&target, &now) / 1000.0;
+	do_annotate_double(annots, annots->count, key, key_size, delta);
+}
+
+WL_EXPORT void
+perfetto_annotate_time_until(struct weston_debug_annotations *annots,
+			     const char *key,
+			     unsigned char key_size,
+			     weston_trace_time_until *until)
+{
+	do_annotate_time_until(annots, annots->count, key, key_size, until);
+}
+
+WL_EXPORT void
+perfetto_annotate_track(struct weston_debug_annotations *annots,
+			const char *key,
+			unsigned char key_size,
+			const struct weston_trace_track *track)
+{
+	weston_assert_u64_eq(NULL, annots->track_id, 0);
+	annots->track_id = track->id;
+}
+
+WL_EXPORT void
+perfetto_annotate_time(struct weston_debug_annotations *annots,
+		       const char *key,
+		       unsigned char key_size,
+		       struct timespec when)
+{
+	weston_assert_false(NULL, annots->when_set);
+	annots->when_set = true;
+	annots->when = when;
+}
+
+WL_EXPORT void
+perfetto_annotate_timer(struct weston_debug_annotations *annots,
+			const char *key,
+			unsigned char key_size,
+			struct itimerspec when)
+{
+	struct timespec now;
+	struct timespec target;
+	int64_t nsec;
+
+	clock_gettime(CLOCK_MONOTONIC, &now);
+	nsec = timespec_to_nsec(&when.it_value);
+	timespec_add_nsec(&target, &now, nsec);
+
+	perfetto_annotate_time(annots, key, key_size, target);
+}
+
+static void
+do_annotate_bitflags(struct weston_debug_annotations *annots,
+		     unsigned char parent,
+		     const char *key,
+		     unsigned char key_size,
+		     struct weston_trace_bitflags *trace_bf)
+{
+	unsigned char container_id = create_container(annots, parent, key, key_size);
+	int i;
+
+	if (!trace_bf->bitflags)
+		return;
+
+	for (i = 0; trace_bf->bitflags; i++) {
+		uint32_t bitmask = 1u << i;
+
+		if (!(trace_bf->bitflags & bitmask))
+			continue;
+
+		/* We can't use the ADD macro here because we don't have a
+		 * string literal for the key!
+		 */
+		do_annotate_bool(annots, container_id, trace_bf->map(bitmask),
+				 strlen(trace_bf->map(bitmask)) + 1, true);
+		trace_bf->bitflags ^= bitmask;
+	}
+}
+
+WL_EXPORT void
+perfetto_annotate_bitflags(struct weston_debug_annotations *annots,
+			   const char *key,
+			   unsigned char key_size,
+			   struct weston_trace_bitflags *trace_bf)
+{
+	do_annotate_bitflags(annots, annots->count, key, key_size, trace_bf);
+}
+
+WL_EXPORT void
+perfetto_annotate_paint_node(struct weston_debug_annotations *annots,
+			     const char *key,
+			     unsigned char key_size,
+			     const struct weston_paint_node *pnode)
+{
+	unsigned char container_id = create_container(annots, annots->count, key, key_size);
+
+	ADD(annots, container_id, "internal name", pnode->internal_name);
+	ADD(annots, container_id, "surface label", pnode->surface->label);
+	ADD(annots, container_id, "flow", &pnode->flow);
+}
+
+WL_EXPORT void
+perfetto_annotate_key_event(struct weston_debug_annotations *annots,
+                            const char *key,
+                            const char key_size,
+                            const struct weston_key_event *event)
+{
+	unsigned char container_id = create_container(annots, annots->count, key, key_size);
+	const char *key_name;
+
+	key_name = libevdev_event_code_get_name(EV_KEY, event->key);
+	if (!key_name)
+		key_name = "UNKNOWN";
+
+	ADD(annots, container_id, "flow", &event->base.flow);
+	ADD(annots, container_id, "key", event->key);
+	ADD(annots, container_id, "latency(us)", (weston_trace_time_since *)&event->base.ts);
+	ADD(annots, container_id, "state", event->key_state);
+	ADD(annots, container_id, "update state", event->key_update_state);
+	ADD(annots, container_id, "key_name", key_name);
+}

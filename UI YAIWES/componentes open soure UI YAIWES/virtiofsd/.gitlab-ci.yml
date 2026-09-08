@@ -1,0 +1,87 @@
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_ID            # Execute jobs in merge request context
+    - if: $CI_COMMIT_BRANCH == 'main'     # Execute jobs when a new commit is pushed to main branch
+
+image: "rust:alpine"
+
+clippy:
+  before_script:
+    - apk add musl-dev
+    - rustup component add clippy
+  script:
+    # clippy seems to have a bug where it is suggesting using C string literals
+    # despite it not being possible in the project's edition (2018 in our case).
+    - cargo clippy --verbose -- -Dwarnings -Aclippy::manual-c-str-literals
+
+fmt:
+  before_script:
+    - rustup component add rustfmt
+  script:
+    - cargo fmt -v -- --check
+
+test:
+  before_script:
+    - apk add libcap-ng-static libseccomp-static musl-dev
+  script:
+    - rustc --version && cargo --version  # Print version info for debugging
+    - RUSTFLAGS='-C target-feature=+crt-static -C link-self-contained=yes' LIBSECCOMP_LINK_TYPE=static LIBSECCOMP_LIB_PATH=/usr/lib LIBCAPNG_LINK_TYPE=static LIBCAPNG_LIB_PATH=/usr/lib cargo build --verbose --target x86_64-unknown-linux-musl
+    - RUSTFLAGS='-C target-feature=+crt-static -C link-self-contained=yes' LIBSECCOMP_LINK_TYPE=static LIBSECCOMP_LIB_PATH=/usr/lib LIBCAPNG_LINK_TYPE=static LIBCAPNG_LIB_PATH=/usr/lib cargo test --verbose --target x86_64-unknown-linux-musl
+  except:
+      # There is an equivalent job ('publish') that will run when code lands
+      # on the 'main' branch, except it will upload a built binary. These are
+      # kept separate to avoid accidentally uploading binaries when it's not
+      # necessary.
+    - main@virtio-fs/virtiofsd
+
+# Build documentation, including private items (making it potentially more
+# useful than docs.rs).
+# Does not include documentation of main.rs: The binary has the same name as the
+# library, so cargo doc can only generate one or the other.  We could generate
+# both, manually renaming the binary folder, but then again there isn’t really
+# anything important in main.rs anyway.
+docs:
+  before_script:
+    - apk add musl-dev
+  script:
+    - RUSTDOCFLAGS="-D warnings" cargo doc --verbose --no-deps --all-features --document-private-items
+  artifacts:
+    paths:
+      - target/doc
+
+# Build a statically linked and optimized binary for publishing.
+#
+# This only runs when code is merged to the 'main' branch.
+publish:
+  before_script:
+    - apk add libcap-ng-static libseccomp-static musl-dev
+  script:
+    - RUSTFLAGS='-C target-feature=+crt-static -C link-self-contained=yes' LIBSECCOMP_LINK_TYPE=static LIBSECCOMP_LIB_PATH=/usr/lib LIBCAPNG_LINK_TYPE=static LIBCAPNG_LIB_PATH=/usr/lib cargo build --release --target x86_64-unknown-linux-musl
+  artifacts:
+    name: "virtiofsd-$CI_COMMIT_SHORT_SHA"
+    paths:
+      - target/x86_64-unknown-linux-musl/release/virtiofsd
+  only:
+    - main@virtio-fs/virtiofsd
+
+# Publish the built documentation to our gitlab pages.
+pages:
+  dependencies:
+    # We need the docs artifacts, so need to specify it here
+    - docs
+  needs:
+    # We need docs to finish to get its artifacts; because we don’t have stages
+    # in this pipeline, we need to explicitly list it here
+    - job: docs
+  script:
+    - mkdir -p public
+    - mv target/doc public/doc
+    # For the https://virtiofs.gitlab.io/virtiofsd URL
+    - echo '/virtiofsd /virtiofsd/doc/virtiofsd/index.html 302' >> public/_redirects
+    # For a potential https://virtiofsd-*.gitlab.io/ URL
+    - echo '/ /doc/virtiofsd/index.html 302' >> public/_redirects
+  artifacts:
+    paths:
+      - public
+  only:
+    - main@virtio-fs/virtiofsd
