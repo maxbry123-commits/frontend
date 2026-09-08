@@ -1,0 +1,36 @@
+{
+  "schema": "yaiwes.action124.recovery_classification.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "run_id": 34060401131,
+  "artifact_id": 10002484616,
+  "artifact_digest": "sha256:680861bb0f9b48dae398ccd56c95add5d44bd0bc45510a9a7cab17a55ee10683",
+  "primary_classes": {
+    "C1_COMPLETE_SHAPE_NO_GAP": [5,6,15,16,17,20,23,25,26,27,28,29,30,32,33,34,36,37,38,39,41,42,43,44,45,47,48,50,51,53,54,55,57,59,60,61,62,69,73,76,77,78,79,81,82,83,84,85,86,87],
+    "C2_COMPLETE_SHAPE_WITH_REPAIR_GAP": [1,4,7,11,52,58,64,65,68,80],
+    "C3_PARTIAL_CHECKPOINT": [2,3,8,10,12,13,14,18,19,21,22,24,31,35,40,46,49,56,63,67],
+    "C4_PROVIDER_GAP": [66,70,71,72,74,75],
+    "C5_UNATTEMPTED": [9,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124]
+  },
+  "secondary_flags": {
+    "C6_PROVENANCE_MISMATCH": [8]
+  },
+  "invariants": {
+    "expected": 124,
+    "primary_class_counts": {"C1":50,"C2":10,"C3":20,"C4":6,"C5":38},
+    "unique_primary_coverage": 124,
+    "director_index_set": "1..124",
+    "primary_classes_disjoint": true,
+    "c6_is_secondary": true
+  },
+  "evidence": {
+    "checkpoint_json": 80,
+    "gaps_tsv_entries": 36,
+    "provider_gaps_without_checkpoint": 6,
+    "verify_final_present": false,
+    "queue_source": "scripts/ui-yaiwes-124-download-extract-20260906/QUEUE.json",
+    "workflow_source": ".github/workflows/ui-yaiwes-124-download-extract-20260906.yml"
+  },
+  "next_delta": "A03_QUEUE_INTEGRITY_PATCH",
+  "closure": "NOT_VERIFIED_CLOSED"
+}
