@@ -1,0 +1,26 @@
+{
+  "task_id": "fabrica-empaque-local-14-canonical-skill-20260908",
+  "destination_repository": "maxbry123-commits/frontend",
+  "destination_branch": "main",
+  "destination_root": "fabrica de UI INTERFACE fromtend",
+  "expected_components": 14,
+  "mode": "DOWNLOAD",
+  "delivery": "EXTRACTED_TREE",
+  "rules": {"overwrite": false, "delete": false, "reactivate_old_workflows": false, "single_writer": true, "lfs": false},
+  "components": [
+    {"name":"Tauri 2","slug":"Tauri-2","source_url":"https://github.com/tauri-apps/tauri","source_ref":"dev"},
+    {"name":"Capacitor","slug":"Capacitor","source_url":"https://github.com/ionic-team/capacitor","source_ref":"main"},
+    {"name":"PWABuilder","slug":"PWABuilder","source_url":"https://github.com/pwa-builder/PWABuilder","source_ref":"main"},
+    {"name":"Workbox","slug":"Workbox","source_url":"https://github.com/GoogleChrome/workbox","source_ref":"v7"},
+    {"name":"Neutralino","slug":"Neutralino","source_url":"https://github.com/neutralinojs/neutralinojs","source_ref":"main"},
+    {"name":"Wails","slug":"Wails","source_url":"https://github.com/wailsapp/wails","source_ref":"master"},
+    {"name":"Bubblewrap TWA","slug":"Bubblewrap-TWA","source_url":"https://github.com/GoogleChromeLabs/bubblewrap","source_ref":"main"},
+    {"name":"Dexie","slug":"Dexie","source_url":"https://github.com/dexie/Dexie.js","source_ref":"master"},
+    {"name":"localForage","slug":"localForage","source_url":"https://github.com/localForage/localForage","source_ref":"master"},
+    {"name":"PouchDB","slug":"PouchDB","source_url":"https://github.com/pouchdb/pouchdb","source_ref":"master"},
+    {"name":"browser-fs-access","slug":"browser-fs-access","source_url":"https://github.com/GoogleChromeLabs/browser-fs-access","source_ref":"main"},
+    {"name":"Filesystem","slug":"Filesystem","source_url":"https://github.com/ionic-team/capacitor-filesystem","source_ref":"main"},
+    {"name":"Plugins Share etc.","slug":"capacitor-plugins","source_url":"https://github.com/ionic-team/capacitor-plugins","source_ref":"main"},
+    {"name":"File sharer","slug":"capacitor-file-sharer","source_url":"https://github.com/Cap-go/capacitor-file-sharer","source_ref":"main"}
+  ]
+}
