@@ -1,0 +1,149 @@
+name: Frontend Archives Watchdog Auditor 20260908
+run-name: Frontend Archives Watchdog Auditor • ${{ github.event_name }} • ${{ github.sha }}
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/frontend_archives_guardian_20260908.py"
+      - ".github/workflows/frontend-archives-watchdog-auditor-20260908.yml"
+      - ".github/workflows/frontend-archives-repair-guardian-20260908.yml"
+      - "📂componentes open soure fromtend/archives/**"
+
+permissions:
+  contents: write
+  actions: read
+
+env:
+  DEST_ROOT: "📂componentes open soure fromtend"
+  SKILL_REF: "c789e5fe635e220230ffc759d86dc3bbb8e261d4"
+
+concurrency:
+  group: frontend-archives-watchdog-auditor-20260908
+  cancel-in-progress: false
+
+jobs:
+  independent-read-only-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout destination main without LFS
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: false
+
+      - name: Checkout pinned skill contract
+        uses: actions/checkout@v4
+        with:
+          repository: maxbry123-commits/agentes
+          ref: c789e5fe635e220230ffc759d86dc3bbb8e261d4
+          path: _skill_contract
+          fetch-depth: 1
+          lfs: false
+
+      - name: Verify exact skill gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          SKILL="_skill_contract/skills/skills Github acción/SKILL.md"
+          test -f "$SKILL"
+          grep -Fq "EXTRACT_ONLY" "$SKILL"
+          grep -Fq "VERIFY_EXISTING" "$SKILL"
+          grep -Fq "Repair Guardian" "$SKILL"
+          grep -Fq "Watchdog Auditor" "$SKILL"
+          grep -Fq "Git LFS" "$SKILL"
+          echo "SKILL_PIN_PASS=$SKILL_REF"
+
+      - name: Read-only forensic X-Ray
+        id: audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/rdc"
+          python3 scripts/frontend_archives_guardian_20260908.py \
+            --mode audit \
+            --report "$RUNNER_TEMP/rdc/audit.json"
+          python3 - "$RUNNER_TEMP/rdc/audit.json" "$GITHUB_OUTPUT" <<'PY'
+          import json,sys
+          d=json.load(open(sys.argv[1],encoding="utf-8"))
+          t=d["totals"]; x=d["xray"]
+          out=sys.argv[2]
+          with open(out,"a",encoding="utf-8") as f:
+              f.write(f"retryable={t['retryable_component_gaps']}\n")
+              f.write(f"hard={t['hard_component_gaps']}\n")
+              f.write(f"flags={t['classification_flags']}\n")
+          print("XRAY_ZIP_TOTAL",x["physical_zip_count"])
+          print("MANAGED_ZIPS",x["managed_zip_count"])
+          print("UNMANAGED_ZIPS",x["unmanaged_zip_count"])
+          print("VERIFIED_COMPONENTS",t["verified_components"])
+          print("RETRYABLE_GAPS",t["retryable_component_gaps"])
+          print("HARD_GAPS",t["hard_component_gaps"])
+          print("CLASSIFICATION_FLAGS",t["classification_flags"])
+          PY
+
+      - name: Check active supervisors before any activation
+        id: supervisors
+        if: steps.audit.outputs.retryable != '0'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ACTIVE="$(
+            curl -fsSL \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs?status=in_progress&per_page=100" |
+            jq --argjson self "$GITHUB_RUN_ID" '
+              [.workflow_runs[]
+               | select(.id != $self)
+               | select(
+                   (.name | ascii_downcase | contains("repair")) or
+                   (.name | ascii_downcase | contains("extraction")) or
+                   (.name | ascii_downcase | contains("download"))
+                 )
+              ] | length'
+          )"
+          echo "active=$ACTIVE" >> "$GITHUB_OUTPUT"
+          echo "ACTIVE_SUPERVISORS=$ACTIVE"
+
+      - name: Activate Repair Guardian only for retryable manifest gaps
+        if: steps.audit.outputs.retryable != '0' && steps.audit.outputs.hard == '0' && steps.supervisors.outputs.active == '0'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl -fsSL -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/dispatches" \
+            -d '{"event_type":"frontend_archives_repair_20260908"}'
+          echo "REPAIR_GUARDIAN_DISPATCHED"
+
+      - name: Passive mode when a supervisor is active
+        if: steps.audit.outputs.retryable != '0' && steps.supervisors.outputs.active != '0'
+        run: echo "PASSIVE_WATCHDOG_SUPERVISOR_ACTIVE"
+
+      - name: Classification flag stays fail-closed and non-destructive
+        if: steps.audit.outputs.flags != '0'
+        run: |
+          echo "ACTIVE_LOOP: unmanaged archive requires authority/destination classification."
+          echo "NO_DELETE_NO_EXTRACT_WITHOUT_AUTHORITY"
+
+      - name: Fail closed on hard component gaps
+        if: steps.audit.outputs.hard != '0'
+        run: exit 52
+
+      - name: Upload independent audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-archives-watchdog-audit-${{ github.run_id }}
+          path: ${{ runner.temp }}/rdc/
+          if-no-files-found: warn
