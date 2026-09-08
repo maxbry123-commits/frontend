@@ -1,0 +1,27 @@
+name: syft-sbom-ci
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: read
+
+jobs:
+  syft-sbom:
+
+    runs-on: ubuntu-x64
+    permissions:
+      actions: read
+      contents: write
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      with:
+        persist-credentials: false
+
+    - name: Anchore SBOM Action
+      uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26 # v0.24.2
+      with:
+         artifact-name: ${{ github.event.repository.name }}-spdx.json
