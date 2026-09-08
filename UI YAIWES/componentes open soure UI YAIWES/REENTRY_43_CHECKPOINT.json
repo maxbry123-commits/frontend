@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 30,
+  "processed": 31,
   "records": [
     {
       "bytes": 312360273,
@@ -388,10 +388,23 @@
       "source_url": "https://github.com/grafana/k6",
       "status": "GAP",
       "tree_sha256": "fdb46bbe0e5ded109595e264b4499cd8e75628351566a67af55ffc9c15a9978e"
+    },
+    {
+      "bytes": 290929,
+      "destination": "Toxiproxy",
+      "files": 89,
+      "index": 31,
+      "n": 118,
+      "name": "Toxiproxy",
+      "read_back": "PASS",
+      "source_commit": "40f7fd31bee529d824116bd2a11a9e3425e904ec",
+      "source_url": "https://github.com/Shopify/toxiproxy",
+      "status": "COMPLETE",
+      "tree_sha256": "c354ee3ee7813d966cd15ede372d74faf7e726475c5882ad9b4fba8e07247f6d"
     }
   ],
   "states": {
-    "COMPLETE": 17,
+    "COMPLETE": 18,
     "GAP": 13,
     "VERIFIED_EXISTING": 0
   }
