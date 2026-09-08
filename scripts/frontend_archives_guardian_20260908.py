@@ -20,6 +20,7 @@ LFS_MARKER = b"version https://git-lfs.github.com/spec/v1"
 MAX_MEMBER = 256 * 1024 * 1024
 MAX_TOTAL = 4 * 1024 * 1024 * 1024
 MAX_RATIO = 250
+DISK_RESERVE = 512 * 1024 * 1024
 SAFE_GARBAGE_NAMES = {".DS_Store", "Thumbs.db"}
 SAFE_GARBAGE_DIRS = {"__MACOSX", "__pycache__", ".pytest_cache"}
 
@@ -90,6 +91,12 @@ def extract_stage(parts: list[Path], slug: str) -> tuple[tempfile.TemporaryDirec
                 total_uncompressed += part_total
                 if total_uncompressed > MAX_TOTAL:
                     raise RuntimeError(f"TOTAL_BUDGET:{slug}:{total_uncompressed}")
+                free_bytes = shutil.disk_usage(stage).free
+                required_bytes = part_total + DISK_RESERVE
+                if required_bytes > free_bytes:
+                    raise RuntimeError(
+                        f"DISK_BUDGET:{slug}:{part.name}:required={required_bytes}:free={free_bytes}"
+                    )
                 for info in infos:
                     ok, reason = safe_member(info)
                     if not ok:
@@ -114,6 +121,8 @@ def extract_stage(parts: list[Path], slug: str) -> tuple[tempfile.TemporaryDirec
                     "sha256": sha256_file(part),
                     "members": len(infos),
                     "uncompressed": part_total,
+                    "free_bytes_before": free_bytes,
+                    "required_bytes": required_bytes,
                 })
         payload = normalize_payload(stage, slug)
         files = sorted(p for p in payload.rglob("*") if p.is_file())
