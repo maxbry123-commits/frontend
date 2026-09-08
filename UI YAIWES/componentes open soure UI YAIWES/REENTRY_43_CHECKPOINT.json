@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 15,
+  "processed": 16,
   "records": [
     {
       "bytes": 312360273,
@@ -193,11 +193,24 @@
       "source_commit": "392539dc28bd489f94e2a28edf989b738b938d01",
       "source_url": "https://github.com/anchore/syft",
       "status": "GAP"
+    },
+    {
+      "bytes": 39016115,
+      "destination": "whisper.cpp",
+      "error": "READ_BACK_HASH_GAP:2ca0503da6598f6a006bf638f02c97c168e586e0e70ac3675388f6b7c4d80654!=8726c16937c541bf4bf46b9e1fbb46528d7d474e72cd514582d4645df68d10bc",
+      "files": 1959,
+      "index": 16,
+      "n": 103,
+      "name": "whisper.cpp",
+      "source_commit": "c44b60b8053bbf2a5c1e014f11323fb3f2485177",
+      "source_url": "https://github.com/ggml-org/whisper.cpp",
+      "status": "GAP",
+      "tree_sha256": "8726c16937c541bf4bf46b9e1fbb46528d7d474e72cd514582d4645df68d10bc"
     }
   ],
   "states": {
     "COMPLETE": 9,
-    "GAP": 6,
+    "GAP": 7,
     "VERIFIED_EXISTING": 0
   }
 }
