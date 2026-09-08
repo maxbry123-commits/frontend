@@ -1,0 +1,68 @@
+name: Fabrica Empaque Local Full Repos v1
+run-name: Fabrica Empaque Local Full Repos v1 • ${{ github.event_name }} • ${{ github.sha }}
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fabrica-empaque-local-full-repos-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  GIT_TERMINAL_PROMPT: "0"
+
+concurrency:
+  group: frontend-fabrica-empaque-local-full-repos-v1
+  cancel-in-progress: false
+
+jobs:
+  download-extract-verify-14:
+    name: Download and mount 14 complete repositories sequentially
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Execute deterministic full-repository chain
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Git LFS prohibited by the governing skill. Neutralize inherited filters only in this runner.
+          git config --local filter.lfs.clean cat
+          git config --local filter.lfs.smudge cat
+          git config --local filter.lfs.process ''
+          git config --local filter.lfs.required false
+          git config --local core.compression 0
+          python3 scripts/fabrica_full_repos_empaque_local_v1.py
+
+      - name: Final local read-back
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f 'fabrica de UI INTERFACE fromtend/FULL_REPOS_EMPAQUE_LOCAL_MANIFEST.jsonl'
+          test "$(grep -c 'EXTRACTED_VERIFIED' 'fabrica de UI INTERFACE fromtend/FULL_REPOS_EMPAQUE_LOCAL_MANIFEST.jsonl')" -ge 14
+          test -f 'fabrica de UI INTERFACE fromtend/FULL_REPOS_EMPAQUE_LOCAL_GAPS.json'
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('fabrica de UI INTERFACE fromtend')
+          gaps=json.loads((root/'FULL_REPOS_EMPAQUE_LOCAL_GAPS.json').read_text())
+          assert gaps['expected_components'] == 14
+          assert gaps['gaps'] == [], gaps
+          names=['Tauri-2','Capacitor','PWABuilder','Workbox','Neutralino','Wails','Bubblewrap-TWA','Dexie','localForage','PouchDB','browser-fs-access','Filesystem','capacitor-plugins','capacitor-file-sharer']
+          for name in names:
+              p=root/name
+              assert p.is_dir(), name
+              assert (p/'SOURCE_URL.txt').is_file(), name
+              assert (p/'SOURCE_COMMIT.txt').is_file(), name
+              assert (p/'SOURCE_SHA256SUMS.txt').is_file(), name
+              assert any(x.is_file() and not x.name.startswith('SOURCE_') for x in p.rglob('*')), name
+          print('FINAL_READBACK_PASS 14/14')
+          PY
