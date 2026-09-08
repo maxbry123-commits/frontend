@@ -19,3 +19,5 @@
 {"number": 19, "parts": 1, "slug": "LiveKit", "source": "https://github.com/livekit/livekit.git", "source_commit": "5121860448763817c72ab211adf693e99c3c2c60", "status": "COMPLETE"}
 {"number": 20, "parts": 2, "slug": "ntfy", "source": "https://github.com/binwiederhier/ntfy.git", "source_commit": "10cb6506f836dbb00bb77e3b52669f6ace37f555", "status": "COMPLETE"}
 {"number": 21, "parts": 1, "slug": "Apprise", "source": "https://github.com/caronc/apprise.git", "source_commit": "41a79473756728e7e22e5ea5e8ab40d97a9a79ac", "status": "COMPLETE"}
+{"number": 22, "parts": 1, "slug": "Prometheus", "source": "https://github.com/prometheus/prometheus.git", "source_commit": "78169fb57d69371b24863b0f26555631a754204c", "status": "COMPLETE"}
+{"number": 23, "parts": 6, "slug": "Grafana", "source": "https://github.com/grafana/grafana.git", "source_commit": "82ada3468b5adcd291af8d0746cbd8e97d4f3983", "status": "COMPLETE"}
