@@ -117,6 +117,12 @@ Nuevo documento canónico aditivo: `CONTRATO-MAESTRO-FORENSE-XRAY-50-GOALS-UI-YA
 CURRENT=`P01_POST124_C1_INDEPENDENT_AUDIT`.
 Siguiente delta: A04 auditar read-only los 50 C1 contra destino actual, sin redownload; exigir URL/commit/sums/hash/license/tree por componente.
 
+## UI-PLUG-0035 — HANDOFF MAESTRO OPERATIVO V5
+Se publica `UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md` como punto único de entrada para otro Sol. El handoff indexa contrato maestro, crosscheck, STATE, CHECKPOINT, PLAN, RECOVERY, 50 GOALS, Action124 recovery, queue-integrity y estado P01–P08; incorpora cifras forenses exactas del artifact y fija CURRENT=A04.
+
+## UI-PLUG-0036 — RECOVERY/HANDOFF SINCRONIZADOS
+`RECOVERY-PATCH.md` ahora inicia leyendo el HANDOFF V5; `STATE.json` y `CHECKPOINT.json` registran el handoff como entrypoint vivo. No se modifica el contrato runtime v3 ni el current node; solo se sincroniza recuperación y descubrimiento.
+
 ---
 
 # CRAZY WALL — DEPENDENCIAS PRINCIPALES
