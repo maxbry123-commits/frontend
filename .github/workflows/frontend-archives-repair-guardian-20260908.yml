@@ -36,6 +36,11 @@ jobs:
           ref: main
           fetch-depth: 1
           lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            scripts/frontend_archives_guardian_20260908.py
+            .github/workflows/frontend-archives-repair-guardian-20260908.yml
+            📂componentes open soure fromtend
 
       - name: Checkout pinned skill contract
         uses: actions/checkout@v4
@@ -45,6 +50,9 @@ jobs:
           path: _skill_contract
           fetch-depth: 1
           lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            skills/skills Github acción/SKILL.md
 
       - name: Verify exact skill gates
         shell: bash
