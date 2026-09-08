@@ -4,10 +4,11 @@
   "project": "UI YAIWES modular component integration",
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_LOOP_POST124_RECOVERY_FORENSIC",
-  "current_node": "P01_POST124_RECOVERY_QUEUE_BUILD",
+  "current_node": "P01_POST124_C1_INDEPENDENT_AUDIT",
   "previous_verified_node": "P01_COMPONENT_PHYSICAL_INVENTORY_INITIAL_14",
   "workflow_owner": "stabilize_core",
   "head_at_forensic_consolidation": "fa3aff93da530cb76c009b0493886c4dcbf0729b",
+  "head_observed_before_a03": "4ce6cc36daeed86003be4d8d8de7f03061e3ae8f",
   "canonical_docs": {
     "master_contract": "UI YAIWES/readme arquitectura UI YAIWES/CONTRATO-MAESTRO-FORENSE-XRAY-50-GOALS-UI-YAIWES.md",
     "source_crosscheck": "UI YAIWES/readme arquitectura UI YAIWES/CROSSCHECK-FUENTES-VERDAD-XRAY-UI-YAIWES.md",
@@ -15,15 +16,11 @@
     "functional_architecture": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md",
     "historical_loop_guide": "UI YAIWES/readme arquitectura UI YAIWES/GUIA-MAESTRA-EJECUCION-LOOP-SOL-UI-YAIWES.md",
     "goals_50": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/GOALS-50-ENTRADA-SALIDA-V5.md",
-    "action124_recovery": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/GAPS-ACTION124-RECOVERY-V5.md"
+    "action124_recovery": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/GAPS-ACTION124-RECOVERY-V5.md",
+    "action124_queue_integrity": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ACTION124-QUEUE-INTEGRITY-V5.json"
   },
   "source_authority": {
-    "functional_yaiwes": [
-      "MAX-SYSTEM-100X-FINAL-1",
-      "Memoria Wordflow YAIWES",
-      "Virtual Computer YAIWES",
-      "Command Center Chat YAIWES"
-    ],
+    "functional_yaiwes": ["MAX-SYSTEM-100X-FINAL-1","Memoria Wordflow YAIWES","Virtual Computer YAIWES","Command Center Chat YAIWES"],
     "method_only_attachment": "Bloque 0 NCT — use process discipline only; source explicitly forbids mixing NCT with YAIWES",
     "authority_rule": "real repo/runtime evidence > STATE/CHECKPOINT > runtime contract > approved functional sources > historical guide > inference"
   },
@@ -37,7 +34,7 @@
     "freshness": "STALE_POST_CANCELLED_124_ACQUISITION",
     "post124_revalidated_entries": 7,
     "last_revalidated_entry": "redun",
-    "next_revalidation_after_recovery_plan": "resilient-circuit or next classified queue item based on artifact/current destination",
+    "next_revalidation_after_recovery_plan": "C1 independent audit then C2/C3/C4/C5/C6 recovery classes",
     "rule": "complete post124 destination/provenance/dedup reconciliation before fresh P01 closure"
   },
   "action124": {
@@ -62,8 +59,16 @@
     "final_124_verified": false,
     "verify_final_present_in_recovered_artifact": false,
     "queue_anomaly": "Hypothesis director_index 9 is placed after director_index 124 and was not attempted before cancellation",
+    "queue_integrity_patch": {
+      "status": "SPECIFIED_VALIDATED",
+      "evidence": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ACTION124-QUEUE-INTEGRITY-V5.json",
+      "source_queue_blob": "f8283c50395a63d5f8d5d3e127d86c2be75a0176",
+      "primary_class_unique_coverage": 124,
+      "recovery_sort": "director_index ASC",
+      "historical_queue_mutated": false
+    },
     "provider_gaps": ["AVF","Wayland","Weston-libweston","Mesa","virglrenderer","virtiofsd"],
-    "next_strategy": "build sorted unique recovery queue from artifact + current destination; audit complete checkpoints, resume partials, use provider adapters, process unattempted, then independent 124/124 verification"
+    "next_strategy": "audit C1 read-only without redownload; then investigate C2, resume C3, use provider-specific C4 paths, process C5 ordered including Hypothesis, resolve C6, then independent 124/124 verification"
   },
   "nodes": {
     "P01": "ACTIVE_REVALIDATION_POST124_CANCELLED",
@@ -96,7 +101,7 @@
     "ACTION124-20-PARTIAL-CHECKPOINTS",
     "ACTION124-10-COMPLETE-SHAPE-WITH-REPAIR-GAP",
     "ACTION124-6-NON-GITHUB-PROVIDER-GAPS",
-    "ACTION124-HYPOTHESIS-QUEUE-ORDER-ANOMALY",
+    "ACTION124-HYPOTHESIS-QUEUE-ORDER-ANOMALY-HISTORICAL",
     "PYTEST-PROVENANCE-SOURCE-COMMIT-MISMATCH",
     "P02A-FLAG-REAL-VENDOR-EXECUTION",
     "P02B-FLAG-PYDANTIC-CORE-VERSION-MISMATCH",
@@ -105,6 +110,6 @@
     "P04-FLAG-RESILIENT-CIRCUIT-REAL-VENDOR-EXECUTION",
     "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
   ],
-  "next_delta": "materialize Action124 recovery queue specification sorted by director_index and classify C1/C2/C3/C4/C5/C6 without re-downloading proven content",
+  "next_delta": "A04_C1_INDEPENDENT_AUDIT: audit 50 complete-shape/no-gap entries against current destination without redownload",
   "closure_rule": "file/import/repository/checkpoint/staging/download never equals VERIFIED_CLOSED without required route+SHA+readback+test/log/URL evidence and Judge"
 }
