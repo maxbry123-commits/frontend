@@ -1,0 +1,117 @@
+name: Fabrica Empaque Local 14 Repair 01 Wails
+run-name: Fabrica Empaque Local 14 Repair 01 Wails • ${{ github.run_id }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fabrica-empaque-local-14-repair-01-wails-20260908.yml'
+
+permissions:
+  contents: write
+
+env:
+  GIT_TERMINAL_PROMPT: "0"
+  SKILL_REF: c789e5fe635e220230ffc759d86dc3bbb8e261d4
+  SKILL_PY_BLOB: b629f9a7844a4752ff7c28b844b83e7f1d99ccb1
+  ARCHIVE_ROOT: fabrica de UI INTERFACE fromtend/_canonical_download_14
+  WAILS_SHA: ceaf5e765bb35f64974de4ebc831ade186000f52
+
+concurrency:
+  group: frontend-fabrica-empaque-local-14-producer
+  cancel-in-progress: false
+
+jobs:
+  repair-wails:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout destination main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout: |
+            fabrica de UI INTERFACE fromtend/_canonical_download_14
+          sparse-checkout-cone-mode: false
+
+      - name: Copy exact pinned skill asset and verify blob
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _work "$ARCHIVE_ROOT"
+          curl -fsSL --retry 3 'https://raw.githubusercontent.com/maxbry123-commits/agentes/c789e5fe635e220230ffc759d86dc3bbb8e261d4/skills/skills%20Github%20acci%C3%B3n/assets/FORENSIC-PASS-research_download_chain.py' -o _work/task_chain.py
+          test "$(git hash-object _work/task_chain.py)" = "$SKILL_PY_BLOB"
+          python3 - <<'PY'
+          import os,re
+          from pathlib import Path
+          p=Path('_work/task_chain.py'); s=p.read_text()
+          repos=[('01','Wails','https://github.com/wailsapp/wails.git',os.environ['WAILS_SHA'])]
+          s=re.sub(r'^REPOS=.*$', 'REPOS='+repr(repos), s, count=1, flags=re.M)
+          s=s.replace('for number,slug,url in REPOS:', 'for number,slug,url,ref in REPOS:')
+          old="sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(); guard_source_tree(root); shutil.rmtree(root/'.git',ignore_errors=True)"
+          new=("run(['git','fetch','--depth','1','origin',ref],cwd=root); run(['git','checkout','--detach',ref],cwd=root); "
+               "sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(); assert sha == ref, f'SOURCE_REF_MISMATCH expected={ref} actual={sha}'; "
+               "guard_source_tree(root); shutil.rmtree(root/'.git',ignore_errors=True)")
+          if old not in s: raise SystemExit('ASSET_GAP')
+          s=s.replace(old,new).replace('/20:','/1:').replace('20/20 repositories processed','1/1 repositories processed')
+          p.write_text(s)
+          PY
+
+      - name: Execute exact copied skill producer for Wails only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config --local filter.lfs.clean cat
+          git config --local filter.lfs.smudge cat
+          git config --local --unset-all filter.lfs.process || true
+          git config --local filter.lfs.required false
+          git config --local core.compression 0
+          python3 _work/task_chain.py "$ARCHIVE_ROOT" _work/research-download
+
+      - name: Reconcile Wails source map
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['ARCHIVE_ROOT'])/'SOURCE_MAP.json'
+          d=json.loads(p.read_text()) if p.exists() else {'expected':14,'resolved':[],'gaps':[]}
+          d['gaps']=[x for x in d.get('gaps',[]) if x.get('name')!='Wails']
+          d['resolved']=[x for x in d.get('resolved',[]) if x.get('slug')!='Wails']
+          d['resolved'].append({'n':'06','slug':'Wails','url':'https://github.com/wailsapp/wails.git','requested':'https://github.com/wailsapp/wails','ref':os.environ['WAILS_SHA'],'historical_ref':'v3-alpha'})
+          p.write_text(json.dumps(d,indent=2,ensure_ascii=False)+'\n')
+          PY
+          git add --sparse -- "$ARCHIVE_ROOT/SOURCE_MAP.json"
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m "repair(download): pin Wails historical v3-alpha SHA [run ${GITHUB_RUN_ID}]"
+            for attempt in 1 2 3; do
+              git fetch origin main && git rebase --autostash origin/main && git push --no-verify origin HEAD:main && break
+              test "$attempt" -lt 3 || exit 41
+              sleep $((attempt*10))
+            done
+          fi
+
+      - name: Read-back Wails repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git reset --hard origin/main
+          python3 - <<'PY'
+          import json,os,sys
+          from pathlib import Path
+          root=Path(os.environ['ARCHIVE_ROOT'])
+          rows=[json.loads(x) for x in (root/'RESEARCH_DOWNLOAD_MANIFEST.jsonl').read_text().splitlines() if x.strip()]
+          ok=any(x.get('slug')=='Wails' and x.get('status')=='COMPLETE' and x.get('source_commit')==os.environ['WAILS_SHA'] for x in rows)
+          sm=json.loads((root/'SOURCE_MAP.json').read_text())
+          gaps=[x for x in sm.get('gaps',[]) if x.get('name')=='Wails']
+          print('WAILS_ARCHIVE_COMPLETE',ok,'WAILS_SOURCE_GAPS',len(gaps))
+          if not ok or gaps: sys.exit(52)
+          print('WAILS_REPAIR_PASS; GUARDIAN_EXTRACTION_REQUIRED')
+          PY
