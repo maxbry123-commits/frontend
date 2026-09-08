@@ -22,3 +22,10 @@
 {"number": 22, "parts": 1, "slug": "Prometheus", "source": "https://github.com/prometheus/prometheus.git", "source_commit": "78169fb57d69371b24863b0f26555631a754204c", "status": "COMPLETE"}
 {"number": 23, "parts": 6, "slug": "Grafana", "source": "https://github.com/grafana/grafana.git", "source_commit": "82ada3468b5adcd291af8d0746cbd8e97d4f3983", "status": "COMPLETE"}
 {"number": 24, "parts": 9, "slug": "Loki", "source": "https://github.com/grafana/loki.git", "source_commit": "3af2471d0f8eeefd4a4a1cdba32dc1c1969f9165", "status": "COMPLETE"}
+{"number": 25, "parts": 3, "slug": "Vitest", "source": "https://github.com/vitest-dev/vitest.git", "source_commit": "73614654a46f617c357920eecda439654a561f92", "status": "COMPLETE"}
+{"number": 26, "parts": 1, "slug": "React Testing Library", "source": "https://github.com/testing-library/react-testing-library.git", "source_commit": "20ce75f2907ca0e5c5a8ae595c0e9a4e368c7800", "status": "COMPLETE"}
+{"number": 27, "parts": 1, "slug": "MSW", "source": "https://github.com/mswjs/msw.git", "source_commit": "85f4bf3ff60fc9441eca2fe44a75878bce50af5a", "status": "COMPLETE"}
+{"number": 28, "parts": 4, "slug": "Playwright", "source": "https://github.com/microsoft/playwright.git", "source_commit": "6232bd76fcf9e54c2e0b57e79879b75e30c89b46", "status": "COMPLETE"}
+{"number": 29, "parts": 1, "slug": "fast-check", "source": "https://github.com/dubzzz/fast-check.git", "source_commit": "962a12504550e8f4436e5d7c45f8e1084491f6f6", "status": "COMPLETE"}
+{"number": 30, "parts": 2, "slug": "k6", "source": "https://github.com/grafana/k6.git", "source_commit": "cdd7355b536141e37ae4497facfa3813f8736cf4", "status": "COMPLETE"}
+{"number": 31, "parts": 1, "slug": "Toxiproxy", "source": "https://github.com/Shopify/toxiproxy.git", "source_commit": "40f7fd31bee529d824116bd2a11a9e3425e904ec", "status": "COMPLETE"}
