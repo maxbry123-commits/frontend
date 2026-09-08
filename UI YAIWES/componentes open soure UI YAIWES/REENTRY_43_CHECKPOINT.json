@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 24,
+  "processed": 25,
   "records": [
     {
       "bytes": 312360273,
@@ -310,11 +310,24 @@
       "source_url": "https://github.com/grafana/loki",
       "status": "GAP",
       "tree_sha256": "b2f494f5201e2cca990ec78a6deca912dd77b9a01d3f020069aae570f4c28887"
+    },
+    {
+      "bytes": 34333649,
+      "destination": "Vitest",
+      "error": "READ_BACK_HASH_GAP:820ea2a101c2ecbb3fd2eb0ed75f368a00c318fa7912ab396181134e1b39b580!=b079b6da2524c84840fe0d344df4ef1231eb3676a5e22eaf0eefaf36625d8b9d",
+      "files": 3125,
+      "index": 25,
+      "n": 112,
+      "name": "Vitest",
+      "source_commit": "b426c1976d32310c271d053b814bafb9a99bcd89",
+      "source_url": "https://github.com/vitest-dev/vitest",
+      "status": "GAP",
+      "tree_sha256": "b079b6da2524c84840fe0d344df4ef1231eb3676a5e22eaf0eefaf36625d8b9d"
     }
   ],
   "states": {
     "COMPLETE": 14,
-    "GAP": 10,
+    "GAP": 11,
     "VERIFIED_EXISTING": 0
   }
 }
