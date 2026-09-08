@@ -1,0 +1,417 @@
+[build-system]
+requires = [
+    "setuptools>=69",
+    "wheel",
+    "babel",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "apprise"
+description = "Push Notifications that work with just about every platform!"
+readme = "README.md"
+authors = [
+    { name = "Chris Caron", email = "lead2gold@gmail.com" },
+]
+dynamic = ["version"]
+
+# Not supported yet for all Distributions
+license = { text = "BSD-2-Clause" }
+
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Operating System :: OS Independent",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+
+dependencies = [
+    # Application dependencies
+    "requests",
+    "requests-oauthlib",
+    "click>=5.0",
+    "markdown",
+    "PyYAML",
+    # Root certificate authority bundle
+    "certifi",
+    # Always ship IANA tzdb on Windows so ZoneInfo works
+    "tzdata; platform_system == 'Windows'",
+]
+
+# Identifies all of the supported plugins
+keywords = [
+    "46elks",
+    "800.com",
+    "Africas Talking",
+    "Alerts",
+    "Apprise API",
+    "Automated Packet Reporting System",
+    "Amazon Chime",
+    "AWS",
+    "Bark",
+    "Blink(1)",
+    "BlueSky",
+    "Brevo",
+    "BulkSMS",
+    "BulkVS",
+    "Burst SMS",
+    "Chanify",
+    "Chat",
+    "CLI",
+    "Clickatell",
+    "ClickSend",
+    "D7Networks",
+    "Dapnet",
+    "DBus",
+    "DingTalk",
+    "Discord",
+    "Dot",
+    "Email",
+    "Emby",
+    "Enigma2",
+    "Evolution API",
+    "Exotel",
+    "FCM",
+    "Feishu",
+    "Flock",
+    "Flowtriq",
+    "Fluxer",
+    "Form",
+    "Free Mobile",
+    "Gnome",
+    "Google Chat",
+    "Gotify",
+    "GroupMe",
+    "Growl",
+    "Guilded",
+    "Home Assistant",
+    "httpSMS",
+    "HumHub",
+    "IFTTT",
+    "IRC",
+    "Jellyfin",
+    "Jira",
+    "Join",
+    "JSON",
+    "Kavenegar",
+    "KODI",
+    "Kook",
+    "Kumulos",
+    "LaMetric",
+    "Lark",
+    "Lauther",
+    "Line",
+    "MacOSX",
+    "Mailgun",
+    "MailerSend",
+    "Mastodon",
+    "Matrix",
+    "Mattermost",
+    "MessageBird",
+    "Microsoft",
+    "Misskey",
+    "MQTT",
+    "MSG91",
+    "MSTeams",
+    "Nextcloud",
+    "NextcloudTalk",
+    "Notica",
+    "Notifiarr",
+    "Notifico",
+    "Notifyre",
+    "Ntfy",
+    "Office365",
+    "OneSignal",
+    "Opsgenie",
+    "PagerDuty",
+    "PagerTree",
+    "ParsePlatform",
+    "Pinglet",
+    "Pingram",
+    "Plivo",
+    "Postmark",
+    "Power Automate",
+    "Prowl",
+    "Push Notifications",
+    "PushBullet",
+    "PushDeer",
+    "Pushed",
+    "Pushjet",
+    "PushMe",
+    "Pushover",
+    "Pushplus",
+    "PushSafer",
+    "PushWard",
+    "Pushy",
+    "QQ Push",
+    "Quote/0",
+    "Reddit",
+    "Resend",
+    "Revolt",
+    "RingCentral",
+    "Rocket.Chat",
+    "RSyslog",
+    "Ryver",
+    "SendGrid",
+    "SendPulse",
+    "ServerChan",
+    "SerwerSMS",
+    "Session Open Group Server",
+    "SES",
+    "Seven",
+    "SFR",
+    "Signal",
+    "Signalgrid",
+    "SIGNL4",
+    "SimplePush",
+    "Sinch",
+    "Slack",
+    "SMPP",
+    "SMS Manager",
+    "SMSC",
+    "SMSEagle",
+    "SMTP2Go",
+    "SNS",
+    "SparkPost",
+    "Spike",
+    "Splunk",
+    "SpugPush",
+    "Stackfield",
+    "Streamlabs",
+    "Stride",
+    "Synology Chat",
+    "Syslog",
+    "Techulus",
+    "Telegram",
+    "Threema Gateway",
+    "Trigv",
+    "Twilio",
+    "Twist",
+    "Twitter",
+    "Vapid",
+    "Viber",
+    "VictorOps",
+    "Voipms",
+    "Vonage",
+    "Webex",
+    "Webpush",
+    "WeChat (WeCom)",
+    "WeCom Bot",
+    "WhatsApp",
+    "Windows",
+    "Workflows",
+    "WPUSH",
+    "WxPusher",
+    "XBMC",
+    "XML",
+    "XMPP",
+    "Zoom",
+    "Zulip",
+]
+
+[project.optional-dependencies]
+
+# All packages required to test/build against
+dev = [
+    "coverage",
+    "mock",
+    "tox",
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "ruff==0.15.8",
+    "babel",
+    "validate-pyproject",
+]
+
+# Defines all Python libraries for Apprise to work with
+# all plugins
+all-plugins = [
+    # Used in many applications requiring cryptography
+    # such as fcm://, splush:// and much more
+    "cryptography",
+
+    # provides growl:// support
+    "gntp",
+    # Provides mqtt:// support
+    "paho-mqtt >= 2.1.0",
+
+     # Pretty Good Privacy (PGP) Provides mailto:// and deltachat:// support
+    "PGPy",
+
+    # Provides blink1:// support
+    "hidapi",
+
+    # Provides smpp:// support
+    "smpplib",
+
+    # For xmpp:// support
+    "slixmpp >= 1.16.0",
+]
+windows = [
+    "pywin32",
+    "tzdata",
+]
+
+[project.urls]
+Homepage = "https://appriseit.com"
+Source = "https://github.com/caronc/apprise"
+Tracker = "https://github.com/caronc/apprise/issues"
+Documentation = "https://appriseit.com"
+
+[project.scripts]
+apprise = "apprise.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+apprise = [
+    "assets/NotifyXML-*.xsd",
+    "assets/themes/default/*.png",
+    "assets/themes/default/*.ico",
+    "i18n/*.py",
+    "i18n/*/LC_MESSAGES/*.mo",
+    "py.typed",
+    "*.pyi",
+    "*/*.pyi",
+]
+
+[tool.setuptools.packages.find]
+where = [
+    ".",
+]
+exclude = [
+    "tests*",
+    "tools*",
+]
+include = ["apprise*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "apprise.__version__"}
+
+[tool.ruff]
+line-length = 79  # Respecting BSD-style 79-char limit
+target-version = "py39"
+exclude = [
+  "tests/data",
+  "bin",
+  "build",
+  "dist",
+  ".eggs",
+  ".tox",
+  ".local",
+  ".venv",
+  "venv",
+]
+
+
+[tool.ruff.lint]
+select = [
+  "E",    # pycodestyle errors
+  "F",    # pyflakes
+  "W",    # pycodestyle warnings
+  "Q",    # Quote handling ' -> "
+  "I",    # isort
+  "UP",   # pyupgrade
+  "B",    # flake8-bugbear
+  "C4",   # flake8-comprehensions
+  "SIM",  # flake8-simplify
+  "T20",  # flake8-print (catches stray `print`)
+  "RUF",  # Ruff-native rules
+]
+
+ignore = [
+  "D100",    # missing docstring in public module
+  "D104",    # missing docstring in public package
+  "B008",    # do not call `dict()` with keyword args
+  "E722",    # bare except (Apprise uses it reasonably)
+  "E741",    # Ambiguous variable name (e.g., l, O, I)
+  "W605",    # Invalid escape sequence
+  "B026",    # Star-arg play a big part of Apprise; must be accepted for now
+
+  # The following needs to be supported at some point and is of great value
+  "RUF012",  # typing.ClassVar implimentation
+  "RUF029",  # Use of async without await or async subcalls
+  "UP032",   # This is a massive undertaking and requires a massive rewrite
+             # of test cases; this will take a while to fix, so turning off
+             # for now
+]
+
+[tool.ruff.lint.pyupgrade]
+keep-runtime-typing = true
+
+[tool.ruff.lint.flake8-quotes]
+inline-quotes = "double"
+
+[tool.ruff.lint.isort]
+known-first-party = ["apprise"]
+force-sort-within-sections = true
+combine-as-imports = true
+order-by-type = true
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[tool.ruff.lint.flake8-builtins]
+builtins-ignorelist = ["_"]
+
+[tool.pytest.ini_options]
+# Keep pytest-cov minimal, let Coverage.py control formatting.
+addopts = "-ra"
+testpaths = ["tests"]
+python_files = ["test_*.py", "tests/test_*.py"]
+filterwarnings = [
+    "once::Warning",
+    # Ignore warnings from PGPy's dependencies and unfinished checks, which
+    # Apprise cannot resolve.
+    "ignore::Warning:pgpy(\\.|$)",
+    # PGPy reports this internal encryption warning from Apprise's call site.
+    "ignore:^Selected compression algorithm not in key preferences$:UserWarning",
+]
+
+[tool.coverage.run]
+branch = true
+parallel = false
+data_file = ".coverage"
+source = ["apprise"]
+relative_files = true
+
+[tool.coverage.paths]
+# Normalise .tox and site-packages layouts back to 'apprise'
+source = [
+    "apprise",
+    "/apprise/apprise",
+    ".tox/*/lib/python*/site-packages/apprise",
+    ".tox/pypy/site-packages/apprise"
+]
+
+[tool.coverage.report]
+# Controls terminal and XML content when Coverage.py renders reports
+show_missing = true
+skip_covered = true
+skip_empty = true
+precision = 1
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+    "pass$",
+]
+
+[tool.coverage.xml]
+# Ensure GitHub Action can find a predictable file
+output = "coverage.xml"
