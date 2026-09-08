@@ -91,15 +91,15 @@
       "url": "https://github.com/Cap-go/capacitor-file-sharer.git",
       "requested": "https://github.com/Cap-go/capacitor-file-sharer",
       "ref": "9379ba451869475c70db972875ab6253616bb19b"
+    },
+    {
+      "n": "06",
+      "slug": "Wails",
+      "url": "https://github.com/wailsapp/wails.git",
+      "requested": "https://github.com/wailsapp/wails",
+      "ref": "ceaf5e765bb35f64974de4ebc831ade186000f52",
+      "historical_ref": "v3-alpha"
     }
   ],
-  "gaps": [
-    {
-      "name": "Wails",
-      "source_url": "https://github.com/wailsapp/wails",
-      "source_ref": "v3-alpha",
-      "status": "SOURCE_REF_GAP",
-      "error": "unresolved ref"
-    }
-  ]
+  "gaps": []
 }
