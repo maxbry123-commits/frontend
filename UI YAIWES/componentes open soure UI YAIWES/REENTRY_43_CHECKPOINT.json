@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 42,
+  "processed": 43,
   "records": [
     {
       "bytes": 312360273,
@@ -525,11 +525,20 @@
       "name": "virglrenderer",
       "source_url": "https://gitlab.freedesktop.org/virgl/virglrenderer",
       "status": "GAP"
+    },
+    {
+      "destination": "virtiofsd",
+      "error": "SOURCE_SHA_GAP:warning:",
+      "index": 43,
+      "n": 75,
+      "name": "virtiofsd",
+      "source_url": "https://gitlab.com/virtio-fs/virtiofsd",
+      "status": "GAP"
     }
   ],
   "states": {
     "COMPLETE": 22,
-    "GAP": 20,
+    "GAP": 21,
     "VERIFIED_EXISTING": 0
   }
 }
