@@ -1,0 +1,87 @@
+# Copyright 2023 LiveKit, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Release to Docker
+
+permissions:
+  contents: read
+
+# Controls when the action will run.
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master # publish to 'master' tag
+    tags:
+      - 'v*.*.*' # publish on version tags, updates 'latest' tag
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            livekit/livekit-server
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern=v{{version}}
+            type=semver,pattern=v{{major}}.{{minor}}
+
+      # Generate with the same Go toolchain the published image is built with
+      - name: Resolve Go version
+        id: go-version
+        run: |
+          # Assign first so a failed lookup trips `set -e`; inside echo its exit
+          # status would be discarded and an empty version written.
+          version=$(.github/scripts/go-version.sh Dockerfile)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
+        with:
+          go-version: ${{ steps.go-version.outputs.version }}
+
+      - name: Download Go modules
+        run: go mod download
+
+      # Run mage at the version go.mod pins, rather than the mage-action's
+      # `version: latest`, so the binary matches the mage/mg library the magefile is
+      # compiled against and Renovate owns the version like any other module.
+      - name: Generate code
+        run: go run github.com/magefile/mage generate
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4
+
+      - name: Login to DockerHub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@f9f3042f7e2789586610d6e8b85c8f03e5195baf # v7
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
