@@ -4,6 +4,7 @@
 **Contrato runtime:** `tel.workflow/v3`
 **Modo:** `FAIL_CLOSED_LOOP`
 **Owner:** `stabilize_core`
+**Handoff vivo:** `UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md`
 
 Este parche permite retomar desde el estado real sin reconstruir el historial.
 
@@ -11,6 +12,7 @@ Este parche permite retomar desde el estado real sin reconstruir el historial.
 
 # 1. BOOT EXACTO
 
+0. Leer `HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md` para obtener el punto de entrada y la ruta de recuperación viva.
 1. Leer `CONTRATO-MAESTRO-FORENSE-XRAY-50-GOALS-UI-YAIWES.md`.
 2. Leer `CROSSCHECK-FUENTES-VERDAD-XRAY-UI-YAIWES.md`.
 3. Leer `STATE.json`.
@@ -245,6 +247,7 @@ Si C1 queda bloqueado, continuar únicamente una tarea independiente segura docu
 # 14. FINAL RECOVERY CHECKLIST
 
 - [x] master contract reconciliado
+- [x] handoff V5 vivo publicado
 - [x] queue anomaly evidenciada
 - [x] A02 124-index classification
 - [x] A03 deterministic recovery ordering
