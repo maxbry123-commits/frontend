@@ -11,3 +11,4 @@
 {"number": 12, "parts": 1, "slug": "Filesystem", "source": "https://github.com/ionic-team/capacitor-filesystem.git", "source_commit": "74495f5177e8f3f2aa477058708af69dea0c0a09", "status": "COMPLETE"}
 {"number": 13, "parts": 1, "slug": "capacitor-plugins", "source": "https://github.com/ionic-team/capacitor-plugins.git", "source_commit": "89070d432771b94c97294ed57b8d4843fc9f5392", "status": "COMPLETE"}
 {"number": 14, "parts": 1, "slug": "capacitor-file-sharer", "source": "https://github.com/Cap-go/capacitor-file-sharer.git", "source_commit": "9379ba451869475c70db972875ab6253616bb19b", "status": "COMPLETE"}
+{"number": 1, "parts": 8, "slug": "Wails", "source": "https://github.com/wailsapp/wails.git", "source_commit": "ceaf5e765bb35f64974de4ebc831ade186000f52", "status": "COMPLETE"}
