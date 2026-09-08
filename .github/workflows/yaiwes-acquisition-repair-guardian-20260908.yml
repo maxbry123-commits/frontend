@@ -1,0 +1,108 @@
+name: YAIWES Acquisition Repair Guardian 20260908
+run-name: YAIWES Acquisition Repair Guardian • ${{ github.run_id }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/trigger/frontend-acquisition-guardian.trigger'
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: frontend-yaiwes-acquisition-repair-guardian
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 480
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: false
+
+      - name: Copy existing Guardian implementation and edit paths surgically
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p _work
+          cp scripts/extract_guardian_repair_20260903.py _work/guardian.py
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('_work/guardian.py'); s=p.read_text()
+          old='MAPS = [{"src":"📂componentes open soure fromtend/Fromtend code","dst":"📂componentes open soure fromtend/Fromtend code","layout":"flat"},{"src":"📂componentes open soure fromtend/UI YAIWES","dst":"📂componentes open soure fromtend/UI YAIWES","layout":"flat","mirror":"UI YAIWES/Interface YAIWES ui/ENGINE ADAPTER"}]'
+          new='MAPS = [{"src":"fabrica de UI INTERFACE fromtend/_canonical_download_28","dst":"fabrica de UI INTERFACE fromtend","layout":"flat"},{"src":"fabrica de UI INTERFACE fromtend/_canonical_download_14","dst":"fabrica de UI INTERFACE fromtend","layout":"flat"},{"src":"UI YAIWES/todos los componentes/Watchdog UI/_canonical_download_26","dst":"UI YAIWES/todos los componentes/Watchdog UI","layout":"flat"},{"src":"UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43","dst":"UI YAIWES/componentes open soure UI YAIWES","layout":"flat"}]'
+          if old not in s: raise SystemExit('GUARDIAN_COPY_ANCHOR_GAP')
+          s=s.replace(old,new,1)
+          anchor='def copy_no_overwrite(src, dst):\n'
+          restore='''def restore_chunks(stage):\n    m=stage/"SPLIT_FILES.json"\n    if not m.exists(): return\n    records=json.loads(m.read_text())\n    for r in records:\n        parts=stage/Path(r["chunks_dir"]); target=stage/Path(r["path"]); target.parent.mkdir(parents=True,exist_ok=True)\n        with target.open("wb") as w:\n            for p in sorted(parts.glob("*.part-*")): w.write(p.read_bytes())\n        if target.stat().st_size!=int(r["bytes"]): raise RuntimeError("CHUNK_REBUILD_GAP:"+r["path"])\n        shutil.rmtree(parts)\n    m.unlink()\n\n'''
+          if anchor not in s: raise SystemExit('GUARDIAN_FUNCTION_ANCHOR_GAP')
+          s=s.replace(anchor,restore+anchor,1)
+          old2='''        state=tree_state(payload)\n        if not state["files"]:\n'''
+          new2='''        restore_chunks(payload)\n        state=tree_state(payload)\n        if not state["files"]:\n'''
+          if old2 not in s: raise SystemExit('GUARDIAN_CALL_ANCHOR_GAP')
+          s=s.replace(old2,new2,1)
+          p.write_text(s)
+          print('GUARDIAN_COPY_PASS')
+          PY
+
+      - name: Enforce NO-LFS runner policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config --local filter.lfs.clean cat
+          git config --local filter.lfs.smudge cat
+          git config --local --unset-all filter.lfs.process || true
+          git config --local filter.lfs.required false
+
+      - name: Extract next bounded batch safely
+        id: extract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 _work/guardian.py --limit 10 | tee extraction-result.json
+
+      - name: Publish exact extracted trees
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -A -- 'fabrica de UI INTERFACE fromtend' 'UI YAIWES/todos los componentes/Watchdog UI' 'UI YAIWES/componentes open soure UI YAIWES' 'forensics/extraction'
+          python3 -c 'import subprocess,sys,pathlib; marker=b"version https://git-lfs.github.com/spec/v1\n"; ps=subprocess.check_output(["git","diff","--cached","--name-only","-z"]).split(b"\0"); bad=[]; overs=[]
+for b in ps:
+ p=pathlib.Path(b.decode("utf-8","surrogateescape")) if b else None
+ if p and p.is_file():
+  data=p.read_bytes()[:1024]
+  if data.startswith(marker): bad.append(str(p))
+  if p.stat().st_size>=100*1024*1024: overs.append(str(p))
+print("SOURCE_LFS_POINTER_GAP",bad) if bad else None; print("GIT_BLOB_LIMIT_GAP",overs) if overs else None; sys.exit(73 if bad or overs else 0)'
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m "fix(extraction): frontend YAIWES canonical guardian [run ${GITHUB_RUN_ID}]"
+            for attempt in 1 2 3; do
+              git fetch origin main && git rebase --autostash origin/main && git push --no-verify origin HEAD:main && break
+              test "$attempt" -lt 3 || exit 41
+              sleep $((attempt*10))
+            done
+          fi
+
+      - name: Read-back fail-closed
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git reset --hard origin/main
+          python3 _work/guardian.py --audit-only | tee audit-result.json
+          python3 - <<'PY'
+          import json,sys
+          d=json.load(open('audit-result.json')); c=d.get('counts',{})
+          print('remaining_gaps=',c.get('remaining')); print('retryable=',c.get('retryable')); print('blocked=',c.get('blocked'))
+          if c.get('remaining',0): sys.exit(73)
+          print('GUARDIAN_READ_BACK_PASS')
+          PY
