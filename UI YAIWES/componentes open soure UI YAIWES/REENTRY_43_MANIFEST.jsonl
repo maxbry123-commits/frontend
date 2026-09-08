@@ -74,3 +74,4 @@
 {"destination": "AVF", "error": "GIT_BLOB_LIMIT_GAP: libs/apkverify/tests/data/input.272629760:272629760", "index": 38, "n": 66, "name": "AVF", "source_commit": "175a51b30123fa6b02b541f1969665708f7ec2c3", "source_url": "https://android.googlesource.com/platform/packages/modules/Virtualization/", "status": "GAP"}
 {"destination": "Wayland", "error": "SOURCE_SHA_GAP:warning:", "index": 39, "n": 70, "name": "Wayland", "source_url": "https://gitlab.freedesktop.org/wayland/wayland", "status": "GAP"}
 {"destination": "Weston-libweston", "error": "SOURCE_SHA_GAP:warning:", "index": 40, "n": 71, "name": "Weston/libweston", "source_url": "https://gitlab.freedesktop.org/wayland/weston", "status": "GAP"}
+{"destination": "Mesa", "error": "SOURCE_SHA_GAP:warning:", "index": 41, "n": 72, "name": "Mesa", "source_url": "https://gitlab.freedesktop.org/mesa/mesa", "status": "GAP"}
