@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 8,
+  "processed": 9,
   "records": [
     {
       "bytes": 312360273,
@@ -105,10 +105,23 @@
       "source_url": "https://github.com/juliansteenbakker/flutter_secure_storage",
       "status": "COMPLETE",
       "tree_sha256": "829c9ea5c198ed79b0f1a2608dc975ad1f057b5354ddb879e5725d1f6d5ce5fd"
+    },
+    {
+      "bytes": 7297754,
+      "destination": "libsodium",
+      "files": 741,
+      "index": 9,
+      "n": 96,
+      "name": "libsodium",
+      "read_back": "PASS",
+      "source_commit": "f6bd9140861ab6806f4a99923888b65477fc4e33",
+      "source_url": "https://github.com/jedisct1/libsodium",
+      "status": "COMPLETE",
+      "tree_sha256": "da18aa3981103983f0e8d610d9146651ae117099e96294cfd74956f4f61461c2"
     }
   ],
   "states": {
-    "COMPLETE": 5,
+    "COMPLETE": 6,
     "GAP": 3,
     "VERIFIED_EXISTING": 0
   }
