@@ -1,0 +1,10 @@
+Fuentes raw usadas para la copia:
+https://raw.githubusercontent.com/anthropics/skills/main/skills/frontend-design/SKILL.md
+https://raw.githubusercontent.com/anthropics/skills/main/skills/canvas-design/SKILL.md
+https://raw.githubusercontent.com/anthropics/skills/main/skills/skill-creator/SKILL.md
+https://raw.githubusercontent.com/anthropics/skills/main/skills/theme-factory/SKILL.md
+https://raw.githubusercontent.com/anthropics/skills/main/skills/web-artifacts-builder/SKILL.md
+https://raw.githubusercontent.com/anthropics/skills/main/skills/brand-guidelines/SKILL.md
+https://raw.githubusercontent.com/vercel-labs/agent-skills/main/skills/web-design-guidelines/SKILL.md
+https://raw.githubusercontent.com/mstrokin/grok-root-skills/main/skills/skill-creator/SKILL.md
+https://raw.githubusercontent.com/anthropics/claude-code/main/plugins/frontend-design/skills/frontend-design/SKILL.md
