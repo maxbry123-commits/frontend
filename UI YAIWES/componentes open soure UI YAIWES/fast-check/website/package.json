@@ -1,0 +1,60 @@
+{
+  "private": true,
+  "name": "website",
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "cp ../.all-contributorsrc src/components/HomepageContributors/all-contributors.json && node prebuild/optimize-images.mjs && docusaurus start",
+    "build": "cp ../.all-contributorsrc src/components/HomepageContributors/all-contributors.json && node prebuild/optimize-images.mjs && docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "docusaurus deploy",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@docusaurus/core": "3.10.2",
+    "@docusaurus/faster": "3.10.2",
+    "@docusaurus/plugin-pwa": "3.10.2",
+    "@docusaurus/preset-classic": "3.10.2",
+    "@docusaurus/remark-plugin-npm2yarn": "3.10.2",
+    "@docusaurus/theme-mermaid": "3.10.2",
+    "@stackblitz/sdk": "^1.11.1",
+    "clsx": "^2.1.1",
+    "lodash": "^4.18.1",
+    "prism-react-renderer": "^2.4.1",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "3.10.2",
+    "@docusaurus/theme-classic": "3.10.2",
+    "@docusaurus/tsconfig": "3.10.2",
+    "@docusaurus/types": "3.10.2",
+    "@mdx-js/react": "^3.1.1",
+    "@types/lodash": "^4.17.25",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "docusaurus-plugin-llms": "^0.6.0",
+    "docusaurus-plugin-typedoc": "^1.4.2",
+    "fast-check": "workspace:*",
+    "jimp": "^1.6.1",
+    "typedoc": "^0.28.20",
+    "typedoc-plugin-markdown": "^4.12.0",
+    "typescript": "~6.0.3",
+    "vitest": "^4.1.10"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

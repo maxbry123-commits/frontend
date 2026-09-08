@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": true,
+    "isolatedDeclarations": true,
+    "incremental": false,
+    "sourceMap": true,
+    "target": "es2020",
+    "lib": ["ES2020", "ES2022.Error"],
+    "module": "node18",
+    "importHelpers": false,
+    "preserveConstEnums": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "moduleDetection": "force",
+    "isolatedModules": true
+  }
+}

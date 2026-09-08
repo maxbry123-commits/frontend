@@ -1,0 +1,37 @@
+{
+  "extends": ["config:recommended", ":dependencyDashboard"],
+  "labels": ["dependencies"],
+  "commitMessagePrefix": "⬆️ ",
+  "packageRules": [
+    {
+      "matchFileNames": ["packages/*/package.json"],
+      "matchDepTypes": ["dependencies", "peerDependencies", "optionalDependencies"],
+      "rangeStrategy": "update-lockfile"
+    },
+    {
+      "matchFileNames": ["packages/*/package.json"],
+      "matchDepTypes": ["devDependencies"],
+      "rangeStrategy": "bump"
+    },
+    {
+      "matchFileNames": ["package.json", "examples/package.json", "website/package.json"],
+      "rangeStrategy": "bump"
+    },
+    {
+      "matchFileNames": ["package.json"],
+      "matchDepTypes": ["pnpm.overrides"],
+      "enabled": false
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true
+  },
+  "osvVulnerabilityAlerts": true,
+  "dependencyDashboardOSVVulnerabilitySummary": "all",
+  "postUpdateOptions": ["pnpmDedupe"],
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "ignorePaths": ["**/node_modules/**", "**/bower_components/**"],
+  "configMigration": true
+}
