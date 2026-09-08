@@ -1,0 +1,4001 @@
+#include "collection.h"
+#include "conversation_manager.h"
+#include "conversation_model_manager.h"
+#include "core_api_utils.h"
+#include "curation_index_manager.h"
+#include "raft_server.h"
+#include "string_utils.h"
+#include "synonym_index_manager.h"
+#include <analytics_manager.h>
+#include <collection_manager.h>
+#include <conversation_model.h>
+#include <core_api.h>
+#include <gtest/gtest.h>
+#include <map>
+#include <unistd.h>
+#include <vector>
+
+uint64_t hash_request(const std::shared_ptr<http_req>& req);
+
+class CoreAPIUtilsTest : public ::testing::Test {
+protected:
+    Store *store;
+    CollectionManager & collectionManager = CollectionManager::get_instance();
+    std::atomic<bool> quit = false;
+
+    std::vector<std::string> query_fields;
+    std::vector<sort_by> sort_fields;
+
+
+    void setupCollection() {
+        std::string state_dir_path = "/tmp/typesense_test/core_api_utils";
+        LOG(INFO) << "Truncating and creating: " << state_dir_path;
+        system(("rm -rf "+state_dir_path+" && mkdir -p "+state_dir_path).c_str());
+
+        store = new Store(state_dir_path);
+        collectionManager.init(store, 1.0, "auth_key", quit);
+        collectionManager.load(8, 1000);
+
+        ConversationModelManager::init(store);
+        nlohmann::json schema_json = R"({
+            "name": "conversation_store",
+            "fields": [
+                {
+                    "name": "conversation_id",
+                    "type": "string"
+                },
+                {
+                    "name": "role",
+                    "type": "string",
+                    "index": false
+                },
+                {
+                    "name": "message",
+                    "type": "string",
+                    "index": false
+                },
+                {
+                    "name": "timestamp",
+                    "type": "int32",
+                    "sort": true
+                }
+            ]
+        })"_json;
+
+        collectionManager.create_collection(schema_json);
+    }
+
+    virtual void SetUp() {
+        setupCollection();
+    }
+
+    virtual void TearDown() {
+        collectionManager.dispose();
+        delete store;
+    }
+};
+
+TEST_F(CoreAPIUtilsTest, StatefulRemoveDocs) {
+    Collection *coll1;
+
+    std::vector<field> fields = {field("title", field_types::STRING, false),
+                                 field("points", field_types::INT32, false),};
+
+    coll1 = collectionManager.get_collection("coll1").get();
+    if(coll1 == nullptr) {
+        coll1 = collectionManager.create_collection("coll1", 2, fields, "points").get();
+    }
+
+    for(size_t i=0; i<100; i++) {
+        nlohmann::json doc;
+
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+
+        coll1->add(doc.dump());
+    }
+
+    bool done;
+    deletion_state_t deletion_state;
+    deletion_state.collection = coll1;
+    deletion_state.num_removed = 0;
+
+    // single document match
+
+    filter_result_t filter_results;
+    coll1->get_filter_ids_with_lock("points: 99", filter_results);
+    deletion_state.index_ids.emplace_back(filter_results.count, filter_results.docs);
+    filter_results.docs = nullptr;
+    for(size_t i=0; i<deletion_state.index_ids.size(); i++) {
+        deletion_state.offsets.push_back(0);
+    }
+
+    stateful_remove_docs(&deletion_state, 5, done);
+    ASSERT_EQ(1, deletion_state.num_removed);
+    ASSERT_TRUE(done);
+
+    // match 12 documents (multiple batches)
+    for(auto& kv: deletion_state.index_ids) {
+        delete [] kv.second;
+    }
+    deletion_state.index_ids.clear();
+    deletion_state.offsets.clear();
+    deletion_state.num_removed = 0;
+
+    coll1->get_filter_ids_with_lock("points:< 11", filter_results);
+    deletion_state.index_ids.emplace_back(filter_results.count, filter_results.docs);
+    filter_results.docs = nullptr;
+    for(size_t i=0; i<deletion_state.index_ids.size(); i++) {
+        deletion_state.offsets.push_back(0);
+    }
+
+    stateful_remove_docs(&deletion_state, 4, done);
+    ASSERT_EQ(4, deletion_state.num_removed);
+    ASSERT_FALSE(done);
+
+    stateful_remove_docs(&deletion_state, 4, done);
+    ASSERT_EQ(8, deletion_state.num_removed);
+    ASSERT_FALSE(done);
+
+    stateful_remove_docs(&deletion_state, 4, done);
+    ASSERT_EQ(11, deletion_state.num_removed);
+    ASSERT_TRUE(done);
+
+    // match 9 documents (multiple batches)
+    for(auto& kv: deletion_state.index_ids) {
+        delete [] kv.second;
+    }
+    deletion_state.index_ids.clear();
+    deletion_state.offsets.clear();
+    deletion_state.num_removed = 0;
+
+    coll1->get_filter_ids_with_lock("points:< 20", filter_results);
+    deletion_state.index_ids.emplace_back(filter_results.count, filter_results.docs);
+    filter_results.docs = nullptr;
+    for(size_t i=0; i<deletion_state.index_ids.size(); i++) {
+        deletion_state.offsets.push_back(0);
+    }
+
+    stateful_remove_docs(&deletion_state, 7, done);
+    ASSERT_EQ(7, deletion_state.num_removed);
+    ASSERT_FALSE(done);
+
+    stateful_remove_docs(&deletion_state, 7, done);
+    ASSERT_EQ(9, deletion_state.num_removed);
+    ASSERT_TRUE(done);
+
+    // fetch raw document IDs
+    for(size_t i=0; i<100; i++) {
+        nlohmann::json doc;
+
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+
+        coll1->add(doc.dump());
+    }
+
+    for(auto& kv: deletion_state.index_ids) {
+        delete [] kv.second;
+    }
+    deletion_state.index_ids.clear();
+    deletion_state.offsets.clear();
+    deletion_state.num_removed = 0;
+
+    coll1->get_filter_ids_with_lock("id:[0, 1, 2]", filter_results);
+    deletion_state.index_ids.emplace_back(filter_results.count, filter_results.docs);
+    filter_results.docs = nullptr;
+    for(size_t i=0; i<deletion_state.index_ids.size(); i++) {
+        deletion_state.offsets.push_back(0);
+    }
+
+    stateful_remove_docs(&deletion_state, 5, done);
+    ASSERT_EQ(3, deletion_state.num_removed);
+    ASSERT_TRUE(done);
+
+    // delete single doc
+
+    for(auto& kv: deletion_state.index_ids) {
+        delete [] kv.second;
+    }
+    deletion_state.index_ids.clear();
+    deletion_state.offsets.clear();
+    deletion_state.num_removed = 0;
+
+    coll1->get_filter_ids_with_lock("id :10", filter_results);
+    deletion_state.index_ids.emplace_back(filter_results.count, filter_results.docs);
+    filter_results.docs = nullptr;
+    for(size_t i=0; i<deletion_state.index_ids.size(); i++) {
+        deletion_state.offsets.push_back(0);
+    }
+
+    stateful_remove_docs(&deletion_state, 5, done);
+    ASSERT_EQ(1, deletion_state.num_removed);
+    ASSERT_TRUE(done);
+
+    for(auto& kv: deletion_state.index_ids) {
+        delete [] kv.second;
+    }
+    deletion_state.index_ids.clear();
+    deletion_state.offsets.clear();
+    deletion_state.num_removed = 0;
+
+    filter_results = filter_result_t(0, nullptr);
+    // bad filter query
+    auto op = coll1->get_filter_ids_with_lock("bad filter", filter_results);
+    ASSERT_FALSE(op.ok());
+    ASSERT_STREQ("Could not parse the filter query.", op.error().c_str());
+
+    bool should_timeout = true;
+    bool validate_field_names = true;
+    op = coll1->get_filter_ids_with_lock("foo: 99", filter_results, should_timeout, validate_field_names);
+    ASSERT_FALSE(op.ok());
+    ASSERT_EQ("Could not find a filter field named `foo` in the schema.", op.error());
+
+    validate_field_names = false;
+    op = coll1->get_filter_ids_with_lock("foo: 99", filter_results, should_timeout, validate_field_names);
+    ASSERT_TRUE(op.ok());
+    ASSERT_EQ(0, filter_results.count);
+    ASSERT_EQ(nullptr, filter_results.docs);
+
+    collectionManager.drop_collection("coll1");
+}
+
+TEST_F(CoreAPIUtilsTest, MultiSearchEmbeddedKeys) {
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+
+    req->params["filter_by"] = "user_id: 100";
+    nlohmann::json body;
+    body["searches"] = nlohmann::json::array();
+    nlohmann::json search;
+    search["collection"] = "users";
+    search["filter_by"] = "age: > 100";
+    body["searches"].push_back(search);
+
+    req->body = body.dump();
+    nlohmann::json embedded_params;
+    embedded_params["filter_by"] = "foo: bar";
+    req->embedded_params_vec.push_back(embedded_params);
+
+    post_multi_search(req, res);
+
+    // ensure that req params are appended to (embedded params are also rolled into req params)
+    ASSERT_EQ("((user_id: 100) && (age: > 100)) && (foo: bar)", req->params["filter_by"]);
+
+    // when empty filter_by is present in req params, don't add ()
+    req->params["filter_by"] = "";
+    post_multi_search(req, res);
+    ASSERT_EQ("((age: > 100)) && (foo: bar)", req->params["filter_by"]);
+
+    // when empty filter_by in collection search params, don't add ()
+    req->params["filter_by"] = "user_id: 100";
+    search["filter_by"] = "";
+    body["searches"].clear();
+    body["searches"].push_back(search);
+    req->body = body.dump();
+    post_multi_search(req, res);
+    ASSERT_EQ("((user_id: 100)) && (foo: bar)", req->params["filter_by"]);
+
+    // when both are empty, don't add ()
+    req->params["filter_by"] = "";
+    search["filter_by"] = "";
+    body["searches"].clear();
+    body["searches"].push_back(search);
+    req->body = body.dump();
+    post_multi_search(req, res);
+    ASSERT_EQ("(foo: bar)", req->params["filter_by"]);
+
+    // try setting max search limit
+    req->embedded_params_vec[0]["limit_multi_searches"] = 0;
+    ASSERT_FALSE(post_multi_search(req, res));
+    ASSERT_EQ("{\"message\":\"Number of multi searches exceeds `limit_multi_searches` parameter.\"}", res->body);
+
+    req->embedded_params_vec[0]["limit_multi_searches"] = 1;
+    ASSERT_TRUE(post_multi_search(req, res));
+
+    // req params must be overridden by embedded param
+    req->embedded_params_vec[0]["limit_multi_searches"] = 0;
+    req->params["limit_multi_searches"] = "100";
+    ASSERT_FALSE(post_multi_search(req, res));
+    ASSERT_EQ("{\"message\":\"Number of multi searches exceeds `limit_multi_searches` parameter.\"}", res->body);
+
+    // use req params if embedded param not present
+    req->embedded_params_vec[0].erase("limit_multi_searches");
+    ASSERT_TRUE(post_multi_search(req, res));
+
+}
+
+TEST_F(CoreAPIUtilsTest, ScopedKeyEmbeddedCollectionCanSupplyMissingMultiSearchCollection) {
+    nlohmann::json schema = R"({
+        "name": "scoped_coll",
+        "fields": [
+          {"name": "title", "type": "string" }
+        ]
+    })"_json;
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    Collection* scoped_coll = op.get();
+    scoped_coll->add(R"({"id":"1","title":"scoped doc"})", CREATE);
+
+    api_key_t parent_key("ScopedKeyMissingCollection1", "scoped search parent", {"documents:search"}, {"scoped_coll"},
+                         api_key_t::FAR_FUTURE_TIMESTAMP);
+    auto key_op = collectionManager.getAuthManager().create_key(parent_key);
+    ASSERT_TRUE(key_op.ok());
+
+    const std::string custom_params = R"({"collection":"scoped_coll"})";
+    const std::string scoped_key_payload = StringUtils::hmac(parent_key.value, custom_params) +
+                                           parent_key.value.substr(0, api_key_t::PREFIX_LEN) + custom_params;
+    const std::string scoped_key = StringUtils::base64_encode(scoped_key_payload);
+
+    auto req = std::make_shared<http_req>();
+    auto res = std::make_shared<http_res>(nullptr);
+    nlohmann::json body;
+    nlohmann::json search = {
+        {"q", "scoped"},
+        {"query_by", "title"}
+    };
+    body["searches"] = nlohmann::json::array();
+    body["searches"].push_back(search);
+    req->body = body.dump();
+
+    route_path rpath_multi_search = route_path("POST", {"multi_search"}, post_multi_search, false, false);
+    ASSERT_TRUE(handle_authentication(req->params, req->embedded_params_vec, req->body, rpath_multi_search, scoped_key));
+    ASSERT_EQ("scoped_coll",
+              req->embedded_params_vec[0][AuthManager::AUTH_RESOLVED_COLLECTION_PARAM].get<std::string>());
+
+    ASSERT_TRUE(post_multi_search(req, res));
+
+    auto response = nlohmann::json::parse(res->body);
+    ASSERT_EQ("scoped_coll", response["results"][0]["request_params"]["collection_name"].get<std::string>());
+    ASSERT_EQ(1, response["results"][0]["found"].get<size_t>());
+    ASSERT_EQ("scoped doc", response["results"][0]["hits"][0]["document"]["title"].get<std::string>());
+}
+
+TEST_F(CoreAPIUtilsTest, ScopedKeyEmbeddedCollectionConflictFailsAuthentication) {
+    nlohmann::json schema = R"({
+        "name": "allowed_coll",
+        "fields": [
+          {"name": "title", "type": "string" }
+        ]
+    })"_json;
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+
+    api_key_t parent_key("ScopedKeyConflictCollection2", "scoped search parent", {"documents:search"}, {"allowed_coll"},
+                         api_key_t::FAR_FUTURE_TIMESTAMP);
+    auto key_op = collectionManager.getAuthManager().create_key(parent_key);
+    ASSERT_TRUE(key_op.ok());
+
+    const std::string custom_params = R"({"collection":"blocked_coll"})";
+    const std::string scoped_key_payload = StringUtils::hmac(parent_key.value, custom_params) +
+                                           parent_key.value.substr(0, api_key_t::PREFIX_LEN) + custom_params;
+    const std::string scoped_key = StringUtils::base64_encode(scoped_key_payload);
+
+    auto req = std::make_shared<http_req>();
+    req->params["collection"] = "allowed_coll";
+    req->params["q"] = "blocked";
+    req->params["query_by"] = "title";
+
+    route_path rpath_search = route_path("GET", {"collections", ":collection", "documents", "search"},
+                                         get_search, false, false);
+    ASSERT_FALSE(handle_authentication(req->params, req->embedded_params_vec, req->body, rpath_search, scoped_key));
+}
+
+TEST_F(CoreAPIUtilsTest, MultiSearchUsesAuthenticatedBodyCollectionInsteadOfTopLevelCollection) {
+    nlohmann::json body_schema = R"({
+        "name": "body_coll",
+        "fields": [
+          {"name": "title", "type": "string" }
+        ]
+    })"_json;
+    auto op = collectionManager.create_collection(body_schema);
+    ASSERT_TRUE(op.ok());
+    Collection* body_coll = op.get();
+
+    nlohmann::json query_schema = R"({
+        "name": "query_coll",
+        "fields": [
+          {"name": "title", "type": "string" }
+        ]
+    })"_json;
+    op = collectionManager.create_collection(query_schema);
+    ASSERT_TRUE(op.ok());
+    Collection* query_coll = op.get();
+
+    body_coll->add(R"({"id":"1","title":"body match"})", CREATE);
+    query_coll->add(R"({"id":"1","title":"query match"})", CREATE);
+
+    auto req = std::make_shared<http_req>();
+    auto res = std::make_shared<http_res>(nullptr);
+    req->params["collection"] = "query_coll";
+
+    nlohmann::json body;
+    nlohmann::json search = {
+        {"collection", "body_coll"},
+        {"q", "body"},
+        {"query_by", "title"}
+    };
+    body["searches"] = nlohmann::json::array();
+    body["searches"].push_back(search);
+    req->body = body.dump();
+
+    route_path rpath_multi_search = route_path("POST", {"multi_search"}, post_multi_search, false, false);
+    ASSERT_TRUE(handle_authentication(req->params, req->embedded_params_vec, req->body, rpath_multi_search, "auth_key"));
+    ASSERT_EQ("body_coll",
+              req->embedded_params_vec[0][AuthManager::AUTH_RESOLVED_COLLECTION_PARAM].get<std::string>());
+
+    ASSERT_TRUE(post_multi_search(req, res));
+
+    auto response = nlohmann::json::parse(res->body);
+    ASSERT_EQ("body_coll", response["results"][0]["request_params"]["collection_name"].get<std::string>());
+    ASSERT_EQ(1, response["results"][0]["found"].get<size_t>());
+    ASSERT_EQ("body match", response["results"][0]["hits"][0]["document"]["title"].get<std::string>());
+}
+
+TEST_F(CoreAPIUtilsTest, SearchCacheShouldRespectScopedEmbeddedFilters) {
+    const std::string coll_name = "scoped_cache_" + StringUtils::randstring(8);
+    const std::string query = "cache-" + StringUtils::randstring(6);
+
+    nlohmann::json schema = {
+        {"name", coll_name},
+        {"fields", nlohmann::json::array({
+            {{"name", "title"}, {"type", "string"}},
+            {{"name", "user_id"}, {"type", "int32"}, {"facet", true}}
+        })}
+    };
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    Collection* coll = op.get();
+    ASSERT_TRUE(coll->add("{\"id\":\"1\",\"title\":\"" + query + "\",\"user_id\":1}", CREATE).ok());
+    ASSERT_TRUE(coll->add("{\"id\":\"2\",\"title\":\"" + query + "\",\"user_id\":2}", CREATE).ok());
+
+    api_key_t parent_key("ScopedCacheLeak" + StringUtils::randstring(8), "scoped cache parent", {"documents:search"},
+                         {coll_name}, api_key_t::FAR_FUTURE_TIMESTAMP);
+    auto key_op = collectionManager.getAuthManager().create_key(parent_key);
+    ASSERT_TRUE(key_op.ok());
+
+    const auto build_scoped_key = [&](const std::string& filter_by) {
+        const std::string custom_params = "{\"filter_by\":\"" + filter_by + "\"}";
+        const std::string scoped_key_payload = StringUtils::hmac(parent_key.value, custom_params) +
+                                               parent_key.value.substr(0, api_key_t::PREFIX_LEN) + custom_params;
+        return StringUtils::base64_encode(scoped_key_payload);
+    };
+
+    const std::string scoped_key_user_1 = build_scoped_key("user_id:1");
+    const std::string scoped_key_user_2 = build_scoped_key("user_id:2");
+
+    route_path rpath_search = route_path("GET", {"collections", ":collection", "documents", "search"},
+                                         get_search, false, false);
+
+    auto req1 = std::make_shared<http_req>();
+    auto res1 = std::make_shared<http_res>(nullptr);
+    req1->route_hash = rpath_search.route_hash();
+    req1->params["collection"] = coll_name;
+    req1->params["q"] = query;
+    req1->params["query_by"] = "title";
+    req1->params["use_cache"] = "1";
+
+    ASSERT_TRUE(handle_authentication(req1->params, req1->embedded_params_vec, req1->body, rpath_search, scoped_key_user_1));
+    ASSERT_EQ("user_id:1", req1->embedded_params_vec[0]["filter_by"].get<std::string>());
+    ASSERT_TRUE(get_search(req1, res1));
+
+    auto response1 = nlohmann::json::parse(res1->body);
+    ASSERT_EQ(1, response1["found"].get<size_t>());
+    ASSERT_EQ(1, response1["hits"][0]["document"]["user_id"].get<int32_t>());
+
+    auto req2 = std::make_shared<http_req>();
+    auto res2 = std::make_shared<http_res>(nullptr);
+    req2->route_hash = rpath_search.route_hash();
+    req2->params["collection"] = coll_name;
+    req2->params["q"] = query;
+    req2->params["query_by"] = "title";
+    req2->params["use_cache"] = "1";
+
+    ASSERT_TRUE(handle_authentication(req2->params, req2->embedded_params_vec, req2->body, rpath_search, scoped_key_user_2));
+    ASSERT_EQ("user_id:2", req2->embedded_params_vec[0]["filter_by"].get<std::string>());
+    ASSERT_TRUE(get_search(req2, res2));
+
+    auto response2 = nlohmann::json::parse(res2->body);
+    ASSERT_EQ(1, response2["found"].get<size_t>());
+    ASSERT_EQ(2, response2["hits"][0]["document"]["user_id"].get<int32_t>());
+}
+
+TEST_F(CoreAPIUtilsTest, SearchCacheShouldIncludeParamNamesAndIgnoreInternalEmbeddedParams) {
+    const std::string coll_name = "cache_collision_" + StringUtils::randstring(8);
+
+    nlohmann::json schema = {
+        {"name", coll_name},
+        {"fields", nlohmann::json::array({
+            {{"name", "c"}, {"type", "string"}},
+            {{"name", "bc"}, {"type", "string"}}
+        })}
+    };
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    Collection* coll = op.get();
+    ASSERT_TRUE(coll->add(R"({"id":"1","c":"ab","bc":"x"})", CREATE).ok());
+    ASSERT_TRUE(coll->add(R"({"id":"2","c":"x","bc":"a"})", CREATE).ok());
+
+    route_path rpath_search = route_path("GET", {"collections", ":collection", "documents", "search"},
+                                         get_search, false, false);
+
+    const auto make_req = [&](const std::string& q, const std::string& query_by) {
+        auto req = std::make_shared<http_req>();
+        req->route_hash = rpath_search.route_hash();
+        req->params["collection"] = coll_name;
+        req->params["q"] = q;
+        req->params["query_by"] = query_by;
+        req->params["use_cache"] = "1";
+        req->embedded_params_vec.push_back(nlohmann::json::object());
+        return req;
+    };
+
+    auto req1 = make_req("a", "bc");
+    auto req2 = make_req("ab", "c");
+
+    ASSERT_NE(hash_request(req1), hash_request(req2));
+
+    auto res1 = std::make_shared<http_res>(nullptr);
+    auto res2 = std::make_shared<http_res>(nullptr);
+
+    ASSERT_TRUE(get_search(req1, res1));
+    auto response1 = nlohmann::json::parse(res1->body);
+    ASSERT_EQ(1, response1["found"].get<size_t>());
+    ASSERT_EQ("2", response1["hits"][0]["document"]["id"].get<std::string>());
+
+    ASSERT_TRUE(get_search(req2, res2));
+    auto response2 = nlohmann::json::parse(res2->body);
+    ASSERT_EQ(1, response2["found"].get<size_t>());
+    ASSERT_EQ("1", response2["hits"][0]["document"]["id"].get<std::string>());
+
+    auto hash_req_base = make_req("a", "bc");
+    hash_req_base->embedded_params_vec.push_back({
+        {"filter_by", "user_id:1"},
+        {"expires_at", 111},
+        {AuthManager::AUTH_RESOLVED_COLLECTION_PARAM, "alpha"}
+    });
+
+    auto hash_req_variant = make_req("a", "bc");
+    hash_req_variant->embedded_params_vec.push_back({
+        {"filter_by", "user_id:1"},
+        {"expires_at", 999999},
+        {AuthManager::AUTH_RESOLVED_COLLECTION_PARAM, "beta"}
+    });
+
+    ASSERT_EQ(hash_request(hash_req_base), hash_request(hash_req_variant));
+}
+
+TEST_F(CoreAPIUtilsTest, ConversationSearchShouldBypassHttpResponseCache) {
+    std::map<std::string, std::string> params = {
+        {"use_cache", "1"},
+        {"conversation", "true"},
+        {"q", "cache conversation"}
+    };
+
+    std::map<std::string, std::string> cacheable_params = {
+        {"use_cache", "1"},
+        {"q", "cache conversation"}
+    };
+
+    ASSERT_TRUE(use_response_cache(cacheable_params));
+    ASSERT_FALSE(use_response_cache(params));
+}
+
+TEST_F(CoreAPIUtilsTest, ConversationMultiSearchShouldBypassHttpResponseCache) {
+    std::map<std::string, std::string> params = {
+        {"use_cache", "true"},
+        {"conversation", "true"},
+        {"q", "cache conversation"}
+    };
+
+    std::map<std::string, std::string> cacheable_params = {
+        {"use_cache", "true"},
+        {"q", "cache conversation"}
+    };
+
+    ASSERT_TRUE(use_response_cache(cacheable_params));
+    ASSERT_FALSE(use_response_cache(params));
+}
+
+TEST_F(CoreAPIUtilsTest, MultiSearchConversationWithEarlierErrorShouldNotReuseFirstSearchCollection) {
+    nlohmann::json schema = R"({
+        "name": "stale_res_index_docs",
+        "fields": [
+          {"name": "title", "type": "string" }
+        ]
+    })"_json;
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    Collection* coll = op.get();
+    ASSERT_TRUE(coll->add(R"({"id":"1","title":"duck story"})", CREATE).ok());
+
+    const std::string model_id = "stale-res-index-model-" + StringUtils::randstring(8);
+    nlohmann::json model = {
+        {"id", model_id},
+        {"model_name", "azure/test-model"},
+        {"api_key", "dummy"},
+        {"url", "http://127.0.0.1:1"},
+        {"history_collection", "conversation_store"},
+        {"max_bytes", 1}
+    };
+    ConversationModelManager::insert_model_for_testing(model_id, model);
+
+    auto req = std::make_shared<http_req>();
+    auto res = std::make_shared<http_res>(nullptr);
+    req->params["conversation"] = "true";
+    req->params["conversation_model_id"] = model_id;
+    req->params["q"] = "duck";
+    req->embedded_params_vec.push_back(nlohmann::json::object());
+    req->embedded_params_vec.push_back(nlohmann::json::object());
+
+    nlohmann::json body;
+    body["searches"] = nlohmann::json::array();
+    body["searches"].push_back({
+        {"collection", false},
+        {"query_by", "missing_field"}
+    });
+    body["searches"].push_back({
+        {"collection", "stale_res_index_docs"},
+        {"query_by", "title"}
+    });
+    req->body = body.dump();
+
+    bool handled = true;
+    EXPECT_NO_THROW(handled = post_multi_search(req, res));
+    EXPECT_FALSE(handled);
+    EXPECT_EQ(400, res->status_code);
+
+    if(res->status_code != 400) {
+        return;
+    }
+
+    const auto expected_min_bytes = AzureConversationModel::get_minimum_required_bytes();
+    auto response = nlohmann::json::parse(res->body);
+    ASSERT_EQ("`max_bytes` of the conversation model is less than the minimum required bytes(" +
+                  std::to_string(expected_min_bytes) + ").",
+              response["message"].get<std::string>());
+}
+
+TEST_F(CoreAPIUtilsTest, GetSearchConversationUnderlyingSearchErrorShouldNotThrow) {
+    nlohmann::json schema = R"({
+        "name": "conversation_error_docs",
+        "fields": [
+          {"name": "title", "type": "string" }
+        ]
+    })"_json;
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+
+    const std::string model_id = "conversation-error-model-" + StringUtils::randstring(8);
+    nlohmann::json model = {
+        {"id", model_id},
+        {"model_name", "azure/test-model"},
+        {"api_key", "dummy"},
+        {"url", "http://127.0.0.1:1"},
+        {"history_collection", "conversation_store"},
+        {"max_bytes", AzureConversationModel::get_minimum_required_bytes() + 16}
+    };
+    ConversationModelManager::insert_model_for_testing(model_id, model);
+
+    auto req = std::make_shared<http_req>();
+    auto res = std::make_shared<http_res>(nullptr);
+    req->params["collection"] = "conversation_error_docs";
+    req->params["q"] = "duck";
+    req->params["query_by"] = "missing_field";
+    req->params["conversation"] = "true";
+    req->params["conversation_model_id"] = model_id;
+    req->embedded_params_vec.push_back(nlohmann::json::object());
+
+    bool handled = true;
+    EXPECT_NO_THROW(handled = get_search(req, res));
+    EXPECT_FALSE(handled);
+    ASSERT_NE(0, res->status_code);
+
+    auto response = nlohmann::json::parse(res->body);
+    ASSERT_EQ("Could not find a field named `missing_field` in the schema.",
+              response["message"].get<std::string>());
+}
+
+TEST_F(CoreAPIUtilsTest, MultiSearchConversationAllSearchesFailedSkipsModelCall) {
+    nlohmann::json schema = R"({
+        "name": "conversation_all_fail_docs",
+        "fields": [
+          {"name": "title", "type": "string" }
+        ]
+    })"_json;
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+
+    const std::string model_id = "conversation-all-fail-model-" + StringUtils::randstring(8);
+    nlohmann::json model = {
+        {"id", model_id},
+        {"model_name", "azure/test-model"},
+        {"api_key", "dummy"},
+        {"url", "http://127.0.0.1:1"},
+        {"history_collection", "conversation_store"},
+        {"max_bytes", 100000}
+    };
+    ConversationModelManager::insert_model_for_testing(model_id, model);
+
+    auto req = std::make_shared<http_req>();
+    auto res = std::make_shared<http_res>(nullptr);
+    req->params["conversation"] = "true";
+    req->params["conversation_model_id"] = model_id;
+    req->params["q"] = "duck";
+    req->embedded_params_vec.push_back(nlohmann::json::object());
+
+    nlohmann::json body;
+    body["searches"] = nlohmann::json::array();
+    body["searches"].push_back({
+        {"collection", "conversation_all_fail_docs"},
+        {"query_by", "missing_field"}
+    });
+    req->body = body.dump();
+
+    bool handled = post_multi_search(req, res);
+    EXPECT_TRUE(handled);
+    EXPECT_EQ(200, res->status_code);
+
+    auto response = nlohmann::json::parse(res->body);
+    // The error result should be present
+    ASSERT_TRUE(response.contains("results"));
+    ASSERT_EQ(1, response["results"].size());
+    ASSERT_TRUE(response["results"][0].contains("code"));
+    // The conversation block should NOT be present since model call was skipped
+    ASSERT_FALSE(response.contains("conversation"));
+}
+
+TEST_F(CoreAPIUtilsTest, GetSearchConversationStreamWithoutConversationShouldNotFrameAsSSE) {
+    nlohmann::json schema = R"({
+        "name": "conversation_stream_no_convo_docs",
+        "fields": [
+          {"name": "title", "type": "string" }
+        ]
+    })"_json;
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    
+    Collection* coll = op.get();
+    ASSERT_TRUE(coll->add(R"({"id":"1","title":"duck story"})", CREATE).ok());
+
+    auto req = std::make_shared<http_req>();
+    auto res = std::make_shared<http_res>(nullptr);
+    req->params["collection"] = "conversation_stream_no_convo_docs";
+    req->params["q"] = "duck";
+    req->params["query_by"] = "title";
+    req->params["conversation_stream"] = "true";
+    // conversation is NOT set to true
+    req->embedded_params_vec.push_back(nlohmann::json::object());
+
+    bool handled = get_search(req, res);
+    EXPECT_TRUE(handled);
+    EXPECT_EQ(200, res->status_code);
+
+    // Response body should be plain JSON, not SSE-framed
+    ASSERT_EQ(std::string::npos, res->body.find("data: "));
+
+    // Should parse as valid JSON
+    nlohmann::json response;
+    ASSERT_NO_THROW(response = nlohmann::json::parse(res->body));
+    ASSERT_TRUE(response.contains("hits"));
+}
+
+TEST_F(CoreAPIUtilsTest, MultiSearchConversationZeroHitTrimmingShouldNotHang) {
+    nlohmann::json schema = R"({
+        "name": "conversation_zero_hits_docs",
+        "fields": [
+          {"name": "title", "type": "string" }
+        ]
+    })"_json;
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    Collection* coll = op.get();
+    ASSERT_TRUE(coll->add(R"({"id":"1","title":"duck story"})", CREATE).ok());
+
+    const std::string model_id = "conversation-zero-hits-model-" + StringUtils::randstring(8);
+    nlohmann::json model = {
+        {"id", model_id},
+        {"model_name", "azure/test-model"},
+        {"api_key", "dummy"},
+        {"url", "http://127.0.0.1:1"},
+        {"history_collection", "conversation_store"},
+        {"max_bytes", AzureConversationModel::get_minimum_required_bytes() + 1}
+    };
+    ConversationModelManager::insert_model_for_testing(model_id, model);
+
+    auto req = std::make_shared<http_req>();
+    auto res = std::make_shared<http_res>(nullptr);
+    req->params["conversation"] = "true";
+    req->params["conversation_model_id"] = model_id;
+    req->params["q"] = "x";
+    req->embedded_params_vec.push_back(nlohmann::json::object());
+
+    nlohmann::json body;
+    body["searches"] = nlohmann::json::array();
+    body["searches"].push_back({
+        {"collection", "conversation_zero_hits_docs"},
+        {"query_by", "title"}
+    });
+    req->body = body.dump();
+
+    ASSERT_EXIT(
+        {
+            alarm(1);
+            const bool handled = post_multi_search(req, res);
+            alarm(0);
+
+            if(!handled && res->final && res->status_code != 0) {
+                _exit(0);
+            }
+
+            _exit(1);
+        },
+        ::testing::ExitedWithCode(0),
+        "");
+}
+
+TEST_F(CoreAPIUtilsTest, SearchEmbeddedPresetKey) {
+    nlohmann::json preset_value = R"(
+        {"per_page": 100}
+    )"_json;
+
+    Option<bool> success_op = collectionManager.upsert_preset("apple", preset_value);
+    ASSERT_TRUE(success_op.ok());
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+
+    nlohmann::json embedded_params;
+    embedded_params["preset"] = "apple";
+    req->embedded_params_vec.push_back(embedded_params);
+    req->params["collection"] = "foo";
+
+    get_search(req, res);
+    ASSERT_EQ("100", req->params["per_page"]);
+
+    // with multi search
+
+    req->params.clear();
+    nlohmann::json body;
+    body["searches"] = nlohmann::json::array();
+    nlohmann::json search;
+    search["collection"] = "users";
+    search["filter_by"] = "age: > 100";
+    body["searches"].push_back(search);
+    req->body = body.dump();
+
+    post_multi_search(req, res);
+    ASSERT_EQ("100", req->params["per_page"]);
+}
+
+TEST_F(CoreAPIUtilsTest, ExtractCollectionsFromRequestBody) {
+    std::map<std::string, std::string> req_params;
+    std::string body = R"(
+      {
+        "name": "coll1",
+        "fields": [
+          {"name": "title", "type": "string" },
+          {"name": "points", "type": "int32" }
+        ],
+        "default_sorting_field": "points"
+      }
+    )";
+
+    route_path rpath("POST", {"collections"}, post_create_collection, false, false);
+    std::vector<collection_key_t> collections;
+    std::vector<nlohmann::json> embedded_params_vec;
+
+    get_collections_for_auth(req_params, body, rpath, "foo", collections, embedded_params_vec);
+    ASSERT_EQ(1, collections.size());
+    ASSERT_EQ("coll1", collections[0].collection);
+    ASSERT_EQ("foo", collections[0].api_key);
+
+    // badly constructed collection schema body
+    collections.clear();
+    embedded_params_vec.clear();
+    body = R"(
+      {
+        "name": "coll1
+        "fields": [
+          {"name": "title", "type": "string" },
+          {"name": "points", "type": "int32" }
+        ],
+        "default_sorting_field": "points"
+      }
+    )";
+
+    get_collections_for_auth(req_params, body, rpath, "foo", collections, embedded_params_vec);
+    ASSERT_EQ(1, collections.size());
+    ASSERT_EQ("", collections[0].collection);
+    ASSERT_EQ("foo", collections[0].api_key);
+    ASSERT_EQ(1, embedded_params_vec.size());
+
+    collections.clear();
+    embedded_params_vec.clear();
+
+    // missing collection name
+    body = R"(
+      {
+        "fields": [
+          {"name": "title", "type": "string" },
+          {"name": "points", "type": "int32" }
+        ],
+        "default_sorting_field": "points"
+      }
+    )";
+
+    get_collections_for_auth(req_params, body, rpath, "foo", collections, embedded_params_vec);
+    ASSERT_EQ(1, collections.size());
+    ASSERT_EQ("", collections[0].collection);
+    ASSERT_EQ("foo", collections[0].api_key);
+
+    // check for multi_search
+    collections.clear();
+    embedded_params_vec.clear();
+    rpath = route_path("POST", {"collections"}, post_multi_search, false, false);
+    body = R"(
+        {"searches":[
+              {
+                "query_by": "concat",
+                "collection": "products",
+                "q": "battery",
+                "x-typesense-api-key": "bar"
+              }
+          ]
+        }
+    )";
+
+    get_collections_for_auth(req_params, body, rpath, "foo", collections, embedded_params_vec);
+    ASSERT_EQ(1, collections.size());
+    ASSERT_EQ("products", collections[0].collection);
+    ASSERT_EQ("bar", collections[0].api_key);
+
+    // when api key type is bad
+    collections.clear();
+    embedded_params_vec.clear();
+    rpath = route_path("POST", {"collections"}, post_multi_search, false, false);
+    body = R"(
+        {"searches":[
+              {
+                "query_by": "concat",
+                "collection": "products",
+                "q": "battery",
+                "x-typesense-api-key": 123
+              }
+          ]
+        }
+    )";
+
+    get_collections_for_auth(req_params, body, rpath, "foo", collections, embedded_params_vec);
+    ASSERT_EQ("foo", collections[0].api_key);
+
+    // when collection name is bad
+    collections.clear();
+    embedded_params_vec.clear();
+    rpath = route_path("POST", {"collections"}, post_multi_search, false, false);
+    body = R"(
+            {"searches":[
+                  {
+                    "query_by": "concat",
+                    "collection": 123,
+                    "q": "battery"
+                  }
+              ]
+            }
+        )";
+
+    get_collections_for_auth(req_params, body, rpath, "foo", collections, embedded_params_vec);
+    ASSERT_EQ("", collections[0].collection);
+
+    // get collection for multi-search
+    collections.clear();
+    embedded_params_vec.clear();
+    body = R"(
+        {"searches":
+              {
+                "query_by": "concat",
+                "collection": "products",
+                "q": "battery"
+              }
+          ]
+        }
+    )";
+
+    get_collections_for_auth(req_params, body, rpath, "foo", collections, embedded_params_vec);
+    ASSERT_EQ(1, collections.size());
+    ASSERT_EQ("", collections[0].collection);
+    ASSERT_EQ("foo", collections[0].api_key);
+
+    collections.clear();
+    embedded_params_vec.clear();
+    body = R"(
+        {"searches":[
+              {
+                "query_by": "concat",
+                "q": "battery",
+                "x-typesense-api-key": "bar"
+              }
+          ]
+        }
+    )";
+
+    get_collections_for_auth(req_params, body, rpath, "foo", collections, embedded_params_vec);
+    ASSERT_EQ(1, collections.size());
+    ASSERT_EQ("", collections[0].collection);
+    ASSERT_EQ("bar", collections[0].api_key);
+}
+
+TEST_F(CoreAPIUtilsTest, ExtractCollectionsFromRequestBodyExtended) {
+    route_path rpath_multi_search = route_path("POST", {"multi_search"}, post_multi_search, false, false);
+    std::map<std::string, std::string> req_params;
+
+    std::vector<collection_key_t> collections;
+    std::vector<nlohmann::json> embedded_params_vec;
+
+    get_collections_for_auth(req_params, "{]", rpath_multi_search, "", collections, embedded_params_vec);
+
+    ASSERT_EQ(1, collections.size());
+    ASSERT_EQ("", collections[0].collection);
+    ASSERT_EQ(1, embedded_params_vec.size());
+
+    nlohmann::json sample_search_body;
+    sample_search_body["searches"] = nlohmann::json::array();
+    nlohmann::json search_query;
+    search_query["q"] = "aaa";
+    search_query["collection"] = "company1";
+
+    sample_search_body["searches"].push_back(search_query);
+
+    search_query["collection"] = "company2";
+    sample_search_body["searches"].push_back(search_query);
+
+    collections.clear();
+    embedded_params_vec.clear();
+    get_collections_for_auth(req_params, sample_search_body.dump(), rpath_multi_search, "", collections, embedded_params_vec);
+
+    ASSERT_EQ(2, collections.size());
+    ASSERT_EQ("company1", collections[0].collection);
+    ASSERT_EQ("company2", collections[1].collection);
+
+    collections.clear();
+    req_params["collection"] = "foo";
+
+    get_collections_for_auth(req_params, sample_search_body.dump(), rpath_multi_search, "", collections, embedded_params_vec);
+
+    ASSERT_EQ(2, collections.size());
+    ASSERT_EQ("company1", collections[0].collection);
+    ASSERT_EQ("company2", collections[1].collection);
+
+    collections.clear();
+    embedded_params_vec.clear();
+
+    // when one of the search arrays don't have an explicit collection, use the collection name from req param
+    sample_search_body["searches"][1].erase("collection");
+
+    get_collections_for_auth(req_params, sample_search_body.dump(), rpath_multi_search, "", collections, embedded_params_vec);
+
+    ASSERT_EQ(2, collections.size());
+    ASSERT_EQ("company1", collections[0].collection);
+    ASSERT_EQ("foo", collections[1].collection);
+
+    collections.clear();
+    embedded_params_vec.clear();
+    req_params.clear();
+
+    route_path rpath_search = route_path("GET", {"collections", ":collection", "documents", "search"}, get_search, false, false);
+    get_collections_for_auth(req_params, sample_search_body.dump(), rpath_search, "", collections, embedded_params_vec);
+
+    ASSERT_EQ(1, collections.size());
+    ASSERT_EQ("", collections[0].collection);
+    ASSERT_EQ(1, embedded_params_vec.size());
+
+    collections.clear();
+    embedded_params_vec.clear();
+    req_params.clear();
+    req_params["collection"] = "foo";
+
+    get_collections_for_auth(req_params, sample_search_body.dump(), rpath_search, "", collections, embedded_params_vec);
+
+    ASSERT_EQ(1, collections.size());
+    ASSERT_EQ("foo", collections[0].collection);
+    ASSERT_EQ(1, embedded_params_vec.size());
+}
+
+TEST_F(CoreAPIUtilsTest, MultiSearchAuthenticationReturnsBodyApiKeyPrefixes) {
+    AuthManager& auth_manager = collectionManager.getAuthManager();
+    api_key_t body_key1("BodyKey1", "body key 1", {"documents:search"}, {"*"}, api_key_t::FAR_FUTURE_TIMESTAMP);
+    api_key_t body_key2("ZodyKey2", "body key 2", {"documents:search"}, {"*"}, api_key_t::FAR_FUTURE_TIMESTAMP);
+    auth_manager.create_key(body_key1);
+    auth_manager.create_key(body_key2);
+
+    route_path rpath_multi_search = route_path("POST", {"multi_search"}, post_multi_search, false, false);
+    std::map<std::string, std::string> req_params;
+    std::vector<nlohmann::json> embedded_params_vec;
+    std::string api_key_prefix;
+
+    std::string body = R"(
+        {"searches":[
+              {
+                "collection": "products",
+                "q": "battery",
+                "query_by": "name",
+                "x-typesense-api-key": "BodyKey1"
+              },
+              {
+                "collection": "products",
+                "q": "charger",
+                "query_by": "name",
+                "x-typesense-api-key": "ZodyKey2"
+              }
+          ]
+        }
+    )";
+
+    ASSERT_TRUE(handle_authentication(req_params, embedded_params_vec, body, rpath_multi_search, "", &api_key_prefix));
+    ASSERT_EQ("Body,Zody", api_key_prefix);
+}
+
+TEST_F(CoreAPIUtilsTest, MultiSearchAuthenticationReturnsBodyApiKeyPrefixOnFailure) {
+    route_path rpath_multi_search = route_path("POST", {"multi_search"}, post_multi_search, false, false);
+    std::map<std::string, std::string> req_params;
+    std::vector<nlohmann::json> embedded_params_vec;
+    std::string api_key_prefix;
+
+    std::string body = R"(
+        {"searches":[
+              {
+                "collection": "products",
+                "q": "battery",
+                "query_by": "name",
+                "x-typesense-api-key": "NopeKey1"
+              }
+          ]
+        }
+    )";
+
+    ASSERT_FALSE(handle_authentication(req_params, embedded_params_vec, body, rpath_multi_search, "", &api_key_prefix));
+    ASSERT_EQ("Nope", api_key_prefix);
+}
+
+TEST_F(CoreAPIUtilsTest, MultiSearchWithPresetShouldUsePresetForAuth) {
+    nlohmann::json preset_value = R"(
+        {"searches":[
+            {"collection":"foo","q":"apple", "query_by": "title"},
+            {"collection":"bar","q":"apple", "query_by": "title"}
+        ]}
+    )"_json;
+
+    Option<bool> success_op = collectionManager.upsert_preset("apple", preset_value);
+
+    route_path rpath_multi_search = route_path("POST", {"multi_search"}, post_multi_search, false, false);
+    std::map<std::string, std::string> req_params;
+
+    std::vector<collection_key_t> collections;
+    std::vector<nlohmann::json> embedded_params_vec;
+
+    std::string search_body = R"(
+        {"searches":[
+            {"collection":"foo1","q":"apple", "query_by": "title"},
+            {"collection":"bar1","q":"apple", "query_by": "title"}
+        ]}
+    )";
+
+    // without preset parameter, use collections from request body
+
+    get_collections_for_auth(req_params, search_body, rpath_multi_search, "", collections, embedded_params_vec);
+    
+    ASSERT_EQ(2, collections.size());
+    ASSERT_EQ("foo1", collections[0].collection);
+    ASSERT_EQ("bar1", collections[1].collection);
+    ASSERT_EQ(2, embedded_params_vec.size());
+
+    // with preset parameter, use collections from preset configuration
+    collections.clear();
+    embedded_params_vec.clear();
+
+    req_params["preset"] = "apple";
+    get_collections_for_auth(req_params, search_body, rpath_multi_search, "", collections, embedded_params_vec);
+    
+    ASSERT_EQ(2, collections.size());
+    ASSERT_EQ("foo", collections[0].collection);
+    ASSERT_EQ("bar", collections[1].collection);
+    ASSERT_EQ(2, embedded_params_vec.size());
+
+    // try using multi_search preset within individual search param
+
+    preset_value = R"(
+        {"collection":"preset_coll"}
+    )"_json;
+
+    collectionManager.upsert_preset("single_preset", preset_value);
+
+    req_params.clear();
+    collections.clear();
+    embedded_params_vec.clear();
+
+    search_body = R"(
+        {"searches":[
+            {"collection":"foo1","q":"apple", "query_by": "title", "preset": "single_preset"},
+            {"collection":"bar1","q":"apple", "query_by": "title", "preset": "single_preset"}
+        ]}
+    )";
+
+    get_collections_for_auth(req_params, search_body, rpath_multi_search, "", collections, embedded_params_vec);
+
+    ASSERT_EQ(2, collections.size());
+    ASSERT_EQ("foo1", collections[0].collection);
+    ASSERT_EQ("bar1", collections[1].collection);
+    ASSERT_EQ(2, embedded_params_vec.size());
+
+    // without collection in search array
+    req_params.clear();
+    collections.clear();
+    embedded_params_vec.clear();
+
+    search_body = R"(
+        {"searches":[
+            {"q":"apple", "query_by": "title", "preset": "single_preset"},
+            {"q":"apple", "query_by": "title", "preset": "single_preset"}
+        ]}
+    )";
+
+    get_collections_for_auth(req_params, search_body, rpath_multi_search, "", collections, embedded_params_vec);
+
+    ASSERT_EQ(2, collections.size());
+    ASSERT_EQ("preset_coll", collections[0].collection);
+    ASSERT_EQ("preset_coll", collections[1].collection);
+    ASSERT_EQ(2, embedded_params_vec.size());
+}
+
+TEST_F(CoreAPIUtilsTest, PresetMultiSearch) {
+    nlohmann::json schema = R"({
+        "name": "coll1",
+        "fields": [
+          {"name": "name", "type": "string" },
+          {"name": "points", "type": "int32" }
+        ]
+    })"_json;
+
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    Collection* coll1 = op.get();
+
+    auto preset_value = R"(
+        {"collection":"preset_coll", "per_page": "12"}
+    )"_json;
+
+    collectionManager.upsert_preset("single_preset", preset_value);
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+    req->params["collection"] = "coll1";
+
+    auto search_body = R"(
+        {"searches":[
+            {"collection":"coll1","q":"apple", "query_by": "name", "preset": "single_preset"}
+        ]}
+    )";
+
+    req->body = search_body;
+    nlohmann::json embedded_params;
+    req->embedded_params_vec.push_back(embedded_params);
+
+    post_multi_search(req, res);
+
+    auto res_json = nlohmann::json::parse(res->body);
+    ASSERT_EQ(1, res_json["results"].size());
+    ASSERT_EQ(0, res_json["results"][0]["found"].get<size_t>());
+
+    // with multiple "searches" preset configuration
+    preset_value = R"(
+        {"searches":[
+            {"collection":"coll1", "q": "*", "per_page": "8"},
+            {"collection":"coll1", "q": "*", "per_page": "11"}
+        ]}
+    )"_json;
+
+    collectionManager.upsert_preset("multi_preset", preset_value);
+    embedded_params.clear();
+    req->params.clear();
+    req->params["preset"] = "multi_preset";
+    req->embedded_params_vec.clear();
+    req->embedded_params_vec.push_back(embedded_params);
+    req->embedded_params_vec.push_back(embedded_params);
+
+    //  "preset": "multi_preset"
+    search_body = R"(
+        {"searches":[
+            {"collection":"coll1","q":"apple", "query_by": "title"}
+        ]}
+    )";
+
+    req->body = search_body;
+
+    post_multi_search(req, res);
+    res_json = nlohmann::json::parse(res->body);
+    ASSERT_EQ(2, res_json["results"].size());
+    ASSERT_EQ(0, res_json["results"][0]["found"].get<size_t>());
+    ASSERT_EQ(0, res_json["results"][1]["found"].get<size_t>());
+
+    collectionManager.drop_collection("coll1");
+}
+
+TEST_F(CoreAPIUtilsTest, SearchPagination) {
+    nlohmann::json schema = R"({
+        "name": "coll1",
+        "fields": [
+          {"name": "name", "type": "string" },
+          {"name": "points", "type": "int32" }
+        ]
+    })"_json;
+
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    Collection* coll1 = op.get();
+
+    for(size_t i = 0; i < 20; i++) {
+        nlohmann::json doc;
+        doc["name"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+        coll1->add(doc.dump(), CREATE);
+    }
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+
+    nlohmann::json body;
+
+    // without any pagination params, default is top 10 records by sort order
+
+    body["searches"] = nlohmann::json::array();
+    nlohmann::json search;
+    search["collection"] = "coll1";
+    search["q"] = "title";
+    search["query_by"] = "name";
+    search["sort_by"] = "points:desc";
+    body["searches"].push_back(search);
+
+    req->body = body.dump();
+    nlohmann::json embedded_params;
+    req->embedded_params_vec.push_back(embedded_params);
+
+    post_multi_search(req, res);
+    nlohmann::json results = nlohmann::json::parse(res->body)["results"][0];
+    ASSERT_EQ(10, results["hits"].size());
+    ASSERT_EQ(19, results["hits"][0]["document"]["points"].get<size_t>());
+    ASSERT_EQ(1, results["page"].get<size_t>());
+
+    // when offset is used we should expect the same but "offset" should be returned in response
+    search.clear();
+    req->params.clear();
+    body["searches"] = nlohmann::json::array();
+    search["collection"] = "coll1";
+    search["q"] = "title";
+    search["offset"] = "1";
+    search["query_by"] = "name";
+    search["sort_by"] = "points:desc";
+    body["searches"].push_back(search);
+    req->body = body.dump();
+
+    post_multi_search(req, res);
+    results = nlohmann::json::parse(res->body)["results"][0];
+    ASSERT_EQ(10, results["hits"].size());
+    ASSERT_EQ(18, results["hits"][0]["document"]["points"].get<size_t>());
+    ASSERT_EQ(1, results["offset"].get<size_t>());
+
+    // use limit to restrict page size
+    search.clear();
+    req->params.clear();
+    body["searches"] = nlohmann::json::array();
+    search["collection"] = "coll1";
+    search["q"] = "title";
+    search["offset"] = "1";
+    search["limit"] = "5";
+    search["query_by"] = "name";
+    search["sort_by"] = "points:desc";
+    body["searches"].push_back(search);
+    req->body = body.dump();
+
+    post_multi_search(req, res);
+    results = nlohmann::json::parse(res->body)["results"][0];
+    ASSERT_EQ(5, results["hits"].size());
+    ASSERT_EQ(18, results["hits"][0]["document"]["points"].get<size_t>());
+    ASSERT_EQ(1, results["offset"].get<size_t>());
+
+    // when page is -1
+    search.clear();
+    req->params.clear();
+    body["searches"] = nlohmann::json::array();
+    search["collection"] = "coll1";
+    search["q"] = "title";
+    search["page"] = "-1";
+    search["limit"] = "5";
+    search["query_by"] = "name";
+    search["sort_by"] = "points:desc";
+    body["searches"].push_back(search);
+    req->body = body.dump();
+
+    post_multi_search(req, res);
+    results = nlohmann::json::parse(res->body)["results"][0];
+    ASSERT_EQ(400, results["code"].get<size_t>());
+    ASSERT_EQ("Parameter `page` must be an unsigned integer.", results["error"].get<std::string>());
+
+    // when offset is -1
+    search.clear();
+    req->params.clear();
+    body["searches"] = nlohmann::json::array();
+    search["collection"] = "coll1";
+    search["q"] = "title";
+    search["offset"] = "-1";
+    search["query_by"] = "name";
+    search["sort_by"] = "points:desc";
+    body["searches"].push_back(search);
+    req->body = body.dump();
+
+    post_multi_search(req, res);
+    results = nlohmann::json::parse(res->body)["results"][0];
+    ASSERT_EQ(400, results["code"].get<size_t>());
+    ASSERT_EQ("Parameter `offset` must be an unsigned integer.", results["error"].get<std::string>());
+
+    // when page is 0 and offset is NOT sent, we will treat as page=1
+    search.clear();
+    req->params.clear();
+    body["searches"] = nlohmann::json::array();
+    search["collection"] = "coll1";
+    search["q"] = "title";
+    search["page"] = "0";
+    search["query_by"] = "name";
+    search["sort_by"] = "points:desc";
+    body["searches"].push_back(search);
+    req->body = body.dump();
+
+    post_multi_search(req, res);
+    results = nlohmann::json::parse(res->body)["results"][0];
+    ASSERT_EQ(10, results["hits"].size());
+    ASSERT_EQ(1, results["page"].get<size_t>());
+    ASSERT_EQ(0, results.count("offset"));
+
+    // when both page and offset are sent, use page
+    search.clear();
+    req->params.clear();
+    body["searches"] = nlohmann::json::array();
+    search["collection"] = "coll1";
+    search["q"] = "title";
+    search["page"] = "2";
+    search["offset"] = "30";
+    search["query_by"] = "name";
+    search["sort_by"] = "points:desc";
+    body["searches"].push_back(search);
+    req->body = body.dump();
+
+    post_multi_search(req, res);
+    results = nlohmann::json::parse(res->body)["results"][0];
+    ASSERT_EQ(10, results["hits"].size());
+    ASSERT_EQ(2, results["page"].get<size_t>());
+    ASSERT_EQ(0, results.count("offset"));
+
+}
+
+TEST_F(CoreAPIUtilsTest, MultiSearchFacetReturnParentOnJoinedFacet) {
+    auto attribute_types_schema = R"({
+        "name": "AttributeTypes",
+        "fields": [
+            {"name": "name", "type": "string"},
+            {"name": "label", "type": "string"},
+            {"name": "sort", "type": "int32"}
+        ],
+        "default_sorting_field": "sort"
+    })"_json;
+
+    auto attribute_values_schema = R"({
+        "name": "AttributeValues",
+        "fields": [
+            {"name": "value", "type": "string", "facet": true},
+            {"name": "type_id", "type": "string", "reference": "AttributeTypes.id"},
+            {"name": "sort", "type": "int32"}
+        ],
+        "default_sorting_field": "sort"
+    })"_json;
+
+    auto attribute_types_op = collectionManager.create_collection(attribute_types_schema);
+    ASSERT_TRUE(attribute_types_op.ok());
+
+    auto attribute_values_op = collectionManager.create_collection(attribute_values_schema);
+    ASSERT_TRUE(attribute_values_op.ok());
+
+    auto attribute_types = attribute_types_op.get();
+    auto attribute_values = attribute_values_op.get();
+
+    ASSERT_TRUE(attribute_types->add(R"({"id":"1","name":"Color","label":"Color","sort":1})").ok());
+    ASSERT_TRUE(attribute_types->add(R"({"id":"2","name":"Size","label":"Size","sort":2})").ok());
+    ASSERT_TRUE(attribute_values->add(R"({"id":"1","value":"Red","type_id":"1","sort":1})").ok());
+    ASSERT_TRUE(attribute_values->add(R"({"id":"2","value":"Large","type_id":"2","sort":2})").ok());
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+
+    nlohmann::json body;
+    body["searches"] = nlohmann::json::array();
+    nlohmann::json search;
+    search["collection"] = "AttributeTypes";
+    search["q"] = "*";
+    search["filter_by"] = "$AttributeValues(id: *)";
+    search["facet_by"] = "$AttributeValues(value)";
+    search["facet_return_parent"] = "*";
+    body["searches"].push_back(search);
+    req->body = body.dump();
+
+    nlohmann::json embedded_params;
+    req->embedded_params_vec.push_back(embedded_params);
+
+    post_multi_search(req, res);
+
+    auto response = nlohmann::json::parse(res->body);
+    ASSERT_EQ(0, response.count("code")) << response.dump();
+    ASSERT_EQ(1, response["results"].size()) << response.dump();
+    ASSERT_EQ(1, response["results"][0]["facet_counts"].size()) << response.dump();
+    ASSERT_EQ("$AttributeValues(value)", response["results"][0]["facet_counts"][0]["field_name"]);
+    ASSERT_EQ(2, response["results"][0]["facet_counts"][0]["counts"].size()) << response.dump();
+
+    std::map<std::string, nlohmann::json> parents_by_value;
+    for(const auto& count: response["results"][0]["facet_counts"][0]["counts"]) {
+        parents_by_value[count["value"].get<std::string>()] = count["parent"];
+    }
+
+    ASSERT_EQ(1, parents_by_value.count("Red")) << response.dump();
+    ASSERT_EQ(1, parents_by_value.count("Large")) << response.dump();
+
+    ASSERT_EQ("1", parents_by_value["Red"]["id"]);
+    ASSERT_EQ("Red", parents_by_value["Red"]["value"]);
+    ASSERT_EQ("1", parents_by_value["Red"]["type_id"]);
+    ASSERT_EQ(1, parents_by_value["Red"]["sort"]);
+
+    ASSERT_EQ("2", parents_by_value["Large"]["id"]);
+    ASSERT_EQ("Large", parents_by_value["Large"]["value"]);
+    ASSERT_EQ("2", parents_by_value["Large"]["type_id"]);
+    ASSERT_EQ(2, parents_by_value["Large"]["sort"]);
+}
+
+TEST_F(CoreAPIUtilsTest, Union) {
+    nlohmann::json schema = R"({
+        "name": "coll1",
+        "fields": [
+          {"name": "name", "type": "string" },
+          {"name": "points", "type": "int32" }
+        ]
+    })"_json;
+
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    Collection* coll1 = op.get();
+
+    for(size_t i = 0; i < 20; i++) {
+        nlohmann::json doc;
+        doc["name"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+        coll1->add(doc.dump(), CREATE);
+    }
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+
+    nlohmann::json body;
+
+    body["union"] = true;
+    body["searches"] = nlohmann::json::array();
+    nlohmann::json search;
+    search["collection"] = "coll1";
+    search["q"] = "title";
+    search["query_by"] = "name";
+    search["sort_by"] = "points:desc";
+    body["searches"].push_back(search);
+
+    req->body = body.dump();
+    nlohmann::json embedded_params;
+    req->embedded_params_vec.push_back(embedded_params);
+
+    post_multi_search(req, res);
+    nlohmann::json response = nlohmann::json::parse(res->body);
+    ASSERT_EQ(0, response.count("results"));
+    ASSERT_EQ(20, response["found"]);
+}
+
+TEST_F(CoreAPIUtilsTest, ExportWithFilter) {
+    Collection *coll1;
+    std::vector<field> fields = {field("title", field_types::STRING, false),
+                                 field("points", field_types::INT32, false),};
+
+    coll1 = collectionManager.get_collection("coll1").get();
+    if(coll1 == nullptr) {
+        coll1 = collectionManager.create_collection("coll1", 2, fields, "points").get();
+    }
+
+    for(size_t i=0; i<4; i++) {
+        nlohmann::json doc;
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+        coll1->add(doc.dump());
+    }
+
+    bool done;
+    std::string res_body;
+
+    export_state_t export_state;
+    filter_result_t filter_result;
+    coll1->get_filter_ids_with_lock("points:>=0", export_state.filter_result);
+
+    export_state.collection = coll1;
+    export_state.res_body = &res_body;
+
+    stateful_export_docs(&export_state, 2, done);
+    ASSERT_FALSE(done);
+    ASSERT_EQ('\n', export_state.res_body->back());
+
+    // should not have trailing newline character for the last line
+    stateful_export_docs(&export_state, 2, done);
+    ASSERT_TRUE(done);
+    ASSERT_EQ('}', export_state.res_body->back());
+}
+
+TEST_F(CoreAPIUtilsTest, ExportWithJoin) {
+    auto schema_json =
+            R"({
+                "name": "Products",
+                "fields": [
+                    {"name": "product_id", "type": "string"},
+                    {"name": "product_name", "type": "string"},
+                    {"name": "product_description", "type": "string"},
+                    {"name": "rating", "type": "int32"}
+                ]
+            })"_json;
+    std::vector<nlohmann::json> documents = {
+            R"({
+                "product_id": "product_a",
+                "product_name": "shampoo",
+                "product_description": "Our new moisturizing shampoo is perfect for those with dry or damaged hair.",
+                "rating": "2"
+            })"_json,
+            R"({
+                "product_id": "product_b",
+                "product_name": "soap",
+                "product_description": "Introducing our all-natural, organic soap bar made with essential oils and botanical ingredients.",
+                "rating": "4"
+            })"_json
+    };
+    auto collection_create_op = collectionManager.create_collection(schema_json);
+    ASSERT_TRUE(collection_create_op.ok());
+    for (auto const &json: documents) {
+        auto add_op = collection_create_op.get()->add(json.dump());
+        if (!add_op.ok()) {
+            LOG(INFO) << add_op.error();
+        }
+        ASSERT_TRUE(add_op.ok());
+    }
+
+    schema_json =
+            R"({
+                "name": "Customers",
+                "fields": [
+                    {"name": "customer_id", "type": "string"},
+                    {"name": "customer_name", "type": "string"},
+                    {"name": "product_price", "type": "float"},
+                    {"name": "product_id", "type": "string", "reference": "Products.product_id"}
+                ]
+            })"_json;
+    documents = {
+            R"({
+                "customer_id": "customer_a",
+                "customer_name": "Joe",
+                "product_price": 143,
+                "product_id": "product_a"
+            })"_json,
+            R"({
+                "customer_id": "customer_a",
+                "customer_name": "Joe",
+                "product_price": 73.5,
+                "product_id": "product_b"
+            })"_json,
+            R"({
+                "customer_id": "customer_b",
+                "customer_name": "Dan",
+                "product_price": 75,
+                "product_id": "product_a"
+            })"_json,
+            R"({
+                "customer_id": "customer_b",
+                "customer_name": "Dan",
+                "product_price": 140,
+                "product_id": "product_b"
+            })"_json
+    };
+    collection_create_op = collectionManager.create_collection(schema_json);
+    ASSERT_TRUE(collection_create_op.ok());
+    for (auto const &json: documents) {
+        auto add_op = collection_create_op.get()->add(json.dump());
+        if (!add_op.ok()) {
+            LOG(INFO) << add_op.error();
+        }
+        ASSERT_TRUE(add_op.ok());
+    }
+
+    schema_json =
+            R"({
+                "name": "Dummy",
+                "fields": [
+                    {"name": "dummy_id", "type": "string"}
+                ]
+            })"_json;
+    collection_create_op = collectionManager.create_collection(schema_json);
+    ASSERT_TRUE(collection_create_op.ok());
+
+    bool done;
+    std::string res_body;
+
+    export_state_t export_state;
+    auto coll1 = collectionManager.get_collection_unsafe("Products");
+    coll1->get_filter_ids_with_lock("$Customers(customer_id:customer_a)", export_state.filter_result);
+    export_state.collection = coll1.get();
+    export_state.res_body = &res_body;
+    export_state.include_fields.insert("product_name");
+    export_state.ref_include_exclude_fields_vec.emplace_back(ref_include_exclude_fields{"Customers", {"product_price"}, "",
+                                                                                        "", ref_include::nest});
+
+    stateful_export_docs(&export_state, 1, done);
+    ASSERT_FALSE(done);
+    ASSERT_EQ('\n', export_state.res_body->back());
+    auto doc = nlohmann::json::parse(export_state.res_body->c_str());
+    ASSERT_EQ("shampoo", doc["product_name"]);
+    ASSERT_EQ(143, doc["Customers"]["product_price"]);
+
+    // should not have trailing newline character for the last line
+    stateful_export_docs(&export_state, 1, done);
+    ASSERT_TRUE(done);
+    ASSERT_EQ('}', export_state.res_body->back());
+    doc = nlohmann::json::parse(export_state.res_body->c_str());
+    ASSERT_EQ("soap", doc["product_name"]);
+    ASSERT_EQ(73.5, doc["Customers"]["product_price"]);
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+    req->params["collection"] = "Products";
+    req->params["q"] = "*";
+    req->params["filter_by"] = "$Customers(customer_id: customer_a)";
+
+    get_export_documents(req, res);
+
+    std::vector<std::string> res_strs;
+    StringUtils::split(res->body, res_strs, "\n");
+
+    doc = nlohmann::json::parse(res_strs[0]);
+    ASSERT_EQ(6, doc.size());
+    ASSERT_EQ(1, doc.count("product_name"));
+    ASSERT_EQ("shampoo", doc["product_name"]);
+    ASSERT_EQ(1, doc.count("Customers"));
+    ASSERT_EQ(5, doc["Customers"].size());
+    ASSERT_EQ(1, doc["Customers"].count("product_price"));
+    ASSERT_EQ(143, doc["Customers"]["product_price"]);
+
+    doc = nlohmann::json::parse(res_strs[1]);
+    ASSERT_EQ(6, doc.size());
+    ASSERT_EQ(1, doc.count("product_name"));
+    ASSERT_EQ("soap", doc["product_name"]);
+    ASSERT_EQ(1, doc.count("Customers"));
+    ASSERT_EQ(5, doc["Customers"].size());
+    ASSERT_EQ(1, doc["Customers"].count("product_price"));
+    ASSERT_EQ(73.5, doc["Customers"]["product_price"]);
+
+    delete dynamic_cast<export_state_t*>(req->data);
+    req->data = nullptr;
+    res->body.clear();
+    req->params["filter_by"] = "rating: >2 && (id:* || $Customers(id:*))";
+    req->params["include_fields"] = "$Customers(*,strategy:nest_array) as Customers";
+
+    get_export_documents(req, res);
+
+    res_strs.clear();
+    StringUtils::split(res->body, res_strs, "\n");
+
+    doc = nlohmann::json::parse(res_strs[0]);
+    ASSERT_EQ(6, doc.size());
+    ASSERT_EQ(1, doc.count("product_name"));
+    ASSERT_EQ("soap", doc["product_name"]);
+    ASSERT_EQ(1, doc.count("Customers"));
+    ASSERT_EQ(2, doc["Customers"].size());
+    ASSERT_EQ(5, doc["Customers"][0].size());
+    ASSERT_EQ("customer_a", doc["Customers"][0]["customer_id"]);
+    ASSERT_EQ(73.5, doc["Customers"][0]["product_price"]);
+    ASSERT_EQ(5, doc["Customers"][1].size());
+    ASSERT_EQ("customer_b", doc["Customers"][1]["customer_id"]);
+    ASSERT_EQ(140, doc["Customers"][1]["product_price"]);
+}
+
+TEST_F(CoreAPIUtilsTest, ExportWithJoinHavingNoReferences) {
+    auto schema_json =
+            R"({
+                "name": "redemption_codes",
+                "fields": [
+                    {"name": "code", "type": "string"}
+                ]
+            })"_json;
+    auto collection_create_op = collectionManager.create_collection(schema_json);
+    ASSERT_TRUE(collection_create_op.ok());
+    schema_json =
+            R"({
+                "name": "transactions",
+                "fields": [
+                    {"name": "redemption_code", "type": "string", "reference": "redemption_codes.code", "optional": true},
+                    {"name": "amount", "type": "int64"}
+                ]
+            })"_json;
+    std::vector<nlohmann::json> documents = {
+            R"({
+                "redemption_code": "1234",
+                "amount": 100
+            })"_json,
+            R"({
+                "amount": 200
+            })"_json
+    };
+    collection_create_op = collectionManager.create_collection(schema_json);
+    ASSERT_TRUE(collection_create_op.ok());
+    for (auto const &json: documents) {
+        auto add_op = collection_create_op.get()->add(json.dump());
+        if (!add_op.ok()) {
+            LOG(INFO) << add_op.error();
+        }
+        // The first document is going to fail with the error:
+        // Reference document having `code:= `1234`` not found in the collection `redemption_codes`.
+        // ASSERT_TRUE(add_op.ok());
+    }
+    documents = {
+            R"({
+                "code": "1234"
+            })"_json,
+            R"({
+                "code": "5678"
+            })"_json
+    };
+    auto redemption_codes = collectionManager.get_collection_unsafe("redemption_codes");
+    for (auto const &json: documents) {
+        auto add_op = redemption_codes->add(json.dump());
+        if (!add_op.ok()) {
+            LOG(INFO) << add_op.error();
+        }
+        ASSERT_TRUE(add_op.ok());
+    }
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+    req->params["collection"] = "redemption_codes";
+    req->params["q"] = "*";
+    req->params["filter_by"] = "id:* || $transactions(id:*)";
+    get_export_documents(req, res);
+    std::vector<std::string> res_strs;
+    StringUtils::split(res->body, res_strs, "\n");
+    auto doc = nlohmann::json::parse(res_strs[0]);
+    ASSERT_EQ(2, doc.size());
+    ASSERT_EQ("1234", doc["code"]);
+    doc = nlohmann::json::parse(res_strs[1]);
+    ASSERT_EQ(2, doc.size());
+    ASSERT_EQ("5678", doc["code"]);
+    delete dynamic_cast<export_state_t*>(req->data);
+    req->data = nullptr;
+    res->body.clear();
+}
+
+TEST_F(CoreAPIUtilsTest, TestParseAPIKeyIPFromMetadata) {
+    // format <length of api key>:<api key><ip address>
+    std::string valid_metadata = "4:abcd127.0.0.1";
+    std::string invalid_ip = "4:abcd127.0.0.1:1234";
+    std::string invalid_api_key = "3:abcd127.0.0.1";
+    std::string no_length = "abcd127.0.0.1";
+    std::string no_colon = "4abcd127.0.0.1";
+    std::string no_ip = "4:abcd";
+    std::string only_length = "4:";
+    std::string only_colon = ":";
+    std::string only_ip = "127.0.0.1";
+
+    Option<std::pair<std::string, std::string>> res = get_api_key_and_ip(valid_metadata);
+    EXPECT_TRUE(res.ok());
+    EXPECT_EQ("abcd", res.get().first);
+    EXPECT_EQ("127.0.0.1", res.get().second);
+
+    res = get_api_key_and_ip(invalid_ip);
+    EXPECT_FALSE(res.ok());
+
+    res = get_api_key_and_ip(invalid_api_key);
+    EXPECT_FALSE(res.ok());
+
+    res = get_api_key_and_ip(no_length);
+    EXPECT_FALSE(res.ok());
+
+    res = get_api_key_and_ip(no_colon);
+    EXPECT_FALSE(res.ok());
+
+    res = get_api_key_and_ip(no_ip);
+    EXPECT_FALSE(res.ok());
+
+    res = get_api_key_and_ip(only_length);
+    EXPECT_FALSE(res.ok());
+
+    res = get_api_key_and_ip(only_colon);
+    EXPECT_FALSE(res.ok());
+
+    res = get_api_key_and_ip(only_ip);
+    EXPECT_FALSE(res.ok());
+}
+
+TEST_F(CoreAPIUtilsTest, DualStackIPValidation) {
+    // Standard IPv4 address
+    std::string ipv4_metadata = "4:abcd127.0.0.1";
+    Option<std::pair<std::string, std::string>> res = get_api_key_and_ip(ipv4_metadata);
+    EXPECT_TRUE(res.ok());
+    EXPECT_EQ("abcd", res.get().first);
+    EXPECT_EQ("127.0.0.1", res.get().second);
+
+    // Standard IPv6 address format
+    std::string ipv6_metadata = "4:abcd2001:db8::1";
+    res = get_api_key_and_ip(ipv6_metadata);
+    EXPECT_TRUE(res.ok());
+    EXPECT_EQ("abcd", res.get().first);
+    EXPECT_EQ("2001:db8::1", res.get().second);
+
+    // Compressed IPv6 address format (localhost)
+    std::string compressed_ipv6 = "4:abcd::1";
+    res = get_api_key_and_ip(compressed_ipv6);
+    EXPECT_TRUE(res.ok());
+    EXPECT_EQ("abcd", res.get().first);
+    EXPECT_EQ("::1", res.get().second);
+
+    // IPv4-mapped IPv6 address
+    std::string ipv4_mapped_ipv6 = "4:abcd::ffff:192.0.2.1";
+    res = get_api_key_and_ip(ipv4_mapped_ipv6);
+    EXPECT_TRUE(res.ok());
+    EXPECT_EQ("abcd", res.get().first);
+    EXPECT_EQ("::ffff:192.0.2.1", res.get().second);
+
+    // Empty API key with IPv6
+    std::string empty_key_ipv6 = "0:2001:db8::1";
+    res = get_api_key_and_ip(empty_key_ipv6);
+    EXPECT_TRUE(res.ok());
+    EXPECT_EQ("", res.get().first);
+    EXPECT_EQ("2001:db8::1", res.get().second);
+
+    // Invalid IP addresses
+    std::string invalid_ipv4 = "4:abcd999.999.999.999";
+    res = get_api_key_and_ip(invalid_ipv4);
+    EXPECT_FALSE(res.ok());
+
+    std::string invalid_ipv6 = "4:abcdzzzz::1";
+    res = get_api_key_and_ip(invalid_ipv6);
+    EXPECT_FALSE(res.ok());
+}
+
+TEST_F(CoreAPIUtilsTest, ExportIncludeExcludeFields) {
+    nlohmann::json schema = R"({
+        "name": "coll1",
+        "enable_nested_fields": true,
+        "fields": [
+          {"name": "name", "type": "object" },
+          {"name": "points", "type": "int32" }
+        ]
+    })"_json;
+
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    Collection* coll1 = op.get();
+
+    auto doc1 = R"({
+        "name": {"first": "John", "last": "Smith"},
+        "points": 100,
+        "description": "description"
+    })"_json;
+
+    auto add_op = coll1->add(doc1.dump(), CREATE);
+    ASSERT_TRUE(add_op.ok());
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+    req->params["collection"] = "coll1";
+
+    // include fields
+
+    req->params["include_fields"] = "name.last";
+
+    ASSERT_TRUE(get_export_documents(req, res));
+
+    std::vector<std::string> res_strs;
+    StringUtils::split(res->body, res_strs, "\n");
+    nlohmann::json doc = nlohmann::json::parse(res_strs[0]);
+    ASSERT_EQ(1, doc.size());
+    ASSERT_EQ(1, doc.count("name"));
+    ASSERT_EQ(1, doc["name"].count("last"));
+
+    // exclude fields
+
+    delete dynamic_cast<export_state_t*>(req->data);
+    req->data = nullptr;
+    res->body.clear();
+    req->params.erase("include_fields");
+    req->params["exclude_fields"] = "name.last";
+    ASSERT_TRUE(get_export_documents(req, res));
+
+    res_strs.clear();
+    StringUtils::split(res->body, res_strs, "\n");
+    doc = nlohmann::json::parse(res_strs[0]);
+    ASSERT_EQ(4, doc.size());
+    ASSERT_EQ(1, doc.count("id"));
+    ASSERT_EQ(1, doc.count("points"));
+    ASSERT_EQ(1, doc.count("name"));
+    ASSERT_EQ(1, doc["name"].count("first"));
+    ASSERT_EQ(1, doc.count("description"));     // field not in schema is exported
+
+    // no include or exclude fields
+
+    delete dynamic_cast<export_state_t*>(req->data);
+    req->data = nullptr;
+    res->body.clear();
+    req->params.erase("include_fields");
+    req->params.erase("exclude_fields");
+    ASSERT_TRUE(get_export_documents(req, res));
+
+    res_strs.clear();
+    StringUtils::split(res->body, res_strs, "\n");
+    doc = nlohmann::json::parse(res_strs[0]);
+    ASSERT_EQ(4, doc.size());
+    ASSERT_EQ(1, doc.count("id"));
+    ASSERT_EQ(1, doc.count("points"));
+    ASSERT_EQ(1, doc.count("name"));
+    ASSERT_EQ(1, doc["name"].count("first"));
+    ASSERT_EQ(1, doc["name"].count("last"));
+    ASSERT_EQ(1, doc.count("description"));     // field not in schema is exported
+
+    // no match for filter_by
+
+    delete dynamic_cast<export_state_t*>(req->data);
+    req->data = nullptr;
+    res->body.clear();
+    req->params["filter_by"] = "foo: val";
+    ASSERT_FALSE(get_export_documents(req, res));
+
+    res_strs.clear();
+    StringUtils::split(res->body, res_strs, "\n");
+    auto error = nlohmann::json::parse(res_strs[0]);
+    ASSERT_EQ(1, error.size());
+    ASSERT_EQ(1, error.count("message"));
+    ASSERT_EQ("Could not find a filter field named `foo` in the schema.", error["message"]);
+
+    delete dynamic_cast<export_state_t*>(req->data);
+    req->data = nullptr;
+    res->body.clear();
+    req->params["filter_by"] = "foo: val";
+    req->params["validate_field_names"] = "false";
+    ASSERT_TRUE(get_export_documents(req, res));
+
+    res_strs.clear();
+    StringUtils::split(res->body, res_strs, "\n");
+    ASSERT_TRUE(res_strs.empty());
+
+    collectionManager.drop_collection("coll1");
+}
+
+TEST_F(CoreAPIUtilsTest, ExportIncludeExcludeFieldsWithFilter) {
+    nlohmann::json schema = R"({
+        "name": "coll1",
+        "enable_nested_fields": true,
+        "fields": [
+          {"name": "name", "type": "object" },
+          {"name": "points", "type": "int32" }
+        ]
+    })"_json;
+
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    Collection* coll1 = op.get();
+
+    auto doc1 = R"({
+        "name": {"first": "John", "last": "Smith"},
+        "points": 100
+    })"_json;
+
+    auto add_op = coll1->add(doc1.dump(), CREATE);
+    ASSERT_TRUE(add_op.ok());
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+    req->params["collection"] = "coll1";
+
+    // include fields
+
+    req->params["include_fields"] = "name.last";
+    req->params["filter_by"] = "points:>=0";
+
+    get_export_documents(req, res);
+
+    std::vector<std::string> res_strs;
+    StringUtils::split(res->body, res_strs, "\n");
+    nlohmann::json doc = nlohmann::json::parse(res_strs[0]);
+    ASSERT_EQ(1, doc.size());
+    ASSERT_EQ(1, doc.count("name"));
+    ASSERT_EQ(1, doc["name"].count("last"));
+
+    // exclude fields
+
+    delete dynamic_cast<export_state_t*>(req->data);
+    req->data = nullptr;
+    res->body.clear();
+    req->params.erase("include_fields");
+    req->params["exclude_fields"] = "name.last";
+    get_export_documents(req, res);
+
+    res_strs.clear();
+    StringUtils::split(res->body, res_strs, "\n");
+    doc = nlohmann::json::parse(res_strs[0]);
+    ASSERT_EQ(3, doc.size());
+    ASSERT_EQ(1, doc.count("id"));
+    ASSERT_EQ(1, doc.count("points"));
+    ASSERT_EQ(1, doc.count("name"));
+    ASSERT_EQ(1, doc["name"].count("first"));
+
+    collectionManager.drop_collection("coll1");
+}
+
+TEST_F(CoreAPIUtilsTest, TestProxy) {
+    std::string res;
+    std::unordered_map<std::string, std::string> headers;
+    std::map<std::string, std::string> res_headers;
+
+    std::string url = "https://typesense.org";
+
+    long expected_status_code = HttpClient::get_instance().get_response(url, res, res_headers, headers);
+
+    auto req = std::make_shared<http_req>();
+    auto resp = std::make_shared<http_res>(nullptr);
+
+    nlohmann::json body;
+    body["url"] = url;
+    body["method"] = "GET";
+    body["headers"] = headers;
+
+    req->body = body.dump();
+
+    post_proxy(req, resp);
+
+    ASSERT_EQ(expected_status_code, resp->status_code);
+    ASSERT_EQ(res, resp->body);
+}
+
+TEST_F(CoreAPIUtilsTest, TestProxyInvalid) {
+    nlohmann::json body;
+    
+
+
+    auto req = std::make_shared<http_req>();
+    auto resp = std::make_shared<http_res>(nullptr);
+
+    // test with url as empty string
+    body["url"] = "";
+    body["method"] = "GET";
+    body["headers"] = nlohmann::json::object();
+
+    req->body = body.dump();
+
+    post_proxy(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("URL and method must be non-empty strings.", nlohmann::json::parse(resp->body)["message"]);
+
+    // test with url as integer
+    body["url"] = 123;
+    body["method"] = "GET";
+
+    req->body = body.dump();
+
+    post_proxy(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("URL and method must be non-empty strings.", nlohmann::json::parse(resp->body)["message"]);
+
+    // test with no url parameter
+    body.erase("url");
+    body["method"] = "GET";
+
+    req->body = body.dump();
+
+    post_proxy(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Missing required fields.", nlohmann::json::parse(resp->body)["message"]);
+
+
+    // test with invalid method
+    body["url"] = "https://typesense.org";
+    body["method"] = "INVALID";
+
+    req->body = body.dump();
+
+    post_proxy(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Parameter `method` must be one of GET, POST, POST_STREAM, PUT, DELETE.", nlohmann::json::parse(resp->body)["message"]);
+
+    // test with method as integer
+    body["method"] = 123;
+
+    req->body = body.dump();
+
+    post_proxy(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("URL and method must be non-empty strings.", nlohmann::json::parse(resp->body)["message"]);
+
+    // test with no method parameter
+    body.erase("method");
+
+    req->body = body.dump();
+
+    post_proxy(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Missing required fields.", nlohmann::json::parse(resp->body)["message"]);
+
+
+    // test with body as integer
+    body["method"] = "POST";
+    body["body"] = 123;
+
+    req->body = body.dump();
+
+    post_proxy(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Body must be a string.", nlohmann::json::parse(resp->body)["message"]);
+
+
+    // test with headers as integer
+    body["body"] = "";
+    body["headers"] = 123;
+
+    req->body = body.dump();
+
+    post_proxy(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Headers must be a JSON object.", nlohmann::json::parse(resp->body)["message"]);
+
+    // test with ssl_verify as string
+    body["headers"] = nlohmann::json::object();
+    body["ssl_verify"] = "true";
+
+    req->body = body.dump();
+
+    post_proxy(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("SSL verify must be a boolean.", nlohmann::json::parse(resp->body)["message"]);
+}
+
+TEST_F(CoreAPIUtilsTest, TestProxyTimeout) {
+    nlohmann::json body;
+
+    auto req = std::make_shared<http_req>();
+    auto resp = std::make_shared<http_res>(nullptr);
+
+    // test with url as empty string
+    body["url"] = "https://typesense.org/docs/";
+    body["method"] = "GET";
+    body["headers"] = nlohmann::json::object();
+    body["headers"]["timeout_ms"] = "1";
+    body["headers"]["num_retry"] = "1";
+
+    req->body = body.dump();
+
+    post_proxy(req, resp);
+
+    ASSERT_EQ(408, resp->status_code);
+    ASSERT_EQ("Server error on remote server. Please try again later.", nlohmann::json::parse(resp->body)["message"]);
+}
+
+TEST_F(CoreAPIUtilsTest, TestGetConversations) {
+    auto req = std::make_shared<http_req>();
+    auto resp = std::make_shared<http_res>(nullptr);
+
+    auto schema_json =
+        R"({
+        "name": "Products",
+        "fields": [
+            {"name": "product_name", "type": "string", "infix": true},
+            {"name": "category", "type": "string"},
+            {"name": "embedding", "type":"float[]", "embed":{"from": ["product_name", "category"], "model_config": {"model_name": "ts/e5-small"}}}
+        ]
+    })"_json;
+
+    EmbedderManager::set_model_dir("/tmp/typesense_test/models");
+
+    if (std::getenv("api_key") == nullptr) {
+        LOG(INFO) << "Skipping test as api_key is not set.";
+        return;
+    }
+
+    auto api_key = std::string(std::getenv("api_key"));
+
+    auto collection_create_op = collectionManager.create_collection(schema_json);
+
+    ASSERT_TRUE(collection_create_op.ok());
+
+    auto coll = collection_create_op.get();
+
+    auto add_op = coll->add(R"({
+        "product_name": "moisturizer",
+        "category": "beauty"
+    })"_json.dump());
+
+    ASSERT_TRUE(add_op.ok());
+
+    add_op = coll->add(R"({
+        "product_name": "shampoo",
+        "category": "beauty"
+    })"_json.dump());
+
+    ASSERT_TRUE(add_op.ok());
+
+    add_op = coll->add(R"({
+        "product_name": "shirt",
+        "category": "clothing"
+    })"_json.dump());
+
+    ASSERT_TRUE(add_op.ok());
+
+    add_op = coll->add(R"({
+        "product_name": "pants",
+        "category": "clothing"
+    })"_json.dump());
+
+    ASSERT_TRUE(add_op.ok());
+
+    nlohmann::json model_config = R"({
+        "model_name": "openai/gpt-3.5-turbo"
+    })"_json;
+
+    model_config["api_key"] = api_key;
+
+    auto add_model_op = ConversationModelManager::add_model(model_config, "", true);
+
+    ASSERT_TRUE(add_model_op.ok());
+
+    LOG(INFO) << "Model id: " << model_config["id"];
+
+    auto model_id = model_config["id"].get<std::string>();
+
+    auto results_op = coll->search("how many products are there for clothing category?", {"embedding"},
+                                 "", {}, {}, {2}, 10,
+                                 1, FREQUENCY, {true},
+                                 0, spp::sparse_hash_set<std::string>(), spp::sparse_hash_set<std::string>(),
+                                 10, "", 30, 4, "", 1, "", "", {}, 3, "<mark>", "</mark>", {}, 4294967295UL, true, false,
+                                 true, "", false, 6000000UL, 4, 7, fallback, 4, {off}, 32767UL, 32767UL, 2, 2, false, "",
+                                 true, 0, max_score, 100, 0, 0, 0, "exhaustive", 30000, 2, "", {}, {}, "right_to_left", true, true, true, model_id);
+    
+    ASSERT_TRUE(results_op.ok());
+
+    auto id = results_op.get()["conversation"]["id"].get<std::string>();
+
+    auto history_collection = ConversationManager::get_instance()
+            .get_history_collection(model_config["history_collection"].get<std::string>()).get();
+    auto history_search_res = history_collection->search(id, {"conversation_id"}, "", {}, {}, {0}).get();
+    ASSERT_EQ(2, history_search_res["hits"].size());
+    auto del_res = ConversationModelManager::delete_model(model_id);
+}
+
+TEST_F(CoreAPIUtilsTest, SampleGzipIndexTest) {
+    Collection *coll_hnstories;
+
+    std::vector<field> fields = {field("title", field_types::STRING, false),
+                                 field("points", field_types::INT32, false),};
+
+    coll_hnstories = collectionManager.get_collection("coll_hnstories").get();
+    if(coll_hnstories == nullptr) {
+        coll_hnstories = collectionManager.create_collection("coll_hnstories", 4, fields, "title").get();
+    }
+
+    auto req = std::make_shared<http_req>();
+    std::ifstream infile(std::string(ROOT_DIR)+"test/resources/hnstories.jsonl.gz");
+    std::stringstream outbuffer;
+
+    infile.seekg (0, infile.end);
+    int length = infile.tellg();
+    infile.seekg (0, infile.beg);
+
+    req->body.resize(length);
+    infile.read(&req->body[0], length);
+
+    auto res = ReplicationState::handle_gzip(req);
+    if (!res.error().empty()) {
+        LOG(ERROR) << res.error();
+        FAIL();
+    } else {
+        outbuffer << req->body;
+    }
+
+    std::vector<std::string> doc_lines;
+    std::string line;
+    while(std::getline(outbuffer, line)) {
+        doc_lines.push_back(line);
+    }
+
+    ASSERT_EQ(14, doc_lines.size());
+    ASSERT_EQ("{\"points\":1,\"title\":\"DuckDuckGo Settings\"}", doc_lines[0]);
+    ASSERT_EQ("{\"points\":1,\"title\":\"Making Twitter Easier to Use\"}", doc_lines[1]);
+    ASSERT_EQ("{\"points\":2,\"title\":\"London refers Uber app row to High Court\"}", doc_lines[2]);
+    ASSERT_EQ("{\"points\":1,\"title\":\"Young Global Leaders, who should be nominated? (World Economic Forum)\"}", doc_lines[3]);
+    ASSERT_EQ("{\"points\":1,\"title\":\"Blooki.st goes BETA in a few hours\"}", doc_lines[4]);
+    ASSERT_EQ("{\"points\":1,\"title\":\"Unicode Security Data: Beta Review\"}", doc_lines[5]);
+    ASSERT_EQ("{\"points\":2,\"title\":\"FileMap: MapReduce on the CLI\"}", doc_lines[6]);
+    ASSERT_EQ("{\"points\":1,\"title\":\"[Full Video] NBC News Interview with Edward Snowden\"}", doc_lines[7]);
+    ASSERT_EQ("{\"points\":1,\"title\":\"Hybrid App Monetization Example with Mobile Ads and In-App Purchases\"}", doc_lines[8]);
+    ASSERT_EQ("{\"points\":1,\"title\":\"We need oppinion from Android Developers\"}", doc_lines[9]);
+    ASSERT_EQ("{\"points\":1,\"title\":\"\\\\t Why Mobile Developers Should Care About Deep Linking\"}", doc_lines[10]);
+    ASSERT_EQ("{\"points\":2,\"title\":\"Are we getting too Sassy? Weighing up micro-optimisation vs. maintainability\"}", doc_lines[11]);
+    ASSERT_EQ("{\"points\":2,\"title\":\"Google's XSS game\"}", doc_lines[12]);
+    ASSERT_EQ("{\"points\":1,\"title\":\"Telemba Turns Your Old Roomba and Tablet Into a Telepresence Robot\"}", doc_lines[13]);
+
+    infile.close();
+}
+
+TEST_F(CoreAPIUtilsTest, TestConversationModels) {
+    nlohmann::json model_config = R"({
+        "model_name": "openai/gpt-3.5-turbo",
+        "max_bytes": 10000,
+        "history_collection": "conversation_store"
+    })"_json;
+
+    EmbedderManager::set_model_dir("/tmp/typesense_test/models");
+
+    if (std::getenv("api_key") == nullptr) {
+        LOG(INFO) << "Skipping test as api_key is not set.";
+        return;
+    }
+
+    model_config["api_key"] = std::string(std::getenv("api_key"));
+
+    auto req = std::make_shared<http_req>();
+    auto resp = std::make_shared<http_res>(nullptr);
+
+    req->body = model_config.dump();
+    post_conversation_model(req, resp);
+    ASSERT_EQ(200, resp->status_code);
+
+    auto id = nlohmann::json::parse(resp->body)["id"].get<std::string>();
+    req->params["id"] = id;
+    get_conversation_model(req, resp);
+
+    ASSERT_EQ(200, resp->status_code);
+    ASSERT_EQ(id, nlohmann::json::parse(resp->body)["id"].get<std::string>());
+
+    get_conversation_models(req, resp);
+    ASSERT_EQ(200, resp->status_code);
+    ASSERT_EQ(1, nlohmann::json::parse(resp->body).size());
+
+    del_conversation_model(req, resp);
+    ASSERT_EQ(200, resp->status_code);
+
+    get_conversation_models(req, resp);
+    ASSERT_EQ(200, resp->status_code);
+    ASSERT_EQ(0, nlohmann::json::parse(resp->body).size());
+}
+
+TEST_F(CoreAPIUtilsTest, TestInvalidConversationModels) {
+    // test with no model_name
+    nlohmann::json model_config = R"({
+        "history_collection": "conversation_store"
+    })"_json;
+
+    if (std::getenv("api_key") == nullptr) {
+        LOG(INFO) << "Skipping test as api_key is not set.";
+        return;
+    }
+
+    model_config["api_key"] = std::string(std::getenv("api_key"));
+
+    auto req = std::make_shared<http_req>();
+    auto resp = std::make_shared<http_res>(nullptr);
+
+    req->body = model_config.dump();
+
+    post_conversation_model(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Property `model_name` is not provided or not a string.", nlohmann::json::parse(resp->body)["message"]);
+
+    // test with invalid model_name
+    model_config["model_name"] = "invalid_model_name";
+
+    req->body = model_config.dump();
+
+    post_conversation_model(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Model namespace `` is not supported.", nlohmann::json::parse(resp->body)["message"]);
+
+    // test with no api_key
+    model_config["model_name"] = "openai/gpt-3.5-turbo";
+    model_config.erase("api_key");
+
+    req->body = model_config.dump();
+
+    post_conversation_model(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("API key is not provided", nlohmann::json::parse(resp->body)["message"]);
+
+    // test with api_key as integer
+    model_config["api_key"] = 123;
+
+    req->body = model_config.dump();
+
+    post_conversation_model(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("API key is not a string", nlohmann::json::parse(resp->body)["message"]);
+
+    // test with model_name as integer
+
+    model_config["api_key"] = std::string(std::getenv("api_key"));
+    model_config["model_name"] = 123;
+
+    req->body = model_config.dump();
+
+    post_conversation_model(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Property `model_name` is not provided or not a string.", nlohmann::json::parse(resp->body)["message"]);
+
+    model_config["model_name"] = "openai/gpt-3.5-turbo";
+
+    // test without max_bytes
+    post_conversation_model(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Property `max_bytes` is not provided or not a number.", nlohmann::json::parse(resp->body)["message"]);
+
+    // test with max_bytes as string
+    model_config["max_bytes"] = "10000";
+
+    req->body = model_config.dump();
+    post_conversation_model(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Property `max_bytes` is not provided or not a number.", nlohmann::json::parse(resp->body)["message"]);
+
+    // test with max_bytes as negative number
+    model_config["max_bytes"] = -10000;
+
+    req->body = model_config.dump();
+    post_conversation_model(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Property `max_bytes` must be a positive number.", nlohmann::json::parse(resp->body)["message"]);
+
+    model_config["max_bytes"] = 10000;
+    model_config["history_collection"] = 123;
+
+    // test with history_collection as integer
+    req->body = model_config.dump();
+    post_conversation_model(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Property `history_collection` is not provided or not a string.", nlohmann::json::parse(resp->body)["message"]);
+
+    // test with history_collection as empty string
+    model_config["history_collection"] = "";
+
+    req->body = model_config.dump();
+    post_conversation_model(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("Collection not found", nlohmann::json::parse(resp->body)["message"]);
+}
+
+TEST_F(CoreAPIUtilsTest, DeleteNonExistingDoc) {
+    Collection *coll1;
+
+    std::vector<field> fields = {field("title", field_types::STRING, false),
+                                 field("points", field_types::INT32, false),};
+
+    coll1 = collectionManager.get_collection("coll1").get();
+    if(coll1 == nullptr) {
+        coll1 = collectionManager.create_collection("coll1", 2, fields, "points").get();
+    }
+
+    for(size_t i=0; i<10; i++) {
+        nlohmann::json doc;
+
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+
+        coll1->add(doc.dump());
+    }
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+
+    req->params["collection"] = "coll1";
+    req->params["id"] = "9";
+    del_remove_document(req, res);
+    ASSERT_EQ(200, res->status_code);
+
+    req->params["id"] = "10";
+    del_remove_document(req, res);
+    ASSERT_EQ(404, res->status_code);
+
+    req->params["ignore_not_found"] = "true";
+    del_remove_document(req, res);
+    ASSERT_EQ(200, res->status_code);
+}
+
+TEST_F(CoreAPIUtilsTest, CollectionsPagination) {
+    //remove all collections first
+    auto collections = collectionManager.get_collections().get();
+    for(auto collection : collections) {
+        collectionManager.drop_collection(collection->get_name());
+    }
+
+    //create few collections
+    for(size_t i = 0; i < 5; i++) {
+        nlohmann::json coll_json = R"({
+                "name": "cp",
+                "fields": [
+                    {"name": "title", "type": "string"}
+                ]
+            })"_json;
+        coll_json["name"] = coll_json["name"].get<std::string>() + std::to_string(i + 1);
+        auto coll_op = collectionManager.create_collection(coll_json);
+        ASSERT_TRUE(coll_op.ok());
+    }
+
+    auto req = std::make_shared<http_req>();
+    auto resp = std::make_shared<http_res>(nullptr);
+
+    req->params["offset"] = "0";
+    req->params["limit"] = "1";
+
+    nlohmann::json expected_meta_json = R"(
+        {
+          "created_at":1663234047,
+          "default_sorting_field":"",
+          "enable_nested_fields":false,
+          "fields":[
+            {
+              "facet":false,
+              "index":true,
+              "infix":false,
+              "locale":"",
+              "name":"title",
+              "optional":false,
+              "track_missing_values":false,
+              "sort":false,
+              "stem":false,
+              "store": true,
+              "type":"string",
+              "stem_dictionary": "",
+              "truncate_len": 100
+            }
+          ],
+          "name":"cp2",
+          "num_documents":0,
+          "symbols_to_index":[],
+          "synonym_sets":[],
+          "curation_sets": [],
+          "token_separators":[]
+        }
+    )"_json;
+
+    get_collections(req, resp);
+
+    auto actual_json = nlohmann::json::parse(resp->body);
+    expected_meta_json["created_at"] = actual_json[0]["created_at"];
+
+    ASSERT_EQ(expected_meta_json.dump(), actual_json[0].dump());
+
+    //invalid offset string
+    req->params["offset"] = "0a";
+    get_collections(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("{\"message\":\"Offset param should be unsigned integer.\"}", resp->body);
+
+    //invalid limit string
+    req->params["offset"] = "0";
+    req->params["limit"] = "-1";
+    get_collections(req, resp);
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("{\"message\":\"Limit param should be unsigned integer.\"}", resp->body);
+}
+
+TEST_F(CoreAPIUtilsTest, OverridesPagination) {
+    Collection *coll2;
+    CurationIndexManager& ov_manager = CurationIndexManager::get_instance();
+    ov_manager.init_store(store);
+    ov_manager.add_curation_index("index");
+
+    std::vector<field> fields = {field("title", field_types::STRING, false),
+                                 field("points", field_types::INT32, false)};
+
+    coll2 = collectionManager.get_collection("coll2").get();
+    if(coll2 == nullptr) {
+        coll2 = collectionManager.create_collection("coll2", 1, fields, "points").get();
+    }
+
+    for(int i = 0; i < 5; ++i) {
+        nlohmann::json curation_json = {
+                {"id",       "curation"},
+                {
+                 "rule",     {
+                                     {"query", "not-found"},
+                                     {"match", curation_t::MATCH_EXACT}
+                             }
+                },
+                {"metadata", {       {"foo",   "bar"}}},
+        };
+
+        curation_json["id"] = curation_json["id"].get<std::string>() + std::to_string(i + 1);
+        curation_t curation;
+        curation_t::parse(curation_json, "", curation);
+
+        ov_manager.upsert_curation_item("index", curation_json);
+    }
+
+    auto req = std::make_shared<http_req>();
+    auto resp = std::make_shared<http_res>(nullptr);
+
+    req->params["name"] = "index";
+    req->params["offset"] = "0";
+    req->params["limit"] = "1";
+
+    get_curation_set_items(req, resp);
+    nlohmann::json expected_json = R"([
+                    {
+                        "excludes":[],
+                        "filter_curated_hits":false,
+                        "id":"curation1",
+                        "includes":[],
+                        "metadata":{"foo":"bar"},
+                        "remove_matched_tokens":false,
+                        "rule":{
+                                "match":"exact",
+                                "query":"not-found",
+                                "stem":false,
+                                "synonyms":false
+                        },
+                        "stop_processing":true
+                    }])"_json;
+
+    ASSERT_EQ(expected_json.dump(), resp->body);
+
+    //invalid offset string
+    req->params["offset"] = "0a";
+    get_collections(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("{\"message\":\"Offset param should be unsigned integer.\"}", resp->body);
+
+    //invalid limit string
+    req->params["offset"] = "0";
+    req->params["limit"] = "-1";
+    get_collections(req, resp);
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("{\"message\":\"Limit param should be unsigned integer.\"}", resp->body);
+}
+
+TEST_F(CoreAPIUtilsTest, PutCurationSetItemReturnsNormalizedRuleFlags) {
+    CurationIndexManager& ov_manager = CurationIndexManager::get_instance();
+    ov_manager.init_store(store);
+    ASSERT_TRUE(ov_manager.add_curation_index("index").ok());
+
+    auto req = std::make_shared<http_req>();
+    auto resp = std::make_shared<http_res>(nullptr);
+
+    req->params["name"] = "index";
+    req->params["id"] = "curation1";
+    req->body = R"({
+        "rule": {
+            "query": "not-found",
+            "match": "exact"
+        },
+        "metadata": {
+            "foo": "bar"
+        }
+    })";
+
+    put_curation_set_item(req, resp);
+
+    ASSERT_EQ(200, resp->status_code);
+    auto body = nlohmann::json::parse(resp->body);
+    ASSERT_EQ("curation1", body["id"].get<std::string>());
+    ASSERT_FALSE(body["rule"]["synonyms"].get<bool>());
+    ASSERT_FALSE(body["rule"]["stem"].get<bool>());
+    ASSERT_EQ("exact", body["rule"]["match"].get<std::string>());
+    ASSERT_EQ("not-found", body["rule"]["query"].get<std::string>());
+}
+
+TEST_F(CoreAPIUtilsTest, SynonymsPagination) {
+    SynonymIndexManager& synonym_index_manager = SynonymIndexManager::get_instance();
+    synonym_index_manager.init_store(store);
+    synonym_index_manager.add_synonym_index("test");
+
+    for (int i = 0; i < 5; ++i) {
+        nlohmann::json synonym_json = R"(
+                {
+                    "id": "foobar",
+                    "synonyms": ["blazer", "suit"]
+                })"_json;
+
+        synonym_json["id"] = synonym_json["id"].get<std::string>() + std::to_string(i + 1);
+
+        synonym_index_manager.upsert_synonym_item("test", synonym_json);
+    }
+
+    auto req = std::make_shared<http_req>();
+    auto resp = std::make_shared<http_res>(nullptr);
+
+    req->params["name"] = "test";
+    req->params["offset"] = "0";
+    req->params["limit"] = "1";
+
+    get_synonym_set_items(req, resp);
+
+    nlohmann::json expected_json = R"([
+                    {
+                        "id":"foobar1",
+                        "root":"",
+                        "synonyms":["blazer","suit"]
+                    }
+    ])"_json;
+
+    ASSERT_EQ(expected_json.dump(), resp->body);
+
+    //invalid offset string
+    req->params["offset"] = "0a";
+    get_collections(req, resp);
+
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("{\"message\":\"Offset param should be unsigned integer.\"}", resp->body);
+
+    //invalid limit string
+    req->params["offset"] = "0";
+    req->params["limit"] = "-1";
+    get_collections(req, resp);
+    ASSERT_EQ(400, resp->status_code);
+    ASSERT_EQ("{\"message\":\"Limit param should be unsigned integer.\"}", resp->body);
+}
+
+
+TEST_F(CoreAPIUtilsTest, CollectionMetadataUpdate) {
+    CollectionManager & collectionManager3 = CollectionManager::get_instance();
+
+    nlohmann::json schema = R"({
+        "name": "collection_meta",
+        "enable_nested_fields": true,
+        "fields": [
+          {"name": "value.color", "type": "string", "optional": false, "facet": true },
+          {"name": "value.r", "type": "int32", "optional": false, "facet": true },
+          {"name": "value.g", "type": "int32", "optional": false, "facet": true },
+          {"name": "value.b", "type": "int32", "optional": false, "facet": true }
+        ],
+        "metadata": {
+            "batch_job":"",
+            "indexed_from":"2023-04-20T00:00:00.000Z",
+            "total_docs": 0
+        }
+    })"_json;
+
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    Collection* coll1 = op.get();
+
+    std::string collection_meta_json;
+    nlohmann::json collection_meta;
+    std::string next_seq_id;
+    std::string next_collection_id;
+
+    store->get(Collection::get_meta_key("collection_meta"), collection_meta_json);
+
+    nlohmann::json expected_meta_json = R"(
+        {
+            "created_at":1705482381,
+            "default_sorting_field":"",
+            "enable_nested_fields":true,
+            "fallback_field_type":"",
+            "fields":[
+                {
+                    "facet":true,
+                    "index":true,
+                    "infix":false,
+                    "locale":"",
+                    "name":"value.color",
+                    "nested":true,
+                    "nested_array":2,
+                    "optional":false,
+                    "track_missing_values":false,
+                    "sort":false,
+                    "store":true,
+                    "type":"string",
+                    "range_index":false,
+                    "stem":false,
+                    "stem_dictionary": "",
+                    "truncate_len": 100
+                },
+                {
+                    "facet":true,
+                    "index":true,
+                    "infix":false,
+                    "locale":"",
+                    "name":"value.r",
+                    "nested":true,
+                    "nested_array":2,
+                    "optional":false,
+                    "track_missing_values":false,
+                    "sort":true,
+                    "store":true,
+                    "type":"int32",
+                    "range_index":false,
+                    "stem":false,
+                    "stem_dictionary": "",
+                    "truncate_len": 100
+                },{
+                    "facet":true,
+                    "index":true,
+                    "infix":false,
+                    "locale":"",
+                    "name":"value.g",
+                    "nested":true,
+                    "nested_array":2,
+                    "optional":false,
+                    "track_missing_values":false,
+                    "sort":true,
+                    "store":true,
+                    "type":"int32",
+                    "range_index":false,
+                    "stem":false,
+                    "stem_dictionary": "",
+                    "truncate_len": 100
+                },{
+                    "facet":true,
+                    "index":true,
+                    "infix":false,
+                    "locale":"",
+                    "name":"value.b",
+                    "nested":true,
+                    "nested_array":2,
+                    "optional":false,
+                    "track_missing_values":false,
+                    "sort":true,
+                    "store":true,
+                    "type":"int32",
+                    "range_index":false,
+                    "stem":false,
+                    "stem_dictionary": "",
+                    "truncate_len": 100
+                }
+            ],
+            "id":1,
+            "metadata":{
+                "batch_job":"",
+                "indexed_from":"2023-04-20T00:00:00.000Z",
+                "total_docs":0
+            },
+            "name":"collection_meta",
+            "num_memory_shards":4,
+            "symbols_to_index":[],
+            "synonym_sets":[],
+            "curation_sets": [],
+            "token_separators":[]
+    })"_json;
+
+    auto actual_json = nlohmann::json::parse(collection_meta_json);
+    expected_meta_json["created_at"] = actual_json["created_at"];
+
+    ASSERT_EQ(expected_meta_json.dump(), actual_json.dump());
+
+    //try setting empty metadata
+    auto metadata = R"({
+        "metadata": {}
+    })"_json;
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+
+    req->params["collection"] = "collection_meta";
+    req->body = metadata.dump();
+    patch_update_collection(req, res);
+
+    expected_meta_json = R"(
+        {
+            "created_at":1705482381,
+            "default_sorting_field":"",
+            "enable_nested_fields":true,
+            "fallback_field_type":"",
+            "fields":[
+                {
+                    "facet":true,
+                    "index":true,
+                    "infix":false,
+                    "locale":"",
+                    "name":"value.color",
+                    "nested":true,
+                    "nested_array":2,
+                    "optional":false,
+                    "track_missing_values":false,
+                    "sort":false,
+                    "store":true,
+                    "type":"string",
+                    "range_index":false,
+                    "stem":false,
+                    "stem_dictionary": "",
+                    "truncate_len": 100
+                },
+                {
+                    "facet":true,
+                    "index":true,
+                    "infix":false,
+                    "locale":"",
+                    "name":"value.r",
+                    "nested":true,
+                    "nested_array":2,
+                    "optional":false,
+                    "track_missing_values":false,
+                    "sort":true,
+                    "store":true,
+                    "type":"int32",
+                    "range_index":false,
+                    "stem":false,
+                    "stem_dictionary": "",
+                    "truncate_len": 100
+                },{
+                    "facet":true,
+                    "index":true,
+                    "infix":false,
+                    "locale":"",
+                    "name":"value.g",
+                    "nested":true,
+                    "nested_array":2,
+                    "optional":false,
+                    "track_missing_values":false,
+                    "sort":true,
+                    "store":true,
+                    "type":"int32",
+                    "range_index":false,
+                    "stem":false,
+                    "stem_dictionary": "",
+                    "truncate_len": 100
+                },{
+                    "facet":true,
+                    "index":true,
+                    "infix":false,
+                    "locale":"",
+                    "name":"value.b",
+                    "nested":true,
+                    "nested_array":2,
+                    "optional":false,
+                    "track_missing_values":false,
+                    "sort":true,
+                    "store":true,
+                    "type":"int32",
+                    "range_index":false,
+                    "stem":false,
+                    "stem_dictionary": "",
+                    "truncate_len": 100
+                }
+            ],
+            "id":1,
+            "metadata":{
+            },
+            "name":"collection_meta",
+            "num_memory_shards":4,
+            "symbols_to_index":[],
+            "synonym_sets":[],
+            "curation_sets": [],
+            "token_separators":[]
+    })"_json;
+
+    store->get(Collection::get_meta_key("collection_meta"), collection_meta_json);
+    actual_json = nlohmann::json::parse(collection_meta_json);
+    expected_meta_json["created_at"] = actual_json["created_at"];
+    ASSERT_EQ(expected_meta_json.dump(), actual_json.dump());
+}
+
+TEST_F(CoreAPIUtilsTest, CollectionUpdateValidation) {
+    CollectionManager & collectionManager3 = CollectionManager::get_instance();
+
+    nlohmann::json schema = R"({
+        "name": "collection_meta",
+        "enable_nested_fields": true,
+        "fields": [
+          {"name": "value.color", "type": "string", "optional": false, "facet": true },
+          {"name": "value.r", "type": "int32", "optional": false, "facet": true },
+          {"name": "value.g", "type": "int32", "optional": false, "facet": true },
+          {"name": "value.b", "type": "int32", "optional": false, "facet": true }
+        ],
+        "metadata": {
+            "batch_job":"",
+            "indexed_from":"2023-04-20T00:00:00.000Z",
+            "total_docs": 0
+        }
+    })"_json;
+
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+    Collection* coll1 = op.get();
+
+    auto alter_schema = R"({
+        "metadata": {},
+        "fields":[
+            {"name": "value.color", "drop": true },
+           {"name": "value.color", "type": "string", "facet": true }
+        ]
+    })"_json;
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+
+    req->params["collection"] = "collection_meta";
+    req->body = alter_schema.dump();
+
+    ASSERT_TRUE(patch_update_collection(req, res));
+
+    alter_schema = R"({
+        "metadata": {},
+        "symbols_to_index":[]
+    })"_json;
+
+    req->body = alter_schema.dump();
+    ASSERT_FALSE(patch_update_collection(req, res));
+    ASSERT_EQ("{\"message\":\"Only `fields`, `metadata` and `synonym_sets` can be updated at the moment.\"}", res->body);
+
+    alter_schema = R"({
+        "symbols_to_index":[]
+    })"_json;
+
+    req->body = alter_schema.dump();
+    ASSERT_FALSE(patch_update_collection(req, res));
+    ASSERT_EQ("{\"message\":\"Only `fields`, `metadata` and `synonym_sets` can be updated at the moment.\"}", res->body);
+
+    alter_schema = R"({
+        "name": "collection_meta2",
+        "metadata": {},
+        "fields":[
+            {"name": "value.hue", "type": "int32", "optional": false, "facet": true }
+        ]
+    })"_json;
+
+    req->body = alter_schema.dump();
+    ASSERT_FALSE(patch_update_collection(req, res));
+    ASSERT_EQ("{\"message\":\"Only `fields`, `metadata` and `synonym_sets` can be updated at the moment.\"}", res->body);
+
+    alter_schema = R"({
+    })"_json;
+
+    req->body = alter_schema.dump();
+    ASSERT_FALSE(patch_update_collection(req, res));
+    ASSERT_EQ("{\"message\":\"Alter payload is empty.\"}", res->body);
+}
+
+TEST_F(CoreAPIUtilsTest, DocumentGetIncludeExcludeFields) {
+    std::vector<field> fields = {
+            field("title", field_types::STRING, false),
+            field("brand", field_types::STRING, true, true),
+            field("size", field_types::INT32, true, false),
+            field("colors", field_types::STRING_ARRAY, true, false),
+            field("rating", field_types::FLOAT, true, false)
+    };
+
+    auto coll1 = collectionManager.get_collection("coll1").get();
+    if(coll1 == nullptr) {
+        coll1 = collectionManager.create_collection("coll1", 4, fields, "rating").get();
+    }
+
+    nlohmann::json doc;
+    doc["id"] = "1";
+    doc["title"] = "Denim jeans";
+    doc["brand"] = "Spykar";
+    doc["size"] = 40;
+    doc["colors"] = {"blue", "black", "grey"};
+    doc["rating"] = 4.5;
+    coll1->add(doc.dump());
+
+    doc["id"] = "2";
+    doc["title"] = "Denim jeans";
+    doc["brand"] = "Levis";
+    doc["size"] = 42;
+    doc["colors"] = {"blue", "black"};
+    doc["rating"] = 4.4;
+    coll1->add(doc.dump());
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+
+    req->params["collection"] = "coll1";
+    req->params["id"] = "1";
+
+    //normal doc fetch
+    ASSERT_TRUE(get_fetch_document(req, res));
+    auto resp = nlohmann::json::parse(res->body);
+    ASSERT_EQ(6, resp.size());
+    ASSERT_TRUE(resp.contains("brand"));
+    ASSERT_TRUE(resp.contains("size"));
+    ASSERT_TRUE(resp.contains("colors"));
+    ASSERT_TRUE(resp.contains("rating"));
+    ASSERT_TRUE(resp.contains("id"));
+    ASSERT_TRUE(resp.contains("title"));
+
+    //include fields
+    req->params["include_fields"] = "brand,size,colors";
+
+    ASSERT_TRUE(get_fetch_document(req, res));
+    resp = nlohmann::json::parse(res->body);
+    ASSERT_EQ(3, resp.size());
+    ASSERT_TRUE(resp.contains("brand"));
+    ASSERT_TRUE(resp.contains("size"));
+    ASSERT_TRUE(resp.contains("colors"));
+    ASSERT_FALSE(resp.contains("rating"));
+
+    //exclude fields
+    req->params.erase("include_fields");
+    req->params["exclude_fields"] = "brand,size,colors";
+    ASSERT_TRUE(get_fetch_document(req, res));
+    resp = nlohmann::json::parse(res->body);
+    ASSERT_EQ(3, resp.size());
+    ASSERT_TRUE(resp.contains("id"));
+    ASSERT_TRUE(resp.contains("title"));
+    ASSERT_TRUE(resp.contains("rating"));
+    ASSERT_FALSE(resp.contains("brand"));
+
+    //both include and exclude fields
+    req->params["include_fields"] = "title,rating";
+    req->params["exclude_fields"] = "brand,size,colors";
+    ASSERT_TRUE(get_fetch_document(req, res));
+    resp = nlohmann::json::parse(res->body);
+    ASSERT_EQ(2, resp.size());
+    ASSERT_TRUE(resp.contains("title"));
+    ASSERT_TRUE(resp.contains("rating"));
+    ASSERT_FALSE(resp.contains("id"));
+}
+
+TEST_F(CoreAPIUtilsTest, DocumentGetIncludeExcludeReferenceFields) {
+    auto schema_json =
+            R"({
+                "name":  "books",
+                "fields": [
+                    {"name": "title", "type": "string"},
+                    {"name": "author_id", "type": "string", "reference": "authors.id", "async_reference": true}
+                ]
+            })"_json;
+    std::vector<nlohmann::json> documents = {
+            R"({
+                "id": "0",
+                "title": "Famous Five",
+                "author_id": "0"
+            })"_json,
+            R"({
+                "id": "1",
+                "title": "Space War Blues",
+                "author_id": "1"
+            })"_json,
+            R"({
+                "id": "2",
+                "title": "12:01 PM",
+                "author_id": "1"
+            })"_json,
+    };
+    auto collection_create_op = collectionManager.create_collection(schema_json);
+    ASSERT_TRUE(collection_create_op.ok());
+    for (auto const &json: documents) {
+        auto add_op = collection_create_op.get()->add(json.dump());
+        if (!add_op.ok()) {
+            LOG(INFO) << add_op.error();
+        }
+        ASSERT_TRUE(add_op.ok());
+    }
+
+    schema_json =
+            R"({
+                "name": "authors",
+                "fields": [
+                    {"name": "first_name", "type": "string"},
+                    {"name": "last_name", "type": "string"}
+                ]
+            })"_json;
+    documents = {
+            R"({
+                "id": "0",
+                "first_name": "Enid",
+                "last_name": "Blyton"
+            })"_json,
+            R"({
+                "id": "1",
+                "first_name": "Richard",
+                "last_name": "Lupoff"
+            })"_json,
+            R"({
+                "id": "2",
+                "first_name": "William",
+                "last_name": "Shakespeare"
+            })"_json,
+    };
+    collection_create_op = collectionManager.create_collection(schema_json);
+    ASSERT_TRUE(collection_create_op.ok());
+    for (auto const &json: documents) {
+        auto add_op = collection_create_op.get()->add(json.dump());
+        if (!add_op.ok()) {
+            LOG(INFO) << add_op.error();
+        }
+        ASSERT_TRUE(add_op.ok());
+    }
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+
+    req->params["collection"] = "books";
+    req->params["id"] = "1";
+    req->params["include_fields"] = "id, $authors(id)";
+
+    ASSERT_TRUE(get_fetch_document(req, res));
+    auto resp = nlohmann::json::parse(res->body);
+    ASSERT_EQ(2, resp.size());
+    ASSERT_TRUE(resp.contains("id"));
+    ASSERT_TRUE(resp.contains("authors"));
+    ASSERT_TRUE(resp["authors"].contains("id"));
+
+    req->params["include_fields"] = "id, $authors(*)";
+    req->params["exclude_fields"] = "$authors(first_name, last_name)";
+    ASSERT_TRUE(get_fetch_document(req, res));
+    resp = nlohmann::json::parse(res->body);
+    ASSERT_EQ(2, resp.size());
+    ASSERT_TRUE(resp.contains("id"));
+    ASSERT_TRUE(resp.contains("authors"));
+    ASSERT_TRUE(resp["authors"].contains("id"));
+}
+
+TEST_F(CoreAPIUtilsTest, CollectionSchemaResponseWithStoreValue) {
+    auto schema = R"({
+            "name": "collection3",
+            "enable_nested_fields": true,
+            "fields": [
+                {"name": "title", "type": "string", "locale": "en", "store":false},
+                {"name": "points", "type": "int32"}
+            ],
+            "default_sorting_field": "points"
+        })"_json;
+
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(op.ok());
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+
+    req->params["collection"] = "collection3";
+    ASSERT_TRUE(get_collection_summary(req, res));
+
+    auto res_json = nlohmann::json::parse(res->body);
+
+    auto expected_json = R"({
+        "default_sorting_field":"points",
+        "enable_nested_fields":true,
+        "fields":[
+                {
+                    "facet":false,
+                    "index":true,
+                    "infix":false,
+                    "locale":"en",
+                    "name":"title",
+                    "optional":false,
+                    "track_missing_values":false,
+                    "sort":false,
+                    "stem":false,
+                    "store":false,
+                    "type":"string",
+                    "stem_dictionary": "",
+                    "truncate_len":100
+                },
+                {
+                    "facet":false,
+                    "index":true,
+                    "infix":false,
+                    "locale":"",
+                    "name":"points",
+                    "optional":false,
+                    "track_missing_values":false,
+                    "sort":true,
+                    "stem":false,
+                    "store":true,
+                    "type":"int32",
+                    "stem_dictionary": "",
+                    "truncate_len":100
+                }],
+                "name":"collection3",
+                "num_documents":0,
+                "symbols_to_index":[],
+                "synonym_sets":[],
+                "curation_sets": [],
+                "token_separators":[]
+    })"_json;
+
+    expected_json["created_at"] = res_json["created_at"];
+    ASSERT_EQ(expected_json, res_json);
+}
+
+TEST_F(CoreAPIUtilsTest, TruncateFieldValidation) {
+    // `truncate_len` must be an integer
+    nlohmann::json schema = R"({
+        "name": "truncate_validation",
+        "fields": [
+            {"name": "title", "type": "string", "truncate_len": "false"}
+        ]
+    })"_json;
+
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_FALSE(op.ok());
+    ASSERT_EQ("The `truncate_len` property of the field `title` should be a non-negative integer.", op.error());
+}
+
+TEST_F(CoreAPIUtilsTest, TruncateFieldValidationNegative) {
+    nlohmann::json schema = R"({
+        "name": "truncate_validation_negative",
+        "fields": [
+            {"name": "title", "type": "string", "truncate_len": -1}
+        ]
+    })"_json;
+
+    auto op = collectionManager.create_collection(schema);
+    ASSERT_FALSE(op.ok());
+    ASSERT_EQ("The `truncate_len` property of the field `title` should be a non-negative integer.", op.error());
+}
+
+TEST_F(CoreAPIUtilsTest, StatefulRemoveDocsWithReturnValues) {
+    Collection *coll1;
+
+    std::vector<field> fields = {field("title", field_types::STRING, false),
+                                 field("points", field_types::INT32, false),};
+
+    coll1 = collectionManager.get_collection("coll1").get();
+    if(coll1 == nullptr) {
+        coll1 = collectionManager.create_collection("coll1", 2, fields, "points").get();
+    }
+
+    for(size_t i=0; i<10; i++) {
+        nlohmann::json doc;
+
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+
+        coll1->add(doc.dump());
+    }
+
+    bool done;
+    deletion_state_t deletion_state;
+    deletion_state.collection = coll1;
+    deletion_state.num_removed = 0;
+    deletion_state.return_doc = true;
+    deletion_state.return_id = true;
+
+    // Single document match with return values
+    filter_result_t filter_results;
+    coll1->get_filter_ids_with_lock("points: 5", filter_results);
+    deletion_state.index_ids.emplace_back(filter_results.count, filter_results.docs);
+    filter_results.docs = nullptr;
+    for(size_t i=0; i<deletion_state.index_ids.size(); i++) {
+        deletion_state.offsets.push_back(0);
+    }
+
+    stateful_remove_docs(&deletion_state, 5, done);
+    ASSERT_EQ(1, deletion_state.num_removed);
+    ASSERT_TRUE(done);
+    ASSERT_EQ(1, deletion_state.removed_docs.size());
+    ASSERT_EQ(1, deletion_state.removed_ids.size());
+    
+    ASSERT_EQ("5", deletion_state.removed_docs[0]["id"]);
+    ASSERT_EQ("Title 5", deletion_state.removed_docs[0]["title"]);
+    ASSERT_EQ(5, deletion_state.removed_docs[0]["points"]);
+    ASSERT_EQ("5", deletion_state.removed_ids[0]);
+
+    // Multiple document match with return values
+    for(auto& kv: deletion_state.index_ids) {
+        delete [] kv.second;
+    }
+    deletion_state.index_ids.clear();
+    deletion_state.offsets.clear();
+    deletion_state.num_removed = 0;
+    deletion_state.removed_docs.clear();
+    deletion_state.removed_ids.clear();
+
+    coll1->get_filter_ids_with_lock("points:>= 6", filter_results);
+    deletion_state.index_ids.emplace_back(filter_results.count, filter_results.docs);
+    filter_results.docs = nullptr;
+    for(size_t i=0; i<deletion_state.index_ids.size(); i++) {
+        deletion_state.offsets.push_back(0);
+    }
+
+    stateful_remove_docs(&deletion_state, 2, done);
+    ASSERT_EQ(2, deletion_state.num_removed);
+    ASSERT_FALSE(done);
+    ASSERT_EQ(2, deletion_state.removed_docs.size());
+    ASSERT_EQ(2, deletion_state.removed_ids.size());
+
+    stateful_remove_docs(&deletion_state, 10, done);
+    ASSERT_EQ(4, deletion_state.num_removed);
+    ASSERT_TRUE(done);
+    ASSERT_EQ(4, deletion_state.removed_docs.size());
+    ASSERT_EQ(4, deletion_state.removed_ids.size());
+
+    // Check return_doc=true, return_id=false
+    for(auto& kv: deletion_state.index_ids) {
+        delete [] kv.second;
+    }
+    deletion_state.index_ids.clear();
+    deletion_state.offsets.clear();
+    deletion_state.num_removed = 0;
+    deletion_state.removed_docs.clear();
+    deletion_state.removed_ids.clear();
+    deletion_state.return_doc = true;
+    deletion_state.return_id = false;
+
+    // Add documents back
+    for(size_t i=0; i<10; i++) {
+        nlohmann::json doc;
+
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+
+        coll1->add(doc.dump());
+    }
+
+    coll1->get_filter_ids_with_lock("points: 3", filter_results);
+    deletion_state.index_ids.emplace_back(filter_results.count, filter_results.docs);
+    filter_results.docs = nullptr;
+    for(size_t i=0; i<deletion_state.index_ids.size(); i++) {
+        deletion_state.offsets.push_back(0);
+    }
+
+    stateful_remove_docs(&deletion_state, 5, done);
+    ASSERT_EQ(1, deletion_state.num_removed);
+    ASSERT_TRUE(done);
+    ASSERT_EQ(1, deletion_state.removed_docs.size());
+    ASSERT_EQ(0, deletion_state.removed_ids.size());
+    ASSERT_EQ("3", deletion_state.removed_docs[0]["id"]);
+
+    // Check return_doc=false, return_id=true
+    for(auto& kv: deletion_state.index_ids) {
+        delete [] kv.second;
+    }
+    deletion_state.index_ids.clear();
+    deletion_state.offsets.clear();
+    deletion_state.num_removed = 0;
+    deletion_state.removed_docs.clear();
+    deletion_state.removed_ids.clear();
+    deletion_state.return_doc = false;
+    deletion_state.return_id = true;
+
+    // Add documents back
+    for(size_t i=0; i<10; i++) {
+        nlohmann::json doc;
+
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+
+        coll1->add(doc.dump());
+    }
+
+    coll1->get_filter_ids_with_lock("points: 4", filter_results);
+    deletion_state.index_ids.emplace_back(filter_results.count, filter_results.docs);
+    filter_results.docs = nullptr;
+    for(size_t i=0; i<deletion_state.index_ids.size(); i++) {
+        deletion_state.offsets.push_back(0);
+    }
+
+    stateful_remove_docs(&deletion_state, 5, done);
+    ASSERT_EQ(1, deletion_state.num_removed);
+    ASSERT_TRUE(done);
+    ASSERT_EQ(0, deletion_state.removed_docs.size());
+    ASSERT_EQ(1, deletion_state.removed_ids.size());
+    ASSERT_EQ("4", deletion_state.removed_ids[0]);
+
+    collectionManager.drop_collection("coll1");
+}
+
+TEST_F(CoreAPIUtilsTest, RemoveIfFoundManyBasicBehavior) {
+    Collection *coll1;
+    std::vector<field> fields = {field("title", field_types::STRING, false),
+                                 field("points", field_types::INT32, false),};
+
+    coll1 = collectionManager.get_collection("coll1").get();
+    if(coll1 == nullptr) {
+        coll1 = collectionManager.create_collection("coll1", 2, fields, "points").get();
+    }
+
+    for(size_t i = 0; i < 10; i++) {
+        nlohmann::json doc;
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+        ASSERT_TRUE(coll1->add(doc.dump()).ok());
+    }
+
+    auto seq_1_op = coll1->doc_id_to_seq_id("1");
+    auto seq_2_op = coll1->doc_id_to_seq_id("2");
+    ASSERT_TRUE(seq_1_op.ok());
+    ASSERT_TRUE(seq_2_op.ok());
+
+    std::vector<uint32_t> seq_ids = {
+        seq_1_op.get(),
+        seq_2_op.get(),
+        static_cast<uint32_t>(seq_2_op.get() + 10000)
+    };
+
+    std::vector<nlohmann::json> removed_docs;
+    auto remove_op = coll1->remove_if_found_many(seq_ids, true, &removed_docs);
+    ASSERT_TRUE(remove_op.ok());
+    ASSERT_EQ(2, remove_op.get());
+    ASSERT_EQ(2, removed_docs.size());
+    ASSERT_EQ(8, coll1->get_num_documents());
+
+    bool found_1 = false;
+    bool found_2 = false;
+    for(const auto& removed_doc: removed_docs) {
+        if(removed_doc["id"] == "1") {
+            found_1 = true;
+        }
+
+        if(removed_doc["id"] == "2") {
+            found_2 = true;
+        }
+    }
+    ASSERT_TRUE(found_1);
+    ASSERT_TRUE(found_2);
+
+    auto get_1_op = coll1->get("1");
+    auto get_2_op = coll1->get("2");
+    auto get_3_op = coll1->get("3");
+    ASSERT_FALSE(get_1_op.ok());
+    ASSERT_FALSE(get_2_op.ok());
+    ASSERT_EQ(404, get_1_op.code());
+    ASSERT_EQ(404, get_2_op.code());
+    ASSERT_TRUE(get_3_op.ok());
+
+    collectionManager.drop_collection("coll1");
+}
+
+TEST_F(CoreAPIUtilsTest, RemoveIfFoundManyWithCascadeReference) {
+    auto products_schema = R"({
+        "name": "Products",
+        "fields": [
+            {"name": "product_id", "type": "string"},
+            {"name": "name", "type": "string"}
+        ]
+    })"_json;
+
+    auto orders_schema = R"({
+        "name": "Orders",
+        "fields": [
+            {"name": "order_id", "type": "string"},
+            {"name": "product_id", "type": "string", "reference": "Products.product_id"}
+        ]
+    })"_json;
+
+    auto products_op = collectionManager.create_collection(products_schema);
+    ASSERT_TRUE(products_op.ok());
+
+    auto orders_op = collectionManager.create_collection(orders_schema);
+    ASSERT_TRUE(orders_op.ok());
+
+    auto products = products_op.get();
+    auto orders = orders_op.get();
+
+    ASSERT_TRUE(products->add(R"({"id":"p1","product_id":"p1","name":"shampoo"})").ok());
+    ASSERT_TRUE(orders->add(R"({"id":"o1","order_id":"o1","product_id":"p1"})").ok());
+
+    auto product_seq_op = products->doc_id_to_seq_id("p1");
+    ASSERT_TRUE(product_seq_op.ok());
+
+    auto remove_op = products->remove_if_found_many({product_seq_op.get()}, true);
+    ASSERT_TRUE(remove_op.ok());
+    ASSERT_EQ(1, remove_op.get());
+
+    auto product_get_op = products->get("p1");
+    auto order_get_op = orders->get("o1");
+    ASSERT_FALSE(product_get_op.ok());
+    ASSERT_FALSE(order_get_op.ok());
+    ASSERT_EQ(404, product_get_op.code());
+    ASSERT_EQ(404, order_get_op.code());
+
+    collectionManager.drop_collection("Orders");
+    collectionManager.drop_collection("Products");
+}
+
+TEST_F(CoreAPIUtilsTest, StatefulRemoveDocsUsesBoundedInternalBatch) {
+    Collection *coll1;
+    std::vector<field> fields = {field("title", field_types::STRING, false),
+                                 field("points", field_types::INT32, false),};
+
+    coll1 = collectionManager.get_collection("coll1").get();
+    if(coll1 == nullptr) {
+        coll1 = collectionManager.create_collection("coll1", 2, fields, "points").get();
+    }
+
+    for(size_t i = 0; i < 1205; i++) {
+        nlohmann::json doc;
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+        ASSERT_TRUE(coll1->add(doc.dump()).ok());
+    }
+
+    deletion_state_t deletion_state;
+    deletion_state.collection = coll1;
+    deletion_state.num_removed = 0;
+
+    filter_result_t filter_results;
+    auto filter_op = coll1->get_filter_ids_with_lock("points:>= 0", filter_results);
+    ASSERT_TRUE(filter_op.ok());
+    deletion_state.index_ids.emplace_back(filter_results.count, filter_results.docs);
+    filter_results.docs = nullptr;
+    deletion_state.offsets.push_back(0);
+
+    bool done = false;
+    auto remove_op = stateful_remove_docs(&deletion_state, 1000000000, done);
+    ASSERT_TRUE(remove_op.ok());
+    ASSERT_EQ(1000, deletion_state.num_removed);
+    ASSERT_FALSE(done);
+
+    remove_op = stateful_remove_docs(&deletion_state, 1000000000, done);
+    ASSERT_TRUE(remove_op.ok());
+    ASSERT_EQ(1205, deletion_state.num_removed);
+    ASSERT_TRUE(done);
+    ASSERT_EQ(0, coll1->get_num_documents());
+
+    collectionManager.drop_collection("coll1");
+}
+
+TEST_F(CoreAPIUtilsTest, RemoveDocumentsWithReturnValues) {
+    Collection *coll1;
+
+    std::vector<field> fields = {field("title", field_types::STRING, false),
+                                 field("points", field_types::INT32, false),};
+
+    coll1 = collectionManager.get_collection("coll1").get();
+    if(coll1 == nullptr) {
+        coll1 = collectionManager.create_collection("coll1", 2, fields, "points").get();
+    }
+
+    for(size_t i=0; i<10; i++) {
+        nlohmann::json doc;
+
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+
+        coll1->add(doc.dump());
+    }
+
+    // Test with both return_doc and return_id
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+    
+    req->params["collection"] = "coll1";
+    req->params["filter_by"] = "points: 5";
+    req->params["return_doc"] = "true";
+    req->params["return_id"] = "true";
+
+    del_remove_documents(req, res);
+    
+    nlohmann::json res_json = nlohmann::json::parse(res->body);
+    ASSERT_EQ(1, res_json["num_deleted"].get<size_t>());
+    ASSERT_TRUE(res_json.contains("documents"));
+    ASSERT_TRUE(res_json.contains("ids"));
+    ASSERT_EQ(1, res_json["documents"].size());
+    ASSERT_EQ(1, res_json["ids"].size());
+    ASSERT_EQ("5", res_json["documents"][0]["id"]);
+    ASSERT_EQ("5", res_json["ids"][0]);
+
+    // Test with only return_doc
+    for(size_t i=0; i<10; i++) {
+        nlohmann::json doc;
+
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+
+        coll1->add(doc.dump());
+    }
+
+    req = std::make_shared<http_req>();
+    res = std::make_shared<http_res>(nullptr);
+    
+    req->params["collection"] = "coll1";
+    req->params["filter_by"] = "points: 4";
+    req->params["return_doc"] = "true";
+
+    del_remove_documents(req, res);
+    
+    res_json = nlohmann::json::parse(res->body);
+    ASSERT_EQ(1, res_json["num_deleted"].get<size_t>());
+    ASSERT_TRUE(res_json.contains("documents"));
+    ASSERT_FALSE(res_json.contains("ids"));
+    ASSERT_EQ(1, res_json["documents"].size());
+    ASSERT_EQ("4", res_json["documents"][0]["id"]);
+
+    // Test with only return_id
+    for(size_t i=0; i<10; i++) {
+        nlohmann::json doc;
+
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+
+        coll1->add(doc.dump());
+    }
+
+    req = std::make_shared<http_req>();
+    res = std::make_shared<http_res>(nullptr);
+    
+    req->params["collection"] = "coll1";
+    req->params["filter_by"] = "points: 3";
+    req->params["return_id"] = "true";
+
+    del_remove_documents(req, res);
+    
+    res_json = nlohmann::json::parse(res->body);
+    ASSERT_EQ(1, res_json["num_deleted"].get<size_t>());
+    ASSERT_FALSE(res_json.contains("documents"));
+    ASSERT_TRUE(res_json.contains("ids"));
+    ASSERT_EQ(1, res_json["ids"].size());
+    ASSERT_EQ("3", res_json["ids"][0]);
+
+    // Test with multiple documents
+    for(size_t i=0; i<10; i++) {
+        nlohmann::json doc;
+
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+
+        coll1->add(doc.dump());
+    }
+
+    req = std::make_shared<http_req>();
+    res = std::make_shared<http_res>(nullptr);
+    
+    req->params["collection"] = "coll1";
+    req->params["filter_by"] = "points:>= 7";
+    req->params["return_doc"] = "true";
+    req->params["return_id"] = "true";
+
+    del_remove_documents(req, res);
+    
+    res_json = nlohmann::json::parse(res->body);
+    ASSERT_EQ(3, res_json["num_deleted"].get<size_t>());
+    ASSERT_TRUE(res_json.contains("documents"));
+    ASSERT_TRUE(res_json.contains("ids"));
+    ASSERT_EQ(3, res_json["documents"].size());
+    ASSERT_EQ(3, res_json["ids"].size());
+
+    // Test without return parameters
+    for(size_t i=0; i<10; i++) {
+        nlohmann::json doc;
+
+        doc["id"] = std::to_string(i);
+        doc["title"] = "Title " + std::to_string(i);
+        doc["points"] = i;
+
+        coll1->add(doc.dump());
+    }
+
+    req = std::make_shared<http_req>();
+    res = std::make_shared<http_res>(nullptr);
+    
+    req->params["collection"] = "coll1";
+    req->params["filter_by"] = "points: 2";
+
+    del_remove_documents(req, res);
+    
+    res_json = nlohmann::json::parse(res->body);
+    ASSERT_EQ(1, res_json["num_deleted"].get<size_t>());
+    ASSERT_FALSE(res_json.contains("documents"));
+    ASSERT_FALSE(res_json.contains("ids"));
+
+    collectionManager.drop_collection("coll1");
+}
+
+TEST_F(CoreAPIUtilsTest, CurlVersionSupportsOnlyHTTP1) {
+    ASSERT_FALSE(HttpServer::curl_only_http1(R"(FME/2023.7.48.23764  libcurl/8.4.0 (OpenSSL/3.0.11)
+                    Schannel zlib/1.2.13 WinIDN libssh2/1.11.0 nghttp2/1.44.0)"));
+    ASSERT_TRUE(HttpServer::curl_only_http1(R"(curl/7.15.1 (i386-pc-win32) libcurl/7.15.1 OpenSSL/0.9.8a zlib/1.2.3)"));
+    ASSERT_FALSE(HttpServer::curl_only_http1(R"(curl/7.81.0 (x86_64-pc-linux-gnu)"));
+    ASSERT_FALSE(HttpServer::curl_only_http1(R"(curl/100.81.28 (x86_64-pc-linux-gnu)"));
+}
+
+TEST_F(CoreAPIUtilsTest, UnionRemoveDuplicates) {
+    nlohmann::json schema = R"({
+        "name": "coll1",
+        "fields": [
+            {"name": "name", "type": "string"}
+        ]
+    })"_json;
+
+    auto collection_create_op = collectionManager.create_collection(schema);
+    ASSERT_TRUE(collection_create_op.ok());
+    auto coll1 = collection_create_op.get();
+
+    nlohmann::json doc = R"({"name": "anti dandruff shampoo" })"_json;
+    auto add_op = coll1->add(doc.dump());
+    ASSERT_TRUE(add_op.ok());
+
+    doc = R"({"name": "sliky hair shampoo" })"_json;
+    add_op = coll1->add(doc.dump());
+    ASSERT_TRUE(add_op.ok());
+
+    nlohmann::json searches = R"([
+                    {
+                        "collection": "coll1",
+                        "q": "shampoo",
+                        "query_by": "name"
+                    },
+                    {
+                        "collection": "coll1",
+                        "q": "dandruff",
+                        "query_by": "name"
+                    },
+                    {
+                        "collection": "coll1",
+                        "q": "silky",
+                        "query_by": "name"
+                    },
+                    {
+                        "collection": "coll1",
+                        "q": "hair",
+                        "query_by": "name"
+                    }
+                ])"_json;
+
+    std::shared_ptr<http_req> req = std::make_shared<http_req>();
+    std::shared_ptr<http_res> res = std::make_shared<http_res>(nullptr);
+
+    nlohmann::json body;
+
+    body["union"] = true;
+    body["remove_duplicates"] = true;
+    body["searches"] = searches;
+
+    req->body = body.dump();
+    nlohmann::json embedded_params;
+    req->embedded_params_vec = std::vector<nlohmann::json>(4, embedded_params);
+
+    post_multi_search(req, res);
+    nlohmann::json response = nlohmann::json::parse(res->body);
+    ASSERT_EQ(2, response["found"]);
+    ASSERT_EQ(2, response["hits"].size());
+    ASSERT_EQ("1", response["hits"][0]["document"]["id"]);
+    ASSERT_EQ("0", response["hits"][1]["document"]["id"]);
+
+    //check setting remove_duplicates to false
+    req->params.clear();
+    body.clear();
+    body["searches"] = searches;
+    body["union"] = true;
+    body["remove_duplicates"] = false;
+    req->body = body.dump();
+
+    post_multi_search(req, res);
+    response = nlohmann::json::parse(res->body);
+    ASSERT_EQ(5, response["found"].get<size_t>());
+    ASSERT_EQ(5, response["hits"].size());
+    ASSERT_EQ("1", response["hits"][0]["document"]["id"]);
+    ASSERT_EQ("0", response["hits"][1]["document"]["id"]);
+    ASSERT_EQ("0", response["hits"][2]["document"]["id"]);
+    ASSERT_EQ("1", response["hits"][3]["document"]["id"]);
+    ASSERT_EQ("1", response["hits"][4]["document"]["id"]);
+}
