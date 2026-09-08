@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 5,
+  "processed": 6,
   "records": [
     {
       "bytes": 312360273,
@@ -66,11 +66,24 @@
       "source_url": "https://github.com/openbao/openbao",
       "status": "GAP",
       "tree_sha256": "b9313af6f1319ef37270d03247dc298a0aaf47d4fc7ab561adf39a92c7c924b4"
+    },
+    {
+      "bytes": 1101618,
+      "destination": "SOPS",
+      "error": "READ_BACK_HASH_GAP:96a0cc17c6744ad9193213b66d40b4193e71b4a33b993d5f6f2c627be6e3b554!=c560868ff4c878f580f42b7c8b90f4639895b4ddbd4d0ee72017bfebc7553a29",
+      "files": 156,
+      "index": 6,
+      "n": 93,
+      "name": "SOPS",
+      "source_commit": "ba5d2731a3ab154c92837d41278a067b53673e30",
+      "source_url": "https://github.com/getsops/sops",
+      "status": "GAP",
+      "tree_sha256": "c560868ff4c878f580f42b7c8b90f4639895b4ddbd4d0ee72017bfebc7553a29"
     }
   ],
   "states": {
     "COMPLETE": 3,
-    "GAP": 2,
+    "GAP": 3,
     "VERIFIED_EXISTING": 0
   }
 }
