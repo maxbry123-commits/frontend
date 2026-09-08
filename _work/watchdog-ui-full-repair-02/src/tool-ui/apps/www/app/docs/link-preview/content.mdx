@@ -1,0 +1,136 @@
+import { DocsHeader } from "../_components/docs-header";
+import { LinkPreview } from "@/components/tool-ui/link-preview";
+
+<DocsHeader
+  title="Link Preview"
+  description="Rich link previews with Open Graph data."
+  mdxPath="app/docs/link-preview/content.mdx"
+/>
+
+Every shared link is a black box until someone clicks it. The user has no idea if the URL leads to documentation, a blog post, or a 404. LinkPreview renders fetched URLs as clickable cards with the page title, description, image, and favicon, the same kind of rich embed you see in Slack or iMessage. Without it, the user sees a bare href or a blob of Open Graph JSON.
+
+**Role:** Information. For displaying data without user input. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="link-preview" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `LinkPreview` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { LinkPreview } from "@/components/tool-ui/link-preview";
+
+export function Example() {
+  return (
+    <LinkPreview
+      id="link-preview-example"
+      href="https://react.dev/reference/rsc/server-components"
+      title="React Server Components"
+      description="Server Components are a new type of Component that renders ahead of time."
+      image="https://images.unsplash.com/photo-1633356122544-f134324a6cee"
+      domain="react.dev"
+      ratio="16:9"
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Registration tells assistant-ui which component to render when a tool returns link metadata. Without it, tool results appear as raw JSON.
+
+```tsx
+import { type Toolkit } from "@assistant-ui/react";
+import { LinkPreview } from "@/components/tool-ui/link-preview";
+import { safeParseSerializableLinkPreview } from "@/components/tool-ui/link-preview/schema";
+
+export const toolkit: Toolkit = {
+  showLinkPreview: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableLinkPreview(result);
+      if (!parsed) {
+        return null;
+      }
+      return <LinkPreview {...parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="Link" title="Open Graph metadata">
+    Title, description, and image pulled from Open Graph tags
+  </Feature>
+  <Feature icon="Globe" title="Domain with favicon">
+    Site favicon next to the domain name
+  </Feature>
+  <Feature icon="AspectRatio" title="Flexible aspect ratios">
+    Auto, 1:1, 4:3, 16:9, and 9:16 image crops
+  </Feature>
+  <Feature icon="MousePointerClick" title="External actions">
+    Compose action buttons below the preview card
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this tool UI instance",
+      type: "string",
+      required: true,
+    },
+    href: {
+      description: "Target URL",
+      type: "string",
+      required: true,
+    },
+    title: { description: "Link title", type: "string" },
+    description: { description: "Link description", type: "string" },
+    image: { description: "Open Graph image URL", type: "string" },
+    domain: { description: "Source domain", type: "string" },
+    favicon: { description: "Favicon URL", type: "string" },
+    ratio: {
+      description: "Image aspect ratio",
+      type: "'auto' | '1:1' | '4:3' | '16:9' | '9:16'",
+      default: "'16:9'",
+    },
+    fit: {
+      description: "Image object fit mode",
+      type: "'cover' | 'contain'",
+      default: "'cover'",
+    },
+    createdAt: { description: "Creation timestamp (ISO 8601)", type: "string" },
+  }}
+/>
+
+Use [`ToolUI.LocalActions`](/docs/actions) to compose external actions next to `LinkPreview`.
+
+## Related
+
+- [Citation](/docs/citation): both surface external references, but Citation is optimized for source attribution with snippets
+- [Image](/docs/image): for when the link target is primarily visual content

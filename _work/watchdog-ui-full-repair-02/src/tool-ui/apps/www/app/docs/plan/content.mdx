@@ -1,0 +1,220 @@
+import { DocsHeader } from "../_components/docs-header";
+
+<DocsHeader
+  title="Plan"
+  description="Display step-by-step task workflows."
+  mdxPath="app/docs/plan/content.mdx"
+/>
+
+When the assistant breaks work into steps (a deployment pipeline, a research plan, a migration checklist) the Plan component turns that structure into a visual progress tracker. Each phase shows its status, and the overall shape of the work is scannable at a glance.
+
+**Role:** State. Shows internal activity and progress. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="plan" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Create a backend tool that returns a serializable plan payload.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+// Backend tool
+import { tool } from "ai";
+
+const showPlan = tool({
+  description: "Display an implementation plan to the user",
+  inputSchema: {
+    type: "object",
+    properties: { task: { type: "string" } },
+    required: ["task"],
+    additionalProperties: false,
+  },
+  async execute({ task }) {
+    return {
+      id: "plan-1",
+      title: "Implementation Plan",
+      description: "Steps to complete: " + task,
+      todos: [
+        { id: "1", label: "Analyze requirements", status: "completed" },
+        { id: "2", label: "Implement solution", status: "in_progress" },
+        { id: "3", label: "Write tests", status: "pending" },
+      ],
+    };
+  },
+});
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Drop this into your runtime provider so tool results render as `Plan`.
+
+```tsx
+import { type Toolkit } from "@assistant-ui/react";
+import { Plan } from "@/components/tool-ui/plan";
+import { safeParseSerializablePlan } from "@/components/tool-ui/plan/schema";
+import { ToolUI } from "@/components/tool-ui/shared";
+
+export const toolkit: Toolkit = {
+  showPlan: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializablePlan(result);
+      if (!parsed) {
+        return null;
+      }
+      return (
+        <ToolUI id={parsed.id}>
+          <ToolUI.Surface>
+            <Plan {...parsed} />
+          </ToolUI.Surface>
+          <ToolUI.Actions>
+            <ToolUI.LocalActions
+              actions={[
+                { id: "approve", label: "Approve Plan" },
+                {
+                  id: "revise",
+                  label: "Request Changes",
+                  variant: "secondary",
+                },
+              ]}
+              onAction={(actionId) => console.log(actionId)}
+            />
+          </ToolUI.Actions>
+        </ToolUI>
+      );
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="BarChart3" title="Progress visualization">
+    Progress bar and "X of Y complete" at a glance
+  </Feature>
+  <Feature icon="CircleCheck" title="Status indicators">
+    Distinct icons for pending, in progress, completed, and cancelled
+  </Feature>
+  <Feature icon="Expand" title="Expandable details">
+    Click any todo to reveal additional context
+  </Feature>
+  <Feature icon="PartyPopper" title="Completion celebration">
+    Visual feedback when all tasks complete
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this component",
+      type: "string",
+      required: true,
+    },
+    title: {
+      description: "Plan title displayed as the header",
+      type: "string",
+      required: true,
+    },
+    description: {
+      description: "Context description below the title",
+      type: "string",
+    },
+    todos: {
+      description: "Array of todo items (min 1)",
+      type: "PlanTodo[]",
+      required: true,
+    },
+    maxVisibleTodos: {
+      description: "Items to show before collapsing",
+      type: "number",
+      default: "4",
+    },
+    className: { description: "Additional CSS classes", type: "string" },
+  }}
+/>
+
+Use [`ToolUI.LocalActions`](/docs/actions) to compose external actions below `Plan`.
+
+### Compact Variant
+
+Use `Plan.Compact` for a steps-only card body:
+
+- No title/description header
+- No progress summary or progress bar
+- No muted inner container
+- No embedded footer actions
+
+## Todo Item Schema
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique todo identifier",
+      type: "string",
+      required: true,
+    },
+    label: { description: "Display text", type: "string", required: true },
+    status: {
+      description: "Current state",
+      type: "'pending' | 'in_progress' | 'completed' | 'cancelled'",
+      required: true,
+    },
+    description: { description: "Expandable detail text", type: "string" },
+  }}
+/>
+
+## Status States
+
+<TypeTable
+  type={{
+    pending: {
+      description: "Circle outline icon, muted color",
+      type: "Not started",
+    },
+    in_progress: {
+      description:
+        "Spinner icon with subtle highlight ring, shimmer text effect",
+      type: "Active",
+    },
+    completed: {
+      description: "Checkmark icon with emphasized completion state",
+      type: "Done",
+    },
+    cancelled: {
+      description: "X circle icon with destructive emphasis",
+      type: "Skipped",
+    },
+  }}
+/>
+
+## Accessibility
+
+- Decorative motion classes (spinner rotation, shimmer, enter/exit effects) are gated behind `motion-safe` variants
+- The progress bar fill uses a base CSS transition, so completion updates can still animate unless your app adds `motion-reduce` overrides
+- Functionality and content remain available regardless of motion preferences
+
+## Related
+
+- [Progress Tracker](/docs/progress-tracker): real-time status for operations like build/test/deploy

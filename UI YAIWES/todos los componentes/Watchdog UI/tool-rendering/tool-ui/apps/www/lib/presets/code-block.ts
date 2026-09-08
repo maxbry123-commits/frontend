@@ -1,0 +1,234 @@
+import type { SerializableCodeBlock } from "@/components/tool-ui/code-block";
+import type { SerializableAction } from "@/components/tool-ui/shared";
+import type { PresetWithCodeGen } from "./types";
+
+export type CodeBlockPresetName =
+  | "typescript"
+  | "python"
+  | "json"
+  | "bash"
+  | "highlighted"
+  | "collapsible"
+  | "with-actions";
+
+function escape(value: string): string {
+  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/`/g, "\\`");
+}
+
+interface CodeBlockPresetData extends SerializableCodeBlock {
+  localActions?: SerializableAction[];
+}
+
+function generateCodeBlockCode(data: CodeBlockPresetData): string {
+  const props: string[] = [];
+
+  props.push(`  id="${data.id}"`);
+  props.push(`  code={\`${escape(data.code)}\`}`);
+  props.push(`  language="${data.language}"`);
+  props.push(`  lineNumbers="${data.lineNumbers}"`);
+
+  if (data.filename) {
+    props.push(`  filename="${data.filename}"`);
+  }
+
+  if (data.highlightLines && data.highlightLines.length > 0) {
+    props.push(`  highlightLines={[${data.highlightLines.join(", ")}]}`);
+  }
+
+  if (data.maxCollapsedLines) {
+    props.push(`  maxCollapsedLines={${data.maxCollapsedLines}}`);
+  }
+
+  const codeBlock = `<CodeBlock.Root\n${props.join("\n")}\n>\n  <CodeBlock.Header />\n  <CodeBlock.Content />\n  <CodeBlock.CollapseToggle />\n</CodeBlock.Root>`;
+  if (!data.localActions || data.localActions.length === 0) {
+    return codeBlock;
+  }
+
+  return `${codeBlock}
+<LocalActions
+  surfaceId="${data.id}"
+  actions={${JSON.stringify(data.localActions, null, 2).replace(/\n/g, "\n  ")}}
+  onAction={(actionId) => console.log("Local action:", actionId)}
+/>`;
+}
+
+export const codeBlockPresets: Record<
+  CodeBlockPresetName,
+  PresetWithCodeGen<CodeBlockPresetData>
+> = {
+  typescript: {
+    description: "TypeScript with filename header",
+    data: {
+      id: "code-block-preview-typescript",
+      code: `import { useState } from "react";
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <button onClick={() => setCount(c => c + 1)}>
+      Count: {count}
+    </button>
+  );
+}`,
+      language: "typescript",
+      lineNumbers: "visible",
+      filename: "Counter.tsx",
+    } satisfies CodeBlockPresetData,
+    generateExampleCode: generateCodeBlockCode,
+  },
+  python: {
+    description: "Python function with docstring",
+    data: {
+      id: "code-block-preview-python",
+      code: `def fibonacci(n: int) -> list[int]:
+    """Generate Fibonacci sequence up to n terms."""
+    if n <= 0:
+        return []
+    elif n == 1:
+        return [0]
+
+    sequence = [0, 1]
+    while len(sequence) < n:
+        sequence.append(sequence[-1] + sequence[-2])
+
+    return sequence
+
+# Example usage
+print(fibonacci(10))`,
+      language: "python",
+      lineNumbers: "visible",
+      filename: "fibonacci.py",
+    } satisfies CodeBlockPresetData,
+    generateExampleCode: generateCodeBlockCode,
+  },
+  json: {
+    description: "JSON configuration file",
+    data: {
+      id: "code-block-preview-json",
+      code: `{
+  "name": "tool-ui",
+  "version": "1.0.0",
+  "dependencies": {
+    "react": "^19.0.0",
+    "zod": "^4.0.0",
+    "shiki": "^3.0.0"
+  }
+}`,
+      language: "json",
+      lineNumbers: "visible",
+      filename: "package.json",
+    } satisfies CodeBlockPresetData,
+    generateExampleCode: generateCodeBlockCode,
+  },
+  bash: {
+    description: "Bash script with comments",
+    data: {
+      id: "code-block-preview-bash",
+      code: `#!/bin/bash
+# Deploy script
+
+echo "Building application..."
+pnpm run build
+
+echo "Running tests..."
+pnpm test
+
+echo "Deploying to production..."
+rsync -avz ./dist/ user@server:/var/www/app/
+
+echo "Done!"`,
+      language: "bash",
+      lineNumbers: "visible",
+      filename: "deploy.sh",
+    } satisfies CodeBlockPresetData,
+    generateExampleCode: generateCodeBlockCode,
+  },
+  highlighted: {
+    description: "Code with highlighted lines (bug indicator)",
+    data: {
+      id: "code-block-preview-highlighted",
+      code: `function processData(items: string[]) {
+  const results = [];
+
+  for (const item of items) {
+    // BUG: This should handle null values
+    results.push(item.toUpperCase());
+  }
+
+  return results;
+}`,
+      language: "typescript",
+      lineNumbers: "visible",
+      filename: "processor.ts",
+      highlightLines: [5, 6],
+    } satisfies CodeBlockPresetData,
+    generateExampleCode: generateCodeBlockCode,
+  },
+  collapsible: {
+    description: "Long code with collapse/expand",
+    data: {
+      id: "code-block-preview-collapsible",
+      code: `import { z } from "zod";
+
+export const UserSchema = z.object({
+  id: z.string().uuid(),
+  email: z.string().email(),
+  name: z.string().min(1).max(100),
+  role: z.enum(["admin", "member", "guest"]),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  profile: z.object({
+    avatar: z.string().url().optional(),
+    bio: z.string().max(500).optional(),
+    location: z.string().optional(),
+    website: z.string().url().optional(),
+  }).optional(),
+  preferences: z.object({
+    theme: z.enum(["light", "dark", "system"]).default("system"),
+    notifications: z.object({
+      email: z.boolean().default(true),
+      push: z.boolean().default(false),
+      marketing: z.boolean().default(false),
+    }),
+    locale: z.string().default("en-US"),
+    timezone: z.string().default("UTC"),
+  }),
+});
+
+export type User = z.infer<typeof UserSchema>;
+
+export const CreateUserSchema = UserSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type CreateUser = z.infer<typeof CreateUserSchema>;`,
+      language: "typescript",
+      lineNumbers: "visible",
+      filename: "user-schema.ts",
+      maxCollapsedLines: 10,
+    } satisfies CodeBlockPresetData,
+    generateExampleCode: generateCodeBlockCode,
+  },
+  "with-actions": {
+    description: "Code with external local actions",
+    data: {
+      id: "code-block-preview-with-actions",
+      code: `# Install dependencies
+pnpm install
+
+# Run development server
+pnpm dev`,
+      language: "bash",
+      lineNumbers: "visible",
+      filename: "setup.sh",
+      localActions: [
+        { id: "copy", label: "Copy to clipboard", variant: "outline" },
+        { id: "run", label: "Run in terminal", variant: "default" },
+      ],
+    } satisfies CodeBlockPresetData,
+    generateExampleCode: generateCodeBlockCode,
+  },
+};

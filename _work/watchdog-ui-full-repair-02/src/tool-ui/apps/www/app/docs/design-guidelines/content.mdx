@@ -1,0 +1,176 @@
+import { DocsHeader } from "../_components/docs-header";
+import { MockThread, MockMessage } from "../_components/mock-thread";
+import { CollaborationDiagram } from "../_components/collaboration-diagram";
+import { DataTable } from "@/components/tool-ui/data-table";
+
+<DocsHeader
+  title="Design Guidelines"
+  description="Principles for agentic UI."
+  mdxPath="app/docs/design-guidelines/content.mdx"
+/>
+
+## The Collaboration Model
+
+In AI chat, users interact with both the assistant and any tool UIs it renders. Most tool UIs treat this as incidental — a tool UI appears, the user clicks, done. That undersells what's happening. The assistant, the tool UI, and the user form a collaborative triad.
+
+<CollaborationDiagram />
+
+The assistant gives context and narration. The tool UI gives structure that prose cannot — sortable tables, controls, media. They work together.
+
+<div>
+  <MockThread caption="The triadic loop in action">
+    <MockMessage role="user">
+      <span className="text-sm">find a good auth library for React</span>
+    </MockMessage>
+    <MockMessage role="assistant">
+      <span className="text-foreground">
+        Found 8 React auth libraries on GitHub. Here are the top results by
+        recent activity:
+      </span>
+      <div className="mt-3">
+        <DataTable
+          rowIdKey="id"
+          columns={[
+            {
+              key: "name",
+              label: "Repository",
+              priority: "primary",
+              format: { kind: "link", hrefKey: "url", external: true },
+            },
+            {
+              key: "stars",
+              label: "Stars",
+              align: "right",
+              format: { kind: "number" },
+            },
+            {
+              key: "weeklyChange",
+              label: "Weekly",
+              align: "right",
+              format: { kind: "delta", decimals: 0, showSign: true },
+            },
+            {
+              key: "issues",
+              label: "Issues",
+              align: "right",
+              format: { kind: "number" },
+            },
+            {
+              key: "license",
+              label: "License",
+              format: { kind: "badge" },
+            },
+          ]}
+          data={[
+            {
+              id: "1",
+              name: "next-auth",
+              url: "https://github.com/nextauthjs/next-auth",
+              stars: 19420,
+              weeklyChange: 342,
+              issues: 86,
+              license: "MIT",
+            },
+            {
+              id: "2",
+              name: "passport",
+              url: "https://github.com/jaredhanson/passport",
+              stars: 847,
+              weeklyChange: -12,
+              issues: 124,
+              license: "MIT",
+            },
+            {
+              id: "3",
+              name: "auth0-react",
+              url: "https://github.com/auth0/auth0-react",
+              stars: 3210,
+              weeklyChange: 89,
+              issues: 23,
+              license: "MIT",
+            },
+            {
+              id: "4",
+              name: "firebase-auth",
+              url: "https://github.com/nicholasgriffintn/firebase-auth",
+              stars: 562,
+              weeklyChange: 8,
+              issues: 45,
+              license: "Apache-2.0",
+            },
+            {
+              id: "5",
+              name: "clerk-sdk",
+              url: "https://github.com/clerk/javascript",
+              stars: 1580,
+              weeklyChange: 156,
+              issues: 31,
+              license: "MIT",
+            },
+          ]}
+        />
+      </div>
+    </MockMessage>
+    <MockMessage role="user">
+      <span className="text-sm">
+        Which one would you recommend for a Next.js app?
+      </span>
+    </MockMessage>
+    <MockMessage role="assistant">
+      <span className="text-foreground">
+        I recommend <strong>next-auth</strong>. It's purpose-built for Next.js,
+        has by far the most stars, and was updated most recently. Want me to
+        show you setup instructions?
+      </span>
+    </MockMessage>
+  </MockThread>
+</div>
+
+The assistant introduces the tool UI, the user scans it and asks a follow-up, the assistant answers by referencing specific rows. This is the triadic loop.
+
+## Roles
+
+Every Tool UI has a job:
+
+- **Information** — Display data. Users read more than they click. Examples: [Data Table](/docs/data-table), [Chart](/docs/chart), [Link Preview](/docs/link-preview).
+
+- **Decision** — For choices that matter (approve/reject, send/cancel). Show clear options and [receipts](/docs/receipts) that confirm what happened. Examples: [Approval Card](/docs/approval-card), [Option List](/docs/option-list).
+
+- **Control** — Adjust parameters without commitment (filters, sort orders, date ranges). Changes are reversible. Examples: [Parameter Slider](/docs/parameter-slider), [Preferences Panel](/docs/preferences-panel).
+
+- **State** — Show internal activity (progress indicators, status logs, loading states). Examples: [Progress Tracker](/docs/progress-tracker), [Terminal](/docs/terminal).
+
+Some tool UIs combine roles. A data table with row actions is "information with control." When combining, pick one role to lead.
+
+## Constraints
+
+Tool UIs live in chat: narrow widths, variable heights, mixed with prose.
+
+- **Vertical:** Communicate purpose within the first 300px or so.
+- **Horizontal:** Expect 400–600px. Prefer single-column layouts.
+- **Touch:** Interactive elements need at least 44×44px tap area.
+- **Choices:** Limit visible options to 5–7. The assistant can offer to show more.
+
+## Addressability
+
+If the assistant can't point at something later, you lose half the value of rendering it.
+
+- **`id`**: Identifies this specific tool UI in the conversation ("the preview above", "that table").
+- **`assetId` / row IDs / option IDs**: Identify real objects ("that link", "row 4", "the merge option").
+
+Use stable IDs from your backend — database IDs, canonical URLs — not array indexes or render-time UUIDs. Anything the user can act on should have an ID the assistant can cite.
+
+## Anti-Patterns
+
+- **Input fields:** Input fields compete with the main chat composer. Ask whether the assistant could gather that information through conversation, or link to a form outside the chat.
+- **Hidden mutations:** Actions that change state should show what happened. Terminal decisions need a receipt showing what the user chose.
+- **Kitchen sinks:** If it needs tabs or navigation, consider breaking it into separate Tool UIs.
+- **Uncontextualized tool UIs:** Always have the assistant introduce a tool UI and explain what it shows.
+- **Redundant narration:** The assistant shouldn't describe what the tool UI already shows. The tool UI shouldn't echo what the assistant just said. If the assistant asks "Where to?", the tool UI doesn't need a header saying "Where to?" — just show the options. Divide the work between them: the assistant gives context, the tool UI gives structure.
+
+## Further reading
+
+- [**Overview**](/docs/overview): What Tool UI is and how schema-first rendering works
+- [**Actions**](/docs/actions): The local vs. decision action model in detail
+- [**Receipts**](/docs/receipts): How to show durable records of user decisions
+- [**Gallery**](/docs/gallery): Browse all available components

@@ -1,0 +1,170 @@
+import { DocsHeader } from "../_components/docs-header";
+import { Citation } from "@/components/tool-ui/citation";
+
+<DocsHeader
+  title="Citation"
+  description="Display source references with attribution."
+  mdxPath="app/docs/citation/content.mdx"
+/>
+
+Users trust answers they can verify. Citation renders a clickable reference card with title, domain, favicon, and an optional text snippet so the reader can trace any claim back to its source. Three variants cover different density needs: a full card for prominent references, an inline chip for tight spaces, and stacked favicons for citation lists.
+
+**Role:** Information. For displaying data without user input. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="citation" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `Citation` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { Citation } from "@/components/tool-ui/citation";
+
+export function Example() {
+  return (
+    <Citation
+      id="citation-example"
+      href="https://react.dev/reference/react/useState"
+      title="useState – React"
+      snippet="useState is a React Hook that lets you add a state variable to your component."
+      domain="react.dev"
+      favicon="https://www.google.com/s2/favicons?domain=react.dev&sz=32"
+      type="document"
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Registration tells assistant-ui which component to render when a tool returns citation data. Without it, tool results appear as raw JSON.
+
+```tsx
+import { type Toolkit } from "@assistant-ui/react";
+import { Citation } from "@/components/tool-ui/citation";
+import { safeParseSerializableCitation } from "@/components/tool-ui/citation/schema";
+
+export const toolkit: Toolkit = {
+  showCitation: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableCitation(result);
+      if (!parsed) {
+        return null;
+      }
+      return <Citation {...parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="FileText" title="Source attribution">
+    Title, domain, author, and publication date in one card
+  </Feature>
+  <Feature icon="Quote" title="Snippet preview">
+    Shows a relevant excerpt so users can judge relevance before clicking
+  </Feature>
+  <Feature icon="Layers" title="Three variants">
+    Full card for detail, inline chip for tight spaces, stacked favicons for
+    lists
+  </Feature>
+  <Feature icon="Keyboard" title="Keyboard accessible">
+    Arrow keys and Enter navigate the stacked variant popover
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this tool UI instance",
+      type: "string",
+      required: true,
+    },
+    variant: {
+      description: "Visual style",
+      type: "'default' | 'inline' | 'stacked'",
+      default: "'default'",
+    },
+    href: {
+      description: "Source URL",
+      type: "string",
+      required: true,
+    },
+    title: {
+      description: "Source title",
+      type: "string",
+      required: true,
+    },
+    snippet: {
+      description: "Relevant excerpt from the source",
+      type: "string",
+    },
+    domain: {
+      description: "Source domain (auto-extracted from href if not provided)",
+      type: "string",
+    },
+    favicon: {
+      description: "Favicon URL",
+      type: "string",
+    },
+    author: {
+      description: "Author or organization name",
+      type: "string",
+    },
+    publishedAt: {
+      description: "Publication date (ISO 8601)",
+      type: "string",
+    },
+    type: {
+      description: "Source type for icon selection",
+      type: "'webpage' | 'document' | 'article' | 'api' | 'code' | 'other'",
+      default: "'webpage'",
+    },
+    onNavigate: {
+      description: "Custom navigation handler",
+      type: "(href: string, citation: SerializableCitation) => void",
+    },
+  }}
+/>
+
+Use [`ToolUI.LocalActions`](/docs/actions) to compose external actions next to citations.
+
+## Accessibility
+
+The stacked variant popover supports full keyboard navigation:
+
+- **Enter / Space:** Open the popover
+- **Tab:** Navigate between citations
+- **Escape:** Close popover and return focus to trigger
+
+Mouse users can hover to reveal the popover. All variants open links in new tabs with `noopener,noreferrer` for security.
+
+## Related
+
+- [Link Preview](/docs/link-preview): both surface external references, but LinkPreview shows Open Graph cards while Citation focuses on source attribution
+- [Data Table](/docs/data-table): for displaying multiple references in a structured, sortable format

@@ -1,0 +1,128 @@
+import { DocsHeader } from "../_components/docs-header";
+import { XPost } from "@/components/tool-ui/x-post";
+
+<DocsHeader
+  title="X Post"
+  description="Platform-native post card for X (Twitter)."
+  mdxPath="app/docs/x-post/content.mdx"
+/>
+
+A link to a tweet tells you nothing until you click it. XPost embeds the full post inline (author, text, media, quoted posts, and engagement stats) styled to match the platform. Use it when the assistant fetches or drafts X content and you want it displayed as a real post.
+
+**Role:** Information. For displaying data the user reads. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="x-post" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `XPost` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { XPost } from "@/components/tool-ui/x-post";
+
+export function Example() {
+  return (
+    <XPost
+      post={{
+        id: "x-post-1",
+        author: {
+          name: "Taylor Kim",
+          handle: "taylorkim",
+          avatarUrl: "https://example.com/avatar.jpg",
+          verified: true,
+        },
+        text: "Thinking about how to make Tool UIs feel more collaborative.",
+        stats: { likes: 12 },
+        createdAt: "2025-01-05T12:00:00.000Z",
+      }}
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Register this renderer so tool results display as `XPost`.
+
+```tsx
+import { type Toolkit } from "@assistant-ui/react";
+import { XPost } from "@/components/tool-ui/x-post";
+import { safeParseSerializableXPost } from "@/components/tool-ui/x-post/schema";
+
+export const toolkit: Toolkit = {
+  showXPost: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableXPost(result);
+      if (!parsed) {
+        return null;
+      }
+      return <XPost post={parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="Paintbrush" title="Platform-native styling">
+    Uses X's layout, typography, and color scheme
+  </Feature>
+  <Feature icon="MessageSquare" title="Rich post content">
+    Text, quoted posts, media attachments, and link previews
+  </Feature>
+  <Feature icon="MousePointerClick" title="External actions">
+    Add actions like "Save Draft" or "Share" via ToolUI action surfaces
+  </Feature>
+  <Feature icon="ShieldCheck" title="Safe links">
+    External URLs open safely with built-in navigation helpers
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+<TypeTable
+  type={{
+    post: {
+      description: "Post payload validated by `SerializableXPostSchema`",
+      type: "XPostData",
+      required: true,
+    },
+    className: {
+      description: "Optional className for the outer card",
+      type: "string",
+    },
+    onAction: {
+      description: "Fires when the user triggers a built-in post action",
+      type: "(action: string, post: XPostData) => void",
+    },
+  }}
+/>
+
+Use [`ToolUI.LocalActions`](/docs/actions) to compose external actions next to `XPost`.
+
+## Related
+
+- [Instagram Post](/docs/instagram-post): platform-native card for Instagram content
+- [LinkedIn Post](/docs/linkedin-post): platform-native card for LinkedIn content

@@ -1,0 +1,218 @@
+import { DocsHeader } from "../_components/docs-header";
+
+<DocsHeader
+  title="Terminal"
+  description="Show command-line output and logs."
+  mdxPath="app/docs/terminal/content.mdx"
+/>
+
+Terminal renders command output with ANSI colors, exit codes, and stderr separation preserved. Long output can be collapsed with `maxCollapsedLines`.
+
+**Role:** Information. For displaying data without user input. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="terminal" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `Terminal` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { Terminal } from "@/components/tool-ui/terminal";
+
+export function MyComponent() {
+  return (
+    <Terminal
+      id="my-terminal-example"
+      command="ls -la"
+      stdout={`total 16
+drwxr-xr-x  3 user user 4096 Dec  3 10:23 .
+drwxr-xr-x 12 user user 4096 Dec  3 10:20 ..
+-rw-r--r--  1 user user  220 Dec  3 10:23 package.json`}
+      exitCode={0}
+      durationMs={45}
+      cwd="~/project"
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Registration tells assistant-ui which component to render when a tool returns command output. Without it, tool results appear as raw JSON.
+
+```tsx
+// Backend tool
+import { tool, jsonSchema } from "ai";
+
+const showTerminal = tool({
+  description: "Show a command result",
+  inputSchema: jsonSchema<{}>({
+    type: "object",
+    properties: {},
+    additionalProperties: false,
+  }),
+  async execute() {
+    return {
+      id: "terminal-1",
+      command: "pnpm test",
+      cwd: "~/project",
+      exitCode: 0,
+      durationMs: 1288,
+      stdout: "\u001b[32m✓\u001b[0m 42 tests passed",
+    };
+  },
+});
+
+// Frontend with assistant-ui
+import { type Toolkit } from "@assistant-ui/react";
+import { Terminal } from "@/components/tool-ui/terminal";
+import { safeParseSerializableTerminal } from "@/components/tool-ui/terminal/schema";
+
+export const toolkit: Toolkit = {
+  showTerminal: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableTerminal(result);
+      if (!parsed) {
+        return null;
+      }
+      return <Terminal {...parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="Paintbrush" title="ANSI color support">
+    Renders colored output exactly as it appears in your shell
+  </Feature>
+  <Feature icon="CircleCheck" title="Exit code display">
+    Green for success (0), red for any non-zero code
+  </Feature>
+  <Feature icon="Timer" title="Duration tracking">
+    Badge showing how long the command took
+  </Feature>
+  <Feature icon="AlertCircle" title="Stdout/Stderr separation">
+    Stderr rendered separately with distinct styling
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+### Core
+
+<TypeTable
+  type={{
+    command: {
+      description: "The command that was executed",
+      type: "string",
+      required: true,
+    },
+    stdout: {
+      description: "Standard output content",
+      type: "string",
+    },
+    stderr: {
+      description: "Standard error content",
+      type: "string",
+    },
+    exitCode: {
+      description: "Process exit code (0 = success)",
+      type: "number",
+      required: true,
+    },
+  }}
+/>
+
+### Metadata
+
+<TypeTable
+  type={{
+    durationMs: {
+      description: "Command execution time in milliseconds",
+      type: "number",
+    },
+    cwd: {
+      description: "Working directory where command ran",
+      type: "string",
+    },
+    truncated: {
+      description: "Indicates output was truncated",
+      type: "boolean",
+    },
+  }}
+/>
+
+### Display Options
+
+<TypeTable
+  type={{
+    maxCollapsedLines: {
+      description: "Auto-collapse if output exceeds this many lines",
+      type: "number",
+    },
+    expanded: {
+      description: "Controlled expand state (for collapsible mode)",
+      type: "boolean",
+    },
+    defaultExpanded: {
+      description: "Initial expand state (for collapsible mode)",
+      type: "boolean",
+    },
+    onExpandedChange: {
+      description: "Called when expand state changes",
+      type: "(expanded: boolean) => void",
+    },
+  }}
+/>
+
+### Standard Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this component",
+      type: "string",
+      required: true,
+    },
+    className: {
+      description: "Additional CSS classes",
+      type: "string",
+    },
+  }}
+/>
+
+Use [`ToolUI.LocalActions`](/docs/actions) to compose external actions next to `Terminal`.
+
+## Accessibility
+
+- ANSI colors maintain WCAG contrast ratios against both light and dark backgrounds
+- Screen readers announce the command, exit status, and output content
+- Collapsible sections are keyboard-accessible with proper ARIA attributes
+
+## Related
+
+- [Code Block](/docs/code-block): both show monospaced content, but CodeBlock is for source code while Terminal is for command execution results
+- [Progress Tracker](/docs/progress-tracker): for when you need real-time status updates during a long-running operation

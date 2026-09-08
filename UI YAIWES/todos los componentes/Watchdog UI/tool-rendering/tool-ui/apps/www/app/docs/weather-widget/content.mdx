@@ -1,0 +1,326 @@
+import { DocsHeader } from "../_components/docs-header";
+import { WeatherWidget } from "@/components/tool-ui/weather-widget/runtime";
+
+<DocsHeader
+  title="Weather Widget"
+  description="The most overbuilt weather widget you'll ever see. On purpose."
+  mdxPath="app/docs/weather-widget/content.mdx"
+/>
+
+WeatherWidget renders current conditions and a multi-day forecast with WebGL atmospheric effects, time-of-day scene rendering, and 13 condition codes.
+
+**Role:** Information. For displaying data without user input. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="weather-widget" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `WeatherWidget` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { WeatherWidget } from "@/components/tool-ui/weather-widget/runtime";
+
+export function Example() {
+  return (
+    <WeatherWidget
+      version="3.1"
+      id="weather-widget-example"
+      location={{ name: "Kansas City, MO" }}
+      units={{ temperature: "fahrenheit" }}
+      current={{
+        temperature: 72,
+        tempMin: 65,
+        tempMax: 78,
+        conditionCode: "thunderstorm",
+      }}
+      forecast={[
+        { label: "Tue", tempMin: 62, tempMax: 75, conditionCode: "heavy-rain" },
+        { label: "Wed", tempMin: 58, tempMax: 70, conditionCode: "rain" },
+        { label: "Thu", tempMin: 55, tempMax: 68, conditionCode: "cloudy" },
+        {
+          label: "Fri",
+          tempMin: 52,
+          tempMax: 72,
+          conditionCode: "partly-cloudy",
+        },
+        { label: "Sat", tempMin: 58, tempMax: 76, conditionCode: "clear" },
+      ]}
+      time={{ localTimeOfDay: 22 / 24 }}
+      updatedAt="2026-01-28T22:00:00Z"
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Registration tells assistant-ui which component to render when a tool named `get_weather` returns data. Without it, tool results appear as raw JSON.
+
+```tsx
+"use client";
+
+import { type Toolkit } from "@assistant-ui/react";
+import { z } from "zod";
+import {
+  WeatherWidget,
+  type WeatherWidgetProps,
+} from "@/components/tool-ui/weather-widget/runtime";
+
+const WeatherWidgetPayloadSchema = z.object({}).passthrough();
+
+function safeParseWeatherWidgetPayload(
+  input: unknown,
+): WeatherWidgetProps | null {
+  const result = WeatherWidgetPayloadSchema.safeParse(input);
+  if (
+    !result.success ||
+    typeof result.data !== "object" ||
+    result.data === null
+  ) {
+    return null;
+  }
+  return {
+    version: "3.1",
+    ...(result.data as Omit<WeatherWidgetProps, "version">),
+  };
+}
+
+export const toolkit: Toolkit = {
+  get_weather: {
+    description: "Display current weather and forecast for a location",
+    parameters: WeatherWidgetPayloadSchema,
+    render: ({ args, toolCallId }) => {
+      const parsedArgs = safeParseWeatherWidgetPayload({
+        version: "3.1",
+        ...(args as Record<string, unknown>),
+        id: args?.id ?? `weather-${toolCallId}`,
+      });
+      if (!parsedArgs) {
+        return null;
+      }
+      return <WeatherWidget {...parsedArgs} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Coding Agent Prompt
+
+Copy this prompt into your coding agent (Claude Code, Cursor, etc.) and it will wire `WeatherWidget` to whatever weather API you use.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```text
+Integrate the Tool UI WeatherWidget with a live weather API.
+
+Step 1 — Discover the weather API:
+- Check the codebase for an existing weather API integration (look for API keys, env vars, fetch calls to weather services).
+- If one exists, use that provider. If not, ask the user which weather API they want to use.
+
+Step 2 — Build the adapter:
+Create a provider adapter module (e.g. weatherAdapter.ts) that:
+- Fetches current conditions and forecast data from the chosen provider
+- Maps provider-specific weather codes to WeatherConditionCode with an explicit lookup table and a sensible fallback
+- Derives localTimeOfDay (0..1) from the location's local time
+- Returns a validated WeatherWidgetProps payload
+
+The payload must match WeatherWidgetProps exactly:
+- version: "3.1"
+- id: stable id string
+- location: { name }
+- units: { temperature: "celsius" | "fahrenheit" }
+- current: { temperature, tempMin, tempMax, conditionCode, windSpeed?, precipitationLevel?, visibility? }
+- forecast: 1–7 items of { label, tempMin, tempMax, conditionCode }
+- time: { localTimeOfDay } where localTimeOfDay is 0..1 based on location local time
+- updatedAt: ISO timestamp
+
+Valid WeatherConditionCode values:
+clear | partly-cloudy | cloudy | overcast | fog | drizzle | rain | heavy-rain | thunderstorm | snow | sleet | hail | windy
+
+Step 3 — Register the tool:
+Register a get_weather tool renderer so tool output renders WeatherWidget (not raw JSON).
+Keep the existing runtime import:
+  import { WeatherWidget } from "@/components/tool-ui/weather-widget/runtime";
+
+Additional requirements:
+- Add lightweight runtime validation before rendering (zod safeParse + fallback behavior).
+- Keep all API keys/secrets server-side only.
+- Add tests for condition code mapping and payload shape.
+```
+
+</div>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="CloudSun" title="Weather conditions">
+    13 condition codes because someone had to distinguish sleet from hail
+  </Feature>
+  <Feature icon="MapPin" title="Location display">
+    City name, current temperature, and today's high/low range
+  </Feature>
+  <Feature icon="Thermometer" title="Temperature units">
+    Celsius or Fahrenheit via a single config flag
+  </Feature>
+  <Feature icon="Calendar" title="Multi-day forecast">
+    1 to 7 day forecasts with daily highs, lows, and condition icons
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this tool UI instance",
+      type: "string",
+      required: true,
+    },
+    location: {
+      description: "Location object",
+      type: "{ name: string }",
+      required: true,
+    },
+    units: {
+      description: "Display units",
+      type: '{ temperature: "celsius" | "fahrenheit" }',
+      required: true,
+    },
+    current: {
+      description: "Current weather conditions",
+      type: "CurrentWeather",
+      required: true,
+    },
+    forecast: {
+      description: "Daily forecast array (1-7 days)",
+      type: "ForecastDay[]",
+      required: true,
+    },
+    time: {
+      description: "Deterministic scene time source",
+      type: "{ timeBucket?: 0..11; localTimeOfDay?: 0..1 }",
+      required: true,
+    },
+    updatedAt: {
+      description: "Last update timestamp (ISO 8601)",
+      type: "string",
+    },
+  }}
+/>
+
+### CurrentWeather
+
+<TypeTable
+  type={{
+    temperature: {
+      description: "Current temperature",
+      type: "number",
+      required: true,
+    },
+    tempMin: {
+      description: "Today's low temperature",
+      type: "number",
+      required: true,
+    },
+    tempMax: {
+      description: "Today's high temperature",
+      type: "number",
+      required: true,
+    },
+    conditionCode: {
+      description: "Weather condition",
+      type: "WeatherConditionCode",
+      required: true,
+    },
+    windSpeed: {
+      description: "Wind speed value",
+      type: "number",
+    },
+    precipitationLevel: {
+      description: "Precipitation intensity",
+      type: "'none' | 'light' | 'moderate' | 'heavy'",
+    },
+    visibility: {
+      description: "Visibility distance value",
+      type: "number",
+    },
+  }}
+/>
+
+### ForecastDay
+
+<TypeTable
+  type={{
+    label: {
+      description: "Day label (e.g., 'Mon', 'Tuesday')",
+      type: "string",
+      required: true,
+    },
+    tempMin: {
+      description: "Daily low temperature",
+      type: "number",
+      required: true,
+    },
+    tempMax: {
+      description: "Daily high temperature",
+      type: "number",
+      required: true,
+    },
+    conditionCode: {
+      description: "Weather condition",
+      type: "WeatherConditionCode",
+      required: true,
+    },
+  }}
+/>
+
+### WeatherConditionCode
+
+Available condition values with their corresponding icons:
+
+| Condition       | Icon           | Description    |
+| --------------- | -------------- | -------------- |
+| `clear`         | Sun            | Clear skies    |
+| `partly-cloudy` | CloudSun       | Partly cloudy  |
+| `cloudy`        | Cloud          | Cloudy         |
+| `overcast`      | Cloud          | Overcast skies |
+| `fog`           | CloudFog       | Fog            |
+| `drizzle`       | CloudDrizzle   | Light rain     |
+| `rain`          | CloudRain      | Rain           |
+| `heavy-rain`    | CloudRain      | Heavy rain     |
+| `thunderstorm`  | CloudLightning | Thunderstorm   |
+| `snow`          | Snowflake      | Snow           |
+| `sleet`         | CloudHail      | Sleet          |
+| `hail`          | CloudHail      | Hail           |
+| `windy`         | Wind           | Windy          |
+
+## Accessibility
+
+- Forecast list uses proper `role="list"` and `role="listitem"` structure
+- Temperature values include screen reader labels with unit names
+- Condition icons are decorative (`aria-hidden`) with text labels provided
+
+## Related
+
+- [Stats Display](/docs/stats-display): for structured numeric data that is not weather-specific
+- [Image](/docs/image): WeatherWidget includes visual scene rendering; use Image when the visual itself is the content

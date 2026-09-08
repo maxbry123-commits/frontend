@@ -1,0 +1,39 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "tw-shimmer";
+
+/* Fumadocs UI styles */
+@import "fumadocs-ui/css/preset.css";
+@import "fumadocs-ui/css/shadcn.css";
+
+/* Silk Sheet UI styles */
+@import "@silk-hq/components/layered-styles";
+
+/* Shadcn theme */
+@import "./shadcn-theme.css";
+
+/* Lib overrides */
+@import "./leaflet-overrides.css";
+@import "./fumadocs-overrides.css";
+
+/* Custom styles */
+@import "./prose.css";
+@import "./squircle.css";
+@import "./custom-utilities.css";
+
+/* View Transitions */
+@import "./theme-transition.css";
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  body {
+    @apply bg-background text-foreground;
+    overflow: hidden;
+  }
+}

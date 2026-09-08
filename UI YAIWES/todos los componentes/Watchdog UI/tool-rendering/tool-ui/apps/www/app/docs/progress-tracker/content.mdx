@@ -1,0 +1,237 @@
+import { DocsHeader } from "../_components/docs-header";
+import { ProgressTracker } from "@/components/tool-ui/progress-tracker";
+
+<DocsHeader
+  title="Progress Tracker"
+  description="Real-time multi-step status."
+  mdxPath="app/docs/progress-tracker/content.mdx"
+/>
+
+When an operation takes more than a moment (build, test, deploy) the user deserves to know where things stand. ProgressTracker shows each step of a multi-step workflow with its current status: pending, in-progress, completed, or failed. If something breaks, the error is visible immediately. Once the operation finishes, the tracker collapses into a receipt with the final outcome.
+
+**Role:** State. Shows internal activity and progress. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="progress-tracker" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `ProgressTracker` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { ProgressTracker } from "@/components/tool-ui/progress-tracker";
+
+export function Example() {
+  return (
+    <ProgressTracker
+      id="progress-tracker-example"
+      steps={[
+        {
+          id: "build",
+          label: "Building",
+          description: "Compiling TypeScript and bundling assets",
+          status: "completed",
+        },
+        {
+          id: "test",
+          label: "Running Tests",
+          description: "147 tests across 23 suites",
+          status: "in-progress",
+        },
+        {
+          id: "deploy",
+          label: "Deploy to Production",
+          description: "Upload to edge nodes",
+          status: "pending",
+        },
+      ]}
+      elapsedTime={43200}
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Register this renderer so tool results display as `ProgressTracker`.
+
+```tsx
+"use client";
+
+import { type Toolkit } from "@assistant-ui/react";
+import { ProgressTracker } from "@/components/tool-ui/progress-tracker";
+import { safeParseSerializableProgressTracker } from "@/components/tool-ui/progress-tracker/schema";
+
+export const toolkit: Toolkit = {
+  trackProgress: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableProgressTracker(result);
+      if (!parsed) {
+        return null;
+      }
+      return <ProgressTracker {...parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+ProgressTracker is display-only and result-driven: render it from backend tool result updates. For interactive decisions or confirmations, use OptionList or ApprovalCard.
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="ListChecks" title="Status indicators">
+    Pending, in-progress, completed, and failed with distinct icons
+  </Feature>
+  <Feature icon="Timer" title="Elapsed time">
+    Auto-formatted timer badge (seconds or minutes)
+  </Feature>
+  <Feature icon="AlertCircle" title="Error handling">
+    Failed steps show red indicators with error details
+  </Feature>
+  <Feature icon="CheckCircle2" title="Receipt state">
+    Read-only summary of the completed operation
+  </Feature>
+</FeatureGrid>
+
+## Step Statuses
+
+Each step has one of four statuses:
+
+- **Pending**: not yet started (empty circle)
+- **In-progress**: currently executing (animated spinner)
+- **Completed**: finished successfully (filled checkmark)
+- **Failed**: encountered an error (filled X icon)
+
+The component automatically highlights the current step (first `in-progress`, otherwise first `failed`, otherwise first `pending`) with a subtle background and `aria-current="step"` for accessibility.
+
+## Receipt Pattern
+
+Pass a `choice` prop to render this component in its receipt state. See [Receipts](/docs/receipts) for the pattern.
+
+The receipt shows all steps with their final statuses, an elapsed time badge, and an outcome indicator in the top-right corner. Supports `success`, `partial`, `failed`, and `cancelled` outcomes. Read-only with no action buttons.
+
+## Elapsed Time
+
+Pass `elapsedTime` in milliseconds to display a timer badge. Automatically formatted as:
+
+- Under 60 seconds: `3.4s`
+- Over 60 seconds: `2m 15s`
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for the progress tracker instance",
+      type: "string",
+      required: true,
+    },
+    steps: {
+      description: "Sequential list of operation steps with status indicators",
+      type: "ProgressStep[]",
+      required: true,
+    },
+    elapsedTime: {
+      description:
+        "Operation duration in milliseconds (finite, non-negative). Displayed as formatted timer badge.",
+      type: "number",
+    },
+    choice: {
+      description:
+        "When provided, renders terminal state showing full step history with outcome indicator",
+      type: "ProgressTrackerChoice",
+    },
+  }}
+/>
+
+## ProgressStep Schema
+
+<TypeTable
+  type={{
+    id: {
+      description:
+        "Unique identifier for the step (must be unique within the steps array)",
+      type: "string",
+      required: true,
+    },
+    label: {
+      description: "Step name displayed to the user",
+      type: "string",
+      required: true,
+    },
+    description: {
+      description:
+        "Additional details shown below the label. In interactive mode, visible for in-progress and failed steps. In receipt mode, all step descriptions are shown.",
+      type: "string",
+    },
+    status: {
+      description: "Current state of the step",
+      type: "'pending' | 'in-progress' | 'completed' | 'failed'",
+      required: true,
+    },
+  }}
+/>
+
+## ToolUIReceipt Schema
+
+<TypeTable
+  type={{
+    outcome: {
+      description:
+        "Final result of the operation. Determines outcome indicator color/icon.",
+      type: "'success' | 'partial' | 'failed' | 'cancelled'",
+      required: true,
+    },
+    summary: {
+      description:
+        "Brief outcome message displayed in top-right (e.g., 'Deployment complete')",
+      type: "string",
+      required: true,
+    },
+    at: {
+      description: "ISO 8601 timestamp when the operation completed",
+      type: "string",
+      required: true,
+    },
+    identifiers: {
+      description:
+        "Optional reference IDs for the operation (e.g., { deploymentId: 'abc-123' })",
+      type: "Record<string, string>",
+    },
+  }}
+/>
+
+## Accessibility
+
+- Semantic `<article>` with `role="status"` and `aria-live="polite"` for live updates
+- `aria-busy` indicates when an operation is in progress
+- `aria-current="step"` marks the currently active step
+- Steps rendered as semantic ordered list (`<ol>` / `<li>`)
+- Elapsed duration is rendered with semantic `<time>` and machine-readable `dateTime`
+- All animations respect `prefers-reduced-motion`
+- Text is unselectable to prevent accidental highlighting during status changes
+
+## Related
+
+- [Plan](/docs/plan): task-oriented progress with expandable detail per step

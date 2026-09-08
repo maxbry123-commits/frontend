@@ -1,0 +1,139 @@
+/* =============================================================================
+   Fumadocs UI Overrides
+   Scoped to docs/MDX surfaces for consistent styling with shadcn theme
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   Debug / Development Variables
+   TODO: Remove or replace these placeholder values before production
+   ----------------------------------------------------------------------------- */
+
+:root {
+  --shiki-light-bg: var(--color-neutral-100);
+  --shiki-dark-bg: var(--color-neutral-900);
+
+  .dark {
+    --color-fd-foreground: hsl(0 0% 98%);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Prose Content Overrides
+   Styling adjustments for MDX content within .prose containers
+   ----------------------------------------------------------------------------- */
+
+@layer utilities {
+  /* Step component badges (<Steps>/<Step>) */
+  .prose :where(.fd-step)::before {
+    @apply bg-muted text-primary size-8 text-lg;
+  }
+
+  /* Remove decorative quote marks from blockquotes */
+  .prose blockquote::before,
+  .prose blockquote::after,
+  .prose blockquote p::before,
+  .prose blockquote p::after {
+    content: none !important;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Tab Panel Layout
+   Component preview and code block positioning within tab panels
+   ----------------------------------------------------------------------------- */
+
+/* Center component previews */
+[data-state][role="tabpanel"] > .not-prose {
+  margin-inline: auto;
+}
+
+/* Full-width code blocks (negative margin compensates for panel padding) */
+[data-state][role="tabpanel"] > figure:only-child {
+  margin: -1rem !important;
+}
+
+/* -----------------------------------------------------------------------------
+   Shiki Code Block Constraints
+   Prevents overflow from long unbreakable strings (URLs, tokens, etc.)
+   Fumadocs Pre uses w-max which causes horizontal overflow
+   ----------------------------------------------------------------------------- */
+
+figure.shiki {
+  position: relative;
+  background-color: var(--color-neutral-100);
+  corner-shape: squircle;
+  border: none;
+  border-radius: calc(var(--radius) * var(--border-radius-multiplier));
+}
+
+.dark figure.shiki {
+  background-color: var(--color-neutral-900);
+}
+
+figure.shiki pre {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+figure.shiki pre code {
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+/* -----------------------------------------------------------------------------
+   Full-Bleed Code Panel
+   Expanded code view with internal padding for view mode toggle
+   ----------------------------------------------------------------------------- */
+
+.code-panel-fullbleed {
+  overflow-y: scroll;
+  height: 100%;
+
+  & figure.shiki {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    height: 100%;
+    background: transparent;
+  }
+
+  & figure.shiki pre {
+    flex: 1;
+    margin: 0;
+    padding-top: 4rem; /* Space for toggle button */
+    border-radius: 0;
+  }
+
+  /* Fill available height instead of fumadocs default max-height */
+  & .fd-scroll-container {
+    height: 100%;
+    max-height: none !important;
+    padding-bottom: 6rem; /* Extra scroll room at bottom */
+  }
+
+  /* Hide fumadocs copy button (we provide our own) */
+  & figure.shiki > div.absolute {
+    display: none;
+  }
+
+  /* Restore squircle corners on larger screens */
+  @media (min-width: 1024px) {
+    & figure.shiki {
+      corner-shape: squircle;
+      border-radius: calc(var(--radius) * var(--border-radius-multiplier));
+    }
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Fumadocs Theme Tokens
+   NOTE: fumadocs-ui/css/shadcn.css automatically maps --color-fd-* to shadcn
+   variables (--background, --foreground, etc). No manual mapping needed here.
+   To customize fumadocs colors, edit shadcn-theme.css instead.
+   ----------------------------------------------------------------------------- */

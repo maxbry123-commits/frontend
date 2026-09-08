@@ -1,0 +1,156 @@
+import { DocsHeader } from "../_components/docs-header";
+import { Image } from "@/components/tool-ui/image";
+
+<DocsHeader
+  title="Image"
+  description="Display images with metadata and attribution."
+  mdxPath="app/docs/image/content.mdx"
+/>
+
+When a tool returns an image URL, a bare `<img>` tag has no context. No title, no attribution, no way for the assistant to reference it later. Image renders pictures inline in the conversation with title, description, source attribution, and configurable aspect ratios. The user sees the image in context instead of opening a raw link in a new tab.
+
+**Role:** Information. For displaying data without user input. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="image" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `Image` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { Image } from "@/components/tool-ui/image";
+
+export function Example() {
+  return (
+    <Image
+      id="image-example"
+      assetId="vintage-mainframe"
+      src="https://images.unsplash.com/photo-1504548840739-580b10ae7715"
+      alt="Vintage mainframe with blinking lights"
+      title="From mainframes to microchips"
+      description="A snapshot of when rooms were computers."
+      ratio="4:3"
+      domain="unsplash.com"
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Registration tells assistant-ui which component to render when a tool returns image data. Without it, tool results appear as raw JSON.
+
+```tsx
+import { type Toolkit } from "@assistant-ui/react";
+import { Image } from "@/components/tool-ui/image";
+import { safeParseSerializableImage } from "@/components/tool-ui/image/schema";
+
+export const toolkit: Toolkit = {
+  showImage: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableImage(result);
+      if (!parsed) {
+        return null;
+      }
+      return <Image {...parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="Eye" title="Hover overlay">
+    Title and source appear on hover, stay hidden otherwise
+  </Feature>
+  <Feature icon="ExternalLink" title="Source attribution">
+    Links back to the original source with favicon and domain
+  </Feature>
+  <Feature icon="Maximize2" title="Aspect ratios">
+    Constrain to 1:1, 4:3, 16:9, 9:16, or let the image decide with auto
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this tool UI instance",
+      type: "string",
+      required: true,
+    },
+    assetId: {
+      description: "Persistent asset identifier",
+      type: "string",
+      required: true,
+    },
+    src: {
+      description: "Image source URL",
+      type: "string",
+      required: true,
+    },
+    alt: {
+      description: "Alt text for accessibility",
+      type: "string",
+      required: true,
+    },
+    title: { description: "Title text", type: "string" },
+    description: { description: "Description", type: "string" },
+    href: {
+      description: "Makes image clickable with this URL",
+      type: "string",
+    },
+    domain: { description: "Source domain label", type: "string" },
+    ratio: {
+      description: "Aspect ratio",
+      type: "'auto' | '1:1' | '4:3' | '16:9' | '9:16'",
+      default: "'auto'",
+    },
+    fit: {
+      description: "Object fit mode",
+      type: "'cover' | 'contain'",
+      default: "'cover'",
+    },
+    source: {
+      description: "Source attribution",
+      type: "{ label: string; iconUrl?: string; url?: string }",
+    },
+    createdAt: { description: "Creation timestamp (ISO 8601)", type: "string" },
+    fileSizeBytes: { description: "File size in bytes", type: "number" },
+    onNavigate: {
+      description: "Called when user clicks the image link (requires href)",
+      type: "(href: string, image: SerializableImage) => void",
+    },
+  }}
+/>
+
+Use [`ToolUI.LocalActions`](/docs/actions) to compose external actions next to `Image`.
+
+## Related
+
+- [Image Gallery](/docs/image-gallery): for displaying multiple images in a masonry grid with a lightbox
+- [Video](/docs/video): the same inline media pattern for video content
+- [Link Preview](/docs/link-preview): for when the image is part of a richer link card with Open Graph metadata

@@ -1,0 +1,262 @@
+import { DocsHeader } from "../_components/docs-header";
+import { ParameterSlider } from "@/components/tool-ui/parameter-slider";
+
+<DocsHeader
+  title="Parameter Slider"
+  description="Numeric parameter adjustment controls."
+  mdxPath="app/docs/parameter-slider/content.mdx"
+/>
+
+Text input is a poor fit for numeric tuning. When the user needs to dial in image exposure, audio levels, or model temperature, ParameterSlider renders grouped sliders with labels, units, and Reset/Apply actions. The confirmed values feed back to the assistant as a tool result.
+
+**Role:** Control. Adjusts parameters without commitment. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="parameter-slider" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `ParameterSlider` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { ParameterSlider } from "@/components/tool-ui/parameter-slider";
+
+export function Example() {
+  return (
+    <ParameterSlider
+      id="parameter-slider-example"
+      sliders={[
+        {
+          id: "exposure",
+          label: "Exposure",
+          min: -3,
+          max: 3,
+          step: 0.1,
+          value: 0.3,
+          unit: "EV",
+          precision: 1,
+        },
+        {
+          id: "contrast",
+          label: "Contrast",
+          min: -100,
+          max: 100,
+          step: 5,
+          value: 15,
+          unit: "%",
+        },
+        {
+          id: "highlights",
+          label: "Highlights",
+          min: -100,
+          max: 100,
+          step: 5,
+          value: -20,
+          unit: "%",
+        },
+      ]}
+      onAction={(actionId, values) => {
+        console.log(actionId, values);
+      }}
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Register this renderer so tool results display as `ParameterSlider`.
+
+```tsx
+"use client";
+
+import { type Toolkit } from "@assistant-ui/react";
+import { ParameterSlider } from "@/components/tool-ui/parameter-slider";
+import {
+  safeParseSerializableParameterSlider,
+  SerializableParameterSliderSchema,
+} from "@/components/tool-ui/parameter-slider/schema";
+
+export const toolkit: Toolkit = {
+  adjust_parameters: {
+    description: "Adjust numeric parameters with sliders",
+    parameters: SerializableParameterSliderSchema,
+    render: ({ args, toolCallId, addResult }) => {
+      const parsedArgs = safeParseSerializableParameterSlider({
+        ...args,
+        id: args?.id ?? `parameter-slider-${toolCallId}`,
+      });
+      if (!parsedArgs) {
+        return null;
+      }
+      return (
+        <ParameterSlider
+          {...parsedArgs}
+          onAction={(actionId, values) => {
+            if (actionId === "apply") {
+              void addResult?.({ values });
+            }
+          }}
+        />
+      );
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="ListChecks" title="Multiple parameters">
+    Group related sliders under shared Reset/Apply actions
+  </Feature>
+  <Feature icon="SlidersHorizontal" title="Inline labels and values">
+    Label and current value sit directly on the slider track
+  </Feature>
+  <Feature icon="Settings2" title="Custom units">
+    Show domain-specific units: EV, dB, %, Mbps, or custom strings
+  </Feature>
+  <Feature icon="Accessibility" title="Built-in accessibility">
+    Arrow keys adjust values; screen readers announce the unit
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+### ParameterSlider
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this tool UI instance",
+      type: "string",
+      required: true,
+    },
+    sliders: {
+      description: "Array of slider configurations",
+      type: "SliderConfig[]",
+      required: true,
+    },
+    values: {
+      description: "Controlled values array (for controlled mode)",
+      type: "SliderValue[]",
+    },
+    onChange: {
+      description: "Called when any slider value changes",
+      type: "(values: SliderValue[]) => void",
+    },
+    actions: {
+      description: "Action buttons (defaults to Reset/Apply)",
+      type: "Action[] | ActionsConfig",
+    },
+    onAction: {
+      description:
+        "Called when an action button is clicked with post-action values",
+      type: "(actionId: string, values: SliderValue[]) => void | Promise<void>",
+    },
+    onBeforeAction: {
+      description:
+        "Called before action with current values, return false to cancel",
+      type: "(actionId: string, values: SliderValue[]) => boolean | Promise<boolean>",
+    },
+    className: {
+      description: "Additional CSS classes",
+      type: "string",
+    },
+  }}
+/>
+
+### SliderConfig
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this slider",
+      type: "string",
+      required: true,
+    },
+    label: {
+      description: "Display label for the slider",
+      type: "string",
+      required: true,
+    },
+    min: {
+      description: "Minimum value",
+      type: "number",
+      required: true,
+    },
+    max: {
+      description: "Maximum value",
+      type: "number",
+      required: true,
+    },
+    value: {
+      description: "Initial value",
+      type: "number",
+      required: true,
+    },
+    step: {
+      description: "Step increment (default: 1)",
+      type: "number",
+    },
+    unit: {
+      description: "Unit suffix shown after value (e.g., 'EV', '%', 'dB')",
+      type: "string",
+    },
+    precision: {
+      description: "Decimal places to display (default: auto)",
+      type: "number",
+    },
+    disabled: {
+      description: "Disable interaction for this slider",
+      type: "boolean",
+    },
+  }}
+/>
+
+### SliderValue
+
+<TypeTable
+  type={{
+    id: {
+      description: "Slider identifier",
+      type: "string",
+      required: true,
+    },
+    value: {
+      description: "Current slider value",
+      type: "number",
+      required: true,
+    },
+  }}
+/>
+
+## Accessibility
+
+- Full keyboard support: Tab to focus, Arrow keys to adjust values
+- `aria-valuetext` includes unit for screen readers (e.g., "plus 0.3 EV")
+- Tick marks provide visual reference for the range
+- Disabled state reduces opacity and disables pointer interactions
+
+## Related
+
+- [Preferences Panel](/docs/preferences-panel): structured settings with switches, toggles, and selects

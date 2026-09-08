@@ -1,0 +1,552 @@
+import { DocsHeader } from "../_components/docs-header";
+import { DataTable } from "@/components/tool-ui/data-table";
+import { FormatInlineExample } from "./formatting-gallery";
+import {
+  NumberValue,
+  CurrencyValue,
+  PercentValue,
+  DeltaValue,
+  DateValue,
+  BooleanValue,
+  LinkValue,
+  BadgeValue,
+  StatusBadge,
+  ArrayValue,
+} from "@/components/tool-ui/data-table";
+
+<DocsHeader
+  title="Data Table"
+  description="Present structured data in sortable tables."
+  mdxPath="app/docs/data-table/content.mdx"
+/>
+
+Search results, issue lists, transaction logs: the assistant surfaces tabular data constantly. DataTable renders those rows as a sortable table on desktop and stacked cards on mobile. You define columns with declarative formatting configs for currency, dates, status badges, and links. No raw JSON, no custom table from scratch.
+
+**Role:** Information. For displaying data the user reads. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="data-table" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `DataTable` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { DataTable, type Column } from "@/components/tool-ui/data-table";
+
+type Row = {
+  id: string;
+  issue: string;
+  priority: "high" | "medium" | "low";
+  createdAt: string;
+  amount: number;
+};
+
+const columns: Column<Row>[] = [
+  { key: "issue", label: "Issue", priority: "primary", truncate: true },
+  {
+    key: "priority",
+    label: "Urgency",
+    format: {
+      kind: "status",
+      statusMap: {
+        high: { tone: "danger", label: "High" },
+        medium: { tone: "warning", label: "Medium" },
+        low: { tone: "neutral", label: "Low" },
+      },
+    },
+  },
+  {
+    key: "createdAt",
+    label: "Created",
+    format: { kind: "date", dateFormat: "relative" },
+  },
+  {
+    key: "amount",
+    label: "Amount",
+    align: "right",
+    format: { kind: "currency", currency: "USD", decimals: 2 },
+  },
+];
+
+const data: Row[] = [
+  {
+    id: "1",
+    issue: "Payment failing on checkout",
+    priority: "high",
+    createdAt: "2025-11-11T09:24:00Z",
+    amount: 129.99,
+  },
+  {
+    id: "2",
+    issue: "Billing UI alignment bug",
+    priority: "medium",
+    createdAt: "2025-11-10T17:03:00Z",
+    amount: 42,
+  },
+  {
+    id: "3",
+    issue: "Export CSV missing headers",
+    priority: "low",
+    createdAt: "2025-11-08T08:00:00Z",
+    amount: 0,
+  },
+  {
+    id: "4",
+    issue: "Webhook retries inconsistent",
+    priority: "high",
+    createdAt: "2025-11-13T22:15:00Z",
+    amount: 527.5,
+  },
+];
+
+export default function Example() {
+  return (
+    <DataTable
+      rowIdKey="id"
+      columns={columns}
+      data={data}
+      defaultSort={{ by: "createdAt", direction: "desc" }}
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Register this renderer so tool results display as `DataTable`.
+
+```tsx
+// Backend tool
+import { tool, jsonSchema } from "ai";
+
+const searchProducts = tool({
+  description: "Search products and return results in a table",
+  inputSchema: jsonSchema<{ query: string }>({
+    type: "object",
+    properties: { query: { type: "string" } },
+    required: ["query"],
+    additionalProperties: false,
+  }),
+  async execute({ query }) {
+    const results = await db.products.search(query);
+    return {
+      id: "data-table-search-products",
+      columns: [
+        { key: "name", label: "Product", priority: "primary" },
+        {
+          key: "price",
+          label: "Price",
+          format: { kind: "currency", currency: "USD" },
+        },
+        { key: "stock", label: "Stock", align: "right" },
+      ],
+      data: results.map((p) => ({
+        id: p.id,
+        name: p.name,
+        price: p.price,
+        stock: p.stock,
+      })),
+    };
+  },
+});
+
+// Frontend with assistant-ui
+import { type Toolkit } from "@assistant-ui/react";
+import { DataTable } from "@/components/tool-ui/data-table";
+import { safeParseSerializableDataTable } from "@/components/tool-ui/data-table/schema";
+
+export const toolkit: Toolkit = {
+  searchProducts: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableDataTable(result);
+      if (!parsed) {
+        return null;
+      }
+      return <DataTable rowIdKey="id" {...parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="Smartphone" title="Responsive layout">
+    Table on desktop, stacked cards on mobile
+  </Feature>
+  <Feature icon="ArrowUpDown" title="Sorting">
+    Tri-state column headers: none, ascending, descending
+  </Feature>
+  <Feature icon="Table2" title="Declarative formatting">
+    Currency, dates, links, badges, and status pills via column config
+  </Feature>
+  <Feature icon="MousePointerClick" title="External actions">
+    Compose action buttons below the table
+  </Feature>
+</FeatureGrid>
+
+## Layout Variants
+
+Use explicit components when you want to force a layout:
+
+- `<DataTable>` (default): responsive auto layout
+- `<DataTable.Table>`: always render the table view
+- `<DataTable.Cards>`: always render the card view
+
+```tsx
+import { DataTable } from "@/components/tool-ui/data-table";
+```
+
+## Props
+
+### Core
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this component instance",
+      type: "string",
+      required: true,
+    },
+    columns: {
+      description: "Column definitions",
+      type: "Column[]",
+      required: true,
+    },
+    data: {
+      description: "Rows (JSON primitives only)",
+      type: "T[]",
+      required: true,
+    },
+    rowIdKey: {
+      description:
+        "Unique key per row (strongly recommended for stable reconciliation)",
+      type: "keyof T",
+      required: false,
+    },
+    emptyMessage: {
+      description: "Message to display when data is empty",
+      type: "string",
+    },
+    maxHeight: {
+      description: "Max height for scrollable table body (CSS value)",
+      type: "string",
+    },
+    locale: { description: "Intl locale", type: "string", default: '"en-US"' },
+  }}
+/>
+
+### Column Options
+
+<TypeTable
+  type={{
+    key: { description: "Row data key", type: "keyof T", required: true },
+    label: { description: "Header text", type: "string", required: true },
+    format: { description: "Cell formatting", type: "FormatConfig" },
+    priority: {
+      description: "Mobile visibility",
+      type: "'primary' | 'secondary' | 'tertiary'",
+    },
+    sortable: {
+      description: "Enable sorting",
+      type: "boolean",
+      default: "true",
+    },
+    align: {
+      description: "Text alignment",
+      type: "'left' | 'right' | 'center'",
+    },
+    abbr: {
+      description: "Abbreviated header text for narrow columns",
+      type: "string",
+    },
+    width: {
+      description: "CSS width for the column (e.g., '120px', '20%')",
+      type: "string",
+    },
+    truncate: { description: "Truncate with ellipsis", type: "boolean" },
+    hideOnMobile: {
+      description: "Hide this column in the mobile card layout",
+      type: "boolean",
+    },
+  }}
+/>
+
+### Sorting
+
+<TypeTable
+  type={{
+    defaultSort: {
+      description: "Initial sort",
+      type: "{ by?: keyof T; direction?: 'asc' | 'desc' }",
+    },
+    sort: {
+      description: "Controlled sort",
+      type: "{ by?: keyof T; direction?: 'asc' | 'desc' }",
+    },
+    onSortChange: { description: "Sort handler", type: "(sort) => void" },
+  }}
+/>
+
+### External Actions
+
+Use [`ToolUI.LocalActions`](/docs/actions) to compose surface-level actions below `DataTable`.
+
+## Formatting
+
+All visual formatting for data stays declarative via `columns[i].format`. Keep row values as primitives and describe presentation through format configs.
+
+<TypeTable
+  type={{
+    number: {
+      description: (
+        <FormatInlineExample
+          value={12345.678}
+          output={
+            <NumberValue
+              value={12345.678}
+              options={{ kind: "number", decimals: 2, unit: " ms" }}
+            />
+          }
+        />
+      ),
+      type: "{ kind: 'number', decimals?: number, unit?: string, compact?: boolean, showSign?: boolean }",
+    },
+    currency: {
+      description: (
+        <FormatInlineExample
+          value={178.25}
+          output={
+            <CurrencyValue
+              value={178.25}
+              options={{ kind: "currency", currency: "USD", decimals: 2 }}
+            />
+          }
+        />
+      ),
+      type: "{ kind: 'currency', currency: string, decimals?: number }",
+    },
+    percent: {
+      description: (
+        <>
+          <FormatInlineExample
+            value={0.123}
+            output={
+              <PercentValue
+                value={0.123}
+                options={{
+                  kind: "percent",
+                  basis: "fraction",
+                  decimals: 1,
+                  showSign: true,
+                }}
+              />
+            }
+          />
+          <FormatInlineExample
+            value={1.23}
+            output={
+              <PercentValue
+                value={1.23}
+                options={{
+                  kind: "percent",
+                  basis: "unit",
+                  decimals: 2,
+                  showSign: true,
+                }}
+              />
+            }
+          />
+        </>
+      ),
+      type: "{ kind: 'percent', basis: 'fraction' | 'unit', decimals?: number, showSign?: boolean }",
+    },
+    delta: {
+      description: (
+        <>
+          <FormatInlineExample
+            value={2.35}
+            output={
+              <DeltaValue
+                value={2.35}
+                options={{
+                  kind: "delta",
+                  decimals: 2,
+                  upIsPositive: true,
+                  showSign: true,
+                }}
+              />
+            }
+          />
+          <FormatInlineExample
+            value={-1.2}
+            output={
+              <DeltaValue
+                value={-1.2}
+                options={{
+                  kind: "delta",
+                  decimals: 2,
+                  upIsPositive: true,
+                  showSign: true,
+                }}
+              />
+            }
+          />
+        </>
+      ),
+      type: "{ kind: 'delta', decimals?: number, upIsPositive?: boolean, showSign?: boolean }",
+    },
+    date: {
+      description: (
+        <>
+          <FormatInlineExample
+            value={"2025-01-05T12:00:00Z"}
+            output={
+              <DateValue
+                value={"2025-01-05T12:00:00Z"}
+                options={{ kind: "date", dateFormat: "relative" }}
+              />
+            }
+          />
+          <FormatInlineExample
+            value={"2025-01-05T12:00:00Z"}
+            output={
+              <DateValue
+                value={"2025-01-05T12:00:00Z"}
+                options={{ kind: "date", dateFormat: "long" }}
+                locale="de-DE"
+              />
+            }
+            note="Long date with locale"
+          />
+        </>
+      ),
+      type: "{ kind: 'date', dateFormat?: 'short' | 'long' | 'relative' }",
+    },
+    boolean: {
+      description: (
+        <FormatInlineExample
+          value={true}
+          output={
+            <BooleanValue
+              value={true}
+              options={{
+                kind: "boolean",
+                labels: { true: "Yes", false: "No" },
+              }}
+            />
+          }
+        />
+      ),
+      type: "{ kind: 'boolean', labels?: { true: string; false: string } }",
+    },
+    link: {
+      description: (
+        <>
+          <FormatInlineExample
+            value={"Docs Portal"}
+            output={
+              <LinkValue
+                value={"Docs Portal"}
+                row={{ url: "/docs" }}
+                options={{ kind: "link", hrefKey: "url" }}
+              />
+            }
+          />
+          <FormatInlineExample
+            value={"https://example.com"}
+            output={
+              <LinkValue
+                value={"https://example.com"}
+                options={{ kind: "link", external: true }}
+              />
+            }
+          />
+        </>
+      ),
+      type: "{ kind: 'link', hrefKey?: string, external?: boolean }",
+    },
+    badge: {
+      description: (
+        <FormatInlineExample
+          value={"open"}
+          output={
+            <BadgeValue
+              value={"open"}
+              options={{
+                kind: "badge",
+                colorMap: { open: "info", closed: "success" },
+              }}
+            />
+          }
+        />
+      ),
+      type: "{ kind: 'badge', colorMap?: Record<string, Tone> }",
+    },
+    status: {
+      description: (
+        <FormatInlineExample
+          value={"high"}
+          output={
+            <StatusBadge
+              value={"high"}
+              options={{
+                kind: "status",
+                statusMap: {
+                  high: { tone: "danger", label: "High" },
+                  low: { tone: "neutral", label: "Low" },
+                },
+              }}
+            />
+          }
+        />
+      ),
+      type: "{ kind: 'status', statusMap: Record<string, { tone: Tone; label?: string }> }",
+    },
+    array: {
+      description: (
+        <FormatInlineExample
+          value={["alpha", "beta", "gamma"]}
+          output={
+            <ArrayValue
+              value={["alpha", "beta", "gamma"]}
+              options={{ kind: "array", maxVisible: 2 }}
+            />
+          }
+        />
+      ),
+      type: "{ kind: 'array', maxVisible?: number }",
+    },
+  }}
+/>
+
+## Accessibility
+
+- Uses semantic `<table>` markup with proper header associations
+- Sortable columns are keyboard-accessible via shadcn/ui Button
+- Sort changes are announced via `aria-live` for assistive technologies
+
+## Related
+
+- [Item Carousel](/docs/item-carousel): horizontal browsing for collection display

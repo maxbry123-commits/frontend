@@ -1,0 +1,321 @@
+import { DocsHeader } from "../_components/docs-header";
+import { OrderSummary } from "@/components/tool-ui/order-summary";
+
+<DocsHeader
+  title="Order Summary"
+  description="Display purchases with itemized pricing."
+  mdxPath="app/docs/order-summary/content.mdx"
+/>
+
+Nobody clicks "Buy" without seeing what they're buying. OrderSummary renders line items with images, quantities, and an itemized price breakdown, everything the user needs to review before committing. Use `OrderSummary.Display` during confirmation and `OrderSummary.Receipt` after the purchase is confirmed.
+
+**Role:** Decision. For choices that return to the assistant. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="order-summary" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `OrderSummary` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { OrderSummary } from "@/components/tool-ui/order-summary";
+
+export function Example() {
+  return (
+    <OrderSummary.Display
+      id="order-summary-example"
+      items={[
+        {
+          id: "item-1",
+          name: "Wireless Earbuds Pro",
+          description: "Active noise cancellation",
+          imageUrl: "https://example.com/earbuds.jpg",
+          quantity: 1,
+          unitPrice: 149.99,
+        },
+        {
+          id: "item-2",
+          name: "USB-C Charging Cable",
+          description: "2m braided",
+          quantity: 2,
+          unitPrice: 19.99,
+        },
+      ]}
+      pricing={{
+        subtotal: 189.97,
+        tax: 16.62,
+        shipping: 0,
+        total: 206.59,
+        currency: "USD",
+      }}
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Register this renderer so tool results display as `OrderSummary`.
+
+```tsx
+"use client";
+
+import { type Toolkit } from "@assistant-ui/react";
+import { OrderSummary } from "@/components/tool-ui/order-summary";
+import {
+  safeParseSerializableOrderSummary,
+  SerializableOrderSummarySchema,
+} from "@/components/tool-ui/order-summary/schema";
+import { ToolUI, createDecisionResult } from "@/components/tool-ui/shared";
+
+export const toolkit: Toolkit = {
+  createOrder: {
+    description: "Display a purchase order for user confirmation",
+    parameters: SerializableOrderSummarySchema,
+    render: ({ args, toolCallId, result, addResult }) => {
+      const parsedArgs = safeParseSerializableOrderSummary({
+        ...args,
+        id: args?.id ?? `order-${toolCallId}`,
+      });
+      if (!parsedArgs) {
+        return null;
+      }
+      if (result) {
+        return <OrderSummary.Receipt {...parsedArgs} choice={result} />;
+      }
+      return (
+        <ToolUI id={parsedArgs.id}>
+          <ToolUI.Surface>
+            <OrderSummary.Display {...parsedArgs} />
+          </ToolUI.Surface>
+          <ToolUI.Actions>
+            <ToolUI.DecisionActions
+              actions={[
+                { id: "cancel", label: "Cancel", variant: "outline" },
+                { id: "confirm", label: "Purchase", variant: "default" },
+              ]}
+              onAction={(action) =>
+                createDecisionResult({
+                  decisionId: `${parsedArgs.id}-decision`,
+                  action,
+                  payload:
+                    action.id === "confirm"
+                      ? {
+                          orderId: `ORD-${Date.now()}`,
+                          confirmedAt: new Date().toISOString(),
+                        }
+                      : undefined,
+                })
+              }
+              onCommit={async (decision) => {
+                if (decision.actionId !== "confirm") return;
+                const orderId =
+                  typeof decision.payload?.orderId === "string"
+                    ? decision.payload.orderId
+                    : `ORD-${Date.now()}`;
+                const confirmedAt =
+                  typeof decision.payload?.confirmedAt === "string"
+                    ? decision.payload.confirmedAt
+                    : new Date().toISOString();
+                await addResult?.({
+                  action: "confirm",
+                  orderId,
+                  confirmedAt,
+                });
+              }}
+            />
+          </ToolUI.Actions>
+        </ToolUI>
+      );
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="DollarSign" title="Currency formatting">
+    Locale-aware prices via `Intl.NumberFormat` for any ISO currency code
+  </Feature>
+  <Feature icon="List" title="Pricing breakdown">
+    Subtotal, tax, shipping, discounts, and total in one place
+  </Feature>
+  <Feature icon="CheckCircle2" title="Receipt state">
+    Dims the card and shows order ID after purchase confirmation
+  </Feature>
+  <Feature icon="Package" title="Image fallbacks">
+    Package icon placeholder when a product image is missing
+  </Feature>
+</FeatureGrid>
+
+## Receipt State
+
+Pass a `choice` prop to render this component in its receipt state. See [Receipts](/docs/receipts) for the pattern.
+
+Render `OrderSummary.Receipt` with a `choice` payload to show the confirmed order metadata.
+
+When parsing tool payloads with `SerializableOrderSummarySchema`, keep variant semantics aligned:
+
+- `variant: "summary"` must not include `choice`
+- `variant: "receipt"` must include `choice`
+
+## With Discount
+
+Add `discount` and `discountLabel` to `pricing` to show promotional savings.
+
+## Shared Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for the order summary",
+      type: "string",
+      required: true,
+    },
+    title: {
+      description: "Header text displayed at the top",
+      type: "string",
+      default: '"Order Summary"',
+    },
+    items: {
+      description: "Array of items in the order",
+      type: "OrderItem[]",
+      required: true,
+    },
+    pricing: {
+      description: "Pricing breakdown for the order",
+      type: "Pricing",
+      required: true,
+    },
+    className: {
+      description: "Additional CSS classes",
+      type: "string",
+    },
+  }}
+/>
+
+## Receipt Props
+
+<TypeTable
+  type={{
+    choice: {
+      description: "Confirmed decision metadata rendered in receipt mode",
+      type: "OrderDecision",
+      required: true,
+    },
+  }}
+/>
+
+Use [`ToolUI.DecisionActions`](/docs/actions) to compose consequential actions next to `OrderSummary`.
+
+## OrderItem Schema
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for the item",
+      type: "string",
+      required: true,
+    },
+    name: {
+      description: "Product or service name",
+      type: "string",
+      required: true,
+    },
+    description: {
+      description: "Additional details (size, color, options)",
+      type: "string",
+    },
+    imageUrl: {
+      description: "URL to product image (shows placeholder if missing)",
+      type: "string",
+    },
+    quantity: {
+      description: "Number of units (hidden when 1)",
+      type: "number",
+      default: "1",
+    },
+    unitPrice: {
+      description: "Price per unit in decimal (e.g., 29.99)",
+      type: "number",
+      required: true,
+    },
+  }}
+/>
+
+## Pricing Schema
+
+<TypeTable
+  type={{
+    subtotal: {
+      description: "Sum of all item prices before tax/shipping",
+      type: "number",
+      required: true,
+    },
+    tax: {
+      description: "Tax amount",
+      type: "number",
+    },
+    taxLabel: {
+      description: 'Custom tax label (e.g., "VAT (19%)")',
+      type: "string",
+      default: '"Tax"',
+    },
+    shipping: {
+      description: 'Shipping cost (shows "Free" when 0)',
+      type: "number",
+    },
+    discount: {
+      description: "Discount amount (displayed as negative)",
+      type: "number",
+    },
+    discountLabel: {
+      description: 'Discount label (e.g., "SAVE10 (10% off)")',
+      type: "string",
+      default: '"Discount"',
+    },
+    total: {
+      description: "Final amount due",
+      type: "number",
+      required: true,
+    },
+    currency: {
+      description: "ISO 4217 currency code",
+      type: "string",
+      default: '"USD"',
+    },
+  }}
+/>
+
+## Accessibility
+
+- Uses semantic `<article>` with `aria-labelledby` pointing to the title
+- Action buttons are keyboard accessible with visible focus states
+- Images use `alt=""` since item names provide the description
+- Receipt state shows clear visual indication of confirmation
+
+## Related
+
+- [Approval Card](/docs/approval-card): binary confirmation for non-purchase actions
+- [Option List](/docs/option-list): selecting from choices without a pricing breakdown

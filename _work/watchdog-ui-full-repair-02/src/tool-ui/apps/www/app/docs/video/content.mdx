@@ -1,0 +1,172 @@
+import { DocsHeader } from "../_components/docs-header";
+import { Video } from "@/components/tool-ui/video";
+
+<DocsHeader
+  title="Video"
+  description="Video playback with controls and poster."
+  mdxPath="app/docs/video/content.mdx"
+/>
+
+Pasting a video URL into a chat gives the user a clickable link and nothing else. No preview, no playback, no context. Video renders an inline player with a poster image, native controls, and metadata so the user can watch without leaving the conversation.
+
+**Role:** Information. For displaying data without user input. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="video" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `Video` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { Video } from "@/components/tool-ui/video";
+
+export function Example() {
+  return (
+    <Video
+      id="video-example"
+      assetId="sample-video"
+      src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4"
+      poster="https://images.unsplash.com/photo-1518770660439-4636190af475"
+      title="The GUI moment"
+      description="From command lines to windows, icons, menus, and pointers."
+      ratio="16:9"
+      durationMs={128000}
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Registration tells assistant-ui which component to render when a tool returns video data. Without it, tool results appear as raw JSON.
+
+```tsx
+import { type Toolkit } from "@assistant-ui/react";
+import { Video } from "@/components/tool-ui/video";
+import { safeParseSerializableVideo } from "@/components/tool-ui/video/schema";
+
+export const toolkit: Toolkit = {
+  showVideo: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableVideo(result);
+      if (!parsed) {
+        return null;
+      }
+      return <Video {...parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="Play" title="Muted autoplay">
+    Starts muted for inline previews so it won't surprise the user
+  </Feature>
+  <Feature icon="Image" title="Poster image">
+    Shows a thumbnail before the first play
+  </Feature>
+  <Feature icon="Video" title="Native controls">
+    Uses the browser's built-in play, pause, seek, and fullscreen
+  </Feature>
+  <Feature icon="AspectRatio" title="Aspect ratio control">
+    Locks to auto, 1:1, 4:3, 16:9, or 9:16
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this tool UI instance",
+      type: "string",
+      required: true,
+    },
+    assetId: {
+      description: "Persistent asset identifier",
+      type: "string",
+      required: true,
+    },
+    src: {
+      description: "Video source URL",
+      type: "string",
+      required: true,
+    },
+    poster: { description: "Poster/thumbnail URL", type: "string" },
+    title: { description: "Title text", type: "string" },
+    description: { description: "Description", type: "string" },
+    ratio: {
+      description: "Aspect ratio",
+      type: "'auto' | '1:1' | '4:3' | '16:9' | '9:16'",
+      default: "'16:9'",
+    },
+    fit: {
+      description: "Object fit mode",
+      type: "'cover' | 'contain'",
+      default: "'cover'",
+    },
+    durationMs: { description: "Duration in milliseconds", type: "number" },
+    autoPlay: {
+      description: "Auto-play video (muted)",
+      type: "boolean",
+      default: "true",
+    },
+    defaultMuted: {
+      description: "Initial mute state",
+      type: "boolean",
+      default: "true",
+    },
+    href: {
+      description: "Makes video clickable with this URL",
+      type: "string",
+    },
+    domain: {
+      description: "Source domain label shown on the video",
+      type: "string",
+    },
+    source: {
+      description: "Source attribution",
+      type: "{ label: string; iconUrl?: string; url?: string }",
+    },
+    createdAt: { description: "Creation timestamp (ISO 8601)", type: "string" },
+    onNavigate: {
+      description: "Called when user clicks the video link",
+      type: "(href: string, video: SerializableVideo) => void",
+    },
+    onMediaEvent: {
+      description: "Called on play, pause, mute, or unmute",
+      type: "(type: 'play' | 'pause' | 'mute' | 'unmute') => void",
+    },
+  }}
+/>
+
+Use [`ToolUI.LocalActions`](/docs/actions) to compose external actions next to `Video`.
+
+## Related
+
+- [Audio](/docs/audio): the same inline media pattern for audio content
+- [Image](/docs/image): for static visual content with metadata and attribution
+- [Image Gallery](/docs/image-gallery): for presenting multiple visual assets in a grid

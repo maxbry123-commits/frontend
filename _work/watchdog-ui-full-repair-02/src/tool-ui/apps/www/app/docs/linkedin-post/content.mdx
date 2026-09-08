@@ -1,0 +1,127 @@
+import { DocsHeader } from "../_components/docs-header";
+import { LinkedInPost } from "@/components/tool-ui/linkedin-post";
+
+<DocsHeader
+  title="LinkedIn Post"
+  description="Platform-native post card for LinkedIn."
+  mdxPath="app/docs/linkedin-post/content.mdx"
+/>
+
+Announcements, thought leadership, company updates: professional content benefits from AI-assisted drafting, but a plain text blob doesn't convey the final result. LinkedInPost renders a card that matches LinkedIn's layout: author headline, long-form text, link previews, and engagement stats.
+
+**Role:** Information. For displaying data the user reads. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="linkedin-post" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `LinkedInPost` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { LinkedInPost } from "@/components/tool-ui/linkedin-post";
+
+export function Example() {
+  return (
+    <LinkedInPost
+      post={{
+        id: "li-post-1",
+        author: {
+          name: "Jordan Lee",
+          avatarUrl: "https://example.com/avatar.jpg",
+          headline: "Engineering Lead | Platform",
+        },
+        text: "Excited to share that our team shipped a major product update this week.",
+        stats: { likes: 234 },
+        createdAt: "2025-01-05T09:00:00.000Z",
+      }}
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Register this renderer so tool results display as `LinkedInPost`.
+
+```tsx
+import { type Toolkit } from "@assistant-ui/react";
+import { LinkedInPost } from "@/components/tool-ui/linkedin-post";
+import { safeParseSerializableLinkedInPost } from "@/components/tool-ui/linkedin-post/schema";
+
+export const toolkit: Toolkit = {
+  showLinkedInPost: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableLinkedInPost(result);
+      if (!parsed) {
+        return null;
+      }
+      return <LinkedInPost post={parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="Paintbrush" title="Platform-native styling">
+    Uses LinkedIn's layout, typography, and color scheme
+  </Feature>
+  <Feature icon="FileText" title="Long-form post support">
+    Handles professional long-form text with proper truncation and expansion
+  </Feature>
+  <Feature icon="MousePointerClick" title="External actions">
+    Add actions like "Post" or "Edit" via ToolUI action surfaces
+  </Feature>
+  <Feature icon="Link" title="Link previews">
+    Rich article previews with title, image, and domain
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+<TypeTable
+  type={{
+    post: {
+      description: "Post payload validated by `SerializableLinkedInPostSchema`",
+      type: "LinkedInPostData",
+      required: true,
+    },
+    className: {
+      description: "Optional className for the outer card",
+      type: "string",
+    },
+    onAction: {
+      description: "Fires when the user triggers a built-in post action",
+      type: "(action: string, post: LinkedInPostData) => void",
+    },
+  }}
+/>
+
+Use [`ToolUI.LocalActions`](/docs/actions) to compose external actions next to `LinkedInPost`.
+
+## Related
+
+- [X Post](/docs/x-post): platform-native card for X (Twitter) content
+- [Instagram Post](/docs/instagram-post): platform-native card for Instagram content

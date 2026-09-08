@@ -1,0 +1,180 @@
+import { DocsHeader } from "../_components/docs-header";
+import { ImageGallery } from "@/components/tool-ui/image-gallery";
+
+<DocsHeader
+  title="Image Gallery"
+  description="Masonry grid with fullscreen lightbox viewer."
+  mdxPath="app/docs/image-gallery/content.mdx"
+/>
+
+Five images stacked vertically push the rest of the conversation off-screen. ImageGallery arranges multiple images in a masonry grid that respects each photo's aspect ratio, with a fullscreen lightbox for inspecting detail. Captions, source attribution, and keyboard navigation come built in.
+
+**Role:** Information. For displaying data without user input. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="image-gallery" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `ImageGallery` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { ImageGallery } from "@/components/tool-ui/image-gallery";
+
+export function Example() {
+  return (
+    <ImageGallery
+      id="image-gallery-example"
+      title="Mountain landscapes"
+      description="Here are some images matching your search"
+      images={[
+        {
+          id: "img-1",
+          src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop",
+          alt: "Dramatic mountain peaks at sunrise",
+          width: 800,
+          height: 600,
+          title: "Alpine Sunrise",
+          caption: "Dolomites, Italy",
+        },
+        {
+          id: "img-2",
+          src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&h=1200&fit=crop",
+          alt: "Misty mountain valley",
+          width: 800,
+          height: 1200,
+          title: "Misty Valley",
+        },
+        // ... more images
+      ]}
+      onImageClick={(id, image) => console.log("Clicked:", id, image)}
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Registration tells assistant-ui which component to render when a tool returns a set of images. Without it, tool results appear as raw JSON.
+
+```tsx
+import { type Toolkit } from "@assistant-ui/react";
+import { ImageGallery } from "@/components/tool-ui/image-gallery";
+import { safeParseSerializableImageGallery } from "@/components/tool-ui/image-gallery/schema";
+
+export const toolkit: Toolkit = {
+  showImageGallery: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableImageGallery(result);
+      if (!parsed) {
+        return null;
+      }
+      return <ImageGallery {...parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="Grid2x2" title="Masonry grid">
+    Tiles images by aspect ratio so tall and wide shots sit together naturally
+  </Feature>
+  <Feature icon="Expand" title="Fullscreen lightbox">
+    Click any image to open it full-screen with title and caption
+  </Feature>
+  <Feature icon="Move" title="Smooth transitions">
+    Animated layout shift from grid thumbnail to lightbox view
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this tool UI instance",
+      type: "string",
+      required: true,
+    },
+    images: {
+      description: "Array of image objects to display",
+      type: "ImageGalleryItem[]",
+      required: true,
+    },
+    title: { description: "Gallery header title", type: "string" },
+    description: { description: "Gallery header description", type: "string" },
+    onImageClick: {
+      description: "Image click handler",
+      type: "(imageId: string, image: ImageGalleryItem) => void",
+    },
+  }}
+/>
+
+### ImageGalleryItem
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this image",
+      type: "string",
+      required: true,
+    },
+    src: {
+      description: "Image source URL",
+      type: "string",
+      required: true,
+    },
+    alt: {
+      description: "Alt text for accessibility",
+      type: "string",
+      required: true,
+    },
+    width: {
+      description: "Image width in pixels (for layout calculation)",
+      type: "number",
+      required: true,
+    },
+    height: {
+      description: "Image height in pixels (for layout calculation)",
+      type: "number",
+      required: true,
+    },
+    title: { description: "Image title (shown in lightbox)", type: "string" },
+    caption: {
+      description: "Image caption (shown in lightbox)",
+      type: "string",
+    },
+    source: {
+      description: "Source attribution",
+      type: "{ label: string; url?: string }",
+    },
+  }}
+/>
+
+## Related
+
+- [Image](/docs/image): for displaying a single image with metadata and attribution
+- [Video](/docs/video): for inline video playback in the same media pattern
+- [Item Carousel](/docs/item-carousel): for browsable collections where each card has actions, not just images

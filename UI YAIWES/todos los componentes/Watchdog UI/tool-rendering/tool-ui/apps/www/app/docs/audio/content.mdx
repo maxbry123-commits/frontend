@@ -1,0 +1,145 @@
+import { DocsHeader } from "../_components/docs-header";
+import { Audio } from "@/components/tool-ui/audio";
+
+<DocsHeader
+  title="Audio"
+  description="Audio playback with artwork and metadata."
+  mdxPath="app/docs/audio/content.mdx"
+/>
+
+An audio URL by itself is invisible. No artwork, no title, no way to know what you are about to hear. Audio wraps the browser's native player with album art, title, duration, and source attribution so the track looks intentional rather than dumped into the conversation.
+
+**Role:** Information. For displaying data without user input. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="audio" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `Audio` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { Audio } from "@/components/tool-ui/audio";
+
+export function Example() {
+  return (
+    <Audio
+      id="audio-example"
+      assetId="sample-audio"
+      src="https://samplelib.com/lib/preview/mp3/sample-6s.mp3"
+      title="Bell Labs hallway recording"
+      description="Ambient sounds where UNIX, C, and more took shape."
+      artwork="https://images.unsplash.com/photo-1454165205744-3b78555e5572"
+      durationMs={30000}
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Registration tells assistant-ui which component to render when a tool returns audio data. Without it, tool results appear as raw JSON.
+
+```tsx
+import { type Toolkit } from "@assistant-ui/react";
+import { Audio } from "@/components/tool-ui/audio";
+import { safeParseSerializableAudio } from "@/components/tool-ui/audio/schema";
+
+export const toolkit: Toolkit = {
+  showAudio: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableAudio(result);
+      if (!parsed) {
+        return null;
+      }
+      return <Audio {...parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="Headphones" title="Native audio controls">
+    Browser-native play, pause, seek, and volume
+  </Feature>
+  <Feature icon="Image" title="Artwork display">
+    Album art or thumbnail displayed beside the player
+  </Feature>
+  <Feature icon="FileText" title="Metadata display">
+    Title, description, duration, and file size at a glance
+  </Feature>
+  <Feature icon="Link" title="Source attribution">
+    Artist, album, or source with an optional link
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this tool UI instance",
+      type: "string",
+      required: true,
+    },
+    assetId: {
+      description: "Persistent asset identifier",
+      type: "string",
+      required: true,
+    },
+    src: {
+      description: "Audio source URL",
+      type: "string",
+      required: true,
+    },
+    title: { description: "Title text", type: "string" },
+    description: { description: "Description", type: "string" },
+    artwork: { description: "Artwork/thumbnail URL", type: "string" },
+    durationMs: { description: "Duration in milliseconds", type: "number" },
+    fileSizeBytes: { description: "File size in bytes", type: "number" },
+    source: {
+      description: "Source attribution",
+      type: "{ label: string; iconUrl?: string; url?: string }",
+    },
+    variant: {
+      description: "Display variant",
+      type: "'full' | 'compact'",
+      default: "'full'",
+    },
+    createdAt: { description: "Creation timestamp (ISO 8601)", type: "string" },
+    onMediaEvent: {
+      description: "Called on play, pause, mute, or unmute",
+      type: "(type: 'play' | 'pause' | 'mute' | 'unmute') => void",
+    },
+  }}
+/>
+
+Use [`ToolUI.LocalActions`](/docs/actions) to compose external actions next to `Audio`.
+
+## Related
+
+- [Video](/docs/video): the same inline media pattern for video content
+- [Image](/docs/image): for static visual content with metadata and attribution
+- [Item Carousel](/docs/item-carousel): for browsable collections of media items like albums or playlists

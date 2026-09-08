@@ -1,0 +1,903 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, type Transition } from "motion/react";
+import { cn } from "@/lib/ui/cn";
+import { CitationList } from "@/components/tool-ui/citation";
+import { DataTable } from "@/components/tool-ui/data-table";
+import { LinkPreview } from "@/components/tool-ui/link-preview";
+import { Plan } from "@/components/tool-ui/plan";
+import { Terminal } from "@/components/tool-ui/terminal";
+import { CodeBlock } from "@/components/tool-ui/code-block";
+import { ItemCarousel } from "@/components/tool-ui/item-carousel";
+import { ParameterSlider } from "@/components/tool-ui/parameter-slider";
+import { StatsDisplay } from "@/components/tool-ui/stats-display";
+import { ProgressTracker } from "@/components/tool-ui/progress-tracker";
+import { MessageDraft } from "@/components/tool-ui/message-draft";
+import { WeatherWidget } from "@/components/tool-ui/weather-widget/runtime";
+import {
+  type Flight,
+  TABLE_COLUMNS,
+  TABLE_DATA,
+  LINK_PREVIEW,
+  PLAN_TODO_LABELS,
+  ITEM_CAROUSEL_DATA,
+  LLM_CITATIONS,
+  PARAMETER_SLIDER_DATA,
+  STATS_DISPLAY_DATA,
+  PROGRESS_TRACKER_DATA,
+} from "@/lib/mocks/chat-showcase-data";
+
+const TIMING = {
+  durations: {
+    userIn: 500,
+    preambleIn: 280,
+    toolIn: 600,
+  },
+  beats: {
+    afterUser: 700,
+    beforeContent: 500,
+    afterPreamble: 200,
+  },
+  sceneHold: 4500,
+  exitStagger: {
+    user: 0,
+    preamble: 80,
+    tool: 160,
+  },
+  reducedMotion: {
+    duration: 250,
+    sceneHold: 1500,
+  },
+} as const;
+
+const SPRINGS = {
+  gentle: {
+    type: "spring",
+    damping: 28,
+    stiffness: 180,
+    mass: 0.8,
+  },
+  smooth: {
+    type: "spring",
+    damping: 24,
+    stiffness: 260,
+    mass: 0.8,
+  },
+  standard: {
+    type: "spring",
+    damping: 26,
+    stiffness: 220,
+    mass: 0.7,
+  },
+} as const satisfies Record<string, Transition>;
+
+type SceneConfig = {
+  userMessage?: string;
+  preamble?: string;
+  toolUI: React.ReactNode;
+  toolFallbackHeight?: number;
+  holdDuration?: number;
+};
+
+type SceneTimelineState = {
+  preambleReady: boolean;
+  showTool: boolean;
+  setShowTool: (value: boolean) => void;
+};
+
+function useReducedMotion(): boolean {
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mediaQuery.matches);
+
+    const handleChange = () => setReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener?.("change", handleChange);
+    return () => mediaQuery.removeEventListener?.("change", handleChange);
+  }, []);
+
+  return reducedMotion;
+}
+
+function useSceneTimeline({
+  reducedMotion,
+  onComplete,
+  hasUserMessage = true,
+  initialDelay = 0,
+  holdDuration,
+}: {
+  reducedMotion: boolean;
+  onComplete: () => void;
+  hasUserMessage?: boolean;
+  initialDelay?: number;
+  holdDuration?: number;
+}): SceneTimelineState {
+  const [preambleReady, setPreambleReady] = useState(reducedMotion);
+  const [showTool, setShowTool] = useState(reducedMotion);
+  const hasScheduledCompletion = useRef(false);
+
+  useEffect(() => {
+    if (!reducedMotion) return;
+
+    const timeoutId = window.setTimeout(
+      onComplete,
+      TIMING.reducedMotion.sceneHold,
+    );
+    return () => window.clearTimeout(timeoutId);
+  }, [reducedMotion, onComplete]);
+
+  useEffect(() => {
+    if (reducedMotion || preambleReady) return;
+
+    const delay =
+      initialDelay +
+      (hasUserMessage ? TIMING.durations.userIn + TIMING.beats.afterUser : 0);
+
+    const timeoutId = window.setTimeout(() => setPreambleReady(true), delay);
+    return () => window.clearTimeout(timeoutId);
+  }, [preambleReady, reducedMotion, hasUserMessage, initialDelay]);
+
+  useEffect(() => {
+    const shouldScheduleCompletion =
+      !hasScheduledCompletion.current &&
+      preambleReady &&
+      showTool &&
+      !reducedMotion;
+
+    if (!shouldScheduleCompletion) return;
+
+    hasScheduledCompletion.current = true;
+    const timeoutId = window.setTimeout(
+      onComplete,
+      holdDuration ?? TIMING.sceneHold,
+    );
+    return () => window.clearTimeout(timeoutId);
+  }, [preambleReady, showTool, onComplete, reducedMotion, holdDuration]);
+
+  return useMemo(
+    () => ({ preambleReady, showTool, setShowTool }),
+    [preambleReady, showTool],
+  );
+}
+
+function ToolReveal({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={SPRINGS.gentle}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function TypingIndicator() {
+  return (
+    <motion.span
+      className="bg-foreground/50 block size-4 rounded-full"
+      animate={{ opacity: [0.4, 1, 0.4] }}
+      transition={{
+        duration: 1.4,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+      aria-label="Assistant is typing"
+    />
+  );
+}
+
+const TEST_LINES = [
+  "\x1b[32m✓\x1b[0m login flow handles invalid credentials \x1b[90m(3 tests)\x1b[0m \x1b[33m42ms\x1b[0m",
+  "\x1b[32m✓\x1b[0m session tokens refresh correctly \x1b[90m(5 tests)\x1b[0m \x1b[33m128ms\x1b[0m",
+  "\x1b[32m✓\x1b[0m logout clears all cookies \x1b[90m(2 tests)\x1b[0m \x1b[33m18ms\x1b[0m",
+  "",
+  "\x1b[32mTests:\x1b[0m 10 passed, 10 total",
+];
+
+function AnimatedTerminal({ className }: { className?: string }) {
+  const [lineCount, setLineCount] = useState(0);
+
+  useEffect(() => {
+    if (lineCount >= TEST_LINES.length) return;
+
+    const delay = lineCount === 0 ? 300 : 700;
+    const timeoutId = window.setTimeout(() => {
+      setLineCount((c) => c + 1);
+    }, delay);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [lineCount]);
+
+  const visibleOutput = TEST_LINES.slice(0, lineCount).join("\n") || " ";
+  const isComplete = lineCount >= TEST_LINES.length;
+
+  return (
+    <Terminal
+      id="chat-showcase-terminal"
+      command="pnpm test auth"
+      stdout={visibleOutput}
+      exitCode={0}
+      durationMs={isComplete ? 1243 : undefined}
+      className={className}
+    />
+  );
+}
+
+function AnimatedPlan({ className }: { className?: string }) {
+  const [completedCount, setCompletedCount] = useState(0);
+
+  useEffect(() => {
+    if (completedCount >= PLAN_TODO_LABELS.length) return;
+
+    const delay = completedCount === 0 ? 400 : 1100;
+    const timeoutId = window.setTimeout(() => {
+      setCompletedCount((c) => c + 1);
+    }, delay);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [completedCount]);
+
+  const todoDescriptions = [
+    "Analyzing social media activity and recent conversations",
+    "Browsing gift guides and personalized recommendations",
+    "Evaluating quality, reviews, and price ranges",
+    "Selecting the top 3 options with purchase links",
+  ];
+
+  const todos = PLAN_TODO_LABELS.map((label: string, index: number) => ({
+    id: String(index + 1),
+    label,
+    description: todoDescriptions[index],
+    status:
+      index < completedCount
+        ? ("completed" as const)
+        : index === completedCount
+          ? ("in_progress" as const)
+          : ("pending" as const),
+  }));
+
+  return (
+    <Plan
+      id="chat-showcase-plan"
+      title="Gift Research"
+      description="Finding the perfect birthday gift for Sarah"
+      todos={todos}
+      className={className}
+    />
+  );
+}
+
+function AnimatedProgressTracker({ className }: { className?: string }) {
+  const [currentStep, setCurrentStep] = useState(1);
+
+  useEffect(() => {
+    if (currentStep >= 3) return;
+
+    const delay = currentStep === 1 ? 1300 : 1500;
+    const timeoutId = window.setTimeout(() => {
+      setCurrentStep((s) => s + 1);
+    }, delay);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [currentStep]);
+
+  const steps = PROGRESS_TRACKER_DATA.steps.map((step, index) => ({
+    ...step,
+    status:
+      index < currentStep
+        ? ("completed" as const)
+        : index === currentStep
+          ? ("in-progress" as const)
+          : ("pending" as const),
+  }));
+
+  const elapsedTime = PROGRESS_TRACKER_DATA.elapsedTime! + currentStep * 12000;
+
+  return (
+    <ProgressTracker
+      id="chat-showcase-progress-tracker"
+      steps={steps}
+      elapsedTime={elapsedTime}
+      className={className}
+    />
+  );
+}
+
+type ChatBubbleProps = {
+  role: "user" | "assistant";
+  children: React.ReactNode;
+  className?: string;
+};
+
+function ChatBubble({ role, children, className }: ChatBubbleProps) {
+  const isUser = role === "user";
+
+  return (
+    <div
+      className={cn(
+        "flex w-full",
+        isUser ? "justify-end pb-3" : "justify-start",
+      )}
+      aria-label={isUser ? "User message" : "Assistant message"}
+    >
+      <div
+        className={cn(
+          "relative max-w-[min(720px,100%)] text-xl",
+          isUser && "rounded-full bg-[#007AFF] text-white dark:bg-[#002b90]",
+          !isUser && "text-foreground",
+          className,
+        )}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+type PreambleBubbleProps = {
+  text: string;
+  msPerChar?: number;
+  reducedMotion?: boolean;
+  onComplete?: () => void;
+};
+
+function StreamingChar({ char, delay }: { char: string; delay: number }) {
+  return (
+    <motion.span
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{
+        duration: 0.4,
+        delay,
+        ease: [0.25, 0.1, 0.25, 1],
+      }}
+    >
+      {char}
+    </motion.span>
+  );
+}
+
+function PreambleBubble({
+  text,
+  msPerChar = 18,
+  reducedMotion,
+  onComplete,
+}: PreambleBubbleProps) {
+  const [isVisible, setIsVisible] = useState(reducedMotion);
+  const hasCalledComplete = useRef(false);
+
+  useEffect(() => {
+    if (reducedMotion) return;
+
+    const timeoutId = window.setTimeout(() => setIsVisible(true), 100);
+    return () => window.clearTimeout(timeoutId);
+  }, [reducedMotion]);
+
+  useEffect(() => {
+    if (hasCalledComplete.current) return;
+
+    if (reducedMotion) {
+      hasCalledComplete.current = true;
+      onComplete?.();
+      return;
+    }
+
+    if (!isVisible) return;
+
+    const totalDuration = text.length * msPerChar + 400;
+    const timeoutId = window.setTimeout(() => {
+      if (!hasCalledComplete.current) {
+        hasCalledComplete.current = true;
+        onComplete?.();
+      }
+    }, totalDuration);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [reducedMotion, msPerChar, text.length, onComplete, isVisible]);
+
+  const characters = useMemo(() => {
+    return text.split("").map((char, index) => ({
+      char,
+      delay: index * (msPerChar / 1000),
+    }));
+  }, [text, msPerChar]);
+
+  if (reducedMotion) {
+    return (
+      <ChatBubble role="assistant">
+        <span>{text}</span>
+      </ChatBubble>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isVisible ? 1 : 0 }}
+      transition={SPRINGS.smooth}
+    >
+      <ChatBubble role="assistant">
+        <span>
+          {isVisible &&
+            characters.map(({ char, delay }, index) => (
+              <StreamingChar key={index} char={char} delay={delay} />
+            ))}
+        </span>
+      </ChatBubble>
+    </motion.div>
+  );
+}
+
+function createSceneConfigs(reducedMotion: boolean): SceneConfig[] {
+  const { title: _title, ...statsDataWithoutTitle } = STATS_DISPLAY_DATA;
+
+  return [
+    {
+      userMessage: "How's the business doing this quarter?",
+      preamble: "Q4 numbers are in. Looking solid.",
+      toolUI: (
+        <StatsDisplay
+          id="chat-showcase-stats-display"
+          {...statsDataWithoutTitle}
+          className="w-full max-w-[560px]"
+        />
+      ),
+      toolFallbackHeight: 280,
+    },
+    {
+      userMessage: "What's the weather like this week?",
+      preamble: "Stormy night ahead. Clears up by Thursday.",
+      toolUI: (
+        <WeatherWidget
+          version="3.1"
+          id="chat-showcase-weather"
+          location={{ name: "San Francisco, CA" }}
+          units={{ temperature: "fahrenheit" }}
+          current={{
+            temperature: 54,
+            tempMin: 51,
+            tempMax: 58,
+            conditionCode: "thunderstorm",
+          }}
+          forecast={[
+            {
+              label: "Tue",
+              tempMin: 50,
+              tempMax: 56,
+              conditionCode: "heavy-rain",
+            },
+            { label: "Wed", tempMin: 49, tempMax: 55, conditionCode: "rain" },
+            { label: "Thu", tempMin: 51, tempMax: 60, conditionCode: "cloudy" },
+            {
+              label: "Fri",
+              tempMin: 53,
+              tempMax: 64,
+              conditionCode: "partly-cloudy",
+            },
+            { label: "Sat", tempMin: 55, tempMax: 68, conditionCode: "clear" },
+          ]}
+          time={{ localTimeOfDay: 23 / 24 }}
+          updatedAt="2024-01-15T23:00:00Z"
+          className="w-full max-w-[400px]"
+          effects={{
+            enabled: !reducedMotion,
+            reducedMotion,
+            quality: "auto",
+          }}
+        />
+      ),
+      toolFallbackHeight: 280,
+      holdDuration: 6000,
+    },
+    {
+      userMessage: "Boost the bass a bit on this track",
+      preamble: "Bass is up. Here's the full EQ.",
+      toolUI: (
+        <ParameterSlider
+          id="chat-showcase-parameter-slider"
+          sliders={[
+            {
+              id: "bass",
+              label: "Bass",
+              min: -12,
+              max: 12,
+              step: 1,
+              value: 4,
+              unit: "dB",
+              fillClassName: "bg-fuchsia-500/30 dark:bg-fuchsia-400/35",
+              handleClassName: "bg-fuchsia-500 dark:bg-fuchsia-400",
+            },
+            {
+              id: "mid",
+              label: "Mid",
+              min: -12,
+              max: 12,
+              step: 1,
+              value: -1,
+              unit: "dB",
+              fillClassName: "bg-cyan-500/30 dark:bg-cyan-400/35",
+              handleClassName: "bg-cyan-500 dark:bg-cyan-400",
+            },
+            {
+              id: "treble",
+              label: "Treble",
+              min: -12,
+              max: 12,
+              step: 1,
+              value: 3,
+              unit: "dB",
+              fillClassName: "bg-violet-500/30 dark:bg-violet-400/35",
+              handleClassName: "bg-violet-500 dark:bg-violet-400",
+            },
+          ]}
+          actions={PARAMETER_SLIDER_DATA.actions}
+          className="w-full max-w-[480px]"
+        />
+      ),
+      toolFallbackHeight: 240,
+    },
+    {
+      userMessage: "Find me a birthday gift for Sarah",
+      preamble: "On it. Checking her interests now.",
+      toolUI: <AnimatedPlan className="w-full max-w-[480px]" />,
+      toolFallbackHeight: 280,
+    },
+    {
+      userMessage: "What should I listen to right now?",
+      preamble: "Found a few albums for you.",
+      toolUI: (
+        <ItemCarousel
+          id="chat-showcase-item-carousel"
+          {...ITEM_CAROUSEL_DATA}
+          className="w-full max-w-[640px]"
+        />
+      ),
+      toolFallbackHeight: 320,
+    },
+    {
+      userMessage: "Run the tests for the auth module",
+      preamble: "Running auth tests now.",
+      toolUI: <AnimatedTerminal className="w-full max-w-[560px]" />,
+      toolFallbackHeight: 200,
+    },
+    {
+      userMessage: "Deploy the updates to production",
+      preamble: "Deployment started. Tracking progress.",
+      toolUI: <AnimatedProgressTracker className="w-full max-w-[480px]" />,
+      toolFallbackHeight: 260,
+    },
+    {
+      userMessage: "Find me flights to Tokyo in March",
+      preamble: "Found 4 nonstop flights. Sorted by price.",
+      toolUI: (
+        <DataTable.Table<Flight>
+          id="chat-showcase-data-table"
+          rowIdKey="id"
+          columns={TABLE_COLUMNS}
+          data={TABLE_DATA}
+          defaultSort={{ by: "price", direction: "asc" }}
+        />
+      ),
+      toolFallbackHeight: 320,
+    },
+    {
+      userMessage: "Create a skill that learns from mistakes",
+      preamble: "Here's a self-improving metaskill.",
+      toolUI: (
+        <CodeBlock
+          id="chat-showcase-code-block"
+          language="markdown"
+          lineNumbers="visible"
+          filename="learn-from-errors.md"
+          code={`name: learn-from-errors
+triggers: [error, failed, mistake, wrong]
+
+## Behavior
+
+When an error occurs:
+1. Capture the context and attempted solution
+2. Analyze what went wrong
+3. Update \`~/.claude/learnings.md\` with the pattern
+4. Apply the learning to retry
+
+## Self-Improvement Loop
+
+\`\`\`
+error → analyze → document → retry → verify
+          ↑                            ↓
+          └──────── if failed ─────────┘
+\`\`\``}
+          className="w-full"
+        />
+      ),
+      toolFallbackHeight: 260,
+    },
+    {
+      userMessage: "Find that physics article from Quanta",
+      preamble: "Was it this one?",
+      toolUI: <LinkPreview {...LINK_PREVIEW} />,
+      toolFallbackHeight: 260,
+    },
+    {
+      userMessage: "Send Marcus the updated proposal",
+      preamble: "Drafted this for you. Review before sending.",
+      toolUI: (
+        <MessageDraft
+          id="chat-showcase-message-draft"
+          channel="email"
+          subject="Updated proposal attached"
+          to={["marcus.chen@acme.co"]}
+          body={`Hi Marcus,
+
+I've attached the revised proposal with the changes we discussed. The new timeline reflects the Q2 launch date, and I've adjusted the budget breakdown in section 3.
+
+Let me know if you have any questions.
+
+Best,
+Sarah`}
+          className="w-full max-w-[480px]"
+        />
+      ),
+      toolFallbackHeight: 340,
+    },
+    {
+      userMessage: "What was the first LLM?",
+      preamble: "GPT-1 from OpenAI in 2018. Here are the key sources.",
+      toolUI: (
+        <CitationList
+          id="showcase-citations"
+          citations={LLM_CITATIONS}
+          variant="stacked"
+          className="w-full max-w-[480px]"
+        />
+      ),
+      toolFallbackHeight: 56,
+    },
+  ];
+}
+
+const SCENE_COUNT = 11;
+
+type AnimatedSceneProps = {
+  config: SceneConfig;
+  reducedMotion: boolean;
+  onComplete: () => void;
+  sceneId: string;
+  isExiting?: boolean;
+  composerPadding?: boolean;
+  initialDelay?: number;
+};
+
+function AnimatedScene({
+  config,
+  reducedMotion,
+  onComplete,
+  sceneId,
+  isExiting = false,
+  initialDelay = 0,
+}: AnimatedSceneProps) {
+  const timeline = useSceneTimeline({
+    reducedMotion,
+    onComplete,
+    hasUserMessage: !!config.userMessage,
+    initialDelay,
+    holdDuration: config.holdDuration,
+  });
+
+  const handlePreambleComplete = useCallback(() => {
+    timeline.setShowTool(true);
+  }, [timeline]);
+
+  useEffect(() => {
+    const shouldShowTool = timeline.preambleReady && !timeline.showTool;
+
+    if (shouldShowTool) {
+      timeline.setShowTool(true);
+    }
+  }, [timeline]);
+
+  const shouldRenderItems = !isExiting;
+  const shouldShowToolContent = config.preamble ? timeline.showTool : true;
+
+  const createEntryTransition = (delayMs: number) => ({
+    ...SPRINGS.standard,
+    delay: delayMs / 1000,
+  });
+
+  const createExitTransition = (delayMs: number) => ({
+    ...SPRINGS.standard,
+    delay: delayMs / 1000,
+  });
+
+  return (
+    <div className="flex flex-col pb-20">
+      <AnimatePresence>
+        {shouldRenderItems && config.userMessage && (
+          <motion.div
+            key={`${sceneId}-user`}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              transition: createEntryTransition(initialDelay + 80),
+            }}
+            exit={{
+              opacity: 0,
+              y: -8,
+              transition: createExitTransition(TIMING.exitStagger.user),
+            }}
+            className="mb-11"
+          >
+            <ChatBubble role="user" className="px-6 py-3">
+              {config.userMessage}
+            </ChatBubble>
+          </motion.div>
+        )}
+
+        {shouldRenderItems && config.preamble && (
+          <motion.div
+            key={`${sceneId}-preamble-area`}
+            className="relative mb-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{
+              opacity: 0,
+              y: -8,
+              transition: createExitTransition(TIMING.exitStagger.preamble),
+            }}
+          >
+            <AnimatePresence>
+              {config.userMessage &&
+                !timeline.preambleReady &&
+                !reducedMotion && (
+                  <motion.div
+                    key={`${sceneId}-indicator`}
+                    className="absolute top-1.5 left-0"
+                    initial={{ opacity: 0, scale: 0.5, filter: "blur(4px)" }}
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
+                      filter: "blur(0px)",
+                      transition: {
+                        ...SPRINGS.smooth,
+                        delay: TIMING.durations.userIn / 1000,
+                      },
+                    }}
+                    exit={{
+                      opacity: 0,
+                      x: 20,
+                      filter: "blur(4px)",
+                      transition: { duration: 0.2, ease: "easeOut" },
+                    }}
+                  >
+                    <TypingIndicator />
+                  </motion.div>
+                )}
+            </AnimatePresence>
+
+            {timeline.preambleReady && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <PreambleBubble
+                  text={config.preamble}
+                  reducedMotion={reducedMotion}
+                  onComplete={handlePreambleComplete}
+                />
+              </motion.div>
+            )}
+          </motion.div>
+        )}
+
+        {shouldRenderItems &&
+          timeline.preambleReady &&
+          shouldShowToolContent && (
+            <motion.div
+              key={`${sceneId}-tool`}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                transition: createEntryTransition(
+                  (config.preamble
+                    ? TIMING.beats.afterPreamble
+                    : TIMING.beats.beforeContent) + 300,
+                ),
+              }}
+              exit={{
+                opacity: 0,
+                y: -8,
+                transition: createExitTransition(TIMING.exitStagger.tool),
+              }}
+              className={config.userMessage ? "" : "mb-11"}
+            >
+              <div className="flex w-full justify-start">
+                <div className="w-full max-w-[720px] *:**:data-[slot=table]:min-w-0">
+                  <ToolReveal>{config.toolUI}</ToolReveal>
+                </div>
+              </div>
+            </motion.div>
+          )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+export function ChatShowcase() {
+  const reducedMotion = useReducedMotion();
+  const sceneConfigs = useMemo(
+    () => createSceneConfigs(reducedMotion),
+    [reducedMotion],
+  );
+
+  const [sceneIndex, setSceneIndex] = useState(0);
+  const [sceneRunId, setSceneRunId] = useState(0);
+  const [isExiting, setIsExiting] = useState(false);
+
+  const exitDuration = reducedMotion
+    ? TIMING.reducedMotion.duration
+    : TIMING.exitStagger.tool + 500;
+
+  const transitionToScene = useCallback(
+    (getNextIndex: (current: number) => number) => {
+      setIsExiting(true);
+      setTimeout(() => {
+        setIsExiting(false);
+        setSceneIndex(getNextIndex);
+        setSceneRunId((id) => id + 1);
+      }, exitDuration);
+    },
+    [exitDuration],
+  );
+
+  const advanceToNextScene = useCallback(() => {
+    transitionToScene((current) => (current + 1) % SCENE_COUNT);
+  }, [transitionToScene]);
+
+  const goToPreviousScene = useCallback(() => {
+    transitionToScene((current) => (current - 1 + SCENE_COUNT) % SCENE_COUNT);
+  }, [transitionToScene]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        advanceToNextScene();
+      } else if (e.key === "ArrowLeft") {
+        goToPreviousScene();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [advanceToNextScene, goToPreviousScene]);
+
+  return (
+    <div className="relative flex h-full w-full flex-col">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-60 dark:opacity-40"
+        aria-hidden="true"
+      />
+      <div className="relative z-10 h-full min-h-0 w-full">
+        <motion.div
+          key={`scene-${sceneIndex}-${sceneRunId}`}
+          className="absolute inset-0"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={SPRINGS.smooth}
+        >
+          <AnimatedScene
+            config={sceneConfigs[sceneIndex]}
+            reducedMotion={reducedMotion}
+            onComplete={advanceToNextScene}
+            sceneId={`scene-${sceneIndex}`}
+            isExiting={isExiting}
+            initialDelay={sceneRunId === 0 ? 2500 : 0}
+          />
+        </motion.div>
+      </div>
+    </div>
+  );
+}

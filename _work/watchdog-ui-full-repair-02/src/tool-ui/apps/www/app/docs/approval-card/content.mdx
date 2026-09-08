@@ -1,0 +1,216 @@
+import { DocsHeader } from "../_components/docs-header";
+import { ApprovalCard } from "@/components/tool-ui/approval-card";
+
+<DocsHeader
+  title="Approval Card"
+  description="Binary confirmation for agent actions."
+  mdxPath="app/docs/approval-card/content.mdx"
+/>
+
+Before the assistant deploys to production, deletes a project, or sends an email on your behalf, it should ask first. ApprovalCard renders a confirmation prompt with context about the action (metadata, consequences, a clear approve/deny choice) and records the decision as a receipt once the user responds.
+
+**Role:** Decision. For choices that return to the assistant. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="approval-card" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `ApprovalCard` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { ApprovalCard } from "@/components/tool-ui/approval-card";
+
+export function Example() {
+  return (
+    <ApprovalCard
+      id="approval-card-example"
+      title="Deploy to Production?"
+      description="This will push the latest changes to all users."
+      icon="Rocket"
+      confirmLabel="Deploy"
+      onConfirm={() => console.log("Approved")}
+      onCancel={() => console.log("Denied")}
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Register this renderer so tool results display as `ApprovalCard`.
+
+```tsx
+"use client";
+
+import { type Toolkit } from "@assistant-ui/react";
+import { ApprovalCard } from "@/components/tool-ui/approval-card";
+import {
+  safeParseSerializableApprovalCard,
+  SerializableApprovalCardSchema,
+} from "@/components/tool-ui/approval-card/schema";
+
+export const toolkit: Toolkit = {
+  requestApproval: {
+    description: "Request user approval before performing an action.",
+    parameters: SerializableApprovalCardSchema,
+    render: ({ args, toolCallId, result, addResult }) => {
+      const parsedArgs = safeParseSerializableApprovalCard({
+        ...args,
+        id: args?.id ?? `approval-${toolCallId}`,
+      });
+      if (!parsedArgs) {
+        return null;
+      }
+      return result ? (
+        <ApprovalCard {...parsedArgs} choice={result} />
+      ) : (
+        <ApprovalCard
+          {...parsedArgs}
+          onConfirm={() => addResult?.("approved")}
+          onCancel={() => addResult?.("denied")}
+        />
+      );
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="ShieldCheck" title="Human-in-the-loop">
+    Blocks agent actions until the user approves or denies
+  </Feature>
+  <Feature icon="AlertTriangle" title="Destructive variant">
+    Red styling for irreversible or dangerous operations
+  </Feature>
+  <Feature icon="List" title="Contextual metadata">
+    Key-value pairs giving context about the action
+  </Feature>
+  <Feature icon="CheckCircle2" title="Receipt state">
+    Compact read-only view of the decision in conversation history
+  </Feature>
+</FeatureGrid>
+
+## Receipt State
+
+Pass a `choice` prop to render this component in its receipt state. See [Receipts](/docs/receipts) for the pattern.
+
+The receipt shows the outcome (approved or denied) with the custom button label you specified, fades in with a subtle animation, and is read-only.
+
+## Destructive Variant
+
+Set `variant="destructive"` for dangerous or irreversible actions. The icon background and confirm button turn red.
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for the approval card",
+      type: "string",
+      required: true,
+    },
+    title: {
+      description: "The action being approved",
+      type: "string",
+      required: true,
+    },
+    description: {
+      description: "Additional context about the action",
+      type: "string",
+    },
+    icon: {
+      description:
+        'Lucide icon name (e.g., "Rocket", "trash-2"). Accepts PascalCase or kebab-case.',
+      type: "string",
+    },
+    metadata: {
+      description: "Key-value pairs providing context",
+      type: "MetadataItem[]",
+    },
+    variant: {
+      description: "Visual style variant",
+      type: "'default' | 'destructive'",
+      default: "'default'",
+    },
+    confirmLabel: {
+      description: "Label for the confirm button",
+      type: "string",
+      default: "'Approve'",
+    },
+    cancelLabel: {
+      description: "Label for the cancel button",
+      type: "string",
+      default: "'Deny'",
+    },
+    choice: {
+      description: "The finalized decision (renders receipt state when set)",
+      type: "'approved' | 'denied'",
+    },
+    onConfirm: {
+      description: "Handler when user approves",
+      type: "() => void | Promise<void>",
+    },
+    onCancel: {
+      description: "Handler when user denies",
+      type: "() => void | Promise<void>",
+    },
+  }}
+/>
+
+## Metadata Schema
+
+<TypeTable
+  type={{
+    key: {
+      description: "Label for the metadata item",
+      type: "string",
+      required: true,
+    },
+    value: {
+      description: "Value to display",
+      type: "string",
+      required: true,
+    },
+  }}
+/>
+
+Long metadata values are automatically truncated with an ellipsis. Keep values concise for best results.
+
+## Accessibility
+
+- Uses `role="dialog"` with `aria-labelledby` and `aria-describedby`
+- **Keyboard navigation:**
+  - `Tab` to move between buttons
+  - `Enter` or `Space` to activate focused button
+  - `Escape` triggers the cancel action
+- Receipt state uses `role="status"` for screen reader announcements
+- Fade-in animation respects `prefers-reduced-motion`
+
+## Related
+
+- [Order Summary](/docs/order-summary): itemized confirmation for purchases
+- [Option List](/docs/option-list): multiple choices when the decision isn't binary
+- [Message Draft](/docs/message-draft): review and approve outgoing messages
+- [Preferences Panel](/docs/preferences-panel): structured settings capture

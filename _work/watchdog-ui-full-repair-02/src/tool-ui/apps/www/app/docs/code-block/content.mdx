@@ -1,0 +1,218 @@
+import { DocsHeader } from "../_components/docs-header";
+
+<DocsHeader
+  title="Code Block"
+  description="Display syntax-highlighted code snippets."
+  mdxPath="app/docs/code-block/content.mdx"
+/>
+
+When the assistant generates or references code, unstyled monospace text sells it short. CodeBlock renders syntax-highlighted snippets with line numbers and a copy button. You can highlight specific lines to draw attention to changes or bugs, and collapse long snippets with `maxCollapsedLines` to keep conversations scannable.
+
+**Role:** Information. For displaying data the user reads. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="code-block" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `CodeBlock` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { CodeBlock } from "@/components/tool-ui/code-block";
+
+export function MyComponent() {
+  return (
+    <CodeBlock
+      id="my-code-example"
+      code={`function hello(name: string) {
+  return \`Hello, \${name}!\`;
+}`}
+      language="typescript"
+      lineNumbers="visible"
+      filename="hello.ts"
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Register this renderer so tool results display as `CodeBlock`.
+
+```tsx
+// Backend tool
+import { tool, jsonSchema } from "ai";
+
+const showCodeBlock = tool({
+  description: "Show a code snippet",
+  inputSchema: jsonSchema<{}>({
+    type: "object",
+    properties: {},
+    additionalProperties: false,
+  }),
+  async execute() {
+    return {
+      id: "code-block-1",
+      code: "console.log('hello');",
+      language: "javascript",
+      filename: "hello.js",
+      highlightLines: [1],
+    };
+  },
+});
+
+// Frontend with assistant-ui
+import { type Toolkit } from "@assistant-ui/react";
+import { CodeBlock } from "@/components/tool-ui/code-block";
+import { safeParseSerializableCodeBlock } from "@/components/tool-ui/code-block/schema";
+
+export const toolkit: Toolkit = {
+  showCodeBlock: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableCodeBlock(result);
+      if (!parsed) {
+        return null;
+      }
+      return <CodeBlock {...parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="Palette" title="Syntax highlighting">
+    Shiki-powered with 100+ languages
+  </Feature>
+  <Feature icon="Highlighter" title="Line highlighting">
+    Draw attention to specific lines for explanations or diffs
+  </Feature>
+  <Feature icon="FoldVertical" title="Collapsible mode">
+    Opt-in collapse for long snippets via `maxCollapsedLines`
+  </Feature>
+  <Feature icon="FileCode" title="Filename header">
+    Filename and language badge in the header
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+### Core
+
+<TypeTable
+  type={{
+    code: {
+      description: "The code content to display",
+      type: "string",
+      required: true,
+    },
+    language: {
+      description: "Programming language for syntax highlighting",
+      type: "string",
+      default: '"text"',
+    },
+    filename: {
+      description: "Filename to display in the header",
+      type: "string",
+    },
+  }}
+/>
+
+### Display Options
+
+<TypeTable
+  type={{
+    lineNumbers: {
+      description: "Line number variant",
+      type: '"visible" | "hidden"',
+      default: '"visible"',
+    },
+    highlightLines: {
+      description: "Array of line numbers to highlight",
+      type: "number[]",
+    },
+    maxCollapsedLines: {
+      description: "Enable collapse when code exceeds this many lines (opt-in)",
+      type: "number",
+    },
+    expanded: {
+      description: "Controlled expand state (for collapsible mode)",
+      type: "boolean",
+    },
+    defaultExpanded: {
+      description: "Initial expand state (for collapsible mode)",
+      type: "boolean",
+    },
+    onExpandedChange: {
+      description: "Called when expand state changes",
+      type: "(expanded: boolean) => void",
+    },
+  }}
+/>
+
+### Standard Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this component",
+      type: "string",
+      required: true,
+    },
+    className: {
+      description: "Additional CSS classes",
+      type: "string",
+    },
+  }}
+/>
+
+Use [`ToolUI.LocalActions`](/docs/actions) to compose external actions next to `CodeBlock`.
+
+## Supported Languages
+
+CodeBlock supports all languages included with Shiki, including:
+
+- TypeScript/JavaScript
+- Python
+- JSON
+- Bash/Shell
+- CSS/HTML
+- Markdown
+- SQL
+- YAML
+- Go
+- Rust
+- And many more...
+
+See [Shiki documentation](https://shiki.style/languages) for the complete list.
+
+## Accessibility
+
+- Collapsible sections use Radix Collapsible with proper ARIA attributes
+- Copy button is keyboard-accessible with focus indication
+- Code content is selectable and works with screen readers
+
+## Related
+
+- [Terminal](/docs/terminal): command-line output and logs

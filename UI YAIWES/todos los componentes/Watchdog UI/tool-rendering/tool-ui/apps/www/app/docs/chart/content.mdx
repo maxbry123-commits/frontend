@@ -1,0 +1,230 @@
+import { DocsHeader } from "../_components/docs-header";
+
+<DocsHeader
+  title="Chart"
+  description="Display interactive data visualizations."
+  mdxPath="app/docs/chart/content.mdx"
+/>
+
+"How did I spend money this week?" is a question best answered visually. Chart renders bar or line visualizations inline in the conversation. You pass data, an x-axis key, and one or more series. The assistant can show spending breakdowns, revenue trends, or performance over time without describing the numbers in prose.
+
+**Role:** Information. For displaying data the user reads. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="chart" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `Chart` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { Chart } from "@/components/tool-ui/chart";
+
+<Chart
+  id="monthly-revenue"
+  type="bar"
+  title="Monthly Revenue"
+  description="2024 YTD"
+  data={[
+    { month: "Jan", revenue: 4000, expenses: 2400 },
+    { month: "Feb", revenue: 3000, expenses: 1398 },
+    // ...
+  ]}
+  xKey="month"
+  series={[
+    { key: "revenue", label: "Revenue" },
+    { key: "expenses", label: "Expenses" },
+  ]}
+  showLegend
+  showGrid
+/>;
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Register this renderer so tool results display as `Chart`.
+
+```tsx
+import { type Toolkit } from "@assistant-ui/react";
+import { Chart } from "@/components/tool-ui/chart";
+import { safeParseSerializableChart } from "@/components/tool-ui/chart/schema";
+
+export const toolkit: Toolkit = {
+  showChart: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableChart(result);
+      if (!parsed) {
+        return null;
+      }
+      return <Chart {...parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="BarChart3" title="Bar and line charts">
+    Bar for categorical data, line for time-series
+  </Feature>
+  <Feature icon="Layers" title="Multiple series">
+    Plot multiple datasets with automatic color assignment
+  </Feature>
+  <Feature icon="MousePointerClick" title="Interactive tooltips">
+    Hover tooltips and click handlers on data points
+  </Feature>
+  <Feature icon="Settings2" title="Configurable display">
+    Optional legends, grid lines, and custom color palettes
+  </Feature>
+</FeatureGrid>
+
+## Variants
+
+### Line Charts
+
+Use `type="line"` for time-series or continuous data.
+
+### Minimal Configuration
+
+Only `data`, `xKey`, and `series` are required. Title, description, legend, and grid are all optional.
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this chart instance",
+      type: "string",
+      required: true,
+    },
+    type: {
+      description: "Chart type",
+      type: "'bar' | 'line'",
+      required: true,
+    },
+    data: {
+      description: "Array of data records",
+      type: "Record<string, unknown>[]",
+      required: true,
+    },
+    xKey: {
+      description: "Key for x-axis values",
+      type: "string",
+      required: true,
+    },
+    series: {
+      description: "Data series to plot",
+      type: "ChartSeries[]",
+      required: true,
+    },
+    title: {
+      description: "Chart title (renders in Card header)",
+      type: "string",
+    },
+    description: {
+      description: "Chart description (renders below title)",
+      type: "string",
+    },
+    colors: {
+      description: "Custom color palette for series",
+      type: "string[]",
+    },
+    showLegend: {
+      description: "Show legend below chart",
+      type: "boolean",
+      default: "false",
+    },
+    showGrid: {
+      description: "Show background grid lines",
+      type: "boolean",
+      default: "true",
+    },
+    onDataPointClick: {
+      description: "Click handler for data points",
+      type: "(point: ChartDataPoint) => void",
+    },
+  }}
+/>
+
+## Series Schema
+
+<TypeTable
+  type={{
+    key: {
+      description: "Data key to plot",
+      type: "string",
+      required: true,
+    },
+    label: {
+      description: "Display label for legend/tooltip",
+      type: "string",
+      required: true,
+    },
+    color: {
+      description: "Override color for this series",
+      type: "string",
+    },
+  }}
+/>
+
+## ChartDataPoint (click handler payload)
+
+<TypeTable
+  type={{
+    seriesKey: {
+      description: "Key of the clicked series",
+      type: "string",
+    },
+    seriesLabel: {
+      description: "Label of the clicked series",
+      type: "string",
+    },
+    xValue: {
+      description: "X-axis value at click point",
+      type: "unknown",
+    },
+    yValue: {
+      description: "Y-axis value at click point",
+      type: "unknown",
+    },
+    index: {
+      description: "Index in data array",
+      type: "number",
+    },
+    payload: {
+      description: "Full data record for clicked point",
+      type: "Record<string, unknown>",
+    },
+  }}
+/>
+
+## Accessibility
+
+- Built on Recharts with semantic SVG structure
+- Tooltips and legends provide text alternatives for visual data
+- Inherits focus management from shadcn/ui Card primitives
+
+## Related
+
+- [Stats Display](/docs/stats-display): key metrics as a grid of numbers with sparklines

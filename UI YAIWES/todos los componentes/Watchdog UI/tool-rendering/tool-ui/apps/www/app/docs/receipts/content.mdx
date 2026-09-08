@@ -1,0 +1,134 @@
+import { DocsHeader } from "../_components/docs-header";
+import { MockThread, MockMessage } from "../_components/mock-thread";
+import { OptionList } from "@/components/tool-ui/option-list";
+import { ApprovalCard } from "@/components/tool-ui/approval-card";
+
+<DocsHeader
+  title="Receipts"
+  description="Confirm what happened after a user decision."
+  mdxPath="app/docs/receipts/content.mdx"
+/>
+
+When a user approves a deploy, selects a plan, or confirms a purchase, the interactive UI should become a permanent record of what happened. Without this, scrolling back shows a live button for a decision that was already made, confusing at best, dangerous at worst if someone clicks it again.
+
+A **receipt state** replaces the interactive controls with a confirmation of the choice. It's proof of the decision, visible to both the user and the assistant. This is the natural counterpart to [decision actions](/docs/actions): the action captures the choice, the receipt displays it.
+
+## Why Receipts Matter
+
+Without receipts, decisions vanish into the conversation history.
+
+<div>
+  <MockThread caption="A decision with receipt">
+    <MockMessage role="assistant">
+      <span className="text-foreground">
+        How would you like to handle the duplicate contacts?
+      </span>
+      <div className="mt-3">
+        <OptionList
+          selectionMode="single"
+          choice="merge"
+          options={[
+            {
+              id: "merge",
+              label: "Merge duplicates",
+              description: "Combine into single contacts, keeping all data",
+            },
+            {
+              id: "keep",
+              label: "Keep all",
+              description: "Leave duplicates as separate contacts",
+            },
+            {
+              id: "review",
+              label: "Review manually",
+              description: "I'll decide for each duplicate",
+            },
+          ]}
+        />
+      </div>
+    </MockMessage>
+    <MockMessage role="assistant">
+      <span className="text-foreground">
+        Done. I merged 12 duplicate contacts. You can undo this from Settings →
+        Contact History if needed.
+      </span>
+    </MockMessage>
+  </MockThread>
+</div>
+
+The receipt shows what was chosen. The follow-up confirms the outcome and offers an undo path.
+
+## Writing Receipt Copy
+
+Receipt copy describes a past decision.
+
+### The Decision Label
+
+Decision labels use **past tense**: they describe what the user decided.
+
+| Interactive State | Receipt State |
+| ----------------- | ------------- |
+| Approve           | Approved      |
+| Deny              | Denied        |
+| Select            | Selected      |
+| Confirm           | Confirmed     |
+
+### The Action Description
+
+Action descriptions stay in **imperative form**: they describe the request, not the outcome.
+
+<div className="not-prose grid gap-4 sm:grid-cols-2 my-6">
+  <div>
+    <p className="text-sm text-muted-foreground mb-2">Approved action</p>
+    <ApprovalCard
+      id="receipt-approved-example"
+      title="Back up database"
+      choice="approved"
+    />
+  </div>
+  <div>
+    <p className="text-sm text-muted-foreground mb-2">Denied action</p>
+    <ApprovalCard
+      id="receipt-denied-example"
+      title="Delete all project files"
+      choice="denied"
+    />
+  </div>
+</div>
+
+The pattern is: **[Past-tense decision] [Imperative action]**
+
+- "Approved: Back up database" (the request to back up was approved)
+- "Denied: Delete all project files" (the request to delete was denied)
+- "Selected: Merge duplicates" (the option to merge was selected)
+
+## Components with Receipt States
+
+Pass a `choice` prop to switch any of these components into receipt mode:
+
+| Component                                    | Receipt Prop | What It Shows                 |
+| -------------------------------------------- | ------------ | ----------------------------- |
+| [Approval Card](/docs/approval-card)         | `choice`     | The decision and action title |
+| [Option List](/docs/option-list)             | `choice`     | Only the selected option(s)   |
+| [Question Flow](/docs/question-flow)         | `choice`     | Summary of completed answers  |
+| [Preferences Panel](/docs/preferences-panel) | `choice`     | Summary of saved preferences  |
+| [Progress Tracker](/docs/progress-tracker)   | `choice`     | Final status of the workflow  |
+| [Order Summary](/docs/order-summary)         | `choice`     | Confirmed order details       |
+
+[Message Draft](/docs/message-draft) uses a similar pattern with an `outcome` prop (`"sent"` or `"cancelled"`) that renders a one-line confirmation receipt after a message is sent or cancelled.
+
+## When to Use Receipts
+
+Use receipts for decisions that:
+
+- Change state (approvals, deletions, submissions)
+- Can't be easily undone
+- The user or assistant might need to reference later
+
+Skip receipts for reversible controls like:
+
+- Sorting or filtering data
+- Adjusting parameters
+- Navigating between views
+
+The assistant's follow-up should reference the receipt and, when appropriate, offer a way to undo or modify the decision.

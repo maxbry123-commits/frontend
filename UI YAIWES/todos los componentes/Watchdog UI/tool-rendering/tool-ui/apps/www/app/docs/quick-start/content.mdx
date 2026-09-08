@@ -1,0 +1,209 @@
+import { DocsHeader } from "../_components/docs-header";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Bot } from "lucide-react";
+
+<DocsHeader
+  title="Quick Start"
+  description="Your first component in minutes."
+  mdxPath="app/docs/quick-start/content.mdx"
+/>
+
+<Alert className="squircle my-6 flex max-w-2xl flex-col gap-3 rounded-4xl border-sky-300 bg-sky-50/50 p-5 dark:border-sky-950 dark:bg-sky-950/20">
+  <AlertTitle className="mb-0! flex items-center gap-2 pb-0! font-mono text-sky-700 dark:text-sky-300">
+    <Bot className="size-4 text-sky-600! dark:text-sky-300!" />
+    {"Skills now available"}
+  </AlertTitle>
+  <AlertDescription className="my-0! py-0! text-pretty text-sky-800 dark:text-sky-100 [&_p]:m-0 [&_p]:p-0">
+    Give your coding agent advanced Tool UI skills.{" "}
+    <a href="/docs/agent-skills">Install now.</a>
+  </AlertDescription>
+</Alert>
+
+Add a Tool UI component to a chat app powered by [assistant-ui](https://www.assistant-ui.com/).
+
+## Install
+
+<Steps>
+
+<Step title="Set up assistant-ui">
+
+[assistant-ui](https://www.assistant-ui.com/) is the React runtime that manages chat state, message streaming, and tool rendering. If you already have it set up, skip to [Step 2](#add-a-tool-ui-component).
+
+The fastest way to start is with the CLI. It creates a working chat app in a Next.js project:
+
+```sh
+npx assistant-ui@latest init
+```
+
+Or install packages manually into an existing project:
+
+```sh
+pnpm add @assistant-ui/react @assistant-ui/react-ai-sdk ai @ai-sdk/openai zod
+```
+
+Add your OpenAI API key to `.env.local`:
+
+```env
+OPENAI_API_KEY=sk-...
+```
+
+Run `pnpm dev` and confirm you see a working chat interface before continuing.
+
+</Step>
+
+<Step title="Add a Tool UI component">
+
+<InstallCommandBlock
+  componentId="link-preview"
+  toolAgentPrompt="integrate the link preview component for rich link previews with Open Graph data in the chat experience"
+  variant="block"
+/>
+
+This copies the source files into your project. The code is yours - change it however you want.
+
+</Step>
+
+</Steps>
+
+## Wire it up
+
+<Steps>
+
+<Step title="Define a backend tool">
+
+Create (or update) your API route to include a tool the LLM can call. This tool accepts a URL, fetches metadata, and returns JSON matching the LinkPreview schema.
+
+```ts title="app/api/chat/route.ts"
+import { streamText, tool, convertToModelMessages } from "ai";
+import { openai } from "@ai-sdk/openai";
+import { z } from "zod";
+import { SerializableLinkPreviewSchema } from "@/components/tool-ui/link-preview/schema";
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  const result = streamText({
+    model: openai("gpt-4o"),
+    messages: await convertToModelMessages(messages),
+    tools: {
+      // The LLM decides when to call this tool based on the description.
+      previewLink: tool({
+        description: "Show a preview card for a URL",
+        inputSchema: z.object({ url: z.url() }),
+        // outputSchema validates the result against the component's schema.
+        outputSchema: SerializableLinkPreviewSchema,
+        // execute() runs on the server when the LLM calls the tool.
+        // It returns JSON that matches the LinkPreview component's schema.
+        async execute({ url }) {
+          return {
+            id: "link-preview-1",
+            href: url,
+            title: "Example Site",
+            description: "A description of the linked content",
+            image: "https://example.com/image.jpg",
+          };
+        },
+      }),
+    },
+  });
+
+  return result.toUIMessageStreamResponse();
+}
+```
+
+In a real app, fetch actual metadata here (Open Graph tags, screenshots, etc.).
+
+</Step>
+
+<Step title="Register the renderer">
+
+Registering tells assistant-ui: "when the model calls a tool named `previewLink`, parse the result and render this component." Without registration, tool results appear as raw JSON.
+
+```tsx title="app/page.tsx"
+"use client";
+
+import {
+  AssistantRuntimeProvider,
+  Tools,
+  useAui,
+  type Toolkit,
+} from "@assistant-ui/react";
+import {
+  useChatRuntime,
+  AssistantChatTransport,
+} from "@assistant-ui/react-ai-sdk";
+import { LinkPreview } from "@/components/tool-ui/link-preview";
+import { safeParseSerializableLinkPreview } from "@/components/tool-ui/link-preview/schema";
+
+// Map backend tool names to frontend renderers.
+// The key "previewLink" must match the tool name in your API route.
+const toolkit: Toolkit = {
+  previewLink: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableLinkPreview(result);
+      if (!parsed) {
+        return null;
+      }
+      return <LinkPreview {...parsed} />;
+    },
+  },
+};
+
+export default function Page() {
+  // Connect to your /api/chat route.
+  const runtime = useChatRuntime({
+    transport: new AssistantChatTransport({ api: "/api/chat" }),
+  });
+
+  // Register the toolkit so the runtime knows how to render tool results.
+  const aui = useAui({ tools: Tools({ toolkit }) });
+
+  return (
+    <AssistantRuntimeProvider runtime={runtime} aui={aui}>
+      {/* Your chat thread component */}
+    </AssistantRuntimeProvider>
+  );
+}
+```
+
+Run `pnpm dev`, then ask the assistant to "preview https://example.com." Instead of raw JSON, you'll see a styled LinkPreview card in the conversation.
+
+</Step>
+
+</Steps>
+
+## Add more components
+
+Same pattern for any component:
+
+1. Install from the registry:
+
+<InstallCommandBlock
+  componentId="approval-card"
+  toolAgentPrompt="integrate the approval card component for binary confirmation of agent actions"
+  variant="block"
+/>
+
+2. Define a backend tool that returns data matching the component's schema.
+3. Register a renderer in your toolkit that maps the tool name to the component.
+
+Every component ships with a colocated `schema.ts` exporting a Zod schema and a `safeParseSerializable{ComponentName}` function for validating tool output on both server and client.
+
+Browse all available components in the [Gallery](/docs/gallery).
+
+## Interactive tool UIs
+
+The example above is a **display-only** component. The tool returns data, and the component renders it. Some components go further: they let the user make a choice that returns to the assistant.
+
+Components like [Option List](/docs/option-list) and [Approval Card](/docs/approval-card) support this pattern through **frontend tools**, where the model calls a tool, your UI renders the component, and the user's response is sent back via `addResult(...)`.
+
+For the full implementation pattern, including how to forward frontend tools through your API route and enable auto-continue after user decisions, see the [Advanced](/docs/advanced) page.
+
+## Next steps
+
+- [**Gallery**](/docs/gallery): Browse all available components
+- [**Actions**](/docs/actions): How interactive components feed user decisions back to the assistant
+- [**Receipts**](/docs/receipts): How components show permanent records of past decisions
+- [**Design Guidelines**](/docs/design-guidelines): The collaboration model and design constraints for chat UI
+- [**Advanced**](/docs/advanced): Frontend tools, type inference, and deeper integration patterns

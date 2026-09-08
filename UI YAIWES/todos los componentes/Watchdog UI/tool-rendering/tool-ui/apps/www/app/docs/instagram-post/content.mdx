@@ -1,0 +1,136 @@
+import { DocsHeader } from "../_components/docs-header";
+import { InstagramPost } from "@/components/tool-ui/instagram-post";
+
+<DocsHeader
+  title="Instagram Post"
+  description="Platform-native post card for Instagram."
+  mdxPath="app/docs/instagram-post/content.mdx"
+/>
+
+Instagram is a visual platform, and its content deserves a visual preview. InstagramPost renders a media-first card that matches Instagram's layout: author info, image carousel, caption, and engagement stats. Use it when the assistant surfaces or drafts Instagram content in the conversation.
+
+**Role:** Information. For displaying data the user reads. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="instagram-post" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `InstagramPost` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { InstagramPost } from "@/components/tool-ui/instagram-post";
+
+export function Example() {
+  return (
+    <InstagramPost
+      post={{
+        id: "ig-post-1",
+        author: {
+          name: "Alex Rivera",
+          handle: "alexrivera",
+          avatarUrl: "https://example.com/avatar.jpg",
+          verified: true,
+        },
+        text: "Golden hour vibes in the city.",
+        media: [
+          {
+            type: "image",
+            url: "https://example.com/post-image.jpg",
+            alt: "City skyline",
+          },
+        ],
+        stats: { likes: 8421 },
+        createdAt: "2025-01-05T18:00:00.000Z",
+      }}
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Register this renderer so tool results display as `InstagramPost`.
+
+```tsx
+import { type Toolkit } from "@assistant-ui/react";
+import { InstagramPost } from "@/components/tool-ui/instagram-post";
+import { safeParseSerializableInstagramPost } from "@/components/tool-ui/instagram-post/schema";
+
+export const toolkit: Toolkit = {
+  showInstagramPost: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableInstagramPost(result);
+      if (!parsed) {
+        return null;
+      }
+      return <InstagramPost post={parsed} />;
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="Paintbrush" title="Platform-native styling">
+    Uses Instagram's layout, typography, and color scheme
+  </Feature>
+  <Feature icon="Images" title="Media-first layout">
+    Single images and swipeable carousels with proper aspect ratios
+  </Feature>
+  <Feature icon="MousePointerClick" title="External actions">
+    Add actions like "Save Draft" or "Share" via ToolUI action surfaces
+  </Feature>
+  <Feature icon="BadgeCheck" title="Verified identity">
+    Verified badges and creator context on author profiles
+  </Feature>
+</FeatureGrid>
+
+## Props
+
+<TypeTable
+  type={{
+    post: {
+      description:
+        "Post payload validated by `SerializableInstagramPostSchema`",
+      type: "InstagramPostData",
+      required: true,
+    },
+    className: {
+      description: "Optional className for the outer card",
+      type: "string",
+    },
+    onAction: {
+      description: "Fires when the user triggers a built-in post action",
+      type: "(action: string, post: InstagramPostData) => void",
+    },
+  }}
+/>
+
+Use [`ToolUI.LocalActions`](/docs/actions) to compose external actions next to `InstagramPost`.
+
+## Related
+
+- [X Post](/docs/x-post): platform-native card for X (Twitter) content
+- [LinkedIn Post](/docs/linkedin-post): platform-native card for LinkedIn content

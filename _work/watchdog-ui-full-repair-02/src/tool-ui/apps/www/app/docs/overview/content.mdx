@@ -1,0 +1,210 @@
+import { DocsHeader } from "../_components/docs-header";
+import { MockThread, MockMessage } from "../_components/mock-thread";
+import { LinkPreview } from "@/components/tool-ui/link-preview";
+import { InteractiveOptionDemo } from "../_components/interactive-option-demo";
+
+<DocsHeader
+  title="Overview"
+  description="UI components for tool call results."
+  mdxPath="app/docs/overview/content.mdx"
+/>
+
+When an AI assistant calls a tool, the result is often plain text or raw JSON. Without purpose-built components, users see a wall of unformatted data they have to parse themselves. The experience breaks because nothing presents the data well.
+
+Tool UI is a component library built for this. Each component turns a specific kind of tool output into real UI: a card, a table, an option list, a chart. They render inline in the conversation and users can interact without leaving the chat.
+
+<div className="mt-8 grid min-w-0 gap-6 md:grid-cols-2">
+  <MockThread caption="Without Tool UI">
+    <MockMessage role="user">Find me a link to the Tailwind docs</MockMessage>
+    <MockMessage role="assistant">
+      <span className="text-foreground text-sm">
+        {"Here's the link to the Tailwind CSS documentation:"}
+      </span>
+      <pre className="bg-muted text-muted-foreground mt-2 overflow-x-auto rounded-lg p-3 font-mono text-xs">
+{`{
+  "href": "https://tailwindcss.com/docs",
+  "title": "Tailwind CSS",
+  "description": "Rapidly build modern websites without ever leaving your HTML."
+}`}
+      </pre>
+    </MockMessage>
+  </MockThread>
+
+  <MockThread caption="With Tool UI">
+    <MockMessage role="user">Find me a link to the Tailwind docs</MockMessage>
+    <MockMessage role="assistant">
+      <span className="text-foreground text-sm">
+        {"Found it."}
+      </span>
+      <div className="mt-3">
+        <LinkPreview
+          id="lp-tailwind"
+          href="https://tailwindcss.com/docs"
+          title="Tailwind CSS"
+          description="Rapidly build modern websites without ever leaving your HTML."
+          domain="tailwindcss.com"
+          favicon="https://tailwindcss.com/favicons/favicon-32x32.png"
+        />
+      </div>
+    </MockMessage>
+  </MockThread>
+</div>
+
+Same data, different experience.
+
+## What if tool results could render UI?
+
+When a tool returns JSON that matches a known **schema**, your app can render a component instead of showing raw data.
+
+Every Tool UI component has a corresponding schema: a Zod definition that describes the shape of the data it needs. When the tool result matches, the component renders. When it doesn't, parsing fails safely and nothing renders.
+
+```ts title="Tool output → Component"
+// The tool returns structured JSON...
+{
+  id: "lp-1",
+  href: "https://tailwindcss.com/docs",
+  title: "Tailwind CSS",
+  description: "Rapidly build modern websites..."
+}
+
+// ...that matches the LinkPreview schema → renders as a card
+```
+
+**Schema-first rendering** means the data contract between server and client is typed and validated. No brittle string parsing. No hoping the model formats things correctly.
+
+## What if that UI could be interactive?
+
+Some tool UIs just display information like a link preview, a chart, or a code block. But others let users **make decisions** that feed back into the conversation.
+
+<div className="pb-4">
+  <InteractiveOptionDemo />
+</div>
+
+The user selects an option, and the choice returns to the assistant as a **tool result**. The assistant can then continue the conversation with that context. The selected state stays visible as a **receipt** — a record of what was chosen.
+
+The [actions](/docs/actions) model covers user interactions on tool UIs that produce side effects and records.
+
+## Where Tool UI fits
+
+Tool UI sits between your design system and your LLM orchestration layer:
+
+[Radix](https://www.radix-ui.com/)/[shadcn](https://ui.shadcn.com/) (design primitives) → **Tool UI** (conversation-native components) → [AI SDK](https://ai-sdk.dev/) / [LangGraph](https://langchain-ai.github.io/langgraphjs/) / etc. (LLM orchestration)
+
+- **Radix / shadcn** give you the base UI primitives (buttons, dialogs, inputs).
+- **Tool UI** gives you components designed for chat (inline cards, tables, option lists, approval flows) with schemas that map to tool outputs.
+- **AI SDK / LangGraph** handle the model communication, streaming, and tool execution.
+
+Tool UI doesn't replace your design system. It extends it. Components use shadcn primitives internally and follow your theme.
+
+## How it works
+
+<Mermaid chart={`
+flowchart LR
+    A["Assistant calls tool"] --> B["Tool returns JSON"]
+    B --> C["Schema match → Component renders"]
+    C --> D["User interacts"]
+    D --> E["Result returns"]
+
+    style A fill:#8b5cf6,stroke:#7c3aed,stroke-width:2px,color:#fff
+    style B fill:#10b981,stroke:#059669,stroke-width:2px,color:#fff
+    style C fill:#3b82f6,stroke:#2563eb,stroke-width:2px,color:#fff
+    style D fill:#f59e0b,stroke:#d97706,stroke-width:2px,color:#fff
+    style E fill:#ef4444,stroke:#dc2626,stroke-width:2px,color:#fff
+
+`} />
+
+### Minimal example
+
+**Server:** define a tool that returns structured data.
+
+```ts title="app/api/chat/route.ts"
+import { streamText, tool, convertToModelMessages } from "ai";
+import { openai } from "@ai-sdk/openai";
+import { z } from "zod";
+import { SerializableLinkPreviewSchema } from "@/components/tool-ui/link-preview/schema";
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+
+  const result = streamText({
+    model: openai("gpt-4o"),
+    messages: await convertToModelMessages(messages),
+    tools: {
+      previewLink: tool({
+        description: "Show a preview card for a URL",
+        inputSchema: z.object({ url: z.url() }),
+        // outputSchema tells the AI SDK what shape the result will have
+        outputSchema: SerializableLinkPreviewSchema,
+        async execute({ url }) {
+          // Fetch metadata and return structured data
+          return {
+            id: "link-preview-1",
+            href: url,
+            title: "Example Site",
+            description: "A description of the linked content",
+            image: "https://example.com/image.jpg",
+          };
+        },
+      }),
+    },
+  });
+
+  return result.toUIMessageStreamResponse();
+}
+```
+
+**Client:** register the component renderer.
+
+```tsx title="app/page.tsx"
+"use client";
+import {
+  AssistantRuntimeProvider,
+  Tools,
+  useAui,
+  type Toolkit,
+} from "@assistant-ui/react";
+import {
+  useChatRuntime,
+  AssistantChatTransport,
+} from "@assistant-ui/react-ai-sdk";
+import { LinkPreview } from "@/components/tool-ui/link-preview";
+import { safeParseSerializableLinkPreview } from "@/components/tool-ui/link-preview/schema";
+
+// Register a renderer for each tool that should display a component
+const toolkit: Toolkit = {
+  previewLink: {
+    type: "backend",
+    render: ({ result }) => {
+      const parsed = safeParseSerializableLinkPreview(result);
+      if (!parsed) return null; // Wait for full payload before rendering
+      return <LinkPreview {...parsed} />;
+    },
+  },
+};
+
+export default function App() {
+  // Connect to your API route
+  const runtime = useChatRuntime({
+    transport: new AssistantChatTransport({ api: "/api/chat" }),
+  });
+
+  // Make tool renderers available to the runtime
+  const aui = useAui({ tools: Tools({ toolkit }) });
+
+  return (
+    <AssistantRuntimeProvider runtime={runtime} aui={aui}>
+      {/* Your chat thread component */}
+    </AssistantRuntimeProvider>
+  );
+}
+```
+
+`toolkit` maps tool names to renderers. Each renderer parses the tool result with `safeParse` and renders when valid. `useAui` and `Tools` connect everything to the assistant-ui runtime.
+
+## Next steps
+
+- **[Quick Start](/docs/quick-start):** Add your first Tool UI component to a chat app
+- **[Design Guidelines](/docs/design-guidelines):** The collaboration model, component roles, and constraints for building in chat
+- **[Actions](/docs/actions):** How interactive tool UIs feed user decisions back to the assistant
+- **[Receipts](/docs/receipts):** How components show permanent records of past decisions
+- **[Gallery](/docs/gallery):** Browse all available components

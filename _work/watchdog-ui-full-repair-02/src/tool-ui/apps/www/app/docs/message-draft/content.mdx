@@ -1,0 +1,251 @@
+import { DocsHeader } from "../_components/docs-header";
+import { MessageDraft } from "@/components/tool-ui/message-draft";
+
+<DocsHeader
+  title="Message Draft"
+  description="Review messages before sending."
+  mdxPath="app/docs/message-draft/content.mdx"
+/>
+
+An AI sending a message on your behalf without asking is a trust violation. MessageDraft shows the full email or Slack message for review, gives you a Send button with an undo grace period, and collapses into a compact receipt once sent or cancelled. The agent never sends silently.
+
+**Role:** Decision. For choices that return to the assistant. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="message-draft" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `MessageDraft` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { MessageDraft } from "@/components/tool-ui/message-draft";
+
+export function Example() {
+  return (
+    <MessageDraft
+      id="message-draft-example"
+      channel="email"
+      subject="Q4 Planning Follow-up"
+      to={["sarah.chen@company.com"]}
+      body={`Hi Sarah,
+
+Thanks for joining the planning meeting today. I've attached the updated timeline.
+
+Best,
+Alex`}
+      onSend={() => console.log("Sent")}
+      onCancel={() => console.log("Cancelled")}
+    />
+  );
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Register this renderer so tool results display as `MessageDraft`.
+
+```tsx
+"use client";
+
+import { type Toolkit } from "@assistant-ui/react";
+import { MessageDraft } from "@/components/tool-ui/message-draft";
+import {
+  safeParseSerializableMessageDraft,
+  SerializableMessageDraftSchema,
+} from "@/components/tool-ui/message-draft/schema";
+
+export const toolkit: Toolkit = {
+  draftMessage: {
+    description: "Draft a message for the user to review before sending.",
+    parameters: SerializableMessageDraftSchema,
+    render: ({ args, toolCallId, result, addResult }) => {
+      const parsedArgs = safeParseSerializableMessageDraft({
+        ...args,
+        id: args?.id ?? `message-draft-${toolCallId}`,
+      });
+      if (!parsedArgs) {
+        return null;
+      }
+      return result ? (
+        <MessageDraft {...parsedArgs} outcome={result} />
+      ) : (
+        <MessageDraft
+          {...parsedArgs}
+          onSend={async () => {
+            // Perform actual send logic here
+            await sendMessage(parsedArgs);
+            await addResult?.("sent");
+          }}
+          onCancel={() => addResult?.("cancelled")}
+        />
+      );
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="ShieldCheck" title="Human-in-the-loop">
+    Nothing sends until the user clicks Send
+  </Feature>
+  <Feature icon="Timer" title="Undo grace period">
+    Configurable countdown after Send where the user can still cancel
+  </Feature>
+  <Feature icon="Layers" title="Channel skins">
+    Email shows subject/recipients, Slack shows channel or DM target
+  </Feature>
+  <Feature icon="CheckCircle2" title="Receipt states">
+    Collapses to a one-line confirmation after send or cancel
+  </Feature>
+</FeatureGrid>
+
+## Channel Skins
+
+Two channel types, each with its own metadata layout.
+
+### Email
+
+Shows subject line, To/CC/BCC recipients, and message body.
+
+### Slack
+
+Shows channel or DM target with the Slack icon.
+
+## Send Flow
+
+Clicking Send starts a countdown. The user can undo before it completes:
+
+1. **Review** - User reviews the draft with Send/Cancel buttons
+2. **Sending** - Countdown with Undo button (default 5 seconds)
+3. **Sent** - Compact receipt confirming the message was sent
+
+Configure the countdown length with `undoGracePeriod` (in milliseconds).
+
+## Receipt States
+
+Pass `outcome="sent"` to render a one-line confirmation receipt. `outcome="cancelled"` hides the component entirely.
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for the message draft",
+      type: "string",
+      required: true,
+    },
+    channel: {
+      description: "Message channel type",
+      type: "'email' | 'slack'",
+      required: true,
+    },
+    body: {
+      description: "Message content",
+      type: "string",
+      required: true,
+    },
+    outcome: {
+      description: "Final state (renders receipt when set)",
+      type: "'sent' | 'cancelled'",
+    },
+    undoGracePeriod: {
+      description: "Milliseconds before send is finalized",
+      type: "number",
+      default: "5000",
+    },
+    onSend: {
+      description: "Called when grace period completes",
+      type: "() => void | Promise<void>",
+    },
+    onUndo: {
+      description: "Called when user clicks Undo during grace period",
+      type: "() => void",
+    },
+    onCancel: {
+      description: "Called when user cancels the draft",
+      type: "() => void",
+    },
+    className: {
+      description: "Additional CSS classes",
+      type: "string",
+    },
+  }}
+/>
+
+### Email-specific Props
+
+<TypeTable
+  type={{
+    subject: {
+      description: "Email subject line",
+      type: "string",
+      required: true,
+    },
+    from: {
+      description: "Sender address",
+      type: "string",
+    },
+    to: {
+      description: "Primary recipients",
+      type: "string[]",
+      required: true,
+    },
+    cc: {
+      description: "Carbon copy recipients",
+      type: "string[]",
+    },
+    bcc: {
+      description: "Blind carbon copy recipients",
+      type: "string[]",
+    },
+  }}
+/>
+
+### Slack-specific Props
+
+<TypeTable
+  type={{
+    target: {
+      description: "Slack destination",
+      type: "{ type: 'channel' | 'dm', name: string, memberCount?: number }",
+      required: true,
+    },
+  }}
+/>
+
+## Accessibility
+
+- Uses `article` with `aria-labelledby` for the draft content
+- **Keyboard navigation:**
+  - `Tab` to move between buttons
+  - `Enter` or `Space` to activate focused button
+  - `Escape` triggers cancel while in review state
+- Sending state announces countdown via `aria-live="polite"`
+- Receipt state uses `role="status"` for screen reader announcements
+- Focus moves to Undo button when entering sending state
+
+## Related
+
+- [Approval Card](/docs/approval-card): binary approve/deny for other consequential actions

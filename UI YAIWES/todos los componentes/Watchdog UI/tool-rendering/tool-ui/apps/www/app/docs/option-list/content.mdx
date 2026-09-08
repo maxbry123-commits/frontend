@@ -1,0 +1,209 @@
+import { DocsHeader } from "../_components/docs-header";
+
+<DocsHeader
+  title="Option List"
+  description="Let users select from multiple choices."
+  mdxPath="app/docs/option-list/content.mdx"
+/>
+
+Not every choice fits in a text reply. When the assistant needs the user to pick an output format, a plan tier, or a movie genre, OptionList renders the options as selectable cards with single or multi-select behavior. The selection feeds back as a tool result, and the chosen option stays visible as a receipt. No free-text parsing required.
+
+**Role:** Decision. For choices that return to the assistant. See [Design Guidelines](/docs/design-guidelines) for how component roles work.
+
+## Getting Started
+
+<Steps>
+
+<Step title="Install the component">
+
+Run this once from your project root.
+
+<InstallCommandBlock componentId="option-list" variant="block" />
+
+</Step>
+
+<Step title="Use it in your application">
+
+Render `OptionList` in your UI with tool-compatible props.
+
+<div className="[&_pre]:max-h-[30rem] [&_pre]:overflow-y-auto">
+
+```tsx
+import { OptionList } from "@/components/tool-ui/option-list";
+
+export function Example({
+  payload,
+}: {
+  payload: React.ComponentProps<typeof OptionList>;
+}) {
+  return <OptionList {...payload} />;
+}
+```
+
+</div>
+
+</Step>
+
+<Step title="Register it in your runtime provider">
+
+Register this renderer so tool results display as `OptionList`.
+
+```tsx
+"use client";
+
+// Frontend tool (recommended for decision surfaces like Option List):
+// - The model calls the tool with SerializableOptionList props as the args
+// - Your UI calls addResult(selection) from onAction when actionId is "confirm"
+import { type Toolkit } from "@assistant-ui/react";
+import { OptionList } from "@/components/tool-ui/option-list";
+import {
+  safeParseSerializableOptionList,
+  SerializableOptionListSchema,
+} from "@/components/tool-ui/option-list/schema";
+
+export const toolkit: Toolkit = {
+  selectFormat: {
+    description: "Let the user choose an output format.",
+    parameters: SerializableOptionListSchema,
+    render: ({ args, toolCallId, result, addResult }) => {
+      const parsedArgs = safeParseSerializableOptionList({
+        ...args,
+        id: args?.id ?? `format-selection-${toolCallId}`,
+      });
+      if (!parsedArgs) {
+        return null;
+      }
+      return result ? (
+        <OptionList {...parsedArgs} value={undefined} choice={result} />
+      ) : (
+        <OptionList
+          {...parsedArgs}
+          // Avoid controlled selection in LLM-driven payloads.
+          value={undefined}
+          onAction={(actionId, selection) => {
+            if (actionId === "confirm") {
+              void addResult?.(selection);
+            }
+          }}
+        />
+      );
+    },
+  },
+};
+```
+
+</Step>
+
+</Steps>
+
+## Key Features
+
+<FeatureGrid>
+  <Feature icon="CircleCheck" title="Single or multi-select">
+    Radio buttons for one choice, checkboxes for many
+  </Feature>
+  <Feature icon="ListChecks" title="Selection constraints">
+    Set minimum and maximum selection counts
+  </Feature>
+  <Feature icon="Settings2" title="Configurable actions">
+    Confirm, cancel, and custom footer buttons
+  </Feature>
+  <Feature icon="CheckCircle2" title="Receipt state">
+    Shows only the chosen option(s) as a read-only record
+  </Feature>
+</FeatureGrid>
+
+## Receipt State
+
+Pass a `choice` prop to render this component in its receipt state. See [Receipts](/docs/receipts) for the pattern.
+
+The receipt shows only the selected option(s) with a checkmark. Unselected options and action buttons are hidden.
+
+## Props
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique identifier for this component instance",
+      type: "string",
+      required: true,
+    },
+    options: {
+      description: "List of selectable options",
+      type: "OptionListOption[]",
+      required: true,
+    },
+    selectionMode: {
+      description: "Selection behavior",
+      type: "'single' | 'multi'",
+      default: "'multi'",
+    },
+    value: {
+      description:
+        "Controlled selection value (runtime only). Avoid in tool/LLM payloads; prefer defaultValue or choice.",
+      type: "string | string[] | null",
+    },
+    defaultValue: {
+      description: "Initial selection (uncontrolled)",
+      type: "string | string[] | null",
+    },
+    choice: {
+      description: "Chosen selection (renders receipt state)",
+      type: "string | string[] | null",
+    },
+    minSelections: {
+      description: "Minimum required selections",
+      type: "number",
+      default: "1",
+    },
+    maxSelections: {
+      description: "Maximum allowed selections",
+      type: "number",
+    },
+    actions: {
+      description: "Action buttons",
+      type: "Action[] | ActionsConfig",
+    },
+    onChange: {
+      description: "Selection change handler",
+      type: "(value) => void",
+    },
+    onAction: {
+      description: "Action handler with post-action selection state",
+      type: "(actionId: string, value: string | string[] | null) => void | Promise<void>",
+    },
+    onBeforeAction: {
+      description: "Action guard with current selection state",
+      type: "(actionId: string, value: string | string[] | null) => boolean | Promise<boolean>",
+    },
+  }}
+/>
+
+## Option Schema
+
+<TypeTable
+  type={{
+    id: {
+      description: "Unique option identifier",
+      type: "string",
+      required: true,
+    },
+    label: { description: "Display text", type: "string", required: true },
+    description: { description: "Secondary text", type: "string" },
+    icon: { description: "Optional icon element", type: "ReactNode" },
+    disabled: { description: "Disable this option", type: "boolean" },
+  }}
+/>
+
+## Accessibility
+
+- Uses a semantic listbox + option pattern (`role="listbox"` with `role="option"` on each option button)
+- Exposes selection state with `aria-selected` and multi-select intent with `aria-multiselectable`
+- Implements roving tab focus with keyboard navigation (`ArrowUp/ArrowDown`, `Home/End`, `Enter`/`Space`, `Escape`)
+- Keeps footer actions keyboard-accessible through native button semantics
+
+## Related
+
+- [Approval Card](/docs/approval-card): binary yes/no for a single consequential action
+- [Preferences Panel](/docs/preferences-panel): structured settings with switches and toggles
+- [Question Flow](/docs/question-flow): multi-step guided decisions where each answer shapes the next
