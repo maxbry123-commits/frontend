@@ -23,7 +23,7 @@ env:
 
 concurrency:
   group: frontend-archives-watchdog-auditor-20260908
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   independent-read-only-audit:
