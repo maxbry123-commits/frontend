@@ -1,0 +1,102 @@
+//go:build !windows
+// +build !windows
+
+package exec
+
+import (
+	"os"
+	"os/exec"
+	"os/user"
+	"path/filepath"
+	"strconv"
+	"syscall"
+)
+
+func ExecSyscall(command string, env []string) error {
+	return syscall.Exec("/bin/sh", []string{"/bin/sh", "-c", command}, env)
+}
+
+func BuildCommand(command string) *exec.Cmd {
+	return exec.Command("/bin/sh", "-c", command)
+}
+
+func WritePipe(pipe string, contents []byte) {
+	handle, err := os.OpenFile(pipe, os.O_WRONLY, 0600)
+
+	if err != nil {
+		os.Remove(pipe)
+		log.Fatal(err)
+	}
+
+	handle.Write(contents)
+	handle.Close()
+}
+
+func GetPipe(dir, filename string) (string, error) {
+	tmpfn := filepath.Join(dir, filename)
+	err := syscall.Mkfifo(tmpfn, 0600)
+	if err != nil {
+		return "", err
+	}
+
+	return tmpfn, nil
+}
+
+func UserEnv(username string) []string {
+	u, err := user.Lookup(username)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return []string{
+		"HOME=" + u.HomeDir,
+		"USER=" + u.Username,
+		"LOGNAME=" + u.Username,
+	}
+}
+
+func SwitchUser(username string) {
+	user, err := user.Lookup(username)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	uid, _ := strconv.Atoi(user.Uid)
+	gid, _ := strconv.Atoi(user.Gid)
+
+	groupIds, err := user.GroupIds()
+	var intGroupIds []int
+	if err != nil {
+		log.Fatal(err)
+		intGroupIds = []int{gid}
+	} else {
+		intGroupIds = make([]int, len(groupIds))
+		for i, gid := range groupIds {
+			intGroupIds[i], _ = strconv.Atoi(gid)
+		}
+	}
+
+	err = syscall.Setgroups(intGroupIds)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = syscall.Setgid(gid)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = syscall.Setuid(uid)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = syscall.Setreuid(uid, uid)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = syscall.Setregid(gid, gid)
+	if err != nil {
+		log.Fatal(err)
+	}
+}

@@ -1,0 +1,182 @@
+package exec
+
+import (
+	"bytes"
+	"fmt"
+	"os"
+	"path/filepath"
+	"runtime"
+	"strings"
+
+	"github.com/getsops/sops/v3/logging"
+
+	"github.com/sirupsen/logrus"
+)
+
+const (
+	FallbackFilename = "tmp-file"
+)
+
+var log *logrus.Logger
+
+func init() {
+	log = logging.NewLogger("EXEC")
+}
+
+type ExecOpts struct {
+	Command     string
+	Plaintext   []byte
+	Background  bool
+	SameProcess bool
+	Pristine    bool
+	Fifo        bool
+	User        string
+	Filename    string
+	Env         []string
+}
+
+func GetFile(dir, filename string) (*os.File, error) {
+	// If no filename is provided, create a random one based on FallbackFilename
+	if filename == "" {
+		handle, err := os.CreateTemp(dir, FallbackFilename)
+		if err != nil {
+			return nil, err
+		}
+		return handle, nil
+	}
+	// If a filename is provided, use that one
+	handle, err := os.Create(filepath.Join(dir, filename))
+	if err != nil {
+		return nil, err
+	}
+	// read+write for owner only
+	if err = handle.Chmod(0600); err != nil {
+		return nil, err
+	}
+	return handle, nil
+}
+
+func ExecWithFile(opts ExecOpts) error {
+	var userEnv []string
+	if opts.User != "" {
+		userEnv = UserEnv(opts.User)
+		SwitchUser(opts.User)
+	}
+
+	if runtime.GOOS == "windows" && opts.Fifo {
+		log.Warn("no fifos on windows, use --no-fifo next time")
+		opts.Fifo = false
+	}
+
+	dir, err := os.MkdirTemp("", ".sops")
+	if err != nil {
+		return err
+	}
+	defer os.RemoveAll(dir)
+
+	if opts.Filename != "" {
+		if filepath.IsAbs(opts.Filename) || !filepath.IsLocal(opts.Filename) {
+			return fmt.Errorf("The provided filename is not a local path.")
+		}
+	}
+
+	var filename string
+	if opts.Fifo {
+		// fifo handling needs to be async, even opening to write
+		// will block if there is no reader present
+		filename = opts.Filename
+		if filename == "" {
+			filename = FallbackFilename
+		}
+		filename, err = GetPipe(dir, filename)
+		if err != nil {
+			return err
+		}
+		go WritePipe(filename, opts.Plaintext)
+	} else {
+		// GetFile handles opts.Filename == "" specially, that's why we have
+		// to pass in opts.Filename without handling the fallback here
+		handle, err := GetFile(dir, opts.Filename)
+		if err != nil {
+			return err
+		}
+		handle.Write(opts.Plaintext)
+		handle.Close()
+		filename = handle.Name()
+	}
+
+	var env []string
+	if !opts.Pristine {
+		env = os.Environ()
+	}
+	env = append(env, userEnv...)
+	env = append(env, opts.Env...)
+
+	placeholdered := strings.Replace(opts.Command, "{}", filename, -1)
+	cmd := BuildCommand(placeholdered)
+	cmd.Env = env
+
+	if opts.Background {
+		return cmd.Start()
+	}
+
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
+}
+
+func ExecWithEnv(opts ExecOpts) error {
+	var userEnv []string
+	if opts.User != "" {
+		userEnv = UserEnv(opts.User)
+		SwitchUser(opts.User)
+	}
+
+	if runtime.GOOS == "windows" && opts.SameProcess {
+		return fmt.Errorf("The --same-process flag is not supported on Windows")
+	}
+
+	var env []string
+
+	if !opts.Pristine {
+		env = os.Environ()
+	}
+
+	lines := bytes.Split(opts.Plaintext, []byte("\n"))
+	for _, line := range lines {
+		if len(line) == 0 {
+			continue
+		}
+		if line[0] == '#' {
+			continue
+		}
+		env = append(env, string(line))
+	}
+
+	env = append(env, userEnv...)
+	env = append(env, opts.Env...)
+
+	if opts.SameProcess {
+		if opts.Background {
+			log.Fatal("background is not supported for same-process")
+		}
+
+		// Note that the call does NOT return, unless an error happens.
+		return ExecSyscall(opts.Command, env)
+	}
+
+	cmd := BuildCommand(opts.Command)
+	cmd.Env = env
+
+	if opts.Background {
+		return cmd.Start()
+	}
+
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
+}
