@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 37,
+  "processed": 38,
   "records": [
     {
       "bytes": 312360273,
@@ -479,11 +479,21 @@
       "source_url": "https://github.com/Unstructured-IO/unstructured",
       "status": "COMPLETE",
       "tree_sha256": "28acb63bff4d07c4cda3bd0082999060d40c1fd135b37f946c17b058c3791fd1"
+    },
+    {
+      "destination": "AVF",
+      "error": "GIT_BLOB_LIMIT_GAP: libs/apkverify/tests/data/input.272629760:272629760",
+      "index": 38,
+      "n": 66,
+      "name": "AVF",
+      "source_commit": "175a51b30123fa6b02b541f1969665708f7ec2c3",
+      "source_url": "https://android.googlesource.com/platform/packages/modules/Virtualization/",
+      "status": "GAP"
     }
   ],
   "states": {
     "COMPLETE": 22,
-    "GAP": 15,
+    "GAP": 16,
     "VERIFIED_EXISTING": 0
   }
 }
