@@ -11,3 +11,11 @@
 {"number": 11, "parts": 1, "slug": "Cosign", "source": "https://github.com/sigstore/cosign.git", "source_commit": "633e8f4303b7db64c369bdfa315374a8bd511ac6", "status": "COMPLETE"}
 {"number": 12, "parts": 1, "slug": "in-toto", "source": "https://github.com/in-toto/in-toto.git", "source_commit": "e352b43ad7cb8915d84c36d791aa61346152a0a3", "status": "COMPLETE"}
 {"number": 13, "parts": 1, "slug": "Python-TUF", "source": "https://github.com/theupdateframework/python-tuf.git", "source_commit": "d6b4392ea0620e2eae32f55bf317afd1009c0096", "status": "COMPLETE"}
+{"number": 14, "parts": 6, "slug": "Trivy", "source": "https://github.com/aquasecurity/trivy.git", "source_commit": "af9d5108a0f53b3cc0428f342f2239724959bc3f", "status": "COMPLETE"}
+{"number": 15, "parts": 1, "slug": "Syft", "source": "https://github.com/anchore/syft.git", "source_commit": "767c83d5131e9591a3f125dca969274399734084", "status": "COMPLETE"}
+{"number": 16, "parts": 2, "slug": "whisper.cpp", "source": "https://github.com/ggml-org/whisper.cpp.git", "source_commit": "c44b60b8053bbf2a5c1e014f11323fb3f2485177", "status": "COMPLETE"}
+{"number": 17, "parts": 3, "slug": "Piper", "source": "https://github.com/OHF-Voice/piper1-gpl.git", "source_commit": "639388b6317fc4731e91d53da42aea68fd4166ff", "status": "COMPLETE"}
+{"number": 18, "parts": 1, "slug": "RNNoise", "source": "https://github.com/xiph/rnnoise.git", "source_commit": "70f1d256acd4b34a572f999a05c87bf00b67730d", "status": "COMPLETE"}
+{"number": 19, "parts": 1, "slug": "LiveKit", "source": "https://github.com/livekit/livekit.git", "source_commit": "5121860448763817c72ab211adf693e99c3c2c60", "status": "COMPLETE"}
+{"number": 20, "parts": 2, "slug": "ntfy", "source": "https://github.com/binwiederhier/ntfy.git", "source_commit": "10cb6506f836dbb00bb77e3b52669f6ace37f555", "status": "COMPLETE"}
+{"number": 21, "parts": 1, "slug": "Apprise", "source": "https://github.com/caronc/apprise.git", "source_commit": "41a79473756728e7e22e5ea5e8ab40d97a9a79ac", "status": "COMPLETE"}
