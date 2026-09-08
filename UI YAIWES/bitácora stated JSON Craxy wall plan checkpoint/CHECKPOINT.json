@@ -1,31 +1,26 @@
 {
-  "checkpoint_id": "UIYAIWES-V5-XRAY-ACTION124-0025",
-  "previous_checkpoint_id": "UIYAIWES-V3-POST124-REDUN-0024",
+  "checkpoint_id": "UIYAIWES-V5-XRAY-ACTION124-0026",
+  "previous_checkpoint_id": "UIYAIWES-V5-XRAY-ACTION124-0025",
   "contract": "tel.workflow/v3",
   "guide_revision": "v5",
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_LOOP_POST124_RECOVERY_FORENSIC",
-  "current_node": "P01_POST124_RECOVERY_QUEUE_BUILD",
+  "current_node": "P01_POST124_C1_INDEPENDENT_AUDIT",
   "last_verified_closed": "P01 initial 14-component inventory/provenance baseline (historical; freshness now stale)",
   "workflow_owner": "stabilize_core",
-  "head_observed": "fa3aff93da530cb76c009b0493886c4dcbf0729b",
-  "new_forensic_evidence": {
-    "artifact_id": 10002484616,
-    "artifact_digest": "sha256:680861bb0f9b48dae398ccd56c95add5d44bd0bc45510a9a7cab17a55ee10683",
-    "artifact_files": 81,
-    "checkpoint_json": 80,
-    "gaps_tsv": true,
-    "verify_final_json": false,
-    "expected": 124,
-    "attempted": 86,
-    "unattempted": 38,
-    "gap_entries": 36,
-    "complete_checkpoint_shape": 60,
-    "complete_shape_no_gap": 50,
-    "complete_shape_with_repair_gap": 10,
-    "partial_checkpoint": 20,
-    "provider_gap_without_checkpoint": 6,
-    "hypothesis_index9_placed_after_124": true
+  "head_observed_before_a03": "4ce6cc36daeed86003be4d8d8de7f03061e3ae8f",
+  "a03_queue_integrity": {
+    "status": "PASS_SPECIFICATION_AND_COVERAGE",
+    "source_queue_blob": "f8283c50395a63d5f8d5d3e127d86c2be75a0176",
+    "historical_queue_order_valid": false,
+    "historical_anomaly": "Hypothesis director_index 9 appears after 124",
+    "classification_primary_count": 124,
+    "classification_unique_count": 124,
+    "missing_indices": [],
+    "duplicate_indices": [],
+    "recovery_sort": "director_index ASC",
+    "evidence": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ACTION124-QUEUE-INTEGRITY-V5.json",
+    "historical_queue_preserved": true
   },
   "crosscheck_sources": {
     "memory_wordflow_yaiwes": "AUDITED",
@@ -34,20 +29,10 @@
     "virtual_computer_yaiwes": "AUDITED_FROM_REPO",
     "command_center_yaiwes": "AUDITED_FROM_REPO"
   },
-  "councils": {
-    "architecture_ownership": "DEFINED_PENDING_FINAL_PASS",
-    "evidence_coverage": "DEFINED_PENDING_FINAL_PASS",
-    "execution_recovery": "DEFINED_PENDING_FINAL_PASS"
-  },
   "refutations": {
-    "r1_action124_presence_is_success": "REFUTED",
-    "r2_adapter_mock_equals_integration": "REFUTED",
-    "r3_nct_block0_is_yaiwes_functional_source": "REFUTED"
-  },
-  "goals": {
-    "count": 50,
-    "ledger": "GOALS-50-ENTRADA-SALIDA-V5.md",
-    "final_goal": "G50 Final E2E / Final Judge"
+    "r1_124_entries_equals_correct_execution_order": "REFUTED",
+    "r2_hypothesis_physical_presence_equals_action_attempt": "REFUTED",
+    "r3_writer_classification_equals_independent_124_verification": "REFUTED"
   },
   "blocked_claims": {
     "P01_freshness": "BLOCKED_UNTIL_ACTION124_RECOVERY_AND_FULL_POST124_RECONCILIATION",
@@ -56,17 +41,16 @@
     "pytest_provenance": "BLOCKED_UNTIL_EXACT_PHYSICAL_SNAPSHOT_IDENTIFIED"
   },
   "queue_1x1": [
-    "build recovery classification from artifact and current destination",
-    "sort and validate director_index set 1..124",
-    "audit C1 complete/no-gap without redownload",
-    "investigate C2 repair_rc despite complete shape",
-    "resume C3 partial checkpoints",
-    "add authorized provider acquisition path for C4",
-    "process C5 unattempted including Hypothesis",
-    "resolve C6 provenance conflicts",
-    "produce final read-back artifact",
-    "run independent 124/124 auditor",
-    "only then refresh P01 closure and continue P05-P08"
+    "A04 audit C1 complete/no-gap against current destination without redownload",
+    "A05 investigate C2 repair_rc",
+    "A06 resume C3 partial checkpoints",
+    "A07 use provider-specific acquisition for C4",
+    "A08 process C5 ordered by director_index including Hypothesis",
+    "A09 resolve C6 provenance conflicts",
+    "A10 alias/dedup",
+    "A11 writer verify-final always-produced",
+    "A12 independent 124/124 auditor",
+    "A13 refresh P01 closure"
   ],
   "recovery_anchor": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/RECOVERY-PATCH.md",
   "closure_rule": "no VERIFIED_CLOSED without required real evidence and Judge"
