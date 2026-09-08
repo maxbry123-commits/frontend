@@ -1,0 +1,40 @@
+{
+  "schema": "yaiwes.action124.queue_integrity.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "scope": "maxbry123-commits/frontend:UI YAIWES",
+  "source_queue": "scripts/ui-yaiwes-124-download-extract-20260906/QUEUE.json",
+  "source_queue_blob": "f8283c50395a63d5f8d5d3e127d86c2be75a0176",
+  "classification_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ACTION124-RECOVERY-CLASSIFICATION-V5.json",
+  "checks": {
+    "expected_components_declared": 124,
+    "primary_class_coverage": 124,
+    "primary_class_unique": 124,
+    "director_index_expected_set": "1..124",
+    "missing_indices": [],
+    "duplicate_indices": [],
+    "provider_support_declared": ["github.com", "android.googlesource.com", "gitlab.freedesktop.org", "gitlab.com"],
+    "historical_queue_order_valid": false,
+    "historical_order_anomaly": "director_index 9 Hypothesis appears after director_index 124"
+  },
+  "recovery_order": {
+    "sort_key": "director_index ASC",
+    "first": 1,
+    "last": 124,
+    "hypothesis_position": 9,
+    "ordered_director_indices": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124]
+  },
+  "strategy_delta": "Do not mutate or rerun the historical queue. Recovery consumers MUST sort a copied recovery view by director_index before class execution; C1 is audit-only/no-redownload; C4 requires provider-specific acquisition; C5 includes Hypothesis index 9.",
+  "refutations": [
+    "124 entries does not prove execution order correctness",
+    "Hypothesis physical presence does not prove Action124 attempted it",
+    "writer checkpoint/classification does not equal independent 124/124 verification"
+  ],
+  "acceptance": {
+    "deterministic_preflight_specified": true,
+    "historical_queue_preserved": true,
+    "scope_boundary_preserved": true,
+    "verified_closed": false
+  },
+  "next_delta": "A04_C1_INDEPENDENT_AUDIT"
+}
