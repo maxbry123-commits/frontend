@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 11,
+  "processed": 12,
   "records": [
     {
       "bytes": 312360273,
@@ -144,10 +144,23 @@
       "source_url": "https://github.com/sigstore/cosign",
       "status": "GAP",
       "tree_sha256": "071c06d152139c9d88949b8723d7ae01f6bf947eb711cfeafa09a02670d40d1d"
+    },
+    {
+      "bytes": 721313,
+      "destination": "in-toto",
+      "files": 183,
+      "index": 12,
+      "n": 99,
+      "name": "in-toto",
+      "read_back": "PASS",
+      "source_commit": "e352b43ad7cb8915d84c36d791aa61346152a0a3",
+      "source_url": "https://github.com/in-toto/in-toto",
+      "status": "COMPLETE",
+      "tree_sha256": "5151c0ae11d72d730f39cfa626b1f036392d019b4fc0a671a3e3883b9f13b9e4"
     }
   ],
   "states": {
-    "COMPLETE": 7,
+    "COMPLETE": 8,
     "GAP": 4,
     "VERIFIED_EXISTING": 0
   }
