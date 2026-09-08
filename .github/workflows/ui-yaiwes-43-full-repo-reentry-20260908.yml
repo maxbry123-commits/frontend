@@ -1,0 +1,55 @@
+name: UI YAIWES 43 Full Repo Reentry
+run-name: UI YAIWES 43 Full Repo Reentry • ${{ github.event_name }} • ${{ github.sha }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ui-yaiwes-43-full-repo-reentry-20260908.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: frontend-ui-yaiwes-43-full-repo-reentry-20260908
+  cancel-in-progress: false
+
+env:
+  GIT_TERMINAL_PROMPT: '0'
+
+jobs:
+  acquire-complete-repositories:
+    name: Acquire and verify 43 complete repositories
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Checkout destination main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Enforce NO-LFS writer policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config --local filter.lfs.clean cat
+          git config --local filter.lfs.smudge cat
+          git config --local filter.lfs.process ''
+          git config --local filter.lfs.required false
+          git config --local core.compression 0
+
+      - name: Execute deterministic complete-repository acquisition
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/ui_yaiwes_43_full_repo_reentry_20260908.py
+
+      - name: Producer checkpoint summary
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          p='UI YAIWES/componentes open soure UI YAIWES/REENTRY_43_CHECKPOINT.json'
+          if test -f "$p"; then cat "$p"; else echo 'CHECKPOINT_NOT_YET_PUBLISHED'; fi
