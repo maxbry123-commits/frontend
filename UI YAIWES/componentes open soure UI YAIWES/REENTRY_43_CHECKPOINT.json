@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 14,
+  "processed": 15,
   "records": [
     {
       "bytes": 312360273,
@@ -183,11 +183,21 @@
       "source_url": "https://github.com/aquasecurity/trivy",
       "status": "GAP",
       "tree_sha256": "ca706b8cb0dc4815ec796e4f27a1006a9ff2a94068a28eda79eac7a83f380c1c"
+    },
+    {
+      "destination": "Syft",
+      "error": "UNSAFE_LINK_GAP: syft/internal/fileresolver/testdata/symlinks-base/baz;syft/internal/fileresolver/testdata/symlinks-base/chain;syft/internal/fileresolver/testdata/symlinks-base/foo",
+      "index": 15,
+      "n": 102,
+      "name": "Syft",
+      "source_commit": "392539dc28bd489f94e2a28edf989b738b938d01",
+      "source_url": "https://github.com/anchore/syft",
+      "status": "GAP"
     }
   ],
   "states": {
     "COMPLETE": 9,
-    "GAP": 5,
+    "GAP": 6,
     "VERIFIED_EXISTING": 0
   }
 }
