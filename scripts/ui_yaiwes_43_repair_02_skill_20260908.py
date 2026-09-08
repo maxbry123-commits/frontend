@@ -176,7 +176,7 @@ def stage_exact(dest):
         mode, blob = blob_for_path(p)
         rel = p.relative_to(ROOT).as_posix()
         run(["git", "update-index", "--add", "--cacheinfo", mode, blob, rel])
-    grep = subprocess.run(["git", "grep", "-l", "-F", "version https://git-lfs.github.com/spec/v1", "--cached", "--", rel_dest], stdout=subprocess.PIPE, text=True)
+    grep = subprocess.run(["git", "grep", "--cached", "-l", "-F", "version https://git-lfs.github.com/spec/v1", "--", rel_dest], stdout=subprocess.PIPE, text=True)
     if grep.returncode == 0 and grep.stdout.strip():
         raise RuntimeError("STAGED_LFS_POINTER_GAP:" + grep.stdout.strip().replace("\n", ";")[:1500])
     if grep.returncode not in (0, 1):
@@ -184,7 +184,6 @@ def stage_exact(dest):
 
 
 def publish_component(dest, stage, label):
-    rel = dest.relative_to(ROOT).as_posix()
     for attempt in range(1, 4):
         run(["git", "fetch", "origin", "main"])
         run(["git", "reset", "--hard", "origin/main"])
@@ -217,24 +216,21 @@ def read_back(rel_dest, expected_hash):
         raise RuntimeError(f"READ_BACK_CONTENT_MISMATCH:{got}!={expected_hash}")
 
 
-def write_repair_checkpoint(records):
-    REPAIR_CHECKPOINT.write_text(json.dumps({
+def checkpoint_payload(records):
+    return {
         "repair": "repair-02-skill",
         "records": records,
         "remaining_component_gaps": sum(1 for r in records if r.get("status") == "GAP"),
         "repaired": sum(1 for r in records if r.get("status") == "REPAIRED"),
         "blocked_nonretryable": sum(1 for r in records if r.get("status") == "BLOCKED_NONRETRYABLE")
-    }, indent=2, sort_keys=True) + "\n")
+    }
+
+
+def write_repair_checkpoint(records):
     run(["git", "fetch", "origin", "main"])
     run(["git", "reset", "--hard", "origin/main"])
     REPAIR_CHECKPOINT.parent.mkdir(parents=True, exist_ok=True)
-    REPAIR_CHECKPOINT.write_text(json.dumps({
-        "repair": "repair-02-skill",
-        "records": records,
-        "remaining_component_gaps": sum(1 for r in records if r.get("status") == "GAP"),
-        "repaired": sum(1 for r in records if r.get("status") == "REPAIRED"),
-        "blocked_nonretryable": sum(1 for r in records if r.get("status") == "BLOCKED_NONRETRYABLE")
-    }, indent=2, sort_keys=True) + "\n")
+    REPAIR_CHECKPOINT.write_text(json.dumps(checkpoint_payload(records), indent=2, sort_keys=True) + "\n")
     run(["git", "add", "--", REPAIR_CHECKPOINT.relative_to(ROOT).as_posix()])
     if subprocess.run(["git", "diff", "--cached", "--quiet"]).returncode != 0:
         run(["git", "config", "user.name", "github-actions[bot]"])
