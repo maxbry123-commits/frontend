@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 39,
+  "processed": 40,
   "records": [
     {
       "bytes": 312360273,
@@ -498,11 +498,20 @@
       "name": "Wayland",
       "source_url": "https://gitlab.freedesktop.org/wayland/wayland",
       "status": "GAP"
+    },
+    {
+      "destination": "Weston-libweston",
+      "error": "SOURCE_SHA_GAP:warning:",
+      "index": 40,
+      "n": 71,
+      "name": "Weston/libweston",
+      "source_url": "https://gitlab.freedesktop.org/wayland/weston",
+      "status": "GAP"
     }
   ],
   "states": {
     "COMPLETE": 22,
-    "GAP": 17,
+    "GAP": 18,
     "VERIFIED_EXISTING": 0
   }
 }
