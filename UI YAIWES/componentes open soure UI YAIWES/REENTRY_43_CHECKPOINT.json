@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 36,
+  "processed": 37,
   "records": [
     {
       "bytes": 312360273,
@@ -466,10 +466,23 @@
       "source_url": "https://github.com/typesense/typesense",
       "status": "GAP",
       "tree_sha256": "7fd9a3575472af0be25cd5c381aeebce00f2cd120c0c7de2088d60a13403fe95"
+    },
+    {
+      "bytes": 178822624,
+      "destination": "Unstructured",
+      "files": 1301,
+      "index": 37,
+      "n": 124,
+      "name": "Unstructured",
+      "read_back": "PASS",
+      "source_commit": "d68ab0fda9bcac317b7c033d42412d716ba1d790",
+      "source_url": "https://github.com/Unstructured-IO/unstructured",
+      "status": "COMPLETE",
+      "tree_sha256": "28acb63bff4d07c4cda3bd0082999060d40c1fd135b37f946c17b058c3791fd1"
     }
   ],
   "states": {
-    "COMPLETE": 21,
+    "COMPLETE": 22,
     "GAP": 15,
     "VERIFIED_EXISTING": 0
   }
