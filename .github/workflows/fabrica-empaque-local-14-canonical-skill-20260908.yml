@@ -1,0 +1,40 @@
+name: Fabrica Empaque Local 14 Canonical Skill
+run-name: Fabrica Empaque Local 14 Canonical Skill • ${{ github.event_name }} • ${{ github.sha }}
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  GIT_TERMINAL_PROMPT: "0"
+
+concurrency:
+  group: frontend-fabrica-empaque-local-14-canonical-skill
+  cancel-in-progress: false
+
+jobs:
+  download-14-in-queue:
+    name: Download 14 repos sequentially
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+      - name: Execute deterministic download chain
+        shell: bash
+        env:
+          GIT_TERMINAL_PROMPT: "0"
+        run: |
+          set -euo pipefail
+          # Git LFS prohibited: never invoke git-lfs. Inherited lfs filters pass bytes unchanged.
+          git config --local filter.lfs.clean cat
+          git config --local filter.lfs.smudge cat
+          git config --local filter.lfs.process ''
+          git config --local filter.lfs.required false
+          git config --local core.compression 0
+          python3 scripts/canonical-fabrica-empaque-local-14-research_download_chain.py 'fabrica de UI INTERFACE fromtend' '_work/fabrica-empaque-local-14-canonical'
