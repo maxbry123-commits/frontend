@@ -8,6 +8,7 @@
   "current_node": "P01_POST124_C1_INDEPENDENT_AUDIT",
   "last_verified_closed": "P01 initial 14-component inventory/provenance baseline (historical; freshness now stale)",
   "workflow_owner": "stabilize_core",
+  "live_handoff": "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md",
   "head_observed_before_a03": "4ce6cc36daeed86003be4d8d8de7f03061e3ae8f",
   "a03_queue_integrity": {
     "status": "PASS_SPECIFICATION_AND_COVERAGE",
