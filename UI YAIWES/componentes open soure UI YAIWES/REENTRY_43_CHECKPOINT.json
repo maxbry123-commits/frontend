@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 3,
+  "processed": 4,
   "records": [
     {
       "bytes": 312360273,
@@ -40,10 +40,23 @@
       "source_url": "https://github.com/containers/bubblewrap",
       "status": "COMPLETE",
       "tree_sha256": "500ac17bef73491da87a15c2322e38982e39c585c960caaa05ea662088fbb500"
+    },
+    {
+      "bytes": 107522723,
+      "destination": "Moby",
+      "files": 13159,
+      "index": 4,
+      "n": 91,
+      "name": "Moby",
+      "read_back": "PASS",
+      "source_commit": "5445d62e36fcbe770d239812242cabd78d3947b7",
+      "source_url": "https://github.com/moby/moby",
+      "status": "COMPLETE",
+      "tree_sha256": "05073eb376b3f934dc7ac79b40da763f6f589cd800f8348949d73df130620fc2"
     }
   ],
   "states": {
-    "COMPLETE": 2,
+    "COMPLETE": 3,
     "GAP": 1,
     "VERIFIED_EXISTING": 0
   }
