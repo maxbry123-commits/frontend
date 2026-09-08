@@ -1,0 +1,138 @@
+name: Frontend Archives Repair Guardian 20260908
+run-name: Frontend Archives Repair Guardian • ${{ github.event_name }} • ${{ github.sha }}
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [frontend_archives_repair_20260908]
+  push:
+    branches: [main]
+    paths:
+      - "scripts/frontend_archives_guardian_20260908.py"
+      - ".github/workflows/frontend-archives-repair-guardian-20260908.yml"
+      - "📂componentes open soure fromtend/archives/**"
+
+permissions:
+  contents: write
+
+env:
+  GIT_TERMINAL_PROMPT: "0"
+  DEST_ROOT: "📂componentes open soure fromtend"
+  SKILL_REPOSITORY: "maxbry123-commits/agentes"
+  SKILL_REF: "c789e5fe635e220230ffc759d86dc3bbb8e261d4"
+
+concurrency:
+  group: extraction-single-writer-main
+  cancel-in-progress: false
+
+jobs:
+  repair-guardian:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout destination main without LFS
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: false
+
+      - name: Checkout pinned skill contract
+        uses: actions/checkout@v4
+        with:
+          repository: maxbry123-commits/agentes
+          ref: c789e5fe635e220230ffc759d86dc3bbb8e261d4
+          path: _skill_contract
+          fetch-depth: 1
+          lfs: false
+
+      - name: Verify exact skill gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          SKILL="_skill_contract/skills/skills Github acción/SKILL.md"
+          test -f "$SKILL"
+          grep -Fq "EXTRACT_ONLY" "$SKILL"
+          grep -Fq "VERIFY_EXISTING" "$SKILL"
+          grep -Fq "Repair Guardian" "$SKILL"
+          grep -Fq "Watchdog Auditor" "$SKILL"
+          grep -Fq "Git LFS" "$SKILL"
+          echo "SKILL_PIN_PASS=$SKILL_REF"
+
+      - name: Disable LFS filters and prove no LFS command is used
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config --local filter.lfs.clean cat
+          git config --local filter.lfs.smudge cat
+          git config --local filter.lfs.process ''
+          git config --local filter.lfs.required false
+          ! grep -RInE '(^|[[:space:]])git[[:space:]]+lfs([[:space:]]|$)' \
+            scripts/frontend_archives_guardian_20260908.py \
+            .github/workflows/frontend-archives-repair-guardian-20260908.yml
+          echo "NO_LFS_PASS"
+
+      - name: Repair Guardian EXTRACT_ONLY or VERIFY_EXISTING
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/rdc"
+          python3 scripts/frontend_archives_guardian_20260908.py \
+            --mode repair \
+            --report "$RUNNER_TEMP/rdc/repair.json"
+
+      - name: Commit bounded safe delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf _skill_contract
+          git add -A -- "$DEST_ROOT"
+          if git diff --cached --quiet; then
+            echo "NO_REPAIR_DELTA"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "repair(frontend-archives): skill-pinned EXTRACT_ONLY watchdog state"
+          for attempt in 1 2 3; do
+            if git pull --rebase origin main && git push --no-verify origin HEAD:main; then
+              echo "PUSH_PASS"
+              exit 0
+            fi
+            test "$attempt" -lt 3 || exit 41
+            sleep $((attempt * 10))
+          done
+
+      - name: Remote read-back verify_final
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git reset --hard origin/main
+          mkdir -p "$RUNNER_TEMP/rdc"
+          python3 scripts/frontend_archives_guardian_20260908.py \
+            --mode audit \
+            --report "$RUNNER_TEMP/rdc/readback.json"
+          python3 - "$RUNNER_TEMP/rdc/readback.json" <<'PY'
+          import json,sys
+          p=sys.argv[1]
+          d=json.load(open(p,encoding="utf-8"))
+          t=d["totals"]
+          print("XRAY_ZIP_TOTAL",d["xray"]["physical_zip_count"])
+          print("MANAGED_ZIPS",d["xray"]["managed_zip_count"])
+          print("UNMANAGED_ZIPS",d["xray"]["unmanaged_zip_count"])
+          print("RETRYABLE_GAPS",t["retryable_component_gaps"])
+          print("HARD_GAPS",t["hard_component_gaps"])
+          print("CLASSIFICATION_FLAGS",t["classification_flags"])
+          if t["retryable_component_gaps"] or t["hard_component_gaps"]:
+              raise SystemExit(51)
+          print("REGISTERED_COMPONENTS_VERIFY_FINAL_PASS")
+          PY
+
+      - name: Upload guardian evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-archives-repair-guardian-${{ github.run_id }}
+          path: ${{ runner.temp }}/rdc/
+          if-no-files-found: warn
