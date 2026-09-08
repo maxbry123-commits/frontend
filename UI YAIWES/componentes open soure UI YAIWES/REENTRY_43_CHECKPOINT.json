@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 13,
+  "processed": 14,
   "records": [
     {
       "bytes": 312360273,
@@ -170,11 +170,24 @@
       "source_url": "https://github.com/theupdateframework/python-tuf",
       "status": "COMPLETE",
       "tree_sha256": "faae0625e109a35f1402eeabb3dbef12e9870189b875a5ae1acac52e9622ebc5"
+    },
+    {
+      "bytes": 94669917,
+      "destination": "Trivy",
+      "error": "READ_BACK_HASH_GAP:0bef26958f75b39c4eb4ff54a10c924648f38853695711f08bc696af76bf9dd1!=ca706b8cb0dc4815ec796e4f27a1006a9ff2a94068a28eda79eac7a83f380c1c",
+      "files": 3380,
+      "index": 14,
+      "n": 101,
+      "name": "Trivy",
+      "source_commit": "af9d5108a0f53b3cc0428f342f2239724959bc3f",
+      "source_url": "https://github.com/aquasecurity/trivy",
+      "status": "GAP",
+      "tree_sha256": "ca706b8cb0dc4815ec796e4f27a1006a9ff2a94068a28eda79eac7a83f380c1c"
     }
   ],
   "states": {
     "COMPLETE": 9,
-    "GAP": 4,
+    "GAP": 5,
     "VERIFIED_EXISTING": 0
   }
 }
