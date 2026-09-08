@@ -1,38 +1,36 @@
-name: UI YAIWES 43 Canonical Skill Repair 01
-run-name: UI YAIWES 43 Canonical Skill Repair 01 • ${{ github.run_id }}
+name: UI YAIWES 43 Canonical Producer
+run-name: UI YAIWES 43 Canonical Producer • ${{ github.run_id }}
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ui-yaiwes-43-canonical-skill-20260908.yml'
 
 permissions:
   contents: write
 
 env:
   GIT_TERMINAL_PROMPT: "0"
-  TASK_ID: "ui-yaiwes-43-canonical-repair-01"
-  SKILL_REPOSITORY: "maxbry123-commits/agentes"
-  SKILL_REF: "c789e5fe635e220230ffc759d86dc3bbb8e261d4"
-  QUEUE_PATH: "scripts/ui-yaiwes-43-full-repo-reentry-20260908/QUEUE.json"
-  DEFAULT_ROOT: "UI YAIWES/componentes open soure UI YAIWES"
-  ARCHIVE_ROOT: "UI YAIWES/componentes open soure UI YAIWES/_canonical_archives_43"
+  SKILL_REF: c789e5fe635e220230ffc759d86dc3bbb8e261d4
+  QUEUE_PATH: scripts/ui-yaiwes-43-full-repo-reentry-20260908/QUEUE.json
+  ARCHIVE_ROOT: UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43
+  EXPECTED: "43"
 
 concurrency:
-  group: frontend-ui-yaiwes-components-open-source-single-writer
+  group: frontend-ui-yaiwes-open-source-43-producer
   cancel-in-progress: false
 
 jobs:
-  download-extract-verified:
+  producer:
     runs-on: ubuntu-latest
     timeout-minutes: 330
     steps:
       - name: Checkout destination main
         uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 1
-          lfs: false
-
-      - name: Copy pinned skill assets from GitHub
+        with: {ref: main, fetch-depth: 1, lfs: false}
+      - name: Checkout pinned skill
         uses: actions/checkout@v4
         with:
           repository: maxbry123-commits/agentes
@@ -40,51 +38,39 @@ jobs:
           path: _skill_source
           fetch-depth: 1
           lfs: false
-
-      - name: Copy official asset and edit only task fields
+      - name: Copy exact skill runtime and edit only task fields/ref
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p _work
-          cp "_skill_source/skills/skills Github acción/assets/FORENSIC-PASS-research_download_chain.py" "_work/task_chain.py"
+          mkdir -p _work "$ARCHIVE_ROOT"
+          cp '_skill_source/skills/skills Github acción/assets/FORENSIC-PASS-research_download_chain.py' _work/task_chain.py
           python3 - <<'PY'
           import json, os, re, subprocess
           from pathlib import Path
-          q=json.loads(Path(os.environ['QUEUE_PATH']).read_text())
-          comps=[]; gaps=[]
+          q=json.loads(Path(os.environ['QUEUE_PATH']).read_text()); comps=[]; gaps=[]
           for i,c in enumerate(q['components'],1):
-              url=c['source_url'].rstrip('/')
-              if not url.startswith('https://github.com/'):
-                  gaps.append({'name':c['name'],'source_url':url,'status':'SOURCE_PROVIDER_GAP'}); continue
-              branch=c.get('source_branch') or c.get('branch') or 'HEAD'
-              requested_ref=c.get('source_commit') or c.get('source_ref')
-              if requested_ref and re.fullmatch(r'[0-9a-fA-F]{40}',str(requested_ref)):
-                  ref=str(requested_ref).lower()
-              else:
-                  query='HEAD' if branch=='HEAD' else f'refs/heads/{branch}'
-                  out=subprocess.check_output(['git','ls-remote',url+'.git',query],text=True).strip().splitlines()
-                  if not out: raise SystemExit(f'SOURCE_REF_GAP:{url}:{query}')
-                  ref=out[0].split()[0]
-              dest=c.get('destination') or f"{os.environ['DEFAULT_ROOT']}/{c.get('slug') or c['name']}"
-              slug=(c.get('slug') or Path(dest).name).replace('/','-')
-              comps.append({'n':f'{i:02d}','slug':slug,'url':url+'.git','requested':url,'ref':ref,'destination':dest})
-          Path('_work/components.json').write_text(json.dumps({'components':comps,'provider_gaps':gaps},indent=2,ensure_ascii=False)+'\n')
-          p=Path('_work/task_chain.py'); s=p.read_text()
-          repos=[(x['n'],x['slug'],x['url'],x['ref']) for x in comps]
-          s=re.sub(r'^REPOS=.*$', 'REPOS='+repr(repos), s, count=1, flags=re.M)
-          s=s.replace('for number,slug,url in REPOS:', 'for number,slug,url,ref in REPOS:')
+              url=c['source_url'].rstrip('/'); requested=str(c.get('source_commit') or c.get('source_ref') or c.get('source_branch') or c.get('branch') or 'HEAD')
+              try:
+                  if re.fullmatch(r'[0-9a-fA-F]{40}',requested): sha=requested.lower()
+                  else:
+                      sha=None
+                      for query in (['HEAD'] if requested=='HEAD' else [f'refs/heads/{requested}',f'refs/tags/{requested}^{{}}',f'refs/tags/{requested}']):
+                          r=subprocess.run(['git','ls-remote',url,query],text=True,capture_output=True,check=False); lines=r.stdout.strip().splitlines()
+                          if lines: sha=lines[0].split()[0]; break
+                      if not sha: raise RuntimeError('unresolved ref')
+                  slug=c.get('slug') or Path(c.get('destination','')).name or c['name']; comps.append({'n':f'{i:02d}','slug':slug,'url':url+'.git','requested':url,'ref':sha})
+              except Exception as e: gaps.append({'name':c.get('name'),'source_url':url,'source_ref':requested,'status':'SOURCE_REF_GAP','error':str(e)})
+          if len(comps)+len(gaps)!=int(os.environ['EXPECTED']): raise SystemExit('INPUT_COUNT_GAP')
+          p=Path('_work/task_chain.py'); s=p.read_text(); repos=[(x['n'],x['slug'],x['url'],x['ref']) for x in comps]
+          s=re.sub(r'^REPOS=.*$', 'REPOS='+repr(repos), s, count=1, flags=re.M); s=s.replace('for number,slug,url in REPOS:', 'for number,slug,url,ref in REPOS:')
           old="sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(); guard_source_tree(root); shutil.rmtree(root/'.git',ignore_errors=True)"
-          new=("run(['git','fetch','--depth','1','origin',ref],cwd=root); run(['git','checkout','--detach',ref],cwd=root); "
-               "sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(); "
-               "assert sha == ref, f'SOURCE_REF_MISMATCH expected={ref} actual={sha}'; guard_source_tree(root); shutil.rmtree(root/'.git',ignore_errors=True)")
-          if old not in s: raise SystemExit('ASSET_GAP: pinned edit anchor missing')
-          s=s.replace(old,new)
-          n=len(comps); s=s.replace('/20:',f'/{n}:').replace('20/20 repositories processed',f'{n}/{n} repositories processed')
-          p.write_text(s)
-          print('ASSET_COPY_PASS',len(comps),'provider_gaps',len(gaps))
+          new=("run(['git','fetch','--depth','1','origin',ref],cwd=root); run(['git','checkout','--detach',ref],cwd=root); sha=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(); assert sha == ref, f'SOURCE_REF_MISMATCH expected={ref} actual={sha}'; guard_source_tree(root); shutil.rmtree(root/'.git',ignore_errors=True)")
+          if old not in s: raise SystemExit('ASSET_GAP')
+          s=s.replace(old,new); n=len(comps); s=s.replace('/20:',f'/{n}:').replace('20/20 repositories processed',f'{n}/{n} repositories processed'); p.write_text(s)
+          Path(os.environ['ARCHIVE_ROOT'],'SOURCE_MAP.json').write_text(json.dumps({'expected':int(os.environ['EXPECTED']),'resolved':comps,'gaps':gaps},indent=2,ensure_ascii=False)+'\n')
+          print('SKILL_ASSET_COPY_PASS resolved=',len(comps),'gaps=',len(gaps))
           PY
-
-      - name: Execute copied skill runtime into immutable archives
+      - name: Execute exact copied skill producer
         shell: bash
         run: |
           set -euo pipefail
@@ -92,113 +78,21 @@ jobs:
           git config --local filter.lfs.smudge cat
           git config --local --unset-all filter.lfs.process || true
           git config --local filter.lfs.required false
-          mkdir -p "$ARCHIVE_ROOT"
-          python3 "_work/task_chain.py" "$ARCHIVE_ROOT" "_work/research-download"
-
-      - name: Extract complete trees with hardened skill gates
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          import hashlib,json,os,shutil,stat,tempfile,zipfile
-          from pathlib import Path,PurePosixPath
-          cfg=json.loads(Path('_work/components.json').read_text()); comps=cfg['components']; out=list(cfg['provider_gaps'])
-          archives=Path(os.environ['ARCHIVE_ROOT']); marker=b'version https://git-lfs.github.com/spec/v1\n'
-          rows=[]
-          mf=archives/'RESEARCH_DOWNLOAD_MANIFEST.jsonl'
-          if mf.exists(): rows=[json.loads(x) for x in mf.read_text().splitlines() if x.strip()]
-          latest={r.get('slug'):r for r in rows}
-          def sha(p):
-              h=hashlib.sha256()
-              with p.open('rb') as f:
-                  for b in iter(lambda:f.read(1024*1024),b''): h.update(b)
-              return h.hexdigest()
-          def safe(i):
-              q=PurePosixPath(i.filename.replace('\\','/')); mode=(i.external_attr>>16)&0o170000
-              return not q.is_absolute() and '..' not in q.parts and mode not in {stat.S_IFLNK,stat.S_IFCHR,stat.S_IFBLK,stat.S_IFIFO,stat.S_IFSOCK}
-          def restore_chunks(stage):
-              m=stage/'SPLIT_FILES.json'
-              if not m.exists(): return
-              records=json.loads(m.read_text())
-              for r in records:
-                  parts=stage/Path(r['chunks_dir']); target=stage/Path(r['path']); target.parent.mkdir(parents=True,exist_ok=True)
-                  with target.open('wb') as w:
-                      for p in sorted(parts.glob('*.part-*')): w.write(p.read_bytes())
-                  if target.stat().st_size!=int(r['bytes']): raise RuntimeError('CHUNK_REBUILD_GAP:'+r['path'])
-                  shutil.rmtree(parts)
-              m.unlink()
-          for c in comps:
-              slug=c['slug']; target=Path(c['destination']); row=latest.get(slug)
-              if target.exists():
-                  su=target/'SOURCE_URL.txt'; sc=target/'SOURCE_COMMIT.txt'; sm=target/'SOURCE_SHA256SUMS.txt'
-                  if su.exists() and sc.exists() and sm.exists() and su.read_text().strip()==c['requested'] and sc.read_text().strip()==c['ref']:
-                      out.append({'slug':slug,'status':'VERIFIED_EXISTING','target':str(target),'source_commit':c['ref']}); continue
-                  out.append({'slug':slug,'status':'COLLISION_BLOCKED','target':str(target)}); continue
-              if not row or row.get('status')!='COMPLETE': out.append({'slug':slug,'status':'ARCHIVE_GAP'}); continue
-              parts=sorted(archives.glob(f'{slug}_*.zip'))
-              if not parts: out.append({'slug':slug,'status':'ARCHIVE_GAP'}); continue
-              try:
-                  with tempfile.TemporaryDirectory(prefix='rdc-extract-') as td:
-                      stage=Path(td); seen={}
-                      for z in parts:
-                          with zipfile.ZipFile(z) as a:
-                              bad=a.testzip()
-                              if bad: raise RuntimeError(f'CRC_FAIL:{z.name}:{bad}')
-                              for info in a.infolist():
-                                  if not safe(info): raise RuntimeError(f'UNSAFE_ZIP:{z.name}:{info.filename}')
-                                  if info.is_dir(): continue
-                                  q=PurePosixPath(info.filename.replace('\\','/')); dst=stage/q; dst.parent.mkdir(parents=True,exist_ok=True)
-                                  with a.open(info) as src,dst.open('wb') as w: shutil.copyfileobj(src,w)
-                                  h=sha(dst); key=str(q)
-                                  if key in seen and seen[key]!=h: raise RuntimeError('COLLISION_BLOCKED:'+key)
-                                  seen[key]=h
-                      payload=stage/slug if (stage/slug).is_dir() else stage
-                      restore_chunks(payload)
-                      files=[p for p in payload.rglob('*') if p.is_file()]
-                      if not files: raise RuntimeError('EMPTY_EXTRACTION')
-                      ptr=[str(p.relative_to(payload)) for p in files if p.stat().st_size<=1024 and p.read_bytes().startswith(marker)]
-                      over=[str(p.relative_to(payload)) for p in files if p.stat().st_size>=100*1024*1024]
-                      if ptr: raise RuntimeError('SOURCE_LFS_POINTER_GAP:'+','.join(ptr[:20]))
-                      if over: raise RuntimeError('GIT_BLOB_LIMIT_GAP:'+','.join(over[:20]))
-                      shutil.copytree(payload,target)
-                      (target/'SOURCE_URL.txt').write_text(c['requested']+'\n'); (target/'SOURCE_COMMIT.txt').write_text(c['ref']+'\n')
-                      lic=sorted(str(p.relative_to(target)) for p in target.rglob('*') if p.is_file() and p.name.lower().startswith(('license','copying','notice')))
-                      (target/'SOURCE_LICENSE.txt').write_text(('; '.join(lic) if lic else 'LICENSE_FILE_NOT_DETECTED')+'\n')
-                      hs=[f'{sha(p)}  {p.relative_to(target).as_posix()}' for p in sorted(x for x in target.rglob('*') if x.is_file() and x.name!='SOURCE_SHA256SUMS.txt')]
-                      (target/'SOURCE_SHA256SUMS.txt').write_text('\n'.join(hs)+'\n')
-                      out.append({'slug':slug,'status':'EXTRACTED_VERIFIED','target':str(target),'source_commit':c['ref'],'files':len(files),'tree_sha256':hashlib.sha256('\n'.join(hs).encode()).hexdigest()})
-              except Exception as e: out.append({'slug':slug,'status':'GAP','error':str(e),'target':str(target)})
-          Path(os.environ['DEFAULT_ROOT']).mkdir(parents=True,exist_ok=True)
-          Path(os.environ['DEFAULT_ROOT'],'UI_YAIWES_43_CANONICAL_CHECKPOINT.json').write_text(json.dumps({'task_id':os.environ['TASK_ID'],'components':out},indent=2,ensure_ascii=False)+'\n')
-          print(json.dumps(out,ensure_ascii=False))
-          PY
-
-      - name: Commit extracted trees and evidence
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -rf _skill_source _work
-          git add -A -- "$DEFAULT_ROOT"
-          if ! git diff --cached --quiet; then
-            git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git commit -m "build(download): UI YAIWES 43 canonical extracted trees"
-            for attempt in 1 2 3; do git fetch origin main && git rebase --autostash origin/main && git push --no-verify origin HEAD:main && break; test "$attempt" -lt 3 || exit 41; sleep $((attempt*10)); done
-          fi
-
-      - name: GitHub read-back fail-closed
-        if: ${{ always() }}
+          git config --local core.compression 0
+          python3 _work/task_chain.py "$ARCHIVE_ROOT" _work/research-download
+      - name: Producer read-back gate
         shell: bash
         run: |
           set -euo pipefail
           git fetch origin main; git reset --hard origin/main
+          test -s "$ARCHIVE_ROOT/RESEARCH_DOWNLOAD_MANIFEST.jsonl"; test -s "$ARCHIVE_ROOT/SOURCE_MAP.json"
           python3 - <<'PY'
           import json,os,sys
           from pathlib import Path
-          p=Path(os.environ['DEFAULT_ROOT'])/'UI_YAIWES_43_CANONICAL_CHECKPOINT.json'
-          if not p.exists(): raise SystemExit('READ_BACK_GAP: checkpoint missing')
-          d=json.loads(p.read_text()); bad=[x for x in d['components'] if x['status'] not in {'EXTRACTED_VERIFIED','VERIFIED_EXISTING'}]
-          print('READ_BACK_COMPONENTS',len(d['components'])); print('READ_BACK_GAPS',len(bad))
-          for x in bad: print('GAP',json.dumps(x,ensure_ascii=False))
-          if bad: sys.exit(51)
-          print('PRODUCER_READ_BACK_PASS; EXTERNAL_AUDITOR_REQUIRED')
+          root=Path(os.environ['ARCHIVE_ROOT']); m=[json.loads(x) for x in (root/'RESEARCH_DOWNLOAD_MANIFEST.jsonl').read_text().splitlines() if x.strip()]; sm=json.loads((root/'SOURCE_MAP.json').read_text())
+          complete={x.get('slug') for x in m if x.get('status')=='COMPLETE'}; missing=[x['slug'] for x in sm['resolved'] if x['slug'] not in complete]
+          print('ARCHIVE_COMPLETE',len(complete),'RESOLVED',len(sm['resolved']),'SOURCE_GAPS',len(sm['gaps']))
+          if missing: print('ARCHIVE_GAPS',missing); sys.exit(51)
+          if sm['gaps']: print('SOURCE_GAPS',sm['gaps']); sys.exit(52)
+          print('ARCHIVE_ONLY_PASS; EXTRACTED_TREE_REQUIRED')
           PY
