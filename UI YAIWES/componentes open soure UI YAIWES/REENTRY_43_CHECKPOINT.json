@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 22,
+  "processed": 23,
   "records": [
     {
       "bytes": 312360273,
@@ -284,11 +284,24 @@
       "source_url": "https://github.com/prometheus/prometheus",
       "status": "GAP",
       "tree_sha256": "090bed7d67192742fdcaa1f0e3eb87fee027c44aa440513f82db8a0a57fd158f"
+    },
+    {
+      "bytes": 212821056,
+      "destination": "Grafana",
+      "error": "READ_BACK_HASH_GAP:4254e8415c046855ba2f3a0f3435daefc096c188cc135aa7340ad1b228b164e8!=94e11f1b228bdcca326e5e50c97c5b8c98cc722465896793889a68469d61444f",
+      "files": 22934,
+      "index": 23,
+      "n": 110,
+      "name": "Grafana",
+      "source_commit": "90999f86a6ce0c609dcbfe0b5add04a6feb8ec97",
+      "source_url": "https://github.com/grafana/grafana",
+      "status": "GAP",
+      "tree_sha256": "94e11f1b228bdcca326e5e50c97c5b8c98cc722465896793889a68469d61444f"
     }
   ],
   "states": {
     "COMPLETE": 14,
-    "GAP": 8,
+    "GAP": 9,
     "VERIFIED_EXISTING": 0
   }
 }
