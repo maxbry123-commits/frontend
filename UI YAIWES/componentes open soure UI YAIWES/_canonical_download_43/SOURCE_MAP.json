@@ -1,0 +1,307 @@
+{
+  "expected": 43,
+  "resolved": [
+    {
+      "n": "01",
+      "slug": "Wasmtime",
+      "url": "https://github.com/bytecodealliance/wasmtime.git",
+      "requested": "https://github.com/bytecodealliance/wasmtime",
+      "ref": "31ddba9ef0cbe21c811a8671827a951bce0172cf"
+    },
+    {
+      "n": "02",
+      "slug": "nsjail",
+      "url": "https://github.com/google/nsjail.git",
+      "requested": "https://github.com/google/nsjail",
+      "ref": "f100fd917c6d3ed0fd15d868528b735cb5fb1a1a"
+    },
+    {
+      "n": "03",
+      "slug": "bubblewrap",
+      "url": "https://github.com/containers/bubblewrap.git",
+      "requested": "https://github.com/containers/bubblewrap",
+      "ref": "4df8ddc7f6bb2080637aa26bf7b205321f504bfc"
+    },
+    {
+      "n": "04",
+      "slug": "Moby",
+      "url": "https://github.com/moby/moby.git",
+      "requested": "https://github.com/moby/moby",
+      "ref": "e0c1583c7891b34bd199fdf9e02fb7c7b65bb1ca"
+    },
+    {
+      "n": "05",
+      "slug": "OpenBao",
+      "url": "https://github.com/openbao/openbao.git",
+      "requested": "https://github.com/openbao/openbao",
+      "ref": "1859768bdb897d92723c68f8457128c9fd707a98"
+    },
+    {
+      "n": "06",
+      "slug": "SOPS",
+      "url": "https://github.com/getsops/sops.git",
+      "requested": "https://github.com/getsops/sops",
+      "ref": "ba5d2731a3ab154c92837d41278a067b53673e30"
+    },
+    {
+      "n": "07",
+      "slug": "SQLCipher",
+      "url": "https://github.com/sqlcipher/sqlcipher.git",
+      "requested": "https://github.com/sqlcipher/sqlcipher",
+      "ref": "c4b275a47932888216bade83aff2bbc73df0ff85"
+    },
+    {
+      "n": "08",
+      "slug": "flutter_secure_storage",
+      "url": "https://github.com/juliansteenbakker/flutter_secure_storage.git",
+      "requested": "https://github.com/juliansteenbakker/flutter_secure_storage",
+      "ref": "e144260cb3c05166d0db4322a46b4637e042351c"
+    },
+    {
+      "n": "09",
+      "slug": "libsodium",
+      "url": "https://github.com/jedisct1/libsodium.git",
+      "requested": "https://github.com/jedisct1/libsodium",
+      "ref": "f6bd9140861ab6806f4a99923888b65477fc4e33"
+    },
+    {
+      "n": "10",
+      "slug": "age",
+      "url": "https://github.com/FiloSottile/age.git",
+      "requested": "https://github.com/FiloSottile/age",
+      "ref": "b74dce4cdbe35b5e5f66c06d9612b72f89028758"
+    },
+    {
+      "n": "11",
+      "slug": "Cosign",
+      "url": "https://github.com/sigstore/cosign.git",
+      "requested": "https://github.com/sigstore/cosign",
+      "ref": "633e8f4303b7db64c369bdfa315374a8bd511ac6"
+    },
+    {
+      "n": "12",
+      "slug": "in-toto",
+      "url": "https://github.com/in-toto/in-toto.git",
+      "requested": "https://github.com/in-toto/in-toto",
+      "ref": "e352b43ad7cb8915d84c36d791aa61346152a0a3"
+    },
+    {
+      "n": "13",
+      "slug": "Python-TUF",
+      "url": "https://github.com/theupdateframework/python-tuf.git",
+      "requested": "https://github.com/theupdateframework/python-tuf",
+      "ref": "d6b4392ea0620e2eae32f55bf317afd1009c0096"
+    },
+    {
+      "n": "14",
+      "slug": "Trivy",
+      "url": "https://github.com/aquasecurity/trivy.git",
+      "requested": "https://github.com/aquasecurity/trivy",
+      "ref": "af9d5108a0f53b3cc0428f342f2239724959bc3f"
+    },
+    {
+      "n": "15",
+      "slug": "Syft",
+      "url": "https://github.com/anchore/syft.git",
+      "requested": "https://github.com/anchore/syft",
+      "ref": "767c83d5131e9591a3f125dca969274399734084"
+    },
+    {
+      "n": "16",
+      "slug": "whisper.cpp",
+      "url": "https://github.com/ggml-org/whisper.cpp.git",
+      "requested": "https://github.com/ggml-org/whisper.cpp",
+      "ref": "c44b60b8053bbf2a5c1e014f11323fb3f2485177"
+    },
+    {
+      "n": "17",
+      "slug": "Piper",
+      "url": "https://github.com/OHF-Voice/piper1-gpl.git",
+      "requested": "https://github.com/OHF-Voice/piper1-gpl",
+      "ref": "639388b6317fc4731e91d53da42aea68fd4166ff"
+    },
+    {
+      "n": "18",
+      "slug": "RNNoise",
+      "url": "https://github.com/xiph/rnnoise.git",
+      "requested": "https://github.com/xiph/rnnoise",
+      "ref": "70f1d256acd4b34a572f999a05c87bf00b67730d"
+    },
+    {
+      "n": "19",
+      "slug": "LiveKit",
+      "url": "https://github.com/livekit/livekit.git",
+      "requested": "https://github.com/livekit/livekit",
+      "ref": "5121860448763817c72ab211adf693e99c3c2c60"
+    },
+    {
+      "n": "20",
+      "slug": "ntfy",
+      "url": "https://github.com/binwiederhier/ntfy.git",
+      "requested": "https://github.com/binwiederhier/ntfy",
+      "ref": "10cb6506f836dbb00bb77e3b52669f6ace37f555"
+    },
+    {
+      "n": "21",
+      "slug": "Apprise",
+      "url": "https://github.com/caronc/apprise.git",
+      "requested": "https://github.com/caronc/apprise",
+      "ref": "41a79473756728e7e22e5ea5e8ab40d97a9a79ac"
+    },
+    {
+      "n": "22",
+      "slug": "Prometheus",
+      "url": "https://github.com/prometheus/prometheus.git",
+      "requested": "https://github.com/prometheus/prometheus",
+      "ref": "78169fb57d69371b24863b0f26555631a754204c"
+    },
+    {
+      "n": "23",
+      "slug": "Grafana",
+      "url": "https://github.com/grafana/grafana.git",
+      "requested": "https://github.com/grafana/grafana",
+      "ref": "82ada3468b5adcd291af8d0746cbd8e97d4f3983"
+    },
+    {
+      "n": "24",
+      "slug": "Loki",
+      "url": "https://github.com/grafana/loki.git",
+      "requested": "https://github.com/grafana/loki",
+      "ref": "3af2471d0f8eeefd4a4a1cdba32dc1c1969f9165"
+    },
+    {
+      "n": "25",
+      "slug": "Vitest",
+      "url": "https://github.com/vitest-dev/vitest.git",
+      "requested": "https://github.com/vitest-dev/vitest",
+      "ref": "73614654a46f617c357920eecda439654a561f92"
+    },
+    {
+      "n": "26",
+      "slug": "React Testing Library",
+      "url": "https://github.com/testing-library/react-testing-library.git",
+      "requested": "https://github.com/testing-library/react-testing-library",
+      "ref": "20ce75f2907ca0e5c5a8ae595c0e9a4e368c7800"
+    },
+    {
+      "n": "27",
+      "slug": "MSW",
+      "url": "https://github.com/mswjs/msw.git",
+      "requested": "https://github.com/mswjs/msw",
+      "ref": "85f4bf3ff60fc9441eca2fe44a75878bce50af5a"
+    },
+    {
+      "n": "28",
+      "slug": "Playwright",
+      "url": "https://github.com/microsoft/playwright.git",
+      "requested": "https://github.com/microsoft/playwright",
+      "ref": "6232bd76fcf9e54c2e0b57e79879b75e30c89b46"
+    },
+    {
+      "n": "29",
+      "slug": "fast-check",
+      "url": "https://github.com/dubzzz/fast-check.git",
+      "requested": "https://github.com/dubzzz/fast-check",
+      "ref": "962a12504550e8f4436e5d7c45f8e1084491f6f6"
+    },
+    {
+      "n": "30",
+      "slug": "k6",
+      "url": "https://github.com/grafana/k6.git",
+      "requested": "https://github.com/grafana/k6",
+      "ref": "cdd7355b536141e37ae4497facfa3813f8736cf4"
+    },
+    {
+      "n": "31",
+      "slug": "Toxiproxy",
+      "url": "https://github.com/Shopify/toxiproxy.git",
+      "requested": "https://github.com/Shopify/toxiproxy",
+      "ref": "40f7fd31bee529d824116bd2a11a9e3425e904ec"
+    },
+    {
+      "n": "32",
+      "slug": "axe-core",
+      "url": "https://github.com/dequelabs/axe-core.git",
+      "requested": "https://github.com/dequelabs/axe-core",
+      "ref": "540ecae993b5b0f40070c6b034843b0392956175"
+    },
+    {
+      "n": "33",
+      "slug": "ParadeDB",
+      "url": "https://github.com/paradedb/paradedb.git",
+      "requested": "https://github.com/paradedb/paradedb",
+      "ref": "350dbfbcf3db71cf4495fb1ee2afc34855e4d78e"
+    },
+    {
+      "n": "34",
+      "slug": "LanceDB",
+      "url": "https://github.com/lancedb/lancedb.git",
+      "requested": "https://github.com/lancedb/lancedb",
+      "ref": "577fb48376b76d9aa44598a0f1b1f44deff444bc"
+    },
+    {
+      "n": "35",
+      "slug": "Meilisearch",
+      "url": "https://github.com/meilisearch/meilisearch.git",
+      "requested": "https://github.com/meilisearch/meilisearch",
+      "ref": "a088ecc354a0002d551acbc41bd87e4e72e7a8d8"
+    },
+    {
+      "n": "36",
+      "slug": "Typesense",
+      "url": "https://github.com/typesense/typesense.git",
+      "requested": "https://github.com/typesense/typesense",
+      "ref": "245ebc7e06731c12381cc37b5b0205845fc1d58a"
+    },
+    {
+      "n": "37",
+      "slug": "Unstructured",
+      "url": "https://github.com/Unstructured-IO/unstructured.git",
+      "requested": "https://github.com/Unstructured-IO/unstructured",
+      "ref": "69d50a74ec084cea02058e811a75187ed793dd4e"
+    },
+    {
+      "n": "38",
+      "slug": "AVF",
+      "url": "https://android.googlesource.com/platform/packages/modules/Virtualization.git",
+      "requested": "https://android.googlesource.com/platform/packages/modules/Virtualization",
+      "ref": "175a51b30123fa6b02b541f1969665708f7ec2c3"
+    },
+    {
+      "n": "39",
+      "slug": "Wayland",
+      "url": "https://gitlab.freedesktop.org/wayland/wayland.git",
+      "requested": "https://gitlab.freedesktop.org/wayland/wayland",
+      "ref": "381af21cf84f13be0ca24aed756a9cded3290d49"
+    },
+    {
+      "n": "40",
+      "slug": "Weston-libweston",
+      "url": "https://gitlab.freedesktop.org/wayland/weston.git",
+      "requested": "https://gitlab.freedesktop.org/wayland/weston",
+      "ref": "15a3882aac51c361c8fc635464b68c4cefbe4275"
+    },
+    {
+      "n": "41",
+      "slug": "Mesa",
+      "url": "https://gitlab.freedesktop.org/mesa/mesa.git",
+      "requested": "https://gitlab.freedesktop.org/mesa/mesa",
+      "ref": "be04bb02747317ed31e5b860a30c7ab60d8840cb"
+    },
+    {
+      "n": "42",
+      "slug": "virglrenderer",
+      "url": "https://gitlab.freedesktop.org/virgl/virglrenderer.git",
+      "requested": "https://gitlab.freedesktop.org/virgl/virglrenderer",
+      "ref": "cf6c62da2a1384b194f463e6221371962fe99575"
+    },
+    {
+      "n": "43",
+      "slug": "virtiofsd",
+      "url": "https://gitlab.com/virtio-fs/virtiofsd.git",
+      "requested": "https://gitlab.com/virtio-fs/virtiofsd",
+      "ref": "f8cc818083509128e6f34d16aed5ff1c00d19a55"
+    }
+  ],
+  "gaps": []
+}
