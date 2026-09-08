@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 6,
+  "processed": 7,
   "records": [
     {
       "bytes": 312360273,
@@ -79,10 +79,23 @@
       "source_url": "https://github.com/getsops/sops",
       "status": "GAP",
       "tree_sha256": "c560868ff4c878f580f42b7c8b90f4639895b4ddbd4d0ee72017bfebc7553a29"
+    },
+    {
+      "bytes": 118508298,
+      "destination": "SQLCipher",
+      "files": 2243,
+      "index": 7,
+      "n": 94,
+      "name": "SQLCipher",
+      "read_back": "PASS",
+      "source_commit": "63697beb0fafcb61faa7a3e6fd267036548ab11b",
+      "source_url": "https://github.com/sqlcipher/sqlcipher",
+      "status": "COMPLETE",
+      "tree_sha256": "ebacd75fe9142760457f4e20534f1e1a71bfb5a34698a564c3c6063095055849"
     }
   ],
   "states": {
-    "COMPLETE": 3,
+    "COMPLETE": 4,
     "GAP": 3,
     "VERIFIED_EXISTING": 0
   }
