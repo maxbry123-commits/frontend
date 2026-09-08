@@ -1,6 +1,6 @@
 {
   "expected": 43,
-  "processed": 12,
+  "processed": 13,
   "records": [
     {
       "bytes": 312360273,
@@ -157,10 +157,23 @@
       "source_url": "https://github.com/in-toto/in-toto",
       "status": "COMPLETE",
       "tree_sha256": "5151c0ae11d72d730f39cfa626b1f036392d019b4fc0a671a3e3883b9f13b9e4"
+    },
+    {
+      "bytes": 861182,
+      "destination": "Python-TUF",
+      "files": 171,
+      "index": 13,
+      "n": 100,
+      "name": "Python-TUF",
+      "read_back": "PASS",
+      "source_commit": "d6b4392ea0620e2eae32f55bf317afd1009c0096",
+      "source_url": "https://github.com/theupdateframework/python-tuf",
+      "status": "COMPLETE",
+      "tree_sha256": "faae0625e109a35f1402eeabb3dbef12e9870189b875a5ae1acac52e9622ebc5"
     }
   ],
   "states": {
-    "COMPLETE": 8,
+    "COMPLETE": 9,
     "GAP": 4,
     "VERIFIED_EXISTING": 0
   }
