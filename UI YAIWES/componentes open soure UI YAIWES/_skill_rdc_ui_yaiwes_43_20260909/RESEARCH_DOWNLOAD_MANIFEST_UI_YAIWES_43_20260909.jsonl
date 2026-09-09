@@ -20,3 +20,4 @@
 {"number": 20, "parts": 2, "slug": "ntfy", "source": "https://github.com/binwiederhier/ntfy.git", "source_commit": "10cb6506f836dbb00bb77e3b52669f6ace37f555", "status": "COMPLETE"}
 {"number": 21, "parts": 1, "slug": "Apprise", "source": "https://github.com/caronc/apprise.git", "source_commit": "6206f6c5dfa0de3fa3c483048c8b6b3211d21294", "status": "COMPLETE"}
 {"number": 22, "parts": 1, "slug": "Prometheus", "source": "https://github.com/prometheus/prometheus.git", "source_commit": "2f91cf54669b48c97f14456888f35e2b137f9532", "status": "COMPLETE"}
+{"number": 23, "parts": 6, "slug": "Grafana", "source": "https://github.com/grafana/grafana.git", "source_commit": "97536bd6a178378b10fdd8cbd0afd74423226b20", "status": "COMPLETE"}
