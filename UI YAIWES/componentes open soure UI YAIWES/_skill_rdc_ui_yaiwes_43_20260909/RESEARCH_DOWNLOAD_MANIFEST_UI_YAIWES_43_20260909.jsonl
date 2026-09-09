@@ -11,3 +11,12 @@
 {"number": 11, "parts": 1, "slug": "Cosign", "source": "https://github.com/sigstore/cosign.git", "source_commit": "633e8f4303b7db64c369bdfa315374a8bd511ac6", "status": "COMPLETE"}
 {"number": 12, "parts": 1, "slug": "in-toto", "source": "https://github.com/in-toto/in-toto.git", "source_commit": "e352b43ad7cb8915d84c36d791aa61346152a0a3", "status": "COMPLETE"}
 {"number": 13, "parts": 1, "slug": "Python-TUF", "source": "https://github.com/theupdateframework/python-tuf.git", "source_commit": "d6b4392ea0620e2eae32f55bf317afd1009c0096", "status": "COMPLETE"}
+{"number": 14, "parts": 5, "slug": "Trivy", "source": "https://github.com/aquasecurity/trivy.git", "source_commit": "3216e576388f56b6c56fbd2fcf6451dfeb5af23a", "status": "COMPLETE"}
+{"number": 15, "parts": 1, "slug": "Syft", "source": "https://github.com/anchore/syft.git", "source_commit": "9addda3da5743be99edd4971b1cfd876afb7bc9d", "status": "COMPLETE"}
+{"number": 16, "parts": 1, "slug": "whisper.cpp", "source": "https://github.com/ggml-org/whisper.cpp.git", "source_commit": "c44b60b8053bbf2a5c1e014f11323fb3f2485177", "status": "COMPLETE"}
+{"number": 17, "parts": 3, "slug": "Piper", "source": "https://github.com/OHF-Voice/piper1-gpl.git", "source_commit": "639388b6317fc4731e91d53da42aea68fd4166ff", "status": "COMPLETE"}
+{"number": 18, "parts": 1, "slug": "RNNoise", "source": "https://github.com/xiph/rnnoise.git", "source_commit": "70f1d256acd4b34a572f999a05c87bf00b67730d", "status": "COMPLETE"}
+{"number": 19, "parts": 1, "slug": "LiveKit", "source": "https://github.com/livekit/livekit.git", "source_commit": "adf44a2eb6f35c1b0df81a2a54428329c1a61dec", "status": "COMPLETE"}
+{"number": 20, "parts": 2, "slug": "ntfy", "source": "https://github.com/binwiederhier/ntfy.git", "source_commit": "10cb6506f836dbb00bb77e3b52669f6ace37f555", "status": "COMPLETE"}
+{"number": 21, "parts": 1, "slug": "Apprise", "source": "https://github.com/caronc/apprise.git", "source_commit": "6206f6c5dfa0de3fa3c483048c8b6b3211d21294", "status": "COMPLETE"}
+{"number": 22, "parts": 1, "slug": "Prometheus", "source": "https://github.com/prometheus/prometheus.git", "source_commit": "2f91cf54669b48c97f14456888f35e2b137f9532", "status": "COMPLETE"}
