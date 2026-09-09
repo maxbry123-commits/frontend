@@ -416,12 +416,14 @@ Checkpoint:
 Plan:
 `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/PLAN-TAREAS.md`
 
+
 <!-- YAIWES_COMPONENTS_01_20_STEP2_BEGIN -->
 ## Handoff — integración 01–20
 
-Componentes 01–20: `16` cableados en registry/mount-guard y `4` PENDING_SOURCE. Poda sólo sobre `runtime/vendor`; upstream intacto. Tests ejecutados en este paso: `false`.
+Componentes 01–20: `17` cableados en registry/mount-guard y `3` PENDING_SOURCE. Poda sólo sobre `runtime/vendor`; upstream intacto. Tests ejecutados en este paso: `false`.
 
 <!-- YAIWES_COMPONENTS_01_20_STEP2_END -->
+
 
 <!-- YAIWES_COMPONENTS_01_20_STEP3_BEGIN -->
 ## Handoff — tests integración 01–20
