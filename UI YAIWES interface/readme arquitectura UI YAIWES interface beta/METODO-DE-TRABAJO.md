@@ -52,3 +52,10 @@ UI code versiones/                      # borradores pre-OK
 Contrato: `CONTRATO-LOOP-OPERATIVO.md`  
 Schema: `LOOP-SCHEMA.json`  
 Vigente al `LOOP OK` del director.
+
+
+## LOOP (contrato)
+
+Ver `CONTRATO-TRABAJO.md`, `LOOP-OPERATIVO.md`, `SCHEMA-LOOP.json`.
+
+Trigger: `CICLO RUN-01`. Sin ese texto no se fabrica.

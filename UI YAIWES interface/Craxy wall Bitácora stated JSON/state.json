@@ -3,11 +3,11 @@
   "tab": "B",
   "mode": "ask",
   "proyecto": "UI YAIWES interface beta",
-  "updated": "2026-09-08T22:30:00-05:00",
-  "fase": "P0-ANOTAR",
+  "updated": "2026-09-08T22:45:00-05:00",
+  "fase": "P0-CONTRATO-LOOP",
   "parte_actual": null,
   "ok_ids": [],
-  "pending_next": "LOOP OK luego 1 CASCADE",
+  "pending_next": "CICLO RUN-01",
   "conteo": {
     "fotos14": 14,
     "gbot": 1,
@@ -20,11 +20,15 @@
   "st": {},
   "pct": {},
   "notes": {
-    "00": "contrato LOOP escrito. biblioteca NO tiene 150. esperar LOOP OK.",
+    "00": "contrato+loop+schema en GitHub. biblioteca NO tiene todo el sandbox.",
     "20": "hot path wordflow: no reescribir runner. fuera de este lote UI."
   },
   "extra": [],
   "sel": "20",
   "selKind": "block",
-  "metodo": "LOOP L0-L10 + 01-original + 02-fromted"
+  "metodo": "LOOP L0-L10 + 01-original + 02-fromted",
+  "loop": {
+    "step": "S0",
+    "current": null
+  }
 }

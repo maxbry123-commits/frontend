@@ -24,6 +24,9 @@ Estado: **anotado**. 0 ventanas fabricadas. 0 IDs OK para code FROMTED.
 | Skill | https://github.com/maxbry123-commits/frontend/blob/main/Skills%20arquitectura%20frontend%20Yaiwes/fromted-frontend-architecture/SKILL.md |
 | Contrato LOOP | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/CONTRATO-LOOP-OPERATIVO.md |
 | Schema LOOP | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/LOOP-SCHEMA.json |
+| Contrato | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/CONTRATO-TRABAJO.md |
+| LOOP | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/LOOP-OPERATIVO.md |
+| Schema LOOP | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/SCHEMA-LOOP.json |
 | Índice 150+ | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/CABLEADO-BIBLIOTECA-150.md |
 
 ## Oficiales
