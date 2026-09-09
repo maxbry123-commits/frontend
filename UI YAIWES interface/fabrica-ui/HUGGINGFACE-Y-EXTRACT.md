@@ -21,7 +21,6 @@ Montar `workflow_dispatch` que llama al extractor **ya hasheado** (`extract_exis
 
 Trigger: Actions → workflow → Run workflow. Sin clonar GitHub/HF en caliente (regla I04: tú subes ZIP).
 
-Propuesta YAML: `empaque/extract-to-factory.workflow.yml` (sparse-checkout no deja escribir `.github` fácil). Tú lo copias a `.github/workflows/` o dices `AUTORIZA WORKFLOW`.
 
 **B. HuggingFace de verdad (3 capas, elige)**  
 
