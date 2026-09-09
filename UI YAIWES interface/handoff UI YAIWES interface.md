@@ -27,6 +27,7 @@ Estado: **anotado**. 0 ventanas fabricadas. 0 IDs OK para code FROMTED.
 | Contrato | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/CONTRATO-TRABAJO.md |
 | LOOP | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/LOOP-OPERATIVO.md |
 | Schema LOOP | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/SCHEMA-LOOP.json |
+| Cómo backend | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/COMO-SE-CONECTA-BACKEND.md |
 | Índice 150+ | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/CABLEADO-BIBLIOTECA-150.md |
 
 ## Oficiales
@@ -52,3 +53,6 @@ Estado: **anotado**. 0 ventanas fabricadas. 0 IDs OK para code FROMTED.
 - Checklist RUN-01: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/UI%20code%20versiones/RUN-01/CHECKLIST.md
 
 Siguiente: `OK RUN-01` o `RECHAZO RUN-01 <motivo>`.
+
+
+**STOP ventanas:** decidir D01–D12 en COMO-SE-CONECTA-BACKEND.md antes de RUN-02.
