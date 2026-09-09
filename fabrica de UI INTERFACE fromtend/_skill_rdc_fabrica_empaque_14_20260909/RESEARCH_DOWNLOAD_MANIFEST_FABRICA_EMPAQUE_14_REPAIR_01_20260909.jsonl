@@ -1,0 +1,2 @@
+{"number": 1, "parts": 2, "slug": "Tauri-2", "source": "https://github.com/tauri-apps/tauri.git", "source_commit": "7f2b7cb7921caf7d9370b7ebe99e3cf47dbcfed6", "status": "COMPLETE"}
+{"number": 2, "parts": 1, "slug": "Capacitor", "source": "https://github.com/ionic-team/capacitor.git", "source_commit": "0c9e35dec13a99ec4a582a2edc536cbec96bf27d", "status": "COMPLETE"}
