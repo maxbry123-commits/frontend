@@ -10,6 +10,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: maxbry123-commits-frontend-main-ui-yaiwes-componentes-open-soure-ui-yaiwes-repair-4
+  cancel-in-progress: false
+
 jobs:
   integrar_01_20:
     runs-on: ubuntu-latest
