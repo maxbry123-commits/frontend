@@ -1,0 +1,290 @@
+{
+  "schema": "yaiwes.integration.01-20.step2.v2",
+  "generated_at": "2026-09-09T01:17:08.721601+00:00",
+  "components": [
+    {
+      "id": 1,
+      "name": "Stabilize CORE",
+      "slug": "stabilize",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Stabilize CORE",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize",
+      "status": "ALREADY_VENDOR",
+      "role": "WORKFLOW_OWNER",
+      "mode": "ACTIVE",
+      "wire_status": "WIRED",
+      "pruned": []
+    },
+    {
+      "id": 2,
+      "name": "Pydantic",
+      "slug": "pydantic",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Pydantic",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pydantic",
+      "status": "ALREADY_VENDOR",
+      "role": "TYPED_CONTRACTS",
+      "mode": "ACTIVE",
+      "wire_status": "WIRED",
+      "pruned": []
+    },
+    {
+      "id": 3,
+      "name": "Starlette",
+      "slug": "starlette",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Starlette",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/starlette",
+      "status": "ALREADY_VENDOR",
+      "role": "ASGI_TRANSPORT",
+      "mode": "ACTIVE",
+      "wire_status": "WIRED",
+      "pruned": []
+    },
+    {
+      "id": 4,
+      "name": "HTTPX",
+      "slug": "httpx",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/HTTPX",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/httpx",
+      "status": "ALREADY_VENDOR",
+      "role": "HTTP_CONNECTOR",
+      "mode": "ACTIVE",
+      "wire_status": "WIRED",
+      "pruned": []
+    },
+    {
+      "id": 5,
+      "name": "rule-engine",
+      "slug": "rule_engine",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/rule-engine",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/rule_engine",
+      "status": "ALREADY_VENDOR",
+      "role": "DETERMINISTIC_RULES",
+      "mode": "ACTIVE",
+      "wire_status": "WIRED",
+      "pruned": []
+    },
+    {
+      "id": 6,
+      "name": "PyCasbin",
+      "slug": "pycasbin",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/PyCasbin",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pycasbin",
+      "status": "MATERIALIZED",
+      "role": "POLICY_AUTHZ",
+      "mode": "ACTIVE",
+      "wire_status": "WIRED",
+      "pruned": [
+        "tests/",
+        "examples/",
+        "CHANGELOG.md",
+        ".github/"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "OpenTelemetry Python",
+      "slug": "opentelemetry_python",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Python",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/opentelemetry_python",
+      "status": "MATERIALIZED",
+      "role": "OBSERVABILITY",
+      "mode": "ACTIVE",
+      "wire_status": "WIRED",
+      "pruned": [
+        "tests/",
+        ".agents/",
+        "CHANGELOG.md",
+        "docs/",
+        ".github/"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "pytest",
+      "slug": "pytest",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/pytest",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pytest",
+      "status": "MATERIALIZED",
+      "role": "TEST_TOOL",
+      "mode": "TEST_ONLY",
+      "wire_status": "WIRED",
+      "pruned": [
+        "doc/",
+        "CHANGELOG.rst",
+        ".github/"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Hypothesis",
+      "slug": "hypothesis",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Hypothesis",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/hypothesis",
+      "status": "MATERIALIZED",
+      "role": "PROPERTY_TEST_TOOL",
+      "mode": "TEST_ONLY",
+      "wire_status": "WIRED",
+      "pruned": [
+        ".claude/",
+        ".github/"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Dagu",
+      "slug": "dagu",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Dagu",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/dagu",
+      "status": "MATERIALIZED",
+      "role": "WORKFLOW_PATTERNS",
+      "mode": "DONOR_ONLY",
+      "wire_status": "WIRED",
+      "pruned": [
+        ".devcontainer/",
+        "examples/",
+        ".github/"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "redun",
+      "slug": "redun",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/redun",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/redun",
+      "status": "MATERIALIZED",
+      "role": "PROVENANCE_HASHING",
+      "mode": "DONOR_ONLY",
+      "wire_status": "WIRED",
+      "pruned": [
+        "examples/",
+        "docs/",
+        ".github/"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "LibreChat",
+      "slug": "librechat",
+      "source": null,
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/librechat",
+      "status": "PENDING_SOURCE",
+      "role": "CHAT_WORKSPACE",
+      "mode": "DONOR_ONLY",
+      "wire_status": "PENDING_SOURCE",
+      "pruned": []
+    },
+    {
+      "id": 13,
+      "name": "big-AGI",
+      "slug": "big_agi",
+      "source": null,
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/big_agi",
+      "status": "PENDING_SOURCE",
+      "role": "MULTIMODEL_CHAT_UI",
+      "mode": "DONOR_ONLY",
+      "wire_status": "PENDING_SOURCE",
+      "pruned": []
+    },
+    {
+      "id": 14,
+      "name": "Open WebUI",
+      "slug": "open_webui",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Open WebUI",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/open_webui",
+      "status": "MATERIALIZED",
+      "role": "CHAT_ADMIN_UI",
+      "mode": "REFERENCE_ONLY",
+      "wire_status": "WIRED",
+      "pruned": [
+        "CHANGELOG.md",
+        "docs/",
+        ".github/"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Jan",
+      "slug": "jan",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Jan",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/jan",
+      "status": "MATERIALIZED",
+      "role": "LOCAL_CHAT_DESKTOP",
+      "mode": "DONOR_ONLY",
+      "wire_status": "WIRED",
+      "pruned": [
+        ".devcontainer/",
+        "tests/",
+        "docs/",
+        ".github/"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Grok Build",
+      "slug": "grok_build",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Grok Build",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/grok_build",
+      "status": "MATERIALIZED",
+      "role": "WORKSPACE_BUILD",
+      "mode": "DONOR_ONLY",
+      "wire_status": "WIRED",
+      "pruned": []
+    },
+    {
+      "id": 17,
+      "name": "React",
+      "slug": "react",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/React",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/react",
+      "status": "MATERIALIZED",
+      "role": "COMMAND_CENTER_UI",
+      "mode": "ACTIVE",
+      "wire_status": "WIRED",
+      "pruned": [
+        ".claude/",
+        "CHANGELOG.md",
+        ".github/"
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Vite",
+      "slug": "vite",
+      "source": null,
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vite",
+      "status": "PENDING_SOURCE",
+      "role": "WEB_BUILD",
+      "mode": "ACTIVE",
+      "wire_status": "PENDING_SOURCE",
+      "pruned": []
+    },
+    {
+      "id": 19,
+      "name": "Vercel AI SDK",
+      "slug": "vercel_ai_sdk",
+      "source": null,
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vercel_ai_sdk",
+      "status": "PENDING_SOURCE",
+      "role": "STREAMING_PROVIDER_UI",
+      "mode": "ACTIVE",
+      "wire_status": "PENDING_SOURCE",
+      "pruned": []
+    },
+    {
+      "id": 20,
+      "name": "Zustand",
+      "slug": "zustand",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Zustand",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/zustand",
+      "status": "MATERIALIZED",
+      "role": "CLIENT_STATE",
+      "mode": "ACTIVE_CLIENT_ONLY",
+      "wire_status": "WIRED",
+      "pruned": [
+        "tests/",
+        "examples/",
+        "docs/",
+        ".github/"
+      ]
+    }
+  ]
+}

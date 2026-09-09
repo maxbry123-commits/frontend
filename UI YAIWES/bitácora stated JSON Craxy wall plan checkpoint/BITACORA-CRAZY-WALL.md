@@ -156,3 +156,10 @@ Council A/B/C + Refutations + Final Judge
 # LEY DE LEDGER
 
 Un evento pasado no se manipula: se agrega evidencia nueva y, si cambia la conclusión, se registra `SUPERSEDES`/`CONTRADICTS`. Git history conserva el ledger anterior.
+
+<!-- YAIWES_COMPONENTS_01_20_STEP2_BEGIN -->
+## UI-PLUG — componentes 01–20 cableados/podados
+
+Componentes 01–20: `16` cableados en registry/mount-guard y `4` PENDING_SOURCE. Poda sólo sobre `runtime/vendor`; upstream intacto. Tests ejecutados en este paso: `false`.
+
+<!-- YAIWES_COMPONENTS_01_20_STEP2_END -->

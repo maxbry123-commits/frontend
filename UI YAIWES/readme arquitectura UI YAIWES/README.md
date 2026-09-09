@@ -865,3 +865,10 @@ Destino: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor`. Fuente c
 |20|Zustand|MATERIALIZED|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/zustand`|
 
 <!-- YAIWES_COMPONENTS_01_20_STEP1_END -->
+
+<!-- YAIWES_COMPONENTS_01_20_STEP2_BEGIN -->
+## Integración 01–20 — Paso 2: cableado y poda
+
+Componentes 01–20: `16` cableados en registry/mount-guard y `4` PENDING_SOURCE. Poda sólo sobre `runtime/vendor`; upstream intacto. Tests ejecutados en este paso: `false`.
+
+<!-- YAIWES_COMPONENTS_01_20_STEP2_END -->

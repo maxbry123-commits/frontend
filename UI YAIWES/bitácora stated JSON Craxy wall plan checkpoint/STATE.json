@@ -21,7 +21,12 @@
     "action124_queue_integrity": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ACTION124-QUEUE-INTEGRITY-V5.json"
   },
   "source_authority": {
-    "functional_yaiwes": ["MAX-SYSTEM-100X-FINAL-1","Memoria Wordflow YAIWES","Virtual Computer YAIWES","Command Center Chat YAIWES"],
+    "functional_yaiwes": [
+      "MAX-SYSTEM-100X-FINAL-1",
+      "Memoria Wordflow YAIWES",
+      "Virtual Computer YAIWES",
+      "Command Center Chat YAIWES"
+    ],
     "method_only_attachment": "Bloque 0 NCT — use process discipline only; source explicitly forbids mixing NCT with YAIWES",
     "authority_rule": "real repo/runtime evidence > STATE/CHECKPOINT > runtime contract > approved functional sources > historical guide > inference"
   },
@@ -68,7 +73,14 @@
       "recovery_sort": "director_index ASC",
       "historical_queue_mutated": false
     },
-    "provider_gaps": ["AVF","Wayland","Weston-libweston","Mesa","virglrenderer","virtiofsd"],
+    "provider_gaps": [
+      "AVF",
+      "Wayland",
+      "Weston-libweston",
+      "Mesa",
+      "virglrenderer",
+      "virtiofsd"
+    ],
     "next_strategy": "audit C1 read-only without redownload; then investigate C2, resume C3, use provider-specific C4 paths, process C5 ordered including Hypothesis, resolve C6, then independent 124/124 verification"
   },
   "nodes": {
@@ -112,5 +124,13 @@
     "P04-FLAG-BULKMAN-REAL-VENDOR-EXECUTION"
   ],
   "next_delta": "A04_C1_INDEPENDENT_AUDIT: audit 50 complete-shape/no-gap entries against current destination without redownload",
-  "closure_rule": "file/import/repository/checkpoint/staging/download never equals VERIFIED_CLOSED without required route+SHA+readback+test/log/URL evidence and Judge"
+  "closure_rule": "file/import/repository/checkpoint/staging/download never equals VERIFIED_CLOSED without required route+SHA+readback+test/log/URL evidence and Judge",
+  "component_integration_01_20": {
+    "step": 2,
+    "status": "WIRED_PARTIAL",
+    "wired": 16,
+    "pending_source": 4,
+    "evidence": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/integration-01-20-step2.json",
+    "tests_run": false
+  }
 }
