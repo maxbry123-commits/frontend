@@ -1,0 +1,166 @@
+{
+  "schema": "yaiwes.integration.01-20.step1.v2",
+  "generated_at": "2026-09-09T01:16:46.022958+00:00",
+  "components": [
+    {
+      "id": 1,
+      "name": "Stabilize CORE",
+      "slug": "stabilize",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Stabilize CORE",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize",
+      "status": "ALREADY_VENDOR"
+    },
+    {
+      "id": 2,
+      "name": "Pydantic",
+      "slug": "pydantic",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Pydantic",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pydantic",
+      "status": "ALREADY_VENDOR"
+    },
+    {
+      "id": 3,
+      "name": "Starlette",
+      "slug": "starlette",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Starlette",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/starlette",
+      "status": "ALREADY_VENDOR"
+    },
+    {
+      "id": 4,
+      "name": "HTTPX",
+      "slug": "httpx",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/HTTPX",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/httpx",
+      "status": "ALREADY_VENDOR"
+    },
+    {
+      "id": 5,
+      "name": "rule-engine",
+      "slug": "rule_engine",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/rule-engine",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/rule_engine",
+      "status": "ALREADY_VENDOR"
+    },
+    {
+      "id": 6,
+      "name": "PyCasbin",
+      "slug": "pycasbin",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/PyCasbin",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pycasbin",
+      "status": "MATERIALIZED"
+    },
+    {
+      "id": 7,
+      "name": "OpenTelemetry Python",
+      "slug": "opentelemetry_python",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Python",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/opentelemetry_python",
+      "status": "MATERIALIZED"
+    },
+    {
+      "id": 8,
+      "name": "pytest",
+      "slug": "pytest",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/pytest",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pytest",
+      "status": "MATERIALIZED"
+    },
+    {
+      "id": 9,
+      "name": "Hypothesis",
+      "slug": "hypothesis",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Hypothesis",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/hypothesis",
+      "status": "MATERIALIZED"
+    },
+    {
+      "id": 10,
+      "name": "Dagu",
+      "slug": "dagu",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Dagu",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/dagu",
+      "status": "MATERIALIZED"
+    },
+    {
+      "id": 11,
+      "name": "redun",
+      "slug": "redun",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/redun",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/redun",
+      "status": "MATERIALIZED"
+    },
+    {
+      "id": 12,
+      "name": "LibreChat",
+      "slug": "librechat",
+      "source": null,
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/librechat",
+      "status": "PENDING_SOURCE"
+    },
+    {
+      "id": 13,
+      "name": "big-AGI",
+      "slug": "big_agi",
+      "source": null,
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/big_agi",
+      "status": "PENDING_SOURCE"
+    },
+    {
+      "id": 14,
+      "name": "Open WebUI",
+      "slug": "open_webui",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Open WebUI",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/open_webui",
+      "status": "MATERIALIZED"
+    },
+    {
+      "id": 15,
+      "name": "Jan",
+      "slug": "jan",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Jan",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/jan",
+      "status": "MATERIALIZED"
+    },
+    {
+      "id": 16,
+      "name": "Grok Build",
+      "slug": "grok_build",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Grok Build",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/grok_build",
+      "status": "MATERIALIZED"
+    },
+    {
+      "id": 17,
+      "name": "React",
+      "slug": "react",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/React",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/react",
+      "status": "MATERIALIZED"
+    },
+    {
+      "id": 18,
+      "name": "Vite",
+      "slug": "vite",
+      "source": null,
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vite",
+      "status": "PENDING_SOURCE"
+    },
+    {
+      "id": 19,
+      "name": "Vercel AI SDK",
+      "slug": "vercel_ai_sdk",
+      "source": null,
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vercel_ai_sdk",
+      "status": "PENDING_SOURCE"
+    },
+    {
+      "id": 20,
+      "name": "Zustand",
+      "slug": "zustand",
+      "source": "UI YAIWES/componentes open soure UI YAIWES/Zustand",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/zustand",
+      "status": "MATERIALIZED"
+    }
+  ]
+}

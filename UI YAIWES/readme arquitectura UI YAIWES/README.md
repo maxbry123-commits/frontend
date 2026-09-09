@@ -835,3 +835,33 @@ Termux, OpenCode, smolagents, Aider, CrewAI, OpenHands, Cua, Browser Use, open-b
 `import presente ≠ PASS`
 
 El cierre técnico posterior exige: descarga/código real → revisión licencia/SHA → adapter → wiring → unit/contract tests → recovery/chaos/E2E → evidence → VERIFIED_CLOSED.
+
+<!-- YAIWES_COMPONENTS_01_20_STEP1_BEGIN -->
+## Integración 01–20 — Paso 1: destino final
+
+Destino: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor`. Fuente central inmutable; materialización sin reescritura de blobs.
+
+|#|Componente|Estado|Destino|
+|---:|---|---|---|
+|1|Stabilize CORE|ALREADY_VENDOR|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize`|
+|2|Pydantic|ALREADY_VENDOR|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pydantic`|
+|3|Starlette|ALREADY_VENDOR|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/starlette`|
+|4|HTTPX|ALREADY_VENDOR|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/httpx`|
+|5|rule-engine|ALREADY_VENDOR|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/rule_engine`|
+|6|PyCasbin|MATERIALIZED|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pycasbin`|
+|7|OpenTelemetry Python|MATERIALIZED|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/opentelemetry_python`|
+|8|pytest|MATERIALIZED|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pytest`|
+|9|Hypothesis|MATERIALIZED|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/hypothesis`|
+|10|Dagu|MATERIALIZED|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/dagu`|
+|11|redun|MATERIALIZED|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/redun`|
+|12|LibreChat|PENDING_SOURCE|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/librechat`|
+|13|big-AGI|PENDING_SOURCE|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/big_agi`|
+|14|Open WebUI|MATERIALIZED|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/open_webui`|
+|15|Jan|MATERIALIZED|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/jan`|
+|16|Grok Build|MATERIALIZED|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/grok_build`|
+|17|React|MATERIALIZED|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/react`|
+|18|Vite|PENDING_SOURCE|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vite`|
+|19|Vercel AI SDK|PENDING_SOURCE|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vercel_ai_sdk`|
+|20|Zustand|MATERIALIZED|`UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/zustand`|
+
+<!-- YAIWES_COMPONENTS_01_20_STEP1_END -->
