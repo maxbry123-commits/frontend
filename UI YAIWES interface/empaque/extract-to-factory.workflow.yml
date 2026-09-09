@@ -1,0 +1,34 @@
+# Copiar a .github/workflows/extract-to-factory.yml cuando autorices.
+# Trigger: workflow_dispatch. Extrae ZIP YA en el repo. No descarga internet.
+name: extract-to-factory
+on:
+  workflow_dispatch:
+    inputs:
+      component:
+        description: "Nombre carpeta ZIP/partes (ej. dockview, transformers.js)"
+        required: true
+        type: string
+permissions:
+  contents: write
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - name: extract existing parts into fabrica-ui/vendor
+        run: |
+          set -euo pipefail
+          DEST="UI YAIWES interface/fabrica-ui/vendor/${{ inputs.component }}"
+          mkdir -p "$DEST"
+          echo "Usa scripts/ui-yaiwes-grupo-a-14-20260906/extract_existing_parts.py si el componente tiene partes."
+          echo "DEST=$DEST"
+          # Fail-closed: no curl a huggingface ni github.com
+          find . -iname "*${{ inputs.component }}*" | head
+      - name: commit if files
+        run: |
+          git add "UI YAIWES interface/fabrica-ui/vendor" || true
+          git diff --cached --quiet && echo NOTHING || git commit -m "extract ${{ inputs.component }} -> fabrica-ui/vendor"
+          git push || true

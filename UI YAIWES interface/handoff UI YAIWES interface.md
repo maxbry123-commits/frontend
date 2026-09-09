@@ -67,3 +67,13 @@ Botón (JS en ese HTML) → ABS → HOST postMessage → kernel (local | web | g
 - Plan lectura fábrica: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/fabrica-ui/PLAN-LECTURA.md
 - 50 justificación: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/fabrica-ui/50-JUSTIFICACION.md
 - Llegó vs falta: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/fabrica-ui/LLEGO-VS-FALTA.md
+
+## 14 fotos · cómo funcionan + vendor + HF
+
+- Función 14: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/Ui%20Yaiwes%20interface%20beta/02-fromted/FUNCION-14-FOTOS.md
+- Subir ZIP 50: https://github.com/maxbry123-commits/frontend/upload/main/fabrica%20de%20UI%20INTERFACE%20fromtend/componentes%20para%20fabrica%20de%20interface
+- Core vs opcional: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/fabrica-ui/CORE-VS-OPCIONAL.md
+- Índice OSS: https://github.com/maxbry123-commits/frontend/blob/main/%F0%9F%93%82%20Indice%20fromtend%20componentes.md
+- Vendor copiado (dockview+lucide): https://github.com/maxbry123-commits/frontend/tree/main/UI%20YAIWES%20interface/fabrica-ui/vendor
+- HF + extract: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/fabrica-ui/HUGGINGFACE-Y-EXTRACT.md
+- Workflow propuesto: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/empaque/extract-to-factory.workflow.yml
