@@ -1,0 +1,11 @@
+{
+  "skill": "fromted-frontend-architecture",
+  "test_cases": [
+    {"input": "INICIA skill FROMTED arquitectura frontend", "should_trigger": true},
+    {"input": "extrae botones del zip y cablea fabrica UI", "should_trigger": true},
+    {"input": "clona kimi-cli y guarda 01-original", "should_trigger": true},
+    {"input": "colores matte little blanco chat yaiwes", "should_trigger": true},
+    {"input": "rotate this pdf page 3", "should_trigger": false},
+    {"input": "write a python script to parse csv", "should_trigger": false}
+  ]
+}

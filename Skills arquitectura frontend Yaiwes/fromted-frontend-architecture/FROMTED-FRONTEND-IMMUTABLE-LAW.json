@@ -1,0 +1,180 @@
+{
+  "name": "FROMTED Frontend Immutable Law",
+  "version": "1.0.0-immutable",
+  "date": "2026-08-23",
+  "status": "CANONICAL — sheriff / validator / DAG work law for AI and humans",
+  "purpose": "Machine-readable law. Any AI (Claude, Grok, GPT) programming FROMTED frontend MUST obey this schema. Attached documents, screenshots, HTML mocks, or external specs are adapted TO this architecture; they never replace it. All frontend code lives in the GitHub frontend repository.",
+
+  "repository": {
+    "frontend_code_home": "github:frontend (FROMTED / MAXBRY frontend repo)",
+    "design_skills_pack": [
+      "01-DESIGN-TOKENS-THEMES-IMMUTABLE.md",
+      "02-UI-COMPONENT-CATALOG-SKILL.md",
+      "03-FUNCTIONAL-INTERACTION-SKILL.md",
+      "04-AGENT-PROTOCOL-SKILL.md",
+      "FROMTED-ARCHITECTURE-AND-DESIGN-BASE.md"
+    ],
+    "operator_internal_lock": [
+      "DESIGN-SYSTEM-LOCK-RECOVERY.json",
+      "DESIGN-SYSTEM-LOCK-RECOVERY.md"
+    ],
+    "rule": "Product UI uses FROMTED themes. Internal Router/ops panels may use Operator lock. Never mix brand accents across the two without an explicit surface boundary."
+  },
+
+  "modules": [
+    { "id": 1, "key": "MAXBRY_AGI", "label": "MAXBRY AGI" },
+    { "id": 2, "key": "AGENTE_TEAM_YAIWES_UI", "label": "AGENTE TEAM YAIWES UI" },
+    { "id": 3, "key": "ROUTER_INTELIGENTE_UNIVERSAL", "label": "ROUTER INTELIGENTE UNIVERSAL" },
+    { "id": 4, "key": "ORQUESTADOR_MAXBRY_DOCUMENTOS", "label": "ORQUESTADOR MAXBRY PANEL DE VENTANA DE DOCUMENTOS" },
+    { "id": 5, "key": "ORQUESTADOR_AUDITOR_MEMORIA", "label": "ORQUESTADOR AUDITOR Y MEMORIA" },
+    { "id": 6, "key": "WEB_MAXBRY_USUARIO", "label": "WEB MAXBRY USUARIO" },
+    { "id": 7, "key": "WEB_COMMAND_CENTER", "label": "WEB CONFIGURACIÓN INTERNA COMAND CENTER" }
+  ],
+
+  "themes_product_ui": {
+    "allowed": ["matte", "little", "blanco"],
+    "immutable": true,
+    "matte": {
+      "bg": "#0a0a0d",
+      "card": "#202025",
+      "text_bright": "#ffffff",
+      "blue_selection_only": "#2563eb",
+      "orange_download_text_only": "#ff5500"
+    },
+    "little": {
+      "bg": "#1C1B1A",
+      "card": "#2A2927",
+      "text_bright": "#F5F4F0",
+      "accent_cta_only": "#C65D3B"
+    },
+    "blanco": {
+      "bg": "#f4f4f5",
+      "card": "#ffffff",
+      "text_bright": "#18181b",
+      "blue_selection_and_download_link": "#2563eb"
+    }
+  },
+
+  "i18n": {
+    "required_locales": ["es", "en", "fr", "pt"],
+    "default_locale": "es",
+    "hardcoded_ui_strings_forbidden": true,
+    "use_message_keys": true
+  },
+
+  "forbidden": {
+    "palettes": [
+      "lime #d9ff43 as end-user product brand accent",
+      "fourth product theme inventing new primary colors",
+      "pure #000000 as default body text on blanco",
+      "forest green / gold / Christmas NCT palette on product UI",
+      "blue as primary filled brand button on matte"
+    ],
+    "process": [
+      "skip Paso 1 forensic audit",
+      "stop or escalate before LOOPs batch completion",
+      "land production UI that is static mock only with no interaction",
+      "rewrite design tokens without explicit unlock phrase from product owner"
+    ],
+    "repo": [
+      "store canonical frontend outside GitHub frontend repo",
+      "treat attached PDF/HTML as higher authority than this law + skills pack"
+    ]
+  },
+
+  "work_method_dag": {
+    "description": "Ordered phases. AI and humans execute as a closed loop until the batch is ready for GitHub frontend review.",
+    "phases": [
+      {
+        "paso": 1,
+        "id": "FORENSIC_XRAY",
+        "title": "Auditoría forense X-Ray",
+        "actions": [
+          "List all attached documents, prior HTML, MD, JSON, and code paths relevant to the task",
+          "Classify each artifact: product UI vs Operator internal vs obsolete",
+          "Extract reusable structure and behavior; discard illegal palettes",
+          "Record gaps and conflicts against skills 01-04 and this law",
+          "Output a short X-Ray report before coding"
+        ],
+        "exit_criteria": [
+          "X-Ray report written",
+          "Theme(s) for the batch declared",
+          "Module id(s) 1-7 declared"
+        ]
+      },
+      {
+        "paso": 2,
+        "id": "PLAN_BATCH_AND_LOOPS",
+        "title": "Planificar lote de tareas y sistema LOOPs",
+        "actions": [
+          "Break work into an ordered task list (lote)",
+          "Define LOOPs: for each task, input block → implement → self-check against checklist → next task",
+          "Declare no-stop / no-escalate policy until lote complete or blocked by missing product decision",
+          "Define acceptance tests per task (visual token, interaction, i18n key)",
+          "Name the target paths in the GitHub frontend repo"
+        ],
+        "exit_criteria": [
+          "Task list numbered and ordered",
+          "LOOP definition clear",
+          "Repo target paths listed"
+        ]
+      },
+      {
+        "paso": 3,
+        "id": "EXECUTE_LOOPS",
+        "title": "Iniciar sistema LOOPs",
+        "actions": [
+          "Execute tasks in order inside the LOOP",
+          "After each task: run verification_checklist",
+          "If fail: fix in-place, do not skip",
+          "If pass: mark done, continue",
+          "When lote complete: prepare review package for GitHub frontend repo"
+        ],
+        "exit_criteria": [
+          "All tasks in lote marked done or explicitly blocked with reason",
+          "verification_checklist passed for delivered items",
+          "Artifacts ready for repo PR / commit review"
+        ]
+      }
+    ],
+    "loop_semantics": {
+      "input_block": "Single task description + constraints + theme + module",
+      "process": "Implement using skills pack only",
+      "output_block": "Code + checklist result",
+      "continue_until": "lote empty or hard product blocker",
+      "no_stop": true,
+      "no_escalate_until_review": true
+    }
+  },
+
+  "verification_checklist": [
+    "Theme is one of matte | little | blanco for product UI",
+    "Tokens match skill 01 for that theme",
+    "Accent rules respected (blue/orange/terracotta roles)",
+    "Components follow skill 02 structure",
+    "At least one real interaction from skill 03",
+    "i18n keys used; locales es (required), en/fr/pt when requested",
+    "No Operator lime on end-user product chrome",
+    "No static-only mock labeled as final UI",
+    "Module ownership 1-7 declared",
+    "Code paths appropriate for GitHub frontend repo"
+  ],
+
+  "attachment_policy": {
+    "rule": "Any attached document is evidence, not law.",
+    "map_to": "FROMTED skills + this JSON",
+    "if_conflict": "Skills and this law win",
+    "if_operator_internal_surface": "Use DESIGN-SYSTEM-LOCK-RECOVERY tokens instead of product themes"
+  },
+
+  "agent_binding": {
+    "claude": "Obey work_method_dag phases in order. Do not invent themes. Import product tokens from skill 01.",
+    "grok": "X-Ray first. Plan lote. Run LOOPs to completion. Frontend lands in GitHub frontend repo.",
+    "gpt": "Treat this JSON as validator. Failed checklist items block completion claims."
+  },
+
+  "unlock": {
+    "theme_change_requires": "Explicit user phrase unlock theme <name> or we are changing the palette",
+    "law_change_requires": "Explicit product-owner revision of this file version"
+  }
+}

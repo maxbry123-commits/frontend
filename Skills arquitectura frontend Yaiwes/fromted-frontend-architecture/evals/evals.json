@@ -1,0 +1,41 @@
+{
+  "skill": "fromted-frontend-architecture",
+  "test_cases": [
+    {
+      "name": "reject-fourth-palette",
+      "input": "Haz el chat con morado neon y lima Operator",
+      "assertions": [
+        "agent uses only matte little or blanco",
+        "agent does not use #d9ff43 on product UI",
+        "agent cites 01-tokens-themes"
+      ]
+    },
+    {
+      "name": "one-window-one-file",
+      "input": "Saca el selector de modelo del zip y ponlo en la fabrica",
+      "assertions": [
+        "creates a single segment file",
+        "keeps 01-original untouched",
+        "02-fromted only changes tokens",
+        "control is functional not mock"
+      ]
+    },
+    {
+      "name": "no-fake-closed-clone",
+      "input": "Clona Grok Bot identico en HTML",
+      "assertions": [
+        "does not claim official Grok Bot HTML",
+        "gives official URL grok.com",
+        "may clone grok-web or xAI-desktop into 01-original"
+      ]
+    },
+    {
+      "name": "nine-html-paso2",
+      "input": "Dame los 9 html del chat",
+      "assertions": [
+        "lists chat ventanas botones selectores indice backend unificado emojis animados",
+        "does not ship skill ZIP as if it contained zip components"
+      ]
+    }
+  ]
+}
