@@ -35,3 +35,6 @@
 {"number": 35, "parts": 2, "slug": "Meilisearch", "source": "https://github.com/meilisearch/meilisearch.git", "source_commit": "797f0dc892035090288a0d9f1ba976b7ad38d0da", "status": "COMPLETE"}
 {"number": 36, "parts": 1, "slug": "Typesense", "source": "https://github.com/typesense/typesense.git", "source_commit": "245ebc7e06731c12381cc37b5b0205845fc1d58a", "status": "COMPLETE"}
 {"number": 37, "parts": 12, "slug": "Unstructured", "source": "https://github.com/Unstructured-IO/unstructured.git", "source_commit": "69d50a74ec084cea02058e811a75187ed793dd4e", "status": "COMPLETE"}
+{"number": 38, "parts": 42, "slug": "AVF", "source": "https://android.googlesource.com/platform/packages/modules/Virtualization/", "source_commit": "175a51b30123fa6b02b541f1969665708f7ec2c3", "status": "COMPLETE"}
+{"number": 39, "parts": 1, "slug": "Wayland", "source": "https://gitlab.freedesktop.org/wayland/wayland.git", "source_commit": "381af21cf84f13be0ca24aed756a9cded3290d49", "status": "COMPLETE"}
+{"number": 40, "parts": 1, "slug": "Weston-libweston", "source": "https://gitlab.freedesktop.org/wayland/weston.git", "source_commit": "15a3882aac51c361c8fc635464b68c4cefbe4275", "status": "COMPLETE"}
