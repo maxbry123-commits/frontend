@@ -1,0 +1,2 @@
+{"number": 1, "parts": 4, "slug": "assistant-ui", "source": "https://github.com/assistant-ui/assistant-ui.git", "source_commit": "a24a47fbc265b97e34d130143b2ed98ff42c38e4", "status": "COMPLETE"}
+{"number": 2, "parts": 1, "slug": "tool-ui", "source": "https://github.com/assistant-ui/tool-ui.git", "source_commit": "49a870286facdbf28160cd647f0d337ebdc9b275", "status": "COMPLETE"}
