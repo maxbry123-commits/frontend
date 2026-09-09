@@ -38,3 +38,6 @@
 {"number": 38, "parts": 42, "slug": "AVF", "source": "https://android.googlesource.com/platform/packages/modules/Virtualization/", "source_commit": "175a51b30123fa6b02b541f1969665708f7ec2c3", "status": "COMPLETE"}
 {"number": 39, "parts": 1, "slug": "Wayland", "source": "https://gitlab.freedesktop.org/wayland/wayland.git", "source_commit": "381af21cf84f13be0ca24aed756a9cded3290d49", "status": "COMPLETE"}
 {"number": 40, "parts": 1, "slug": "Weston-libweston", "source": "https://gitlab.freedesktop.org/wayland/weston.git", "source_commit": "15a3882aac51c361c8fc635464b68c4cefbe4275", "status": "COMPLETE"}
+{"number": 41, "parts": 13, "slug": "Mesa", "source": "https://gitlab.freedesktop.org/mesa/mesa.git", "source_commit": "0ba4b08edc65075e9346d20d5310261939aaaf48", "status": "COMPLETE"}
+{"number": 42, "parts": 1, "slug": "virglrenderer", "source": "https://gitlab.freedesktop.org/virgl/virglrenderer.git", "source_commit": "cf6c62da2a1384b194f463e6221371962fe99575", "status": "COMPLETE"}
+{"number": 43, "parts": 1, "slug": "virtiofsd", "source": "https://gitlab.com/virtio-fs/virtiofsd.git", "source_commit": "f8cc818083509128e6f34d16aed5ff1c00d19a55", "status": "COMPLETE"}
