@@ -1,2 +1,5 @@
 {"number": 1, "parts": 2, "slug": "Tauri-2", "source": "https://github.com/tauri-apps/tauri.git", "source_commit": "7f2b7cb7921caf7d9370b7ebe99e3cf47dbcfed6", "status": "COMPLETE"}
 {"number": 2, "parts": 1, "slug": "Capacitor", "source": "https://github.com/ionic-team/capacitor.git", "source_commit": "0c9e35dec13a99ec4a582a2edc536cbec96bf27d", "status": "COMPLETE"}
+{"number": 3, "parts": 11, "slug": "PWABuilder", "source": "https://github.com/pwa-builder/PWABuilder.git", "source_commit": "bfba40305e116a1ebb78f9f0c20e592dae104d89", "status": "COMPLETE"}
+{"number": 4, "parts": 1, "slug": "Workbox", "source": "https://github.com/GoogleChrome/workbox.git", "source_commit": "4ea3138a120fd2c87389b54130e25f47e0fd7089", "status": "COMPLETE"}
+{"number": 5, "parts": 1, "slug": "Neutralino", "source": "https://github.com/neutralinojs/neutralinojs.git", "source_commit": "e8e687187e3c93788223523ddfebe46add203a3c", "status": "COMPLETE"}
