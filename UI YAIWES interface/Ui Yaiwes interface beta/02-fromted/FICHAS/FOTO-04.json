@@ -1,6 +1,6 @@
 {
   "id": "FOTO-04",
-  "name": "Motivo foto 04",
+  "name": "Assets / librería media",
   "kind": "foto",
   "view": "F004",
   "tokens": {
@@ -44,5 +44,7 @@
     "G12"
   ],
   "status": "SUBIDO-FROMTED-SPLIT",
-  "updated": "2026-09-09T07:04:31Z"
+  "updated": "2026-09-09T07:04:31Z",
+  "photo": "F048.png",
+  "origin": "1000021929.png"
 }

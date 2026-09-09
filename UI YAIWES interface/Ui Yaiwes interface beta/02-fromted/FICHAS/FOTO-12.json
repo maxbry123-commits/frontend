@@ -1,6 +1,6 @@
 {
   "id": "FOTO-12",
-  "name": "Motivo foto 12",
+  "name": "Timeline",
   "kind": "foto",
   "view": "F012",
   "tokens": {
@@ -44,5 +44,7 @@
     "G12"
   ],
   "status": "SUBIDO-FROMTED-SPLIT",
-  "updated": "2026-09-09T07:04:31Z"
+  "updated": "2026-09-09T07:04:31Z",
+  "photo": "F040.png",
+  "origin": "1000021917.png"
 }

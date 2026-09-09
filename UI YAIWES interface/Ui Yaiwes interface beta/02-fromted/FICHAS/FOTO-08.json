@@ -1,6 +1,6 @@
 {
   "id": "FOTO-08",
-  "name": "Motivo foto 08",
+  "name": "Capas / layers",
   "kind": "foto",
   "view": "F008",
   "tokens": {
@@ -44,5 +44,7 @@
     "G12"
   ],
   "status": "SUBIDO-FROMTED-SPLIT",
-  "updated": "2026-09-09T07:04:31Z"
+  "updated": "2026-09-09T07:04:31Z",
+  "photo": "F041.png",
+  "origin": "1000021920.png"
 }

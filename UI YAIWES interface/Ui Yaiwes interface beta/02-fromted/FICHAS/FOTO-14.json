@@ -1,6 +1,6 @@
 {
   "id": "FOTO-14",
-  "name": "Motivo foto 14",
+  "name": "Evidencia",
   "kind": "foto",
   "view": "F014",
   "tokens": {
@@ -44,5 +44,7 @@
     "G12"
   ],
   "status": "SUBIDO-FROMTED-SPLIT",
-  "updated": "2026-09-09T07:04:31Z"
+  "updated": "2026-09-09T07:04:31Z",
+  "photo": "F036.png",
+  "origin": "1000021900.png"
 }

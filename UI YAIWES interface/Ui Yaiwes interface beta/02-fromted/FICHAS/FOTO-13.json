@@ -1,6 +1,6 @@
 {
   "id": "FOTO-13",
-  "name": "Motivo foto 13",
+  "name": "Personalidad",
   "kind": "foto",
   "view": "F013",
   "tokens": {
@@ -44,5 +44,7 @@
     "G12"
   ],
   "status": "SUBIDO-FROMTED-SPLIT",
-  "updated": "2026-09-09T07:04:31Z"
+  "updated": "2026-09-09T07:04:31Z",
+  "photo": "F037.png",
+  "origin": "1000021905.png"
 }

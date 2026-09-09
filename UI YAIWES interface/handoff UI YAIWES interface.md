@@ -59,3 +59,11 @@ Botón (JS en ese HTML) → ABS → HOST postMessage → kernel (local | web | g
 ## Siguiente del director
 
 `OK RUN-01` (estético) · `ACEPTO DEFAULTS` · o siguiente ID.
+
+## Ver fotos (no el code)
+
+- Descripciones + imágenes: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/Ui%20Yaiwes%20interface%20beta/02-fromted/DESCRIPCIONES-39.md
+- Subir fotos: https://github.com/maxbry123-commits/frontend/upload/main/UI%20YAIWES%20interface/Ui%20Yaiwes%20interface%20beta/01-original/FOTOS-REF
+- Plan lectura fábrica: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/fabrica-ui/PLAN-LECTURA.md
+- 50 justificación: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/fabrica-ui/50-JUSTIFICACION.md
+- Llegó vs falta: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/fabrica-ui/LLEGO-VS-FALTA.md

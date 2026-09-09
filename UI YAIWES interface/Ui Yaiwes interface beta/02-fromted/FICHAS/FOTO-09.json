@@ -1,6 +1,6 @@
 {
   "id": "FOTO-09",
-  "name": "Motivo foto 09",
+  "name": "Almacenamiento",
   "kind": "foto",
   "view": "F009",
   "tokens": {
@@ -44,5 +44,7 @@
     "G12"
   ],
   "status": "SUBIDO-FROMTED-SPLIT",
-  "updated": "2026-09-09T07:04:31Z"
+  "updated": "2026-09-09T07:04:31Z",
+  "photo": "F039.png",
+  "origin": "1000021915.png"
 }

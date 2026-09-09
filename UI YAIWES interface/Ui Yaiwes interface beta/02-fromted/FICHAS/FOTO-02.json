@@ -1,6 +1,6 @@
 {
   "id": "FOTO-02",
-  "name": "Motivo foto 02",
+  "name": "Terminal Marte / HUD",
   "kind": "foto",
   "view": "F002",
   "tokens": {
@@ -44,5 +44,7 @@
     "G12"
   ],
   "status": "SUBIDO-FROMTED-SPLIT",
-  "updated": "2026-09-09T07:04:31Z"
+  "updated": "2026-09-09T07:04:31Z",
+  "photo": "F089.png",
+  "origin": "1000077766.png"
 }

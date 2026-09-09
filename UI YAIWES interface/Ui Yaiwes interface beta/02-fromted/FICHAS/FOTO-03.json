@@ -1,6 +1,6 @@
 {
   "id": "FOTO-03",
-  "name": "Motivo foto 03",
+  "name": "Versionado / timeline git",
   "kind": "foto",
   "view": "F003",
   "tokens": {
@@ -44,5 +44,7 @@
     "G12"
   ],
   "status": "SUBIDO-FROMTED-SPLIT",
-  "updated": "2026-09-09T07:04:31Z"
+  "updated": "2026-09-09T07:04:31Z",
+  "photo": "F046.png",
+  "origin": "1000021925.png"
 }
