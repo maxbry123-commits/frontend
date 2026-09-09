@@ -1,6 +1,6 @@
 {
   "schema": "yaiwes.integration.01-20.step1.v2",
-  "generated_at": "2026-09-09T01:16:46.022958+00:00",
+  "generated_at": "2026-09-09T04:36:42.700368+00:00",
   "components": [
     {
       "id": 1,
@@ -48,7 +48,7 @@
       "slug": "pycasbin",
       "source": "UI YAIWES/componentes open soure UI YAIWES/PyCasbin",
       "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pycasbin",
-      "status": "MATERIALIZED"
+      "status": "ALREADY_VENDOR"
     },
     {
       "id": 7,
@@ -56,7 +56,7 @@
       "slug": "opentelemetry_python",
       "source": "UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Python",
       "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/opentelemetry_python",
-      "status": "MATERIALIZED"
+      "status": "ALREADY_VENDOR"
     },
     {
       "id": 8,
@@ -64,7 +64,7 @@
       "slug": "pytest",
       "source": "UI YAIWES/componentes open soure UI YAIWES/pytest",
       "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pytest",
-      "status": "MATERIALIZED"
+      "status": "ALREADY_VENDOR"
     },
     {
       "id": 9,
@@ -72,7 +72,7 @@
       "slug": "hypothesis",
       "source": "UI YAIWES/componentes open soure UI YAIWES/Hypothesis",
       "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/hypothesis",
-      "status": "MATERIALIZED"
+      "status": "ALREADY_VENDOR"
     },
     {
       "id": 10,
@@ -80,7 +80,7 @@
       "slug": "dagu",
       "source": "UI YAIWES/componentes open soure UI YAIWES/Dagu",
       "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/dagu",
-      "status": "MATERIALIZED"
+      "status": "ALREADY_VENDOR"
     },
     {
       "id": 11,
@@ -88,15 +88,15 @@
       "slug": "redun",
       "source": "UI YAIWES/componentes open soure UI YAIWES/redun",
       "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/redun",
-      "status": "MATERIALIZED"
+      "status": "ALREADY_VENDOR"
     },
     {
       "id": 12,
       "name": "LibreChat",
       "slug": "librechat",
-      "source": null,
+      "source": "UI YAIWES/componentes open soure UI YAIWES/LibreChat",
       "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/librechat",
-      "status": "PENDING_SOURCE"
+      "status": "MATERIALIZED"
     },
     {
       "id": 13,
@@ -112,7 +112,7 @@
       "slug": "open_webui",
       "source": "UI YAIWES/componentes open soure UI YAIWES/Open WebUI",
       "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/open_webui",
-      "status": "MATERIALIZED"
+      "status": "ALREADY_VENDOR"
     },
     {
       "id": 15,
@@ -120,7 +120,7 @@
       "slug": "jan",
       "source": "UI YAIWES/componentes open soure UI YAIWES/Jan",
       "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/jan",
-      "status": "MATERIALIZED"
+      "status": "ALREADY_VENDOR"
     },
     {
       "id": 16,
@@ -128,7 +128,7 @@
       "slug": "grok_build",
       "source": "UI YAIWES/componentes open soure UI YAIWES/Grok Build",
       "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/grok_build",
-      "status": "MATERIALIZED"
+      "status": "ALREADY_VENDOR"
     },
     {
       "id": 17,
@@ -136,7 +136,7 @@
       "slug": "react",
       "source": "UI YAIWES/componentes open soure UI YAIWES/React",
       "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/react",
-      "status": "MATERIALIZED"
+      "status": "ALREADY_VENDOR"
     },
     {
       "id": 18,
@@ -160,7 +160,7 @@
       "slug": "zustand",
       "source": "UI YAIWES/componentes open soure UI YAIWES/Zustand",
       "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/zustand",
-      "status": "MATERIALIZED"
+      "status": "ALREADY_VENDOR"
     }
   ]
 }
