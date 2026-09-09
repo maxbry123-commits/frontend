@@ -1,0 +1,12 @@
+{
+  "schema": "yaiwes.hf.component-download.v1",
+  "part_size_mib": 12,
+  "max_github_blob_mib": 95,
+  "no_lfs": true,
+  "fetch_depth": 1,
+  "partial_clone_filter": "blob:none",
+  "archive_format": "deterministic-zip",
+  "part_extension": ".zip.part-XXXX",
+  "publish_requires": "GITHUB_TOKEN",
+  "acceptance": "SOURCE_COMMIT_PINNED + NO_LFS_POINTERS + BUNDLE_SHA256 + PART_SHA256 + EACH_PART_LT_95_MIB + optional GitHub push/read-back"
+}
