@@ -1,0 +1,50 @@
+name: HF Combined Download Extract E2E
+run-name: HF Combined Download Extract E2E • ${{ github.sha }}
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/hf-combined-download-extract-e2e-20260909.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hf-combined-download-extract-e2e
+  cancel-in-progress: false
+
+jobs:
+  combined-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Fetch combined motor only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import urllib.request, pathlib
+          u='https://raw.githubusercontent.com/maxbry123-commits/frontend/main/%E2%9E%A1%EF%B8%8F%F0%9F%93%82motor%20descarga%20y%20extracci%C3%B3n%20con%20huggueface/hf_download_extract_engine.py'
+          p=pathlib.Path('/tmp/hf_download_extract_engine.py')
+          p.write_bytes(urllib.request.urlopen(u).read())
+          PY
+      - name: Download extract publish read-back
+        shell: bash
+        env:
+          SOURCE_REPO: agronholm/apscheduler
+          SOURCE_REF: master
+          SLUG: APScheduler-COMBINED-E2E
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: 📂componentes open soure fromtend
+          PART_SIZE_MIB: '12'
+          MAX_GITHUB_BLOB_MIB: '95'
+          PUBLISH: '1'
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 /tmp/hf_download_extract_engine.py | tee /tmp/combined-result.jsonl
+          grep -q 'PUBLISHED_AND_EXTRACTED_READBACK_VERIFIED' /tmp/combined-result.jsonl
+          grep -q 'VERIFIED_CLOSED' /tmp/combined-result.jsonl
