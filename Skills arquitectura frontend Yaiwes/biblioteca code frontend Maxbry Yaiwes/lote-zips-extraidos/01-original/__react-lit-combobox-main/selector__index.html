@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Example: Basic</title>
+		<style>
+			.combobox-input {
+				width: 400;
+				font-size: 100%;
+				padding: 0.33rem;
+			}
+
+			.combobox-popup {
+				box-shadow: 0px 2px 6px hsla(0, 0%, 0%, 0.15);
+				border: none;
+			}
+
+			.combobox-option {
+				margin: 0;
+				padding: 0.25rem 0.5rem;
+			}
+			.combobox-option:hover {
+				background: hsl(211, 10%, 92%);
+			}
+			.combobox-option[aria-selected='true'] {
+				background: hsl(211, 10%, 95%);
+			}
+			.combobox-option[aria-selected='true']:hover {
+				background: hsl(211, 10%, 90%);
+			}
+			.combobox-option [data-user-value] {
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="module">
+			import * as React from 'react';
+			import { createRoot } from 'react-dom/client';
+			import { Example } from './index.js';
+			const container = document.getElementById('root');
+			const root = createRoot(container);
+			root.render(<Example />);
+		</script>
+	</body>
+</html>

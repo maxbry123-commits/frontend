@@ -1,0 +1,88 @@
+.slick-grey-dropdown-container {
+    width: 350px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    color: #e0e0e0; 
+  }
+  
+  .slick-grey-search-query-input {
+    width: 100%;
+    padding: 14px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px; 
+    font-size: 1.05rem;
+    color: #ffffff; 
+    background: rgba(44, 44, 44, 0.95); 
+    outline: none;
+    box-shadow: inset 2px 2px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .slick-grey-search-query-input:focus {
+    background: rgba(0, 0, 0, 0.6); 
+    box-shadow: inset 2px 2px 8px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(255, 255, 255, 0.2); 
+  }
+  
+  .slick-grey-search-query-input::placeholder {
+    color: rgba(255, 255, 255, 0.3); 
+  }
+  
+  .slick-grey-dropdown-options {
+    background: rgb(44, 44, 44); 
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .slick-grey-dropdown-option {
+    padding: 14px 20px;
+    cursor: pointer;
+    color: #e0e0e0; 
+    transition: background-color 0.2s ease, color 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+  }
+  
+
+  
+  .slick-grey-dropdown-option-focused {
+    background-color: rgba(90, 90, 90, 0.5); 
+    color: #ffffff; 
+  }
+  
+  .slick-grey-dropdown-option-label {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+  
+  .slick-grey-dropdown-option-label-focused {
+    font-weight: 600;
+    color: #ffffff; 
+  }
+  
+  .slick-grey-dropdown-option-no-match {
+    padding: 14px 20px;
+    color: #aaaaaa;
+    font-style: italic;
+    text-align: center;
+    background-color: rgba(44, 44, 44, 0.95);
+  }
+  
+  .slick-grey-trigger-icon {
+    position: absolute;
+    right: 20px;
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease-in-out;
+    color: #bbbbbb; 
+    pointer-events: none;
+  }
+  
+  .slick-grey-trigger-icon-invert {
+    transform: rotate(180deg);
+    color: #ffffff; 
+  }

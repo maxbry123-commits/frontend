@@ -1,0 +1,66 @@
+import type { SiteConfig } from "@luciodale/docs-ui-kit/types/config";
+
+export const siteConfig: SiteConfig = {
+	title: "react-searchable-dropdown",
+	description:
+		"A TypeScript-first searchable dropdown for React. Virtualized lists, keyboard navigation, single and multi-select, full styling control.",
+	siteUrl: "https://koolcodez.com/projects/react-searchable-dropdown",
+	logoSrc: "/logo.svg",
+	logoAlt: "react-searchable-dropdown logo",
+	faviconSrc: "/projects/react-searchable-dropdown/favicon.svg",
+	ogImage: "/og-image.png",
+	installCommand: "npm install @luciodale/react-searchable-dropdown",
+	githubUrl: "https://github.com/luciodale/react-searchable-dropdown",
+	author: "Lucio D'Alessandro",
+	socialLinks: {
+		github: "https://github.com/luciodale/react-searchable-dropdown",
+		linkedin: "https://linkedin.com/in/lucio-d-alessandro",
+	},
+	navLinks: [
+		{ href: "/docs/getting-started", label: "Docs" },
+		{ href: "/demo/single-select", label: "Examples" },
+	],
+	sidebarSections: [
+		{
+			title: "Getting Started",
+			links: [{ href: "/docs/getting-started", label: "Getting Started" }],
+		},
+		{
+			title: "Guides",
+			links: [
+				{ href: "/docs/configuration", label: "Configuration" },
+				{ href: "/docs/filtering", label: "Filtering" },
+				{ href: "/docs/styling", label: "Styling" },
+				{ href: "/docs/multi-select", label: "Multi Select" },
+				{ href: "/docs/grouping", label: "Grouping" },
+			],
+		},
+		{
+			title: "Reference",
+			links: [{ href: "/docs/api", label: "API" }],
+		},
+		{
+			title: "Examples",
+			links: [
+				{ href: "/demo/single-select", label: "Single Select" },
+				{ href: "/demo/multi-select", label: "Multi Select" },
+				{ href: "/demo/custom-data", label: "Custom Data" },
+				{ href: "/demo/groups", label: "Groups" },
+				{ href: "/demo/custom-theme", label: "Custom Theme" },
+			],
+		},
+		{
+			title: "Comparison",
+			links: [
+				{ href: "/docs/vs-react-select", label: "vs react-select" },
+				{ href: "/docs/vs-downshift", label: "vs Downshift" },
+			],
+		},
+	],
+	copyright: "Lucio D'Alessandro",
+	parentSite: {
+		href: "https://koolcodez.com/projects",
+		label: "koolcodez",
+		logoSrc: "/projects/react-searchable-dropdown/kool-codez-illustration.svg",
+	},
+};

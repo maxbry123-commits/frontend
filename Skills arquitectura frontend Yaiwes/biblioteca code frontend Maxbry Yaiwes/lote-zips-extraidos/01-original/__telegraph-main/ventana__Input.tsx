@@ -1,0 +1,184 @@
+import { useComposedRefs } from "@telegraph/compose-refs";
+import type {
+  PolymorphicProps,
+  Required,
+  TgphElement,
+} from "@telegraph/helpers";
+import { TgphSlot } from "@telegraph/helpers";
+import { Stack, type StackProps } from "@telegraph/layout";
+import { Text, type TextProps } from "@telegraph/typography";
+import {
+  type ComponentPropsWithRef,
+  type MouseEvent,
+  type ReactNode,
+  createContext,
+  forwardRef,
+  useContext,
+  useRef,
+} from "react";
+
+import { COLOR, SIZE } from "./Input.constants";
+
+export type BaseRootProps = {
+  size?: "1" | "2" | "3";
+  variant?: "outline" | "ghost";
+  errored?: boolean;
+};
+
+export type RootProps<T extends TgphElement = "input"> = BaseRootProps & {
+  // Declared because the `Omit` below strips Text's own `as`.
+  as?: T;
+  textProps?: Omit<TextProps<T>, "as">;
+  stackProps?: Omit<StackProps, "as">;
+} & Omit<TextProps<T>, "as" | keyof BaseRootProps>;
+
+type InternalProps = Omit<BaseRootProps, "errored"> & {
+  state: "default" | "disabled" | "error";
+};
+
+const InputContext = createContext<Required<InternalProps>>({
+  state: "default",
+  size: "2",
+  variant: "outline",
+});
+
+const Root = <T extends TgphElement = "input">(rootProps: RootProps<T>) => {
+  const {
+    as = "input",
+    size = "2",
+    variant = "outline",
+    textProps,
+    stackProps,
+    disabled,
+    errored,
+    children,
+    tgphRef,
+    ...props
+  } = rootProps as RootProps<"input">;
+  const Component = as;
+  const inputRef = useRef<HTMLInputElement>(null);
+  const composedRefs = useComposedRefs(tgphRef, inputRef);
+
+  const state = disabled ? "disabled" : errored ? "error" : "default";
+
+  return (
+    <InputContext.Provider value={{ size, variant, state }}>
+      <Stack
+        // Focus the input when clicking on the container
+        onPointerDown={(event: MouseEvent<HTMLDivElement>) => {
+          const target = event.target as HTMLElement;
+
+          // Make sure we're not clicking on an interactive element
+          if (target.closest("button, a")) {
+            event.preventDefault();
+            return;
+          }
+
+          const input = inputRef.current;
+          if (!input) return;
+
+          requestAnimationFrame(() => {
+            input.focus();
+          });
+        }}
+        align="center"
+        {...SIZE.Container[size]}
+        {...COLOR.Container[state][variant]}
+        data-tgph-input-container
+        data-tgph-input-container-variant={variant}
+        data-tgph-input-container-state={state}
+        data-tgph-input-container-size={size}
+        {...stackProps}
+      >
+        {/*
+          We choose to use the `<Text/>` component as a base here so that we can 
+          configure the text inside of the input to match the design system font sizes
+        */}
+        <Text
+          as={Component}
+          bg="transparent"
+          shadow="0"
+          h="full"
+          w="full"
+          disabled={disabled}
+          tgphRef={composedRefs}
+          {...SIZE.Text[size]}
+          {...COLOR.Text[state]}
+          {...props}
+          {...textProps}
+          data-tgph-input-field
+        />
+        {children}
+      </Stack>
+    </InputContext.Provider>
+  );
+};
+
+// Declared rather than inherited from `TgphSlotProps`. That type intersects
+// `Record<string, unknown>` so the slot primitive can merge arbitrary props
+// onto its child, and `Omit` over an index signature keeps the index
+// signature — which swallowed every key here, valid or not.
+export type SlotProps = Omit<ComponentPropsWithRef<"span">, "size"> & {
+  children?: ReactNode;
+  size?: "1" | "2" | "3";
+  position?: "leading" | "trailing";
+};
+type SlotRef = HTMLElement;
+
+const Slot = forwardRef<SlotRef, SlotProps>(
+  ({ position = "leading", ...props }, forwardedRef) => {
+    const context = useContext(InputContext);
+    const slotSize = props.size ?? context.size;
+
+    return (
+      <Stack
+        align="center"
+        justify="center"
+        h="full"
+        data-tgph-input-slot
+        data-tgph-input-slot-position={position}
+        data-tgph-input-slot-size={slotSize}
+        {...(position === "leading" && SIZE.SlotLeading[context.size])}
+        {...(position === "trailing" && SIZE.SlotTrailing[context.size])}
+      >
+        <TgphSlot size={slotSize} {...props} ref={forwardedRef} />
+      </Stack>
+    );
+  },
+);
+Slot.displayName = "Slot";
+
+export type DefaultProps<T extends TgphElement = "input"> = Omit<
+  PolymorphicProps<T>,
+  keyof BaseRootProps
+> &
+  RootProps<T> & {
+    LeadingComponent?: ReactNode;
+    TrailingComponent?: ReactNode;
+  };
+
+const Default = <T extends TgphElement = "input">({
+  LeadingComponent,
+  TrailingComponent,
+  ...props
+}: DefaultProps<T>) => {
+  const rootProps = props as RootProps<T>;
+
+  return (
+    <Root {...rootProps}>
+      {LeadingComponent && <Slot position="leading">{LeadingComponent}</Slot>}
+      {TrailingComponent && (
+        <Slot position="trailing">{TrailingComponent}</Slot>
+      )}
+    </Root>
+  );
+};
+
+Object.assign(Default, { Root, Slot });
+
+const Input = Default as typeof Default & {
+  Root: typeof Root;
+  Slot: typeof Slot;
+};
+
+export { Input };

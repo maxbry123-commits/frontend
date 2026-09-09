@@ -1,0 +1,231 @@
+/**
+ * Editor Theme Integration with Monochrome Edge
+ * Uses high specificity and CSS cascade instead of !important
+ *
+ * Strategy: Chain selectors to increase specificity and override ProseMirror defaults
+ */
+
+/* =================================================================
+   1. Editor Wrapper & Core Components
+   ================================================================= */
+
+/* Reset any hardcoded colors with higher specificity */
+.editor-wrapper .editor-content-wrapper,
+.editor-wrapper .editor-content,
+.editor-wrapper .editor-toolbar-container,
+.editor-wrapper .ProseMirror {
+    background: inherit;
+    color: inherit;
+    border-color: inherit;
+}
+
+/* Editor wrapper - use theme background */
+.editor-wrapper {
+    background: var(--theme-background);
+    color: var(--theme-text-primary);
+}
+
+/* Content wrapper */
+.editor-wrapper .editor-content-wrapper {
+    background: var(--theme-background);
+}
+
+/* Editor content area */
+.editor-wrapper .editor-content {
+    background: var(--theme-surface);
+    color: var(--theme-text-primary);
+    border: 1px solid var(--theme-border);
+}
+
+/* ProseMirror content */
+.editor-wrapper .ProseMirror {
+    background: transparent;
+    color: var(--theme-text-primary);
+}
+
+/* =================================================================
+   2. Toolbar Components
+   ================================================================= */
+
+/* Toolbar */
+.editor-wrapper .editor-toolbar-container {
+    background: var(--theme-surface);
+    border-bottom: 1px solid var(--theme-border);
+}
+
+/* Toolbar buttons - higher specificity chain */
+.editor-toolbar-container .toolbar-btn {
+    background: transparent;
+    color: var(--theme-text-secondary);
+    border: 1px solid transparent;
+}
+
+.editor-toolbar-container .toolbar-btn:hover {
+    background: var(--theme-background);
+    color: var(--theme-text-primary);
+    border-color: var(--theme-border);
+}
+
+.editor-toolbar-container .toolbar-btn.active,
+.editor-toolbar-container .toolbar-btn:active {
+    background: var(--theme-accent);
+    color: var(--theme-accent-contrast);
+    border-color: var(--theme-accent);
+}
+
+/* =================================================================
+   3. Text & Content Elements
+   ================================================================= */
+
+/* Primary text elements */
+.editor-wrapper .editor-block,
+.editor-wrapper .block-heading1,
+.editor-wrapper .block-heading2,
+.editor-wrapper .block-heading3,
+.editor-wrapper .block-heading4,
+.editor-wrapper .block-paragraph,
+.editor-wrapper .block-bullet,
+.editor-wrapper .block-number {
+    color: var(--theme-text-primary);
+}
+
+/* Secondary text */
+.editor-wrapper .block-quote,
+.editor-wrapper .list-marker,
+.editor-wrapper .editor-block[data-placeholder]:empty:before {
+    color: var(--theme-text-secondary);
+}
+
+/* =================================================================
+   4. Accents & Links
+   ================================================================= */
+
+/* Block quote accent */
+.editor-wrapper .block-quote {
+    border-left-color: var(--theme-accent);
+}
+
+/* Links */
+.editor-wrapper .editor-block a,
+.editor-wrapper .ProseMirror a {
+    color: var(--theme-accent);
+}
+
+/* =================================================================
+   5. Floating Toolbar
+   ================================================================= */
+
+/* Floating toolbar container */
+.editor-wrapper .floating-toolbar {
+    background: var(--theme-surface);
+    border: 1px solid var(--theme-border);
+}
+
+.editor-wrapper .floating-toolbar button {
+    color: var(--theme-text-secondary);
+}
+
+.editor-wrapper .floating-toolbar button:hover {
+    background: var(--theme-background);
+    color: var(--theme-text-primary);
+}
+
+.editor-wrapper .floating-toolbar button.active {
+    background: var(--theme-accent);
+    color: var(--theme-accent-contrast);
+}
+
+/* =================================================================
+   6. Slash Menu (Command Palette)
+   ================================================================= */
+
+/* Slash menu container */
+.editor-wrapper .slash-menu-enhanced {
+    background: var(--theme-surface);
+    border: 1px solid var(--theme-border);
+}
+
+/* Search input */
+.editor-wrapper .slash-menu-enhanced .menu-search {
+    background: var(--theme-background);
+    border-color: var(--theme-border);
+    color: var(--theme-text-primary);
+}
+
+/* Menu items */
+.editor-wrapper .slash-menu-enhanced .menu-item {
+    color: var(--theme-text-primary);
+}
+
+.editor-wrapper .slash-menu-enhanced .menu-item:hover,
+.editor-wrapper .slash-menu-enhanced .menu-item.selected {
+    background: var(--theme-background);
+}
+
+/* =================================================================
+   7. Code Blocks
+   ================================================================= */
+
+/* Code block wrapper */
+.editor-wrapper .block-codeblock-wrapper {
+    background: var(--theme-surface);
+    border: 1px solid var(--theme-border);
+}
+
+/* Code header */
+.editor-wrapper .code-header {
+    background: var(--theme-background);
+    border-bottom: 1px solid var(--theme-border);
+}
+
+/* Code language selector & copy button */
+.editor-wrapper .code-language,
+.editor-wrapper .code-copy-btn {
+    border-color: var(--theme-border);
+    color: var(--theme-text-secondary);
+}
+
+/* =================================================================
+   8. Tables
+   ================================================================= */
+
+/* Table borders */
+.editor-wrapper .editor-table,
+.editor-wrapper .editor-table td,
+.editor-wrapper .editor-table th {
+    border-color: var(--theme-border);
+}
+
+/* Table header cells */
+.editor-wrapper .table-header .table-cell-content {
+    background: var(--theme-surface);
+}
+
+/* =================================================================
+   9. Status Bar
+   ================================================================= */
+
+/* Status bar at bottom */
+.editor-wrapper .editor-status-bar {
+    background: var(--theme-surface);
+    border-top: 1px solid var(--theme-border);
+    color: var(--theme-text-secondary);
+}
+
+/* =================================================================
+   10. Smooth Theme Transitions
+   ================================================================= */
+
+/* Allow theme transitions to work smoothly */
+.editor-wrapper,
+.editor-wrapper .editor-content-wrapper,
+.editor-wrapper .editor-content,
+.editor-wrapper .editor-toolbar-container,
+.editor-wrapper .toolbar-btn,
+.editor-wrapper .floating-toolbar,
+.editor-wrapper .slash-menu-enhanced {
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}

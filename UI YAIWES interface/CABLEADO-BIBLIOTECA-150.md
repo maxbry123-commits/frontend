@@ -33,3 +33,9 @@ Quedan en attachments del chat. Protocolo: extraer → lista de botones/selector
 
 El número “150+” mezcla: componentes OSS de zips + HTML p0x + lotes host/tokens + mocks viejos.  
 Este índice es la lista **cableada**. Cada extracción nueva suma una línea aquí y un path en 01-original.
+
+## lote-zips-extraidos (2026-09-08)
+
+https://github.com/maxbry123-commits/frontend/tree/main/Skills%20arquitectura%20frontend%20Yaiwes/biblioteca%20code%20frontend%20Maxbry%20Yaiwes/lote-zips-extraidos
+
+**1206 archivos / 6.11 MB** copiados de AUDITORIA-ZIPS. Solo extraído. 02-fromted vacío.
