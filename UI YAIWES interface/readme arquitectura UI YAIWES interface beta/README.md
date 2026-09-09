@@ -7,6 +7,13 @@ Skill padre: `Skills arquitectura frontend Yaiwes/`
 **Aprobado 2026-09-08:** anotar primero. **No fabricar las 39** hasta `OK` por ID.  
 **5 partes.** Una ventana por salida.
 
+## Leer primero (lenguaje simple)
+
+- [Cómo vive un botón + fábrica + 4 sistemas](EXPLICACION-SIMPLE.md)
+- [No alucinar](NO-ALUCINAR.md)
+- [Backend local/nube (detalle)](COMO-SE-CONECTA-BACKEND.md)
+- [12 goals](GOALS-12.md) · [12 decisiones](DECISION-12.md)
+
 ## Tokens FROMTED (ley)
 
 | Token | Valor | Uso |
@@ -49,6 +56,8 @@ Fotos HUD naranja (Anthropic/grafos) = referencia de **layout**, no paleta.
 7. **1 ID por mensaje** (máx 2 si lo pides).
 
 Si no hay archivo subido → **no invento** esa ventana.
+
+Ver `NO-ALUCINAR.md`.
 
 ## Cableado
 
@@ -93,6 +102,7 @@ Si no hay archivo subido → **no invento** esa ventana.
 
 ## IDs aprobados para fabricar
 
-**Ninguno.** Aprobado: método + carpeta + 5 partes + conteo 39.
+**Ninguno en `02-fromted` producto.** RUN-01 existe como **borrador** en `UI code versiones/RUN-01/` (pendiente `OK RUN-01` + lock sin Factory).
 
-Siguiente: `1 CASCADE` o `OK RUN-01`.
+Siguiente: explicación simple leída + `ACEPTO DEFAULTS` o `OK RUN-01`.
+

@@ -27,7 +27,6 @@ Estado: **anotado**. 0 ventanas fabricadas. 0 IDs OK para code FROMTED.
 | Contrato | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/CONTRATO-TRABAJO.md |
 | LOOP | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/LOOP-OPERATIVO.md |
 | Schema LOOP | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/SCHEMA-LOOP.json |
-| Cómo backend | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/COMO-SE-CONECTA-BACKEND.md |
 | Índice 150+ | https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/CABLEADO-BIBLIOTECA-150.md |
 
 ## Oficiales
@@ -55,4 +54,16 @@ Estado: **anotado**. 0 ventanas fabricadas. 0 IDs OK para code FROMTED.
 Siguiente: `OK RUN-01` o `RECHAZO RUN-01 <motivo>`.
 
 
-**STOP ventanas:** decidir D01–D12 en COMO-SE-CONECTA-BACKEND.md antes de RUN-02.
+## Backend + 12 decisiones (2026-09-09)
+
+- Cómo se conecta: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/COMO-SE-CONECTA-BACKEND.md
+- 12 decisiones (parar aquí): https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/DECISION-12.md
+- 12 goals: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/GOALS-12.md
+
+Esperando: `ACEPTO DEFAULTS` o cambios D01–D12. No RUN-02 hasta entonces.
+
+
+## Explicación simple + no alucinar (2026-09-09)
+
+- Simple: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/EXPLICACION-SIMPLE.md
+- No alucinar: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/NO-ALUCINAR.md
