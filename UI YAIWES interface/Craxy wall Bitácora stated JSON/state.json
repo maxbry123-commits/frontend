@@ -1,10 +1,10 @@
 {
-  "v": 2,
+  "v": 3,
   "tab": "B",
   "mode": "ask",
   "proyecto": "UI YAIWES interface beta",
-  "updated": "2026-09-08T22:45:00-05:00",
-  "fase": "P0-CONTRATO-LOOP",
+  "updated": "2026-09-09T00:10:00-05:00",
+  "fase": "P0-BIBLIOTECA-FROMTED",
   "parte_actual": null,
   "ok_ids": [],
   "pending_next": "CICLO RUN-01",
@@ -20,7 +20,7 @@
   "st": {},
   "pct": {},
   "notes": {
-    "00": "contrato+loop+schema en GitHub. biblioteca NO tiene todo el sandbox.",
+    "00": "OK biblioteca: 02-fromted zips empujado. Siguiente CICLO RUN-01.",
     "20": "hot path wordflow: no reescribir runner. fuera de este lote UI."
   },
   "extra": [],

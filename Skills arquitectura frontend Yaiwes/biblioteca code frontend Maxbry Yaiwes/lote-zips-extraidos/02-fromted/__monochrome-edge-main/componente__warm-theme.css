@@ -1,0 +1,147 @@
+/* FROMTED tokens: matte #0a0a0d | little #2563eb | blanco #ffffff | naranja #ff5500 solo Cargar/Descargar */
+/*
+ * Warm UI Components Tokens
+ * Theme: Warm Monochrome Edge for Content Management
+ * Perfect for: Blog publishing, content creation, documentation
+ */
+
+/* Warm theme variables - Applied when [data-theme-variant="warm"] */
+[data-theme-variant="warm"] {
+    /* === Generic Tokens (Unchanged) === */
+    --font-family-sans:
+        "Pretendard", "Noto Sans KR", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-family-mono:
+        "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    --font-size-h1: 28px;
+    --font-weight-h1: 700;
+    --font-size-body: 16px;
+    --font-weight-body: 400;
+    --font-size-caption: 14px;
+    --border-radius: 8px;
+    --transition-speed: 0.2s ease-in-out;
+
+    /* === Derived / compatibility tokens ===
+       Aliases consumed across components (editor, math, callouts, blog) that
+       previously resolved to `initial` and silently broke styling. */
+    --border-radius-sm: calc(var(--border-radius) * 0.5);
+    --border-radius-lg: calc(var(--border-radius) * 1.5);
+    --font-size-base: var(--font-size-body);
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --color-text: var(--theme-text-primary);
+    --theme-text-muted: var(--theme-text-tertiary);
+    --theme-success: var(--color-success);
+    --theme-info: var(--color-info);
+    --theme-warning: var(--color-warning);
+    --theme-error: var(--color-error);
+    --theme-accent-alpha: color-mix(in srgb, var(--theme-accent) 12%, transparent);
+    --theme-info-alpha: color-mix(in srgb, var(--color-info) 14%, transparent);
+    --theme-success-alpha: color-mix(in srgb, var(--color-success) 14%, transparent);
+    --theme-warning-alpha: color-mix(in srgb, var(--color-warning) 14%, transparent);
+    --theme-error-alpha: color-mix(in srgb, var(--color-error) 14%, transparent);
+    --color-error-alpha: var(--theme-error-alpha);
+
+    /* Map the generic --color-* vocabulary used by some component/editor
+       stylesheets onto the canonical theme palette (no new colours). */
+    --color-surface: var(--theme-surface);
+    --color-surface-hover: color-mix(in srgb, var(--theme-surface) 92%, var(--theme-text-primary));
+    --color-background: var(--theme-background);
+    --color-border: var(--theme-border);
+    --color-primary: var(--theme-accent);
+    --color-primary-contrast: var(--theme-accent-contrast);
+    --color-primary-alpha: var(--theme-accent-alpha);
+    --color-text-secondary: var(--theme-text-secondary);
+    --theme-accent-light: color-mix(in srgb, var(--theme-accent) 45%, var(--theme-surface));
+    --theme-accent-rgb: 138, 135, 132;
+
+    /* === Warm gray Color Scale === */
+    --warm-100: #ffffff;
+    --warm-200: #ffffff;
+    --warm-300: #ffffff;
+    --warm-400: #ffffff;
+    --warm-500: #a1a1aa;
+    --warm-600: #a1a1aa;
+    --warm-700: #141417;
+    --warm-800: #141417;
+    --warm-900: #141417;
+
+    /* Accent colors */
+    --color-wine: #2563eb;
+    --color-olive: #a1a1aa;
+
+    /* === Light Mode === */
+    --theme-bg: #ffffff;
+    --theme-background: #ffffff;
+    --theme-text-primary: #141417;
+    --theme-text-secondary: #a1a1aa;
+    /* Tertiary: de-emphasised hint/icon text (UI ≥3:1). */
+    --theme-text-tertiary: #a1a1aa;
+    --theme-text-emphasis: var(--warm-600);
+    --theme-accent: #a1a1aa;
+    --theme-accent-contrast: #ffffff;
+    --theme-secondary: #a1a1aa;
+    --theme-secondary-contrast: #ffffff;
+    --theme-border: #ffffff;
+    --theme-surface: #ffffff;
+    --theme-highlight: #a1a1aa;
+
+    /* === Semantic status colors === */
+    --color-success: #2563eb;
+    --color-warning: #2563eb;
+    --color-error: #2563eb;
+    --color-info: #2563eb;
+
+    /* Shadow tokens */
+    --theme-shadow-color: rgba(20,20,23,0.12);
+    --theme-shadow-sm: 0 1px 3px var(--theme-shadow-color);
+    --theme-shadow-md: 0 4px 12px var(--theme-shadow-color);
+    --theme-shadow-lg: 0 8px 24px var(--theme-shadow-color);
+    --theme-shadow-xl: 0 10px 40px var(--theme-shadow-color);
+
+    /* Landscape colored mode - Warm Light */
+    --landscape-wave-color: #2563eb;
+    --landscape-mountain-color: #a1a1aa;
+    --landscape-forest-color: #2563eb;
+    --landscape-desert-color: #2563eb;
+}
+
+[data-theme-variant="warm"][data-theme="dark"] {
+    /* === Dark Mode === */
+    --theme-bg: #141417;
+    --theme-background: #141417;
+    --theme-text-primary: rgba(255,255,255,0.92);
+    --theme-text-secondary: #a1a1aa;
+    --theme-text-tertiary: #a1a1aa;
+    --theme-text-emphasis: var(--warm-400);
+    --theme-accent: #141417;
+    --theme-accent-rgb: 74, 72, 70;
+    --theme-accent-contrast: rgba(255,255,255,0.92);
+    --theme-secondary: #a1a1aa;
+    --theme-secondary-contrast: rgba(255,255,255,0.92);
+    --theme-border: #141417;
+    --theme-surface: #141417;
+    --theme-highlight: #a1a1aa;
+
+    /* === Semantic status colors (dark) === */
+    --color-success: #2563eb;
+    --color-warning: #2563eb;
+    --color-error: #2563eb;
+    --color-info: #2563eb;
+
+    /* Shadow tokens (dark mode) */
+    --theme-shadow-color: rgba(10,10,13,0.35);
+    --theme-shadow-sm: 0 1px 3px var(--theme-shadow-color);
+    --theme-shadow-md: 0 4px 12px var(--theme-shadow-color);
+    --theme-shadow-lg: 0 8px 24px var(--theme-shadow-color);
+    --theme-shadow-xl: 0 10px 40px var(--theme-shadow-color);
+
+    /* Landscape colored mode - Warm Dark */
+    --landscape-wave-color: #2563eb;
+    --landscape-mountain-color: #a1a1aa;
+    --landscape-forest-color: #2563eb;
+    --landscape-desert-color: #2563eb;
+}

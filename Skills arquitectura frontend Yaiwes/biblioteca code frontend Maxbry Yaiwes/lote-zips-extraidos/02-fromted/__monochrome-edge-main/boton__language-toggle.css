@@ -1,0 +1,182 @@
+/* FROMTED tokens: matte #0a0a0d | little #2563eb | blanco #ffffff | naranja #ff5500 solo Cargar/Descargar */
+/*
+ * Language Toggle Component - Text Version
+ * Diagonal flip animation: Lang1 ↖ / ↘ Lang2
+ * Two-language text toggle with diagonal slash separator
+ */
+
+/* ========================================
+   BASE COMPONENT
+   ======================================== */
+
+.language-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 44px;
+    padding: 0;
+    background: var(--theme-surface);
+    border: 1px solid var(--theme-border);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition:
+        background 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+        border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.language-toggle:hover {
+    background-color: var(--theme-bg);
+    border-color: var(--theme-text-secondary);
+}
+
+.language-toggle:active {
+    transform: scale(0.95);
+}
+
+/* ========================================
+   TEXT CONTAINER
+   ======================================== */
+
+/* Container for diagonal layout */
+.language-toggle-text {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--theme-text-secondary);
+}
+
+.language-toggle:hover .language-toggle-text {
+    color: var(--theme-text-primary);
+}
+
+/* ========================================
+   LANGUAGE TEXT POSITIONS
+   ======================================== */
+
+/* First language - top-left */
+.lang-first {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Second language - bottom-right */
+.lang-second {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Diagonal slash separator (top-right to bottom-left: \ direction) */
+.lang-slash {
+    position: absolute;
+    width: 1px;
+    height: 32px;
+    background: currentColor;
+    opacity: 0.3;
+    transform: rotate(45deg);
+    transform-origin: center;
+}
+
+/* ========================================
+   TOGGLE STATES
+   ======================================== */
+
+/* Default state (not toggled) */
+.language-toggle[data-toggled="false"] .lang-first {
+    top: 6px;
+    left: 6px;
+    opacity: 1;
+}
+
+.language-toggle[data-toggled="false"] .lang-second {
+    bottom: 6px;
+    right: 6px;
+    opacity: 1;
+}
+
+/* Toggled state - positions swap */
+.language-toggle[data-toggled="true"] .lang-first {
+    top: auto;
+    bottom: 6px;
+    left: auto;
+    right: 6px;
+    opacity: 1;
+}
+
+.language-toggle[data-toggled="true"] .lang-second {
+    bottom: auto;
+    top: 6px;
+    right: auto;
+    left: 6px;
+    opacity: 1;
+}
+
+/* Animation state - fade during transition */
+.language-toggle.is-animating .lang-first,
+.language-toggle.is-animating .lang-second {
+    opacity: 0.4;
+}
+
+/* ========================================
+   SIZE VARIANTS
+   ======================================== */
+
+.language-toggle-sm {
+    width: 40px;
+    height: 36px;
+}
+
+.language-toggle-sm .language-toggle-text {
+    font-size: 0.5rem;
+}
+
+.language-toggle-sm .lang-slash {
+    height: 24px;
+}
+
+.language-toggle-lg {
+    width: 60px;
+    height: 52px;
+}
+
+.language-toggle-lg .language-toggle-text {
+    font-size: 0.75rem;
+}
+
+.language-toggle-lg .lang-slash {
+    height: 40px;
+}
+
+/* ========================================
+   THEME VARIANTS
+   ======================================== */
+
+[data-theme="dark"] .language-toggle {
+    background-color: var(--theme-surface);
+    border-color: var(--theme-border);
+}
+
+[data-theme="dark"] .language-toggle:hover {
+    background-color: var(--theme-bg);
+}
+
+[data-theme-variant="cold"] .language-toggle {
+    background-color: var(--theme-surface);
+}
+
+[data-theme-variant="cold"] .language-toggle:hover {
+    background-color: rgba(10,10,13,0.02);
+}

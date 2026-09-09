@@ -1,0 +1,17 @@
+/* FROMTED tokens: matte #0a0a0d | little #2563eb | blanco #ffffff | naranja #ff5500 solo Cargar/Descargar */
+.tgph-icon {
+  display: inline-block;
+}
+
+.tgph-icon[data-tgph-icon-animation="spin"] {
+  animation: tgph-icon-spin 1s infinite linear;
+}
+
+@keyframes tgph-icon-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

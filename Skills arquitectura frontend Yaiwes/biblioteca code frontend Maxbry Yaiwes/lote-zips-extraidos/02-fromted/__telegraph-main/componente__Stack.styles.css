@@ -1,0 +1,16 @@
+/* FROMTED tokens: matte #0a0a0d | little #2563eb | blanco #ffffff | naranja #ff5500 solo Cargar/Descargar */
+.tgph-stack {
+  --display: flex;
+  --direction: row;
+  --wrap: nowrap;
+  --justify: flex-start;
+  --align: stretch;
+  --gap: 0;
+
+  display: var(--display);
+  flex-direction: var(--direction);
+  flex-wrap: var(--wrap);
+  justify-content: var(--justify);
+  align-items: var(--align);
+  gap: var(--gap);
+}

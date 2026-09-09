@@ -1,0 +1,9 @@
+/* FROMTED — ley de color biblioteca 02-fromted */
+:root {
+  --fromted-matte: #0a0a0d;
+  --fromted-surf: #141417;
+  --fromted-little: #2563eb;
+  --fromted-blanco: #ffffff;
+  --fromted-muted: #a1a1aa;
+  --fromted-naranja: #ff5500; /* solo Cargar / Descargar */
+}

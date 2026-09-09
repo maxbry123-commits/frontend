@@ -1,0 +1,66 @@
+/* FROMTED tokens: matte #0a0a0d | little #2563eb | blanco #ffffff | naranja #ff5500 solo Cargar/Descargar */
+/* Styles for basic form elements like input fields */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-family: var(--font-family-sans);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--theme-text-primary);
+    cursor: pointer;
+}
+
+.form-input {
+    font-family: var(--font-family-sans);
+    font-size: 15px;
+    padding: 10px 12px;
+    background-color: var(--theme-surface);
+    border: 1px solid var(--theme-border);
+    border-radius: var(--border-radius);
+    color: var(--theme-text-primary);
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--theme-highlight);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-highlight) 20%, transparent);
+}
+
+.form-description {
+    font-size: 13px;
+    color: var(--theme-text-secondary);
+}
+
+/* --- States --- */
+
+/* Error State */
+.form-input.is-error {
+    border-color: var(--color-error);
+}
+
+.form-input.is-error:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-error) 20%, transparent);
+}
+
+.form-error-text {
+    font-size: 13px;
+    color: var(--color-error);
+    margin-top: 2px;
+}
+
+/* Disabled State */
+.form-input:disabled {
+    background-color: var(--theme-border);
+    cursor: not-allowed;
+    opacity: 0.7;
+}

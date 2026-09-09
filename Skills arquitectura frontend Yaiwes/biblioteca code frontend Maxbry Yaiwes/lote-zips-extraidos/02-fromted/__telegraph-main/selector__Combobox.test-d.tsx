@@ -1,0 +1,569 @@
+/* FROMTED palette pass — logic unchanged */
+import { describe, expectTypeOf, it } from "vitest";
+
+import { Combobox } from ".";
+import type {
+  ComboboxContentProps,
+  ComboboxCreateProps,
+  ComboboxEmptyProps,
+  ComboboxHighlightDetails,
+  ComboboxHighlightReason,
+  ComboboxInputProps,
+  ComboboxOptionProps,
+  ComboboxOptionsProps,
+  ComboboxPageButtonProps,
+  ComboboxPageProps,
+  ComboboxPageSelectorProps,
+  ComboboxRootProps,
+  ComboboxSearchProps,
+  ComboboxTriggerProps,
+} from ".";
+
+describe("Combobox types", () => {
+  it("has no catch-all index signature", () => {
+    expectTypeOf<ComboboxRootProps<string>>().not.toHaveProperty(
+      "notARealProp",
+    );
+    expectTypeOf<ComboboxTriggerProps<string>>().not.toHaveProperty(
+      "notARealProp",
+    );
+    expectTypeOf<ComboboxContentProps>().not.toHaveProperty("notARealProp");
+    expectTypeOf<ComboboxOptionsProps>().not.toHaveProperty("notARealProp");
+    expectTypeOf<ComboboxOptionProps>().not.toHaveProperty("notARealProp");
+    expectTypeOf<ComboboxSearchProps>().not.toHaveProperty("notARealProp");
+    expectTypeOf<ComboboxEmptyProps>().not.toHaveProperty("notARealProp");
+    expectTypeOf<ComboboxCreateProps>().not.toHaveProperty("notARealProp");
+  });
+
+  it("keeps autocomplete behavior separate from consumer mode props", () => {
+    type ConsumerProps = ComboboxRootProps<string> & {
+      mode: "compose" | "preview";
+    };
+
+    expectTypeOf<ComboboxRootProps<string>>().not.toHaveProperty("mode");
+    expectTypeOf<ComboboxRootProps<string>>().not.toHaveProperty(
+      "autoComplete",
+    );
+    expectTypeOf<ComboboxRootProps<string>["autocompleteMode"]>().toEqualTypeOf<
+      "list" | "inline" | "both" | "none" | undefined
+    >();
+    expectTypeOf<ConsumerProps["mode"]>().toEqualTypeOf<
+      "compose" | "preview"
+    >();
+  });
+
+  it("links explicit selection modes to their value contracts", () => {
+    <Combobox.Root
+      selectionMode="single"
+      onValueChange={(value) =>
+        expectTypeOf(value).toEqualTypeOf<string | undefined>()
+      }
+    />;
+    <Combobox.Root
+      selectionMode="multiple"
+      onValueChange={(value) =>
+        expectTypeOf(value).toEqualTypeOf<Array<string>>()
+      }
+    />;
+    <Combobox.Root
+      selectionMode="none"
+      inputValue="draft"
+      onInputValueChange={(value) =>
+        expectTypeOf(value).toEqualTypeOf<string>()
+      }
+    />;
+
+    // @ts-expect-error single mode does not accept array values
+    <Combobox.Root selectionMode="single" value={["a"]} />;
+    // @ts-expect-error multiple mode does not accept string values
+    <Combobox.Root selectionMode="multiple" value="a" />;
+    // @ts-expect-error free-text mode has no selected value
+    <Combobox.Root selectionMode="none" value="a" />;
+    // @ts-expect-error free-text mode has no selection callback
+    <Combobox.Root selectionMode="none" onValueChange={() => {}} />;
+  });
+
+  it("accepts multiple JSX children for concrete and generic values", () => {
+    <Combobox.Root>
+      <Combobox.Trigger />
+      <Combobox.Content />
+    </Combobox.Root>;
+
+    const GenericRoot = <V extends string | Array<string>>() => (
+      <Combobox.Root<V>>
+        <Combobox.Trigger<V> />
+        <Combobox.Content />
+      </Combobox.Root>
+    );
+
+    expectTypeOf(GenericRoot).toBeFunction();
+  });
+
+  it("types Combobox.Input (anchor input)", () => {
+    // No catch-all passthrough.
+    expectTypeOf<ComboboxInputProps>().not.toHaveProperty("notARealProp");
+    // The engine owns the input text, so these are intentionally omitted from
+    // the public props (drive them via Combobox.Root's inputValue/value).
+    expectTypeOf<ComboboxInputProps>().not.toHaveProperty("value");
+    expectTypeOf<ComboboxInputProps>().not.toHaveProperty("onChange");
+    expectTypeOf<ComboboxInputProps>().not.toHaveProperty("defaultValue");
+    // A rendered anchor input takes native attributes.
+    <Combobox.Input aria-label="Search" />;
+  });
+
+  it("types the segmented-page parts", () => {
+    // No catch-all passthrough on any page part.
+    expectTypeOf<ComboboxPageProps>().not.toHaveProperty("notARealProp");
+    expectTypeOf<ComboboxPageButtonProps>().not.toHaveProperty("notARealProp");
+    expectTypeOf<ComboboxPageSelectorProps>().not.toHaveProperty(
+      "notARealProp",
+    );
+    // Declared props stay narrow.
+    expectTypeOf<ComboboxPageProps["value"]>().not.toBeAny();
+    expectTypeOf<ComboboxPageButtonProps["value"]>().not.toBeAny();
+    expectTypeOf<ComboboxPageSelectorProps["aria-label"]>().not.toBeAny();
+    // PageSelector drives page state through the engine, so onValueChange/value
+    // are omitted; aria-label is required.
+    expectTypeOf<ComboboxPageSelectorProps>().not.toHaveProperty(
+      "onValueChange",
+    );
+    <Combobox.PageSelector aria-label="Pages">
+      <Combobox.PageButton value="a">A</Combobox.PageButton>
+    </Combobox.PageSelector>;
+    <Combobox.Page value="a">
+      <Combobox.Option value="x">X</Combobox.Option>
+    </Combobox.Page>;
+  });
+
+  it("keeps declared props narrow", () => {
+    expectTypeOf<ComboboxRootProps<string>["value"]>().not.toBeAny();
+    expectTypeOf<ComboboxRootProps<string>["onValueChange"]>().not.toBeAny();
+    expectTypeOf<
+      ComboboxRootProps<string>["onItemHighlighted"]
+    >().not.toBeAny();
+    expectTypeOf<ComboboxRootProps<string>["placeholder"]>().not.toBeAny();
+    expectTypeOf<ComboboxRootProps<string>["clearable"]>().not.toBeAny();
+    expectTypeOf<ComboboxRootProps<string>["disabled"]>().not.toBeAny();
+    expectTypeOf<ComboboxRootProps<string>["closeOnSelect"]>().not.toBeAny();
+    expectTypeOf<ComboboxRootProps<string>["errored"]>().not.toBeAny();
+    expectTypeOf<ComboboxRootProps<string>["modal"]>().not.toBeAny();
+    expectTypeOf<
+      ComboboxRootProps<string>["defaultScrollToValue"]
+    >().not.toBeAny();
+    expectTypeOf<ComboboxRootProps<Array<string>>["layout"]>().not.toBeAny();
+
+    expectTypeOf<ComboboxTriggerProps<string>["placeholder"]>().not.toBeAny();
+
+    expectTypeOf<ComboboxOptionProps["value"]>().not.toBeAny();
+    expectTypeOf<ComboboxOptionProps["label"]>().not.toBeAny();
+    expectTypeOf<ComboboxOptionProps["selected"]>().not.toBeAny();
+    expectTypeOf<ComboboxOptionProps["fontWeight"]>().not.toBeAny();
+    expectTypeOf<ComboboxOptionProps["closeOnClick"]>().not.toBeAny();
+    // Guard the callback PARAM, not just the function: closed-polymorphic typing
+    // must keep it from widening to `any` (the KNO-14309 failure mode).
+    expectTypeOf<
+      Parameters<NonNullable<ComboboxOptionProps["onSelect"]>>[0]
+    >().toEqualTypeOf<Event>();
+
+    expectTypeOf<ComboboxSearchProps["label"]>().not.toBeAny();
+
+    expectTypeOf<ComboboxEmptyProps["icon"]>().not.toBeAny();
+    expectTypeOf<ComboboxEmptyProps["message"]>().not.toBeAny();
+
+    expectTypeOf<ComboboxCreateProps["leadingText"]>().not.toBeAny();
+    expectTypeOf<ComboboxCreateProps["values"]>().not.toBeAny();
+    expectTypeOf<ComboboxCreateProps["onCreate"]>().not.toBeAny();
+    expectTypeOf<
+      ComboboxHighlightDetails["reason"]
+    >().toEqualTypeOf<ComboboxHighlightReason>();
+    expectTypeOf<
+      Parameters<NonNullable<ComboboxCreateProps["onCreate"]>>[0]
+    >().toEqualTypeOf<string>();
+  });
+
+  it("reports undefined when a single selection is cleared", () => {
+    expectTypeOf<ComboboxRootProps<string>["onValueChange"]>().toEqualTypeOf<
+      ((value: string | undefined) => void) | undefined
+    >();
+    expectTypeOf<
+      ComboboxRootProps<Array<string>>["onValueChange"]
+    >().toEqualTypeOf<((value: Array<string>) => void) | undefined>();
+
+    <Combobox.Root<string>
+      value="a"
+      onValueChange={(value) =>
+        expectTypeOf(value).toEqualTypeOf<string | undefined>()
+      }
+    />;
+    <Combobox.Root
+      value={["a"]}
+      onValueChange={(value) =>
+        expectTypeOf(value).toEqualTypeOf<Array<string>>()
+      }
+    />;
+  });
+
+  it("rejects unknown props", () => {
+    <Combobox.Root
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Root
+      // @ts-expect-error unknown prop
+      fontSize={16}
+    />;
+    <Combobox.Trigger
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Trigger
+      // @ts-expect-error unknown prop
+      fontSize={16}
+    />;
+    <Combobox.Content
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Content
+      // @ts-expect-error unknown prop
+      fontSize={16}
+    />;
+    <Combobox.Options
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Options
+      // @ts-expect-error unknown prop
+      fontSize={16}
+    />;
+    <Combobox.Option
+      value="a"
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Option
+      value="a"
+      // @ts-expect-error unknown prop
+      fontSize={16}
+    />;
+    <Combobox.Search
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Search
+      // @ts-expect-error unknown prop
+      fontSize={16}
+    />;
+    <Combobox.Empty
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Empty
+      // @ts-expect-error unknown prop
+      fontSize={16}
+    />;
+    <Combobox.Create
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Create
+      // @ts-expect-error unknown prop
+      fontSize={16}
+    />;
+  });
+
+  it("rejects unknown props on trigger primitives", () => {
+    <Combobox.Primitives.TriggerIndicator
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Primitives.TriggerClear
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Primitives.TriggerText
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Primitives.TriggerPlaceholder
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Primitives.TriggerTagsContainer
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Primitives.TriggerActionsContainer
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Primitives.TriggerValue
+      // @ts-expect-error TriggerValue takes no props
+      notARealProp="x"
+    />;
+    <Combobox.Primitives.TriggerTag.Root
+      value="a"
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Primitives.TriggerTag.Text
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Primitives.TriggerTag.Button
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+    <Combobox.Primitives.TriggerTag.Default
+      value="a"
+      // @ts-expect-error unknown prop
+      notARealProp="x"
+    />;
+  });
+
+  it("rejects `as` on animated trigger primitives", () => {
+    // KNO-14501.
+    <Combobox.Primitives.TriggerIndicator
+      // @ts-expect-error as is not a TriggerIndicator prop
+      as="section"
+    />;
+    // The body discards `alt`, so the type must not promise it.
+    <Combobox.Primitives.TriggerIndicator
+      // @ts-expect-error alt is not a TriggerIndicator prop
+      alt="Open"
+    />;
+    <Combobox.Primitives.TriggerTag.Root
+      value="a"
+      // @ts-expect-error as is not a TriggerTag.Root prop
+      as="section"
+    />;
+  });
+
+  it("rejects invalid values for declared props", () => {
+    <Combobox.Root
+      // @ts-expect-error modal is a boolean
+      modal="yes"
+    />;
+    <Combobox.Root
+      // @ts-expect-error disabled is a boolean
+      disabled="yes"
+    />;
+    <Combobox.Root
+      value="a"
+      // @ts-expect-error placeholder is a string
+      placeholder={42}
+    />;
+    <Combobox.Root
+      value={["a"]}
+      // @ts-expect-error not a layout value
+      layout="sideways"
+    />;
+    // @ts-expect-error layout only applies to multi-select values
+    <Combobox.Root value="a" layout="wrap" />;
+    <Combobox.Trigger
+      // @ts-expect-error placeholder is a string
+      placeholder={42}
+    />;
+    <Combobox.Trigger
+      // @ts-expect-error disabled is a boolean
+      disabled="yes"
+    />;
+    <Combobox.Content
+      // @ts-expect-error not a spacing token
+      p={12345}
+    />;
+    <Combobox.Content
+      // @ts-expect-error not a popover side
+      side="sideways"
+    />;
+    <Combobox.Options
+      // @ts-expect-error not a spacing token
+      p={12345}
+    />;
+    <Combobox.Options
+      // @ts-expect-error not a flex direction
+      direction="sideways"
+    />;
+    <Combobox.Option
+      value="a"
+      // @ts-expect-error not a spacing token
+      p={12345}
+    />;
+    <Combobox.Option
+      // @ts-expect-error option values are strings
+      value={42}
+    />;
+    <Combobox.Option
+      value="a"
+      // @ts-expect-error selected is boolean | null
+      selected="yes"
+    />;
+    // @ts-expect-error value is required on an option
+    <Combobox.Option />;
+    <Combobox.Search
+      // @ts-expect-error label is a string
+      label={42}
+    />;
+    <Combobox.Empty
+      // @ts-expect-error not a spacing token
+      p={12345}
+    />;
+    <Combobox.Empty
+      // @ts-expect-error message is string | null
+      message={42}
+    />;
+    <Combobox.Empty
+      // @ts-expect-error icon is Icon props | null
+      icon="notAnIcon"
+    />;
+    <Combobox.Create
+      // @ts-expect-error not a spacing token
+      p={12345}
+    />;
+    <Combobox.Create
+      // @ts-expect-error leadingText is a string
+      leadingText={42}
+    />;
+    <Combobox.Create
+      // @ts-expect-error create values are strings
+      values={[1]}
+    />;
+  });
+
+  it("keeps legacy option presentation and close props", () => {
+    <Combobox.Option value="a" fontWeight="semi-bold" closeOnClick>
+      A
+    </Combobox.Option>;
+  });
+
+  it("rejects the removed legacy value contracts", () => {
+    <Combobox.Root
+      // @ts-expect-error legacyBehavior was removed
+      legacyBehavior
+    />;
+    <Combobox.Root
+      // @ts-expect-error single-select values are strings, not option objects
+      value={{ value: "a", label: "A" }}
+    />;
+    <Combobox.Root
+      value="a"
+      // @ts-expect-error single-select callbacks receive strings
+      onValueChange={(_value: { value: string; label?: string }) => {}}
+    />;
+    <Combobox.Root
+      // @ts-expect-error multi-select values are string arrays
+      value={[{ value: "a", label: "A" }]}
+    />;
+    <Combobox.Root
+      value={["a"]}
+      // @ts-expect-error multi-select callbacks receive string arrays
+      onValueChange={(_value: Array<{ value: string; label?: string }>) => {}}
+    />;
+    <Combobox.Create
+      // @ts-expect-error Create values are strings
+      values={[{ value: "a", label: "A" }]}
+    />;
+    <Combobox.Create
+      // @ts-expect-error Create callbacks receive strings
+      onCreate={(_value: { value: string; label?: string }) => {}}
+    />;
+
+    // @ts-expect-error ComboboxRootProps no longer accepts a legacy-mode generic
+    expectTypeOf<ComboboxRootProps<string, true>>();
+  });
+
+  it("accepts valid props", () => {
+    <Combobox.Root
+      value="a"
+      defaultValue="b"
+      onValueChange={(value) => value?.toUpperCase()}
+      open
+      defaultOpen={false}
+      onOpenChange={() => {}}
+      onItemHighlighted={(value, details) => {
+        expectTypeOf(value).toEqualTypeOf<string | undefined>();
+        expectTypeOf(details).toEqualTypeOf<ComboboxHighlightDetails>();
+      }}
+      errored
+      placeholder="Pick one"
+      modal
+      closeOnSelect
+      clearable
+      disabled
+      defaultScrollToValue="a"
+    >
+      <Combobox.Trigger placeholder="Pick one" disabled id="trigger" />
+      <Combobox.Content p="2" className="c" style={{ opacity: 1 }}>
+        <Combobox.Search
+          label="Search"
+          placeholder="Search"
+          variant="ghost"
+          size="2"
+          value=""
+          defaultValue="initial"
+          onValueChange={() => {}}
+          className="c"
+          style={{ opacity: 1 }}
+          id="search"
+        />
+        <Combobox.Options direction="column" gap="1" p="2" maxHeight="64">
+          <Combobox.Option value="a" label="A" selected p="2" />
+          <Combobox.Option value="b" selected={null} onSelect={() => {}} />
+          <Combobox.Option value="c" as="button" aria-label="c" />
+        </Combobox.Options>
+        <Combobox.Empty message="No results" icon={null} p="2" />
+        <Combobox.Create
+          leadingText="Create"
+          values={["a"]}
+          onCreate={(value) => value.toUpperCase()}
+        />
+      </Combobox.Content>
+    </Combobox.Root>;
+
+    <Combobox.Root value={["a"]} layout="wrap" />;
+
+    <Combobox.Trigger size="1" variant="outline" p="2" />;
+    <Combobox.Trigger className="c" style={{ opacity: 1 }} color="gray" />;
+    <Combobox.Trigger aria-label="trigger" data-testid="trigger" />;
+    <Combobox.Trigger>
+      {({ value }) => <span>{String(value)}</span>}
+    </Combobox.Trigger>;
+    <Combobox.Content data-testid="content" aria-label="content" as="div" />;
+    <Combobox.Options className="c" as="div" aria-label="options" id="opts" />;
+    <Combobox.Option
+      value="a"
+      className="c"
+      data-testid="option"
+      id="option"
+    />;
+    <Combobox.Search aria-label="search" data-testid="search" />;
+    <Combobox.Empty
+      message={null}
+      className="c"
+      as="div"
+      data-testid="empty"
+    />;
+    <Combobox.Create className="c" p="2" aria-label="create" />;
+
+    <Combobox.Primitives.TriggerIndicator />;
+    <Combobox.Primitives.TriggerClear />;
+    <Combobox.Primitives.TriggerText />;
+    <Combobox.Primitives.TriggerPlaceholder />;
+    <Combobox.Primitives.TriggerTagsContainer />;
+    <Combobox.Primitives.TriggerActionsContainer />;
+    <Combobox.Primitives.TriggerValue />;
+    <Combobox.Primitives.TriggerTag.Root value="a" />;
+    <Combobox.Primitives.TriggerTag.Text />;
+    <Combobox.Primitives.TriggerTag.Button />;
+    <Combobox.Primitives.TriggerTag.Default value="a" />;
+  });
+
+  it("resolves Create at its default element", () => {
+    // Create renders as an option row, so with no `as` it takes `div` native
+    // attributes (`id`) and an explicit `as="a"` switches to anchor attributes.
+    // `type` can't discriminate the default here — Create accepts Button.Root
+    // props (incl. `type`) through its option-row base regardless of element.
+    <Combobox.Create id="create-row" />;
+    <Combobox.Create as="a" href="/new" />;
+  });
+});

@@ -9,7 +9,7 @@ Fuente sandbox: `artifacts/AUDITORIA-ZIPS/`
 |--|--|
 | Archivos | **1206** |
 | Peso | **6.11 MB** |
-| `02-fromted` | vacío (espera CICLO + OK) |
+| `02-fromted` | **FROMTED listo** (OK director 2026-09-09) |
 
 ## Clasificación (nombres `tipo__archivo`)
 
@@ -54,3 +54,13 @@ Fuente sandbox: `artifacts/AUDITORIA-ZIPS/`
 ## Contrato
 
 1 ventana = 1 salida. Primer ciclo: `CICLO RUN-01`.
+
+
+## 02-fromted (2026-09-09)
+
+OK del director: mandar FROMTED biblioteca primero.
+
+- Paleta: Matte `#0a0a0d` · Little `#2563eb` · Blanco `#ffffff` · naranja `#ff5500` solo Cargar/Descargar
+- 1206 archivos copiados + `00-FROMTED-TOKENS.css` + README
+- ~2534 hex/rgb sustituidos. Lógica no reescrita.
+- Carpeta: `lote-zips-extraidos/02-fromted/`

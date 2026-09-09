@@ -1,0 +1,20 @@
+/* FROMTED tokens: matte #0a0a0d | little #2563eb | blanco #ffffff | naranja #ff5500 solo Cargar/Descargar */
+.dropdown-link {
+  padding: 5px 30px 5px 12px;
+  border: 1px solid rgba(10,10,13,0.2);
+  display: inline-block;
+  cursor: pointer
+}
+
+.dropdown-link:hover {
+  background-color: #ffffff;
+}
+
+ul.dropdown-menu li.current {
+  background-color: #ffffff;
+}
+
+ul.menu.dropdown-menu {
+  position: absolute;
+  margin-top: -1px;
+}

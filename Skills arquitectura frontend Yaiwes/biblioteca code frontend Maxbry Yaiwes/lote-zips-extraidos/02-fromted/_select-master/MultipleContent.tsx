@@ -1,0 +1,224 @@
+/* FROMTED palette pass — logic unchanged */
+import * as React from 'react';
+import { clsx } from 'clsx';
+import Overflow from '@rc-component/overflow';
+import Input from '../Input';
+import { useSelectInputContext } from '../context';
+import type { SharedContentProps } from '.';
+import type { DisplayValueType, RawValueType } from '../../interface';
+import type { RenderNode, CustomTagProps } from '../../BaseSelect';
+import TransBtn from '../../TransBtn';
+import { getTitle } from '../../utils/commonUtil';
+import useBaseProps from '../../hooks/useBaseProps';
+import Placeholder from './Placeholder';
+
+function itemKey(value: DisplayValueType) {
+  return value.key ?? value.value;
+}
+
+const onPreventMouseDown = (event: React.MouseEvent) => {
+  event.preventDefault();
+  event.stopPropagation();
+};
+
+export default React.forwardRef<HTMLInputElement, SharedContentProps>(function MultipleContent(
+  { inputProps },
+  ref,
+) {
+  const {
+    prefixCls,
+    displayValues,
+    searchValue,
+    mode,
+    onSelectorRemove,
+    removeIcon: removeIconFromContext,
+  } = useSelectInputContext();
+  const {
+    disabled,
+    showSearch,
+    triggerOpen,
+    rawOpen,
+    toggleOpen,
+    autoClearSearchValue,
+    tagRender: tagRenderFromContext,
+    maxTagPlaceholder: maxTagPlaceholderFromContext,
+    maxTagTextLength,
+    maxTagCount,
+    classNames,
+    styles,
+  } = useBaseProps();
+
+  const selectionItemPrefixCls = `${prefixCls}-selection-item`;
+
+  // ===================== Search ======================
+  // Apply autoClearSearchValue logic: when dropdown is closed and autoClearSearchValue is not false (default true), clear search value
+  // Use rawOpen to avoid clearing search when emptyListContent blocks open
+  let computedSearchValue = searchValue;
+  if (!rawOpen && mode === 'multiple' && autoClearSearchValue !== false) {
+    computedSearchValue = '';
+  }
+
+  const inputValue = showSearch ? computedSearchValue || '' : '';
+  const inputEditable: boolean = showSearch && !disabled;
+
+  // Props from context with safe defaults
+  const removeIcon: RenderNode = removeIconFromContext ?? '×';
+  const maxTagPlaceholder:
+    | React.ReactNode
+    | ((omittedValues: DisplayValueType[]) => React.ReactNode) =
+    maxTagPlaceholderFromContext ??
+    ((omittedValues: DisplayValueType[]) => `+ ${omittedValues.length} ...`);
+  const tagRender: ((props: CustomTagProps) => React.ReactElement) | undefined =
+    tagRenderFromContext;
+
+  const onToggleOpen = (newOpen?: boolean) => {
+    toggleOpen(newOpen);
+  };
+
+  const onRemove = (value: DisplayValueType) => {
+    onSelectorRemove?.(value);
+  };
+
+  // ======================== Item ========================
+  // >>> Render Selector Node. Includes Item & Rest
+  const defaultRenderSelector = (
+    item: DisplayValueType,
+    content: React.ReactNode,
+    itemDisabled: boolean,
+    closable?: boolean,
+    onClose?: React.MouseEventHandler,
+  ) => (
+    <span
+      title={getTitle(item)}
+      className={clsx(
+        selectionItemPrefixCls,
+        {
+          [`${selectionItemPrefixCls}-disabled`]: itemDisabled,
+        },
+        classNames?.item,
+      )}
+      style={styles?.item}
+    >
+      <span
+        className={clsx(`${selectionItemPrefixCls}-content`, classNames?.itemContent)}
+        style={styles?.itemContent}
+      >
+        {content}
+      </span>
+      {closable && (
+        <TransBtn
+          className={clsx(`${selectionItemPrefixCls}-remove`, classNames?.itemRemove)}
+          style={styles?.itemRemove}
+          onMouseDown={onPreventMouseDown}
+          onClick={onClose}
+          customizeIcon={removeIcon}
+        >
+          ×
+        </TransBtn>
+      )}
+    </span>
+  );
+
+  const customizeRenderSelector = (
+    value: RawValueType,
+    content: React.ReactNode,
+    itemDisabled: boolean,
+    closable?: boolean,
+    onClose?: React.MouseEventHandler,
+    isMaxTag?: boolean,
+    info?: { index: number },
+  ) => {
+    const onMouseDown = (e: React.MouseEvent) => {
+      onPreventMouseDown(e);
+      onToggleOpen(!triggerOpen);
+    };
+    return (
+      <span onMouseDown={onMouseDown}>
+        {tagRender({
+          label: content,
+          value,
+          index: info?.index,
+          disabled: itemDisabled,
+          closable,
+          onClose,
+          isMaxTag: !!isMaxTag,
+        })}
+      </span>
+    );
+  };
+
+  // ====================== Overflow ======================
+  const renderItem = (valueItem: DisplayValueType, info: { index: number }) => {
+    const { disabled: itemDisabled, label, value } = valueItem;
+    const closable = !disabled && !itemDisabled;
+
+    let displayLabel: React.ReactNode = label;
+
+    if (typeof maxTagTextLength === 'number') {
+      if (typeof label === 'string' || typeof label === 'number') {
+        const strLabel = String(displayLabel);
+        if (strLabel.length > maxTagTextLength) {
+          displayLabel = `${strLabel.slice(0, maxTagTextLength)}...`;
+        }
+      }
+    }
+
+    const onClose = (event?: React.MouseEvent) => {
+      if (event) {
+        event.stopPropagation();
+      }
+      onRemove(valueItem);
+    };
+
+    return typeof tagRender === 'function'
+      ? customizeRenderSelector(
+          value,
+          displayLabel,
+          itemDisabled,
+          closable,
+          onClose,
+          undefined,
+          info,
+        )
+      : defaultRenderSelector(valueItem, displayLabel, itemDisabled, closable, onClose);
+  };
+
+  const renderRest = (omittedValues: DisplayValueType[]) => {
+    // https://github.com/ant-design/ant-design/issues/48930
+    if (!displayValues.length) {
+      return null;
+    }
+    const content =
+      typeof maxTagPlaceholder === 'function'
+        ? maxTagPlaceholder(omittedValues)
+        : maxTagPlaceholder;
+    return typeof tagRender === 'function'
+      ? customizeRenderSelector(undefined, content, false, false, undefined, true)
+      : defaultRenderSelector({ title: content }, content, false);
+  };
+
+  // ======================= Render =======================
+  return (
+    <Overflow
+      prefixCls={`${prefixCls}-content`}
+      className={classNames?.content}
+      style={styles?.content}
+      prefix={!displayValues.length && !inputValue && <Placeholder />}
+      data={displayValues}
+      renderItem={renderItem}
+      renderRest={renderRest}
+      suffix={
+        <Input
+          ref={ref}
+          disabled={disabled}
+          readOnly={!inputEditable}
+          {...inputProps}
+          value={inputValue || ''}
+          syncWidth
+        />
+      }
+      itemKey={itemKey}
+      maxCount={maxTagCount}
+    />
+  );
+});

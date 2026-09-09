@@ -1,0 +1,44 @@
+/* FROMTED palette pass — logic unchanged */
+import {
+  forEach
+} from './util'
+
+export const stringify = function (obj, sep, eq, encodeURIComponent) {
+  if (sep == null) {
+    sep = '&'
+  }
+  if (eq == null) {
+    eq = '='
+  }
+  if (encodeURIComponent == null) {
+    encodeURIComponent = window.encodeURIComponent
+  }
+  const params = []
+  for (const name in obj) {
+    const value = obj[name]
+    if (value != null) {
+      params.push(encodeURIComponent(name) + eq + encodeURIComponent(value))
+    }
+  }
+  return params.join(sep)
+}
+
+export const parse = function (str, sep, eq, decodeURIComponent) {
+  if (sep == null) {
+    sep = '&'
+  }
+  if (eq == null) {
+    eq = '='
+  }
+  if (decodeURIComponent == null) {
+    decodeURIComponent = window.decodeURIComponent
+  }
+  const obj = {}
+  forEach(str.split(sep), function (entry) {
+    if (entry !== '') {
+      const ref = entry.split(eq)
+      obj[decodeURIComponent(ref[0])] = (ref[1] != null ? decodeURIComponent(ref.slice(1).join(eq)) : undefined)
+    }
+  })
+  return obj
+}

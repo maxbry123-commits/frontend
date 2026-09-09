@@ -1,0 +1,18 @@
+/* FROMTED tokens: matte #0a0a0d | little #2563eb | blanco #ffffff | naranja #ff5500 solo Cargar/Descargar */
+/* Override the focus visible state as our buttons already have a focus state */
+[data-tgph-menu-button]:focus-visible {
+  outline: none;
+}
+
+[data-tgph-menu-content]:focus,
+[data-tgph-menu-content]:focus-visible {
+  outline: none;
+}
+
+/* Keep a submenu trigger highlighted while its submenu is open, so it stays
+   clear which parent item the open submenu belongs to. Telegraph re-emits the
+   Radix-era data-state="open" attribute from Base UI state; we reuse the
+   button's own hover background so the highlight matches automatically. */
+[data-tgph-menu-button][data-state="open"] {
+  background-color: var(--hover--background-color, var(--background-color));
+}
