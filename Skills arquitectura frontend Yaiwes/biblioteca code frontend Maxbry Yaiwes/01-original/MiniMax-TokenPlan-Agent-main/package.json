@@ -1,0 +1,104 @@
+{
+  "name": "minimax-tokenplan-agent",
+  "version": "0.1.0",
+  "description": "MiniMax Token Plan Agent - 多模态AI客户端",
+  "author": "MiniMax Team",
+  "private": true,
+  "main": "electron/main.mjs",
+  "bin": {
+    "mmx": "./bin/mmx"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:web": "next build",
+    "start": "next start",
+    "desktop:dev": "concurrently -k \"npm run dev\" \"wait-on http://localhost:3000 && cross-env ELECTRON_DEV=1 electron .\"",
+    "desktop:start": "npm run build:web && electron .",
+    "desktop:dist": "npm run build:web && electron-builder --win --mac --publish never",
+    "desktop:dist:win": "npm run build:web && electron-builder --win nsis portable --publish never",
+    "desktop:dist:mac": "npm run build:web && electron-builder --mac dmg --publish never",
+    "mobile:sync": "npm run build:web && cap sync",
+    "mobile:android": "npm run build:web && cap run android",
+    "mobile:ios": "npm run build:web && cap run ios",
+    "mobile:build:android": "npm run build:web && cap sync android && cd android && gradlew.bat assembleDebug",
+    "mobile:build:ios": "npm run build:web && cap sync ios",
+    "mobile:open:android": "cap open android",
+    "mobile:open:ios": "cap open ios",
+    "cli": "node ./bin/mmx",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.4",
+    "@capacitor/core": "^7.4.4",
+    "@capacitor/ios": "^7.4.4",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-switch": "^1.2.6",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "electron-store": "^11.0.2",
+    "lucide-react": "^1.7.0",
+    "next": "16.2.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "serve-handler": "^6.1.6",
+    "tailwind-merge": "^3.3.1",
+    "uuid": "^13.0.0",
+    "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.4",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/uuid": "^10.0.0",
+    "babel-plugin-react-compiler": "1.0.0",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^37.5.0",
+    "electron-builder": "^26.0.12",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.1",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "wait-on": "^9.0.1"
+  },
+  "build": {
+    "appId": "com.minimax.tokenplan.agent",
+    "productName": "MiniMax Token Plan Agent",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "out/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "artifactName": "${productName}-${version}-setup.${ext}",
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ]
+    }
+  }
+}

@@ -1,0 +1,213 @@
+# Using Kimi-GUI
+
+**One Kimi login. Two ways to work. One focused desktop app.**
+
+[Kimi-GUI](https://github.com/kaminion/Kimi-GUI) is an open-source desktop
+interface for Kimi Code and Kimi Code CLI. It is designed for people who want
+the power of an AI coding agent without spending their day managing terminal
+windows, remembering commands, or guessing what the agent changed.
+
+With Kimi-GUI, you can start with a simple built-in experience and move to the
+full Kimi CLI agent workflow when you need more advanced capabilities. Your
+conversations, project context, agent activity, file changes, and usage stay
+visible in one place.
+
+> Kimi-GUI is an independent community project. It is not an official
+> Moonshot AI product.
+
+![The Kimi-GUI startup wordmark](https://raw.githubusercontent.com/kaminion/Kimi-GUI/main/docs/media/release-0.6.1-kimi-gui-brand.png)
+
+## Start in three steps
+
+1. Open Kimi-GUI and sign in with your Kimi account.
+2. Choose a project directory and an existing Git branch.
+3. Describe the outcome you want and send the prompt.
+
+```text
+Find the cause of the Windows startup failure, fix it, and add a regression test.
+Do not discard any existing local changes.
+```
+
+The built-in engine needs no CLI installation. If the task needs Plan mode,
+sub-agents, Swarm, or the full CLI toolset, connect CLI Agent mode from the
+single guidance dialog.
+
+## Start with one Kimi login
+
+Open the app, select **Log in**, and complete Kimi's verification in your
+browser. The built-in engine is ready without installing or configuring Kimi
+Code CLI.
+
+The same local Kimi credentials can be shared with the CLI, so you do not have
+to maintain a separate account setup when you decide to use CLI Agent mode.
+
+![A simple first-launch screen with one Log in to Kimi button](https://raw.githubusercontent.com/kaminion/Kimi-GUI/main/docs/media/kimi-login.png)
+
+## Choose the experience that fits the task
+
+You do not need the most advanced agent workflow for every job. Kimi-GUI gives
+you a practical choice:
+
+| If you want to… | Choose |
+| --- | --- |
+| Sign in and start quickly, without installing the CLI | **Built-in engine** |
+| Chat, edit files with approvals, and control model and thinking effort | **Built-in engine** |
+| Use the full Kimi CLI toolset and continue CLI sessions | **CLI Agent mode** |
+| Use Plan mode, sub-agents, or Swarm for larger tasks | **CLI Agent mode** |
+
+When the CLI is not installed, the app can guide you through installation.
+When it is available, you can connect it instead. You can also keep the
+built-in engine and switch later from Settings.
+
+The connection dialog explains what becomes available before you switch:
+Swarm and sub-agents, Plan mode, the full CLI toolset, and continuity with
+sessions created by Kimi Code CLI.
+
+![The CLI Agent mode dialog explains the advanced capabilities available after connecting](https://raw.githubusercontent.com/kaminion/Kimi-GUI/main/docs/media/release-0.6.1-cli-capabilities.png)
+
+## Bring your own Agent Skills
+
+Select **Skills** in the main sidebar to manage the repeatable instructions
+Kimi Code can load for a task. Choose **All projects** or **Current project**,
+then add a folder containing `SKILL.md` or a single Markdown Skill.
+
+Use the search field to match names, descriptions, install paths, availability,
+and enabled state. **Refresh installed folders** rescans the Kimi Code and
+shared Agents discovery locations while preserving the current search.
+
+Select **Ask Kimi to add one** when you want Kimi to author the Skill. Kimi-GUI
+opens a new conversation with an editable request template that includes the
+selected destination, expected `SKILL.md` structure, safety conditions, and
+usage documentation.
+
+Each Skill has an explicit enabled state. Disabling a Skill preserves it on
+disk so you can turn it back on later. Removing a Skill sends it to the
+operating system Trash instead of permanently deleting it.
+
+![The Skills manager filtered to matching installed Skills after refreshing its discovery folders](https://raw.githubusercontent.com/kaminion/Kimi-GUI/main/docs/media/release-0.8.4-skills-search.png)
+
+Changes are guaranteed to be picked up by new chats. This makes it practical
+to keep a small library of review checklists, release procedures, or
+project-specific conventions without editing configuration files by hand.
+
+## Find Kimi CLI commands without memorizing them
+
+In CLI Agent mode, type `/` at the start of the prompt. Kimi-GUI searches the
+web-compatible Kimi CLI command catalog plus enabled built-in, user, and
+project Skills.
+
+- Use `↑` and `↓` to move through matches.
+- Press `Tab` or `Enter` to complete the selected command.
+- Press `Esc` to close the list.
+- Keep typing to use prefix, substring, or fuzzy matching.
+
+Completion fills the prompt but does not execute the command, so you can add
+arguments or review it before sending.
+
+![Slash-command autocomplete above the prompt, including an enabled Skill](https://raw.githubusercontent.com/kaminion/Kimi-GUI/main/docs/media/release-0.6.5-slash-autocomplete.png)
+
+## Start in the right project and branch
+
+Before sending the first message, choose the project directory and an existing
+local Git branch. The app remembers your most recent project, which makes
+returning to daily work faster.
+
+This keeps the important context visible before Kimi begins. You are less
+likely to start a task in the wrong folder or discover too late that you were
+working on the wrong branch.
+
+![A new conversation with project and Git branch controls above the prompt](https://raw.githubusercontent.com/kaminion/Kimi-GUI/main/docs/media/release-0.6.0-new-chat.png)
+
+Useful first prompts include:
+
+```text
+Explain the data flow from this UI action to the backend.
+```
+
+```text
+Implement the requested change, run the relevant tests, and summarize every file changed.
+```
+
+## Stay in control while Kimi is working
+
+An agent run does not have to be an all-or-nothing operation. The prompt remains
+available while work is in progress, so you can send an adjustment without
+stopping the entire run.
+
+That is useful when you notice a missing requirement, want Kimi to preserve a
+particular file, or need to narrow the scope before more changes are made. Each
+adjustment appears in the conversation as a visible queued item, giving you a
+chance to edit or delete it before Kimi picks it up. A separate stop control
+remains available when you really do want to end the run.
+
+For example, add a constraint as soon as you notice it:
+
+```text
+Keep the existing public API and include computers where no Kimi server is already running.
+```
+
+![An active conversation with a queued work adjustment that can be edited or deleted](https://raw.githubusercontent.com/kaminion/Kimi-GUI/main/docs/media/release-0.6.1-queued-steer.png)
+
+## Review the result without hunting through the repository
+
+When Kimi edits code or documentation, Kimi-GUI shows change cards directly in
+the conversation. You can see which files changed, inspect added and deleted
+lines, and open the shared **Changes** panel for a focused review.
+
+The same right-side panel also provides agent activity, so you can understand
+both what the agent is doing and what it has changed without stacking multiple
+inspectors.
+
+![The Changes tab showing changed files and a per-file diff beside the conversation](https://raw.githubusercontent.com/kaminion/Kimi-GUI/main/docs/media/release-0.6.0-changes-panel.png)
+
+## A desktop workspace, not just a chat window
+
+Kimi-GUI brings the parts of an everyday coding-agent workflow together:
+
+- Built-in and CLI conversations in one searchable sidebar
+- Per-conversation model and thinking controls
+- Project directory and Git branch selection
+- Live thinking, responses, tool activity, and context usage
+- Approval dialogs for local tools in built-in mode
+- Plan mode, sub-agents, and Swarm in CLI Agent mode
+- Inline file-change cards and a tabbed review panel
+- Daily and rolling usage visibility
+- English and Korean interfaces with dark and light themes
+
+The result is a gentler starting point for new Kimi Code users and a more
+visible, organized workspace for experienced Kimi CLI users.
+
+## Who is it for?
+
+Kimi-GUI is a good fit if:
+
+- You want to try Kimi Code without first learning a CLI workflow.
+- You already use Kimi CLI but want a visual home for sessions and changes.
+- You switch between quick edits and larger multi-agent tasks.
+- You want project, branch, context, usage, and file changes visible while you
+  work.
+- You prefer native desktop controls for folders, approvals, updates, and
+  settings.
+
+## Try Kimi-GUI
+
+Requirements:
+
+- macOS or Windows
+- Node.js 20 or later when running from source
+- A Kimi membership
+
+Run it from source:
+
+```sh
+git clone https://github.com/kaminion/Kimi-GUI.git
+cd Kimi-GUI
+npm install
+npm start
+```
+
+Installers and portable builds are available from
+[GitHub Releases](https://github.com/kaminion/Kimi-GUI/releases).
+
+**Use Kimi Code for a quick desktop conversation. Connect Kimi CLI when the
+task needs the full agent workflow. Keep both experiences in one place.**

@@ -1,0 +1,183 @@
+"""Wrapper around xai_sdk for chat completions with streaming and tool use."""
+
+import asyncio
+import json
+import logging
+import os
+from collections.abc import AsyncIterator
+from dataclasses import dataclass, field
+
+from xai_sdk import Client
+from xai_sdk.chat import user, system, assistant, tool as make_tool, tool_result, text
+from xai_sdk.proto import chat_pb2
+
+from grok_web.config import Config
+
+logger = logging.getLogger(__name__)
+
+SYSTEM_PROMPT_TEMPLATE = """You are a powerful AI coding assistant running in a browser-based development tool called grok-web. You have access to tools that let you interact with the local filesystem and run shell commands.
+
+Current working directory: {cwd}
+
+When the user asks you to perform tasks:
+- Use the available tools to read files, write files, search/replace in files, list directories, and run commands
+- Be thorough and precise in your tool usage
+- Show your work by explaining what you're doing
+- Use absolute paths or paths relative to the current working directory
+
+You can make multiple tool calls in sequence to accomplish complex tasks."""
+
+
+@dataclass
+class ToolCallInfo:
+    id: str
+    name: str
+    arguments: str  # JSON string
+
+
+@dataclass
+class StreamChunk:
+    """A chunk from the LLM stream."""
+    content: str | None = None
+    reasoning_content: str | None = None
+    tool_calls: list[ToolCallInfo] = field(default_factory=list)
+    finish_reason: str | None = None
+
+
+def _build_tool_definitions(tool_schemas: list[dict]) -> list:
+    """Convert our tool schemas into xai_sdk tool objects."""
+    tools = []
+    for schema in tool_schemas:
+        tools.append(make_tool(
+            name=schema["name"],
+            description=schema["description"],
+            parameters=schema["parameters"],
+        ))
+    return tools
+
+
+def _build_messages(history: list[dict], cwd: str) -> list:
+    """Convert stored message dicts back to xai_sdk message objects."""
+    msgs = [system(SYSTEM_PROMPT_TEMPLATE.format(cwd=cwd))]
+    for msg in history:
+        role = msg["role"]
+        if role == "user":
+            msgs.append(user(msg["content"]))
+        elif role == "assistant":
+            if msg.get("tool_calls"):
+                # Build protobuf message directly to include tool_calls
+                tool_calls = []
+                for tc in msg["tool_calls"]:
+                    tool_calls.append(chat_pb2.ToolCall(
+                        id=tc["id"],
+                        type=chat_pb2.ToolCallType.TOOL_CALL_TYPE_CLIENT_SIDE_TOOL,
+                        status=chat_pb2.ToolCallStatus.TOOL_CALL_STATUS_COMPLETED,
+                        function=chat_pb2.FunctionCall(
+                            name=tc["name"],
+                            arguments=tc["arguments"] if isinstance(tc["arguments"], str) else json.dumps(tc["arguments"]),
+                        ),
+                    ))
+                content_parts = [text(msg["content"])] if msg.get("content") else []
+                msgs.append(chat_pb2.Message(
+                    role=chat_pb2.MessageRole.ROLE_ASSISTANT,
+                    content=content_parts,
+                    tool_calls=tool_calls,
+                ))
+            else:
+                msgs.append(assistant(msg.get("content") or ""))
+        elif role == "tool":
+            msgs.append(tool_result(
+                result=msg["content"] or "",
+                tool_call_id=msg.get("tool_use_id", ""),
+            ))
+    return msgs
+
+
+class LLMClient:
+    def __init__(self, config: Config, cwd: str | None = None):
+        self._config = config
+        self._client = Client(api_key=config.api_key)
+        self._cwd = cwd or os.getcwd()
+
+    def close(self):
+        pass
+
+    async def stream_response(
+        self,
+        history: list[dict],
+        tool_schemas: list[dict],
+    ) -> AsyncIterator[StreamChunk]:
+        """Stream a response from the LLM, yielding chunks as they arrive.
+
+        Runs the synchronous SDK stream in a thread to avoid blocking.
+        Uses an asyncio.Queue to bridge sync iteration to async iteration.
+        """
+        queue: asyncio.Queue[StreamChunk | None] = asyncio.Queue()
+
+        def _run_stream():
+            try:
+                messages = _build_messages(history, self._cwd)
+                tools = _build_tool_definitions(tool_schemas) if tool_schemas else None
+
+                kwargs = {
+                    "model": self._config.model,
+                    "messages": messages,
+                }
+                if tools:
+                    kwargs["tools"] = tools
+                    kwargs["tool_choice"] = "auto"
+
+                chat = self._client.chat.create(**kwargs)
+
+                final_response = None
+                for response, chunk in chat.stream():
+                    final_response = response
+                    sc = StreamChunk()
+
+                    if chunk.content:
+                        sc.content = chunk.content
+
+                    if chunk.reasoning_content:
+                        sc.reasoning_content = chunk.reasoning_content
+
+                    if chunk.tool_calls:
+                        for tc in chunk.tool_calls:
+                            sc.tool_calls.append(ToolCallInfo(
+                                id=tc.id,
+                                name=tc.function.name if tc.function else "",
+                                arguments=tc.function.arguments if tc.function else "",
+                            ))
+
+                    queue.put_nowait(sc)
+
+                # Send final chunk with finish reason
+                if final_response:
+                    final_chunk = StreamChunk(finish_reason=final_response.finish_reason)
+                    # Include accumulated tool calls from the full response
+                    if final_response.tool_calls:
+                        for tc in final_response.tool_calls:
+                            final_chunk.tool_calls.append(ToolCallInfo(
+                                id=tc.id,
+                                name=tc.function.name if tc.function else "",
+                                arguments=tc.function.arguments if tc.function else "",
+                            ))
+                    queue.put_nowait(final_chunk)
+
+            except Exception as e:
+                logger.exception("LLM stream error")
+                queue.put_nowait(StreamChunk(finish_reason=f"error: {e}"))
+            finally:
+                queue.put_nowait(None)  # Sentinel
+
+        # Run sync stream in thread
+        loop = asyncio.get_event_loop()
+        task = loop.run_in_executor(None, _run_stream)
+
+        try:
+            while True:
+                chunk = await queue.get()
+                if chunk is None:
+                    break
+                yield chunk
+        finally:
+            await task

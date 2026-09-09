@@ -1,0 +1,66 @@
+# electron-builder configuration for Kimi-GUI
+# Docs: https://www.electron.build/configuration
+
+appId: com.kimi.gui
+productName: "Kimi-GUI"
+
+directories:
+  output: dist
+
+publish:
+  - provider: github
+    owner: kaminion
+    repo: Kimi-GUI
+
+# Pack only runtime files; docs/ (incl. docs/ref ground-truth specs) stays out of the bundle.
+files:
+  - package.json
+  - main/**/*
+  - renderer/**/*
+  - vendor/**/*
+  - assets/**/*
+  - "!docs/**"
+  - "!dist/**"
+
+mac:
+  category: public.app-category.developer-tools
+  target:
+    - dmg
+    - zip
+  icon: assets/icon.png # electron-builder auto-generates .icns (use >=512x512 png)
+  hardenedRuntime: false # dev builds: skip hardened runtime / notarization requirements
+  artifactName: ${productName}-${version}-mac-${arch}.${ext}
+
+dmg:
+  window:
+    width: 540
+    height: 380
+  # Standard drag-to-Applications layout: app icon left, Applications alias right.
+  contents:
+    - x: 140
+      y: 180
+      type: file
+    - x: 400
+      y: 180
+      type: link
+      path: /Applications
+
+win:
+  # Keep the installed/portable process name aligned with the product name.
+  # Do not rely on the npm-safe package name (`kimi-gui`) as a fallback.
+  executableName: Kimi-GUI
+  target:
+    - nsis
+    - portable
+  icon: assets/icon.png # electron-builder auto-generates .ico (use >=256x256 png)
+
+nsis:
+  artifactName: ${productName}-${version}-win-${arch}-setup.${ext}
+  oneClick: false # assisted installer with wizard pages
+  perMachine: false # per-user install, no admin rights needed
+  allowToChangeInstallationDirectory: true
+  shortcutName: Kimi-GUI
+  uninstallDisplayName: Kimi-GUI
+
+portable:
+  artifactName: ${productName}-${version}-win-${arch}-portable.${ext}

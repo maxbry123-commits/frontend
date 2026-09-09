@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Self-contained app: scripts/styles/images only from the app bundle.
+       The single inline <script> below (pre-paint theme) is allow-listed by hash. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'sha256-GvdpNkRIutULfcbOlm8oyKuuEdFxTsG0Fmi5UZBCz2A='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kimi-GUI</title>
+  <!-- Apply the persisted theme before first paint to avoid a flash.
+       Dark is the app default (CSS falls back to dark when unset), so only an
+       explicit dark/light choice needs to be stamped onto <html>. -->
+  <script>const t=localStorage['kimi.theme'];if(t&&t!=='system')document.documentElement.dataset.theme=t;</script>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/onboarding.css">
+  <link rel="stylesheet" href="styles/panel.css">
+  <link rel="stylesheet" href="styles/settings.css">
+  <link rel="stylesheet" href="styles/search.css">
+</head>
+<body>
+  <div id="titlebar"></div>
+  <!-- Splash gate stays mounted until the first conversation is ready. Its
+       CSS-only idle animation remains smooth while session history loads. -->
+  <div id="splash" role="status" aria-live="polite" aria-label="Loading Kimi-GUI"
+       data-i18n-aria="app.loading_aria">
+    <div id="splash-logo"></div>
+    <div id="splash-word">Kimi-GUI</div>
+    <div id="splash-status" data-i18n="app.loading_workspace">Preparing your workspace…</div>
+  </div>
+  <!-- Onboarding (v3: login gate only — the app works without the CLI). -->
+  <div id="onboarding" hidden>
+    <div id="onboarding-card">
+      <div id="onboarding-logo"></div>
+      <h1 id="onboarding-title"></h1>
+      <p id="onboarding-desc"></p>
+      <div id="onboarding-progress" hidden>
+        <div class="progress-bar"><div></div></div>
+        <span id="onboarding-progress-label"></span>
+      </div>
+      <div id="onboarding-login" hidden>
+        <code id="login-code"></code>
+        <button id="login-url-btn" type="button"></button>
+        <span id="login-status"></span>
+      </div>
+      <div id="onboarding-actions">
+        <button id="onboarding-primary-btn" class="btn btn-primary" type="button"></button>
+        <button id="onboarding-secondary-btn" class="btn btn-ghost" type="button"></button>
+      </div>
+    </div>
+  </div>
+  <div id="app">
+    <aside id="sidebar">
+      <div id="sidebar-header">
+        <button id="new-chat-btn" type="button" title="New chat (⌘N)" data-i18n-title="sidebar.new_chat_title">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <path d="M6.5 1.5v10M1.5 6.5h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span data-i18n="chat.new_chat">New chat</span>
+        </button>
+        <button id="search-open-btn" type="button" title="Search (⌘F)" aria-label="Search"
+                data-i18n-title="search.open_title" data-i18n-aria="search.open_aria">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8.7 8.7L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <nav id="session-list" aria-label="Conversations" data-i18n-aria="sidebar.list_aria"></nav>
+      <div id="sidebar-footer">
+        <button id="usage-nav-btn" type="button" title="Usage (⌘,)" data-i18n-title="usage.nav_title">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <path d="M2 11.5v-4M6.5 11.5v-9M11 11.5V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span data-i18n="usage.nav">Usage</span>
+        </button>
+        <button id="skills-btn" type="button" title="Skills" aria-label="Skills"
+                data-i18n-title="skills.open_title" data-i18n-aria="skills.open_aria">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <path d="M6.5 1.5 7.7 5.3l3.8 1.2-3.8 1.2-1.2 3.8-1.2-3.8-3.8-1.2 3.8-1.2 1.2-3.8Z"
+                  stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+          </svg>
+          <span data-i18n="skills.open_title">Skills</span>
+        </button>
+        <button id="settings-btn" type="button" title="Settings" aria-label="Settings"
+                data-i18n-title="settings.open_title" data-i18n-aria="settings.open_title">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <circle cx="6.5" cy="6.5" r="1.8" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M6.5 1.2v1.6M6.5 10.2v1.6M1.2 6.5h1.6M10.2 6.5h1.6M2.7 2.7l1.1 1.1M9.2 9.2l1.1 1.1M10.3 2.7L9.2 3.8M3.8 9.2l-1.1 1.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          <span data-i18n="settings.open_title">Settings</span>
+          <span id="settings-update-dot" hidden></span>
+        </button>
+        <span id="server-status" role="status" aria-label="Server status" data-i18n-aria="app.server_status_aria"></span>
+      </div>
+    </aside>
+    <main id="main">
+      <section id="chat-view">
+        <header id="chat-header">
+          <div id="chat-title-group">
+            <span id="chat-section-label" data-i18n="chat.section_label">Conversation</span>
+            <span id="chat-title"></span>
+          </div>
+          <span id="model-label"></span>
+          <button id="panel-toggle-btn" type="button" title="Agent panel — view run status and tool activity"
+                  aria-label="Agent panel"
+                  data-i18n-title="panel.toggle_title" data-i18n-aria="panel.toggle">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+              <rect x="1.5" y="2.2" width="10" height="8.6" rx="2" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M8.6 2.2v8.6" stroke="currentColor" stroke-width="1.3"/>
+            </svg>
+          </button>
+        </header>
+        <div id="transcript"></div>
+        <div id="composer-wrap">
+          <!-- Only visible before the first prompt of a new conversation. The
+               last project is restored by app.js; Git branches are local-only. -->
+          <div id="draft-context" hidden>
+            <button id="draft-directory-btn" class="draft-context-control" type="button">
+              <span class="draft-context-label" data-i18n="workspace.project">Project</span>
+              <span id="draft-directory-value" class="draft-context-value"></span>
+            </button>
+            <label id="draft-branch-control" class="draft-context-control">
+              <span class="draft-context-label" data-i18n="workspace.branch">Branch</span>
+              <select id="draft-branch-select" disabled
+                      aria-label="Working branch" data-i18n-aria="workspace.branch_aria">
+                <option data-i18n="workspace.none">None</option>
+              </select>
+            </label>
+            <!-- Sidebar group '+' drafts only: where the new chat will land. -->
+            <span id="draft-group-chip" class="draft-context-control" hidden>
+              <span class="draft-context-label" data-i18n="workspace.group">Group</span>
+              <span id="draft-group-value" class="draft-context-value"></span>
+            </span>
+            <span id="draft-context-error" role="alert" hidden></span>
+          </div>
+          <textarea id="composer" rows="1" placeholder="Type a message…" aria-label="Message input"
+                    data-i18n-placeholder="chat.composer_placeholder" data-i18n-aria="chat.composer_aria"></textarea>
+          <!-- Intentionally empty: the glyph is a CSS mask. One button, three
+               faces — SEND when idle, STOP while a turn runs with an empty
+               composer, SCHEDULE while it runs with text typed (chat.js). -->
+          <button id="send-btn" type="button" title="Send (↵)" aria-label="Send"
+                  data-i18n-title="chat.send_title" data-i18n-aria="chat.send_aria"></button>
+          <!-- v3 composer options row (chat-options.js binds these; wraps below
+               the textarea via CSS). v7 order: model / thinking / permission /
+               swarm — model+thinking shape the answer, permission gates tool
+               approval, swarm rides last (cli-only; inert under direct). -->
+          <div id="composer-options">
+            <button id="model-select" class="pill" type="button"
+                    title="Select model — applies to this chat" data-i18n-title="options.model.pick_title"></button>
+            <button id="effort-select" class="pill" type="button" hidden></button>
+            <button id="permission-select" class="pill" type="button" hidden></button>
+            <button id="swarm-toggle" class="pill" type="button" hidden></button>
+            <span id="branch-indicator" role="status" hidden></span>
+            <!-- context meter rides at the row's right edge (v5) -->
+            <span id="context-meter" role="status"></span>
+          </div>
+          <!-- Changes pill: conversation file-change totals (panel.js). It
+               floats just ABOVE the composer (settings.css), outside the
+               options row; clicking opens the popover file list upward. -->
+          <button id="changes-pill" class="pill" type="button" hidden
+                  aria-haspopup="true" aria-expanded="false"
+                  title="Review file changes" aria-label="Review file changes"
+                  data-i18n-title="changes.open_review" data-i18n-aria="changes.open_review"></button>
+        </div>
+      </section>
+      <section id="usage-view" hidden>
+        <div id="quota-cards"></div>
+        <div id="session-usage"></div>
+      </section>
+    </main>
+    <!-- Single right panel with activity/change-review tabs (R3 owns behavior). -->
+    <aside id="panel" hidden>
+      <div id="panel-header">
+        <span id="panel-title" data-i18n="panel.title">Agent panel</span>
+        <button id="panel-close-btn" type="button" title="Close panel" aria-label="Close panel"
+                data-i18n-title="panel.close" data-i18n-aria="panel.close">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+            <path d="M2 2l7 7M9 2L2 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div id="panel-tabs" role="tablist" aria-label="Panel views"
+           data-i18n-aria="panel.tabs_aria">
+        <button id="panel-tab-activity" class="panel-tab active" type="button" role="tab"
+                aria-selected="true" aria-controls="panel-work" tabindex="0">
+          <span data-i18n="panel.tab_activity">Activity</span>
+        </button>
+        <button id="panel-tab-changes" class="panel-tab" type="button" role="tab"
+                aria-selected="false" aria-controls="panel-changes" tabindex="-1">
+          <span data-i18n="panel.tab_changes">Changes</span>
+          <span id="panel-tab-change-count" class="panel-tab-count" hidden>0</span>
+        </button>
+      </div>
+      <div id="panel-content">
+        <div id="panel-work" role="tabpanel" aria-labelledby="panel-tab-activity">
+          <div id="panel-status"></div>
+          <div id="panel-tasks"></div>
+          <div id="panel-activity"></div>
+          <div id="panel-files"></div>
+        </div>
+        <div id="panel-changes" role="tabpanel" aria-labelledby="panel-tab-changes" hidden></div>
+      </div>
+    </aside>
+  </div>
+  <!-- Spotlight-style content search (R2 owns behavior). -->
+  <div id="search-palette" hidden>
+    <input id="search-input" type="search" placeholder="Search conversations…" aria-label="Search conversations"
+           data-i18n-placeholder="search.placeholder" data-i18n-aria="search.placeholder">
+    <div id="search-results"></div>
+  </div>
+  <!-- Settings modal mount point (R4 owns behavior). -->
+  <div id="settings-root"></div>
+  <div id="modal-root"></div>
+  <!-- Fatal boot error (only reached when neither engine can start). Inline
+       styles keep it legible regardless of stylesheet state. -->
+  <div id="boot-error" style="display:none; position:fixed; inset:0; z-index:999;
+       flex-direction:column; align-items:center; justify-content:center; gap:16px;
+       padding:32px; text-align:center; background:var(--bg, #fff); color:var(--text, #1d1d1f);
+       font-family:var(--font-ui, -apple-system, sans-serif);">
+    <h1 style="font-size:17px; font-weight:600; margin:0;" data-i18n="app.boot_error_title">Kimi-GUI couldn’t start</h1>
+    <p id="boot-error-message" style="font-size:13px; margin:0; max-width:420px;
+       color:var(--text-secondary, #6e6e73); word-break:break-all;"></p>
+    <p style="font-size:12px; margin:0; max-width:420px; color:var(--text-dim, #86868b);"
+       data-i18n="app.boot_error_hint">Try again. If CLI agent mode is unavailable, Kimi switches to the built-in engine automatically.</p>
+    <button id="boot-retry-btn" type="button" style="font-size:13px; padding:6px 16px;
+      border:none; border-radius:6px; cursor:pointer;
+      background:var(--accent, #007AFF); color:var(--accent-text, #fff);"
+      data-i18n="app.boot_retry">Try again</button>
+  </div>
+  <script src="../vendor/marked.min.js"></script>
+  <script src="../vendor/highlight.min.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/markdown.js"></script>
+  <script src="js/slash-autocomplete.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/approvals.js"></script>
+  <script src="js/onboarding.js"></script>
+  <script src="js/cli-connect-prompt.js"></script>
+  <script src="js/update-prompt.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/panel.js"></script>
+  <script src="js/skill-filter.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/chat-options.js"></script>
+  <script src="js/sidebar.js"></script>
+  <script src="js/usage.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

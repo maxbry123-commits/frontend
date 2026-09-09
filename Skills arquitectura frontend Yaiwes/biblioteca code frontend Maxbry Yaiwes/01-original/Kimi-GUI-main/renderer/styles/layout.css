@@ -1,0 +1,868 @@
+/* ==========================================================================
+   Kimi-GUI — layout.css
+   Window chrome and view structure: titlebar, sidebar, main column,
+   chat header, transcript rhythm, composer card, usage grid.
+   All ids below are fixed by ARCHITECTURE.md / CONTRACT-V2 DOM contracts.
+   Dark-first: surfaces are lifted off the charcoal base via --surface-raised
+   and --bg-secondary; definition comes from 0.5px hairlines, not shadows.
+   ========================================================================== */
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Titlebar (drag region; traffic lights inset on macOS) ---- */
+#titlebar {
+  flex: 0 0 var(--titlebar-h);
+  display: flex;
+  align-items: center;
+  padding-left: 78px; /* clear macOS traffic lights */
+  -webkit-app-region: drag;
+  user-select: none;
+}
+
+#titlebar button,
+#titlebar a,
+#titlebar input {
+  -webkit-app-region: no-drag;
+}
+
+/* ---- App row ---- */
+#app {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+/* ---- Sidebar ---- */
+#sidebar {
+  width: var(--sidebar-w);
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--sidebar-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-right: 0.5px solid var(--border);
+}
+
+/* v2: header row holds #new-chat-btn (flexes) + #search-open-btn (icon) */
+#sidebar-header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+}
+
+#new-chat-btn {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: var(--space-1) var(--space-2);
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg-secondary);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-m);
+}
+
+#new-chat-btn:hover {
+  background: var(--hover-bg);
+}
+
+#new-chat-btn:active {
+  background: var(--active-bg);
+}
+
+#session-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 var(--space-2) var(--space-2);
+}
+
+/* Initial session-list skeleton. It mirrors the final two-line session rows
+   and pulses opacity only, keeping animation off the layout/paint path. */
+.session-list-loading {
+  padding-top: var(--space-2);
+  pointer-events: none;
+}
+
+.session-list-skeleton-heading,
+.session-list-skeleton-line {
+  display: block;
+  background: var(--active-bg);
+  border-radius: var(--radius-s);
+}
+
+.session-list-skeleton-heading {
+  width: 72px;
+  height: 10px;
+  margin: var(--space-1) var(--space-2) 12px;
+}
+
+.session-list-skeleton-item {
+  padding: var(--space-2);
+  animation: loading-skeleton-pulse 1.35s var(--ease-in-out) infinite;
+}
+
+.session-list-skeleton-line.title {
+  height: 12px;
+}
+
+.session-list-skeleton-line.meta {
+  height: 8px;
+  margin-top: 7px;
+  opacity: 0.72;
+}
+
+.session-list-skeleton-line.title.line-1 { width: 76%; }
+.session-list-skeleton-line.title.line-2 { width: 62%; }
+.session-list-skeleton-line.title.line-3 { width: 84%; }
+.session-list-skeleton-line.meta.line-1 { width: 48%; }
+.session-list-skeleton-line.meta.line-2 { width: 57%; }
+.session-list-skeleton-line.meta.line-3 { width: 42%; }
+
+@keyframes loading-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.38;
+  }
+  50% {
+    opacity: 0.82;
+  }
+}
+
+/* Session groups (v1: 오늘/이전; v2: per-project, collapsible).
+   Collapse hook: sidebar.js toggles .collapsed on .session-group — items
+   hide and the label chevron snaps back to point right. Chevron convention
+   matches .tool-chevron: right-pointing base glyph, rotated 90° (down)
+   while the group is expanded. */
+.session-group + .session-group {
+  margin-top: var(--space-3);
+}
+
+.session-group-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  user-select: none;
+  cursor: default;
+}
+
+.session-group-label:hover {
+  color: var(--text-secondary);
+}
+
+.session-group-label > svg,
+.session-group-chevron {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  color: var(--text-dim);
+  transform: rotate(90deg); /* expanded by default: right-pointing glyph → down */
+  transition: transform 0.15s var(--ease-out);
+}
+
+/* sidebar.js renders .session-group-name + .session-group-count inside the
+   label: project name truncates, the count parks dimmed at the trailing edge. */
+.session-group-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-group-count {
+  margin-left: auto;
+  padding-left: var(--space-2);
+  font-weight: 400;
+  color: var(--text-dim);
+}
+
+.session-group.collapsed .session-group-label > svg,
+.session-group.collapsed .session-group-chevron {
+  transform: none;
+}
+
+.session-group.collapsed .session-item {
+  display: none;
+}
+
+/* .session-item(.active)(.busy) > .session-title + .session-meta */
+.session-item {
+  position: relative;
+  padding: var(--space-2);
+  border-radius: var(--radius-m);
+  cursor: default;
+  user-select: none;
+}
+
+.session-item + .session-item {
+  margin-top: 2px;
+}
+
+.session-item:hover {
+  background: var(--hover-bg);
+}
+
+.session-item.active,
+.session-item.active:hover {
+  background: var(--active-bg);
+}
+
+.session-title {
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  /* 2-line truncation */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.session-meta {
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 1.3;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* v5 (R-UX): tiny neutral pill on foreign-engine items (direct sessions
+   listed under the cli engine — they open read-only). */
+.session-engine-badge {
+  display: inline-block;
+  margin-left: var(--space-1);
+  padding: 0 4px;
+  font-size: 9px;
+  line-height: 1.5;
+  color: var(--text-dim);
+  background: var(--bg-secondary);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-s);
+  vertical-align: 1px;
+}
+
+/* Busy indicator: pulsing accent dot on the trailing edge */
+.session-item.busy {
+  padding-right: var(--space-4);
+}
+
+.session-item.busy::after {
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: busy-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes busy-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+#sidebar-footer {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border-top: 0.5px solid var(--border);
+}
+
+#usage-nav-btn {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  padding: var(--space-1) var(--space-2);
+  font-size: 13px;
+  color: var(--text-secondary);
+  border-radius: var(--radius-s);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#usage-nav-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text);
+}
+
+#usage-nav-btn:active {
+  background: var(--active-bg);
+}
+
+/* Server status dot: #server-status(.ok|.err) */
+#server-status {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+#server-status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-dim);
+}
+
+#server-status.ok::before {
+  background: var(--success);
+}
+
+#server-status.err::before {
+  background: var(--danger);
+}
+
+/* ---- Main column ---- */
+#main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg);
+}
+
+#chat-view {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Chat header (translucent, bottom hairline) ----
+   Right cluster: #model-label, #panel-toggle-btn ride the 8px flex gap after
+   the flexible title; none of them shrink or wrap.
+   (v3: #model-select/#swarm-toggle moved into #composer-options; v5: the
+   header abort button is gone — #send-btn itself morphs into STOP; the
+   context meter moved to the composer options row, right edge.) */
+#chat-header {
+  flex: none;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-4);
+  background: var(--header-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+#chat-header > :not(#chat-title-group) {
+  flex: none;
+}
+
+#chat-title-group {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 1px;
+}
+
+#chat-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-secondary);
+}
+
+#chat-title {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Transcript: centered 800px column, generous rhythm (v3 readability) ---- */
+#transcript {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 28px var(--space-3) var(--space-4);
+}
+
+#transcript > * {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#transcript.is-load-pending > * {
+  opacity: 0.38;
+  transition: opacity 0.12s var(--ease-out);
+  pointer-events: none;
+}
+
+/* Conversation-history skeleton: message-shaped blocks reserve the final
+   transcript rhythm without pretending that the old session is still active. */
+.transcript-loading {
+  width: 100%;
+  display: grid;
+  gap: var(--space-5);
+  padding-top: var(--space-2);
+  pointer-events: none;
+}
+
+.transcript-skeleton-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  animation: loading-skeleton-pulse 1.35s var(--ease-in-out) infinite;
+}
+
+.transcript-skeleton-row.is-user {
+  align-items: flex-end;
+}
+
+.transcript-skeleton-row.is-assistant {
+  animation-delay: 80ms;
+}
+
+.transcript-skeleton-row.is-secondary {
+  animation-delay: 160ms;
+}
+
+.transcript-skeleton-bubble {
+  width: min(54%, 410px);
+  display: grid;
+  gap: var(--space-2);
+  padding: 14px var(--space-3);
+  background: var(--surface-raised);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-xl);
+}
+
+.transcript-skeleton-line {
+  display: block;
+  height: 11px;
+  background: var(--active-bg);
+  border-radius: var(--radius-s);
+}
+
+.transcript-skeleton-line.is-label {
+  width: 92px;
+  height: 9px;
+  margin-bottom: var(--space-1);
+}
+
+.transcript-skeleton-line.is-full { width: 94%; }
+.transcript-skeleton-line.is-long { width: 78%; }
+.transcript-skeleton-line.is-medium { width: 58%; }
+.transcript-skeleton-line.is-short { width: 34%; }
+
+/* Older-history paging skeleton: three compact lines pinned at the transcript
+   top while the previous page loads (infinite scroll). Same pulse + rhythm as
+   the full-history skeleton above, denser so it reads as a continuation. */
+.history-older-skeleton {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2) var(--space-3);
+  pointer-events: none;
+}
+
+.history-older-line {
+  display: block;
+  height: 11px;
+  background: var(--active-bg);
+  border-radius: var(--radius-s);
+  animation: loading-skeleton-pulse 1.35s var(--ease-in-out) infinite;
+}
+
+.history-older-line.line-1 { width: 34%; }
+.history-older-line.line-2 { width: 62%; animation-delay: 80ms; }
+.history-older-line.line-3 { width: 48%; animation-delay: 160ms; }
+
+.transcript-load-error {
+  width: min(100%, 520px);
+  padding: var(--space-4);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.transcript-load-error-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.transcript-load-error-detail {
+  margin-top: var(--space-2);
+  font-size: 11px;
+  color: var(--text-dim);
+  overflow-wrap: anywhere;
+}
+
+/* Message gap: 16px between rows, 24px before a new user turn. Tightened
+   from 20/32px (CONTRACT-V3) — long thinking blocks made the old rhythm
+   read as disconnected empty space; secondary voices stay denser. */
+#transcript > * + * {
+  margin-top: var(--space-3);
+}
+
+/* Kimi can persist one assistant turn as several adjacent messages while it
+   alternates thinking, tools, and answer text. Keep those chunks visually
+   owned by the same turn instead of applying the unrelated-message gap. */
+#transcript > .msg-assistant-row + .msg-assistant-row {
+  margin-top: var(--space-2);
+}
+
+/* New turn gets extra separation (id specificity needed to beat the rule above) */
+#transcript > .msg-user:not(:first-child) {
+  margin-top: var(--space-4);
+}
+
+/* Consecutive tool rows pack tighter */
+#transcript > .msg-tool + .msg-tool {
+  margin-top: var(--space-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .session-list-skeleton-item,
+  .transcript-skeleton-row {
+    animation: none !important;
+    opacity: 0.58;
+  }
+
+  #transcript.is-load-pending > * {
+    transition: none !important;
+  }
+}
+
+/* ---- Composer: floating rounded card, lifted one step off the base ---- */
+#composer-wrap {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  width: calc(100% - var(--space-5)); /* 16px gutters */
+  max-width: 800px; /* matches the v3 transcript column */
+  margin: 0 auto var(--space-3);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  background: var(--surface-raised);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+#composer-wrap:focus-within {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-card), 0 0 0 3px var(--accent-soft);
+}
+
+/* ---- Usage view: section title + grid of cards ---- */
+#usage-view {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-3) var(--space-6);
+}
+
+/* usage.js emits h2.usage-section-title + .usage-card-grid inside here */
+#quota-cards {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.usage-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-3);
+}
+
+#session-usage {
+  max-width: 960px;
+  margin: var(--space-4) auto 0;
+}
+
+/* ==========================================================================
+   sidebar v3 (R1) — custom groups, HTML5 drag & drop, inline rename,
+   hover session actions. ADDITIVE block: new selectors only; nothing above
+   is restyled. R3 preserves appended blocks.
+   ========================================================================== */
+
+/* Positioning context for #group-unassign-zone (visuals unchanged). */
+#sidebar {
+  position: relative;
+}
+
+/* Custom groups section pinned above the auto project groups. */
+#custom-groups-section {
+  margin-bottom: var(--space-3);
+}
+
+.custom-groups-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+}
+
+.custom-groups-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  user-select: none;
+}
+
+.custom-group-add {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--text-dim);
+  border-radius: var(--radius-s);
+}
+
+.custom-group-add:hover {
+  background: var(--hover-bg);
+  color: var(--text);
+}
+
+.custom-group + .custom-group {
+  margin-top: var(--space-2);
+}
+
+/* Group hover actions ('+' new chat, pencil rename, '×' delete): the count
+   is the rightmost element by default; on hover (or keyboard focus inside)
+   the count hides and the action wrapper takes its place. The wrapper keeps
+   its own margin-left:auto so the buttons stay pinned to the right edge
+   once the count (the usual auto-margin carrier) is hidden. */
+.custom-group-actions {
+  display: none;
+  flex: none;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+
+.custom-group-label:hover .custom-group-actions,
+.custom-group-actions:focus-within {
+  display: inline-flex;
+}
+
+.custom-group-label:hover > .session-group-count {
+  display: none;
+}
+
+.custom-group-delete,
+.custom-group-new-chat,
+.custom-group-rename {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--text-dim);
+  border-radius: var(--radius-s);
+}
+
+/* The destructive '×' keeps a misclick buffer from the rename pencil. */
+.custom-group-delete {
+  margin-left: var(--space-1);
+}
+
+.custom-group-delete:hover {
+  background: var(--hover-bg);
+  color: var(--danger);
+}
+
+.custom-group-new-chat:hover,
+.custom-group-rename:hover {
+  background: var(--hover-bg);
+  color: var(--text);
+}
+
+/* Drop-target highlight on custom group header + container. */
+.custom-group.drop-target {
+  background: var(--accent-soft);
+  border-radius: var(--radius-m);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+/* Draft target: the group the pending new chat (group '+') will be filed
+   into on first send — softer than the drop-target ring, plus a badge. */
+.custom-group.draft-target > .session-group-label {
+  background: var(--accent-soft);
+  border-radius: var(--radius-m);
+}
+
+.custom-group-draft-badge {
+  flex: none;
+  padding: 1px var(--space-1);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--accent-text);
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+/* '그룹 해제' zone: pinned at the sidebar bottom while body.dnd-active. */
+#group-unassign-zone {
+  position: absolute;
+  left: var(--space-2);
+  right: var(--space-2);
+  bottom: 44px; /* just above #sidebar-footer */
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2);
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--surface-raised);
+  border: 0.5px dashed var(--border);
+  border-radius: var(--radius-m);
+  user-select: none;
+  /* Fade + small rise as [hidden] toggles mid-drag (sidebar.js). display
+     rides the transition with allow-discrete: visible at once on enter,
+     painted until the exit fade completes. */
+  transition-property: opacity, transform, display;
+  transition-duration: 140ms;
+  transition-timing-function: var(--ease-out);
+  transition-behavior: allow-discrete;
+}
+
+#group-unassign-zone[hidden] {
+  display: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition-duration: 100ms; /* exits run faster than enters */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Gentler, not zero: keep the opacity fade, drop the rise. !important
+     restores real durations against the global kill-switch in base.css. */
+  #group-unassign-zone {
+    transition-duration: 140ms !important;
+  }
+
+  #group-unassign-zone[hidden] {
+    transform: none;
+    transition-duration: 100ms !important;
+  }
+}
+
+#group-unassign-zone.drop-target {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* Hover session actions: rename (pencil) + delete (trash), top-right. */
+.session-actions {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 2px;
+  padding: 1px;
+  border-radius: var(--radius-s);
+  background: var(--bg-secondary);
+  opacity: 0;
+}
+
+.session-item:hover .session-actions,
+.session-actions:focus-within {
+  opacity: 1;
+}
+
+.session-action {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  border-radius: var(--radius-s);
+}
+
+.session-action:hover {
+  background: var(--hover-bg);
+  color: var(--text);
+}
+
+.session-action.session-delete:hover {
+  color: var(--danger);
+}
+
+/* Inline rename inputs (session title + custom group name). */
+.inline-input {
+  width: 100%;
+  min-width: 0;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg-secondary);
+  border: 0.5px solid var(--accent);
+  border-radius: var(--radius-s);
+  padding: 1px 4px;
+  outline: none;
+}
+
+.session-group-label .inline-input {
+  flex: 1;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   sidebar v4 (R1) — single '최근 내역' section replaces auto project groups.
+   ADDITIVE block: the section is .session-group.recent-group with a static
+   header (.session-group-label.recent-group-label — no chevron, no
+   collapse). Existing selectors above keep doing the visual work.
+   ========================================================================== */
+
+/* Static label: suppress the interactive-label hover feedback. */
+.recent-group .session-group-label,
+.recent-group .session-group-label:hover {
+  color: var(--text-dim);
+}
