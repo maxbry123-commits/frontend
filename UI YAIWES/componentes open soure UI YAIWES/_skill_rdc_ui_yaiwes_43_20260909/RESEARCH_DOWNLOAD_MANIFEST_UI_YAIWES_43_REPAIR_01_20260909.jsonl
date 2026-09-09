@@ -29,3 +29,8 @@
 {"number": 29, "parts": 1, "slug": "fast-check", "source": "https://github.com/dubzzz/fast-check.git", "source_commit": "0f1bf99547a592f0a2dc2d09ddf07034a727f59d", "status": "COMPLETE"}
 {"number": 30, "parts": 2, "slug": "k6", "source": "https://github.com/grafana/k6.git", "source_commit": "05efeafe90b49fba83d760deaa29222159e0f128", "status": "COMPLETE"}
 {"number": 31, "parts": 1, "slug": "Toxiproxy", "source": "https://github.com/Shopify/toxiproxy.git", "source_commit": "40f7fd31bee529d824116bd2a11a9e3425e904ec", "status": "COMPLETE"}
+{"number": 32, "parts": 1, "slug": "axe-core", "source": "https://github.com/dequelabs/axe-core.git", "source_commit": "42970fd2567f6941ec22d983262997a77ae44ebb", "status": "COMPLETE"}
+{"number": 33, "parts": 1, "slug": "ParadeDB", "source": "https://github.com/paradedb/paradedb.git", "source_commit": "e0cff54acab71a99be615d529074b04bb5b3d166", "status": "COMPLETE"}
+{"number": 34, "parts": 1, "slug": "LanceDB", "source": "https://github.com/lancedb/lancedb.git", "source_commit": "1da5876870e4766621d903fb4ce9e656d1261124", "status": "COMPLETE"}
+{"number": 35, "parts": 2, "slug": "Meilisearch", "source": "https://github.com/meilisearch/meilisearch.git", "source_commit": "797f0dc892035090288a0d9f1ba976b7ad38d0da", "status": "COMPLETE"}
+{"number": 36, "parts": 1, "slug": "Typesense", "source": "https://github.com/typesense/typesense.git", "source_commit": "245ebc7e06731c12381cc37b5b0205845fc1d58a", "status": "COMPLETE"}
