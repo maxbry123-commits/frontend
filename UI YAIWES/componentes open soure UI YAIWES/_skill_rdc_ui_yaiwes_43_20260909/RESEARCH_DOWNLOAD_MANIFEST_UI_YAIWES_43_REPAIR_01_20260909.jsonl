@@ -34,3 +34,4 @@
 {"number": 34, "parts": 1, "slug": "LanceDB", "source": "https://github.com/lancedb/lancedb.git", "source_commit": "1da5876870e4766621d903fb4ce9e656d1261124", "status": "COMPLETE"}
 {"number": 35, "parts": 2, "slug": "Meilisearch", "source": "https://github.com/meilisearch/meilisearch.git", "source_commit": "797f0dc892035090288a0d9f1ba976b7ad38d0da", "status": "COMPLETE"}
 {"number": 36, "parts": 1, "slug": "Typesense", "source": "https://github.com/typesense/typesense.git", "source_commit": "245ebc7e06731c12381cc37b5b0205845fc1d58a", "status": "COMPLETE"}
+{"number": 37, "parts": 12, "slug": "Unstructured", "source": "https://github.com/Unstructured-IO/unstructured.git", "source_commit": "69d50a74ec084cea02058e811a75187ed793dd4e", "status": "COMPLETE"}
