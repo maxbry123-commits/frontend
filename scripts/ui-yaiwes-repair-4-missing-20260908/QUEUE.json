@@ -1,0 +1,51 @@
+{
+  "task_id": "ui-yaiwes-repair-4-missing-20260908",
+  "destination_repository": "maxbry123-commits/frontend",
+  "destination_branch": "main",
+  "destination_root": "UI YAIWES/componentes open soure UI YAIWES",
+  "expected_components": 4,
+  "components": [
+    {
+      "director_index": 12,
+      "name": "LibreChat",
+      "slug": "LibreChat",
+      "source_url": "https://github.com/danny-avila/LibreChat",
+      "source_ref": "968950a4bdb3929c9381b80290720972cb936134",
+      "mode": "DOWNLOAD",
+      "selected_paths": []
+    },
+    {
+      "director_index": 13,
+      "name": "big-AGI",
+      "slug": "big-AGI",
+      "source_url": "https://github.com/enricoros/big-AGI",
+      "source_ref": "00b1509e3944a299ced9e10a67ff72d303649be6",
+      "mode": "DOWNLOAD",
+      "selected_paths": []
+    },
+    {
+      "director_index": 18,
+      "name": "Vite",
+      "slug": "Vite",
+      "source_url": "https://github.com/vitejs/vite",
+      "source_ref": "e6f6b3e3119256daa837b2dc399058c8aa45b470",
+      "mode": "DOWNLOAD",
+      "selected_paths": []
+    },
+    {
+      "director_index": 19,
+      "name": "Vercel AI SDK",
+      "slug": "Vercel AI SDK",
+      "source_url": "https://github.com/vercel/ai",
+      "source_ref": "45f2b6a5bc06bdb40a847ea961f8d7ca7cd86563",
+      "mode": "DOWNLOAD",
+      "selected_paths": []
+    }
+  ],
+  "rules": {
+    "overwrite": false,
+    "delete": false,
+    "reactivate_old_workflows": false,
+    "single_writer": true
+  }
+}
