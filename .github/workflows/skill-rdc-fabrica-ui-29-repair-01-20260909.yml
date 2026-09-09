@@ -1,0 +1,44 @@
+name: Skill RDC Fabrica UI 29 Repair 01 20260909
+run-name: Skill RDC Fabrica UI 29 Repair 01 20260909 • ${{ github.event_name }} • ${{ github.sha }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/skill-rdc-fabrica-ui-29-repair-01-20260909.yml'
+
+permissions:
+  contents: write
+
+env:
+  GIT_TERMINAL_PROMPT: "0"
+
+concurrency:
+  group: maxbry123-commits-frontend-fabrica-ui-interface-skill-rdc-ui-29
+  cancel-in-progress: false
+
+jobs:
+  download-29-in-queue:
+    name: Download 29 repos sequentially
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+      - name: Execute deterministic download chain
+        shell: bash
+        env:
+          GIT_TERMINAL_PROMPT: "0"
+        run: |
+          set -euo pipefail
+          # Git LFS prohibited: never invoke git-lfs. Inherited lfs filters pass bytes unchanged.
+          git config --local filter.lfs.clean cat
+          git config --local filter.lfs.smudge cat
+          git config --local filter.lfs.process ''
+          git config --local filter.lfs.required false
+          git config --local core.compression 0
+          python3 scripts/skill-rdc-fabrica-ui-29-repair-01-20260909/research_download_chain.py 'fabrica de UI INTERFACE fromtend/_skill_rdc_fabrica_ui_29_20260909' '_work/skill-rdc-fabrica-ui-29-repair-01-20260909'
