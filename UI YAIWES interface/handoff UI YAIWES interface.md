@@ -41,3 +41,14 @@ Estado: **anotado**. 0 ventanas fabricadas. 0 IDs OK para code FROMTED.
 ## Siguiente frase del director
 
 1) `LOOP OK`  2) `1 CASCADE` = RUN-01 con L0–L10.
+
+
+## Fotos + retomar
+
+- Fotos 106: https://github.com/maxbry123-commits/frontend/tree/main/UI%20YAIWES%20interface/Ui%20Yaiwes%20interface%20beta/01-original/FOTOS-REF
+- INDEX: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/Ui%20Yaiwes%20interface%20beta/01-original/FOTOS-REF/INDEX.json
+- 12 goals: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/GOALS-12.md
+- RUN-01 (borrador, no OK): https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/UI%20code%20versiones/RUN-01/RUN-01-CASCADE.html
+- Checklist RUN-01: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/UI%20code%20versiones/RUN-01/CHECKLIST.md
+
+Siguiente: `OK RUN-01` o `RECHAZO RUN-01 <motivo>`.
