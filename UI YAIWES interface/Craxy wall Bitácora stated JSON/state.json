@@ -1,0 +1,30 @@
+{
+  "v": 1,
+  "tab": "B",
+  "mode": "ask",
+  "proyecto": "UI YAIWES interface beta",
+  "updated": "2026-09-08T22:15:00-05:00",
+  "fase": "P0-ANOTAR",
+  "parte_actual": null,
+  "ok_ids": [],
+  "pending_next": "1 CASCADE = RUN-01",
+  "conteo": {
+    "fotos14": 14,
+    "gbot": 1,
+    "run8": 8,
+    "wall16": 16,
+    "total39": 39,
+    "html_source": 24
+  },
+  "wall_note": "SEGS 00-25 = 26 claves. UI label Bloques 25 es off-by-one.",
+  "st": {},
+  "pct": {},
+  "notes": {
+    "00": "anotacion 2026-09-08: carpeta main creada. no fabricar.",
+    "20": "hot path wordflow: no reescribir runner. fuera de este lote UI."
+  },
+  "extra": [],
+  "sel": "20",
+  "selKind": "block",
+  "metodo": "01-original + 02-fromted + 1 ID por salida"
+}
