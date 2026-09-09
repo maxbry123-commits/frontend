@@ -45,3 +45,10 @@ UI code versiones/                      # borradores pre-OK
 - [ ] bitácora `state.json`
 - [ ] enlace GitHub visible
 - [ ] 01-original intacto
+
+
+## LOOP L0–L10
+
+Contrato: `CONTRATO-LOOP-OPERATIVO.md`  
+Schema: `LOOP-SCHEMA.json`  
+Vigente al `LOOP OK` del director.

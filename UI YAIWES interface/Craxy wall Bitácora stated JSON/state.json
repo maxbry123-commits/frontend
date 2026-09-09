@@ -1,13 +1,13 @@
 {
-  "v": 1,
+  "v": 2,
   "tab": "B",
   "mode": "ask",
   "proyecto": "UI YAIWES interface beta",
-  "updated": "2026-09-08T22:15:00-05:00",
+  "updated": "2026-09-08T22:30:00-05:00",
   "fase": "P0-ANOTAR",
   "parte_actual": null,
   "ok_ids": [],
-  "pending_next": "1 CASCADE = RUN-01",
+  "pending_next": "LOOP OK luego 1 CASCADE",
   "conteo": {
     "fotos14": 14,
     "gbot": 1,
@@ -20,11 +20,11 @@
   "st": {},
   "pct": {},
   "notes": {
-    "00": "anotacion 2026-09-08: carpeta main creada. no fabricar.",
+    "00": "contrato LOOP escrito. biblioteca NO tiene 150. esperar LOOP OK.",
     "20": "hot path wordflow: no reescribir runner. fuera de este lote UI."
   },
   "extra": [],
   "sel": "20",
   "selKind": "block",
-  "metodo": "01-original + 02-fromted + 1 ID por salida"
+  "metodo": "LOOP L0-L10 + 01-original + 02-fromted"
 }
