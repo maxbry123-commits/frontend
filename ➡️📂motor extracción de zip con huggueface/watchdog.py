@@ -46,7 +46,7 @@ def recover_from_hf_logs():
             stage = str(getattr(getattr(job, "status", None), "stage", "")).upper()
             if stage not in {"COMPLETED", "ERROR", "CANCELED"}:
                 continue
-            lines = list(fetch_job_logs(job.id, token=HF_TOKEN, follow=False))
+            lines = list(fetch_job_logs(job_id=job.id, token=HF_TOKEN, follow=False))
             for raw in reversed(lines):
                 line = str(raw).strip()
                 pos = line.find(STATE_MARKER)
