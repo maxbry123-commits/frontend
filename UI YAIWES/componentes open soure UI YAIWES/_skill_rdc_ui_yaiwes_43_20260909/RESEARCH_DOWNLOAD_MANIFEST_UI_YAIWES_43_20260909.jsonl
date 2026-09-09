@@ -2,3 +2,12 @@
 {"number": 2, "parts": 1, "slug": "nsjail", "source": "https://github.com/google/nsjail.git", "source_commit": "f100fd917c6d3ed0fd15d868528b735cb5fb1a1a", "status": "COMPLETE"}
 {"number": 3, "parts": 1, "slug": "bubblewrap", "source": "https://github.com/containers/bubblewrap.git", "source_commit": "4df8ddc7f6bb2080637aa26bf7b205321f504bfc", "status": "COMPLETE"}
 {"number": 4, "parts": 3, "slug": "Moby", "source": "https://github.com/moby/moby.git", "source_commit": "fce9664cc153ea3da5a3057957a65be9bda30de8", "status": "COMPLETE"}
+{"number": 5, "parts": 4, "slug": "OpenBao", "source": "https://github.com/openbao/openbao.git", "source_commit": "ccc04f0952a84846330def323da1db6f8416a79e", "status": "COMPLETE"}
+{"number": 6, "parts": 1, "slug": "SOPS", "source": "https://github.com/getsops/sops.git", "source_commit": "ba5d2731a3ab154c92837d41278a067b53673e30", "status": "COMPLETE"}
+{"number": 7, "parts": 2, "slug": "SQLCipher", "source": "https://github.com/sqlcipher/sqlcipher.git", "source_commit": "c4b275a47932888216bade83aff2bbc73df0ff85", "status": "COMPLETE"}
+{"number": 8, "parts": 1, "slug": "flutter_secure_storage", "source": "https://github.com/juliansteenbakker/flutter_secure_storage.git", "source_commit": "0530fe74174743b234adc14c5305d13cbdac7764", "status": "COMPLETE"}
+{"number": 9, "parts": 1, "slug": "libsodium", "source": "https://github.com/jedisct1/libsodium.git", "source_commit": "f6bd9140861ab6806f4a99923888b65477fc4e33", "status": "COMPLETE"}
+{"number": 10, "parts": 1, "slug": "age", "source": "https://github.com/FiloSottile/age.git", "source_commit": "b74dce4cdbe35b5e5f66c06d9612b72f89028758", "status": "COMPLETE"}
+{"number": 11, "parts": 1, "slug": "Cosign", "source": "https://github.com/sigstore/cosign.git", "source_commit": "633e8f4303b7db64c369bdfa315374a8bd511ac6", "status": "COMPLETE"}
+{"number": 12, "parts": 1, "slug": "in-toto", "source": "https://github.com/in-toto/in-toto.git", "source_commit": "e352b43ad7cb8915d84c36d791aa61346152a0a3", "status": "COMPLETE"}
+{"number": 13, "parts": 1, "slug": "Python-TUF", "source": "https://github.com/theupdateframework/python-tuf.git", "source_commit": "d6b4392ea0620e2eae32f55bf317afd1009c0096", "status": "COMPLETE"}
