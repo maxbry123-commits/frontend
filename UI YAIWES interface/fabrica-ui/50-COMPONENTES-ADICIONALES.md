@@ -1,52 +1,5 @@
-# 50+ componentes adicionales (URL)
+# Lista canónica
 
-- GrapesJS: https://github.com/GrapesJS/grapesjs
-- Puck: https://github.com/measuredco/puck
-- Craft.js: https://github.com/prevwong/craft.js
-- Onlook: https://github.com/onlook-dev/onlook
-- Penpot: https://github.com/penpot/penpot
-- JSONForms: https://github.com/eclipsesource/jsonforms
-- RJSF: https://github.com/rjsf-team/react-jsonschema-form
-- Blockly: https://github.com/RaspberryPiFoundation/blockly
-- Node-RED: https://github.com/node-red/node-red
-- n8n: https://github.com/n8n-io/n8n
-- Directus: https://github.com/directus/directus
-- NocoDB: https://github.com/nocodb/nocodb
-- PocketBase: https://github.com/pocketbase/pocketbase
-- Appwrite: https://github.com/appwrite/appwrite
-- RxDB: https://github.com/pubkey/rxdb
-- libsodium.js: https://github.com/jedisct1/libsodium.js
-- OpenPGP.js: https://github.com/openpgpjs/openpgpjs
-- Ory Kratos: https://github.com/ory/kratos
-- simple-webauthn: https://github.com/MasterKale/SimpleWebAuthn
-- single-spa: https://github.com/single-spa/single-spa
-- qiankun: https://github.com/umijs/qiankun
-- wujie: https://github.com/Tencent/wujie
-- Shoelace: https://github.com/shoelace-style/shoelace
-- Ark UI: https://github.com/chakra-ui/ark
-- Base UI: https://github.com/mui/base-ui
-- cmdk: https://github.com/dip/cmdk
-- TanStack Table: https://github.com/TanStack/table
-- XState: https://github.com/statelyai/xstate
-- xyflow: https://github.com/xyflow/xyflow
-- dockview: https://github.com/mathuo/dockview
-- lucide: https://github.com/lucide-icons/lucide
-- assistant-ui: https://github.com/assistant-ui/assistant-ui
-- i18next: https://github.com/i18next/i18next
-- Workbox: https://github.com/GoogleChrome/workbox
-- Tauri: https://github.com/tauri-apps/tauri
-- Capacitor: https://github.com/ionic-team/capacitor
-- PWABuilder: https://github.com/pwa-builder/PWABuilder
-- Dexie: https://github.com/dexie/Dexie.js
-- browser-fs-access: https://github.com/GoogleChromeLabs/browser-fs-access
-- SQLCipher: https://github.com/sqlcipher/sqlcipher
-- Keycloak: https://github.com/keycloak/keycloak
-- Casdoor: https://github.com/casdoor/casdoor
-- Lit: https://github.com/lit/lit
-- Zag: https://github.com/chakra-ui/zag
-- Floating UI: https://github.com/floating-ui/floating-ui
-- Zustand: https://github.com/pmndrs/zustand
-- Prefect: https://github.com/PrefectHQ/prefect
-- Dagster: https://github.com/dagster-io/dagster
-- Airflow: https://github.com/apache/airflow
-- Luigi: https://github.com/spotify/luigi
+Ver: [LISTA-FINAL-FABRICA.md](LISTA-FINAL-FABRICA.md)
+
+La lista de 50 extras NO es el CORE. Faltan solo JSONForms y XState.
