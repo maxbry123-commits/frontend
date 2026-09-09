@@ -1,6 +1,5 @@
-# 02-fromted
+# 02-fromted · 39 ventanas
 
-Vacío hasta que un ID de ventana se apruebe.
-
-Regla: 01-original = archivo del usuario sin tocar.
-02-fromted = el mismo, solo tokens FROMTED (Matte/Little/Blanco, naranja Cargar/Descargar).
+Una HTML por ID. Host: HOST.html.
+Colores FROMTED. Original intacto en 01-original/.
+Estado: SUBIDO-FROMTED-SPLIT (pendiente OK estético por ID).

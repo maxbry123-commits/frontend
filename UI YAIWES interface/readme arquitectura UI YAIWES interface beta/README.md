@@ -96,3 +96,18 @@ Si no hay archivo subido → **no invento** esa ventana.
 **Ninguno.** Aprobado: método + carpeta + 5 partes + conteo 39.
 
 Siguiente: `1 CASCADE` o `OK RUN-01`.
+
+
+## 39 ventanas SUBIDAS (2026-09-09)
+
+Carpeta: `Ui Yaiwes interface beta/02-fromted/` (39 HTML + HOST).
+Fichas: `02-fromted/FICHAS/<ID>.json`.
+Índice: `02-fromted/INDEX.json`.
+Host Lego: `02-fromted/HOST.html`.
+Plan: `PLAN-39-Y-FABRICA.md`.
+Fábrica DAG: `fabrica de UI INTERFACE fromtend/componentes para fabrica de interface/PLAN-DAG-DETERMINISTA.json`.
+Seguridad: `UI YAIWES interface/seguridad/`.
+Empaque: `UI YAIWES interface/empaque/`.
+
+Estado: **SUBIDO-FROMTED-SPLIT**. `03-producto` vacío hasta `OK <ID>`.
+Original intacto en `01-original/`.

@@ -1,9 +1,9 @@
 {
-  "v": 4,
+  "v": 5,
   "tab": "B",
   "mode": "ask",
   "proyecto": "UI YAIWES interface beta",
-  "updated": "2026-09-09T00:20:00-05:00",
+  "updated": "2026-09-09T02:10:00-05:00",
   "fase": "S6-SHOW-RUN-01",
   "parte_actual": "RUN-01",
   "ok_ids": [],
@@ -20,7 +20,7 @@
   "st": {},
   "pct": {},
   "notes": {
-    "00": "RUN-01 HTML en versiones + 12 goals + 106 fotos. Esperando OK.",
+    "00": "39 FROMTED split subidas. Fábrica DAG+seguridad+empaque.",
     "20": "hot path wordflow: no reescribir runner. fuera de este lote UI."
   },
   "extra": [],
