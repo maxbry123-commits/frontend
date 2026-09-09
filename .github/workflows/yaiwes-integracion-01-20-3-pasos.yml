@@ -14,10 +14,41 @@ jobs:
   integrar_01_20:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout minimo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            .github/workflows/yaiwes-integracion-01-20-3-pasos.yml
+            UI YAIWES/componentes open soure UI YAIWES/Stabilize CORE
+            UI YAIWES/componentes open soure UI YAIWES/Pydantic
+            UI YAIWES/componentes open soure UI YAIWES/Starlette
+            UI YAIWES/componentes open soure UI YAIWES/HTTPX
+            UI YAIWES/componentes open soure UI YAIWES/rule-engine
+            UI YAIWES/componentes open soure UI YAIWES/Rule Engine
+            UI YAIWES/componentes open soure UI YAIWES/PyCasbin
+            UI YAIWES/componentes open soure UI YAIWES/Apache PyCasbin
+            UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Python
+            UI YAIWES/componentes open soure UI YAIWES/pytest
+            UI YAIWES/componentes open soure UI YAIWES/Hypothesis
+            UI YAIWES/componentes open soure UI YAIWES/Dagu
+            UI YAIWES/componentes open soure UI YAIWES/redun
+            UI YAIWES/componentes open soure UI YAIWES/LibreChat
+            UI YAIWES/componentes open soure UI YAIWES/big-AGI
+            UI YAIWES/componentes open soure UI YAIWES/Open WebUI
+            UI YAIWES/componentes open soure UI YAIWES/Jan
+            UI YAIWES/componentes open soure UI YAIWES/Grok Build
+            UI YAIWES/componentes open soure UI YAIWES/React
+            UI YAIWES/componentes open soure UI YAIWES/Vite
+            UI YAIWES/componentes open soure UI YAIWES/Vercel AI SDK
+            UI YAIWES/componentes open soure UI YAIWES/Zustand
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop
+            UI YAIWES/readme arquitectura UI YAIWES/README.md
+            UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md
+            UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/BITACORA-CRAZY-WALL.md
+            UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json
 
       - name: 'Paso 1 - mover/materializar 01-20 al destino final'
         shell: bash
@@ -28,60 +59,28 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import json, shutil, datetime
-
-          root = Path('UI YAIWES')
-          src_root = root / 'componentes open soure UI YAIWES'
-          vendor = root / '➡️📂 Wordflow LOOP UI YAIWES' / 'runtime' / 'vendor'
-          arch = root / 'readme arquitectura UI YAIWES' / 'README.md'
-          vendor.mkdir(parents=True, exist_ok=True)
-
-          rows = [
-            (1,'Stabilize CORE','stabilize'), (2,'Pydantic','pydantic'), (3,'Starlette','starlette'),
-            (4,'HTTPX','httpx'), (5,'rule-engine','rule_engine'), (6,'PyCasbin','pycasbin'),
-            (7,'OpenTelemetry Python','opentelemetry_python'), (8,'pytest','pytest'),
-            (9,'Hypothesis','hypothesis'), (10,'Dagu','dagu'), (11,'redun','redun'),
-            (12,'LibreChat','librechat'), (13,'big-AGI','big_agi'), (14,'Open WebUI','open_webui'),
-            (15,'Jan','jan'), (16,'Grok Build','grok_build'), (17,'React','react'),
-            (18,'Vite','vite'), (19,'Vercel AI SDK','vercel_ai_sdk'), (20,'Zustand','zustand'),
-          ]
-          aliases = {
-            'rule-engine':['rule-engine','Rule Engine'],
-            'PyCasbin':['PyCasbin','Apache PyCasbin'],
-          }
-          extra_roots = [Path('fabrica de UI INTERFACE fromtend')]
-          result=[]
-          for number,name,slug in rows:
+          root=Path('UI YAIWES'); src=root/'componentes open soure UI YAIWES'
+          loop=root/'➡️📂 Wordflow LOOP UI YAIWES'; vendor=loop/'runtime'/'vendor'; vendor.mkdir(parents=True,exist_ok=True)
+          rows=[(1,'Stabilize CORE','stabilize'),(2,'Pydantic','pydantic'),(3,'Starlette','starlette'),(4,'HTTPX','httpx'),(5,'rule-engine','rule_engine'),(6,'PyCasbin','pycasbin'),(7,'OpenTelemetry Python','opentelemetry_python'),(8,'pytest','pytest'),(9,'Hypothesis','hypothesis'),(10,'Dagu','dagu'),(11,'redun','redun'),(12,'LibreChat','librechat'),(13,'big-AGI','big_agi'),(14,'Open WebUI','open_webui'),(15,'Jan','jan'),(16,'Grok Build','grok_build'),(17,'React','react'),(18,'Vite','vite'),(19,'Vercel AI SDK','vercel_ai_sdk'),(20,'Zustand','zustand')]
+          aliases={'rule-engine':['rule-engine','Rule Engine'],'PyCasbin':['PyCasbin','Apache PyCasbin']}
+          out=[]
+          for i,name,slug in rows:
               dest=vendor/slug
-              candidates=[src_root/x for x in aliases.get(name,[name])]
-              for er in extra_roots:
-                  candidates.extend(er/x for x in aliases.get(name,[name]))
-              source=next((p for p in candidates if p.is_dir()), None)
-              if dest.is_dir() and any(dest.iterdir()):
-                  status='ALREADY_VENDOR'
-              elif source is not None:
-                  shutil.copytree(source, dest, symlinks=True)
-                  status='MATERIALIZED'
-              else:
-                  status='PENDING_SOURCE'
-              result.append({'id':number,'name':name,'slug':slug,'source':str(source) if source else None,'destination':str(dest),'status':status})
-
-          evidence = root/'➡️📂 Wordflow LOOP UI YAIWES'/'runtime'/'integration-01-20-step1.json'
-          evidence.write_text(json.dumps({'schema':'yaiwes.integration.01-20.step1.v1','generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'components':result},indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
-
-          begin='<!-- YAIWES_COMPONENTS_01_20_STEP1_BEGIN -->'
-          end='<!-- YAIWES_COMPONENTS_01_20_STEP1_END -->'
-          lines=['\n'+begin,'## Integración 01–20 — Paso 1: destino final','',f'Destino: `{vendor}`. La fuente central permanece inmutable; el código se materializa sin reescritura de blobs.','', '|#|Componente|Estado|Destino|','|---:|---|---|---|']
-          for r in result:
-              lines.append(f"|{r['id']}|{r['name']}|{r['status']}|`{r['destination']}`|")
-          lines += ['',end,'']
+              source=next((src/x for x in aliases.get(name,[name]) if (src/x).is_dir()),None)
+              if dest.is_dir() and any(dest.iterdir()): status='ALREADY_VENDOR'
+              elif source:
+                  shutil.copytree(source,dest,symlinks=True); status='MATERIALIZED'
+              else: status='PENDING_SOURCE'
+              out.append({'id':i,'name':name,'slug':slug,'source':str(source) if source else None,'destination':str(dest),'status':status})
+          ev=loop/'runtime'/'integration-01-20-step1.json'
+          ev.write_text(json.dumps({'schema':'yaiwes.integration.01-20.step1.v2','generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'components':out},indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+          arch=root/'readme arquitectura UI YAIWES'/'README.md'; text=arch.read_text(encoding='utf-8')
+          b='<!-- YAIWES_COMPONENTS_01_20_STEP1_BEGIN -->'; e='<!-- YAIWES_COMPONENTS_01_20_STEP1_END -->'
+          lines=['',b,'## Integración 01–20 — Paso 1: destino final','',f'Destino: `{vendor}`. Fuente central inmutable; materialización sin reescritura de blobs.','', '|#|Componente|Estado|Destino|','|---:|---|---|---|']+[f"|{r['id']}|{r['name']}|{r['status']}|`{r['destination']}`|" for r in out]+['',e,'']
           block='\n'.join(lines)
-          text=arch.read_text(encoding='utf-8')
-          if begin in text and end in text:
-              text=text.split(begin)[0]+block+text.split(end,1)[1]
-          else:
-              text=text.rstrip()+'\n'+block
+          text=(text.split(b)[0]+block+text.split(e,1)[1]) if b in text and e in text else text.rstrip()+'\n'+block
           arch.write_text(text,encoding='utf-8')
-          print(json.dumps({'step':1,'materialized':sum(r['status']=='MATERIALIZED' for r in result),'already_vendor':sum(r['status']=='ALREADY_VENDOR' for r in result),'pending':sum(r['status']=='PENDING_SOURCE' for r in result)},ensure_ascii=False))
+          print(json.dumps({'step':1,'materialized':sum(r['status']=='MATERIALIZED' for r in out),'already_vendor':sum(r['status']=='ALREADY_VENDOR' for r in out),'pending':sum(r['status']=='PENDING_SOURCE' for r in out)}))
           PY
           git add -A -- 'UI YAIWES'
           if ! git diff --cached --quiet; then
@@ -97,68 +96,35 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import json, shutil, datetime
-
-          root=Path('UI YAIWES')
-          loop=root/'➡️📂 Wordflow LOOP UI YAIWES'
-          vendor=loop/'runtime'/'vendor'
+          root=Path('UI YAIWES'); loop=root/'➡️📂 Wordflow LOOP UI YAIWES'; vendor=loop/'runtime'/'vendor'
           step1=json.loads((loop/'runtime'/'integration-01-20-step1.json').read_text(encoding='utf-8'))
-          roles={
-            1:('WORKFLOW_OWNER','ACTIVE'),2:('TYPED_CONTRACTS','ACTIVE'),3:('ASGI_TRANSPORT','ACTIVE'),4:('HTTP_CONNECTOR','ACTIVE'),
-            5:('DETERMINISTIC_RULES','ACTIVE'),6:('POLICY_AUTHZ','ACTIVE'),7:('OBSERVABILITY','ACTIVE'),8:('TEST_TOOL','TEST_ONLY'),
-            9:('PROPERTY_TEST_TOOL','TEST_ONLY'),10:('WORKFLOW_PATTERNS','DONOR_ONLY'),11:('PROVENANCE_HASHING','DONOR_ONLY'),
-            12:('CHAT_WORKSPACE','DONOR_ONLY'),13:('MULTIMODEL_CHAT_UI','DONOR_ONLY'),14:('CHAT_ADMIN_UI','REFERENCE_ONLY'),
-            15:('LOCAL_CHAT_DESKTOP','DONOR_ONLY'),16:('WORKSPACE_BUILD','DONOR_ONLY'),17:('COMMAND_CENTER_UI','ACTIVE'),
-            18:('WEB_BUILD','ACTIVE'),19:('STREAMING_PROVIDER_UI','ACTIVE'),20:('CLIENT_STATE','ACTIVE_CLIENT_ONLY')}
-          prune_dirs={'.github','.agents','.buildkite','.claude','.circleci','.devcontainer','docs','doc','examples','example','tests','test'}
-          prune_prefix=('CHANGELOG','HISTORY')
+          roles={1:('WORKFLOW_OWNER','ACTIVE'),2:('TYPED_CONTRACTS','ACTIVE'),3:('ASGI_TRANSPORT','ACTIVE'),4:('HTTP_CONNECTOR','ACTIVE'),5:('DETERMINISTIC_RULES','ACTIVE'),6:('POLICY_AUTHZ','ACTIVE'),7:('OBSERVABILITY','ACTIVE'),8:('TEST_TOOL','TEST_ONLY'),9:('PROPERTY_TEST_TOOL','TEST_ONLY'),10:('WORKFLOW_PATTERNS','DONOR_ONLY'),11:('PROVENANCE_HASHING','DONOR_ONLY'),12:('CHAT_WORKSPACE','DONOR_ONLY'),13:('MULTIMODEL_CHAT_UI','DONOR_ONLY'),14:('CHAT_ADMIN_UI','REFERENCE_ONLY'),15:('LOCAL_CHAT_DESKTOP','DONOR_ONLY'),16:('WORKSPACE_BUILD','DONOR_ONLY'),17:('COMMAND_CENTER_UI','ACTIVE'),18:('WEB_BUILD','ACTIVE'),19:('STREAMING_PROVIDER_UI','ACTIVE'),20:('CLIENT_STATE','ACTIVE_CLIENT_ONLY')}
+          prune={'.github','.agents','.buildkite','.claude','.circleci','.devcontainer','docs','doc','examples','example','tests','test'}
           wired=[]
           for r in step1['components']:
-              dest=Path(r['destination'])
-              removed=[]
+              dest=Path(r['destination']); removed=[]
               if dest.is_dir():
                   for child in list(dest.iterdir()):
-                      if child.is_dir() and child.name in prune_dirs:
-                          shutil.rmtree(child); removed.append(child.name+'/')
-                      elif child.is_file() and child.name.upper().startswith(prune_prefix):
-                          child.unlink(); removed.append(child.name)
-              role,mode=roles[r['id']]
-              status='WIRED' if dest.is_dir() and any(dest.iterdir()) else 'PENDING_SOURCE'
+                      if child.is_dir() and child.name in prune: shutil.rmtree(child); removed.append(child.name+'/')
+                      elif child.is_file() and (child.name.upper().startswith('CHANGELOG') or child.name.upper().startswith('HISTORY')): child.unlink(); removed.append(child.name)
+              role,mode=roles[r['id']]; status='WIRED' if dest.is_dir() and any(dest.iterdir()) else 'PENDING_SOURCE'
               wired.append({**r,'role':role,'mode':mode,'wire_status':status,'pruned':removed})
-
-          registry=loop/'wordflow_loop'/'wordflow_loop'/'component_registry.py'
-          registry.parent.mkdir(parents=True,exist_ok=True)
-          rows_repr=repr([(r['id'],r['name'],r['slug'],r['role'],r['mode'],r['wire_status']) for r in wired])
-          registry.write_text(f'''from __future__ import annotations\nfrom dataclasses import dataclass\nfrom pathlib import Path\n\n@dataclass(frozen=True)\nclass ComponentSpec:\n    id: int\n    name: str\n    slug: str\n    role: str\n    mode: str\n    status: str\n\n_ROWS = {rows_repr}\nCOMPONENTS = {{row[0]: ComponentSpec(*row) for row in _ROWS}}\n\ndef vendor_root() -> Path:\n    return Path(__file__).resolve().parents[2] / "runtime" / "vendor"\n\ndef component_path(component_id: int) -> Path:\n    spec = COMPONENTS[component_id]\n    path = vendor_root() / spec.slug\n    if spec.status != "WIRED" or not path.is_dir() or not any(path.iterdir()):\n        raise RuntimeError(f"component {{component_id}} not mounted: {{spec.status}}")\n    return path\n\ndef active_components():\n    return tuple(spec for spec in COMPONENTS.values() if spec.status == "WIRED")\n''',encoding='utf-8')
-
-          init=registry.parent/'__init__.py'
-          text=init.read_text(encoding='utf-8') if init.exists() else ''
-          marker='from .component_registry import COMPONENTS, ComponentSpec, active_components, component_path\n'
-          if marker not in text:
-              init.write_text(text.rstrip()+'\n'+marker,encoding='utf-8')
-
-          wire_evidence=loop/'runtime'/'integration-01-20-step2.json'
-          wire_evidence.write_text(json.dumps({'schema':'yaiwes.integration.01-20.step2.v1','generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'components':wired},indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
-
-          def replace_md(path, tag, title, body):
-              p=Path(path); text=p.read_text(encoding='utf-8')
-              b=f'<!-- {tag}_BEGIN -->'; e=f'<!-- {tag}_END -->'
-              block='\n'.join(['',b,f'## {title}','',body,'',e,''])
-              if b in text and e in text: text=text.split(b)[0]+block+text.split(e,1)[1]
-              else: text=text.rstrip()+'\n'+block
-              p.write_text(text,encoding='utf-8')
-
-          ready=sum(r['wire_status']=='WIRED' for r in wired)
-          pending=20-ready
-          summary=f'Componentes 01–20: `{ready}` cableados en registry/mount-guard y `{pending}` pendientes de fuente. Poda aplicada sólo al duplicado `runtime/vendor`; no se reescribió código upstream. No se ejecutaron tests en este paso.'
-          replace_md(root/'readme arquitectura UI YAIWES'/'README.md','YAIWES_COMPONENTS_01_20_STEP2','Integración 01–20 — Paso 2: cableado y poda',summary)
-          replace_md(root/'bitácora stated JSON Craxy wall plan checkpoint'/'BITACORA-CRAZY-WALL.md','YAIWES_COMPONENTS_01_20_STEP2','UI-PLUG — componentes 01–20 cableados/podados',summary)
-          replace_md(root/'readme arquitectura UI YAIWES'/'HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md','YAIWES_COMPONENTS_01_20_STEP2','Handoff — integración 01–20',summary)
-
-          state_path=root/'bitácora stated JSON Craxy wall plan checkpoint'/'STATE.json'
-          state=json.loads(state_path.read_text(encoding='utf-8'))
-          state['component_integration_01_20']={'step':2,'status':'WIRED_PARTIAL' if pending else 'WIRED_NO_TESTS','wired':ready,'pending_source':pending,'evidence':str(wire_evidence),'tests_run':False}
-          state_path.write_text(json.dumps(state,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
-          print(json.dumps({'step':2,'wired':ready,'pending_source':pending,'tests_run':False},ensure_ascii=False))
+          registry=loop/'wordflow_loop'/'wordflow_loop'/'component_registry.py'; registry.parent.mkdir(parents=True,exist_ok=True)
+          rr=repr([(r['id'],r['name'],r['slug'],r['role'],r['mode'],r['wire_status']) for r in wired])
+          registry.write_text(f'''from __future__ import annotations\nfrom dataclasses import dataclass\nfrom pathlib import Path\n\n@dataclass(frozen=True)\nclass ComponentSpec:\n    id: int\n    name: str\n    slug: str\n    role: str\n    mode: str\n    status: str\n\n_ROWS = {rr}\nCOMPONENTS = {{row[0]: ComponentSpec(*row) for row in _ROWS}}\n\ndef vendor_root() -> Path:\n    return Path(__file__).resolve().parents[2] / "runtime" / "vendor"\n\ndef component_path(component_id: int) -> Path:\n    spec = COMPONENTS[component_id]\n    path = vendor_root() / spec.slug\n    if spec.status != "WIRED" or not path.is_dir() or not any(path.iterdir()):\n        raise RuntimeError(f"component {{component_id}} not mounted: {{spec.status}}")\n    return path\n\ndef active_components():\n    return tuple(spec for spec in COMPONENTS.values() if spec.status == "WIRED")\n''',encoding='utf-8')
+          init=registry.parent/'__init__.py'; t=init.read_text(encoding='utf-8') if init.exists() else ''
+          imp='from .component_registry import COMPONENTS, ComponentSpec, active_components, component_path\n'
+          if imp not in t: init.write_text(t.rstrip()+'\n'+imp,encoding='utf-8')
+          ev=loop/'runtime'/'integration-01-20-step2.json'; ev.write_text(json.dumps({'schema':'yaiwes.integration.01-20.step2.v2','generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'components':wired},indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+          def md(path,tag,title,body):
+              p=Path(path); t=p.read_text(encoding='utf-8'); b=f'<!-- {tag}_BEGIN -->'; e=f'<!-- {tag}_END -->'; block='\n'.join(['',b,f'## {title}','',body,'',e,'']); p.write_text((t.split(b)[0]+block+t.split(e,1)[1]) if b in t and e in t else t.rstrip()+'\n'+block,encoding='utf-8')
+          ready=sum(r['wire_status']=='WIRED' for r in wired); pending=20-ready
+          summary=f'Componentes 01–20: `{ready}` cableados en registry/mount-guard y `{pending}` PENDING_SOURCE. Poda sólo sobre `runtime/vendor`; upstream intacto. Tests ejecutados en este paso: `false`.'
+          md(root/'readme arquitectura UI YAIWES'/'README.md','YAIWES_COMPONENTS_01_20_STEP2','Integración 01–20 — Paso 2: cableado y poda',summary)
+          md(root/'bitácora stated JSON Craxy wall plan checkpoint'/'BITACORA-CRAZY-WALL.md','YAIWES_COMPONENTS_01_20_STEP2','UI-PLUG — componentes 01–20 cableados/podados',summary)
+          md(root/'readme arquitectura UI YAIWES'/'HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md','YAIWES_COMPONENTS_01_20_STEP2','Handoff — integración 01–20',summary)
+          statep=root/'bitácora stated JSON Craxy wall plan checkpoint'/'STATE.json'; state=json.loads(statep.read_text(encoding='utf-8')); state['component_integration_01_20']={'step':2,'status':'WIRED_PARTIAL' if pending else 'WIRED_NO_TESTS','wired':ready,'pending_source':pending,'evidence':str(ev),'tests_run':False}; statep.write_text(json.dumps(state,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+          print(json.dumps({'step':2,'wired':ready,'pending_source':pending,'tests_run':False}))
           PY
           git add -A -- 'UI YAIWES'
           if ! git diff --cached --quiet; then
@@ -173,57 +139,35 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-          import json, datetime, importlib.util, shutil
-
-          root=Path('UI YAIWES')
-          loop=root/'➡️📂 Wordflow LOOP UI YAIWES'
-          reg_path=loop/'wordflow_loop'/'wordflow_loop'/'component_registry.py'
-          spec=importlib.util.spec_from_file_location('yaiwes_component_registry',reg_path)
-          mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
-          forbidden={'.github','.agents','.buildkite','.claude','.circleci','.devcontainer','docs','doc','examples','example','tests','test'}
-          results=[]
+          import json, datetime, importlib.util, shutil, sys
+          root=Path('UI YAIWES'); loop=root/'➡️📂 Wordflow LOOP UI YAIWES'; reg=loop/'wordflow_loop'/'wordflow_loop'/'component_registry.py'
+          spec=importlib.util.spec_from_file_location('yaiwes_component_registry',reg); mod=importlib.util.module_from_spec(spec); sys.modules[spec.name]=mod; spec.loader.exec_module(mod)
+          forbidden={'.github','.agents','.buildkite','.claude','.circleci','.devcontainer','docs','doc','examples','example','tests','test'}; results=[]
           for cid in range(1,21):
               c=mod.COMPONENTS[cid]
-              if c.status != 'WIRED':
-                  results.append({'id':cid,'name':c.name,'result':'PENDING_SOURCE'})
-                  continue
+              if c.status!='WIRED': results.append({'id':cid,'name':c.name,'result':'PENDING_SOURCE'}); continue
               try:
-                  path=mod.component_path(cid)
-                  entries=list(path.iterdir())
+                  path=mod.component_path(cid); entries=list(path.iterdir())
                   if not entries: raise RuntimeError('empty destination')
                   leftovers=sorted(x.name for x in entries if x.is_dir() and x.name in forbidden)
                   if leftovers: raise RuntimeError('unpruned:'+','.join(leftovers))
                   results.append({'id':cid,'name':c.name,'result':'PASS','path':str(path)})
               except Exception as exc:
-                  path=mod.vendor_root()/c.slug
-                  quarantine=mod.vendor_root()/'_pruned_failed'/c.slug
-                  quarantine.parent.mkdir(parents=True,exist_ok=True)
+                  path=mod.vendor_root()/c.slug; quarantine=mod.vendor_root()/'_pruned_failed'/c.slug; quarantine.parent.mkdir(parents=True,exist_ok=True)
                   if path.exists():
                       if quarantine.exists(): shutil.rmtree(quarantine)
                       shutil.move(str(path),str(quarantine))
                   results.append({'id':cid,'name':c.name,'result':'PRUNED_AFTER_FAIL','error':str(exc),'quarantine':str(quarantine)})
-
-          evidence=loop/'runtime'/'integration-01-20-step3-tests.json'
-          evidence.write_text(json.dumps({'schema':'yaiwes.integration.01-20.step3.v1','generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'tests':results},indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+          ev=loop/'runtime'/'integration-01-20-step3-tests.json'; ev.write_text(json.dumps({'schema':'yaiwes.integration.01-20.step3.v2','generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'tests':results},indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
           passed=sum(r['result']=='PASS' for r in results); pending=sum(r['result']=='PENDING_SOURCE' for r in results); pruned=sum(r['result']=='PRUNED_AFTER_FAIL' for r in results)
-
-          def replace_md(path, tag, title, body):
-              p=Path(path); text=p.read_text(encoding='utf-8')
-              b=f'<!-- {tag}_BEGIN -->'; e=f'<!-- {tag}_END -->'
-              block='\n'.join(['',b,f'## {title}','',body,'',e,''])
-              if b in text and e in text: text=text.split(b)[0]+block+text.split(e,1)[1]
-              else: text=text.rstrip()+'\n'+block
-              p.write_text(text,encoding='utf-8')
-
-          summary=f'Test de mount-guard/cableado ejecutado 1×1: `{passed}` PASS, `{pending}` PENDING_SOURCE y `{pruned}` podados tras fallo. Evidencia: `{evidence}`. Sólo PASS cuenta como probado en este lote.'
-          replace_md(root/'readme arquitectura UI YAIWES'/'README.md','YAIWES_COMPONENTS_01_20_STEP3','Integración 01–20 — Paso 3: tests',summary)
-          replace_md(root/'bitácora stated JSON Craxy wall plan checkpoint'/'BITACORA-CRAZY-WALL.md','YAIWES_COMPONENTS_01_20_STEP3','UI-PLUG — tests componentes 01–20',summary)
-          replace_md(root/'readme arquitectura UI YAIWES'/'HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md','YAIWES_COMPONENTS_01_20_STEP3','Handoff — tests integración 01–20',summary)
-          state_path=root/'bitácora stated JSON Craxy wall plan checkpoint'/'STATE.json'
-          state=json.loads(state_path.read_text(encoding='utf-8'))
-          state['component_integration_01_20']={'step':3,'status':'TESTED_COMPLETE' if passed==20 else 'TESTED_PARTIAL','passed':passed,'pending_source':pending,'pruned_after_fail':pruned,'evidence':str(evidence),'tests_run':True}
-          state_path.write_text(json.dumps(state,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
-          print(json.dumps({'step':3,'pass':passed,'pending_source':pending,'pruned_after_fail':pruned},ensure_ascii=False))
+          def md(path,tag,title,body):
+              p=Path(path); t=p.read_text(encoding='utf-8'); b=f'<!-- {tag}_BEGIN -->'; e=f'<!-- {tag}_END -->'; block='\n'.join(['',b,f'## {title}','',body,'',e,'']); p.write_text((t.split(b)[0]+block+t.split(e,1)[1]) if b in t and e in t else t.rstrip()+'\n'+block,encoding='utf-8')
+          summary=f'Test real de mount-guard/cableado 1×1: `{passed}` PASS, `{pending}` PENDING_SOURCE, `{pruned}` PRUNED_AFTER_FAIL. Evidencia: `{ev}`. Sólo PASS cuenta como probado.'
+          md(root/'readme arquitectura UI YAIWES'/'README.md','YAIWES_COMPONENTS_01_20_STEP3','Integración 01–20 — Paso 3: tests',summary)
+          md(root/'bitácora stated JSON Craxy wall plan checkpoint'/'BITACORA-CRAZY-WALL.md','YAIWES_COMPONENTS_01_20_STEP3','UI-PLUG — tests componentes 01–20',summary)
+          md(root/'readme arquitectura UI YAIWES'/'HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md','YAIWES_COMPONENTS_01_20_STEP3','Handoff — tests integración 01–20',summary)
+          statep=root/'bitácora stated JSON Craxy wall plan checkpoint'/'STATE.json'; state=json.loads(statep.read_text(encoding='utf-8')); state['component_integration_01_20']={'step':3,'status':'TESTED_COMPLETE' if passed==20 else 'TESTED_PARTIAL','passed':passed,'pending_source':pending,'pruned_after_fail':pruned,'evidence':str(ev),'tests_run':True}; statep.write_text(json.dumps(state,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+          print(json.dumps({'step':3,'pass':passed,'pending_source':pending,'pruned_after_fail':pruned}))
           PY
           git add -A -- 'UI YAIWES'
           if ! git diff --cached --quiet; then
