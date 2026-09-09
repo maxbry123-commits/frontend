@@ -1,0 +1,43 @@
+name: HF Component Download E2E APScheduler
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/hf-component-download-e2e-apscheduler-20260909.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hf-component-download-e2e-apscheduler
+  cancel-in-progress: false
+
+jobs:
+  e2e-download-publish-readback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout motor
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+      - name: Run deterministic component download motor
+        shell: bash
+        env:
+          SOURCE_REPO: agronholm/apscheduler
+          SOURCE_REF: master
+          SLUG: APScheduler
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: 📂componentes open soure fromtend
+          PART_SIZE_MIB: '12'
+          MAX_GITHUB_BLOB_MIB: '95'
+          PUBLISH: '1'
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 '➡️📂motor descarga de componentes con huggueface/hf_component_download_engine.py' | tee /tmp/hf-component-download-result.jsonl
+          grep -q 'PUBLISHED_READBACK_VERIFIED' /tmp/hf-component-download-result.jsonl
