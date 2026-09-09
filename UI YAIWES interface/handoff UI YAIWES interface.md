@@ -77,3 +77,5 @@ Botón (JS en ese HTML) → ABS → HOST postMessage → kernel (local | web | g
 - Vendor copiado (dockview+lucide): https://github.com/maxbry123-commits/frontend/tree/main/UI%20YAIWES%20interface/fabrica-ui/vendor
 - HF + extract: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/fabrica-ui/HUGGINGFACE-Y-EXTRACT.md
 - Workflow propuesto: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/empaque/extract-to-factory.workflow.yml
+
+- Lista final fábrica: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/fabrica-ui/LISTA-FINAL-FABRICA.md
