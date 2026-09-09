@@ -1,0 +1,122 @@
+{
+  "schema": "yaiwes.integration.01-20.step3.v2",
+  "generated_at": "2026-09-09T01:17:15.507601+00:00",
+  "tests": [
+    {
+      "id": 1,
+      "name": "Stabilize CORE",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize"
+    },
+    {
+      "id": 2,
+      "name": "Pydantic",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pydantic"
+    },
+    {
+      "id": 3,
+      "name": "Starlette",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/starlette"
+    },
+    {
+      "id": 4,
+      "name": "HTTPX",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/httpx"
+    },
+    {
+      "id": 5,
+      "name": "rule-engine",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/rule_engine"
+    },
+    {
+      "id": 6,
+      "name": "PyCasbin",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pycasbin"
+    },
+    {
+      "id": 7,
+      "name": "OpenTelemetry Python",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/opentelemetry_python"
+    },
+    {
+      "id": 8,
+      "name": "pytest",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/pytest"
+    },
+    {
+      "id": 9,
+      "name": "Hypothesis",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/hypothesis"
+    },
+    {
+      "id": 10,
+      "name": "Dagu",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/dagu"
+    },
+    {
+      "id": 11,
+      "name": "redun",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/redun"
+    },
+    {
+      "id": 12,
+      "name": "LibreChat",
+      "result": "PENDING_SOURCE"
+    },
+    {
+      "id": 13,
+      "name": "big-AGI",
+      "result": "PENDING_SOURCE"
+    },
+    {
+      "id": 14,
+      "name": "Open WebUI",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/open_webui"
+    },
+    {
+      "id": 15,
+      "name": "Jan",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/jan"
+    },
+    {
+      "id": 16,
+      "name": "Grok Build",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/grok_build"
+    },
+    {
+      "id": 17,
+      "name": "React",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/react"
+    },
+    {
+      "id": 18,
+      "name": "Vite",
+      "result": "PENDING_SOURCE"
+    },
+    {
+      "id": 19,
+      "name": "Vercel AI SDK",
+      "result": "PENDING_SOURCE"
+    },
+    {
+      "id": 20,
+      "name": "Zustand",
+      "result": "PASS",
+      "path": "/home/runner/work/frontend/frontend/UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/zustand"
+    }
+  ]
+}

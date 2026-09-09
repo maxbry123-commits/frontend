@@ -422,3 +422,10 @@ Plan:
 Componentes 01–20: `16` cableados en registry/mount-guard y `4` PENDING_SOURCE. Poda sólo sobre `runtime/vendor`; upstream intacto. Tests ejecutados en este paso: `false`.
 
 <!-- YAIWES_COMPONENTS_01_20_STEP2_END -->
+
+<!-- YAIWES_COMPONENTS_01_20_STEP3_BEGIN -->
+## Handoff — tests integración 01–20
+
+Test real de mount-guard/cableado 1×1: `16` PASS, `4` PENDING_SOURCE, `0` PRUNED_AFTER_FAIL. Evidencia: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/integration-01-20-step3-tests.json`. Sólo PASS cuenta como probado.
+
+<!-- YAIWES_COMPONENTS_01_20_STEP3_END -->

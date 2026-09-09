@@ -126,11 +126,12 @@
   "next_delta": "A04_C1_INDEPENDENT_AUDIT: audit 50 complete-shape/no-gap entries against current destination without redownload",
   "closure_rule": "file/import/repository/checkpoint/staging/download never equals VERIFIED_CLOSED without required route+SHA+readback+test/log/URL evidence and Judge",
   "component_integration_01_20": {
-    "step": 2,
-    "status": "WIRED_PARTIAL",
-    "wired": 16,
+    "step": 3,
+    "status": "TESTED_PARTIAL",
+    "passed": 16,
     "pending_source": 4,
-    "evidence": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/integration-01-20-step2.json",
-    "tests_run": false
+    "pruned_after_fail": 0,
+    "evidence": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/integration-01-20-step3-tests.json",
+    "tests_run": true
   }
 }
