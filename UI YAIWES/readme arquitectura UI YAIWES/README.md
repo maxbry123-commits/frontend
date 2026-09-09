@@ -877,9 +877,11 @@ Componentes 01–20: `17` cableados en registry/mount-guard y `3` PENDING_SOURCE
 <!-- YAIWES_COMPONENTS_01_20_STEP2_END -->
 
 
+
 <!-- YAIWES_COMPONENTS_01_20_STEP3_BEGIN -->
 ## Integración 01–20 — Paso 3: tests
 
-Test real de mount-guard/cableado 1×1: `16` PASS, `4` PENDING_SOURCE, `0` PRUNED_AFTER_FAIL. Evidencia: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/integration-01-20-step3-tests.json`. Sólo PASS cuenta como probado.
+Test real de mount-guard/cableado 1×1: `17` PASS, `3` PENDING_SOURCE, `0` PRUNED_AFTER_FAIL. Evidencia: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/integration-01-20-step3-tests.json`. Sólo PASS cuenta como probado.
 
 <!-- YAIWES_COMPONENTS_01_20_STEP3_END -->
+
