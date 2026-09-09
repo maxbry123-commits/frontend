@@ -1,0 +1,44 @@
+name: HF Component Download E2E APScheduler FAST
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/hf-component-download-e2e-apscheduler-fast-20260909.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  e2e-download-publish-readback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Fetch motor only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import urllib.request, pathlib
+          u='https://raw.githubusercontent.com/maxbry123-commits/frontend/main/%E2%9E%A1%EF%B8%8F%F0%9F%93%82motor%20descarga%20de%20componentes%20con%20huggueface/hf_component_download_engine.py'
+          p=pathlib.Path('/tmp/hf_component_download_engine.py')
+          p.write_bytes(urllib.request.urlopen(u).read())
+          PY
+      - name: Run deterministic component download motor
+        shell: bash
+        env:
+          SOURCE_REPO: agronholm/apscheduler
+          SOURCE_REF: master
+          SLUG: APScheduler
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: 📂componentes open soure fromtend
+          PART_SIZE_MIB: '12'
+          MAX_GITHUB_BLOB_MIB: '95'
+          PUBLISH: '1'
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python3 /tmp/hf_component_download_engine.py | tee /tmp/hf-component-download-result.jsonl
+          grep -q 'PUBLISHED_READBACK_VERIFIED' /tmp/hf-component-download-result.jsonl
