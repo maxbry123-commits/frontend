@@ -1,0 +1,4 @@
+https://github.com/danny-avila/LibreChat/blob/968950a4bdb3929c9381b80290720972cb936134/.claude/skills/codebase-design/LICENSE
+https://github.com/danny-avila/LibreChat/blob/968950a4bdb3929c9381b80290720972cb936134/.claude/skills/improve-codebase-architecture/LICENSE
+https://github.com/danny-avila/LibreChat/blob/968950a4bdb3929c9381b80290720972cb936134/LICENSE
+https://github.com/danny-avila/LibreChat/blob/968950a4bdb3929c9381b80290720972cb936134/packages/data-schemas/LICENSE
