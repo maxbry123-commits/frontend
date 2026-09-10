@@ -1,0 +1,8 @@
+{
+  "name": "yaiwes-astra-factory-v0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/factory.test.mjs"
+  }
+}
