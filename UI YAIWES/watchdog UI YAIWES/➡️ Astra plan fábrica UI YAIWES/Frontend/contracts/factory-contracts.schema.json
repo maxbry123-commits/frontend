@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "yaiwes.factory.contracts.v1",
+  "title": "YAIWES Factory Contracts",
+  "$defs": {
+    "ComponentDraft": {
+      "type": "object",
+      "required": ["id", "version", "kind", "props", "source", "status"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "version": {"type": "integer", "minimum": 1},
+        "kind": {"enum": ["window", "button", "selector", "segment", "panel", "custom"]},
+        "props": {"type": "object"},
+        "tokens": {"type": "object"},
+        "source": {"enum": ["manual", "template", "oss_adapter", "ai_delta"]},
+        "status": {"enum": ["draft", "previewed", "validated", "rejected"]}
+      },
+      "additionalProperties": false
+    },
+    "UIScene": {
+      "type": "object",
+      "required": ["id", "version", "nodes", "layout", "responsive", "status"],
+      "properties": {
+        "id": {"type": "string"},
+        "version": {"type": "integer", "minimum": 1},
+        "nodes": {"type": "array", "items": {"type": "string"}},
+        "layout": {"type": "object"},
+        "responsive": {"type": "object"},
+        "navigation": {"type": "object"},
+        "status": {"enum": ["draft", "previewed", "validated", "rejected"]}
+      },
+      "additionalProperties": false
+    },
+    "RegisteredComponentCandidate": {
+      "type": "object",
+      "required": ["id", "source_url", "source_commit", "capability", "lane", "status"],
+      "properties": {
+        "id": {"type": "string"},
+        "source_url": {"type": "string"},
+        "source_commit": {"type": "string"},
+        "license": {"type": ["string", "null"]},
+        "capability": {"type": "string"},
+        "lane": {"enum": ["Frontend", "backend", "shared", "test", "reference"]},
+        "adapter": {"type": ["string", "null"]},
+        "status": {"enum": ["source_present", "verified_source", "adapter_prepared", "tested_staging", "rejected"]}
+      },
+      "additionalProperties": false
+    },
+    "ProposedStateDelta": {
+      "type": "object",
+      "required": ["id", "base_version", "operations", "reason", "actor", "status"],
+      "properties": {
+        "id": {"type": "string"},
+        "base_version": {"type": "integer", "minimum": 1},
+        "operations": {"type": "array", "items": {"type": "object"},
+        "reason": {"type": "string"},
+        "actor": {"type": "string"},
+        "status": {"enum": ["proposed", "validated", "previewed", "applied", "rolled_back", "rejected"]}
+      },
+      "additionalProperties": false
+    },
+    "FactoryEvidence": {
+      "type": "object",
+      "required": ["node", "base_sha", "paths", "tests", "readback", "result"],
+      "properties": {
+        "node": {"type": "string"},
+        "base_sha": {"type": "string"},
+        "paths": {"type": "array", "items": {"type": "string"}},
+        "diff_sha": {"type": ["string", "null"]},
+        "tests": {"type": "array", "items": {"type": "object"}},
+        "logs": {"type": "array", "items": {"type": "string"}},
+        "readback": {"type": "boolean"},
+        "result": {"enum": ["ACTIVE_LOOP", "GAP", "INCONCLUSIVE", "CLOSED_UNVERIFIED", "VERIFIED_CLOSED"]}
+      },
+      "additionalProperties": false
+    }
+  }
+}
