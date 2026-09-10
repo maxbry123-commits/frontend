@@ -1,0 +1,63 @@
+{
+  "schema": "yaiwes.astra.factory_interface.checkpoint.v3",
+  "contract": "tel.workflow/v3",
+  "timestamp": "2026-09-10T17:06:00-05:00",
+  "owner_identity": "➡️ Astra plan fábrica UI YAIWES",
+  "scope": "ONLY_FACTORY_AND_UI_YAIWES_INTERFACE",
+  "status": "ACTIVE_LOOP",
+  "task_gate": {
+    "T1_FACTORY": "ACTIVE_LOOP",
+    "T2_INTERFACE": "BLOCKED_BY_T1_FOR_PRODUCTIVE_EXECUTION"
+  },
+  "current_node": "T1_03_COMPONENT_XRAY",
+  "next_node": "T1_04_CANVAS_OWNER_SELECTION",
+  "canonical_read_order": [
+    "INPUT-BLOCK-LITERAL-2026-09-10.md",
+    "INPUT-BLOCK-LITERAL-ADDENDUM-2026-09-10.md",
+    "INPUT-BLOCK-LITERAL-PART-02-2026-09-10.md",
+    "CRAZY-WALL-ASTRA-FABRICA-INTERFACE-UI-YAIWES.json",
+    "STATE.json",
+    "PERFIL-TRABAJO-Y-PERFIL-UI-YAIWES.md",
+    "ARQUITECTURA-DETALLADA-FABRICA-E-INTERFACE-YAIWES-V2.md",
+    "MATRIZ-FUSION-46-COMPONENTES-FRONTEND-BACKEND.md",
+    "PLAN-MAESTRO-TAREA1-TAREA2-ASTRA-V2.md",
+    "AUDITORIA-FORENSE-4-PASADAS-ASTRA-V2.md",
+    "AUDITORIA-4-PASADAS-INPUT-PLAN-ARQUITECTURA-CABLEADO-2026-09-10.md",
+    "RECOVERY-PATCH-ASTRA-FABRICA-INTERFACE-YAIWES-V3.md",
+    "HANDOFF-ASTRA-CLAUDE-FABRICA-INTERFACE-YAIWES-V3.md"
+  ],
+  "physical_roots": {
+    "factory": "fabrica de UI INTERFACE fromtend/",
+    "oss_library": "UI YAIWES/componentes open soure UI YAIWES/",
+    "historical_product_interface": "UI YAIWES interface/",
+    "astra_workspace": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/",
+    "astra_frontend": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/Frontend/",
+    "astra_backend_donor": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/backend/",
+    "sol_backend_read_only": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/"
+  },
+  "verified_repairs": [
+    "dedicated Astra Crazy Wall created",
+    "Frontend/ lowercase collision removed",
+    "literal source URL addendum persisted",
+    "literal part-02 persisted without secrets",
+    "physical factory root corrected",
+    "architecture V2 separates proposed frontend contracts from verified Sol backend capabilities"
+  ],
+  "open_gaps": [
+    "GAP_COMPONENT_XRAY_NOT_COMPLETE",
+    "GAP_CANVAS_OWNER_NOT_SELECTED",
+    "GAP_PROVIDER_MODEL_AVAILABILITY",
+    "GAP_HF_PRIVATE_FACTORY_DEPLOYMENT_NOT_VERIFIED",
+    "GAP_BACKEND_LLM_CAPABILITY_FOR_FACTORY",
+    "GAP_REAL_BACKEND_BINDINGS_NOT_VERIFIED_T2"
+  ],
+  "backend_crosscheck": {
+    "contracts": "NodeContract/Evidence/LayerResult found",
+    "registry": "ComponentSpec registry found; WIRED is not VERIFIED_CLOSED",
+    "llm_gate": "current reasons limited to ambiguity_resolution, semantic_ranking, bounded_summary; general factory Autopilot not verified",
+    "rule": "Backend PASS maps to RUNTIME_PASS only until independent verification"
+  },
+  "resume_algorithm": "read literals -> read Crazy Wall/STATE/profile/architecture V2/matrix/plan/audits/recovery/handoff -> fetch fresh main HEAD -> verify current_node + ownership + path -> execute one safe node -> test/evidence -> update state/checkpoint/handoff",
+  "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
+  "secrets_policy": "Never persist user API keys; use secret_ref only."
+}
