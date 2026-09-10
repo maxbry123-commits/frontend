@@ -1,0 +1,38 @@
+{
+  "bundle_bytes": 19286426,
+  "bundle_sha256": "8b20b4b685bd0d8aebb498a351370513790379beadbb066fe772cf511577f12c",
+  "extracted_tree": {
+    "bytes": 23241150,
+    "files": 1638,
+    "sha256": "5e7e8f01976c6ff60c6c4580c854be822b067d432313d2a14514082247f758da"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "TanStack Query.bundle.zip.part-0001",
+      "sha256": "e819f5d061c7501f50fa97e79f7011158731695d9dda22d47066f405ee921314"
+    },
+    {
+      "bytes": 6703514,
+      "name": "TanStack Query.bundle.zip.part-0002",
+      "sha256": "15b37dc94df0e553f6646d1ba4b5761d9685e7b37a0762d3693c3dacc15e3288"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "TanStack Query",
+  "source_bytes": 23241150,
+  "source_commit": "d595e2367967da42b64685e7b57cb0261e432180",
+  "source_files": 1638,
+  "source_ref": "d595e2367967da42b64685e7b57cb0261e432180",
+  "source_repo": "https://github.com/TanStack/query",
+  "source_tree": {
+    "bytes": 23241150,
+    "files": 1638,
+    "sha256": "5e7e8f01976c6ff60c6c4580c854be822b067d432313d2a14514082247f758da"
+  }
+}
