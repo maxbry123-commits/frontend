@@ -1,0 +1,13 @@
+{
+	"name": "runtypes",
+	"version": "7.0.5",
+	"description": "Runtime validation for static types",
+	"sideEffects": false,
+	"author": "Thomas Crockett",
+	"license": "MIT",
+	"keywords": ["runtime", "type", "validation", "typescript"],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/runtypes/runtypes"
+	}
+}

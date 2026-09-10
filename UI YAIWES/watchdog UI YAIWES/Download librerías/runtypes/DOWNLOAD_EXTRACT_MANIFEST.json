@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 134103,
+  "bundle_sha256": "5d94ccb4e09972ffe3e1b71635baceac1088549c628aebfb8f46c9fcb14e88ee",
+  "extracted_tree": {
+    "bytes": 392802,
+    "files": 104,
+    "sha256": "fc446455a3b89d09c3d02eb56dfb04ed7ba5c95ce43d28f127d4a324a97af5b4"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 134103,
+      "name": "runtypes.bundle.zip.part-0001",
+      "sha256": "5d94ccb4e09972ffe3e1b71635baceac1088549c628aebfb8f46c9fcb14e88ee"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "runtypes",
+  "source_bytes": 392802,
+  "source_commit": "5cabab81fc9266dfeffd3d236677fdf2cd80eaac",
+  "source_files": 104,
+  "source_ref": "HEAD",
+  "source_repo": "pelotom/runtypes",
+  "source_tree": {
+    "bytes": 392802,
+    "files": 104,
+    "sha256": "fc446455a3b89d09c3d02eb56dfb04ed7ba5c95ce43d28f127d4a324a97af5b4"
+  }
+}

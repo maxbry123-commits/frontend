@@ -1,0 +1,12 @@
+.*
+*.log
+node_modules
+build
+coverage
+jsr.json
+
+!.git*
+!.vscode
+!.editorconfig
+!.*rc
+!.tool-versions
