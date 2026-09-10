@@ -1,0 +1,38 @@
+{
+  "bundle_bytes": 13488234,
+  "bundle_sha256": "dfb4792ae2c6202e691a596b7d0154c1b956dd769b283a9dd161404f9b953fa6",
+  "extracted_tree": {
+    "bytes": 18316845,
+    "files": 1070,
+    "sha256": "003b3433d38e621957d39288cbd4da77d718fa13f536f1934957bd92fb01e246"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "big-AGI.bundle.zip.part-0001",
+      "sha256": "bd0bb8e67ee6b43485e894580fcaca734c05033176ff12fbee3f823e4202489d"
+    },
+    {
+      "bytes": 905322,
+      "name": "big-AGI.bundle.zip.part-0002",
+      "sha256": "c8051a9ecb665d45c79f624f6e5c1c4bb1f772f7faf4412334845e50473be678"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "big-AGI",
+  "source_bytes": 18316845,
+  "source_commit": "7413983159ddb7056bde035d98446d33573bfa0a",
+  "source_files": 1070,
+  "source_ref": "7413983159ddb7056bde035d98446d33573bfa0a",
+  "source_repo": "https://github.com/enricoros/big-AGI",
+  "source_tree": {
+    "bytes": 18316845,
+    "files": 1070,
+    "sha256": "003b3433d38e621957d39288cbd4da77d718fa13f536f1934957bd92fb01e246"
+  }
+}
