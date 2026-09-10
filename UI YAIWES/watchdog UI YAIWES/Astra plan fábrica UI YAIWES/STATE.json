@@ -1,0 +1,41 @@
+{
+  "schema": "yaiwes.astra.factory.state.v1",
+  "contract": "tel.workflow/v3",
+  "updated_date": "2026-09-10",
+  "owner_identity": "➡️ Astra plan fábrica UI YAIWES",
+  "status": "ACTIVE_LOOP",
+  "primary_goal": "Persistent frontend YAIWES + Factory UI zero-friction; understand backend contracts and prepare non-conflicting backend donors.",
+  "integration_allowlist": ["GitHub", "Hugging Face"],
+  "task_gate": {
+    "T1_FACTORY_FRONTEND": "ACTIVE_LOOP",
+    "T2_INTERFACE_YAIWES": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED"
+  },
+  "roots": {
+    "frontend_canonical_candidate": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/Frontend/",
+    "backend": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/backend/"
+  },
+  "gaps": [
+    {
+      "id": "GAP_CASE_COLLISION_FRONTEND",
+      "status": "OPEN",
+      "evidence": "Both Frontend/ and frontend/ exist in Astra staging; must canonicalize before cross-platform code promotion.",
+      "safe_action": "Do not place production code in either duplicate path until canonical path is selected and migration is verified."
+    }
+  ],
+  "inventory": {
+    "component_root": "UI YAIWES/componentes open soure UI YAIWES/",
+    "components_mapped_initial": 46,
+    "matrix": "MATRIZ-FUSION-46-COMPONENTES-FRONTEND-BACKEND.md",
+    "state": "SOURCE_PRESENT_ONLY"
+  },
+  "architecture": {
+    "detailed": "ARQUITECTURA-DETALLADA-FABRICA-E-INTERFACE-YAIWES-V1.md",
+    "profile": "PERFIL-TRABAJO-Y-PERFIL-UI-YAIWES.md",
+    "input_literal": "INPUT-BLOCK-LITERAL-2026-09-10.md"
+  },
+  "factory_steps": ["DESIGN/CREATE", "COMPOSE", "CONNECT", "AI/TRANSFORM", "VALIDATE/PUBLISH/EDIT"],
+  "factory_modules": ["ELEMENT_BUILDER", "UI_COMPOSER", "COMPONENT_TRANSFORMER", "AI_OPERATOR", "DETERMINISTIC_MODULE_KIT"],
+  "loop": "INPUT literal -> GOALS12 -> priorities -> plan -> queue1x1 -> execute/review -> verify/refute -> GAP/FLAG -> research up to 20 -> StrategyDelta -> Council12 -> 3 simulations -> 3 refutations -> cross-check -> CODA -> verify_final",
+  "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
+  "next_node": "T1_COMPONENT_CAPABILITY_READBACK_AND_CANVAS_SELECTION"
+}
