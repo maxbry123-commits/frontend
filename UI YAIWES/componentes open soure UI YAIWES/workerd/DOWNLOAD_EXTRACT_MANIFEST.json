@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 7153416,
+  "bundle_sha256": "4b9d89178743467841e4c7dae27992f98cee44c632a6f1e6a970b7d4f60c3eb4",
+  "extracted_tree": {
+    "bytes": 26400674,
+    "files": 2482,
+    "sha256": "d5550e1046fd17e633bdda8916aa4dc5b6063174e8b68bc476d133652297e74c"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 7153416,
+      "name": "workerd.bundle.zip.part-0001",
+      "sha256": "4b9d89178743467841e4c7dae27992f98cee44c632a6f1e6a970b7d4f60c3eb4"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "workerd",
+  "source_bytes": 26400674,
+  "source_commit": "0dea9ed4e35dff712968366920b39d408d136c38",
+  "source_files": 2482,
+  "source_ref": "0dea9ed4e35dff712968366920b39d408d136c38",
+  "source_repo": "https://github.com/cloudflare/workerd",
+  "source_tree": {
+    "bytes": 26400674,
+    "files": 2482,
+    "sha256": "d5550e1046fd17e633bdda8916aa4dc5b6063174e8b68bc476d133652297e74c"
+  }
+}
