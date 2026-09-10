@@ -1,0 +1,178 @@
+import {
+  Maybe,
+  Nullable,
+  invariant,
+  isNullish,
+  dynamicValue,
+} from 'vest-utils';
+
+import { type TIsolate } from './Isolate/Isolate';
+import { createHistoryIndex } from './Isolate/IsolateIndexer';
+import { IsolateInspector } from './Isolate/IsolateInspector';
+import { IsolateMutator } from './Isolate/IsolateMutator';
+import { isSameIsolateType } from './Isolate/IsolateSelectors';
+import * as VestRuntime from './VestRuntime';
+import { ErrorStrings } from './errors/ErrorStrings';
+// import { isSameIsolateType } from 'IsolateSelectors';
+
+// I would rather not use `any` here, but instead use `Isolate`.
+// The problem is that it breaks the actual implementation of `Isolate` in `IsolateTest`
+// As it is not properly extending `Isolate`.
+export interface IReconciler<I = any> {
+  (currentNode: I, historyNode: I): Nullable<I>;
+}
+
+function BaseReconciler(
+  currentNode: TIsolate,
+  historyNode: TIsolate,
+): TIsolate {
+  if (isNullish(historyNode)) {
+    return currentNode;
+  }
+  return currentNode;
+}
+
+export class Reconciler {
+  /**
+   * Reconciles the current isolate with the history isolate.
+   * If the current isolate is of a different type than the history isolate,
+   * the current isolate is returned.
+   * Otherwise, the reconciler function is called to determine the next isolate.
+   * If the reconciler function returns null or undefined, the base reconciler is used.
+   * If no history isolate exists, the current isolate is returned.
+   * @param node The current isolate to reconcile.
+   * @returns The next isolate after reconciliation.
+   */
+  static reconcile(node: TIsolate): TIsolate {
+    // If the node is transient, it should not be reconciled with history
+    // and should not consume the history cursor.
+    // This allows us to insert/remove transient nodes without affecting
+    // the stable identity of their siblings.
+    if (node.transient) {
+      return node;
+    }
+
+    const localHistoryNode = VestRuntime.useHistoryIsolateAtCurrentPosition();
+
+    const nextNodeResult = pickNextNode(node, localHistoryNode);
+
+    invariant(nextNodeResult, ErrorStrings.UNABLE_TO_PICK_NEXT_ISOLATE);
+
+    return nextNodeResult;
+  }
+
+  static dropNextNodesOnReorder<I extends TIsolate>(
+    reorderLogic: (newNode: I, prevNode: Maybe<TIsolate>) => boolean,
+    newNode: I,
+    prevNode: Maybe<TIsolate>,
+  ): boolean {
+    const didReorder = reorderLogic(newNode, prevNode);
+
+    if (didReorder) {
+      removeAllNextNodesInIsolate();
+    }
+
+    return didReorder;
+  }
+
+  static handleIsolateNodeWithKey<I extends TIsolate>(
+    node: TIsolate,
+
+    // The revoke function allows the caller to revoke the previous node
+    revoke: ((node: I) => boolean) | false,
+  ): TIsolate {
+    invariant(IsolateInspector.usesKey(node));
+
+    const prevNodeByKey = getNodeByKey(node.key);
+    let nextNode = node;
+
+    if (!isNullish(prevNodeByKey) && !dynamicValue(revoke, prevNodeByKey)) {
+      nextNode = prevNodeByKey;
+    }
+
+    VestRuntime.useSetIsolateKey(node.key, nextNode);
+
+    return nextNode;
+  }
+}
+
+function pickNextNode(
+  currentNode: TIsolate,
+  historyNode: Nullable<TIsolate>,
+): TIsolate {
+  if (isNullish(historyNode)) {
+    return handleNoHistoryNode(currentNode);
+  }
+
+  if (!isSameIsolateType(currentNode, historyNode)) {
+    return currentNode;
+  }
+
+  const reconciler = VestRuntime.useReconciler();
+
+  return (
+    reconciler(currentNode, historyNode) ??
+    BaseReconciler(currentNode, historyNode)
+  );
+}
+
+function handleNoHistoryNode<I extends TIsolate>(newNode: I): I {
+  if (IsolateInspector.usesKey(newNode)) {
+    return Reconciler.handleIsolateNodeWithKey(newNode, false) as I;
+  }
+
+  return newNode;
+}
+
+function removeAllNextNodesInIsolate() {
+  const currentNode = VestRuntime.useIsolate();
+  const historyNode = VestRuntime.useHistoryIsolate();
+
+  if (!historyNode || !currentNode) {
+    // This is probably unreachable, but TS is not convinced.
+    // Let's play it safe.
+    /* istanbul ignore next */
+    return;
+  }
+
+  IsolateMutator.slice(historyNode, IsolateInspector.cursor(currentNode));
+}
+
+const historyIndexCache = new WeakMap<
+  TIsolate,
+  Map<string, TIsolate | TIsolate[]>
+>();
+
+function getNodeByKey(key: Nullable<string>): Nullable<TIsolate> {
+  const historyParent = VestRuntime.useHistoryIsolate();
+
+  if (isNullish(key) || !historyParent) {
+    return null;
+  }
+
+  const index = getHistoryIndex(historyParent);
+  const match = index.get(key);
+
+  if (!match) {
+    return null;
+  }
+
+  if (Array.isArray(match)) {
+    return match[0];
+  }
+
+  return match;
+}
+
+function getHistoryIndex(
+  historyParent: TIsolate,
+): Map<string, TIsolate | TIsolate[]> {
+  let index = historyIndexCache.get(historyParent);
+
+  if (!index) {
+    index = createHistoryIndex(historyParent.children);
+    historyIndexCache.set(historyParent, index);
+  }
+
+  return index;
+}

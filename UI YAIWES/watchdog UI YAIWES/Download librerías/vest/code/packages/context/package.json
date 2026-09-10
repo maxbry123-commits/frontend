@@ -1,0 +1,44 @@
+{
+  "version": "4.0.17",
+  "license": "MIT",
+  "main": "./dist/context.cjs",
+  "types": "./types/context.d.cts",
+  "name": "context",
+  "author": "ealush",
+  "scripts": {
+    "test": "vx test",
+    "build": "vx build",
+    "release": "vx release"
+  },
+  "dependencies": {
+    "vest-utils": "^2.0.17"
+  },
+  "module": "./dist/context.mjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ealush/vest.git",
+    "directory": "packages/context"
+  },
+  "bugs": {
+    "url": "https://github.com/ealush/vest.git/issues"
+  },
+  "unpkg": "./dist/context.mjs",
+  "jsdelivr": "./dist/context.mjs",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./types/context.d.cts",
+      "require": "./dist/context.cjs",
+      "import": "./dist/context.mjs"
+    },
+    "./*": {
+      "types": "./types/context.d.cts",
+      "default": "./*"
+    },
+    "./package.json": "./package.json",
+    "./context": "./types/context.d.cts",
+    "./context.d.ts": "./types/context.d.ts",
+    "./types/*": "./types/*",
+    "./dist/*": "./dist/*"
+  }
+}

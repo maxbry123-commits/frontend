@@ -1,0 +1,125 @@
+.section {
+  --example-ink: #121212;
+  --example-paper: #f2efe8;
+  --example-red: #f04444;
+  display: grid;
+  grid-template-columns: minmax(240px, 0.55fr) minmax(520px, 1fr);
+  gap: clamp(3rem, 7vw, 7rem);
+  align-items: start;
+  padding: 7rem max(2rem, calc((100vw - 1180px) / 2));
+  border-top: 1px solid var(--example-ink);
+  border-bottom: 1px solid var(--example-ink);
+  background: var(--example-paper);
+  color: var(--example-ink);
+}
+
+html[data-theme='dark'] .section {
+  --example-ink: #f1eee7;
+  --example-paper: #111111;
+}
+
+.desc {
+  position: sticky;
+  top: 6rem;
+  max-width: 430px;
+  text-align: left;
+}
+
+.kicker {
+  display: block;
+  margin-bottom: 1.4rem;
+  color: var(--example-red);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.65rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+}
+
+.desc strong {
+  display: block;
+  color: var(--example-ink);
+  font-size: clamp(2rem, 3.5vw, 3.25rem);
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+}
+
+.desc p {
+  margin: 1.25rem 0 0;
+  color: color-mix(in srgb, var(--example-ink) 68%, transparent);
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+.codeWindow {
+  min-width: 0;
+  margin: 0 12px 12px 0;
+  overflow: hidden;
+  border: 1px solid #242424;
+  border-radius: 0;
+  background: #151515;
+  box-shadow: 12px 12px 0 var(--example-red);
+}
+
+.windowHeader {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background: #151515;
+}
+
+.fileName {
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.8rem;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  margin-right: 7px;
+  border-radius: 50%;
+}
+
+.red {
+  background-color: #f04444;
+}
+
+.yellow {
+  background-color: #eabf45;
+}
+
+.green {
+  background-color: #58c886;
+}
+
+.codeBlock {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  font-size: 0.9rem;
+}
+
+@media screen and (max-width: 966px) {
+  .section {
+    grid-template-columns: 1fr;
+    padding: 5rem 1.5rem;
+  }
+
+  .desc {
+    position: static;
+    max-width: 680px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .section {
+    padding: 4rem 1rem;
+  }
+
+  .codeWindow {
+    font-size: 0.8rem;
+  }
+}

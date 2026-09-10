@@ -1,0 +1,83 @@
+{
+  "name": "vest-monorepo",
+  "scripts": {
+    "build": "vx build && yarn build:llms",
+    "test": "vx test run --typecheck",
+    "test:watch": "vx test",
+    "bench": "npx tsx vx/scripts/benchmark-reporter.ts --update",
+    "release": "vx release",
+    "format": "prettier -c .",
+    "lint": "eslint --cache .",
+    "prepare": "husky install",
+    "dev": "vx dev",
+    "website:start": "yarn workspace website start",
+    "build:llms": "node scripts/build-llms.js",
+    "website:build": "yarn build:llms && yarn workspace website build",
+    "example:production:build": "yarn workspace @vest/example-production-registration build",
+    "example:production:test": "yarn workspace @vest/example-production-registration test",
+    "example:production:typecheck": "yarn workspace @vest/example-production-registration typecheck",
+    "integrations:test": "tsx scripts/integrations/run.js test",
+    "integrations:typecheck": "tsx scripts/integrations/run.js typecheck",
+    "integrations:build": "tsx scripts/integrations/run.js build",
+    "integrations:verify": "tsx scripts/integrations/run.js verify",
+    "integrations:docs": "tsx scripts/integrations/generate-docs.js",
+    "integrations:status": "tsx scripts/integrations/status.js",
+    "docs:examples:test": "yarn workspace vest vitest run src/suite/__tests__/docsExamples.test.ts && yarn workspace website test",
+    "ai:eval": "node scripts/score-ai-eval.js",
+    "postinstall": "husky install"
+  },
+  "homepage": "https://vestjs.dev",
+  "prettier": {
+    "arrowParens": "avoid",
+    "singleQuote": true
+  },
+  "vx": {},
+  "workspaces": [
+    "website",
+    "examples/*",
+    "integrations/*",
+    "packages/*",
+    "./vx/",
+    "./vx/eslint-plugin-vest-internal"
+  ],
+  "devDependencies": {
+    "@faker-js/faker": "^10.3.0",
+    "@types/lodash": "^4.17.21",
+    "@typescript-eslint/eslint-plugin": "^7",
+    "@typescript-eslint/parser": "^7",
+    "@vitest/coverage-v8": "4.0.18",
+    "@vitest/ui": "4.0.18",
+    "eslint": "^9",
+    "eslint-config-prettier": "^9",
+    "eslint-import-resolver-typescript": "^3",
+    "eslint-plugin-import": "^2",
+    "eslint-plugin-prettier": "^5",
+    "eslint-plugin-vitest": "^0",
+    "husky": "^8.0.3",
+    "lint-staged": "^16.3.0",
+    "lodash": "^4.17.21",
+    "prettier": "^3.7.3",
+    "tsc": "^2.0.4",
+    "tsdown": "^0.17.0-beta.5",
+    "tslib": "^2.8.1",
+    "tsx": "4.21.0",
+    "typescript": "^5.4.5",
+    "vitest": "^4.0.18",
+    "vx": "workspace:*",
+    "wait": "^0.4.2"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ealush/vest.git"
+  },
+  "version": "0",
+  "packageManager": "yarn@3.5.1",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml,css,scss,html}": "prettier --write"
+  }
+}

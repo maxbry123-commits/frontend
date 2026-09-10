@@ -1,0 +1,100 @@
+name: Performance Benchmark
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout baseline branch
+        uses: actions/checkout@v4
+        with:
+          ref: latest
+          path: .benchmark-baseline
+          fetch-depth: 1
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Enable corepack (Yarn)
+        run: corepack enable
+
+      - name: Install dependencies (baseline)
+        working-directory: .benchmark-baseline
+        run: yarn install --immutable
+
+      - name: Build internal packages (baseline)
+        working-directory: .benchmark-baseline
+        run: yarn build
+
+      - name: Install dependencies (PR)
+        run: yarn install --immutable
+
+      - name: Build internal packages (PR)
+        run: yarn build
+
+      - name: Run interlaced benchmarks and generate report
+        run: npx tsx vx/scripts/benchmark-reporter.ts --interlace .benchmark-baseline
+
+      - name: Comment Benchmark Results
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const fs = require('fs');
+            const results = fs.readFileSync('benchmark-results.md', 'utf8');
+
+            // Get existing comments
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            // Find bot comment
+            const botComment = comments.find(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('🚀 Benchmark Results');
+            });
+
+            if (botComment) {
+              const oldContent = botComment.body;
+              const prevMarker = '<details>\n<summary>PREVIOUS_RESULTS</summary>';
+              let historical = oldContent;
+              
+              const prevResultsIndex = oldContent.indexOf(prevMarker);
+              if (prevResultsIndex !== -1) {
+                const previousLatest = oldContent.substring(0, prevResultsIndex).trim();
+                const pastHistory = oldContent.substring(prevResultsIndex + prevMarker.length, oldContent.lastIndexOf('</details>')).trim();
+                
+                const historyEntries = pastHistory.split('\n\n---\n\n').map(e => e.trim()).filter(Boolean);
+                historyEntries.unshift(previousLatest);
+                historical = historyEntries.slice(0, 5).join('\n\n---\n\n');
+              }
+              
+              const newBody = results + '\n\n' + prevMarker + '\n\n' + historical + '\n</details>';
+
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: newBody
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: results
+              });
+            }

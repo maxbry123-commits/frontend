@@ -1,0 +1,85 @@
+{
+  "name": "n4s",
+  "version": "6.2.1",
+  "description": "typed schema validation version of enforce",
+  "license": "MIT",
+  "author": "ealush",
+  "main": "./dist/n4s.cjs",
+  "module": "./dist/n4s.mjs",
+  "unpkg": "./dist/n4s.mjs",
+  "jsdelivr": "./dist/n4s.mjs",
+  "types": "./types/n4s.d.cts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ealush/vest.git",
+    "directory": "packages/n4s"
+  },
+  "bugs": {
+    "url": "https://github.com/ealush/vest.git/issues"
+  },
+  "sideEffects": [
+    "./dist/exports/*.mjs",
+    "./dist/exports/*.cjs"
+  ],
+  "dependencies": {
+    "context": "^4.0.17",
+    "vest-utils": "^2.0.17"
+  },
+  "devDependencies": {
+    "@types/validator": "^13.15.10",
+    "validator": "13.9.0"
+  },
+  "vxAllowResolve": [
+    "validator"
+  ],
+  "exports": {
+    "./exports/date": {
+      "types": "./types/exports/date.d.cts",
+      "require": "./dist/exports/date.cjs",
+      "import": "./dist/exports/date.mjs"
+    },
+    "./exports/email": {
+      "types": "./types/exports/email.d.cts",
+      "require": "./dist/exports/email.cjs",
+      "import": "./dist/exports/email.mjs"
+    },
+    "./exports/isURL": {
+      "types": "./types/exports/isURL.d.cts",
+      "require": "./dist/exports/isURL.cjs",
+      "import": "./dist/exports/isURL.mjs"
+    },
+    "./n4s": {
+      "types": "./types/n4s.d.cts",
+      "require": "./dist/n4s.cjs",
+      "import": "./dist/n4s.mjs"
+    },
+    "./*": {
+      "types": "./types/n4s.d.cts",
+      "default": "./*"
+    },
+    ".": {
+      "types": "./types/n4s.d.cts",
+      "require": "./dist/n4s.cjs",
+      "import": "./dist/n4s.mjs"
+    },
+    "./package.json": "./package.json",
+    "./date": {
+      "types": "./types/exports/date.d.cts",
+      "require": "./dist/exports/date.cjs",
+      "import": "./dist/exports/date.mjs"
+    },
+    "./email": {
+      "types": "./types/exports/email.d.cts",
+      "require": "./dist/exports/email.cjs",
+      "import": "./dist/exports/email.mjs"
+    },
+    "./isURL": {
+      "types": "./types/exports/isURL.d.cts",
+      "require": "./dist/exports/isURL.cjs",
+      "import": "./dist/exports/isURL.mjs"
+    },
+    "./n4s.d.ts": "./types/n4s.d.ts",
+    "./types/*": "./types/*",
+    "./dist/*": "./dist/*"
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "name": "vest",
+  "version": "6.3.2",
+  "description": "TypeScript validation-state framework for complex forms: incremental, async, conditional, client and server.",
+  "license": "MIT",
+  "author": "ealush",
+  "main": "./dist/vest.cjs",
+  "module": "./dist/vest.mjs",
+  "unpkg": "./dist/vest.mjs",
+  "jsdelivr": "./dist/vest.mjs",
+  "types": "./types/vest.d.cts",
+  "homepage": "https://vestjs.dev",
+  "keywords": [
+    "form validation",
+    "stateful validation",
+    "validation state",
+    "typescript validation",
+    "async validation",
+    "progressive validation",
+    "conditional validation",
+    "cross-field validation",
+    "react validation",
+    "angular validation",
+    "vue validation",
+    "svelte validation",
+    "standard schema",
+    "client server validation",
+    "form workflow",
+    "enforce"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ealush/vest.git",
+    "directory": "packages/vest"
+  },
+  "bugs": {
+    "url": "https://github.com/ealush/vest/issues"
+  },
+  "scripts": {
+    "bench": "vitest bench --run --config ./vitest.config.ts"
+  },
+  "sideEffects": [
+    "./dist/exports/*.mjs",
+    "./dist/exports/*.cjs"
+  ],
+  "dependencies": {
+    "context": "^4.0.17",
+    "n4s": "^6.2.1",
+    "vest-utils": "^2.0.17",
+    "vestjs-runtime": "^2.0.17"
+  },
+  "devDependencies": {
+    "vitest": "^4.0.18"
+  },
+  "exports": {
+    "./exports/classnames": {
+      "types": "./types/exports/classnames.d.cts",
+      "require": "./dist/exports/classnames.cjs",
+      "import": "./dist/exports/classnames.mjs"
+    },
+    "./exports/date": {
+      "types": "./types/exports/date.d.cts",
+      "require": "./dist/exports/date.cjs",
+      "import": "./dist/exports/date.mjs"
+    },
+    "./exports/debounce": {
+      "types": "./types/exports/debounce.d.cts",
+      "require": "./dist/exports/debounce.cjs",
+      "import": "./dist/exports/debounce.mjs"
+    },
+    "./exports/email": {
+      "types": "./types/exports/email.d.cts",
+      "require": "./dist/exports/email.cjs",
+      "import": "./dist/exports/email.mjs"
+    },
+    "./exports/isURL": {
+      "types": "./types/exports/isURL.d.cts",
+      "require": "./dist/exports/isURL.cjs",
+      "import": "./dist/exports/isURL.mjs"
+    },
+    "./exports/memo": {
+      "types": "./types/exports/memo.d.cts",
+      "require": "./dist/exports/memo.cjs",
+      "import": "./dist/exports/memo.mjs"
+    },
+    "./exports/parser": {
+      "types": "./types/exports/parser.d.cts",
+      "require": "./dist/exports/parser.cjs",
+      "import": "./dist/exports/parser.mjs"
+    },
+    "./exports/SuiteSerializer": {
+      "types": "./types/exports/SuiteSerializer.d.cts",
+      "require": "./dist/exports/SuiteSerializer.cjs",
+      "import": "./dist/exports/SuiteSerializer.mjs"
+    },
+    "./vest": {
+      "types": "./types/vest.d.cts",
+      "require": "./dist/vest.cjs",
+      "import": "./dist/vest.mjs"
+    },
+    "./*": {
+      "types": "./types/vest.d.cts",
+      "default": "./*"
+    },
+    ".": {
+      "types": "./types/vest.d.cts",
+      "require": "./dist/vest.cjs",
+      "import": "./dist/vest.mjs"
+    },
+    "./package.json": "./package.json",
+    "./classnames": {
+      "types": "./types/exports/classnames.d.cts",
+      "require": "./dist/exports/classnames.cjs",
+      "import": "./dist/exports/classnames.mjs"
+    },
+    "./date": {
+      "types": "./types/exports/date.d.cts",
+      "require": "./dist/exports/date.cjs",
+      "import": "./dist/exports/date.mjs"
+    },
+    "./debounce": {
+      "types": "./types/exports/debounce.d.cts",
+      "require": "./dist/exports/debounce.cjs",
+      "import": "./dist/exports/debounce.mjs"
+    },
+    "./email": {
+      "types": "./types/exports/email.d.cts",
+      "require": "./dist/exports/email.cjs",
+      "import": "./dist/exports/email.mjs"
+    },
+    "./isURL": {
+      "types": "./types/exports/isURL.d.cts",
+      "require": "./dist/exports/isURL.cjs",
+      "import": "./dist/exports/isURL.mjs"
+    },
+    "./memo": {
+      "types": "./types/exports/memo.d.cts",
+      "require": "./dist/exports/memo.cjs",
+      "import": "./dist/exports/memo.mjs"
+    },
+    "./parser": {
+      "types": "./types/exports/parser.d.cts",
+      "require": "./dist/exports/parser.cjs",
+      "import": "./dist/exports/parser.mjs"
+    },
+    "./SuiteSerializer": {
+      "types": "./types/exports/SuiteSerializer.d.cts",
+      "require": "./dist/exports/SuiteSerializer.cjs",
+      "import": "./dist/exports/SuiteSerializer.mjs"
+    },
+    "./vest.d.ts": "./types/vest.d.ts",
+    "./types/*": "./types/*",
+    "./dist/*": "./dist/*"
+  }
+}

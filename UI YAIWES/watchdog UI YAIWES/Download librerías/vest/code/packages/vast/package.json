@@ -1,0 +1,44 @@
+{
+  "version": "2.0.17",
+  "license": "MIT",
+  "main": "./dist/vast.cjs",
+  "types": "./types/vast.d.cts",
+  "name": "vast",
+  "author": "ealush",
+  "scripts": {
+    "test": "vx test",
+    "release": "vx release"
+  },
+  "module": "./dist/vast.mjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ealush/vest.git",
+    "directory": "packages/vast"
+  },
+  "bugs": {
+    "url": "https://github.com/ealush/vest.git/issues"
+  },
+  "dependencies": {
+    "vest-utils": "^2.0.17"
+  },
+  "unpkg": "./dist/vast.mjs",
+  "jsdelivr": "./dist/vast.mjs",
+  "sideEffects": false,
+  "vxAllowResolve": [],
+  "exports": {
+    ".": {
+      "types": "./types/vast.d.cts",
+      "require": "./dist/vast.cjs",
+      "import": "./dist/vast.mjs"
+    },
+    "./*": {
+      "types": "./types/vast.d.cts",
+      "default": "./*"
+    },
+    "./package.json": "./package.json",
+    "./vast": "./types/vast.d.cts",
+    "./vast.d.ts": "./types/vast.d.ts",
+    "./types/*": "./types/*",
+    "./dist/*": "./dist/*"
+  }
+}

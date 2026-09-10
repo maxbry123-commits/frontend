@@ -1,0 +1,360 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Test Vest's \`test\` function > test params > creates a test with a message and with a key 1`] = `"[{"key":"keyboardcat","status":"DONE","$type":"Test","data":{"severity":"error","testStatus":"PASSING","fieldName":"field_name","message":"failure message"}},{}]"`;
+
+exports[`Test Vest's \`test\` function > test params > creates a test without a key 1`] = `
+IsolateInstance {
+  "$type": "Test",
+  "abortController": AbortController {},
+  "allowReorder": undefined,
+  "children": null,
+  "data": {
+    "fieldName": "field_name",
+    "message": "failure message",
+    "severity": "error",
+    "testFn": [Function],
+    "testStatus": "PASSING",
+  },
+  "key": null,
+  "keys": null,
+  "output": undefined,
+  "parent": IsolateInstance {
+    "$type": "Suite",
+    "abortController": null,
+    "allowReorder": undefined,
+    "children": [
+      [Circular],
+      IsolateInstance {
+        "$type": "Reorderable",
+        "abortController": null,
+        "allowReorder": true,
+        "children": null,
+        "data": {
+          "tests": [],
+        },
+        "key": null,
+        "keys": null,
+        "output": undefined,
+        "parent": [Circular],
+        "status": "DONE",
+        "transient": undefined,
+      },
+    ],
+    "data": {
+      "optional": {},
+      "registry_all": Map {
+        "field_name" => Set {
+          [Circular],
+        },
+      },
+      "registry_failed": Map {},
+      "registry_omitted": Map {},
+      "registry_passing": Map {
+        "field_name" => Set {
+          [Circular],
+        },
+      },
+      "registry_pending": Map {},
+      "registry_tested": Map {
+        "field_name" => Set {
+          [Circular],
+        },
+      },
+      "registry_valid": Map {
+        "field_name" => Set {
+          [Circular],
+        },
+      },
+      "registry_warning": Map {},
+      "resolver": [Function],
+      "tests": [
+        [Circular],
+      ],
+    },
+    "key": null,
+    "keys": null,
+    "output": {
+      "dump": [Function],
+      "errorCount": 0,
+      "errors": [],
+      "getError": [Function],
+      "getErrors": [Function],
+      "getErrorsByGroup": [Function],
+      "getMessage": [Function],
+      "getWarning": [Function],
+      "getWarnings": [Function],
+      "getWarningsByGroup": [Function],
+      "groups": {},
+      "hasErrors": [Function],
+      "hasErrorsByGroup": [Function],
+      "hasWarnings": [Function],
+      "hasWarningsByGroup": [Function],
+      "isPending": [Function],
+      "isTested": [Function],
+      "isValid": [Function],
+      "isValidByGroup": [Function],
+      "pendingCount": 0,
+      "testCount": 1,
+      "tests": {
+        "field_name": SummaryBase {
+          "errorCount": 0,
+          "errors": [],
+          "pendingCount": 0,
+          "testCount": 1,
+          "valid": true,
+          "warnCount": 0,
+          "warnings": [],
+        },
+      },
+      "types": undefined,
+      "valid": true,
+      "value": undefined,
+      "warnCount": 0,
+      "warnings": [],
+    },
+    "parent": null,
+    "status": "DONE",
+    "transient": undefined,
+  },
+  "status": "DONE",
+  "transient": undefined,
+}
+`;
+
+exports[`Test Vest's \`test\` function > test params > creates a test without a message and with a key 1`] = `
+IsolateInstance {
+  "$type": "Test",
+  "abortController": AbortController {},
+  "allowReorder": undefined,
+  "children": null,
+  "data": {
+    "fieldName": "field_name",
+    "severity": "error",
+    "testFn": [Function],
+    "testStatus": "PASSING",
+  },
+  "key": "keyboardcat",
+  "keys": null,
+  "output": undefined,
+  "parent": IsolateInstance {
+    "$type": "Suite",
+    "abortController": null,
+    "allowReorder": undefined,
+    "children": [
+      [Circular],
+      IsolateInstance {
+        "$type": "Reorderable",
+        "abortController": null,
+        "allowReorder": true,
+        "children": null,
+        "data": {
+          "tests": [],
+        },
+        "key": null,
+        "keys": null,
+        "output": undefined,
+        "parent": [Circular],
+        "status": "DONE",
+        "transient": undefined,
+      },
+    ],
+    "data": {
+      "optional": {},
+      "registry_all": Map {
+        "field_name" => Set {
+          [Circular],
+        },
+      },
+      "registry_failed": Map {},
+      "registry_omitted": Map {},
+      "registry_passing": Map {
+        "field_name" => Set {
+          [Circular],
+        },
+      },
+      "registry_pending": Map {},
+      "registry_tested": Map {
+        "field_name" => Set {
+          [Circular],
+        },
+      },
+      "registry_valid": Map {
+        "field_name" => Set {
+          [Circular],
+        },
+      },
+      "registry_warning": Map {},
+      "resolver": [Function],
+      "tests": [
+        [Circular],
+      ],
+    },
+    "key": null,
+    "keys": {
+      "keyboardcat": [Circular],
+    },
+    "output": {
+      "dump": [Function],
+      "errorCount": 0,
+      "errors": [],
+      "getError": [Function],
+      "getErrors": [Function],
+      "getErrorsByGroup": [Function],
+      "getMessage": [Function],
+      "getWarning": [Function],
+      "getWarnings": [Function],
+      "getWarningsByGroup": [Function],
+      "groups": {},
+      "hasErrors": [Function],
+      "hasErrorsByGroup": [Function],
+      "hasWarnings": [Function],
+      "hasWarningsByGroup": [Function],
+      "isPending": [Function],
+      "isTested": [Function],
+      "isValid": [Function],
+      "isValidByGroup": [Function],
+      "pendingCount": 0,
+      "testCount": 1,
+      "tests": {
+        "field_name": SummaryBase {
+          "errorCount": 0,
+          "errors": [],
+          "pendingCount": 0,
+          "testCount": 1,
+          "valid": true,
+          "warnCount": 0,
+          "warnings": [],
+        },
+      },
+      "types": undefined,
+      "valid": true,
+      "value": undefined,
+      "warnCount": 0,
+      "warnings": [],
+    },
+    "parent": null,
+    "status": "DONE",
+    "transient": undefined,
+  },
+  "status": "DONE",
+  "transient": undefined,
+}
+`;
+
+exports[`Test Vest's \`test\` function > test params > creates a test without a message and without a key 1`] = `
+IsolateInstance {
+  "$type": "Test",
+  "abortController": AbortController {},
+  "allowReorder": undefined,
+  "children": null,
+  "data": {
+    "fieldName": "field_name",
+    "severity": "error",
+    "testFn": [Function],
+    "testStatus": "PASSING",
+  },
+  "key": null,
+  "keys": null,
+  "output": undefined,
+  "parent": IsolateInstance {
+    "$type": "Suite",
+    "abortController": null,
+    "allowReorder": undefined,
+    "children": [
+      [Circular],
+      IsolateInstance {
+        "$type": "Reorderable",
+        "abortController": null,
+        "allowReorder": true,
+        "children": null,
+        "data": {
+          "tests": [],
+        },
+        "key": null,
+        "keys": null,
+        "output": undefined,
+        "parent": [Circular],
+        "status": "DONE",
+        "transient": undefined,
+      },
+    ],
+    "data": {
+      "optional": {},
+      "registry_all": Map {
+        "field_name" => Set {
+          [Circular],
+        },
+      },
+      "registry_failed": Map {},
+      "registry_omitted": Map {},
+      "registry_passing": Map {
+        "field_name" => Set {
+          [Circular],
+        },
+      },
+      "registry_pending": Map {},
+      "registry_tested": Map {
+        "field_name" => Set {
+          [Circular],
+        },
+      },
+      "registry_valid": Map {
+        "field_name" => Set {
+          [Circular],
+        },
+      },
+      "registry_warning": Map {},
+      "resolver": [Function],
+      "tests": [
+        [Circular],
+      ],
+    },
+    "key": null,
+    "keys": null,
+    "output": {
+      "dump": [Function],
+      "errorCount": 0,
+      "errors": [],
+      "getError": [Function],
+      "getErrors": [Function],
+      "getErrorsByGroup": [Function],
+      "getMessage": [Function],
+      "getWarning": [Function],
+      "getWarnings": [Function],
+      "getWarningsByGroup": [Function],
+      "groups": {},
+      "hasErrors": [Function],
+      "hasErrorsByGroup": [Function],
+      "hasWarnings": [Function],
+      "hasWarningsByGroup": [Function],
+      "isPending": [Function],
+      "isTested": [Function],
+      "isValid": [Function],
+      "isValidByGroup": [Function],
+      "pendingCount": 0,
+      "testCount": 1,
+      "tests": {
+        "field_name": SummaryBase {
+          "errorCount": 0,
+          "errors": [],
+          "pendingCount": 0,
+          "testCount": 1,
+          "valid": true,
+          "warnCount": 0,
+          "warnings": [],
+        },
+      },
+      "types": undefined,
+      "valid": true,
+      "value": undefined,
+      "warnCount": 0,
+      "warnings": [],
+    },
+    "parent": null,
+    "status": "DONE",
+    "transient": undefined,
+  },
+  "status": "DONE",
+  "transient": undefined,
+}
+`;

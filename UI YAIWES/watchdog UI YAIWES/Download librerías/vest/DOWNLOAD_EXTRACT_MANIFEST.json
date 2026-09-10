@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 2578742,
+  "bundle_sha256": "e13c64ffe15cecce8e02ef37995d2f33c2eb1c36ea519d1ecfa2a96ead3dfdf2",
+  "extracted_tree": {
+    "bytes": 7560992,
+    "files": 1156,
+    "sha256": "a63940486b00b96445cb34f3306bab70ec93dca784ff721a475907baa9b19ade"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 2578742,
+      "name": "vest.bundle.zip.part-0001",
+      "sha256": "e13c64ffe15cecce8e02ef37995d2f33c2eb1c36ea519d1ecfa2a96ead3dfdf2"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "vest",
+  "source_bytes": 7560992,
+  "source_commit": "cb4c7e960199063a81659b3479ec048208b9586f",
+  "source_files": 1156,
+  "source_ref": "HEAD",
+  "source_repo": "ealush/vest",
+  "source_tree": {
+    "bytes": 7560992,
+    "files": 1156,
+    "sha256": "a63940486b00b96445cb34f3306bab70ec93dca784ff721a475907baa9b19ade"
+  }
+}
