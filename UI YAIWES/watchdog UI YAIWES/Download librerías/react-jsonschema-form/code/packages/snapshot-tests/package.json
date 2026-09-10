@@ -1,0 +1,72 @@
+{
+  "name": "@rjsf/snapshot-tests",
+  "version": "6.10.0",
+  "type": "module",
+  "description": "A set of snapshot tests to be used for testing RJSF theme.",
+  "scripts": {
+    "build": "tsc -b .",
+    "cs-check": "oxfmt --check \"src/**/*.{ts,tsx,js,jsx}\"",
+    "cs-format": "oxfmt \"src/**/*.{ts,tsx,js,jsx}\"",
+    "lint": "oxlint src",
+    "precommit": "lint-staged",
+    "publish-to-npm": "pnpm run build && pnpm publish",
+    "test": "echo 'OK'",
+    "test-coverage": "echo 'OK'"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx,js,jsx}": [
+      "oxlint --fix",
+      "oxfmt"
+    ]
+  },
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "files": [
+    "dist",
+    "lib",
+    "src"
+  ],
+  "engineStrict": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependencies": {
+    "@rjsf/core": "workspace:^",
+    "@rjsf/utils": "workspace:^",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@rjsf/core": "workspace:^",
+    "@rjsf/utils": "workspace:^",
+    "@rjsf/validator-ajv8": "workspace:^"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rjsf-team/react-jsonschema-form.git"
+  },
+  "author": "Nicolas Perriault <nperriault@mozilla.com>",
+  "contributors": [
+    "Heath Chiavettone <heath.chiavettone@freenome.com"
+  ],
+  "keywords": [
+    "react",
+    "form",
+    "json-schema"
+  ],
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/rjsf-team/react-jsonschema-form",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "@rjsf/source": "./src/index.ts",
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json",
+    "./*": "./*"
+  }
+}

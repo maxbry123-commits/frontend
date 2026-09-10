@@ -1,0 +1,33 @@
+import type { MockInstance } from 'vitest';
+
+import type { RJSFSchema } from '../src/index.ts';
+import { getDiscriminatorFieldFromSchema, noop } from '../src/index.ts';
+
+const PROPERTY_NAME = 'testProp';
+const BAD_DISCRIMINATOR: RJSFSchema = { discriminator: { propertyName: 5 } };
+const GOOD_DISCRIMINATOR: RJSFSchema = { discriminator: { propertyName: PROPERTY_NAME } };
+
+describe('getDiscriminatorFieldFromSchema()', () => {
+  it('returns undefined when no discriminator is present', () => {
+    expect(getDiscriminatorFieldFromSchema({})).toBeUndefined();
+  });
+  it('returns the propertyName when discriminator is present', () => {
+    expect(getDiscriminatorFieldFromSchema(GOOD_DISCRIMINATOR)).toEqual(PROPERTY_NAME);
+  });
+  describe('bad discriminator', () => {
+    let consoleWarn: MockInstance;
+    beforeAll(() => {
+      // Spy and mock to be silent
+      consoleWarn = vi.spyOn(console, 'warn').mockImplementation(noop);
+    });
+    afterAll(() => {
+      consoleWarn.mockRestore();
+    });
+    it('returns undefined when discriminator is present, but not a string', () => {
+      expect(getDiscriminatorFieldFromSchema(BAD_DISCRIMINATOR)).toBeUndefined();
+    });
+    it('it also warns about the bad discriminator', () => {
+      expect(consoleWarn).toHaveBeenCalledWith('Expecting discriminator to be a string, got "number" instead');
+    });
+  });
+});

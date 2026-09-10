@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x, 24.x]
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
+      # Workspace-wide and independent of the Node version, so run it once.
+      - if: matrix.node-version == '22.x'
+        run: pnpm run knip
+
+      - name: Build with Netlify badge
+        run: pnpm run build-serial
+        env:
+          VITE_SHOW_NETLIFY_BADGE: true
+          NODE_OPTIONS: --max_old_space_size=4096
+
+      - name: Build
+        run: pnpm run build-serial
+        env:
+          NODE_OPTIONS: --max_old_space_size=4096
+
+      - run: pnpm run typecheck
+
+      - if: matrix.node-version == '22.x'
+        uses: actions/upload-artifact@v7
+        with:
+          name: playground
+          path: packages/playground/dist
+      - if: matrix.node-version == '22.x'
+        uses: actions/upload-artifact@v7
+        with:
+          name: docs
+          path: packages/docs/build
+      - run: pnpm test
+
+  deploy_playground_and_docs:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    name: Deploy playground and docs to GitHub Pages
+    needs: [build]
+    steps:
+      - name: Download built playground
+        uses: actions/download-artifact@v8
+        with:
+          name: playground
+          path: dist
+      - name: Download built docs
+        uses: actions/download-artifact@v8
+        with:
+          name: docs
+          path: dist/docs
+      - name: Deploy playground + docs to GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v5.0.0
+        with:
+          keep_history: true
+          target_branch: gh-pages
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
