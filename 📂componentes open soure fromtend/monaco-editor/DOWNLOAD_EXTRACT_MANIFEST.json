@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 4443206,
+  "bundle_sha256": "1a719400427175777a6fe5a02ea96ae790886303825f42eead10a790f8870302",
+  "extracted_tree": {
+    "bytes": 21096138,
+    "files": 994,
+    "sha256": "2e6fe51bba0d5a8808dd499eff958d1499dc04e0e8e4df896a164ec95e3e7b1f"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 4443206,
+      "name": "monaco-editor.bundle.zip.part-0001",
+      "sha256": "1a719400427175777a6fe5a02ea96ae790886303825f42eead10a790f8870302"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "monaco-editor",
+  "source_bytes": 21096138,
+  "source_commit": "d620ca0c03d24a51c05ae4dca8a9d5923a4aeb9c",
+  "source_files": 994,
+  "source_ref": "HEAD",
+  "source_repo": "microsoft/monaco-editor",
+  "source_tree": {
+    "bytes": 21096138,
+    "files": 994,
+    "sha256": "2e6fe51bba0d5a8808dd499eff958d1499dc04e0e8e4df896a164ec95e3e7b1f"
+  }
+}
