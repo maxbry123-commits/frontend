@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 4580892,
+  "bundle_sha256": "7b3f5a0bff3c643cf2f968315a2582e1ea6d18653dc2ddf5ffac977b538416ef",
+  "extracted_tree": {
+    "bytes": 7566646,
+    "files": 976,
+    "sha256": "30c4bdac18cdc63b507dd44b5b5d60d20895416b37b5d5910b668bf223a3160a"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 4580892,
+      "name": "dnd-kit.bundle.zip.part-0001",
+      "sha256": "7b3f5a0bff3c643cf2f968315a2582e1ea6d18653dc2ddf5ffac977b538416ef"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "dnd-kit",
+  "source_bytes": 7566646,
+  "source_commit": "4fa5c574107eaa2d40dc2c444d6138f93003aca7",
+  "source_files": 976,
+  "source_ref": "HEAD",
+  "source_repo": "clauderic/dnd-kit",
+  "source_tree": {
+    "bytes": 7566646,
+    "files": 976,
+    "sha256": "30c4bdac18cdc63b507dd44b5b5d60d20895416b37b5d5910b668bf223a3160a"
+  }
+}
