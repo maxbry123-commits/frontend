@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 5913161,
+  "bundle_sha256": "2b647dbd58239ffe1790246b8fb90aa868cfc32ecc96bbf0efa6dd3236a40044",
+  "extracted_tree": {
+    "bytes": 19112794,
+    "files": 1277,
+    "sha256": "7a0b4ca7107da292b3c91fb6272f7a73313a47f3bad4b8d3ca285f5a58366ab8"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 5913161,
+      "name": "Mitosis.bundle.zip.part-0001",
+      "sha256": "2b647dbd58239ffe1790246b8fb90aa868cfc32ecc96bbf0efa6dd3236a40044"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Mitosis",
+  "source_bytes": 19112794,
+  "source_commit": "cb1e2105c21971f336a1d8a4ff9a0406716471a0",
+  "source_files": 1277,
+  "source_ref": "HEAD",
+  "source_repo": "BuilderIO/mitosis",
+  "source_tree": {
+    "bytes": 19112794,
+    "files": 1277,
+    "sha256": "7a0b4ca7107da292b3c91fb6272f7a73313a47f3bad4b8d3ca285f5a58366ab8"
+  }
+}
