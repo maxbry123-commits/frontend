@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 2862299,
+  "bundle_sha256": "cee5665c3d4a01e3b333d42bad20202c3a6afdf090a8dd1a9aeda59d303e158a",
+  "extracted_tree": {
+    "bytes": 9546287,
+    "files": 630,
+    "sha256": "2599d184799ac2d5846bcd3abc8b4a0c31729436ef04392bf75e00d546ff4f10"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 2862299,
+      "name": "Frappe-Builder.bundle.zip.part-0001",
+      "sha256": "cee5665c3d4a01e3b333d42bad20202c3a6afdf090a8dd1a9aeda59d303e158a"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Frappe-Builder",
+  "source_bytes": 9546287,
+  "source_commit": "8c50b15f5b65eacf94a54fda742436811d718372",
+  "source_files": 630,
+  "source_ref": "HEAD",
+  "source_repo": "frappe/builder",
+  "source_tree": {
+    "bytes": 9546287,
+    "files": 630,
+    "sha256": "2599d184799ac2d5846bcd3abc8b4a0c31729436ef04392bf75e00d546ff4f10"
+  }
+}
