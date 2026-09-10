@@ -1,0 +1,103 @@
+name: Motor Download Extract G456 Pending 35 20260910
+run-name: Motor Download Extract G456 Pending 35 • ${{ github.sha }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/motor-download-extract-g456-pending-35-20260910.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: motor-download-extract-g456-pending-35-20260910
+  cancel-in-progress: false
+
+jobs:
+  motor-groups-4-5-6-pending:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Checkout canonical motor
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout: |
+            ➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip
+          sparse-checkout-cone-mode: false
+
+      - name: Verify canonical motor blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          MOTOR_DIR='➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip'
+          test "$(git hash-object "$MOTOR_DIR/motor_2_queue_download_extract.py")" = '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          test "$(git hash-object "$MOTOR_DIR/hf_download_extract_engine.py")" = '91e6e4486692eab314be5c7130d8310d3c855397'
+
+      - name: Execute canonical motor for Groups 4 5 6 pending
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: 📂componentes open soure fromtend
+          MAX_RETRIES: '3'
+        run: |
+          set -euo pipefail
+          MOTOR_DIR="$GITHUB_WORKSPACE/➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip"
+          export ENGINE_PATH="$MOTOR_DIR/hf_download_extract_engine.py"
+          export QUEUE_FILE="$RUNNER_TEMP/g456-pending.queue.json"
+          export STATE_FILE="$RUNNER_TEMP/g456-pending.state.json"
+          export INDEX_PATH="$RUNNER_TEMP/g456-pending.index.md"
+          cat > "$QUEUE_FILE" <<'JSON'
+          {"queue":[
+            {"id":"g456p-001","source_repo":"BuilderIO/builder","slug":"Builder.io","publish":true},
+            {"id":"g456p-002","source_repo":"prevwong/craft.js","slug":"Craft.js","publish":true},
+            {"id":"g456p-003","source_repo":"GrapesJS/grapesjs","slug":"GrapesJS","publish":true},
+            {"id":"g456p-004","source_repo":"Canop/muse","slug":"MUSE","publish":true},
+            {"id":"g456p-005","source_repo":"mermaid-js/mermaid","slug":"Mermaid","publish":true},
+            {"id":"g456p-006","source_repo":"motiondivision/motion","slug":"Motion","publish":true},
+            {"id":"g456p-007","source_repo":"keeyanajoudaki/OpenDesign","slug":"OpenDesign","publish":true},
+            {"id":"g456p-008","source_repo":"parcel-bundler/parcel","slug":"Parcel","publish":true},
+            {"id":"g456p-009","source_repo":"penpot/penpot","slug":"Penpot","publish":true},
+            {"id":"g456p-010","source_repo":"plasmicapp/plasmic","slug":"Plasmic","publish":true},
+            {"id":"g456p-011","source_repo":"measuredco/puck","slug":"Puck","publish":true},
+            {"id":"g456p-012","source_repo":"react-cosmos/react-cosmos","slug":"React-Cosmos","publish":true},
+            {"id":"g456p-013","source_repo":"adobe/react-spectrum","slug":"React-Spectrum","publish":true},
+            {"id":"g456p-014","source_repo":"silexlabs/Silex","slug":"Silex","publish":true},
+            {"id":"g456p-015","source_repo":"storybookjs/storybook","slug":"Storybook","publish":true},
+            {"id":"g456p-016","source_repo":"teleporthq/teleport-code-generators","slug":"TeleportHQ","publish":true},
+            {"id":"g456p-017","source_repo":"ToolJet/ToolJet","slug":"ToolJet","publish":true},
+            {"id":"g456p-018","source_repo":"tldraw/tldraw","slug":"tldraw","publish":true},
+            {"id":"g456p-019","source_repo":"givanz/VvvebJs","slug":"VvvebJs","publish":true},
+            {"id":"g456p-020","source_repo":"webiny/webiny-js","slug":"Webiny","publish":true},
+            {"id":"g456p-021","source_repo":"wekan/wekan","slug":"Wekan","publish":true},
+            {"id":"g456p-022","source_repo":"microsoft/WinUI-Gallery","slug":"WinUI-Gallery","publish":true},
+            {"id":"g456p-023","source_repo":"AppFlowy-IO/AppFlowy","slug":"AppFlowy","publish":true},
+            {"id":"g456p-024","source_repo":"syncfusion/flutter-widgets","slug":"flutter-widgets","publish":true},
+            {"id":"g456p-025","source_repo":"appsmithorg/appsmith","slug":"Appsmith","publish":true},
+            {"id":"g456p-026","source_repo":"Codelessly/FlutterFlow","slug":"Codelessly","publish":true},
+            {"id":"g456p-027","source_repo":"FlutterFlow/flutterflow","slug":"flutterflow","publish":true},
+            {"id":"g456p-028","source_repo":"twentyhq/twenty","slug":"twenty","publish":true},
+            {"id":"g456p-029","source_repo":"callstack/react-native-paper","slug":"react-native-paper","publish":true},
+            {"id":"g456p-030","source_repo":"JetBrains/compose-multiplatform","slug":"compose-multiplatform","publish":true},
+            {"id":"g456p-031","source_repo":"android/compose-samples","slug":"compose-samples","publish":true},
+            {"id":"g456p-032","source_repo":"android/nowinandroid","slug":"Nowinandroid","publish":true},
+            {"id":"g456p-033","source_repo":"material-components/material-components-android","slug":"material-components-android","publish":true},
+            {"id":"g456p-034","source_repo":"JetBrains/compose-multiplatform-examples","slug":"compose-multiplatform-examples","publish":true},
+            {"id":"g456p-035","source_repo":"android/architecture-samples","slug":"architecture-samples","publish":true}
+          ]}
+          JSON
+          python3 "$MOTOR_DIR/motor_2_queue_download_extract.py" | tee "$RUNNER_TEMP/g456-pending.result.jsonl"
+          tail -n 1 "$RUNNER_TEMP/g456-pending.result.jsonl" > "$RUNNER_TEMP/g456-pending.final.json"
+          python3 - "$RUNNER_TEMP/g456-pending.final.json" <<'PY'
+          import json,sys
+          p=json.load(open(sys.argv[1]))
+          b=p.get('balance',{})
+          assert p.get('verdict')=='VERIFIED_CLOSED', p
+          assert b.get('failed')==0 and b.get('pending')==0, p
+          assert b.get('published_readback_verified')==b.get('total')==35, p
+          PY
