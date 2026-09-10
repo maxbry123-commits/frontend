@@ -1,0 +1,48 @@
+{
+  "bundle_bytes": 40262294,
+  "bundle_sha256": "aaa07e5652344e19aacd84d40810eb143c17e75c6927a440f4d0bb08806dcbab",
+  "extracted_tree": {
+    "bytes": 70206888,
+    "files": 3617,
+    "sha256": "a7729eaa47290816413bcb9882678facfda8ce57c5b0d015ab1deeb47accc0ec"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "flutter-widgets.bundle.zip.part-0001",
+      "sha256": "c22633f3ab7737f692d6d9e82a3ff485c8cfc0bfe52d10f100b9fa0ea7f8eb5b"
+    },
+    {
+      "bytes": 12582912,
+      "name": "flutter-widgets.bundle.zip.part-0002",
+      "sha256": "48a330c043353b2a1ad28ba2a468c0404f5462d0e8b324c5f226b970cd73af36"
+    },
+    {
+      "bytes": 12582912,
+      "name": "flutter-widgets.bundle.zip.part-0003",
+      "sha256": "411147257ba8eaba476c666176d241a46431cb6bb91f260688bd3fe9f5098b1d"
+    },
+    {
+      "bytes": 2513558,
+      "name": "flutter-widgets.bundle.zip.part-0004",
+      "sha256": "24fd88c58d98b3c61b044ba7c7e83b9cf4f21194199cbc147fcfa488dff96d83"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "flutter-widgets",
+  "source_bytes": 70206888,
+  "source_commit": "6de1e66c6b41bfedee25f0e3f040d6eddb8146bb",
+  "source_files": 3617,
+  "source_ref": "HEAD",
+  "source_repo": "syncfusion/flutter-widgets",
+  "source_tree": {
+    "bytes": 70206888,
+    "files": 3617,
+    "sha256": "a7729eaa47290816413bcb9882678facfda8ce57c5b0d015ab1deeb47accc0ec"
+  }
+}
