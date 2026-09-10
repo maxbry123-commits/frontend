@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 2419746,
+  "bundle_sha256": "e007e688b4d724727968fb4afb91eba43e276495987b7648ad8b09c73aae7f40",
+  "extracted_tree": {
+    "bytes": 9553676,
+    "files": 575,
+    "sha256": "85c2ccb627037905307ed1ab9d2fe6328b3f609cd8f2870544655a231752efa5"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 2419746,
+      "name": "Silex.bundle.zip.part-0001",
+      "sha256": "e007e688b4d724727968fb4afb91eba43e276495987b7648ad8b09c73aae7f40"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Silex",
+  "source_bytes": 9553676,
+  "source_commit": "4c8830181340fca1b2cb7379c33dd778424b091d",
+  "source_files": 575,
+  "source_ref": "HEAD",
+  "source_repo": "silexlabs/Silex",
+  "source_tree": {
+    "bytes": 9553676,
+    "files": 575,
+    "sha256": "85c2ccb627037905307ed1ab9d2fe6328b3f609cd8f2870544655a231752efa5"
+  }
+}
