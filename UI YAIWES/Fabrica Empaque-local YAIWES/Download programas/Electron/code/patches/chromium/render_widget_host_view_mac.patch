@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Cheng Zhao <zcbenz@gmail.com>
+Date: Thu, 20 Sep 2018 17:46:28 -0700
+Subject: render_widget_host_view_mac.patch
+
+This allows Electron to override `acceptsFirstMouse` on Mac so that windows can
+respond to the first mouse click in their window, which is desirable for some
+kinds of utility windows. Similarly for `disableAutoHideCursor`.
+
+diff --git a/content/app_shim_remote_cocoa/render_widget_host_view_cocoa.mm b/content/app_shim_remote_cocoa/render_widget_host_view_cocoa.mm
+index e16496bf8f63907101542120f9dfdd6b2d07d782..a220b3a2fcc0f197cabc7018f45256b401b41131 100644
+--- a/content/app_shim_remote_cocoa/render_widget_host_view_cocoa.mm
++++ b/content/app_shim_remote_cocoa/render_widget_host_view_cocoa.mm
+@@ -191,6 +191,11 @@ void ExtractUnderlines(NSAttributedString* string,
+ 
+ }  // namespace
+ 
++@interface NSWindow (AtomCustomMethods)
++- (BOOL)acceptsFirstMouse;
++- (BOOL)disableAutoHideCursor;
++@end
++
+ // RenderWidgetHostViewCocoa ---------------------------------------------------
+ 
+ // Private methods:
+@@ -852,6 +857,10 @@ - (AcceptMouseEvents)acceptsMouseEventsOption {
+ }
+ 
+ - (BOOL)acceptsFirstMouse:(NSEvent*)theEvent {
++  if ([self.window respondsToSelector:@selector(acceptsFirstMouse)] &&
++      [self.window acceptsFirstMouse])
++    return YES;
++
+   // Enable "click-through" if mouse clicks are accepted in inactive windows.
+   return
+       [self acceptsMouseEventsOption] > AcceptMouseEvents::kWhenInActiveWindow;
+@@ -1477,6 +1486,10 @@ - (void)keyEvent:(NSEvent*)theEvent wasKeyEquivalent:(BOOL)equiv {
+                               eventType == NSEventTypeKeyDown &&
+                               !(modifierFlags & NSEventModifierFlagCommand);
+ 
++  if ([theEvent.window respondsToSelector:@selector(disableAutoHideCursor)] &&
++      [theEvent.window disableAutoHideCursor])
++    shouldAutohideCursor = NO;
++
+   // We only handle key down events and just simply forward other events.
+   if (eventType != NSEventTypeKeyDown) {
+     _hostHelper->ForwardKeyboardEvent(event, latencyInfo);

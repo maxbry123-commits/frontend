@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+
+import os
+import subprocess
+import sys
+import zipfile
+
+EXTENSIONS_TO_SKIP = [
+  '.pdb',
+  '.mojom.js',
+  '.mojom-lite.js',
+  '.info',
+  '.m.js',
+
+  # These are only needed for Chromium tests we don't run. Listed in
+  # 'extensions' because the mksnapshot zip has these under a subdirectory, and
+  # the PATHS_TO_SKIP is checked with |startswith|.
+  'dbgcore.dll',
+  'dbghelp.dll',
+  # msdia140.dll is copied to the output dir alongside dbghelp.dll (dbghelp
+  # dynamically loads it to symbolize stack traces). Since we don't ship
+  # dbghelp.dll/dbgcore.dll, msdia140.dll is unneeded in the distribution.
+  'msdia140.dll',
+]
+
+PATHS_TO_SKIP = [
+  # Skip because it is an output of //ui/gl that we don't need.
+  'angledata',
+  # Skip because ANGLE is statically linked; these are dummy stubs
+  # that upstream generates only for Chromium bot infrastructure and nothing
+  # loads them at runtime. See the TODO(crbug.com/514229803) in ui/gl/BUILD.gn.
+  './libEGL',
+  './libGLESv2',
+  # Skip because these are outputs that we don't need.
+  './libVkICD_mock_',
+  # Skip because these are outputs that we don't need.
+  './VkICD_mock_',
+  # Skip because its an output of create_bundle from
+  # //build/config/mac/rules.gni that we don't need
+  'Electron.dSYM',
+  # Refs https://chromium-review.googlesource.com/c/angle/angle/+/2425197.
+  # Remove this when Angle themselves remove the file:
+  # https://issuetracker.google.com/issues/168736059
+  'gen/angle/angle_commit.h',
+  # //chrome/browser:resources depends on this via
+  # //chrome/browser/resources/ssl/ssl_error_assistant, but we don't need to
+  # ship it.
+  'pyproto',
+  # Skip because these are outputs that we don't need.
+  'resources/inspector',
+  'gen/third_party/chromium-bidi/src',
+  'gen/third_party/devtools-frontend/src',
+  'gen/ui/webui',
+  # Skip because these get zipped separately in script/zip-symbols.py
+  'debug',
+]
+
+def skip_path(dep, dist_zip, target_cpu):
+  # Skip specific paths and extensions as well as the following special case:
+  # snapshot_blob.bin is a dependency of mksnapshot.zip because
+  # v8_context_generator needs it, but this file does not get generated for arm
+  # and arm 64 binaries of mksnapshot since they are built on x64 hardware.
+  # Consumers of arm and arm64 mksnapshot can generate snapshot_blob.bin
+  # themselves by running mksnapshot.
+  #
+  # Outputs of a secondary toolchain live under $root_out_dir/<toolchain>/
+  # (e.g. clang_x64_v8_arm64/gen/...), so match PATHS_TO_SKIP against the
+  # path relative to that toolchain dir too.
+  candidates = [dep]
+  if dep.startswith('clang_') and '/' in dep:
+    toolchain_relative_dep = dep.split('/', 1)[1]
+    candidates += [toolchain_relative_dep, './' + toolchain_relative_dep]
+  should_skip = (
+    any(c.startswith(path) for c in candidates for path in PATHS_TO_SKIP) or
+    any(dep.endswith(ext) for ext in EXTENSIONS_TO_SKIP) or
+    (
+      "arm" in target_cpu
+      and dist_zip == "mksnapshot.zip"
+      and "snapshot_blob.bin" in candidates
+    ) or
+    # electron_xcache links V8 but is always handed the target's blob.
+    (dist_zip == "xcache.zip" and "snapshot_blob.bin" in candidates)
+  )
+  if should_skip and os.environ.get('ELECTRON_DEBUG_ZIP_SKIP') == '1':
+    print("Skipping {}".format(dep))
+  return should_skip
+
+def execute(argv):
+  try:
+    output = subprocess.check_output(argv, stderr=subprocess.STDOUT)
+    return output
+  except subprocess.CalledProcessError as e:
+    print(e.output)
+    raise e
+
+def main(argv):
+  dist_zip, runtime_deps, target_cpu, _, flatten_val, flatten_relative_to = argv
+  should_flatten = flatten_val == "true"
+  dist_files = set()
+  with open(runtime_deps) as f:
+    for dep in f.readlines():
+      dep = dep.strip()
+      if not skip_path(dep, dist_zip, target_cpu):
+        dist_files.add(dep)
+  # On Linux, filter out any files which have a .stripped companion
+  if sys.platform == 'linux':
+    dist_files = {
+      dep for dep in dist_files if f"{dep.removeprefix('./')}.stripped" not in dist_files
+    }
+  if sys.platform == 'darwin' and not should_flatten:
+    execute(['zip', '-r', '-y', dist_zip] + list(dist_files))
+  else:
+    with zipfile.ZipFile(
+      dist_zip, 'w', zipfile.ZIP_DEFLATED, allowZip64=True
+    ) as z:
+      written = set()
+      for dep in dist_files:
+        if os.path.isdir(dep):
+          for root, _, files in os.walk(dep):
+            for filename in files:
+              z.write(os.path.join(root, filename))
+        else:
+          basename = os.path.basename(dep)
+          dirname = os.path.dirname(dep)
+          arcname = (
+            os.path.join(dirname, 'chrome-sandbox')
+            if basename.removesuffix('.stripped') == 'chrome_sandbox'
+            else dep
+          )
+          name_to_write = arcname
+          # On Linux, strip the .stripped suffix from the name before zipping
+          if sys.platform == 'linux':
+            name_to_write = name_to_write.removesuffix('.stripped')
+          if should_flatten:
+            if flatten_relative_to:
+              if name_to_write.startswith(flatten_relative_to):
+                name_to_write = name_to_write[len(flatten_relative_to):]
+              else:
+                name_to_write = os.path.basename(arcname)
+            else:
+              name_to_write = os.path.basename(arcname)
+          # Flattening can map several deps onto one name (e.g. the same
+          # file built by two toolchains); keep the first.
+          if name_to_write in written:
+            continue
+          written.add(name_to_write)
+          z.write(
+            dep,
+            name_to_write,
+          )
+
+if __name__ == '__main__':
+  sys.exit(main(sys.argv[1:]))

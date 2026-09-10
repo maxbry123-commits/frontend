@@ -1,0 +1,80 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jeremy Apthorp <nornagon@nornagon.net>
+Date: Wed, 28 Nov 2018 13:20:27 -0800
+Subject: support_mixed_sandbox_with_zygote.patch
+
+On Linux, Chromium launches all new renderer processes via a "zygote"
+process which has the sandbox pre-initialized (see
+//docs/linux_zygote.md). In order to support mixed-sandbox mode, in
+which some renderers are launched with the sandbox engaged and others
+without it, we need the option to launch non-sandboxed renderers without
+going through the zygote.
+
+Chromium already supports a `--no-zygote` flag, but it turns off the
+zygote completely, and thus also disables sandboxing. This patch allows
+the `--no-zygote` flag to affect renderer processes on a case-by-case
+basis, checking immediately prior to launch whether to go through the
+zygote or not based on the command-line of the to-be-launched renderer.
+
+This patch could conceivably be upstreamed, as it does not affect
+production Chromium (which does not use the `--no-zygote` flag).
+However, the patch would need to be reviewed by the security team, as it
+does touch a security-sensitive class.
+
+diff --git a/content/browser/renderer_host/render_process_host_impl.cc b/content/browser/renderer_host/render_process_host_impl.cc
+index 7b772b9006ffcd5e453839808b55de1f3ebd6a4a..82da14aec1f153e720b198aafd189a64e45a7bc9 100644
+--- a/content/browser/renderer_host/render_process_host_impl.cc
++++ b/content/browser/renderer_host/render_process_host_impl.cc
+@@ -2097,6 +2097,10 @@ bool RenderProcessHostImpl::Init() {
+     std::unique_ptr<SandboxedProcessLauncherDelegate> sandbox_delegate =
+         std::make_unique<RendererSandboxedProcessLauncherDelegateWin>(
+             *cmd_line, IsPdf(), IsJitDisabled());
++#elif BUILDFLAG(USE_ZYGOTE)
++    bool use_zygote = !cmd_line->HasSwitch(switches::kNoZygote);
++    std::unique_ptr<SandboxedProcessLauncherDelegate> sandbox_delegate =
++        std::make_unique<RendererSandboxedProcessLauncherDelegate>(use_zygote);
+ #else
+     std::unique_ptr<SandboxedProcessLauncherDelegate> sandbox_delegate =
+         std::make_unique<RendererSandboxedProcessLauncherDelegate>();
+diff --git a/content/browser/renderer_host/renderer_sandboxed_process_launcher_delegate.cc b/content/browser/renderer_host/renderer_sandboxed_process_launcher_delegate.cc
+index e5e9bb92966f84c7b993797aeaf83c8c17e91c3b..ae1ca8e2cbb7757b8fc3eef9f966044b9a27af08 100644
+--- a/content/browser/renderer_host/renderer_sandboxed_process_launcher_delegate.cc
++++ b/content/browser/renderer_host/renderer_sandboxed_process_launcher_delegate.cc
+@@ -35,6 +35,9 @@ namespace content {
+ 
+ #if BUILDFLAG(USE_ZYGOTE)
+ ZygoteCommunication* RendererSandboxedProcessLauncherDelegate::GetZygote() {
++  if (!use_zygote_) {
++    return nullptr;
++  }
+   const base::CommandLine& browser_command_line =
+       *base::CommandLine::ForCurrentProcess();
+   base::CommandLine::StringType renderer_prefix =
+diff --git a/content/browser/renderer_host/renderer_sandboxed_process_launcher_delegate.h b/content/browser/renderer_host/renderer_sandboxed_process_launcher_delegate.h
+index e058db451bef755a8c5bf3dc9bc9c5e9eb83b7f4..abe037f3a374e6fe9888186aa873fa17879ec418 100644
+--- a/content/browser/renderer_host/renderer_sandboxed_process_launcher_delegate.h
++++ b/content/browser/renderer_host/renderer_sandboxed_process_launcher_delegate.h
+@@ -18,6 +18,11 @@ class CONTENT_EXPORT RendererSandboxedProcessLauncherDelegate
+  public:
+   RendererSandboxedProcessLauncherDelegate() = default;
+ 
++#if BUILDFLAG(USE_ZYGOTE)
++  RendererSandboxedProcessLauncherDelegate(bool use_zygote):
++    use_zygote_(use_zygote) {}
++#endif
++
+   ~RendererSandboxedProcessLauncherDelegate() override = default;
+ 
+ #if BUILDFLAG(USE_ZYGOTE)
+@@ -30,6 +35,11 @@ class CONTENT_EXPORT RendererSandboxedProcessLauncherDelegate
+ 
+   // sandbox::policy::SandboxDelegate:
+   sandbox::mojom::Sandbox GetSandboxType() override;
++
++ private:
++#if BUILDFLAG(USE_ZYGOTE)
++  bool use_zygote_ = true;
++#endif
+ };
+ 
+ #if BUILDFLAG(IS_WIN)

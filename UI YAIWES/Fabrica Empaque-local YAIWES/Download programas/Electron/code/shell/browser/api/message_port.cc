@@ -1,0 +1,343 @@
+// Copyright (c) 2020 Slack Technologies, Inc.
+// Use of this source code is governed by the MIT license that can be
+// found in the LICENSE file.
+
+#include "shell/browser/api/message_port.h"
+
+#include <string>
+#include <utility>
+
+#include "base/strings/string_number_conversions.h"
+#include "base/task/single_thread_task_runner.h"
+#include "gin/arguments.h"
+#include "gin/data_object_builder.h"
+#include "gin/object_template_builder.h"
+#include "gin/persistent.h"
+#include "shell/browser/javascript_environment.h"
+#include "shell/common/gin_helper/dictionary.h"
+#include "shell/common/gin_helper/error_thrower.h"
+#include "shell/common/gin_helper/event_emitter_caller.h"
+#include "shell/common/gin_helper/wrappable_pointer_tags.h"
+#include "shell/common/node_includes.h"
+#include "shell/common/v8_util.h"
+#include "third_party/blink/public/common/messaging/transferable_message.h"
+#include "third_party/blink/public/common/messaging/transferable_message_mojom_traits.h"
+#include "third_party/blink/public/mojom/blob/blob.mojom.h"
+#include "third_party/blink/public/mojom/messaging/transferable_message.mojom.h"
+#include "v8/include/cppgc/allocation.h"
+#include "v8/include/cppgc/persistent.h"
+#include "v8/include/v8-cppgc.h"
+
+namespace electron {
+
+gin::WrapperInfo MessagePort::kWrapperInfo =
+    electron::MakeWrapperInfo(electron::kElectronMessagePort);
+
+MessagePort::MessagePort() = default;
+MessagePort::~MessagePort() {
+  if (!IsNeutered()) {
+    // Disentangle before teardown. The MessagePortDescriptor will blow up if it
+    // hasn't had its underlying handle returned to it before teardown.
+    Disentangle();
+  }
+}
+
+// static
+MessagePort* MessagePort::Create(v8::Isolate* isolate) {
+  return cppgc::MakeGarbageCollected<MessagePort>(
+      isolate->GetCppHeap()->GetAllocationHandle());
+}
+
+bool MessagePort::IsEntangled() const {
+  return !closed_ && !IsNeutered();
+}
+
+bool MessagePort::IsNeutered() const {
+  return !connector_ || !connector_->is_valid();
+}
+
+void MessagePort::PostMessage(gin::Arguments* args) {
+  if (!IsEntangled())
+    return;
+  DCHECK(!IsNeutered());
+
+  blink::TransferableMessage transferable_message;
+  gin_helper::ErrorThrower thrower(args->isolate());
+
+  // |message| is any value that can be serialized to StructuredClone.
+  v8::Local<v8::Value> message_value;
+  if (args->GetNext(&message_value)) {
+    if (!electron::SerializeV8Value(args->isolate(), message_value,
+                                    &transferable_message)) {
+      // SerializeV8Value sets an exception.
+      return;
+    }
+  }
+
+  v8::Local<v8::Value> transferables;
+  v8::LocalVector<v8::Value> wrapped_ports(args->isolate());
+  if (args->GetNext(&transferables)) {
+    if (!gin::ConvertFromV8(args->isolate(), transferables, &wrapped_ports)) {
+      thrower.ThrowTypeError("transferables must be an array of MessagePorts");
+      return;
+    }
+  }
+
+  // Serialization above can run JS that transfers or closes this port.
+  if (!IsEntangled())
+    return;
+
+  bool threw_exception = false;
+  transferable_message.ports = MessagePort::DisentanglePorts(
+      args->isolate(), wrapped_ports, &threw_exception, this);
+  if (threw_exception)
+    return;
+
+  mojo::Message mojo_message = blink::mojom::TransferableMessage::WrapAsMessage(
+      std::move(transferable_message));
+  connector_->Accept(&mojo_message);
+}
+
+void MessagePort::Start() {
+  if (!IsEntangled())
+    return;
+
+  if (started_)
+    return;
+
+  started_ = true;
+  if (HasPendingActivity())
+    Pin();
+  connector_->ResumeIncomingMethodCallProcessing();
+}
+
+void MessagePort::Close() {
+  if (closed_)
+    return;
+  if (!IsNeutered()) {
+    Disentangle().ReleaseHandle();
+    blink::MessagePortDescriptorPair pipe;
+    Entangle(pipe.TakePort0());
+  }
+  closed_ = true;
+  if (!HasPendingActivity())
+    Unpin();
+
+  v8::Isolate* isolate = JavascriptEnvironment::GetIsolate();
+  v8::HandleScope scope(isolate);
+  v8::Local<v8::Object> self;
+  if (GetWrapper(isolate).ToLocal(&self))
+    gin_helper::EmitEvent(isolate, self, "close");
+}
+
+void MessagePort::Entangle(blink::MessagePortDescriptor port) {
+  DCHECK(port.IsValid());
+  DCHECK(!connector_);
+  port_ = std::move(port);
+  v8::Isolate* isolate = JavascriptEnvironment::GetIsolate();
+  v8::HandleScope scope(isolate);
+  connector_ = std::make_unique<mojo::Connector>(
+      port_.TakeHandleToEntangleWithEmbedder(),
+      mojo::Connector::SINGLE_THREADED_SEND,
+      base::SingleThreadTaskRunner::GetCurrentDefault());
+  connector_->PauseIncomingMethodCallProcessing();
+  connector_->set_incoming_receiver(this);
+  connector_->set_connection_error_handler(base::BindOnce(
+      &MessagePort::Close, gin::WrapPersistent(weak_factory_.GetWeakCell(
+                               isolate->GetCppHeap()->GetAllocationHandle()))));
+  if (HasPendingActivity())
+    Pin();
+}
+
+void MessagePort::Entangle(blink::MessagePortChannel channel) {
+  Entangle(channel.ReleaseHandle());
+}
+
+blink::MessagePortChannel MessagePort::Disentangle() {
+  DCHECK(!IsNeutered());
+  port_.GiveDisentangledHandle(connector_->PassMessagePipe());
+  connector_ = nullptr;
+  if (!HasPendingActivity())
+    Unpin();
+  return blink::MessagePortChannel(std::move(port_));
+}
+
+bool MessagePort::HasPendingActivity() const {
+  // The spec says that entangled message ports should always be treated as if
+  // they have a strong reference.
+  // We'll also stipulate that the queue needs to be open (if the app drops its
+  // reference to the port before start()-ing it, then it's not really entangled
+  // as it's unreachable).
+  return started_ && IsEntangled();
+}
+
+// static
+bool MessagePort::EntanglePorts(v8::Isolate* isolate,
+                                std::vector<blink::MessagePortChannel> channels,
+                                v8::LocalVector<v8::Value>* wrapped_ports) {
+  v8::LocalVector<v8::Value> result(isolate);
+  for (auto& port : channels) {
+    auto* wrapped_port = MessagePort::Create(isolate);
+    wrapped_port->Entangle(std::move(port));
+    v8::Local<v8::Object> wrapper;
+    if (!wrapped_port->GetWrapper(isolate).ToLocal(&wrapper))
+      return false;
+    result.emplace_back(wrapper);
+  }
+  wrapped_ports->swap(result);
+  return true;
+}
+
+// static
+std::vector<blink::MessagePortChannel> MessagePort::DisentanglePorts(
+    v8::Isolate* isolate,
+    const v8::LocalVector<v8::Value>& ports,
+    bool* threw_exception,
+    MessagePort* source_port) {
+  if (ports.empty())
+    return {};
+
+  std::vector<cppgc::Persistent<MessagePort>> validated_ports;
+  validated_ports.reserve(ports.size());
+  gin_helper::ErrorThrower thrower(isolate);
+
+  // Walk the incoming array - if there are any duplicate ports, or null ports
+  // or cloned ports, throw an error (per section 8.3.3 of the HTML5 spec).
+  for (unsigned i = 0; i < ports.size(); ++i) {
+    MessagePort* port = nullptr;
+    if (!gin::ConvertFromV8(isolate, ports[i], &port)) {
+      thrower.ThrowTypeError("Port at index " + base::NumberToString(i) +
+                             " is not a valid port");
+      *threw_exception = true;
+      return {};
+    }
+    if (port == source_port) {
+      thrower.ThrowError("Port at index " + base::NumberToString(i) +
+                         " contains the source port.");
+      *threw_exception = true;
+      return {};
+    }
+    bool duplicate = false;
+    for (const auto& validated_port : validated_ports) {
+      if (validated_port.Get() == port) {
+        duplicate = true;
+        break;
+      }
+    }
+    if (port->IsNeutered() || duplicate) {
+      std::string type;
+      if (port->IsNeutered())
+        type = "already neutered";
+      else
+        type = "a duplicate";
+      thrower.ThrowError("Port at index " + base::NumberToString(i) + " is " +
+                         type + ".");
+      *threw_exception = true;
+      return {};
+    }
+    validated_ports.emplace_back(port);
+  }
+
+  // Passed-in ports passed validity checks, so we can disentangle them.
+  std::vector<blink::MessagePortChannel> channels;
+  channels.reserve(validated_ports.size());
+  for (const auto& port : validated_ports)
+    channels.push_back(port->Disentangle());
+  return channels;
+}
+
+void MessagePort::Pin() {
+  if (keep_alive_)
+    return;
+  keep_alive_ = this;
+}
+
+void MessagePort::Unpin() {
+  keep_alive_.Clear();
+}
+
+bool MessagePort::Accept(mojo::Message* mojo_message) {
+  blink::TransferableMessage message;
+  if (!blink::mojom::TransferableMessage::DeserializeFromMessage(
+          std::move(*mojo_message), &message)) {
+    return false;
+  }
+
+  v8::Isolate* isolate = JavascriptEnvironment::GetIsolate();
+  v8::HandleScope scope(isolate);
+
+  v8::LocalVector<v8::Value> ports(isolate);
+  if (!EntanglePorts(isolate, std::move(message.ports), &ports))
+    return false;
+
+  v8::Local<v8::Value> message_value = DeserializeV8Value(isolate, message);
+
+  v8::Local<v8::Object> self;
+  if (!GetWrapper(isolate).ToLocal(&self))
+    return false;
+
+  auto event = gin::DataObjectBuilder(isolate)
+                   .Set("data", message_value)
+                   .Set("ports", ports)
+                   .Build();
+  gin_helper::EmitEvent(isolate, self, "message", event);
+  return true;
+}
+
+gin::ObjectTemplateBuilder MessagePort::GetObjectTemplateBuilder(
+    v8::Isolate* isolate) {
+  return gin::ObjectTemplateBuilder(isolate, GetClassName())
+      .SetMethod("postMessage", &MessagePort::PostMessage)
+      .SetMethod("start", &MessagePort::Start)
+      .SetMethod("close", &MessagePort::Close);
+}
+
+const gin::WrapperInfo* MessagePort::wrapper_info() const {
+  return &kWrapperInfo;
+}
+
+const char* MessagePort::GetHumanReadableName() const {
+  return "Electron / MessagePort";
+}
+
+void MessagePort::Trace(cppgc::Visitor* visitor) const {
+  gin::Wrappable<MessagePort>::Trace(visitor);
+  visitor->Trace(weak_factory_);
+}
+
+}  // namespace electron
+
+namespace {
+
+using electron::MessagePort;
+
+v8::Local<v8::Value> CreatePair(v8::Isolate* isolate) {
+  auto* port1 = MessagePort::Create(isolate);
+  auto* port2 = MessagePort::Create(isolate);
+  blink::MessagePortDescriptorPair pipe;
+  port1->Entangle(pipe.TakePort0());
+  port2->Entangle(pipe.TakePort1());
+  v8::Local<v8::Object> wrapper1;
+  v8::Local<v8::Object> wrapper2;
+  if (!port1->GetWrapper(isolate).ToLocal(&wrapper1) ||
+      !port2->GetWrapper(isolate).ToLocal(&wrapper2)) {
+    return {};
+  }
+  return gin::DataObjectBuilder(isolate)
+      .Set("port1", wrapper1)
+      .Set("port2", wrapper2)
+      .Build();
+}
+
+void Initialize(v8::Local<v8::Object> exports,
+                v8::Local<v8::Value> unused,
+                v8::Local<v8::Context> context,
+                void* priv) {
+  v8::Isolate* const isolate = electron::JavascriptEnvironment::GetIsolate();
+  gin_helper::Dictionary dict{isolate, exports};
+  dict.SetMethod("createPair", &CreatePair);
+}
+
+}  // namespace
+
+NODE_LINKED_BINDING_CONTEXT_AWARE(electron_browser_message_port, Initialize)

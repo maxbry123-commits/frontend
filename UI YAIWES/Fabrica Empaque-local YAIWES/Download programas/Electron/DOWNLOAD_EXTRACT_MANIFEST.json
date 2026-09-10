@@ -1,0 +1,38 @@
+{
+  "bundle_bytes": 21017061,
+  "bundle_sha256": "0035c607dfc2f33535b55ff2372b4e7af79547bcf2609fb953452aa7d45eff46",
+  "extracted_tree": {
+    "bytes": 35111739,
+    "files": 3148,
+    "sha256": "120932483d273b5b59d6806e15a7431db4f6f56876afa1fadbb87350284152f8"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "Electron.bundle.zip.part-0001",
+      "sha256": "fac6079a75c409205b1dfe5b924582f7fbfa09a7c2f274a62321645d09b26b3c"
+    },
+    {
+      "bytes": 8434149,
+      "name": "Electron.bundle.zip.part-0002",
+      "sha256": "addb10d70b5c895c446813714f95ecbd8891d6279bcca4cae6b64d747a3bb5fa"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Electron",
+  "source_bytes": 35111739,
+  "source_commit": "a74f72884d1335044a922b9d0f586bcc3e307b02",
+  "source_files": 3148,
+  "source_ref": "HEAD",
+  "source_repo": "electron/electron",
+  "source_tree": {
+    "bytes": 35111739,
+    "files": 3148,
+    "sha256": "120932483d273b5b59d6806e15a7431db4f6f56876afa1fadbb87350284152f8"
+  }
+}
