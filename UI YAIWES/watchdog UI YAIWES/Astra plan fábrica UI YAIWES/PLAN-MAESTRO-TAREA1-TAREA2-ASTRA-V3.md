@@ -6,7 +6,7 @@ Contrato: `tel.workflow/v3`
 Modo: `FAIL_CLOSED_LOOP`
 Estado: `ACTIVE_LOOP`
 
-V3 supersede V2 como plan operativo porque corrige la cadena de recuperación para incluir INPUT Part-02, Arquitectura V2, CHECKPOINT y Handoff/Recovery V3. No borra V2.
+V3 supersede V2 como plan operativo porque corrige la cadena de recuperación para incluir INPUT Part-02, Arquitectura V2, CHECKPOINT, auditoría post-check y Recovery/Handoff V4. No borra V2.
 
 ## GATE PRINCIPAL
 
@@ -17,7 +17,7 @@ T2 sólo admite investigación/read-only/contracts durante T1. No implementació
 
 ## CADENA DE RECUPERACIÓN
 
-`INPUT base -> INPUT addendum -> INPUT part-02 -> Crazy Wall Astra -> STATE -> CHECKPOINT -> Perfil -> Arquitectura V2 -> Matriz -> Plan V3 -> Auditorías 4 pasadas -> Recovery V3 -> Handoff V3 -> fresh HEAD -> current_node`.
+`INPUT base -> INPUT addendum -> INPUT part-02 -> Crazy Wall Astra -> STATE -> CHECKPOINT -> Perfil -> Arquitectura V2 -> Matriz -> Plan V3 -> Auditorías 4 pasadas -> Auditoría post-check factory-v1 -> Recovery V4 -> Handoff V4 -> fresh HEAD -> current_node`.
 
 ## TAREA 1 — FÁBRICA UI
 
@@ -39,7 +39,7 @@ Acción: inventario físico completo de candidatos útiles, source/ref/commit/li
 Salida: capability map suficiente para seleccionar owners de capacidades.
 
 `T1_04 CANVAS_OWNER_SELECTION` — `PENDING`.
-Bakeoff Craft.js/GrapesJS/Puck si están verificados; un solo CanvasOwner/API.
+Bakeoff Craft.js/GrapesJS/Puck si están verificados; un solo CanvasOwner/API. `Frontend/factory-v1/index.html` sólo participa como baseline experimental/donor, no como owner canónico automático.
 
 `T1_05 COMPONENT_REGISTRY_CONTRACT` — `PENDING`.
 Cerrar ComponentManifest + ComponentDefinition + ComponentInstance + UIDocument + TypedAction + UIStateDelta + BackendBinding + RuntimeEvent + ProviderRef + ArtifactRef + EvidenceRef + SurfaceCapability.
@@ -80,9 +80,17 @@ Owner reviewer Claude/otra AI independiente; productor no auto-certifica.
 Cierre T1:
 `path + SHA/diff + build/test/log + read-back + no unresolved node GAP + independent reviewer = VERIFIED_CLOSED`.
 
+## PROTOTIPO FACTORY-V1 — NO PROMUEVE NODOS
+
+Existe `Frontend/factory-v1/index.html`, commit `a9f9818dd76025141333df5102fc885646df8d70`, blob `a6d078c9accca130344f7ceddefb5482d15c4978`.
+
+Clasificación: `EXPERIMENTAL_REFERENCE_AND_DONOR / CLOSED_UNVERIFIED`.
+
+Razones: single-file monolith; no separation contracts/adapters/plugins/registry/loader/guards/tests; T1_03/T1_04 no cerrados; provider/backend/HF/browser E2E no demostrados. Ver `AUDITORIA-POSTCHECK-FACTORY-RUNTIME-V1-2026-09-10.md`.
+
 ## TAREA 2 — INTERFACE UI YAIWES
 
-Sólo tras T1_16 PASS + ownership/write paths explícitos:
+Se desbloquea sólo después de T1_16 PASS.
 
 `T2_00 REQUIREMENTS/SOURCE/BACKEND CROSSCHECK`
 -> `T2_01 APPSHELL/WORKSPACES`
@@ -119,6 +127,7 @@ Cross-check vigente:
 4. HF private factory deployment not verified -> T1_13/T1_14.
 5. Backend LLM capability for factory not verified -> external dependency/T1_10/T1_12.
 6. Real backend bindings -> T2_09, blocked by T1.
+7. factory-v1 monolithic prototype -> donor/reference only; modular extraction after T1_03/T1_04.
 
 ## LOOP / WRITE POLICY
 
@@ -131,4 +140,4 @@ Si HEAD cambia: refetch/rebuild delta; no force.
 
 `T1_03_COMPONENT_XRAY`
 
-No volver a planificación genérica. No iniciar T2 productiva.
+No volver a planificación genérica. No iniciar T2 productiva. No reanudar desde el prototipo experimental.
