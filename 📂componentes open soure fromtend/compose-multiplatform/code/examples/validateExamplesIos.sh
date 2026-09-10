@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Script to build most of the examples, to verify if they can compile.
+# Example must be buildable with dev builds, so they should have dev maven repo set up.
+
+set -euo pipefail
+
+if [ "$#" -ne 2 ]; then
+echo "Specify Compose and Kotlin version. For example: ./validateExamplesIos.sh 1.1.1 1.6.10"
+exit 1
+fi
+COMPOSE_VERSION=$1
+KOTLIN_VERSION=$2
+
+
+runGradle() {
+    pushd $1
+    echo "Validating $1"
+    ./gradlew clean linkIosArm64 -Pcompose.version=$COMPOSE_VERSION -Pkotlin.version=$KOTLIN_VERSION --rerun-tasks || (echo "Failed $1" && exit 1)
+    popd
+}
+
+runGradle chat
+runGradle codeviewer
+runGradle imageviewer
+runGradle graphics-2d

@@ -1,0 +1,74 @@
+import org.gradle.api.tasks.compile.JavaCompile
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+plugins {
+    id "com.android.kotlin.multiplatform.library"
+    id "org.jetbrains.kotlin.multiplatform"
+    id "org.jetbrains.kotlin.plugin.compose"
+    id "org.jetbrains.compose"
+}
+
+kotlin {
+    // empty stub (no actual android app) to detect configuration conflicts
+    // like https://youtrack.jetbrains.com/issue/CMP-2345
+    android {
+        namespace = "org.jetbrains.compose.testapp"
+        compileSdk = 37
+        minSdk = 23
+    }
+
+    jvm()
+    sourceSets {
+        jvmMain {
+            dependsOn(commonMain)
+
+            dependencies {
+                implementation(compose.desktop.currentOs)
+            }
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+tasks.withType(KotlinCompile).configureEach {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
+    }
+}
+
+compose.desktop {
+    application {
+        mainClass = "MainKt"
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+
+            packageVersion = "1.0.0"
+            packageName = "TestPackage"
+            description = "Test description"
+            copyright = "Test Copyright Holder"
+            vendor = "Test Vendor"
+
+            linux {
+                shortcut = true
+                packageName = "test-package"
+                debMaintainer = "example@example.com"
+                menuGroup = "menu-group"
+            }
+            windows {
+                console = true
+                dirChooser = true
+                perUserInstall = true
+                shortcut = true
+                menu = true
+                menuGroup = "compose"
+                upgradeUuid = "2d6ff464-75be-40ad-a256-56420b9cc374"
+            }
+        }
+    }
+}

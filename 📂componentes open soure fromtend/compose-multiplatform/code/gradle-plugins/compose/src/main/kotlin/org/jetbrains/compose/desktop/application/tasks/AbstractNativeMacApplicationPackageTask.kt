@@ -1,0 +1,50 @@
+/*
+ * Copyright 2020-2022 JetBrains s.r.o. and respective authors and developers.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE.txt file.
+ */
+
+package org.jetbrains.compose.desktop.application.tasks
+
+import org.gradle.api.file.Directory
+import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.*
+import org.gradle.work.DisableCachingByDefault
+import org.jetbrains.compose.desktop.tasks.AbstractComposeDesktopTask
+import org.jetbrains.compose.internal.utils.*
+import java.io.File
+
+@DisableCachingByDefault(because = "Uses platform-specific native tools whose output depends on local system")
+abstract class AbstractNativeMacApplicationPackageTask : AbstractComposeDesktopTask() {
+    @get:Input
+    val packageName: Property<String> = objects.property()
+
+    @get:Input
+    val packageVersion: Property<String> = objects.property<String>().value("1.0.0")
+
+    @get:Internal
+    internal val fullPackageName: Provider<String> =
+        project.provider { "${packageName.get()}-${packageVersion.get()}" }
+
+    @get:OutputDirectory
+    val destinationDir: DirectoryProperty = objects.directoryProperty()
+
+    @get:LocalState
+    val workingDir: Provider<Directory> = project.layout.buildDirectory.dir("compose/tmp/$name")
+
+    @TaskAction
+    fun run() {
+        fileOperations.clearDirs(destinationDir, workingDir)
+
+        createPackage(
+            destinationDir = destinationDir.ioFile,
+            workingDir = workingDir.ioFile
+        )
+    }
+
+    protected abstract fun createPackage(
+        destinationDir: File,
+        workingDir: File
+    )
+}

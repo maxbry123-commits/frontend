@@ -1,0 +1,75 @@
+package example.imageviewer.view
+
+import android.content.Context
+import android.content.Intent
+import android.widget.Toast
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import example.imageviewer.Dependencies
+import example.imageviewer.ImageViewerCommon
+import example.imageviewer.Notification
+import example.imageviewer.PopupNotification
+import example.imageviewer.SharePicture
+import example.imageviewer.filter.PlatformContext
+import example.imageviewer.ioDispatcher
+import example.imageviewer.model.PictureData
+import example.imageviewer.storage.AndroidImageStorage
+import example.imageviewer.style.ImageViewerTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+
+@Composable
+fun ImageViewerAndroid() {
+    val context: Context = LocalContext.current
+    val ioScope = rememberCoroutineScope { ioDispatcher }
+    val dependencies = remember(context, ioScope) {
+        getDependencies(context, ioScope)
+    }
+    ImageViewerTheme {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            ImageViewerCommon(dependencies)
+        }
+    }
+}
+
+private fun getDependencies(
+    context: Context,
+    ioScope: CoroutineScope,
+) = object : Dependencies() {
+    override val notification: Notification = object : PopupNotification() {
+        override fun showPopUpMessage(text: String) {
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+        }
+    }
+    override val imageStorage: AndroidImageStorage = AndroidImageStorage(pictures, ioScope, context)
+    override val sharePicture: SharePicture = object : SharePicture {
+        override suspend fun share(context: PlatformContext, picture: PictureData) {
+            ioScope.launch(ioDispatcher) {
+                val shareIntent: Intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(
+                        Intent.EXTRA_STREAM,
+                        imageStorage.getUri(context.androidContext, picture)
+                    )
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        picture.description
+                    )
+                    type = "image/jpeg"
+                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                }
+                withContext(Dispatchers.Main) {
+                    context.androidContext.startActivity(Intent.createChooser(shareIntent, null))
+                }
+            }.join()
+        }
+    }
+}

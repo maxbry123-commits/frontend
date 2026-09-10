@@ -1,0 +1,48 @@
+{
+  "bundle_bytes": 43912812,
+  "bundle_sha256": "201f4a5a1cb33411494afbb5d25b97a90ba70d612b1177256155f6fe6f961e66",
+  "extracted_tree": {
+    "bytes": 56470269,
+    "files": 2472,
+    "sha256": "612c6c916804b9cd1eefa8de67afc811feee8d4d999ea0503437ad8ac2f330dc"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "compose-multiplatform.bundle.zip.part-0001",
+      "sha256": "0c6c0bf90e1bdae41013e6c2a21029feca53b045f8a5b81c19e3689414738fa4"
+    },
+    {
+      "bytes": 12582912,
+      "name": "compose-multiplatform.bundle.zip.part-0002",
+      "sha256": "bd5fab345a75a97bd19ab52365a804a48f7ce1bd8552b0634a8f192fb7b5e357"
+    },
+    {
+      "bytes": 12582912,
+      "name": "compose-multiplatform.bundle.zip.part-0003",
+      "sha256": "d26c097cba5f5cd4203c55d45dbc4f583281337c75c2245c2d64bff4eae6a69f"
+    },
+    {
+      "bytes": 6164076,
+      "name": "compose-multiplatform.bundle.zip.part-0004",
+      "sha256": "9a545a94d9f74ee8beffa5b8e6a7567913de985a884c86e77ed3bc7bea552eeb"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "compose-multiplatform",
+  "source_bytes": 56470269,
+  "source_commit": "8c54244535c1992dacc7a1878e6ad27bc8bee1da",
+  "source_files": 2472,
+  "source_ref": "HEAD",
+  "source_repo": "JetBrains/compose-multiplatform",
+  "source_tree": {
+    "bytes": 56470269,
+    "files": 2472,
+    "sha256": "612c6c916804b9cd1eefa8de67afc811feee8d4d999ea0503437ad8ac2f330dc"
+  }
+}
