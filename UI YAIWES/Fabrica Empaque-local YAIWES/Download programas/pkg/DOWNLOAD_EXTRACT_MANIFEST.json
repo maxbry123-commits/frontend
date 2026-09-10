@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 731792,
+  "bundle_sha256": "f62dddaa6bd267671793fc485bdec6a6ffc8a849a2b3f9f5dec4bfa08bac1acd",
+  "extracted_tree": {
+    "bytes": 1672868,
+    "files": 1541,
+    "sha256": "cc8f5102f97b599324b187f19fa0be1072c9c65b0fe83fd2be5a67ac3fd4cb6a"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 731792,
+      "name": "pkg.bundle.zip.part-0001",
+      "sha256": "f62dddaa6bd267671793fc485bdec6a6ffc8a849a2b3f9f5dec4bfa08bac1acd"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "pkg",
+  "source_bytes": 1672868,
+  "source_commit": "9066ceeb391d9c7ba6aba650109c2fa3f8e088eb",
+  "source_files": 1541,
+  "source_ref": "HEAD",
+  "source_repo": "vercel/pkg",
+  "source_tree": {
+    "bytes": 1672868,
+    "files": 1541,
+    "sha256": "cc8f5102f97b599324b187f19fa0be1072c9c65b0fe83fd2be5a67ac3fd4cb6a"
+  }
+}
