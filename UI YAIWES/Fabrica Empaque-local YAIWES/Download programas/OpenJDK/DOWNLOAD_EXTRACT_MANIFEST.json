@@ -1,0 +1,108 @@
+{
+  "bundle_bytes": 191088953,
+  "bundle_sha256": "fa2fc12b2e16964713f64a28e86fc2618422c26c4606ddfc21075dae16e1c357",
+  "extracted_tree": {
+    "bytes": 701117693,
+    "files": 71749,
+    "sha256": "6ad1c4f7fc595dcaa224521771e15dd335a8e9aa720fe00638f1812b0b4e0c1c"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0001",
+      "sha256": "880de52a6d6764748fb4a2f3772e492cc97d9476c3e89aa2ef074cb1a9c66692"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0002",
+      "sha256": "b2f9d9b01a94627005240a9729830e7461d772a32f7914df612bfcf732cf6dd6"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0003",
+      "sha256": "3b2590c849ec71ece9fdcaf114bd37a7e7a17682869f0a54b6ba21aa62dae1f5"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0004",
+      "sha256": "e70d83b1f267ee992bd597f05053886c0003119967c6056d3cd33bf40ada54cf"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0005",
+      "sha256": "96cec0e14bb2c686c27c6e58468a24c40d6c418070abef6ca0bced021c206eb6"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0006",
+      "sha256": "b416e29d7114cf1d26851622f000cae6dc786b78e81eaef511ca19819d4a8ad9"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0007",
+      "sha256": "cfc3c69bf59ac09001c97ed0bbaab5e075a84f03a61f62955e9ac108284bc60b"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0008",
+      "sha256": "8990874b659ef546b08a182455d13f7aebabe9598f6461a686200cfe84f9603d"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0009",
+      "sha256": "619fb18536238ae485c5eb7d0f53acd62bc4d5707b5d960f7f4437b88d8f5d1e"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0010",
+      "sha256": "e7d5f45841c6997bdd5d4e32f296e7a4152f8f97982e16423296813ba0b4999e"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0011",
+      "sha256": "587e3a350b75e48305b6d159b9de1a295e2d627426816e9bec9e4fe12e8ea177"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0012",
+      "sha256": "4bff3cf085c561d7b2c8eac17b43ebeca1ccaaf532fc2e35e733bedf1d53e89a"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0013",
+      "sha256": "e6f829bfb41c239282b5d1eba4368cdbdacc97fc77a867943512dda4240d38bd"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0014",
+      "sha256": "70d2801e96d6970c310185de523362581f4bd7785f52e425bba063fb4b1f1894"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OpenJDK.bundle.zip.part-0015",
+      "sha256": "5392bea928451318c2c05c8f2d7922224587ba9775f0347b24ae2ce7c7a5864c"
+    },
+    {
+      "bytes": 2345273,
+      "name": "OpenJDK.bundle.zip.part-0016",
+      "sha256": "f53c3c3161f3b0e9d3a32c147fbc5163ac69d2df9570044ec68103b6eb67ac03"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "OpenJDK",
+  "source_bytes": 701117693,
+  "source_commit": "abf881b0108610051fb36636a5f8ce44e8076ddb",
+  "source_files": 71749,
+  "source_ref": "HEAD",
+  "source_repo": "openjdk/jdk",
+  "source_tree": {
+    "bytes": 701117693,
+    "files": 71749,
+    "sha256": "6ad1c4f7fc595dcaa224521771e15dd335a8e9aa720fe00638f1812b0b4e0c1c"
+  }
+}
