@@ -1,0 +1,138 @@
+{
+  "bundle_bytes": 272885784,
+  "bundle_sha256": "59ddf7dbc2b3b6d43a7e94e97a75fb26e905baad0f2613f9ad02825f6bf0dea1",
+  "extracted_tree": {
+    "bytes": 289645437,
+    "files": 3201,
+    "sha256": "ec29baa326655f7284abfbab907658923302b8d050f7990f6d8a48ece1d2902a"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0001",
+      "sha256": "adb0d8fa22e62e3b1b12e66e7405ebb0c66a75292b3a6d00daf9530059738b41"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0002",
+      "sha256": "c19ffd8bcf375d223eab33405febf780e54bf65c7804159564547208b8f02a76"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0003",
+      "sha256": "f60bbd171e38aeb0d5d25e72acafeeb5307cf19b87a68810df680d6dfc55f1c0"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0004",
+      "sha256": "b62667e20d3b97805fa7cee57fc6ff5b8d59bc49e694de4ef76452a1cfecfeaa"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0005",
+      "sha256": "4b8e718ee2d745e1edeaa89271be77a311f61df15a03a8537fae2a6cd91f52d5"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0006",
+      "sha256": "71966d055acb0197ef62b9ab0acde856cbc0d5f63ef3045a69aa648983baf387"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0007",
+      "sha256": "f157d257ebd042cbf4b9ecb2a9ba769f272cf499bd95fe6616373ab29d3c13be"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0008",
+      "sha256": "f1a2591070c358da797b2ac45bc5f31a1cbde48540b3231b6ef930f1d44d7d08"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0009",
+      "sha256": "5febbb6d6cc9a05deee5c7b9401abf8a1a92ec3d9a3ad8fdf3aab100b884d99f"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0010",
+      "sha256": "a2099ee076e2a08df7bd86f2daa9f6c20c0ca7017473fffb86c5880975a16eb6"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0011",
+      "sha256": "93b7bbb24806854c58c9d404a42430286ba060738aaaee9523b11c1850266767"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0012",
+      "sha256": "a52cf4acd9b95f95478f52bbeec4c34b6d41376b842a6ce0647774fdbc6dc7c4"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0013",
+      "sha256": "90bea59fe5ee7413f7e708d285d1cc8fe25e4fffb3c8496e151327b62889a8a5"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0014",
+      "sha256": "28e9af3731a1ff458224896b499043eb3caee7a867346d7e401dfc6c28b2cd1f"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0015",
+      "sha256": "0f74964015a068a37cc43dc976bfc6ae5b0537df75fb6fdbc0015e514408d0d8"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0016",
+      "sha256": "f4c48d6d68a1627e43441500ae3d96283a94571ff6f01b053acce32b190eb551"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0017",
+      "sha256": "673265fc80384064c2f884ab077c7c68cf618d9c867bfe640e2591e3e790213f"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0018",
+      "sha256": "288cfbed55a64a38ac85451c8cd00072e3cc90983feb52a6d6c31c0cd600cb8b"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0019",
+      "sha256": "ee63ff9bd231af699fc4a3541c13954397d212393c829bc846e02d7d1d284916"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0020",
+      "sha256": "7517cb9c598898e2d673a2d70a5683c8a4b15c12440bdf5d84085ad70e9b8f2f"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Motion.bundle.zip.part-0021",
+      "sha256": "3dc7aabf33c7438c08743d34b20024a37547c1c89fac3043c694db69f9459577"
+    },
+    {
+      "bytes": 8644632,
+      "name": "Motion.bundle.zip.part-0022",
+      "sha256": "ee54e4ce9de88b55da378169b3d1139f700756f5a15e21a89928e1d13f3ccf7d"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Motion",
+  "source_bytes": 289645437,
+  "source_commit": "e871ba7f175d0609cef84f416f984e8e84be8333",
+  "source_files": 3201,
+  "source_ref": "HEAD",
+  "source_repo": "motiondivision/motion",
+  "source_tree": {
+    "bytes": 289645437,
+    "files": 3201,
+    "sha256": "ec29baa326655f7284abfbab907658923302b8d050f7990f6d8a48ece1d2902a"
+  }
+}
