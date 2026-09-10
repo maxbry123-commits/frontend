@@ -1,0 +1,53 @@
+{
+  "bundle_bytes": 62270029,
+  "bundle_sha256": "dba19e59ec85426676ede095d7a92c9de6ace106ae3255d6f05b06c218f92688",
+  "extracted_tree": {
+    "bytes": 75212763,
+    "files": 4584,
+    "sha256": "c03137c60f030ab8e5d267e3f2da597ffc8aa5a589376ab4cf9d1c8a9d61b758"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "material-components-android.bundle.zip.part-0001",
+      "sha256": "f75e4a42e008d2f984e3e8bd6f60ec0202e5cee6446e3c0a77f637febe33e421"
+    },
+    {
+      "bytes": 12582912,
+      "name": "material-components-android.bundle.zip.part-0002",
+      "sha256": "34fd0fbd0ada54c4b6757f5d4178bfa1d8a6404ed8fb2bf11108ffcd97ccc5e7"
+    },
+    {
+      "bytes": 12582912,
+      "name": "material-components-android.bundle.zip.part-0003",
+      "sha256": "27a3538299ded611afe63f5f98b55eeee86718e014eb787cf7f0bd7563979eae"
+    },
+    {
+      "bytes": 12582912,
+      "name": "material-components-android.bundle.zip.part-0004",
+      "sha256": "239c3deb3229658c1693ef0ab77a7edd5eceda21d56a9382aa9f15e856203432"
+    },
+    {
+      "bytes": 11938381,
+      "name": "material-components-android.bundle.zip.part-0005",
+      "sha256": "2f779c7eb55ab61e0e32d6b592d26b8c1c7f0dff9b148addfb8715bd48ee561a"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "material-components-android",
+  "source_bytes": 75212763,
+  "source_commit": "d12048664f383e88148afb18e971aa6dd24ed42e",
+  "source_files": 4584,
+  "source_ref": "HEAD",
+  "source_repo": "material-components/material-components-android",
+  "source_tree": {
+    "bytes": 75212763,
+    "files": 4584,
+    "sha256": "c03137c60f030ab8e5d267e3f2da597ffc8aa5a589376ab4cf9d1c8a9d61b758"
+  }
+}
