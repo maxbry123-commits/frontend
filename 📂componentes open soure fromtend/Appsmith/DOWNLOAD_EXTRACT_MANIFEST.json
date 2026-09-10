@@ -1,0 +1,93 @@
+{
+  "bundle_bytes": 152954000,
+  "bundle_sha256": "9affdf386dbfc64d47bc527d47e206e36a5b3e9b7938092b85670e202df91f58",
+  "extracted_tree": {
+    "bytes": 521568354,
+    "files": 13692,
+    "sha256": "cccf03a93ce6530664eb503e828e3a8ab66bc2722bb8e31d40f00135f4e4a9e3"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "Appsmith.bundle.zip.part-0001",
+      "sha256": "30c22f30d18146be6bcae5df3180da6fc984a01bee7f012abbcf2746c6e33aca"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Appsmith.bundle.zip.part-0002",
+      "sha256": "668849792329be7d5126ff4d12e6757bd5f4ffa546f51d762f0bdcbbebac130d"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Appsmith.bundle.zip.part-0003",
+      "sha256": "27df22b1dd0911562a7f65d3576af86311dda9e1d56a4ec340b6488970a84d75"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Appsmith.bundle.zip.part-0004",
+      "sha256": "4b0db31e976617c03de787e9084425eb6a89ca9276228ff5ce76600cc9211642"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Appsmith.bundle.zip.part-0005",
+      "sha256": "946eaf966c2d1ac52f9d8d29061e9cbe897263e5292fae1e277ab58a17b1f983"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Appsmith.bundle.zip.part-0006",
+      "sha256": "d7f4f8fb3696d5f5d0f12760a7f753ed71f1a0ae18ccfc58194de00962670970"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Appsmith.bundle.zip.part-0007",
+      "sha256": "fba1234b7490e63a4bb2d6b619ebe2b39c183e0ae1cf8536284db66cde232c3b"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Appsmith.bundle.zip.part-0008",
+      "sha256": "0159a383f17b01fbef8f35a33f2502b1a099ea4d11356a5e2c8ff44016915cb0"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Appsmith.bundle.zip.part-0009",
+      "sha256": "a561637e1f083ce225ab7dc7df7feea21b4feeccd097ff0a4b8daf73e2d10cd2"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Appsmith.bundle.zip.part-0010",
+      "sha256": "7a5d61d88b44f29a0f6fc737d7422bd9870d18fec4e55586a8e5f12f2daf864c"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Appsmith.bundle.zip.part-0011",
+      "sha256": "9db1e968a7b42e8ae58fd19e6b38aad4a9f92cfee1ba73f2296ab229781e134e"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Appsmith.bundle.zip.part-0012",
+      "sha256": "37539eee28099b687a35080193f7f7a125be6697d56867fabe8fc7210bf6bce3"
+    },
+    {
+      "bytes": 1959056,
+      "name": "Appsmith.bundle.zip.part-0013",
+      "sha256": "89a9ab5565d3ffe6dce8ef422aeea2672b9bc0af28869d7b0b60869826a0ee9d"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Appsmith",
+  "source_bytes": 521568354,
+  "source_commit": "2a42b02c4a0a036a24dba596f0868f8680de7cdb",
+  "source_files": 13692,
+  "source_ref": "HEAD",
+  "source_repo": "appsmithorg/appsmith",
+  "source_tree": {
+    "bytes": 521568354,
+    "files": 13692,
+    "sha256": "cccf03a93ce6530664eb503e828e3a8ab66bc2722bb8e31d40f00135f4e4a9e3"
+  }
+}
