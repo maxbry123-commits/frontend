@@ -1,0 +1,38 @@
+{
+  "bundle_bytes": 14071038,
+  "bundle_sha256": "42aa54b58a0146abdfeeec6006aa8738474d83645beb0fb6466b47c944b25054",
+  "extracted_tree": {
+    "bytes": 18603286,
+    "files": 761,
+    "sha256": "e7f99cf3a34d70c0d908f6701acc7abb93086bf9ab84a30ffd77165aa814a272"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "xterm.js.bundle.zip.part-0001",
+      "sha256": "d4dd1ee922d7c9aec8c8f75dd44c2e04029b576a3efa870ba6d7bb951e758c19"
+    },
+    {
+      "bytes": 1488126,
+      "name": "xterm.js.bundle.zip.part-0002",
+      "sha256": "c099eb0dda4c6656480d66e58e4e90d62302efd12d195c2671fe38a36930d2ff"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "xterm.js",
+  "source_bytes": 18603286,
+  "source_commit": "c58ea3637f3968e0e6e79cd92cf9aace7ef89ee2",
+  "source_files": 761,
+  "source_ref": "HEAD",
+  "source_repo": "xtermjs/xterm.js",
+  "source_tree": {
+    "bytes": 18603286,
+    "files": 761,
+    "sha256": "e7f99cf3a34d70c0d908f6701acc7abb93086bf9ab84a30ffd77165aa814a272"
+  }
+}
