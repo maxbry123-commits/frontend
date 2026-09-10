@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 2046742,
+  "bundle_sha256": "b65a6437f24dffa538d6a0f114d7ac8e030ce9a3c2e84439c15f6c0c8589e7ce",
+  "extracted_tree": {
+    "bytes": 2541396,
+    "files": 119,
+    "sha256": "ddf2b1135071ddd138bf92098309cde1a09c503fd8ab2caa39c210233192159c"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 2046742,
+      "name": "architecture-samples.bundle.zip.part-0001",
+      "sha256": "b65a6437f24dffa538d6a0f114d7ac8e030ce9a3c2e84439c15f6c0c8589e7ce"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "architecture-samples",
+  "source_bytes": 2541396,
+  "source_commit": "ee66e1526b84c026615df032c705842b7d2a521f",
+  "source_files": 119,
+  "source_ref": "HEAD",
+  "source_repo": "android/architecture-samples",
+  "source_tree": {
+    "bytes": 2541396,
+    "files": 119,
+    "sha256": "ddf2b1135071ddd138bf92098309cde1a09c503fd8ab2caa39c210233192159c"
+  }
+}
