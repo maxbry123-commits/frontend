@@ -1,0 +1,18 @@
+{
+  "queue": [
+    {"id":"0013:big-AGI","slug":"big-AGI","source_repo":"https://github.com/enricoros/big-AGI","source_ref":"968950a4bdb3929c9381b80290720972cb936134","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0018:Vite","slug":"Vite","source_repo":"https://github.com/vitejs/vite","source_ref":"e6f6b3e3119256daa837b2dc399058c8aa45b470","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0019:Vercel-AI-SDK","slug":"Vercel AI SDK","source_repo":"https://github.com/vercel/ai","source_ref":"45f2b6a5bc06bdb40a847ea961f8d7ca7cd86563","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0021:TanStack-Query","slug":"TanStack Query","source_repo":"https://github.com/TanStack/query","source_ref":"HEAD","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0022:React-Virtuoso","slug":"React Virtuoso","source_repo":"https://github.com/petyosi/react-virtuoso","source_ref":"HEAD","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0024:shadcn-ui","slug":"shadcn-ui","source_repo":"https://github.com/shadcn-ui/ui","source_ref":"HEAD","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0031:XYFlow-React-Flow","slug":"XYFlow React Flow","source_repo":"https://github.com/xyflow/xyflow","source_ref":"HEAD","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0035:Lucide","slug":"Lucide","source_repo":"https://github.com/lucide-icons/lucide","source_ref":"HEAD","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0040:Uppy","slug":"Uppy","source_repo":"https://github.com/transloadit/uppy","source_ref":"HEAD","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0046:Supabase","slug":"Supabase","source_repo":"https://github.com/supabase/supabase","source_ref":"HEAD","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0056:DuckDB","slug":"DuckDB","source_repo":"https://github.com/duckdb/duckdb","source_ref":"HEAD","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0063:workerd","slug":"workerd","source_repo":"https://github.com/cloudflare/workerd","source_ref":"HEAD","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0066:AVF","slug":"AVF","source_repo":"https://android.googlesource.com/platform/packages/modules/Virtualization","source_ref":"HEAD","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0067:Flutter","slug":"Flutter","source_repo":"https://github.com/flutter/flutter","source_ref":"HEAD","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true}
+  ]
+}
