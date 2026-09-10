@@ -13,18 +13,30 @@ permissions:
 
 concurrency:
   group: maxbry123-commits-frontend-main-ui-yaiwes-motor-canonico-repair-14
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   download_extract_publish:
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
-      - name: Checkout fresh main
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          fetch-depth: 1
+      - name: Bootstrap sparse main for canonical motors only
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git init -q
+          git remote add origin 'https://github.com/maxbry123-commits/frontend.git'
+          git config core.sparseCheckout true
+          git sparse-checkout init --no-cone
+          cat > .git/info/sparse-checkout <<'EOF'
+          /UI YAIWES/➡️📂motores de descarga extracción copiado movimiento archivos frontend/
+          /UI YAIWES/automation/repair-14-motores-canonicos-20260910/QUEUE.json
+          EOF
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
+          git checkout -q --detach FETCH_HEAD
 
       - name: Verify immutable canonical motor blobs
         shell: bash
