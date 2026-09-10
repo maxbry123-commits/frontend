@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 4169213,
+  "bundle_sha256": "4aa4ec3d3074623e8d1bda1e232a53b8972a5fe779796d97536a7bd6ff4383d6",
+  "extracted_tree": {
+    "bytes": 20313065,
+    "files": 1389,
+    "sha256": "80b6c0a4db6006d4d84dea40cbe375526cc38f696591c193f5c5c9d9306ff474"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 4169213,
+      "name": "Neutralino-JS.bundle.zip.part-0001",
+      "sha256": "4aa4ec3d3074623e8d1bda1e232a53b8972a5fe779796d97536a7bd6ff4383d6"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Neutralino-JS",
+  "source_bytes": 20313065,
+  "source_commit": "e8e687187e3c93788223523ddfebe46add203a3c",
+  "source_files": 1389,
+  "source_ref": "HEAD",
+  "source_repo": "neutralinojs/neutralinojs",
+  "source_tree": {
+    "bytes": 20313065,
+    "files": 1389,
+    "sha256": "80b6c0a4db6006d4d84dea40cbe375526cc38f696591c193f5c5c9d9306ff474"
+  }
+}
