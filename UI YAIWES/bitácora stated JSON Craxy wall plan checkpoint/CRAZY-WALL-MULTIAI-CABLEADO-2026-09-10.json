@@ -8,6 +8,7 @@
   "repository": "maxbry123-commits/frontend",
   "branch": "main",
   "backend": {
+    "owner_identity": "➡️🤯 sol plan 1 UI YAIWES backend",
     "root": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/",
     "code_root": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/",
     "declared_status": "INITIAL_LAYERED_RUNTIME_NOT_YET_CONNECTED_TO_REAL_GITHUB_ACTIONS_OR_LLM_PROVIDER",
@@ -68,7 +69,7 @@
   },
   "tasks": {
     "T1_ACQUIRE_14": {
-      "owner": "SOL",
+      "owner": "➡️🤯 sol plan 1 UI YAIWES backend",
       "reviewer": "ASTRA",
       "status": "ACTIVE_GAP",
       "write_paths": [
@@ -95,7 +96,7 @@
       "close_when": "14/14 download+extract+move+readback VERIFIED_CLOSED"
     },
     "T2_BACKEND_INTEGRATION": {
-      "owner": "SOL",
+      "owner": "➡️🤯 sol plan 1 UI YAIWES backend",
       "reviewer": "ASTRA",
       "status": "BLOCKED_BY_T1",
       "write_paths": [
