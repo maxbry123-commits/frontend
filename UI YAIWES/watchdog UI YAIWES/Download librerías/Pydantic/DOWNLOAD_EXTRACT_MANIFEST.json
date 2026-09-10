@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 2141630,
+  "bundle_sha256": "76672100f5e39fd07d5cce73f858da3ae23c8d6f275e755af5b301d809ac618e",
+  "extracted_tree": {
+    "bytes": 6389877,
+    "files": 486,
+    "sha256": "00a475a00ea721ee4b71346d2a33d3cec99039e717ca9d6773a87469efba86ce"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 2141630,
+      "name": "Pydantic.bundle.zip.part-0001",
+      "sha256": "76672100f5e39fd07d5cce73f858da3ae23c8d6f275e755af5b301d809ac618e"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Pydantic",
+  "source_bytes": 6389877,
+  "source_commit": "bd2d0dd0137dfa1a8fdff2529b9dfb1547980150",
+  "source_files": 486,
+  "source_ref": "v2.12.5",
+  "source_repo": "pydantic/pydantic",
+  "source_tree": {
+    "bytes": 6389877,
+    "files": 486,
+    "sha256": "00a475a00ea721ee4b71346d2a33d3cec99039e717ca9d6773a87469efba86ce"
+  }
+}
