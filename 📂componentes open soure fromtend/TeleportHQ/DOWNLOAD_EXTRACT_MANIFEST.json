@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 5287043,
+  "bundle_sha256": "22a4db70be669fd610547a8a32ea025a3372a10caff95659ce8e4f86e4e0b7a6",
+  "extracted_tree": {
+    "bytes": 53305074,
+    "files": 1382,
+    "sha256": "dd06d84cb804d946114949e401dbbd45710bd28bba9b56909c2709070ac3138f"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 5287043,
+      "name": "TeleportHQ.bundle.zip.part-0001",
+      "sha256": "22a4db70be669fd610547a8a32ea025a3372a10caff95659ce8e4f86e4e0b7a6"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "TeleportHQ",
+  "source_bytes": 53305074,
+  "source_commit": "375bc9966070d51eb8fd7ff195bca4052da4b132",
+  "source_files": 1382,
+  "source_ref": "HEAD",
+  "source_repo": "teleporthq/teleport-code-generators",
+  "source_tree": {
+    "bytes": 53305074,
+    "files": 1382,
+    "sha256": "dd06d84cb804d946114949e401dbbd45710bd28bba9b56909c2709070ac3138f"
+  }
+}

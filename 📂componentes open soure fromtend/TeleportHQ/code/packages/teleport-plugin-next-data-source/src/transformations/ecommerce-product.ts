@@ -1,0 +1,1016 @@
+import type { UIDLEcommerceCategory } from '@teleporthq/teleport-types'
+import { ProductDiscounts, ProductRatings, StorefrontTax } from '@teleporthq/teleport-shared'
+import { generateCategoryTaxonomyCode } from './category-taxonomy'
+
+/**
+ * Everything the product transform needs baked in at export time, beyond the
+ * row itself. An options OBJECT rather than positional parameters: the list has
+ * already grown twice and every caller in the chain has to forward it verbatim.
+ */
+export interface EcommerceProductTransformOptions {
+  /** Category taxonomy — lives only in the UIDL, there is no DB table for it. */
+  categories?: UIDLEcommerceCategory[]
+  /**
+   * Percentage to ADD on top of every stored (NET) price for DISPLAY, or 0.
+   * Resolved by the caller through `StorefrontTax.resolveStorefrontTaxRate`.
+   */
+  storefrontTaxRate?: number
+  /**
+   * TRUE when stock levels must never gate purchasability in the storefront:
+   * the merchant disabled stock management entirely OR opted into backorders
+   * (`stockManagementConfig.allowBackorders`). Resolved by the caller through
+   * `buildProductTransformOptions`. Baked into the generated transform as
+   * `ALLOW_BACKORDERS`: `outOfStock` then always reads 'false' and every
+   * EXISTING variant combination counts as in stock — a combination that does
+   * not exist at all stays unavailable (there is nothing to backorder).
+   * Mirrors the GUI rule in
+   * `apps/gui/app/project-page/features/e-commerce/utils/product-variants.ts`.
+   */
+  allowBackorders?: boolean
+}
+
+/**
+ * Generates JavaScript code for e-commerce product data transformation.
+ * Transforms raw snake_case database records into the camelCase shape
+ * that UIDL components expect.
+ */
+export const generateEcommerceProductTransformationCode = (
+  options: EcommerceProductTransformOptions = {}
+): string => {
+  const taxHelperCode = StorefrontTax.generateStorefrontTaxHelperCode(
+    options.storefrontTaxRate ?? 0
+  )
+  const allowBackordersLiteral = options.allowBackorders === true ? 'true' : 'false'
+
+  return `
+${taxHelperCode}
+${ProductDiscounts.generateProductDiscountHelperCode()}
+${ProductRatings.generateProductRatingHelperCode()}
+
+// Baked from the merchant's stock settings: TRUE when stock never blocks a
+// purchase (stock management off OR backorders allowed). Regenerating the
+// project refreshes it — do not hand-edit. See EcommerceProductTransformOptions.
+var ALLOW_BACKORDERS = ${allowBackordersLiteral}
+
+${generateCategoryTaxonomyCode('PRODUCT_CATEGORIES_BY_ID', options.categories)}
+// The merchant's "Show 3D model by default" toggle, as every backend may hand
+// it back: a real boolean, 1/0, 'true'/'false'/'t'/'f' strings — and NULL /
+// absent / '' as ON, because a product that has a model shows it unless the
+// merchant switched it off. MUST mirror normalizeShowModelFlag in the GUI's
+// features/e-commerce/constants/product-model.ts.
+function normalizeShowModelFlag(raw) {
+  if (raw === null || raw === undefined || raw === '') return true
+  if (typeof raw === 'boolean') return raw
+  if (typeof raw === 'number') return raw !== 0
+  if (typeof raw === 'string') {
+    var token = raw.trim().toLowerCase()
+    return !(token === 'false' || token === 'f' || token === '0' || token === 'no' || token === 'off')
+  }
+  return true
+}
+
+// The product's media gallery in display order, HERO FIRST: the model when it
+// is shown by default, otherwise the images with the model last. Each entry is
+// { kind: 'image' | 'model', src, poster, thumbnail, alt }; 'thumbnail' is what
+// a strip draws and is never empty for an entry that can appear in one. MUST
+// mirror buildProductGalleryMedia in the GUI's
+// features/e-commerce/utils/product-gallery-media.ts.
+function buildProductGalleryMedia(params) {
+  var imageItems = []
+  for (var gi = 0; gi < params.images.length; gi++) {
+    imageItems.push({
+      kind: 'image',
+      src: params.images[gi],
+      poster: '',
+      thumbnail: params.images[gi],
+      alt: params.imageAlt || params.name,
+    })
+  }
+  if (!params.modelUrl) return imageItems
+  var modelItem = {
+    kind: 'model',
+    src: params.modelUrl,
+    poster: params.modelPoster || '',
+    thumbnail: params.modelPoster || params.mainImage || params.images[0] || '',
+    alt: params.name,
+  }
+  return params.showModel === 'true' ? [modelItem].concat(imageItems) : imageItems.concat([modelItem])
+}
+
+// ============================================================
+// E-Commerce Product Transformation
+// ============================================================
+
+function buildEcommerceProduct(record, options) {
+  if (!record || typeof record !== 'object') return record
+  options = options || {}
+  var currentLang = options.currentLanguage || null
+  var mainLang = options.mainLanguage || null
+  var assetMap = options.assetMap || {}
+
+  var id = record.id !== undefined && record.id !== null ? record.id : null
+
+  // i18n-resolved text fields
+  var name = resolveI18nField(record, 'name', 'name', currentLang, mainLang) || ''
+  var slug = resolveI18nField(record, 'slug', 'slug', currentLang, mainLang) || ''
+  var description = resolveI18nField(record, 'description', 'description', currentLang, mainLang) || ''
+  var category = resolveI18nField(record, 'category', 'category', currentLang, mainLang) || null
+  var tagsRaw = resolveI18nField(record, 'tags', 'tags', currentLang, mainLang)
+  var imageAlt = resolveI18nField(record, 'image_alt', 'imageAlt', currentLang, mainLang) || null
+
+  // Computed: plain-text description (HTML stripped)
+  var descriptionText = stripHtmlTags(description)
+
+  // Numeric fields (with NaN protection)
+  var price = safeNumber(record.price, 0)
+  var quantity = safeNumber(record.quantity, null)
+
+  // Currency
+  var currency = (record.currency || 'USD').toUpperCase()
+  var rawCurrencySymbol = pickFirst(record.currency_symbol, record.currencySymbol)
+  var currencySymbol = rawCurrencySymbol || getCurrencySymbol(currency)
+
+  // Status and active (normalize case — DB / forms may send "Active", "Inactive", etc.)
+  var statusRaw = record.status
+  if (statusRaw == null || statusRaw === '') {
+    statusRaw = record.active ? 'active' : 'inactive'
+  }
+  var status =
+    typeof statusRaw === 'string'
+      ? statusRaw.trim().toLowerCase()
+      : String(statusRaw).toLowerCase()
+  var active = status === 'active'
+
+  // Payment fields
+  var paymentType = pickFirst(record.payment_type, record.paymentType) || 'one_time'
+  var recurringInterval = pickFirst(record.recurring_interval, record.recurringInterval) || null
+  var rawRecurringCount = pickFirst(record.recurring_interval_count, record.recurringIntervalCount)
+  var recurringIntervalCount = safeNumber(rawRecurringCount, null)
+
+  // Physical product fields
+  var sku = record.sku || null
+  var weight = safeNumber(record.weight, null)
+  var weightUnit = pickFirst(record.weight_unit, record.weightUnit) || null
+  var dimensions = record.dimensions || null
+
+  // Tags - parse as JSON array (handles JSON strings, arrays, comma-separated)
+  var tags = parseJsonArray(tagsRaw)
+
+  // Variant AXES (translatable). The i18n-resolved column already carries the
+  // display labels for the current language (with the SAME stable keys as the
+  // base column); we just parse + normalize. The purchasable combinations live
+  // in teleport_product_variants and are fetched by the variant picker widget.
+  var variantOptionsRaw = resolveI18nField(record, 'variant_options', 'variantOptions', currentLang, mainLang)
+  var variantOptions = normalizeVariantOptions(variantOptionsRaw)
+  // Emitted as a STRING ('true'/'false') to match the strict-equality checks the
+  // storefront uses (same convention as outOfStock).
+  var requiresVariantSelection = variantOptions.length > 0 ? 'true' : 'false'
+
+  // Provider fields
+  var providerType = pickFirst(record.provider_type, record.providerType) || null
+  var providerProductId = pickFirst(record.provider_product_id, record.providerProductId) || null
+  var defaultPrice = pickFirst(record.default_price, record.defaultPrice) || null
+
+  // Metadata
+  var metadata = parseJsonObject(record.metadata)
+
+  // Visible custom properties -> [{key,value,kind,color,imageUrl}] for the
+  // storefront pills mapper. MUST mirror buildVisibleProductProperties /
+  // classifyProductProperty in
+  // apps/gui/app/project-page/features/e-commerce/utils/product-property-display.ts
+  // (the canvas-preview SSOT) field-for-field: same reserved-key exclusions,
+  // same default-VISIBLE (opt-out) rule, same color/image classification. A
+  // property is shown unless it is a reserved key, has an empty value, or is
+  // explicitly hidden (false) in the _tqPropVisibility map -- so it also
+  // renders for products whose form was never opened (no visibility map yet).
+  var propVisibility = parseJsonObject(metadata._tqPropVisibility)
+  var visibleProperties = []
+  Object.keys(metadata).forEach(function (propKey) {
+    if (isReservedProductMetadataKey(propKey)) return
+    if (propVisibility[propKey] === false) return
+    var rawValue = metadata[propKey]
+    if (rawValue == null) return
+    var propValue = String(rawValue)
+    if (propValue.trim() === '') return
+    visibleProperties.push(classifyProductProperty(propKey, propValue))
+  })
+
+  // Assigned category ids -> resolved {id,name,slug} objects for the storefront
+  // category pills mapper and the product-details breadcrumbs. The taxonomy
+  // itself is not in the DB (categories are authored in the GUI and live only in
+  // ecommerceSettings.categories); resolved against PRODUCT_CATEGORIES_BY_ID,
+  // baked in at export time. Unknown/stale ids are silently dropped.
+  var categories = resolveAssignedCategories(
+    record.category_ids,
+    PRODUCT_CATEGORIES_BY_ID,
+    currentLang,
+    mainLang
+  )
+
+  // Purchasable variant COMBINATIONS for this product ({id, options map, price,
+  // stock, image}). Empty for flat products. Fetched in ONE batched query by
+  // transformRecords and passed in via options.variantsByProductId, keyed by
+  // product id. The storefront card/details read these to default-select the
+  // first in-stock variant, disable dead options, and resolve the chosen id.
+  //
+  // NULL (not {}) means the lookup could not run — the table is missing, or the
+  // query failed. That is "combinations UNKNOWN", which is NOT "this product has
+  // none": a transient DB failure must never turn every variant product in the
+  // catalogue into an unbuyable one. See hasPurchasableVariant below.
+  var variantsResolved = options.variantsByProductId != null
+  var variantsByProductId = options.variantsByProductId || {}
+  var rawVariants = variantsByProductId[id] || []
+  var variants = []
+  for (var vi = 0; vi < rawVariants.length; vi++) {
+    var vrow = rawVariants[vi] || {}
+    var vopts = parseJsonObject(vrow.options)
+    variants.push({
+      id: vrow.id != null ? String(vrow.id) : '',
+      options: vopts && typeof vopts === 'object' ? vopts : {},
+      price: safeNumber(vrow.price, null),
+      quantity: safeNumber(vrow.quantity, null),
+      image_url: vrow.image_url ? resolveAssetUrl(vrow.image_url, assetMap) : null,
+    })
+  }
+
+  // The merchant's related-product picks. \`relatedProducts\` carries the
+  // TRANSFORMED rows, not ids, so the details page's related-products rail can
+  // map over it and draw a product card per entry; \`relatedProductIds\` keeps
+  // the raw selection for anything that wants it. The rows arrive from ONE
+  // batched query (getRelatedProductsMap) that transformRecords runs, keyed by
+  // id in options.relatedProductsById.
+  //
+  // MUST mirror buildRelatedEcommerceProducts in
+  // packages/renderer/src/utils/ecommerce-products.ts (the canvas-preview SSOT):
+  // the merchant's order, inactive products dropped, self dropped, and the
+  // nested build deliberately WITHOUT the map — two products referencing each
+  // other is the normal case (they are each other's accessories) and threading
+  // the map through would recurse until the stack ran out.
+  var relatedProductIds = parseRelatedIds(record.related_product_ids)
+  var relatedProductsById = options.relatedProductsById
+  var relatedProducts = []
+  if (relatedProductsById && relatedProductIds.length > 0) {
+    var relatedNestedOptions = {
+      assetMap: assetMap,
+      currentLanguage: currentLang,
+      mainLanguage: mainLang,
+      // Passed through UNCOALESCED so a related product inherits the same
+      // known/unknown answer as its parent — \`|| {}\` here would tell the nested
+      // build "the lookup ran and found nothing" and strike out every related
+      // card's picker. The batched query includes the related ids for exactly
+      // this reason (see getTransformWrapperCode).
+      variantsByProductId: options.variantsByProductId,
+      // Same reason: a related card draws its own star row, and the batched
+      // aggregate already covered its id.
+      ratingsByProductId: options.ratingsByProductId,
+    }
+    for (var rp = 0; rp < relatedProductIds.length; rp++) {
+      var relatedId = relatedProductIds[rp]
+      if (id != null && relatedId === String(id)) continue
+      var relatedRecord = relatedProductsById[relatedId]
+      if (!relatedRecord) continue
+      // A product taken off sale must not come back through the back door on
+      // every product that references it. Missing status reads as active, the
+      // same default the main status normalization uses above.
+      var relatedStatusRaw = relatedRecord.status
+      var relatedStatus =
+        relatedStatusRaw == null || relatedStatusRaw === ''
+          ? 'active'
+          : String(relatedStatusRaw).trim().toLowerCase()
+      if (relatedStatus !== 'active') continue
+      relatedProducts.push(buildEcommerceProduct(relatedRecord, relatedNestedOptions))
+    }
+  }
+
+  // -------------------------------------------------------
+  // Image resolution (complex multi-step process)
+  // -------------------------------------------------------
+
+  // Step 1: Get raw image values
+  var rawImageUrl = pickFirst(record.image_url, record.mainImage, record.imageUrl)
+  var rawGalleryImages = pickFirst(record.gallery_images, record.galleryImages)
+  var legacyImages = Array.isArray(record.images)
+    ? record.images.filter(function(v) { return typeof v === 'string' })
+    : []
+
+  // Step 2: Parse gallery images from JSON
+  var parsedGalleryImages = parseJsonArray(rawGalleryImages)
+
+  // Step 3: Build combined raw images array
+  var allRawImages = []
+  if (rawImageUrl) allRawImages.push(rawImageUrl)
+  allRawImages = allRawImages.concat(parsedGalleryImages).concat(legacyImages)
+
+  // Step 4: Resolve all asset URLs first, then deduplicate
+  var resolvedAll = resolveAssetUrls(allRawImages, assetMap)
+  var resolvedImages = deduplicateStrings(resolvedAll)
+
+  // Step 5: Determine mainImage
+  var mainImage = rawImageUrl
+    ? resolveAssetUrl(rawImageUrl, assetMap)
+    : (resolvedImages.length > 0 ? resolvedImages[0] : null)
+
+  // Step 6: galleryImages = resolvedImages without mainImage
+  var galleryImages = mainImage
+    ? resolvedImages.filter(function(url) { return url !== mainImage })
+    : resolvedImages.slice()
+
+  // Step 7: images = full resolved deduplicated array
+  var images = resolvedImages
+
+  // -------------------------------------------------------
+  // 3D model (one per product; GUI: constants/product-model.ts)
+  // -------------------------------------------------------
+  // model_url / model_poster_url hold an asset id OR a raw URL like image_url.
+  // A poster the merchant never got (capture failed, plan cap) falls back to
+  // the main image so <model-viewer> always has something to paint first.
+  var modelUrl = resolveMediaUrl(record.model_url, assetMap)
+  var modelPoster = modelUrl ? resolveMediaUrl(record.model_poster_url, assetMap) || mainImage : null
+  var hasModel = modelUrl ? 'true' : 'false'
+  // STRING gate ('true'/'false') like outOfStock: whether the model replaces the
+  // main image on the card / details hero. A product whose only media is the
+  // model always shows it. An absent field must read as the IMAGE branch, so the
+  // builders gate the viewer on = 'true' and the image on != 'true'.
+  var showModel =
+    modelUrl && (normalizeShowModelFlag(record.show_model_by_default) || images.length === 0)
+      ? 'true'
+      : 'false'
+  var galleryMedia = buildProductGalleryMedia({
+    images: images,
+    mainImage: mainImage,
+    modelUrl: modelUrl,
+    modelPoster: modelPoster,
+    showModel: showModel,
+    imageAlt: imageAlt,
+    name: name,
+  })
+  // Everything that is not the hero — the details thumbnail strip. When the
+  // model is the hero the main image moves in here, so the modal stays reachable.
+  var galleryThumbnails = galleryMedia.slice(1)
+
+  // Timestamps
+  var rawCreatedAt = pickFirst(record.created_at, record.createdAt, record.created)
+  var createdAt = normalizeTimestamp(rawCreatedAt)
+
+  var rawUpdatedAt = pickFirst(record.updated_at, record.updatedAt, record.updated)
+  var updatedAt = rawUpdatedAt != null ? normalizeTimestamp(rawUpdatedAt) : createdAt
+
+  // Computed: created = Unix seconds
+  var created = Math.floor(createdAt / 1000)
+
+  // Computed: outOfStock (emitted as a STRING — 'true' / 'false' — so it
+  // matches the strict equality check the AI generates on product
+  // cards/details pages: \`ecommerceProduct?.outOfStock === 'true'\`.
+  // A boolean here would silently fail that comparison (boolean !==
+  // string), leaving the Add to Cart button visible on out-of-stock
+  // products. NULL/NaN quantity → 'false' (treated as "unlimited
+  // stock", same as the upstream cart-availability rewriter).
+  // With ALLOW_BACKORDERS the merchant sells past zero (or does not track
+  // stock at all), so nothing is ever presented as out of stock.
+  var outOfStock = (!ALLOW_BACKORDERS && quantity !== null && !isNaN(quantity) && quantity <= 0) ? 'true' : 'false'
+
+  // Per-value availability + default-selection flags, derived from the
+  // purchasable combinations, so the storefront picker renders its
+  // Default / Selected / Unavailable states with NO runtime fetch. The card
+  // (N instances) first-paints from these data flags; the details page seeds
+  // its selection from the same combinations. axisValueKey (axisKey|valueKey)
+  // disambiguates same-named values across axes (Size "s" vs Sleeve "s").
+  // Emitted as STRINGS to match the storefront's string-equality convention.
+  var variantAxisKeys = []
+  for (var ak = 0; ak < variantOptions.length; ak++) { variantAxisKeys.push(variantOptions[ak].key) }
+  var firstVariant = pickFirstAvailableVariant(variants, variantAxisKeys)
+  var deadValueKeys = computeDeadVariantKeys(variants, variantOptions, variantsResolved)
+  for (var ai = 0; ai < variantOptions.length; ai++) {
+    var vax = variantOptions[ai]
+    for (var vj = 0; vj < vax.values.length; vj++) {
+      var vval = vax.values[vj]
+      var composite = vax.key + '|' + vval.value
+      vval.axisValueKey = composite
+      vval.isDead = deadValueKeys[composite] ? 'true' : 'false'
+      vval.isDefault =
+        firstVariant && firstVariant.options && firstVariant.options[vax.key] === vval.value
+          ? 'true'
+          : 'false'
+      // Whether THIS value renders as a colour swatch vs a text pill. A colour
+      // axis whose value has no resolvable colour degrades to a text pill so it
+      // is never an invisible empty circle. Emitted as a string to match the
+      // picker's string-equality rendering gate. MUST mirror the renderer
+      // enrichment in packages/renderer/src/utils/ecommerce-products.ts.
+      vval.showSwatch = vax.type === 'color' && vval.color ? 'true' : 'false'
+    }
+  }
+  // The combination the picker auto-selects on first paint: the first in-stock
+  // one covering every axis. Absent means there is nothing the shopper could add
+  // without choosing — which is what gates the buy button below.
+  var hasInStockCombination = !!(firstVariant && isVariantInStock(firstVariant))
+  var defaultVariantId = hasInStockCombination ? firstVariant.id : ''
+  var defaultVariantPrice = firstVariant ? formatVariantPrice(firstVariant.price, price) : ''
+  // Gross (tax-inclusive) counterparts of the three price fields the STOREFRONT
+  // renders. \`price\` / \`defaultVariantPrice\` / \`variantsJson\` deliberately stay
+  // NET: the same transform feeds the merchant's admin panel, and every write
+  // path (add-to-cart, checkout, the invoice route) re-reads the raw row and
+  // must keep seeing the price the merchant typed. Only these three are safe to
+  // gross, because nothing writes them back.
+  //
+  // MUST mirror packages/renderer/src/utils/ecommerce-products.ts.
+  // The scheduled markdown in force right now, resolved from the raw column on
+  // every read so a discount starts and expires on its own. It comes off the NET
+  // price BEFORE tax: tax is a percentage of what is actually charged.
+  var activeDiscount = __pdResolveActive(record.discounts, Date.now())
+  var displayPrice = grossMoney(__pdDiscountedPrice(price, activeDiscount))
+  var defaultVariantNetPrice = firstVariant
+    ? safeNumber(formatVariantPrice(firstVariant.price, price), 0)
+    : 0
+  var defaultVariantDisplayPrice = firstVariant
+    ? grossMoney(__pdDiscountedPrice(defaultVariantNetPrice, activeDiscount))
+    : ''
+  var variantsDisplay = []
+  for (var dv = 0; dv < variants.length; dv++) {
+    var dvRow = variants[dv]
+    // A null variant price INHERITS the product price, so discount and gross the
+    // RESOLVED value — otherwise an inheriting combination would fall back to
+    // the net base price in the picker while an overriding one showed gross.
+    var dvNetPrice = dvRow.price == null ? price : dvRow.price
+    variantsDisplay.push({
+      id: dvRow.id,
+      options: dvRow.options,
+      price: applyStorefrontTax(__pdDiscountedPrice(dvNetPrice, activeDiscount)),
+      // What this combination costs WITHOUT the discount, for the struck-through
+      // price beside it. Null when nothing is discounted, so the picker's click
+      // resolver can tell "no saving" from "a saving of zero".
+      originalPrice: activeDiscount ? applyStorefrontTax(dvNetPrice) : null,
+      quantity: dvRow.quantity,
+      image_url: dvRow.image_url,
+    })
+  }
+  // Discount display fields. Strings throughout: rendering conditions compare
+  // operands as strings, and a bound text node prints its value verbatim.
+  var hasDiscount = activeDiscount ? 'true' : 'false'
+  var discountLabel = activeDiscount
+    ? __pdDiscountLabel(activeDiscount, currencySymbol, getCurrencyInfo(currency).position)
+    : ''
+  var originalDisplayPrice = activeDiscount ? grossMoney(price) : ''
+  var originalDefaultVariantDisplayPrice =
+    activeDiscount && firstVariant ? grossMoney(defaultVariantNetPrice) : ''
+  // Can this product be added to the cart at all, before the shopper touches the
+  // picker? A STRING, same convention as outOfStock/requiresVariantSelection.
+  //
+  //   flat product         -> 'true'  (stock is governed by outOfStock)
+  //   combinations UNKNOWN -> 'true'  (the lookup could not run; a transient DB
+  //                                    failure must never make a whole catalogue
+  //                                    unbuyable — same permissive rule as
+  //                                    dead-marking)
+  //   otherwise            -> whether an in-stock combination covering every axis
+  //                           exists. 'false' therefore covers BOTH "every
+  //                           combination is sold out" AND "the axes have no
+  //                           combinations at all" — to a shopper those are the
+  //                           same thing: there is no size to pick.
+  //
+  // MUST mirror packages/renderer/src/utils/ecommerce-products.ts.
+  var hasPurchasableVariant =
+    (requiresVariantSelection !== 'true' || !variantsResolved || hasInStockCombination)
+      ? 'true'
+      : 'false'
+  // Aggregate review rating, from ONE batched COUNT/AVG over approved reviews
+  // that transformRecords runs for every product on the page (keyed by product
+  // id in options.ratingsByProductId).
+  //
+  // ⛔ An ABSENT entry and a NULL map both mean "no rating to show", never "0
+  // stars": a product nobody has reviewed and a product whose rating query
+  // failed must both render with no stars at all. "0.0 out of 5" is the single
+  // worst thing a storefront can say about a product by accident.
+  //
+  // MUST mirror buildProductRatingFields in the GUI's
+  // features/e-commerce/utils/product-ratings.ts.
+  var ratingsByProductId = options.ratingsByProductId || {}
+  var ratingFields = __prBuildRatingFields(id != null ? ratingsByProductId[id] : null)
+
+  // The individual reviews behind those stars, for the product page's JSON-LD.
+  // Fetched ONLY for a single-product request (see getTransformWrapperCode), so
+  // this is an empty array on every listing — which is correct: a listing emits
+  // no Product markup to put them in.
+  //
+  // Not rendered anywhere. That is why there is no canvas mirror for it: the
+  // three-mirror rule exists for fields the editor DRAWS, and structured data
+  // is a publish-time concern the canvas has no equivalent of.
+  var reviewsByProductId = options.reviewsByProductId || {}
+  var reviews = (id != null && reviewsByProductId[id]) || []
+
+  // Stringified companions: a data-* attr bound to an ARRAY renders
+  // '[object Object]', so the picker's on-mount/click workflows read the
+  // combinations + axes from these JSON strings via getAttribute.
+  var variantOptionsJson = safeStringifyJson(variantOptions)
+  var variantsJson = safeStringifyJson(variants)
+  var variantsDisplayJson = safeStringifyJson(variantsDisplay)
+
+  return {
+    id: id,
+    name: name,
+    slug: slug,
+    description: description,
+    descriptionText: descriptionText,
+    price: price,
+    currency: currency,
+    currencySymbol: currencySymbol,
+    status: status,
+    active: active,
+    quantity: quantity,
+    paymentType: paymentType,
+    recurringInterval: recurringInterval,
+    recurringIntervalCount: recurringIntervalCount,
+    sku: sku,
+    weight: weight,
+    weightUnit: weightUnit,
+    dimensions: dimensions,
+    category: category,
+    categories: categories,
+    tags: tags,
+    relatedProductIds: relatedProductIds,
+    relatedProducts: relatedProducts,
+    imageAlt: imageAlt,
+    providerType: providerType,
+    providerProductId: providerProductId,
+    default_price: defaultPrice,
+    metadata: metadata,
+    visibleProperties: visibleProperties,
+    mainImage: mainImage,
+    imageUrl: mainImage,
+    image_url: mainImage,
+    galleryImages: galleryImages,
+    images: images,
+    modelUrl: modelUrl,
+    modelPoster: modelPoster,
+    hasModel: hasModel,
+    showModel: showModel,
+    galleryMedia: galleryMedia,
+    galleryThumbnails: galleryThumbnails,
+    createdAt: createdAt,
+    updatedAt: updatedAt,
+    created: created,
+    outOfStock: outOfStock,
+    variantOptions: variantOptions,
+    requiresVariantSelection: requiresVariantSelection,
+    variants: variants,
+    variantOptionsJson: variantOptionsJson,
+    variantsJson: variantsJson,
+    variantsDisplayJson: variantsDisplayJson,
+    defaultVariantId: defaultVariantId,
+    defaultVariantPrice: defaultVariantPrice,
+    displayPrice: displayPrice,
+    defaultVariantDisplayPrice: defaultVariantDisplayPrice,
+    hasDiscount: hasDiscount,
+    discountLabel: discountLabel,
+    originalDisplayPrice: originalDisplayPrice,
+    originalDefaultVariantDisplayPrice: originalDefaultVariantDisplayPrice,
+    hasPurchasableVariant: hasPurchasableVariant,
+    // Aggregate review rating — see the ratingFields block above.
+    ratingAverage: ratingFields.ratingAverage,
+    ratingCount: ratingFields.ratingCount,
+    ratingAverageLabel: ratingFields.ratingAverageLabel,
+    ratingCountLabel: ratingFields.ratingCountLabel,
+    hasRatings: ratingFields.hasRatings,
+    ratingStar1: ratingFields.ratingStar1,
+    ratingStar2: ratingFields.ratingStar2,
+    ratingStar3: ratingFields.ratingStar3,
+    ratingStar4: ratingFields.ratingStar4,
+    ratingStar5: ratingFields.ratingStar5,
+    // Domain-shaped, not schema.org-shaped: the head-config plugin's
+    // 'reviewList' computed kind does the vocabulary. NO BACKTICKS ANYWHERE IN
+    // THIS FILE — it is one template literal, and a backtick in a comment ends
+    // the string.
+    reviews: reviews,
+  }
+}
+
+// --- Variant availability helpers (mirror packages/renderer ecommerce-products) ---
+// A variant is in stock when its quantity is null (unlimited) or > 0. With
+// ALLOW_BACKORDERS every EXISTING combination is purchasable regardless of its
+// quantity — but a missing combination (null) is still not in stock: there is
+// no variant row to backorder.
+function isVariantInStock(v) {
+  if (!v) return false
+  if (ALLOW_BACKORDERS) return true
+  return v.quantity == null || v.quantity > 0
+}
+function variantCoversAllAxes(v, axisKeys) {
+  if (!v || !v.options) return false
+  for (var i = 0; i < axisKeys.length; i++) {
+    if (v.options[axisKeys[i]] == null) return false
+  }
+  return true
+}
+// First in-stock combination covering every axis; falls back to the first
+// covering combination (even if OOS) so a fully-OOS product still has a
+// visual default; null when no combination covers the axes.
+function pickFirstAvailableVariant(variants, axisKeys) {
+  if (!Array.isArray(variants) || !axisKeys.length) return null
+  for (var i = 0; i < variants.length; i++) {
+    if (variantCoversAllAxes(variants[i], axisKeys) && isVariantInStock(variants[i])) return variants[i]
+  }
+  for (var j = 0; j < variants.length; j++) {
+    if (variantCoversAllAxes(variants[j], axisKeys)) return variants[j]
+  }
+  return null
+}
+// Map of composite "axisKey|valueKey" -> true for every value that appears in
+// NO in-stock combination (rendered as the Unavailable state).
+//
+// variantsResolved is the whole subtlety: dead-marking is only meaningful
+// against combinations we actually LOOKED UP. When the lookup could not run,
+// nothing is dead — a missing table or a failed query must not grey out every
+// picker in the store. When it DID run, an empty list is a fact, not a gap:
+// every value is unbuyable and renders as Unavailable.
+function computeDeadVariantKeys(variants, axes, variantsResolved) {
+  if (!variantsResolved || !Array.isArray(variants)) return {}
+  var alive = {}
+  for (var i = 0; i < variants.length; i++) {
+    var v = variants[i]
+    if (!isVariantInStock(v)) continue
+    for (var k in v.options) {
+      if (Object.prototype.hasOwnProperty.call(v.options, k)) alive[k + '|' + v.options[k]] = true
+    }
+  }
+  var dead = {}
+  for (var a = 0; a < axes.length; a++) {
+    var ax = axes[a]
+    for (var b = 0; b < ax.values.length; b++) {
+      var key = ax.key + '|' + ax.values[b].value
+      if (!alive[key]) dead[key] = true
+    }
+  }
+  return dead
+}
+// Variant price with base-price inheritance (null variant price -> product price).
+function formatVariantPrice(vprice, basePrice) {
+  var p = vprice == null || isNaN(vprice) ? basePrice : vprice
+  return String(Number(p).toFixed(2))
+}
+function safeStringifyJson(obj) {
+  try {
+    return JSON.stringify(obj)
+  } catch (e) {
+    return '[]'
+  }
+}
+
+// Parse + normalize the variant_options JSON into render-ready axes. Tolerant of
+// null / malformed / partial data (returns []). Keeps ONLY the fields the pill
+// widget needs; the labels are already language-resolved by the caller.
+function normalizeVariantOptions(raw) {
+  if (!raw) return []
+  var parsed = raw
+  if (typeof raw === 'string') {
+    try { parsed = JSON.parse(raw) } catch (e) { return [] }
+  }
+  if (!Array.isArray(parsed)) return []
+  var out = []
+  for (var i = 0; i < parsed.length; i++) {
+    var axis = parsed[i]
+    if (!axis || typeof axis !== 'object' || !Array.isArray(axis.values)) continue
+    var name = typeof axis.name === 'string' ? axis.name : ''
+    var key = typeof axis.key === 'string' && axis.key ? axis.key : name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+    if (!key) continue
+    var type = axis.type === 'color' ? 'color' : 'text'
+    var values = []
+    for (var j = 0; j < axis.values.length; j++) {
+      var v = axis.values[j]
+      if (!v || typeof v !== 'object') continue
+      var label = typeof v.label === 'string' ? v.label : ''
+      var value = typeof v.value === 'string' && v.value ? v.value : label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      if (!value) continue
+      var entry = { value: value, label: label }
+      if (type === 'color' && typeof v.color === 'string' && v.color) entry.color = v.color
+      values.push(entry)
+    }
+    if (!values.length) continue
+    out.push({ key: key, name: name, type: type, values: values })
+  }
+  return out
+}
+
+// --- Custom-property classification (MUST mirror product-property-display.ts) ---
+
+// Product-attribute keys that can leak into the free-form \`metadata\` map (e.g.
+// from a payment-provider sync or legacy data) but are NOT user custom
+// properties. Kept in sync with the GUI's RESERVED_PRODUCT_METADATA_KEYS.
+var RESERVED_PRODUCT_METADATA_KEYS = {
+  paymentType: true, recurringInterval: true, recurringIntervalCount: true,
+  price: true, currency: true, status: true, sku: true, weightUnit: true,
+  dimensions: true, category: true, brand: true, gtin: true, mpn: true,
+  condition: true, tags: true,
+}
+function isReservedProductMetadataKey(key) {
+  return !!RESERVED_PRODUCT_METADATA_KEYS[key] ||
+    key.indexOf('mainImage') === 0 ||
+    key.indexOf('secondaryImage') === 0 ||
+    key.indexOf('_tq') === 0
+}
+
+var CSS_NAMED_COLORS = {
+  aliceblue: 1, antiquewhite: 1, aqua: 1, aquamarine: 1, azure: 1, beige: 1, bisque: 1,
+  black: 1, blanchedalmond: 1, blue: 1, blueviolet: 1, brown: 1, burlywood: 1,
+  cadetblue: 1, chartreuse: 1, chocolate: 1, coral: 1, cornflowerblue: 1, cornsilk: 1,
+  crimson: 1, cyan: 1, darkblue: 1, darkcyan: 1, darkgoldenrod: 1, darkgray: 1,
+  darkgrey: 1, darkgreen: 1, darkkhaki: 1, darkmagenta: 1, darkolivegreen: 1,
+  darkorange: 1, darkorchid: 1, darkred: 1, darksalmon: 1, darkseagreen: 1,
+  darkslateblue: 1, darkslategray: 1, darkslategrey: 1, darkturquoise: 1,
+  darkviolet: 1, deeppink: 1, deepskyblue: 1, dimgray: 1, dimgrey: 1, dodgerblue: 1,
+  firebrick: 1, floralwhite: 1, forestgreen: 1, fuchsia: 1, gainsboro: 1,
+  ghostwhite: 1, gold: 1, goldenrod: 1, gray: 1, grey: 1, green: 1, greenyellow: 1,
+  honeydew: 1, hotpink: 1, indianred: 1, indigo: 1, ivory: 1, khaki: 1, lavender: 1,
+  lavenderblush: 1, lawngreen: 1, lemonchiffon: 1, lightblue: 1, lightcoral: 1,
+  lightcyan: 1, lightgoldenrodyellow: 1, lightgray: 1, lightgrey: 1, lightgreen: 1,
+  lightpink: 1, lightsalmon: 1, lightseagreen: 1, lightskyblue: 1, lightslategray: 1,
+  lightslategrey: 1, lightsteelblue: 1, lightyellow: 1, lime: 1, limegreen: 1,
+  linen: 1, magenta: 1, maroon: 1, mediumaquamarine: 1, mediumblue: 1,
+  mediumorchid: 1, mediumpurple: 1, mediumseagreen: 1, mediumslateblue: 1,
+  mediumspringgreen: 1, mediumturquoise: 1, mediumvioletred: 1, midnightblue: 1,
+  mintcream: 1, mistyrose: 1, moccasin: 1, navajowhite: 1, navy: 1, oldlace: 1,
+  olive: 1, olivedrab: 1, orange: 1, orangered: 1, orchid: 1, palegoldenrod: 1,
+  palegreen: 1, paleturquoise: 1, palevioletred: 1, papayawhip: 1, peachpuff: 1,
+  peru: 1, pink: 1, plum: 1, powderblue: 1, purple: 1, rebeccapurple: 1, red: 1,
+  rosybrown: 1, royalblue: 1, saddlebrown: 1, salmon: 1, sandybrown: 1, seagreen: 1,
+  seashell: 1, sienna: 1, silver: 1, skyblue: 1, slateblue: 1, slategray: 1,
+  slategrey: 1, snow: 1, springgreen: 1, steelblue: 1, tan: 1, teal: 1, thistle: 1,
+  tomato: 1, turquoise: 1, violet: 1, wheat: 1, white: 1, whitesmoke: 1, yellow: 1,
+  yellowgreen: 1, transparent: 1,
+}
+var HEX_COLOR_RE = /^#(?:[0-9a-f]{3}|[0-9a-f]{4}|[0-9a-f]{6}|[0-9a-f]{8})$/i
+var FUNCTIONAL_COLOR_RE = /^(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\\((?:[0-9a-z%.,\\s/+-]+)\\)$/i
+var COLOR_KEY_WORDS = {
+  color: 1, colors: 1, colour: 1, colours: 1, shade: 1, shades: 1, hue: 1, hues: 1,
+  tint: 1, tints: 1, tone: 1, tones: 1, swatch: 1, swatches: 1,
+}
+function splitKeyWords(key) {
+  return key.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)
+}
+function keyIndicatesColor(key) {
+  var normalized = key.toLowerCase()
+  if (/colou?r/.test(normalized)) return true
+  return splitKeyWords(key).some(function(word) { return !!COLOR_KEY_WORDS[word] })
+}
+function resolvePropertyColor(key, value) {
+  var v = value.trim()
+  if (!v) return ''
+  if (HEX_COLOR_RE.test(v) || FUNCTIONAL_COLOR_RE.test(v)) return v
+  if (CSS_NAMED_COLORS[v.toLowerCase()] && keyIndicatesColor(key)) return v
+  return ''
+}
+
+var DATA_IMAGE_URI_RE = /^data:image\\//i
+var ABSOLUTE_URL_RE = /^(?:https?:)?\\/\\//i
+var IMAGE_EXTENSION_RE = /\\.(?:png|jpe?g|gif|webp|svg|avif|bmp|ico|tiff?|heic|heif)$/i
+var IMAGE_KEY_WORDS = {
+  image: 1, images: 1, img: 1, imgs: 1, photo: 1, photos: 1, picture: 1, pictures: 1,
+  pic: 1, pics: 1, thumbnail: 1, thumbnails: 1, thumb: 1, thumbs: 1, icon: 1, icons: 1,
+  logo: 1, logos: 1, avatar: 1, avatars: 1, banner: 1, banners: 1, cover: 1, covers: 1,
+  gallery: 1, screenshot: 1, screenshots: 1, poster: 1, posters: 1, artwork: 1,
+  graphic: 1, graphics: 1, illustration: 1, wallpaper: 1, preview: 1, snapshot: 1,
+  media: 1, visual: 1, visuals: 1,
+}
+function keyIndicatesImage(key) {
+  var normalized = key.toLowerCase()
+  if (/(?:image|img|photo|picture|thumb|icon|logo|avatar|banner|gallery|screenshot|poster|artwork|graphic|wallpaper)/.test(normalized)) return true
+  return splitKeyWords(key).some(function(word) { return !!IMAGE_KEY_WORDS[word] })
+}
+function stripUrlQueryAndHash(url) {
+  return url.split(/[?#]/)[0]
+}
+function resolvePropertyImage(key, value) {
+  var v = value.trim()
+  if (!v) return ''
+  if (DATA_IMAGE_URI_RE.test(v)) return v
+  var isAbsoluteUrl = ABSOLUTE_URL_RE.test(v)
+  var isRootRelative = v.charAt(0) === '/' && !isAbsoluteUrl
+  if (!isAbsoluteUrl && !isRootRelative) return ''
+  if (IMAGE_EXTENSION_RE.test(stripUrlQueryAndHash(v))) return v
+  if (isAbsoluteUrl && keyIndicatesImage(key)) return v
+  return ''
+}
+
+// Image wins over colour (a URL can never be a CSS colour, but checking image
+// first keeps the precedence explicit), text is the fallback.
+function classifyProductProperty(key, value) {
+  var imageUrl = resolvePropertyImage(key, value)
+  if (imageUrl) return { key: key, value: value, kind: 'image', color: '', imageUrl: imageUrl }
+  var color = resolvePropertyColor(key, value)
+  if (color) return { key: key, value: value, kind: 'color', color: color, imageUrl: '' }
+  return { key: key, value: value, kind: 'text', color: '', imageUrl: '' }
+}
+
+function transformEcommerceProducts(records, options) {
+  if (!Array.isArray(records)) return []
+  return records.map(function(record) { return buildEcommerceProduct(record, options) })
+}
+
+// Batched fetch of the purchasable variant rows for a set of product ids, keyed
+// by product_id, so buildEcommerceProduct can attach product.variants without a
+// per-product query. Best-effort: a store with no variants (or before the table
+// exists) yields an empty map and flat products keep variants: [].
+// Batched fetch of the product rows a set of products reference as "related",
+// keyed by id, so buildEcommerceProduct can attach product.relatedProducts
+// without a query per product.
+//
+// Best-effort by design: a store whose products table predates the column
+// yields no ids at all (the read below is of an absent property, not of a
+// column — the SQL never names it), the map stays empty, and the details page's
+// rail simply stays hidden behind its is_not_empty gate. Same for a failed
+// query.
+async function getRelatedProductsMap(getClientFn, records) {
+  var map = {}
+  if (!Array.isArray(records) || records.length === 0) return map
+
+  var wantedIds = []
+  for (var i = 0; i < records.length; i++) {
+    var ids = parseRelatedIds(records[i] && records[i].related_product_ids)
+    for (var j = 0; j < ids.length; j++) {
+      if (wantedIds.indexOf(ids[j]) === -1) wantedIds.push(ids[j])
+    }
+  }
+  if (wantedIds.length === 0) return map
+
+  var client
+  try {
+    client = getClientFn()
+    await client.connect()
+    var result = await client.query('SELECT * FROM teleport_products WHERE id = ANY($1)', [
+      wantedIds,
+    ])
+    if (result && result.rows) {
+      for (var r = 0; r < result.rows.length; r++) {
+        var row = result.rows[r]
+        if (row && row.id != null) map[String(row.id)] = row
+      }
+    }
+  } catch (e) {
+    // Leaves relatedProducts empty rather than failing the page.
+  } finally {
+    if (client) {
+      try { await client.end() } catch (e) { /* ignore */ }
+    }
+  }
+  return map
+}
+
+// Aggregate review rating for every product on the page, keyed by product id,
+// so a card can draw its star row without a query per product.
+//
+// APPROVED ONLY, and 'approved' is a fixed literal rather than a bound value
+// because nothing may ever widen it: a pending review is one the merchant has
+// not agreed to publish, and a rejected one is a review they actively removed.
+//
+// Unlike getVariantsMap this returns an EMPTY MAP on failure rather than null.
+// The two "unknown" answers differ because the consequences differ: an unknown
+// variant map must stay permissive (never make a catalogue unbuyable), whereas
+// an unknown rating has exactly one safe rendering — no stars — which is also
+// what a product with no reviews shows. Collapsing both onto {} means every
+// caller has one case to handle instead of two.
+async function getRatingsMap(getClientFn, productIds) {
+  var map = {}
+  if (!Array.isArray(productIds) || productIds.length === 0) return map
+  var uniqueIds = []
+  var seenIds = {}
+  for (var u = 0; u < productIds.length; u++) {
+    var pid0 = productIds[u]
+    if (pid0 != null && !seenIds[pid0]) { seenIds[pid0] = true; uniqueIds.push(pid0) }
+  }
+  if (uniqueIds.length === 0) return map
+  var client
+  try {
+    client = getClientFn()
+    await client.connect()
+    var result = await client.query(
+      "SELECT product_id, AVG(rating)::float AS average, COUNT(*)::int AS count " +
+        'FROM teleport_product_reviews ' +
+        "WHERE status = 'approved' AND rating IS NOT NULL AND product_id = ANY($1) " +
+        'GROUP BY product_id',
+      [uniqueIds]
+    )
+    if (result && result.rows) {
+      for (var r = 0; r < result.rows.length; r++) {
+        var row = result.rows[r]
+        if (row && row.product_id != null) {
+          map[row.product_id] = { average: row.average, count: row.count }
+        }
+      }
+    }
+  } catch (e) {
+    // teleport_product_reviews may not exist (reviews were never enabled), or
+    // the query may have failed. Either way there is no rating to show, which
+    // is exactly what an empty map produces.
+    map = {}
+  } finally {
+    if (client) {
+      try { await client.end() } catch (e) { /* ignore */ }
+    }
+  }
+  return map
+}
+
+// The most recent APPROVED reviews for a product, for the product page's
+// structured data. Keyed by product id like every other batched lookup, though
+// in practice it is only ever called with one id.
+//
+// Three filters, and each one exists because of what the output is used for:
+//  - APPROVED only, as a fixed literal, for the same reason the aggregate is:
+//    a pending review is one the merchant has not agreed to publish.
+//  - A NON-EMPTY reviewer name. Google requires author.name on a review
+//    snippet, and an anonymous row would produce a Review object it rejects —
+//    taking the whole Product block down with it on some validators.
+//  - A CAP. The reviews are inlined into the page's props and then into its
+//    HTML twice over (once as data, once as JSON-LD); a product with four
+//    hundred reviews would otherwise put all of them in both.
+async function getProductReviewsMap(getClientFn, productIds, perProduct) {
+  var map = {}
+  if (!Array.isArray(productIds) || productIds.length === 0) return map
+  var uniqueIds = []
+  var seenIds = {}
+  for (var u = 0; u < productIds.length; u++) {
+    var pid0 = productIds[u]
+    if (pid0 != null && !seenIds[pid0]) { seenIds[pid0] = true; uniqueIds.push(pid0) }
+  }
+  if (uniqueIds.length === 0) return map
+  var client
+  try {
+    client = getClientFn()
+    await client.connect()
+    var result = await client.query(
+      'SELECT product_id, reviewer_name, rating, content, created_at ' +
+        'FROM teleport_product_reviews ' +
+        "WHERE status = 'approved' AND rating IS NOT NULL " +
+        "AND reviewer_name IS NOT NULL AND btrim(reviewer_name) <> '' " +
+        'AND product_id = ANY($1) ' +
+        'ORDER BY created_at DESC',
+      [uniqueIds]
+    )
+    var cap = typeof perProduct === 'number' && perProduct > 0 ? perProduct : 5
+    if (result && result.rows) {
+      for (var r = 0; r < result.rows.length; r++) {
+        var row = result.rows[r]
+        if (!row || row.product_id == null) continue
+        var bucket = map[row.product_id] || (map[row.product_id] = [])
+        if (bucket.length >= cap) continue
+        bucket.push({
+          author: String(row.reviewer_name).trim(),
+          rating: Number(row.rating),
+          body: row.content == null ? '' : String(row.content),
+          datePublished: row.created_at ? new Date(row.created_at).toISOString() : null,
+        })
+      }
+    }
+  } catch (e) {
+    // The reviews table may not exist (reviews were never enabled). No reviews
+    // to show is both the empty answer and the safe one.
+    map = {}
+  } finally {
+    if (client) {
+      try { await client.end() } catch (e) { /* ignore */ }
+    }
+  }
+  return map
+}
+
+// Combinations for every product on the page, keyed by product id. Returns NULL
+// when the lookup could not run, which the transform reads as "unknown" and
+// stays permissive with; an empty map means the query ran and this catalogue
+// simply has no combinations.
+async function getVariantsMap(getClientFn, productIds) {
+  var map = {}
+  if (!Array.isArray(productIds) || productIds.length === 0) return map
+  var uniqueIds = []
+  var seenIds = {}
+  for (var u = 0; u < productIds.length; u++) {
+    var pid0 = productIds[u]
+    if (pid0 != null && !seenIds[pid0]) { seenIds[pid0] = true; uniqueIds.push(pid0) }
+  }
+  if (uniqueIds.length === 0) return map
+  var client
+  try {
+    client = getClientFn()
+    await client.connect()
+    var result = await client.query(
+      'SELECT id, product_id, options, price, quantity, image_url FROM teleport_product_variants WHERE product_id = ANY($1) ORDER BY position ASC, id ASC',
+      [uniqueIds]
+    )
+    if (result && result.rows) {
+      for (var r = 0; r < result.rows.length; r++) {
+        var row = result.rows[r]
+        var pid = row.product_id
+        if (!map[pid]) map[pid] = []
+        map[pid].push(row)
+      }
+    }
+  } catch (e) {
+    // teleport_product_variants may not exist for a non-variant store, or the
+    // query may have failed. Either way the combinations are UNKNOWN — null
+    // keeps every picker selectable instead of declaring the catalogue unbuyable.
+    map = null
+  } finally {
+    if (client) {
+      try { await client.end() } catch (e) { /* ignore */ }
+    }
+  }
+  return map
+}
+`
+}
