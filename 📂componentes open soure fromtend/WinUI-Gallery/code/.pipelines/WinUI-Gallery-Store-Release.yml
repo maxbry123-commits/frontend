@@ -1,0 +1,219 @@
+name: $(BuildDefinitionName)_$(StorePackageVersion)
+
+trigger: none
+pr: none
+
+resources:
+  repositories:
+  - repository: 1esPipelines
+    type: git
+    name: 1ESPipelineTemplates/1ESPipelineTemplates
+    ref: refs/tags/release
+
+parameters:
+- name: releaseVersion
+  displayName: Release version (X.Y.Z)
+  type: string
+  default: '2.10.0'
+- name: publishToStore
+  displayName: Submit package for Store certification
+  type: boolean
+  default: false
+- name: storeServiceEndpoint
+  displayName: StoreBroker service connection
+  type: string
+  default: 'WinUI Gallery - StoreBroker'
+- name: platforms
+  type: object
+  default:
+  - x64
+  - ARM64
+
+variables:
+  StorePackageVersion: ${{ parameters.releaseVersion }}.0
+
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
+  parameters:
+    sdl:
+      sourceAnalysisPool:
+        name: Azure-Pipelines-1ESPT-ExDShared
+        image: windows-latest
+        os: windows
+      codeql:
+        compiled:
+          enabled: false
+        runSourceLanguagesInSourceAnalysis: true
+    stages:
+    - stage: Build
+      jobs:
+      - ${{ each platform in parameters.platforms }}:
+        - job: Build_${{ platform }}
+          pool:
+            name: Azure-Pipelines-1ESPT-ExDShared
+            image: windows-latest
+            os: windows
+          variables:
+            AppxPackageDir: '$(Build.ArtifactStagingDirectory)\AppxPackages\'
+          steps:
+          - checkout: self
+          - task: UseDotNet@2
+            displayName: Setup .NET
+            inputs:
+              packageType: sdk
+              version: 9.0.x
+          - task: NuGetAuthenticate@1
+          - task: PowerShell@2
+            displayName: Build Store package - ${{ platform }}
+            inputs:
+              targetType: inline
+              script: |
+                $packageVersion = "$(StorePackageVersion)"
+                if ($packageVersion -notmatch '^\d{1,5}\.\d{1,5}\.\d{1,5}\.0$') {
+                  Write-Error "Release version '${{ parameters.releaseVersion }}' must use X.Y.Z format, with each component between 0 and 65535."
+                  exit 1
+                }
+
+                $versionParts = $packageVersion.Split('.') | ForEach-Object { [int]$_ }
+                if ($versionParts | Where-Object { $_ -gt 65535 }) {
+                  Write-Error "Package version '$packageVersion' contains a component greater than 65535."
+                  exit 1
+                }
+
+                [xml]$project = Get-Content "WinUIGallery\WinUIGallery.csproj"
+                $projectVersion = $project.SelectSingleNode("//Version").InnerText
+                if ($projectVersion -ne $packageVersion) {
+                  Write-Error "Release version '$packageVersion' does not match WinUIGallery.csproj version '$projectVersion'. Merge the version bump before running this pipeline."
+                  exit 1
+                }
+
+                dotnet publish WinUIGallery\WinUIGallery.csproj `
+                  --runtime win-${{ lower(platform) }} `
+                  --configuration Release `
+                  /p:Platform=${{ platform }} `
+                  /p:AppxPackageDir="$(AppxPackageDir)" `
+                  /p:UapAppxPackageBuildMode=SideloadOnly `
+                  /p:AppxBundle=Never `
+                  /p:GenerateAppxPackageOnBuild=true `
+                  /p:AppxPackageSigningEnabled=false `
+                  /p:Version="$(StorePackageVersion)"
+
+                if ($LASTEXITCODE -ne 0) {
+                  exit $LASTEXITCODE
+                }
+          - task: PowerShell@2
+            displayName: Stage Store package - ${{ platform }}
+            inputs:
+              targetType: inline
+              script: |
+                $packages = @(
+                  Get-ChildItem -Path "$(AppxPackageDir)" -Recurse -Filter "WinUIGallery*_${{ lower(platform) }}.msix"
+                )
+
+                if ($packages.Count -ne 1) {
+                  Write-Error "Expected one ${{ platform }} MSIX package, found $($packages.Count)."
+                  $packages | ForEach-Object { Write-Host $_.FullName }
+                  exit 1
+                }
+
+                New-Item -ItemType Directory -Path "$(Build.ArtifactStagingDirectory)\MSIX" -Force | Out-Null
+                Copy-Item $packages[0].FullName -Destination "$(Build.ArtifactStagingDirectory)\MSIX" -Force
+          - task: 1ES.PublishPipelineArtifact@1
+            displayName: Upload Store package - ${{ platform }}
+            inputs:
+              path: '$(Build.ArtifactStagingDirectory)\MSIX'
+              artifactName: MSIX-${{ platform }}
+
+    - ${{ if eq(parameters.publishToStore, true) }}:
+      - stage: Publish
+        dependsOn: Build
+        jobs:
+        - job: Publish
+          timeoutInMinutes: 360
+          templateContext:
+            type: releaseJob
+            isProduction: true
+            inputs:
+            - ${{ each platform in parameters.platforms }}:
+              - input: pipelineArtifact
+                artifactName: MSIX-${{ platform }}
+                targetPath: $(Pipeline.Workspace)
+          pool:
+            name: Azure-Pipelines-1ESPT-ExDShared
+            image: windows-latest
+            os: windows
+          steps:
+          - task: PowerShell@2
+            displayName: Create and validate Store submission bundle
+            inputs:
+              targetType: inline
+              script: |
+                $packages = @(Get-ChildItem -Path "$(Pipeline.Workspace)" -Recurse -Filter "WinUIGallery_*.msix")
+                $requiredPlatforms = @("x64", "arm64")
+
+                foreach ($platform in $requiredPlatforms) {
+                  $matches = @($packages | Where-Object { $_.BaseName -like "*_$platform" })
+                  if ($matches.Count -ne 1) {
+                    Write-Error "Expected one $platform Store package, found $($matches.Count)."
+                    exit 1
+                  }
+                }
+
+                if ($packages.Count -ne $requiredPlatforms.Count) {
+                  Write-Error "Expected exactly $($requiredPlatforms.Count) Store packages, found $($packages.Count)."
+                  $packages | ForEach-Object { Write-Host $_.FullName }
+                  exit 1
+                }
+
+                $bundleInputDirectory = "$(Pipeline.Workspace)\StoreBundleInput"
+                $bundleOutputDirectory = "$(Pipeline.Workspace)\StoreBundle"
+                $bundleValidationDirectory = "$(Pipeline.Workspace)\StoreBundleValidation"
+                $bundlePath = Join-Path $bundleOutputDirectory "WinUIGallery_$(StorePackageVersion).msixbundle"
+
+                New-Item -ItemType Directory -Path $bundleInputDirectory -Force | Out-Null
+                New-Item -ItemType Directory -Path $bundleOutputDirectory -Force | Out-Null
+                $packages | Copy-Item -Destination $bundleInputDirectory -Force
+
+                $makeAppx = Get-ChildItem -Path "${env:ProgramFiles(x86)}\Windows Kits\10\bin" `
+                  -Recurse `
+                  -Filter makeappx.exe |
+                    Where-Object { $_.DirectoryName -like "*\x64" } |
+                    Sort-Object @{ Expression = { [version]$_.Directory.Parent.Name }; Descending = $true } |
+                    Select-Object -First 1
+
+                if (-not $makeAppx) {
+                  Write-Error "Could not find the Windows SDK makeappx.exe tool."
+                  exit 1
+                }
+
+                & $makeAppx.FullName bundle /d $bundleInputDirectory /p $bundlePath /bv "$(StorePackageVersion)" /o
+                if ($LASTEXITCODE -ne 0) {
+                  exit $LASTEXITCODE
+                }
+
+                & $makeAppx.FullName unbundle /p $bundlePath /d $bundleValidationDirectory /o
+                if ($LASTEXITCODE -ne 0) {
+                  exit $LASTEXITCODE
+                }
+
+                $bundledPackages = @(Get-ChildItem -Path $bundleValidationDirectory -Filter "WinUIGallery_*.msix")
+                if ($bundledPackages.Count -ne $requiredPlatforms.Count) {
+                  Write-Error "Expected the bundle to contain $($requiredPlatforms.Count) packages, found $($bundledPackages.Count)."
+                  exit 1
+                }
+
+                Write-Host "Created Store bundle: $bundlePath"
+          - task: MS-RDX-MRO.windows-store-publish.publish-task.store-publish@3
+            displayName: Publish WinUI Gallery StoreBroker package
+            inputs:
+              serviceEndpoint: ${{ parameters.storeServiceEndpoint }}
+              appId: 9P3JFPWWDZRC
+              inputMethod: Packages
+              sourceFolder: '$(Pipeline.Workspace)\StoreBundle'
+              contents: 'WinUIGallery_*.msixbundle'
+              force: true
+              skipPolling: true
+              deletePackages: true
+              numberOfPackagesToKeep: 1
+              targetPublishMode: Manual
+              Visibility: Private

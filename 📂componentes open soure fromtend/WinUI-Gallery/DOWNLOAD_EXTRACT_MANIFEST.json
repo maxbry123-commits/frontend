@@ -1,0 +1,38 @@
+{
+  "bundle_bytes": 16193692,
+  "bundle_sha256": "52823c160e305a3f19bab80fa50521d8dcd415ada9a8b8fbac5f229823c873bb",
+  "extracted_tree": {
+    "bytes": 19364304,
+    "files": 1298,
+    "sha256": "3aa2625e233a2c296785477d22cf10d204692439947799544c756ad0e74a444e"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "WinUI-Gallery.bundle.zip.part-0001",
+      "sha256": "199171b4184697a97319f592b1344e558cbae8f125fda2364819281cc7732163"
+    },
+    {
+      "bytes": 3610780,
+      "name": "WinUI-Gallery.bundle.zip.part-0002",
+      "sha256": "f03d6d1112f8c91b6cffe79d7bf1040680723493e37c5e29fec1263191b46b8f"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "WinUI-Gallery",
+  "source_bytes": 19364304,
+  "source_commit": "b1730cb60a36014b1715df6b797e79a3f7c414ce",
+  "source_files": 1298,
+  "source_ref": "HEAD",
+  "source_repo": "microsoft/WinUI-Gallery",
+  "source_tree": {
+    "bytes": 19364304,
+    "files": 1298,
+    "sha256": "3aa2625e233a2c296785477d22cf10d204692439947799544c756ad0e74a444e"
+  }
+}
