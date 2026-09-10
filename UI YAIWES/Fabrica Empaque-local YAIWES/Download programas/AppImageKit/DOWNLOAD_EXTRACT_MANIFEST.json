@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 6028,
+  "bundle_sha256": "6818b98e494f10aec0733d6d6dbfe3472b121a07eb2d90ef4674d3134f545798",
+  "extracted_tree": {
+    "bytes": 13264,
+    "files": 4,
+    "sha256": "a8b3d50ef5ae6da524f4015096e9ce4ab9ac85f9979dd1af2c1d5de23cd42d6a"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 6028,
+      "name": "AppImageKit.bundle.zip.part-0001",
+      "sha256": "6818b98e494f10aec0733d6d6dbfe3472b121a07eb2d90ef4674d3134f545798"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "AppImageKit",
+  "source_bytes": 13264,
+  "source_commit": "939ff4d4c033caa0170d0cac643098b5b5664528",
+  "source_files": 4,
+  "source_ref": "HEAD",
+  "source_repo": "AppImage/AppImageKit",
+  "source_tree": {
+    "bytes": 13264,
+    "files": 4,
+    "sha256": "a8b3d50ef5ae6da524f4015096e9ce4ab9ac85f9979dd1af2c1d5de23cd42d6a"
+  }
+}
