@@ -1,0 +1,91 @@
+name: Motor Download Extract G3 26 20260909
+run-name: Motor Download Extract G3 26 • ${{ github.sha }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/motor-download-extract-g3-26-20260909.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: motor-download-extract-g3-26-20260909
+  cancel-in-progress: false
+
+jobs:
+  motor-group-3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Verify canonical motor blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          MOTOR_DIR='➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip'
+          test "$(git hash-object "$MOTOR_DIR/motor_2_queue_download_extract.py")" = '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          test "$(git hash-object "$MOTOR_DIR/hf_download_extract_engine.py")" = '91e6e4486692eab314be5c7130d8310d3c855397'
+
+      - name: Execute canonical motor for Group 3
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: UI YAIWES/watchdog UI YAIWES/Download librerías
+          MAX_RETRIES: '3'
+        run: |
+          set -euo pipefail
+          MOTOR_DIR="$GITHUB_WORKSPACE/➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip"
+          export ENGINE_PATH="$MOTOR_DIR/hf_download_extract_engine.py"
+          export QUEUE_FILE="$RUNNER_TEMP/g3.queue.json"
+          export STATE_FILE="$RUNNER_TEMP/g3.state.json"
+          export INDEX_PATH="$RUNNER_TEMP/g3.index.md"
+          cat > "$QUEUE_FILE" <<'JSON'
+          {"queue":[
+            {"id":"g3-001","source_repo":"pydantic/pydantic","slug":"Pydantic","publish":true},
+            {"id":"g3-002","source_repo":"marshmallow-code/marshmallow","slug":"marshmallow","publish":true},
+            {"id":"g3-003","source_repo":"pyeve/cerberus","slug":"cerberus","publish":true},
+            {"id":"g3-004","source_repo":"python-jsonschema/jsonschema","slug":"jsonschema","publish":true},
+            {"id":"g3-005","source_repo":"python-attrs/attrs","slug":"attrs","publish":true},
+            {"id":"g3-006","source_repo":"alecthomas/voluptuous","slug":"Voluptuous","publish":true},
+            {"id":"g3-007","source_repo":"agronholm/typeguard","slug":"typeguard","publish":true},
+            {"id":"g3-008","source_repo":"colinhacks/zod","slug":"zod","publish":true},
+            {"id":"g3-009","source_repo":"gcanti/io-ts","slug":"io-ts","publish":true},
+            {"id":"g3-010","source_repo":"jquense/yup","slug":"yup","publish":true},
+            {"id":"g3-011","source_repo":"hapijs/joi","slug":"joi","publish":true},
+            {"id":"g3-012","source_repo":"ajv-validator/ajv","slug":"ajv","publish":true},
+            {"id":"g3-013","source_repo":"ianstormtaylor/superstruct","slug":"superstruct","publish":true},
+            {"id":"g3-014","source_repo":"pelotom/runtypes","slug":"runtypes","publish":true},
+            {"id":"g3-015","source_repo":"fabian-hiller/valibot","slug":"valibot","publish":true},
+            {"id":"g3-016","source_repo":"arktypeio/arktype","slug":"arktype","publish":true},
+            {"id":"g3-017","source_repo":"rjsf-team/react-jsonschema-form","slug":"react-jsonschema-form","publish":true},
+            {"id":"g3-018","source_repo":"react-hook-form/react-hook-form","slug":"react-hook-form","publish":true},
+            {"id":"g3-019","source_repo":"ealush/vest","slug":"vest","publish":true},
+            {"id":"g3-020","source_repo":"sindresorhus/ow","slug":"ow","publish":true},
+            {"id":"g3-021","source_repo":"causaly/zod-validation-error","slug":"zod-validation-error","publish":true},
+            {"id":"g3-022","source_repo":"Effect-TS/effect","slug":"effect","publish":true},
+            {"id":"g3-023","source_repo":"samchon/typia","slug":"typia","publish":true},
+            {"id":"g3-024","source_repo":"dubzzz/fast-check","slug":"fast-check","publish":true},
+            {"id":"g3-025","source_repo":"HypothesisWorks/hypothesis","slug":"Hypothesis","publish":true},
+            {"id":"g3-026","source_repo":"SimonSapin/rust-quickcheck","slug":"rust-quickcheck","publish":true}
+          ]}
+          JSON
+          python3 "$MOTOR_DIR/motor_2_queue_download_extract.py" | tee "$RUNNER_TEMP/g3.result.jsonl"
+          tail -n 1 "$RUNNER_TEMP/g3.result.jsonl" > "$RUNNER_TEMP/g3.final.json"
+          python3 - "$RUNNER_TEMP/g3.final.json" <<'PY'
+          import json,sys
+          p=json.load(open(sys.argv[1]))
+          b=p.get('balance',{})
+          assert p.get('verdict')=='VERIFIED_CLOSED', p
+          assert b.get('failed')==0 and b.get('pending')==0, p
+          assert b.get('published_readback_verified')==b.get('total')==26, p
+          PY
