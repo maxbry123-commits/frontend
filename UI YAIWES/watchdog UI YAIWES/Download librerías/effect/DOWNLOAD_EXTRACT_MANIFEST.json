@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 9304305,
+  "bundle_sha256": "906aa961180f8f0cd166a09edfd84331c02be063a79581d84d83f525b3248641",
+  "extracted_tree": {
+    "bytes": 41076694,
+    "files": 3976,
+    "sha256": "9719e74ad55e6c165fd87668e02105624d0ddebd38f64647ce97d279fe68957d"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 9304305,
+      "name": "effect.bundle.zip.part-0001",
+      "sha256": "906aa961180f8f0cd166a09edfd84331c02be063a79581d84d83f525b3248641"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "effect",
+  "source_bytes": 41076694,
+  "source_commit": "d3b837aee836f35d625d55205f7d6e61305fc198",
+  "source_files": 3976,
+  "source_ref": "HEAD",
+  "source_repo": "Effect-TS/effect",
+  "source_tree": {
+    "bytes": 41076694,
+    "files": 3976,
+    "sha256": "9719e74ad55e6c165fd87668e02105624d0ddebd38f64647ce97d279fe68957d"
+  }
+}
