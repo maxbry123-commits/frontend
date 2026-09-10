@@ -1,0 +1,171 @@
+name: UI YAIWES Canonical Motors 14 Missing
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/ui-yaiwes-canonical-motors-14-20260910/QUEUE.json'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: maxbry123-commits-frontend-main-ui-yaiwes-componentes-open-soure-ui-yaiwes-repair-4
+  cancel-in-progress: false
+
+jobs:
+  acquire-extract-move:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout destination main NO-LFS
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: false
+
+      - name: Verify immutable canonical motor blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend'
+          check_blob() {
+            local rel="$1" expected="$2" got
+            got="$(git hash-object "$ROOT/$rel")"
+            test "$got" = "$expected" || { echo "MOTOR_CODE_LOCK_GAP $rel expected=$expected got=$got"; exit 1; }
+          }
+          check_blob '➡️📂 Motor de extracción zip/motor_1_extract_only.py' 'a52d5dc0e6ff26f75d753b848dcc1a40c5dd4500'
+          check_blob '📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py' '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          check_blob '📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py' '91e6e4486692eab314be5c7130d8310d3c855397'
+          check_blob '➡️📂motor de copiar archivos/motor_3_copy_batches.py' '3689924361ce4a1a9fde4ae2b6f6009c37a6042d'
+          check_blob '➡️📂motor de copiar archivos/motor_copy_root_to_repo.py' '8281211da76db3080fe1f1ea38b3eb0c45d655cb'
+          check_blob '➡️📂motor de moves archivos/motor_4_move_batches.py' '9a21facfe11327cf60a2afca8f415ad52f0ecbe5'
+
+      - name: Copy canonical motor root exactly into runner
+        shell: bash
+        env:
+          SOURCE_ROOT: ${{ github.workspace }}/➡️📂motores de descarga extracción copiado movimiento archivos fromtend
+          DEST_ROOT: ${{ runner.temp }}/➡️📂motores de descarga extracción copiado movimiento archivos frontend
+          DEST_REPO_NAME: frontend
+          BATCH_SIZE: '2'
+        run: |
+          set -euo pipefail
+          python "$SOURCE_ROOT/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py" | tee "$RUNNER_TEMP/motor-copy-root.json"
+          grep -Eq '"verdict": "VERIFIED_(CLOSED|EXISTING)"' "$RUNNER_TEMP/motor-copy-root.json"
+
+      - name: Execute exact Motor 2 download and extraction queue
+        shell: bash
+        env:
+          QUEUE_FILE: ${{ github.workspace }}/scripts/ui-yaiwes-canonical-motors-14-20260910/QUEUE.json
+          STATE_FILE: ${{ runner.temp }}/motor2-queue-state.json
+          INDEX_PATH: ${{ runner.temp }}/motor2-index.md
+          ENGINE_PATH: ${{ runner.temp }}/➡️📂motores de descarga extracción copiado movimiento archivos frontend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: UI YAIWES/➡️📂 descarga extracción 14 faltantes
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_RETRIES: '3'
+          LOOP_SLEEP_SECONDS: '0'
+        run: |
+          set -euo pipefail
+          MOTOR_ROOT="$RUNNER_TEMP/➡️📂motores de descarga extracción copiado movimiento archivos frontend"
+          python "$MOTOR_ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py" | tee "$RUNNER_TEMP/motor2-result.log"
+          python - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'motor2-result.log'
+          rows=[x.strip() for x in p.read_text().splitlines() if x.strip()]
+          obj=json.loads(rows[-1])
+          b=obj.get('balance',{})
+          assert obj.get('verdict')=='VERIFIED_CLOSED', obj
+          assert b.get('total')==14 and b.get('download_verified')==14 and b.get('extraction_verified')==14 and b.get('published_readback_verified')==14 and b.get('failed')==0 and b.get('pending')==0, b
+          print(json.dumps({'motor2_gate':'PASS','balance':b},sort_keys=True))
+          PY
+
+      - name: Refresh main after Motor 2 publications
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin main
+          git reset --hard origin/main
+
+      - name: Move extracted component trees with exact Motor 4
+        shell: bash
+        run: |
+          set -euo pipefail
+          MOTOR="$RUNNER_TEMP/➡️📂motores de descarga extracción copiado movimiento archivos frontend/➡️📂motor de moves archivos/motor_4_move_batches.py"
+          STAGE='UI YAIWES/➡️📂 descarga extracción 14 faltantes'
+          FINAL='UI YAIWES/componentes open soure UI YAIWES'
+          i=0
+          while IFS= read -r name; do
+            i=$((i+1))
+            src="$STAGE/$name/code"
+            dst="$FINAL/$name"
+            state="$RUNNER_TEMP/motor4-${i}.json"
+            out="$RUNNER_TEMP/motor4-${i}.out"
+            env SOURCE_DIR="$src" DEST_DIR="$dst" STATE_FILE="$state" BATCH_SIZE='100' COLLISION_POLICY='fail' python "$MOTOR" | tee "$out"
+            python - "$out" <<'PY'
+          import json, pathlib, sys
+          rows=[x.strip() for x in pathlib.Path(sys.argv[1]).read_text().splitlines() if x.strip()]
+          obj=json.loads(rows[-1])
+          assert obj.get('verdict')=='VERIFIED_CLOSED' and obj.get('failed')==0 and obj.get('pending')==0, obj
+          PY
+          done <<'EOF'
+          big-AGI
+          Vite
+          Vercel AI SDK
+          TanStack Query
+          React Virtuoso
+          shadcn-ui
+          XYFlow React Flow
+          Lucide
+          Uppy
+          Supabase
+          DuckDB
+          workerd
+          AVF
+          Flutter
+          EOF
+
+      - name: Publish verified Motor 4 moves without force
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'yaiwes-canonical-motors'
+          git config user.email 'yaiwes-canonical-motors@users.noreply.github.com'
+          git add -A -- 'UI YAIWES/➡️📂 descarga extracción 14 faltantes' 'UI YAIWES/componentes open soure UI YAIWES'
+          git diff --cached --quiet && { echo 'MOVE_PUBLICATION_GAP:no changes'; exit 1; }
+          git commit -m 'build(yaiwes): move 14 canonical missing components into final root'
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+
+      - name: Independent final read-back 14 of 14
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin main
+          FINAL='UI YAIWES/componentes open soure UI YAIWES'
+          count=0
+          while IFS= read -r name; do
+            files="$(git ls-tree -r --name-only origin/main -- "$FINAL/$name" | wc -l | tr -d ' ')"
+            test "$files" -gt 0 || { echo "READBACK_GAP:$name"; exit 1; }
+            count=$((count+1))
+          done <<'EOF'
+          big-AGI
+          Vite
+          Vercel AI SDK
+          TanStack Query
+          React Virtuoso
+          shadcn-ui
+          XYFlow React Flow
+          Lucide
+          Uppy
+          Supabase
+          DuckDB
+          workerd
+          AVF
+          Flutter
+          EOF
+          test "$count" -eq 14
+          echo "VERIFIED_CLOSED components=14 final_sha=$(git rev-parse origin/main)"
