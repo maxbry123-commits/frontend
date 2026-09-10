@@ -1,0 +1,38 @@
+{
+  "bundle_bytes": 14161815,
+  "bundle_sha256": "2eaa42a5e729f95f3d768125ab300e766691c197c3e72759a08d24e8e0c58219",
+  "extracted_tree": {
+    "bytes": 46632613,
+    "files": 471,
+    "sha256": "a7d6b33cb320ce61e69a8f71a4e4ef037871daf81dd5f0fadd0f6523a847f054"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "VvvebJs.bundle.zip.part-0001",
+      "sha256": "7060462c59905d7cd7b5ddf6a71d01f15c29136092d5eeddd5fb1bc1ec1d0438"
+    },
+    {
+      "bytes": 1578903,
+      "name": "VvvebJs.bundle.zip.part-0002",
+      "sha256": "51a7e81dcce553c05d42c0f4cae1a42689af0b142c2e050dbf16f7019d46153a"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "VvvebJs",
+  "source_bytes": 46632613,
+  "source_commit": "1acbab7ebfe3e7b004f1f18c039d26550fc04bd8",
+  "source_files": 471,
+  "source_ref": "HEAD",
+  "source_repo": "givanz/VvvebJs",
+  "source_tree": {
+    "bytes": 46632613,
+    "files": 471,
+    "sha256": "a7d6b33cb320ce61e69a8f71a4e4ef037871daf81dd5f0fadd0f6523a847f054"
+  }
+}
