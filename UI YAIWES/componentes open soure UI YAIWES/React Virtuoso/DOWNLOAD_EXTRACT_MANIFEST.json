@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 2242786,
+  "bundle_sha256": "866e3933f157297650eea63e4ccddad340075dd2d18e9f03ef7f1e29f056474f",
+  "extracted_tree": {
+    "bytes": 6254692,
+    "files": 1311,
+    "sha256": "1f2d5a77183d9fb8d3883d1a012aa9525498afb9c76ea0d108e68ca09b5d57de"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 2242786,
+      "name": "React Virtuoso.bundle.zip.part-0001",
+      "sha256": "866e3933f157297650eea63e4ccddad340075dd2d18e9f03ef7f1e29f056474f"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "React Virtuoso",
+  "source_bytes": 6254692,
+  "source_commit": "ebd6b0f0ff41e1fe003a50fe47b168b3ed698868",
+  "source_files": 1311,
+  "source_ref": "HEAD",
+  "source_repo": "https://github.com/petyosi/react-virtuoso",
+  "source_tree": {
+    "bytes": 6254692,
+    "files": 1311,
+    "sha256": "1f2d5a77183d9fb8d3883d1a012aa9525498afb9c76ea0d108e68ca09b5d57de"
+  }
+}
