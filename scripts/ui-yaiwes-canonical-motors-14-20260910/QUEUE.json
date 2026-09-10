@@ -1,9 +1,7 @@
 {
   "schema": "yaiwes.frontend.download-extract-queue.v1",
+  "trigger_generation": 2,
   "queue": [
-    {"id":"0013:big-AGI","canonical_index":13,"slug":"big-AGI","source_repo":"https://github.com/enricoros/big-AGI","source_ref":"00b1509e3944a299ced9e10a67ff72d303649be6","publish":true},
-    {"id":"0018:Vite","canonical_index":18,"slug":"Vite","source_repo":"https://github.com/vitejs/vite","source_ref":"e6f6b3e3119256daa837b2dc399058c8aa45b470","publish":true},
-    {"id":"0019:Vercel-AI-SDK","canonical_index":19,"slug":"Vercel AI SDK","source_repo":"https://github.com/vercel/ai","source_ref":"45f2b6a5bc06bdb40a847ea961f8d7ca7cd86563","publish":true},
     {"id":"0021:TanStack-Query","canonical_index":21,"slug":"TanStack Query","source_repo":"https://github.com/TanStack/query","source_ref":"HEAD","publish":true},
     {"id":"0022:React-Virtuoso","canonical_index":22,"slug":"React Virtuoso","source_repo":"https://github.com/petyosi/react-virtuoso","source_ref":"HEAD","publish":true},
     {"id":"0024:shadcn-ui","canonical_index":24,"slug":"shadcn-ui","source_repo":"https://github.com/shadcn-ui/ui","source_ref":"HEAD","publish":true},
@@ -14,6 +12,9 @@
     {"id":"0056:DuckDB","canonical_index":56,"slug":"DuckDB","source_repo":"https://github.com/duckdb/duckdb","source_ref":"HEAD","publish":true},
     {"id":"0063:workerd","canonical_index":63,"slug":"workerd","source_repo":"https://github.com/cloudflare/workerd","source_ref":"HEAD","publish":true},
     {"id":"0066:AVF","canonical_index":66,"slug":"AVF","source_repo":"https://github.com/aosp-mirror-neo/platform_packages_modules_Virtualization","source_ref":"main","upstream_url":"https://android.googlesource.com/platform/packages/modules/Virtualization/","provenance_note":"GitHub mirror required because canonical engine accepts GitHub remotes only","publish":true},
-    {"id":"0067:Flutter","canonical_index":67,"slug":"Flutter","source_repo":"https://github.com/flutter/flutter","source_ref":"HEAD","publish":true}
+    {"id":"0067:Flutter","canonical_index":67,"slug":"Flutter","source_repo":"https://github.com/flutter/flutter","source_ref":"HEAD","publish":true},
+    {"id":"0013:big-AGI","canonical_index":13,"slug":"big-AGI","source_repo":"https://github.com/enricoros/big-AGI","source_ref":"00b1509e3944a299ced9e10a67ff72d303649be6","publish":true},
+    {"id":"0018:Vite","canonical_index":18,"slug":"Vite","source_repo":"https://github.com/vitejs/vite","source_ref":"e6f6b3e3119256daa837b2dc399058c8aa45b470","publish":true},
+    {"id":"0019:Vercel-AI-SDK","canonical_index":19,"slug":"Vercel AI SDK","source_repo":"https://github.com/vercel/ai","source_ref":"45f2b6a5bc06bdb40a847ea961f8d7ca7cd86563","publish":true}
   ]
 }
