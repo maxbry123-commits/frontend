@@ -1,0 +1,6 @@
+{
+  "queue": [
+    {"id":"0013:big-AGI","slug":"big-AGI","source_repo":"https://github.com/enricoros/big-AGI","source_ref":"7413983159ddb7056bde035d98446d33573bfa0a","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true},
+    {"id":"0019:Vercel-AI-SDK","slug":"Vercel AI SDK","source_repo":"https://github.com/vercel/ai","source_ref":"916da300b87610a84c58dc5bb2da15f9f9dbae98","dest_repo":"maxbry123-commits/frontend","dest_branch":"main","dest_root":"UI YAIWES/componentes open soure UI YAIWES","publish":true}
+  ]
+}
