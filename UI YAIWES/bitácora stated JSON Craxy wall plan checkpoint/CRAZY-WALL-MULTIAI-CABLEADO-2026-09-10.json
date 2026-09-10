@@ -1,1 +1,122 @@
-{"schema":"yaiwes.crazy-wall.multiai.v1","contract":"tel.workflow/v3","project":"UI YAIWES","updated_date":"2026-09-10","mode":"FAIL_CLOSED_LOOP","status":"ACTIVE_LOOP","repository":"maxbry123-commits/frontend","branch":"main","backend":{"owner_identity":"➡️🤯 sol plan 1 UI YAIWES backend","root":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/","code_root":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/","declared_status":"INITIAL_LAYERED_RUNTIME_NOT_YET_CONNECTED_TO_REAL_GITHUB_ACTIONS_OR_LLM_PROVIDER"},"frontend_factory":{"owner_identity":"➡️ Astra plan fábrica UI YAIWES","objective":"Frontend persistente de UI YAIWES + fábrica UI como herramienta principal de construcción, prueba, corrección y mejora; comprender contratos backend y preparar adapters/artefactos frontend compatibles sin apropiarse de rutas backend de Sol.","status":"ACTIVE_LOOP","single_writer_per_path":true,"integration_allowlist":["GitHub","Hugging Face"],"backend_write_policy":"READ_CONTRACTS_AND_PREPARE_NON_CONFLICTING_BACKEND_DONOR_ARTIFACTS_ONLY_UNTIL_HANDOFF","task_gate":"TAREA_1_FACTORY_VERIFIED_CLOSED_BEFORE_TAREA_2_INTERFACE"},"tasks":{"T1_ACQUIRE_14":{"owner":"➡️🤯 sol plan 1 UI YAIWES backend","reviewer":"ASTRA","status":"ACTIVE_GAP","close_when":"14/14 download+extract+move+readback VERIFIED_CLOSED"},"T1_FACTORY_FRONTEND":{"owner":"➡️ Astra plan fábrica UI YAIWES","reviewer":"SHERIFF","status":"ACTIVE_LOOP","rule":"INPUT literal -> architecture -> component map -> factory modules -> deterministic tests -> evidence -> VERIFIED_CLOSED"},"T2_BACKEND_INTEGRATION":{"owner":"➡️🤯 sol plan 1 UI YAIWES backend","reviewer":"ASTRA","status":"BLOCKED_BY_T1"},"T2_INTERFACE_YAIWES":{"owner":"➡️ Astra plan fábrica UI YAIWES","reviewer":"SHERIFF","status":"BLOCKED_BY_T1_FACTORY_FRONTEND","rule":"No start until T1 factory VERIFIED_CLOSED"}},"anti_collision":{"one_instruction_one_node":true,"single_writer_per_path":true,"read_main_before_write":true,"base_sha_required":true,"force_push":false,"on_head_changed":"STALE_LOCK_GAP_REBASE_REBUILD_DELTA","producer_cannot_self_certify":true},"persistent_goal":"YAIWES UI es un Work multiplataforma con chat/orquestador tipo Jarvis que controla paneles y sistemas; frontend parcialmente local, seguro y cifrado; agentes/LLMs servidos desde web; componentes alojados en web; almacenamiento local por defecto con conectores opcionales del usuario; producto SaaS propietario; fábrica UI es el instrumento permanente para construir y mejorar la interfaz.","loop_contract":"INPUT literal -> GOALS -> priorities -> plan -> queue1x1 -> execute -> verify/refute -> GAP/FLAG -> research up to 20 solutions -> StrategyDelta -> retry/continue safe task -> Council12 -> 3 refutations -> cross-check -> CODA -> verify_final","closure_rule":"SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"}
+{
+  "schema": "yaiwes.crazy-wall.multiai.v1",
+  "contract": "tel.workflow/v3",
+  "project": "UI YAIWES",
+  "updated_date": "2026-09-10",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "ACTIVE_LOOP",
+  "repository": "maxbry123-commits/frontend",
+  "branch": "main",
+  "backend": {
+    "owner_identity": "➡️🤯 sol plan 1 UI YAIWES backend",
+    "root": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/",
+    "code_root": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/",
+    "declared_status": "INITIAL_LAYERED_RUNTIME_NOT_YET_CONNECTED_TO_REAL_GITHUB_ACTIONS_OR_LLM_PROVIDER",
+    "cables": [
+      "contracts -> runner",
+      "ledger -> governance/verifier",
+      "component_registry -> integration adapters",
+      "layers/layer_04_copy_move -> canonical copy/move boundary",
+      "layers/layer_05_download_extract -> canonical acquisition boundary",
+      "governance/sheriff -> validator -> sentinel -> verifier -> supervisor -> judge -> guardian"
+    ]
+  },
+  "frontend_factory": {
+    "owner_identity": "➡️ Astra plan fábrica UI YAIWES",
+    "role": "persistent_frontend_factory_and_interface_integrator",
+    "objective": "Frontend persistente de UI YAIWES + fábrica UI como herramienta principal de construcción, prueba, corrección y mejora; comprender contratos backend y preparar adapters/artefactos compatibles sin apropiarse de rutas backend de Sol.",
+    "status": "ACTIVE_LOOP",
+    "integration_allowlist": ["GitHub", "Hugging Face"],
+    "task_gate": "TAREA_1_FACTORY_VERIFIED_CLOSED_BEFORE_TAREA_2_INTERFACE",
+    "persistent_goal": "YAIWES UI es un Work multiplataforma con chat/orquestador tipo Jarvis que controla paneles y sistemas; frontend parcialmente local, seguro y cifrado; agentes/LLMs servidos desde web; componentes alojados en web; almacenamiento local por defecto con conectores opcionales del usuario; producto SaaS propietario; fábrica UI es el instrumento permanente para construir y mejorar la interfaz.",
+    "backend_boundary": "READ_AND_DESIGN_AGAINST_BACKEND_CONTRACTS; donor backend code must remain separated and non-conflicting until explicit integration/handoff"
+  },
+  "canonical_architecture": [
+    "UI YAIWES/readme arquitectura UI YAIWES/CONTRATO-MAESTRO-FORENSE-XRAY-50-GOALS-UI-YAIWES.md",
+    "UI YAIWES/readme arquitectura UI YAIWES/CROSSCHECK-FUENTES-VERDAD-XRAY-UI-YAIWES.md",
+    "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md",
+    "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md",
+    "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-WATCHDOG-MOTORES-CANONICOS-2026-09-10.md",
+    "UI YAIWES/readme arquitectura UI YAIWES/RECOVERY-PATCH-ASTRA-UI-YAIWES-2026-09-10.md",
+    "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-ASTRA-UI-YAIWES-2026-09-10.md",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
+    "UI YAIWES/watchdog UI YAIWES/CHECKPOINT-ASTRA-UI-YAIWES-2026-09-10.md"
+  ],
+  "source_truth_attachments": [
+    {"title":"MAX-SYSTEM-100X-FINAL-1.md","status":"LOCATED_FILE_LIBRARY","role":"functional architecture / durable execution / state / recovery"},
+    {"title":"🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md","status":"LOCATED_FILE_LIBRARY","role":"memory / task / context engine / evidence / reconstruction"},
+    {"title":"Virtual Computer YAIWES","status":"SOURCE_REFERENCE_GAP","role":"named by STATE but exact attachment not resolved"},
+    {"title":"Command Center Chat YAIWES","status":"SOURCE_REFERENCE_GAP","role":"named by STATE but exact attachment not resolved"}
+  ],
+  "canonical_motors": {
+    "source_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
+    "root": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/",
+    "policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
+    "allowed": ["motor_1_extract_only.py","motor_2_queue_download_extract.py","hf_download_extract_engine.py","motor_3_copy_batches.py","motor_copy_root_to_repo.py","motor_4_move_batches.py"]
+  },
+  "tasks": {
+    "T1_ACQUIRE_14": {
+      "owner": "➡️🤯 sol plan 1 UI YAIWES backend",
+      "reviewer": "ASTRA",
+      "status": "ACTIVE_GAP",
+      "write_paths": [".github/workflows/","UI YAIWES/_adquisicion/","UI YAIWES/componentes open soure UI YAIWES/"],
+      "components": ["big-AGI","Vite","Vercel AI SDK","TanStack Query","React Virtuoso","shadcn-ui","XYFlow React Flow","Lucide","Uppy","Supabase","DuckDB","workerd","AVF","Flutter"],
+      "close_when": "14/14 download+extract+move+readback VERIFIED_CLOSED"
+    },
+    "T1_FACTORY_FRONTEND": {
+      "owner": "➡️ Astra plan fábrica UI YAIWES",
+      "reviewer": "SHERIFF",
+      "status": "ACTIVE_LOOP",
+      "write_paths": ["UI YAIWES/watchdog UI YAIWES/","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/"],
+      "rule": "INPUT literal -> architecture -> component map -> factory modules -> deterministic tests -> evidence -> VERIFIED_CLOSED",
+      "blocked_paths_until_handoff": ["UI YAIWES/Interface YAIWES ui/","UI YAIWES/Fabrica UI YAIWES/"]
+    },
+    "T2_BACKEND_INTEGRATION": {
+      "owner": "➡️🤯 sol plan 1 UI YAIWES backend",
+      "reviewer": "ASTRA",
+      "status": "BLOCKED_BY_T1",
+      "write_paths": ["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/"],
+      "rule": "one component/capability per node; adapter/contract first; tests required; no monolith"
+    },
+    "T2_FRONTEND_INTEGRATION": {
+      "owner": "GROK",
+      "reviewer": "ASTRA",
+      "status": "WAITING_INDEPENDENT_FRONTEND_NODE",
+      "write_paths": ["UI YAIWES/Interface YAIWES ui/","UI YAIWES/Fabrica UI YAIWES/"],
+      "rule": "do not edit backend paths; preserve existing windows; create V+ changes"
+    },
+    "T2_INTERFACE_YAIWES": {
+      "owner": "➡️ Astra plan fábrica UI YAIWES",
+      "reviewer": "SHERIFF",
+      "status": "BLOCKED_BY_T1_FACTORY_FRONTEND",
+      "rule": "No start until T1 factory VERIFIED_CLOSED and frontend path handoff is explicit"
+    },
+    "T3_INDEPENDENT_AUDIT": {
+      "owner": "ASTRA",
+      "reviewer": "SHERIFF",
+      "status": "READY_READ_ONLY",
+      "write_paths": ["UI YAIWES/watchdog UI YAIWES/","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/"],
+      "rule": "audit evidence; do not self-certify producer work"
+    },
+    "T4_CLAUDE_INDEPENDENT": {"owner":"CLAUDE","reviewer":"ASTRA","status":"UNASSIGNED_NODE_REQUIRED","write_paths":[],"rule":"no write until explicit non-overlapping path/node is assigned"}
+  },
+  "anti_collision": {
+    "one_instruction_one_node": true,
+    "single_writer_per_path": true,
+    "read_main_before_write": true,
+    "base_sha_required": true,
+    "force_push": false,
+    "on_head_changed": "STALE_LOCK_GAP_REBASE_REBUILD_DELTA",
+    "handoff_required_for_owner_change": true,
+    "producer_cannot_self_certify": true
+  },
+  "loop_contract": "INPUT literal -> GOALS -> priorities -> plan -> queue1x1 -> execute -> verify/refute -> GAP/FLAG -> research up to 20 solutions -> StrategyDelta -> retry/continue safe task -> Council12 -> 3 refutations -> cross-check -> CODA -> verify_final",
+  "evidence": {
+    "recovery_patch_commit": "724a8ec24960e5a2f1127eb3fab9ddf611f171e8",
+    "astra_handoff_commit": "26a2b44e8f5c44cc6edf4542985b77fb23ecf075",
+    "previous_astra_checkpoint_commit": "68e12c2f0f47456155bcfe5af597cd5afbbc7792",
+    "state_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+  },
+  "next_node": "T1_FACTORY_FRONTEND_RECORD_LITERAL_INPUT_AND_ARCHITECTURE",
+  "closure": "VERIFIED_CLOSED only with path+SHA/diff+run/test/log+readback and no open node gap"
+}
