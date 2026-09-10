@@ -1,0 +1,48 @@
+{
+  "bundle_bytes": 39578646,
+  "bundle_sha256": "db6a4c0adcc4a994598430bee35f4785b1b37a87adf8ca653791632b942c6985",
+  "extracted_tree": {
+    "bytes": 111404422,
+    "files": 3892,
+    "sha256": "f5e545e128c72510ba5abf9316fd20bbbb3dac4be9eae6ae06ab69f13ecadc93"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "Builder.io.bundle.zip.part-0001",
+      "sha256": "709f0ad716b9064b2c3afddbfb1d62f5087ae7e7bb6fb914cbf930091a5cb5ce"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Builder.io.bundle.zip.part-0002",
+      "sha256": "f4f0a13b5c1b57dcba3f37ce8db877d99a034aa44c36bc56d83aa7dbe6bb0e37"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Builder.io.bundle.zip.part-0003",
+      "sha256": "fe56b730601fcc2b27e4b1e08aa6d92ac84e681ff129bdad7f335701c59551f7"
+    },
+    {
+      "bytes": 1829910,
+      "name": "Builder.io.bundle.zip.part-0004",
+      "sha256": "dd7c796a8c792c6fa5cde6bbe56cc3f329c29cb36a866682a37e2cd0140ff08d"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Builder.io",
+  "source_bytes": 111404422,
+  "source_commit": "580739246da0c08114a70ea3a72cbacd3ea19c58",
+  "source_files": 3892,
+  "source_ref": "HEAD",
+  "source_repo": "BuilderIO/builder",
+  "source_tree": {
+    "bytes": 111404422,
+    "files": 3892,
+    "sha256": "f5e545e128c72510ba5abf9316fd20bbbb3dac4be9eae6ae06ab69f13ecadc93"
+  }
+}
