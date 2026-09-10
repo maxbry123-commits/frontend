@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "erasableSyntaxOnly": true,
+    "esModuleInterop": true,
+    "lib": ["esnext", "dom"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "removeComments": true,
+    "strict": true,
+    "target": "esnext",
+    "types": ["vitest/globals"]
+  },
+  "include": ["./lib/**/*.ts"]
+}

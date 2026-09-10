@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 208352,
+  "bundle_sha256": "afb98d45556c382b307e26f3a066b0bb5c7ee594dfa2bb65f8d2d494aca8579d",
+  "extracted_tree": {
+    "bytes": 780367,
+    "files": 89,
+    "sha256": "5e46a183efec3fd174ad8212b9bac06eab9111b0d5328f74b809d82982005c6d"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 208352,
+      "name": "zod-validation-error.bundle.zip.part-0001",
+      "sha256": "afb98d45556c382b307e26f3a066b0bb5c7ee594dfa2bb65f8d2d494aca8579d"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "zod-validation-error",
+  "source_bytes": 780367,
+  "source_commit": "8221754a8b156da1b41fb1fad402e66cfc59901b",
+  "source_files": 89,
+  "source_ref": "HEAD",
+  "source_repo": "causaly/zod-validation-error",
+  "source_tree": {
+    "bytes": 780367,
+    "files": 89,
+    "sha256": "5e46a183efec3fd174ad8212b9bac06eab9111b0d5328f74b809d82982005c6d"
+  }
+}
