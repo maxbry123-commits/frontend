@@ -1,0 +1,43 @@
+{
+  "bundle_bytes": 25959065,
+  "bundle_sha256": "3e4a56a92f9b39024b974eb6ac97830d1c2e8b19b76995435057aff1a56c2cc5",
+  "extracted_tree": {
+    "bytes": 97411925,
+    "files": 2182,
+    "sha256": "a3ea67be70c5fb68aa6ec516327e28bd5a8ebdebe71ed465dfd8b8ce0e4ce59c"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "echarts.bundle.zip.part-0001",
+      "sha256": "76d001e04766a3c78ab112a6b3dc3cdbd0381ea1bdd5ce81559e48b59d363beb"
+    },
+    {
+      "bytes": 12582912,
+      "name": "echarts.bundle.zip.part-0002",
+      "sha256": "1c1b96766e44512150cbd4bbfa970cc6432241327bfe613e18a00b1be33a45a7"
+    },
+    {
+      "bytes": 793241,
+      "name": "echarts.bundle.zip.part-0003",
+      "sha256": "b0cca39924b6a1be4a882fb87a52568bee440fc40681e1692a45dd3754be7aeb"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "echarts",
+  "source_bytes": 97411925,
+  "source_commit": "018ed3998984243b2fe2d072c17cfaa3fba41145",
+  "source_files": 2182,
+  "source_ref": "HEAD",
+  "source_repo": "apache/echarts",
+  "source_tree": {
+    "bytes": 97411925,
+    "files": 2182,
+    "sha256": "a3ea67be70c5fb68aa6ec516327e28bd5a8ebdebe71ed465dfd8b8ce0e4ce59c"
+  }
+}
