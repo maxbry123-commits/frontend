@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 9113972,
+  "bundle_sha256": "4f2ca6dcb92b386084300c181d7dffa2de26ad620d73f1aaae1abb6299eb45a1",
+  "extracted_tree": {
+    "bytes": 25087523,
+    "files": 7847,
+    "sha256": "bff1383b0fa4ab4cfc475e7035da904bd8df065434275d8773eed6c3150b3550"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 9113972,
+      "name": "TanStack-Table.bundle.zip.part-0001",
+      "sha256": "4f2ca6dcb92b386084300c181d7dffa2de26ad620d73f1aaae1abb6299eb45a1"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "TanStack-Table",
+  "source_bytes": 25087523,
+  "source_commit": "ce123bc6651bcbf188f3198627c6bb0b10588162",
+  "source_files": 7847,
+  "source_ref": "HEAD",
+  "source_repo": "TanStack/table",
+  "source_tree": {
+    "bytes": 25087523,
+    "files": 7847,
+    "sha256": "bff1383b0fa4ab4cfc475e7035da904bd8df065434275d8773eed6c3150b3550"
+  }
+}
