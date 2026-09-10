@@ -1,0 +1,439 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as DialogStories from "./Dialog.stories";
+
+<Meta of={DialogStories} />
+
+# Dialog
+
+A Dialog is used to display content or actions in a focused, overlay window that requires user interaction before returning to the main interface. Modals are valuable for drawing attention to important information, capturing user input, and streamlining workflows without navigating away from the current page.
+
+## Usage
+
+<Canvas of={DialogStories.Documentation} source={ { code: `
+import React, { useState } from "react";
+import { Dialog, Button } from "@webiny/admin-ui";
+
+const DialogExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Dialog"
+                onClick={() => setOpen(true)}
+            />
+
+            <Dialog
+                open={open}
+                onOpenChange={open => setOpen(open)}
+                title="Dialog Title"
+                description="A short dialog description."
+                info={<>Learn more about this <a href={"#"}>here</a>.</>}
+                actions={
+                    <>
+                        <Dialog.CancelAction />
+                        <Dialog.ConfirmAction />
+                    </>
+                }
+                showCloseButton={true}
+                dismissible={true}
+            >
+                This is the dialog content area. You can place any content here including
+                forms, text, images, or other components.
+            </Dialog>
+        </>
+    );
+
+};
+
+export default DialogExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Dialog/Dialog.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={DialogStories.Documentation} exclude={["onOpenChange", "trigger"]} />
+
+```tsx
+import React, { useState } from "react";
+import { Dialog, Button } from "@webiny/admin-ui";
+
+const DialogExample = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="primary" text="Open Dialog" onClick={() => setOpen(true)} />
+
+      <Dialog
+        open={open}
+        onOpenChange={open => setOpen(open)}
+        title="Dialog Title"
+        description="A short dialog description."
+        info={
+          <>
+            Learn more about this <a href={"#"}>here</a>.
+          </>
+        }
+        actions={
+          <>
+            <Dialog.CancelAction />
+            <Dialog.ConfirmAction />
+          </>
+        }
+        showCloseButton={true}
+        dismissible={true}
+      >
+        This is the dialog content area. You can place any content here including forms, text,
+        images, or other components.
+      </Dialog>
+    </>
+  );
+};
+
+export default DialogExample;
+```
+
+## Examples
+
+### Controlled Visibility
+
+Controlled Visibility demonstrates how to manually control the open/close state of the Dialog component from the outside, using React useState. Here we are following the “controlled component” pattern, where the visibility (open state) of the Dialog is not managed internally by the component itself, but instead controlled by the parent using React state.
+
+<Canvas of={DialogStories.ControlledVisibility} source={ { code: `
+import React, { useState } from "react";
+import { Dialog, Button } from "@webiny/admin-ui";
+
+const ControlledVisibilityExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Dialog"
+                onClick={() => setOpen(true)}
+            />
+
+            <Dialog
+                open={open}
+                onOpenChange={open => {
+                    if (!open) {
+                        setOpen(false);
+                    }
+                }}
+                title="Dialog Title"
+                description="A short dialog description."
+                actions={
+                    <>
+                        <Dialog.CancelAction />
+                        <Dialog.ConfirmAction />
+                    </>
+                }
+            >
+                This dialog&apos;s visibility is controlled by the open state.
+            </Dialog>
+        </>
+    );
+
+};
+
+export default ControlledVisibilityExample;
+` } } />
+
+### With Dropdown Menu
+
+<Canvas of={DialogStories.WithDropdownMenu} source={ { code: `
+import React, { useState } from "react";
+import { Dialog, Button, DropdownMenu } from "@webiny/admin-ui";
+
+const WithDropdownMenuExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <DropdownMenu trigger={<Button variant="primary" text="Open Menu" />}>
+                <DropdownMenu.Item text={"Open Dialog"} content="Open Dialog" onClick={() => setOpen(true)} />
+            </DropdownMenu>
+
+            <Dialog
+                open={open}
+                onOpenChange={() => setOpen(false)}
+                title="Dialog Title"
+                description="A short dialog description."
+                actions={
+                    <>
+                        <Dialog.CancelAction />
+                        <Dialog.ConfirmAction />
+                    </>
+                }
+            >
+                This dialog is opened from a dropdown menu item.
+            </Dialog>
+        </>
+    );
+
+};
+
+export default WithDropdownMenuExample;
+` } } />
+
+### Without Close Button
+
+<Canvas of={DialogStories.WithoutCloseButton} source={ { code: `
+import React, { useState } from "react";
+import { Dialog, Button } from "@webiny/admin-ui";
+
+const WithoutCloseButtonExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Dialog"
+                onClick={() => setOpen(true)}
+            />
+
+            <Dialog
+                open={open}
+                onOpenChange={open => setOpen(open)}
+                title="Dialog Title"
+                description="A short dialog description."
+                showCloseButton={false}
+                actions={
+                    <>
+                        <Dialog.CancelAction />
+                        <Dialog.ConfirmAction />
+                    </>
+                }
+            >
+                This dialog doesn&apos;st have a close button in the top-right corner.
+            </Dialog>
+        </>
+    );
+
+};
+
+export default WithoutCloseButtonExample;
+` } } />
+
+### Alert Dialog
+
+<Canvas of={DialogStories.AlertDialog} source={ { code: `
+import React, { useState } from "react";
+import { Dialog, Button } from "@webiny/admin-ui";
+
+const AlertDialogExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Alert Dialog"
+                onClick={() => setOpen(true)}
+            />
+
+            <Dialog
+                open={open}
+                onOpenChange={open => setOpen(open)}
+                title="Confirm Action"
+                description="Are you sure you want to delete this item?"
+                showCloseButton={false}
+                actions={
+                    <>
+                        <Dialog.CancelAction text="Cancel" />
+                        <Dialog.ConfirmAction text="Delete" />
+                    </>
+                }
+            >
+                <p>This action cannot be undone.</p>
+                <p>Deleted items cannot be recovered.</p>
+            </Dialog>
+        </>
+    );
+
+};
+
+export default AlertDialogExample;
+` } } />
+
+### With Icon
+
+<Canvas of={DialogStories.WithIcon} source={ { code: `
+import React, { useState } from "react";
+import { Dialog, Button } from "@webiny/admin-ui";
+import { ReactComponent as DoorbellIcon } from "@webiny/icons/ring_volume.svg";
+
+const WithIconExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Dialog with Icon"
+                onClick={() => setOpen(true)}
+            />
+
+            <Dialog
+                open={open}
+                onOpenChange={open => setOpen(open)}
+                title="Dialog with Icon"
+                description="This dialog has an icon in the header."
+                icon={<Dialog.Icon icon={<DoorbellIcon />} label="Title icon" />}
+                actions={
+                    <>
+                        <Dialog.CancelAction />
+                        <Dialog.ConfirmAction />
+                    </>
+                }
+            >
+                The icon helps to visually identify the purpose of this dialog.
+            </Dialog>
+        </>
+    );
+
+};
+
+export default WithIconExample;
+` } } />
+
+### Prevent Outside Dismiss
+
+<Canvas of={DialogStories.PreventOutsideDismiss} source={ { code: `
+import React, { useState } from "react";
+import { Dialog, Button } from "@webiny/admin-ui";
+
+const PreventOutsideDismissExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Modal Dialog"
+                onClick={() => setOpen(true)}
+            />
+
+            <Dialog
+                open={open}
+                onOpenChange={open => setOpen(open)}
+                title="Important Action"
+                description="This dialog requires explicit action."
+                dismissible={false}
+                actions={
+                    <>
+                        <Dialog.CancelAction />
+                        <Dialog.ConfirmAction />
+                    </>
+                }
+            >
+                This dialog cannot be dismissed by clicking outside or pressing Escape.
+                You must use one of the action buttons to close it.
+            </Dialog>
+        </>
+    );
+
+};
+
+export default PreventOutsideDismissExample;
+` } } />
+
+### With Tabs
+
+<Canvas of={DialogStories.WithTabs} source={ { code: `
+import React, { useState } from "react";
+import { Dialog, Button, Tabs } from "@webiny/admin-ui";
+
+const WithTabsExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Dialog with Tabs"
+                onClick={() => setOpen(true)}
+            />
+
+            <Dialog
+                open={open}
+                onOpenChange={open => setOpen(open)}
+                title="Settings"
+                description="Configure your preferences"
+                bodyPadding={false}
+                actions={
+                    <>
+                        <Dialog.CancelAction />
+                        <Dialog.ConfirmAction text="Save" />
+                    </>
+                }
+            >
+                <Tabs
+                    spacing="lg"
+                    tabs={[
+                        <Tabs.Tab
+                            key="account"
+                            value="account"
+                            trigger="Account"
+                            content="Make changes to your account here."
+                        />,
+                        <Tabs.Tab
+                            key="company"
+                            value="company"
+                            trigger="Company"
+                            content="Make changes to your company info here."
+                        />,
+                        <Tabs.Tab
+                            key="security"
+                            value="security"
+                            trigger="Security"
+                            content="Make changes to your security settings here."
+                        />,
+                        <Tabs.Tab
+                            key="development"
+                            value="development"
+                            trigger="Development"
+                            content="Make changes to your development settings here."
+                        />
+                    ]}
+                />
+            </Dialog>
+        </>
+    );
+
+};
+
+export default WithTabsExample;
+` } } />
+
+## Anatomy
+
+### Dialog Construction
+
+<img src="/images/storybook/dialog/anatomy.png" alt="Anatomy" />
+
+### Overlay and Positioning
+
+<img
+  src="/images/storybook/dialog/overlay-and-positioning.png"
+  alt="Dialog Overlay and Positioning"
+/>
+
+## Usage
+
+<img src="/images/storybook/dialog/usage.png" alt="Usage" />

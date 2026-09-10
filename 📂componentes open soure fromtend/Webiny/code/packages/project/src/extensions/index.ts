@@ -1,0 +1,152 @@
+import { ExtensionDefinitions } from "./ExtensionDefinitions.js";
+import { ProjectDecorator } from "./ProjectDecorator.js";
+import { ProjectImplementation } from "./ProjectImplementation.js";
+import { ProjectId } from "./ProjectId.js";
+import { Telemetry } from "./Telemetry.js";
+import { EnvVar } from "./EnvVar.js";
+import { DatabaseSetup } from "./DatabaseSetup.js";
+import { FeatureFlags } from "./FeatureFlags.js";
+import { BuildParam } from "./ApiBuildParam.js";
+import { AdminBuildParam } from "./AdminBuildParam.js";
+import { AdminApiUrl } from "./AdminApiUrl.js";
+import { AdminWebsocketsUrl } from "./AdminWebsocketsUrl.js";
+import { AdminExtension } from "./AdminExtension.js";
+import { ApiExtension } from "./ApiExtension.js";
+import { ApiMaxBundleSize } from "./ApiMaxBundleSize.js";
+import { Encryption } from "./infra/Encryption.js";
+import { Hashing } from "./infra/Hashing.js";
+
+// Hooks.
+import {
+    AdminAfterBuild,
+    AdminAfterDeploy,
+    AdminBeforeBuild,
+    AdminBeforeDeploy,
+    AdminBeforeWatch,
+    AfterBuild,
+    AfterDeploy,
+    BeforeDeploy,
+    BeforeWatch,
+    ApiAfterBuild,
+    ApiAfterDeploy,
+    ApiBeforeBuild,
+    ApiBeforeDeploy,
+    ApiBeforeWatch,
+    BeforeBuild,
+    CoreAfterBuild,
+    CoreAfterDeploy,
+    CoreBeforeBuild,
+    CoreBeforeDeploy,
+    CoreBeforeWatch
+} from "./hooks/index.js";
+
+// Pulumi (non-app-specific).
+import {
+    ProductionEnvironments,
+    PulumiResourceNamePrefix,
+    CoreStackOutputValue,
+    ApiStackOutputValue,
+    AdminStackOutputValue
+} from "./pulumi/index.js";
+
+// Exports.
+export { Telemetry };
+export { ProjectId };
+export { ProjectDecorator };
+export { ProjectImplementation };
+export { ExtensionDefinitions };
+export { EnvVar };
+export { FeatureFlags };
+export { DatabaseSetup };
+export { BuildParam };
+export { AdminBuildParam };
+export { AdminApiUrl };
+export { AdminWebsocketsUrl };
+export { AdminExtension };
+export { ApiExtension };
+export { ApiMaxBundleSize };
+export { Encryption };
+export { Hashing };
+
+// Hooks.
+export { BeforeBuild };
+export { BeforeDeploy };
+export { BeforeWatch };
+export { AfterBuild };
+export { AfterDeploy };
+export { AdminBeforeBuild };
+export { AdminBeforeDeploy };
+export { AdminBeforeWatch };
+export { AdminAfterBuild };
+export { AdminAfterDeploy };
+export { ApiBeforeBuild };
+export { ApiBeforeDeploy };
+export { ApiBeforeWatch };
+export { ApiAfterBuild };
+export { ApiAfterDeploy };
+export { CoreBeforeBuild };
+export { CoreBeforeDeploy };
+export { CoreBeforeWatch };
+export { CoreAfterBuild };
+export { CoreAfterDeploy };
+
+// Pulumi (non-app-specific).
+export { PulumiResourceNamePrefix };
+export { ProductionEnvironments };
+export { CoreStackOutputValue };
+export { ApiStackOutputValue };
+export { AdminStackOutputValue };
+
+// Definitions (used internally). 👇
+export const definitions = [
+    Telemetry.def,
+    ProjectId.def,
+    ProjectDecorator.def,
+    ProjectImplementation.def,
+    ExtensionDefinitions.def,
+    EnvVar.def,
+    FeatureFlags.def,
+
+    // Hooks.
+    AdminAfterBuild.def,
+    AdminAfterDeploy.def,
+    BeforeBuild.def,
+    BeforeDeploy.def,
+    BeforeWatch.def,
+    AfterBuild.def,
+    AfterDeploy.def,
+    AdminBeforeBuild.def,
+    AdminBeforeDeploy.def,
+    AdminBeforeWatch.def,
+    ApiAfterBuild.def,
+    ApiAfterDeploy.def,
+    ApiBeforeBuild.def,
+    ApiBeforeDeploy.def,
+    ApiBeforeWatch.def,
+    CoreAfterBuild.def,
+    CoreAfterDeploy.def,
+    CoreBeforeBuild.def,
+    CoreBeforeDeploy.def,
+    CoreBeforeWatch.def,
+
+    // Pulumi (non-app-specific).
+    PulumiResourceNamePrefix.def,
+    ProductionEnvironments.def,
+    CoreStackOutputValue.def,
+    ApiStackOutputValue.def,
+    AdminStackOutputValue.def,
+    DatabaseSetup.def,
+    BuildParam.def,
+    AdminBuildParam.def,
+    AdminApiUrl.def,
+    AdminWebsocketsUrl.def,
+    AdminExtension.def,
+    ApiExtension.def,
+    ApiMaxBundleSize.def,
+    Encryption.def,
+    Hashing.def
+];
+
+export { Project } from "./Project.js";
+
+export * from "../defineExtension/index.js";

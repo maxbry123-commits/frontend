@@ -1,0 +1,42 @@
+import { Result } from "@webiny/feature/api";
+import { CreateEntryRepository as RepositoryAbstraction } from "./abstractions.js";
+import { EntryPersistenceError } from "~/domain/contentEntry/errors.js";
+import type { CmsEntry, CmsModel } from "~/types/index.js";
+import { CreateEntryStorageOperation } from "~/features/shared/storageOperations/entry/CreateEntryStorageOperation.js";
+import { EntryToStorageTransform } from "~/legacy/abstractions.js";
+
+/**
+ * CreateEntryRepository - Handles persistence of new entries.
+ * Transforms domain entry to storage format and persists it.
+ */
+class CreateEntryRepositoryImpl implements RepositoryAbstraction.Interface {
+    public constructor(
+        private entryToStorageTransform: EntryToStorageTransform.Interface,
+        private createEntryStorage: CreateEntryStorageOperation.Interface
+    ) {}
+
+    public async execute(
+        model: CmsModel,
+        entry: CmsEntry
+    ): Promise<Result<void, RepositoryAbstraction.Error>> {
+        try {
+            // Transform domain entry to storage format
+            const storageEntry = await this.entryToStorageTransform(model, entry);
+
+            // Persist to storage
+            await this.createEntryStorage.execute(model, {
+                entry,
+                storageEntry
+            });
+
+            return Result.ok();
+        } catch (error) {
+            return Result.fail(new EntryPersistenceError(error as Error));
+        }
+    }
+}
+
+export const CreateEntryRepository = RepositoryAbstraction.createImplementation({
+    implementation: CreateEntryRepositoryImpl,
+    dependencies: [EntryToStorageTransform, CreateEntryStorageOperation]
+});

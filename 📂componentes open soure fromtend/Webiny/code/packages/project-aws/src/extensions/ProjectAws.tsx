@@ -1,0 +1,75 @@
+import React from "react";
+import {
+    AdminAfterDeploy,
+    AdminBeforeBuild,
+    AdminBeforeWatch,
+    AfterDeploy,
+    ApiAfterDeploy,
+    ApiBeforeDeploy,
+    ApiBeforeWatch,
+    BeforeDeploy,
+    CoreBeforeDeploy,
+    DatabaseSetup,
+    ExtensionDefinitions,
+    Project,
+    ProjectImplementation
+} from "@webiny/project/extensions/index.js";
+import { createPathResolver } from "@webiny/project";
+import { CliCommand } from "@webiny/cli-core/extensions/index.js";
+import { CorePulumi } from "~/pulumi/extensions/CorePulumi.js";
+
+const p = createPathResolver(import.meta.dirname);
+
+export const ProjectAws = () => {
+    return (
+        <>
+            <Project />
+
+            {/* Database Setup - default to DynamoDB only */}
+            <DatabaseSetup setupName="ddb" />
+
+            {/* Set database setup output value in Core stack */}
+            <CorePulumi src={p("ProjectAws/SetDatabaseSetupOutput.js")} />
+
+            {/* Stack Output Services */}
+            <ProjectImplementation src={p("ProjectAws/CoreStackOutputService.js")} singleton />
+            <ProjectImplementation src={p("ProjectAws/ApiStackOutputService.js")} singleton />
+            <ProjectImplementation src={p("ProjectAws/AdminStackOutputService.js")} singleton />
+
+            <ProjectImplementation src={p("../features/InvokeLambdaFunction.js")} singleton />
+            <ProjectImplementation src={p("../features/ApiGqlClient.js")} singleton />
+
+            <AdminAfterDeploy src={p("ProjectAws/UploadAdminAppToS3.js")} />
+
+            <ApiAfterDeploy src={p("ProjectAws/AutoInstall/AutoInstallAfterApiDeploy.js")} />
+            <ExtensionDefinitions src={p("definitions.js")} />
+            <ExtensionDefinitions src={p("ProjectAws/definitions.js")} />
+
+            {/* Admin env vars */}
+            <AdminBeforeBuild src={p("ProjectAws/SetAdminEnvVars/SetAdminEnvVarsBeforeBuild.js")} />
+            <AdminBeforeWatch src={p("ProjectAws/SetAdminEnvVars/SetAdminEnvVarsBeforeWatch.js")} />
+
+            {/* Deployment gates — AWS-only (there is no Pulumi stack output to check off-AWS) */}
+            <ApiBeforeWatch src={p("ProjectAws/EnsureApiDeployedBeforeWatch.js")} />
+            <AdminBeforeBuild src={p("ProjectAws/EnsureApiDeployedBeforeAdminBuild.js")} />
+            <AdminBeforeWatch src={p("ProjectAws/EnsureApiDeployedBeforeAdminWatch.js")} />
+            <ApiBeforeDeploy src={p("ProjectAws/EnsureCoreDeployedBeforeApiDeploy.js")} />
+            <CoreBeforeDeploy src={p("ProjectAws/ValidateProductionPulumiState.js")} />
+
+            {/* Deploy-time hooks — server hosting type has no deploy command, so these are AWS-only */}
+            <BeforeDeploy src={p("ProjectAws/EnsureTelemetryEnabledForOss.js")} />
+            <BeforeDeploy src={p("ProjectAws/ValidateEncryptionBeforeDeploy.js")} />
+            <AdminAfterDeploy src={p("ProjectAws/TelemetryNoLongerNewUser.js")} />
+
+            {/* AWS credentials check */}
+            <BeforeDeploy src={p("ProjectAws/EnsureAwsCredentialsBeforeDeploy.js")} />
+
+            {/* Blue-green */}
+            <CliCommand src={p("ProjectAws/BlueGreenDeployments/SetPrimaryVariantCliCommand.js")} />
+            <BeforeDeploy src={p("ProjectAws/BlueGreenDeployments/EnsureVariantBeforeDeploy.js")} />
+            <AfterDeploy
+                src={p("ProjectAws/BlueGreenDeployments/PrintDeploymentInfoAfterDeploy.js")}
+            />
+        </>
+    );
+};

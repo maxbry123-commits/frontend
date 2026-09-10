@@ -1,0 +1,171 @@
+import * as React from "react";
+import { makeDecoratable, withStaticProps } from "~/utils.js";
+import { OverlayLoader } from "~/Loader/index.js";
+import { DialogContent } from "./components/DialogContent.js";
+import { DialogHeader } from "~/Dialog/components/DialogHeader.js";
+import { DialogBody } from "~/Dialog/components/DialogBody.js";
+import { DialogFooter } from "~/Dialog/components/DialogFooter.js";
+import { DialogOverlay } from "~/Dialog/components/DialogOverlay.js";
+import { DialogPortal } from "./components/DialogPortal.js";
+import { DialogRoot } from "./components/DialogRoot.js";
+import { DialogTrigger } from "./components/DialogTrigger.js";
+import { Icon } from "./components/Icon.js";
+import { ConfirmAction } from "./components/ConfirmAction.js";
+import { CancelAction } from "./components/CancelAction.js";
+import { CloseDialogIconButton } from "~/Dialog/components/CloseDialogIconButton.js";
+import { DialogClose } from "~/Dialog/components/DialogClose.js";
+
+interface DialogProps
+    extends
+        React.ComponentPropsWithoutRef<typeof DialogRoot>,
+        Omit<React.ComponentPropsWithoutRef<typeof DialogContent>, "title"> {
+    trigger?: React.ReactNode;
+    title?: React.ReactNode;
+    icon?: React.ReactElement;
+    showCloseButton?: boolean;
+    dismissible?: boolean;
+    bodyPadding?: boolean;
+    scrollable?: boolean;
+    description?: React.ReactNode;
+    children: React.ReactNode;
+    actions?: React.ReactNode;
+    info?: React.ReactNode;
+    loading?: boolean | { text?: string };
+    overlay?: React.ReactNode;
+    onClose?: () => void;
+    onOpen?: () => void;
+}
+
+const DialogBase = (props: DialogProps) => {
+    const {
+        rootProps,
+        triggerProps,
+        contentProps,
+        headerProps,
+        bodyProps,
+        footerProps,
+        closeButtonProps
+    } = React.useMemo(() => {
+        const {
+            // Root props.
+            defaultOpen,
+            open,
+            onOpenChange: originalOnOpenChange,
+            onClose,
+            onOpen,
+            modal,
+            dir,
+
+            // Shared props.
+            size,
+
+            // Trigger props.
+            trigger,
+
+            // Header props.
+            title,
+            icon,
+            description,
+
+            // Body props.
+            children,
+            bodyPadding,
+            scrollable,
+
+            // Footer props.
+            actions,
+            info,
+
+            // Overlay props.
+            loading,
+            overlay,
+
+            // Close button props.
+            showCloseButton = true,
+
+            // Content props.
+            ...rest
+        } = props;
+
+        // Handles dialog open state changes, calling original and onClose / onOpen callbacks as needed
+        const onOpenChange = (open: boolean) => {
+            originalOnOpenChange && originalOnOpenChange(open);
+
+            if (onClose && !open) {
+                onClose();
+            }
+
+            if (onOpen && open) {
+                onOpen();
+            }
+        };
+
+        const resolvedOverlay = (() => {
+            if (overlay) {
+                return overlay;
+            }
+            if (!loading) {
+                return undefined;
+            }
+            const text = typeof loading === "object" ? loading.text : undefined;
+            return <OverlayLoader text={text} />;
+        })();
+
+        return {
+            rootProps: {
+                defaultOpen,
+                open,
+                onOpenChange,
+                modal,
+                dir,
+                size
+            },
+            triggerProps: {
+                // Temporary fix. We need this because `ref` doesn't get passed to components
+                // that are decorated with `makeDecoratable`. This will be fixed in the future.
+                children: <div>{trigger}</div>
+            },
+            headerProps: { title, icon, description, size },
+            bodyProps: { children, bodyPadding, scrollable, size },
+            footerProps: { info, actions, size },
+            closeButtonProps: { show: showCloseButton, size },
+            contentProps: { ...rest, size, overlay: resolvedOverlay }
+        };
+    }, [props]);
+
+    return (
+        <DialogRoot {...rootProps}>
+            {triggerProps.children && <DialogTrigger {...triggerProps} asChild />}
+            <DialogPortal>
+                <div data-role="dialog" className={"z-overlay absolute"}>
+                    <DialogOverlay />
+                    <DialogContent
+                        {...contentProps}
+                        header={<DialogHeader {...headerProps} />}
+                        footer={<DialogFooter {...footerProps} />}
+                        closeButton={
+                            closeButtonProps.show ? (
+                                <CloseDialogIconButton size={closeButtonProps.size} />
+                            ) : undefined
+                        }
+                    >
+                        <DialogBody {...bodyProps} />
+                    </DialogContent>
+                </div>
+            </DialogPortal>
+        </DialogRoot>
+    );
+};
+
+DialogBase.displayName = "Dialog";
+
+const DecoratableDialog = makeDecoratable("Dialog", DialogBase);
+
+const Dialog = withStaticProps(DecoratableDialog, {
+    ConfirmAction,
+    CancelAction,
+    Icon,
+    Close: DialogClose
+});
+
+export { Dialog, type DialogProps };

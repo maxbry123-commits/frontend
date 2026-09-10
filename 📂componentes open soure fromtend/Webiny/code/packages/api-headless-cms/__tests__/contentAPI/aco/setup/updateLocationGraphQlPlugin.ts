@@ -1,0 +1,59 @@
+import { HeadlessCms } from "~/features/shared/abstractions.js";
+import { ErrorResponse, Response } from "@webiny/api-graphql";
+import { createCmsGraphQLSchemaPlugin } from "~/index";
+import { ACO_TEST_MODEL_ID } from "./model";
+import type { CmsContext } from "~/types";
+import { IdentityContext } from "@webiny/api-core/features/security/IdentityContext/abstractions.js";
+
+const createUpdateLocationGraphQlPlugin = () => {
+    const plugin = createCmsGraphQLSchemaPlugin<CmsContext>({
+        typeDefs: /* GraphQL */ `
+            type UpdateTestAcoModelLocationResponse {
+                data: TestAcoModel
+                error: CmsError
+            }
+
+            extend type Mutation {
+                updateTestAcoModelLocation(
+                    id: ID!
+                    folderId: ID!
+                ): UpdateTestAcoModelLocationResponse
+            }
+        `,
+        resolvers: {
+            Mutation: {
+                updateTestAcoModelLocation: async (_, args, context) => {
+                    return context.container
+                        .resolve(IdentityContext)
+                        .withoutAuthorization(async () => {
+                            try {
+                                const model = await context.container
+                                    .resolve(HeadlessCms)
+                                    .getModel(ACO_TEST_MODEL_ID);
+                                if (!model) {
+                                    throw new Error(`Model "${ACO_TEST_MODEL_ID}" not found!`);
+                                }
+                                const entry = await context.container
+                                    .resolve(HeadlessCms)
+                                    .updateEntry(model, args.id, {
+                                        wbyAco_location: {
+                                            folderId: args.folderId
+                                        }
+                                    });
+                                return new Response(entry);
+                            } catch (ex) {
+                                return new ErrorResponse(ex);
+                            }
+                        });
+                }
+            }
+        }
+    });
+
+    plugin.name = "headless-cms.graphqlCmsSchema.updateLocation";
+    return plugin;
+};
+
+export const createUpdateLocationGraphQl = () => {
+    return [createUpdateLocationGraphQlPlugin()];
+};

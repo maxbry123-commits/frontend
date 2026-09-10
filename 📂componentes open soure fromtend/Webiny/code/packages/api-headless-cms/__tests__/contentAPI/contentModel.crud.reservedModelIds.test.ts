@@ -1,0 +1,83 @@
+import { beforeEach, describe, expect, it } from "vitest";
+import { CmsGroup } from "~/types";
+import { useGraphQLHandler } from "../testHelpers/useGraphQLHandler";
+import { pubSubTracker } from "./mocks/lifecycleHooks";
+
+describe("content model test reserved model ids", () => {
+    const manageHandlerOpts = { path: "manage" };
+
+    const { createContentModelGroupMutation, createContentModelMutation } =
+        useGraphQLHandler(manageHandlerOpts);
+
+    let contentModelGroup: CmsGroup;
+
+    beforeEach(async () => {
+        const [createCMG] = await createContentModelGroupMutation({
+            data: {
+                name: "Group",
+                slug: "group",
+                icon: {
+                    name: "ico/ico",
+                    value: "ico/ico",
+                    type: "ico/ico"
+                },
+                description: "description"
+            }
+        });
+        contentModelGroup = createCMG.data.createContentModelGroup.data;
+        // we need to reset this since we are using a singleton
+        pubSubTracker.reset();
+    });
+
+    it(`should not allow creation of a model the modelId set to blacklisted value`, async () => {
+        const [response1] = await createContentModelMutation({
+            data: {
+                name: "Content Model",
+                modelId: "contentModel",
+                singularApiName: "ContentModel",
+                pluralApiName: "ContentModels",
+                group: contentModelGroup.slug
+            }
+        });
+
+        expect(response1).toEqual({
+            data: {
+                createContentModel: {
+                    data: null,
+                    error: {
+                        code: "Cms/Model/ValidationError",
+                        data: {
+                            input: "contentModel"
+                        },
+                        message: 'Provided model ID "contentModel" is not allowed.'
+                    }
+                }
+            }
+        });
+
+        const [response2] = await createContentModelMutation({
+            data: {
+                name: "Content Model Group",
+                modelId: "contentModelGroup",
+                singularApiName: "ContentModelGroup",
+                pluralApiName: "ContentModelsGroups",
+                group: contentModelGroup.slug
+            }
+        });
+
+        expect(response2).toEqual({
+            data: {
+                createContentModel: {
+                    data: null,
+                    error: {
+                        code: "Cms/Model/ValidationError",
+                        data: {
+                            input: "contentModelGroup"
+                        },
+                        message: 'Provided model ID "contentModelGroup" is not allowed.'
+                    }
+                }
+            }
+        });
+    });
+});

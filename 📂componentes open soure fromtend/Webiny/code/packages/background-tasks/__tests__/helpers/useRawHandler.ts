@@ -1,0 +1,102 @@
+import { createTestHttpHandler } from "@webiny/event-handler-core/features/testing";
+import { ApiCoreFeature, registerApiCoreStorageOperations } from "@webiny/api-core";
+import { HeadlessCmsFeature } from "@webiny/api-headless-cms";
+import { GraphQLEngineFeature, GraphQLContextualSchema } from "@webiny/api-graphql";
+import { buildSchema } from "graphql";
+import { WcpLicenseLoader } from "@webiny/api-core/features/wcp/WcpLicenseLoader.js";
+import { createTestWcpLicense } from "@webiny/wcp/testing/createTestWcpLicense.js";
+import { getStorageOps } from "@webiny/api-core/testing/environment.js";
+import type { ApiCoreStorageOperations } from "@webiny/api-core/types/core.js";
+import { BackgroundTasksFeature } from "~/api/BackgroundTasksFeature.js";
+import { TasksCrud } from "~/api/TasksCrud.js";
+import { processLegacyPlugins } from "./bridgeLegacyPlugins";
+import { createMockTaskService } from "~tests/mocks/taskTriggerTransportPlugin";
+import { TaskService } from "~/api/domain/TaskService.js";
+import { TestIdentity, TestAuthenticator } from "@webiny/api-core-testing";
+import { TestPermissions, TestAuthorizer } from "@webiny/api-core-testing";
+import { AuthTriggerHandler } from "@webiny/api-core-testing";
+import { TenantFromHeaderInitializer } from "./mocks/TenantFromHeaderInitializer";
+import type { IdentityData } from "@webiny/api-core/features/security/IdentityContext/index.js";
+import type { SecurityPermission } from "@webiny/api-core/types/security.js";
+
+export interface UseRawHandlerParams {
+    plugins?: any[];
+}
+
+const defaultIdentity: IdentityData = {
+    id: "id-12345678",
+    type: "admin",
+    displayName: "John Doe"
+};
+
+const defaultPermissions: SecurityPermission[] = [
+    { name: "task.entry", rwd: "rwd" },
+    { name: "*" }
+];
+
+export const useRawHandler = <C = any>(params?: UseRawHandlerParams) => {
+    const apiCoreStorage = getStorageOps<ApiCoreStorageOperations>("apiCore");
+    const cmsStorage = getStorageOps("cms");
+
+    let capturedCtx: any = null;
+
+    const handler = createTestHttpHandler({
+        root: container => {
+            container.registerInstance(TestIdentity, defaultIdentity);
+            container.registerInstance(TestPermissions, { list: defaultPermissions });
+            container.register(TestAuthenticator);
+            container.register(TestAuthorizer);
+            container.registerDecorator(AuthTriggerHandler);
+            container.registerDecorator(TenantFromHeaderInitializer);
+        },
+        child: async container => {
+            const wcpLicense = await WcpLicenseLoader.load(createTestWcpLicense());
+            registerApiCoreStorageOperations(container, apiCoreStorage.storageOperations);
+            ApiCoreFeature.register(container, { wcpLicense });
+            processLegacyPlugins(container, cmsStorage.plugins);
+            HeadlessCmsFeature.register(container, { type: "manage" });
+
+            BackgroundTasksFeature.register(container);
+
+            container.registerInstance(TaskService, createMockTaskService());
+            // DI-native plugins are plain `container => {}` functions; call them directly.
+            for (const plugin of [...(params?.plugins || [])].flat(Infinity as 1).filter(Boolean)) {
+                (plugin as (container: any) => void)(container);
+            }
+            const STUB_SCHEMA = buildSchema("type Query { _empty: String }");
+            container.registerInstance(GraphQLContextualSchema, {
+                async build(ctx: Record<string, any>) {
+                    capturedCtx = ctx;
+                    return STUB_SCHEMA;
+                }
+            });
+
+            GraphQLEngineFeature.register(container);
+        }
+    });
+
+    return {
+        handle: async (payload?: Record<string, any>): Promise<C> => {
+            capturedCtx = null;
+            await handler({
+                method: "POST",
+                path: "/graphql",
+                headers: {
+                    "x-tenant": "root",
+                    ...(payload?.headers || {}),
+                    "content-type": "application/json",
+                    authorization: "Bearer test-token"
+                },
+                body: { query: "{ __typename }" }
+            });
+            // DI-native source for the legacy `context.tasks` service-locator: resolve the CRUD
+            // aggregate from the container (registered by BackgroundTasksFeature) and expose it on
+            // the captured context. See the "full-DI tasks" cleanup note to retire this bridge.
+            const [tasksCrud] = capturedCtx.container.resolveAll(TasksCrud);
+            if (tasksCrud) {
+                capturedCtx.tasks = tasksCrud;
+            }
+            return capturedCtx as C;
+        }
+    };
+};

@@ -1,0 +1,11 @@
+import { getStackOutput } from "~/pulumi/getStackOutput.js";
+import type { IGetSyncSystemOutputResult } from "~/pulumi/apps/syncSystem/types.js";
+
+export const getSyncSystemOutput = () => {
+    return getStackOutput<IGetSyncSystemOutputResult>("sync");
+};
+
+export const asyncGetSyncSystemOutput = async (): Promise<IGetSyncSystemOutputResult> => {
+    const value = await getSyncSystemOutput();
+    return value!;
+};

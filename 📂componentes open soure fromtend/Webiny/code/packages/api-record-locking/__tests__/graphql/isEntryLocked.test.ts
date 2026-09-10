@@ -1,0 +1,24 @@
+import { describe, it, expect } from "vitest";
+import { useGraphQLHandler } from "~tests/helpers/useGraphQLHandler";
+
+describe("is entry locked", () => {
+    const { isEntryLockedQuery } = useGraphQLHandler();
+
+    it("should return false on checking if entry is locked", async () => {
+        const [response] = await isEntryLockedQuery({
+            id: "someId",
+            type: "cms#author"
+        });
+
+        expect(response).toEqual({
+            data: {
+                recordLocking: {
+                    isEntryLocked: {
+                        data: false,
+                        error: null
+                    }
+                }
+            }
+        });
+    });
+});

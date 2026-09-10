@@ -1,0 +1,373 @@
+import * as aws from "@pulumi/aws";
+import { createPulumiApp, isResourceOfType } from "@webiny/pulumi";
+import { CoreCognito } from "./CoreCognito.js";
+import { CoreDynamo } from "./CoreDynamo.js";
+import { OpenSearch } from "./CoreOpenSearch.js";
+import { CoreEventBus } from "./CoreEventBus.js";
+import { CoreFileManger } from "./CoreFileManager.js";
+import { CoreVpc } from "./CoreVpc.js";
+import { WatchCommand } from "./WatchCommand.js";
+import { withServiceManifest } from "~/pulumi/utils/withServiceManifest.js";
+import {
+    addServiceManifestTableItem,
+    type TableDefinition
+} from "~/pulumi/utils/addServiceManifestTableItem.js";
+import * as random from "@pulumi/random";
+
+import { getAwsProjectSdk } from "~/pulumi/getAwsProjectSdk.js";
+import { CorePulumi } from "~/abstractions/features/pulumi/index.js";
+import { corePulumi } from "~/pulumi/features/CorePulumi/index.js";
+import { getOsConfigFromExtension } from "~/pulumi/apps/extensions/getOsConfigFromExtension.js";
+import { getVpcConfigFromExtension } from "~/pulumi/apps/extensions/getVpcConfigFromExtension.js";
+import { applyAwsResourceTags, getAwsRegion } from "~/pulumi/apps/awsUtils.js";
+import { configureS3BucketMalwareProtection } from "./configureS3BucketMalwareProtection.js";
+import * as pulumi from "@pulumi/pulumi";
+import { CoreAuditLogsDynamo } from "~/pulumi/index.js";
+
+export type CorePulumiApp = ReturnType<typeof createCorePulumiApp>;
+
+export function createCorePulumiApp() {
+    const baseApp = createPulumiApp({
+        name: "core",
+        path: "apps/core",
+        program: async app => {
+            const sdk = await getAwsProjectSdk();
+            const projectConfig = await sdk.getProjectConfig();
+
+            const pulumiResourceNamePrefix = await sdk.getPulumiResourceNamePrefix();
+            const coreStackOutput = await sdk.getAppStackOutput<{
+                opensearchDomainName?: string;
+                primaryDynamodbTableName?: string;
+            }>("core");
+            const vpcExtensionsConfig = getVpcConfigFromExtension(projectConfig);
+            const opensearchExtensionConfig = getOsConfigFromExtension(projectConfig);
+
+            const deploymentId = new random.RandomId("deploymentId", { byteLength: 8 });
+
+            let searchEngineType: "opensearch" | null = null;
+            let searchEngineParams: typeof opensearchExtensionConfig | null = null;
+
+            if (opensearchExtensionConfig) {
+                searchEngineParams = opensearchExtensionConfig;
+                searchEngineType = "opensearch";
+            }
+
+            if (searchEngineParams) {
+                const params = searchEngineParams;
+                if (typeof params === "object") {
+                    if (params.endpoint) {
+                        process.env.OPENSEARCH_ENDPOINT = params.endpoint;
+                    }
+
+                    if (params.domainName) {
+                        process.env.AWS_OS_DOMAIN_NAME = params.domainName;
+                    }
+
+                    if (params.indexPrefix) {
+                        process.env.OPENSEARCH_INDEX_PREFIX = params.indexPrefix;
+                    }
+
+                    if (params.sharedIndexes) {
+                        process.env.OPENSEARCH_SHARED_INDEXES = "true";
+                    }
+
+                    if (params.username) {
+                        process.env.OPENSEARCH_USERNAME = params.username;
+                    }
+
+                    if (params.password) {
+                        process.env.OPENSEARCH_PASSWORD = params.password;
+                    }
+                }
+            }
+
+            if (pulumiResourceNamePrefix) {
+                app.onResource(resource => {
+                    if (!resource.name.startsWith(pulumiResourceNamePrefix)) {
+                        resource.name = `${pulumiResourceNamePrefix}${resource.name}`;
+                    }
+                });
+            }
+
+            // <-------------------- Enterprise start -------------------->
+            app.addHandler(async () => {
+                const usingAdvancedVpcParams =
+                    vpcExtensionsConfig && typeof vpcExtensionsConfig !== "boolean";
+
+                const featureFlags = await sdk.getFeatureFlags();
+                if (featureFlags.isEnabled("fileManager.threatDetection")) {
+                    configureS3BucketMalwareProtection(app as CorePulumiApp);
+                }
+
+                // Not using advanced VPC params? Then immediately exit.
+                if (!usingAdvancedVpcParams) {
+                    return;
+                }
+
+                const { resources, addResource, onResource } = app as CorePulumiApp;
+                const { useExistingVpc, useVpcEndpoints } = vpcExtensionsConfig;
+
+                // 1. We first deal with "existing VPC" setup.
+                if (useExistingVpc) {
+                    if ("useVpcEndpoints" in vpcExtensionsConfig) {
+                        throw new Error(
+                            "Cannot specify `useVpcEndpoints` parameter when using an existing VPC. The VPC endpoints configurations should be already defined within the existing VPC."
+                        );
+                    }
+
+                    if (opensearchExtensionConfig) {
+                        if (!useExistingVpc.openSearchDomainVpcConfig) {
+                            throw new Error(
+                                "Cannot specify `useExistingVpc` parameter because the `openSearchDomainVpcConfig` parameter wasn't provided."
+                            );
+                        }
+
+                        onResource(resource => {
+                            if (isResourceOfType(resource, aws.opensearch.Domain)) {
+                                resource.config.vpcOptions(
+                                    useExistingVpc!.openSearchDomainVpcConfig
+                                );
+                            }
+                        });
+                    }
+
+                    if (!useExistingVpc.lambdaFunctionsVpcConfig) {
+                        throw new Error(
+                            "Cannot specify `useExistingVpc` parameter because the `lambdaFunctionsVpcConfig` parameter wasn't provided."
+                        );
+                    }
+
+                    onResource(resource => {
+                        if (isResourceOfType(resource, aws.lambda.Function)) {
+                            const canUseVpc = resource.meta.canUseVpc !== false;
+                            if (canUseVpc) {
+                                resource.config.vpcConfig(useExistingVpc!.lambdaFunctionsVpcConfig);
+                            }
+                        }
+
+                        if (isResourceOfType(resource, aws.iam.Role)) {
+                            if (resource.meta.isLambdaFunctionRole) {
+                                addResource(aws.iam.RolePolicyAttachment, {
+                                    name: `${resource.name}-vpc-access-execution-role`,
+                                    config: {
+                                        role: resource.output.name,
+                                        policyArn:
+                                            aws.iam.ManagedPolicy.AWSLambdaVPCAccessExecutionRole
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                    return;
+                }
+
+                // 2. Now we deal with "non-existing VPC" setup.
+                if (useVpcEndpoints) {
+                    const region = getAwsRegion(app);
+
+                    onResource(resource => {
+                        if (isResourceOfType(resource, aws.ec2.Vpc)) {
+                            resource.config.enableDnsSupport(true);
+                            resource.config.enableDnsHostnames(true);
+                        }
+                    });
+
+                    const { vpc, subnets, routeTables } = resources.vpc!;
+                    addResource(aws.ec2.VpcEndpoint, {
+                        name: "vpc-s3-vpc-endpoint",
+                        config: {
+                            vpcId: vpc.output.id,
+                            serviceName: pulumi.interpolate`com.amazonaws.${region}.s3`,
+                            routeTableIds: [routeTables.privateSubnets.output.id]
+                        }
+                    });
+
+                    addResource(aws.ec2.VpcEndpoint, {
+                        name: "vpc-dynamodb-vpc-endpoint",
+                        config: {
+                            vpcId: vpc.output.id,
+                            serviceName: pulumi.interpolate`com.amazonaws.${region}.dynamodb`,
+                            routeTableIds: [routeTables.privateSubnets.output.id]
+                        }
+                    });
+
+                    addResource(aws.ec2.VpcEndpoint, {
+                        name: "vpc-sqs-vpc-endpoint",
+                        config: {
+                            vpcId: vpc.output.id,
+                            serviceName: pulumi.interpolate`com.amazonaws.${region}.sqs`,
+                            vpcEndpointType: "Interface",
+                            privateDnsEnabled: true,
+                            securityGroupIds: [vpc.output.defaultSecurityGroupId],
+                            subnetIds: subnets.private.map(subNet => subNet.output.id)
+                        }
+                    });
+
+                    addResource(aws.ec2.VpcEndpoint, {
+                        name: "vpc-events-vpc-endpoint",
+                        config: {
+                            vpcId: vpc.output.id,
+                            serviceName: pulumi.interpolate`com.amazonaws.${region}.events`,
+                            vpcEndpointType: "Interface",
+                            privateDnsEnabled: true,
+                            securityGroupIds: [vpc.output.defaultSecurityGroupId],
+                            subnetIds: subnets.private.map(subNet => subNet.output.id)
+                        }
+                    });
+                }
+            });
+            // <-------------------- Enterprise end -------------------->
+
+            // Overrides must be applied via a handler, registered at the very start of the program.
+            // By doing this, we're ensuring user's adjustments are not applied to late.
+            sdk.getContainer().registerComposite(corePulumi);
+            const pulumiHandlers = sdk.getContainer().resolve(CorePulumi);
+
+            app.addHandler(() => {
+                return pulumiHandlers.execute(app as CorePulumiApp);
+            });
+
+            const isProduction = app.env.isProduction;
+            const protect = isProduction;
+
+            // Setup DynamoDB table
+            const dynamoDbTable = app.addModule(CoreDynamo, { protect });
+            const auditLogsDynamoDbTable = app.addModule(CoreAuditLogsDynamo, { protect });
+
+            // Setup VPC
+            const vpcEnabled =
+                vpcExtensionsConfig === true ||
+                typeof vpcExtensionsConfig === "object" ||
+                isProduction;
+
+            const vpc = vpcEnabled ? app.addModule(CoreVpc) : null;
+
+            // Setup Cognito
+            const cognito = app.addModule(CoreCognito, {
+                protect,
+                useEmailAsUsername: false,
+                mfa: process.env.COGNITO_MFA === "true"
+            });
+
+            // Cognito custom:id was originally set to maxLength 36 (UUID). Federated OIDC
+            // providers (e.g., Entra ID) can produce sub values longer than 36 chars. Since
+            // Cognito doesn't allow changing custom attribute constraints after pool creation,
+            // we only increase it for new deployments. Existing pools keep their original limit.
+            const isNewDeployment = !coreStackOutput || Object.keys(coreStackOutput).length === 0;
+            if (isNewDeployment) {
+                cognito.userPool.config.schemas(schemas => {
+                    return schemas?.map(schema => {
+                        if (schema.name === "id") {
+                            return {
+                                ...schema,
+                                stringAttributeConstraints: {
+                                    ...schema.stringAttributeConstraints,
+                                    maxLength: "256"
+                                }
+                            };
+                        }
+                        return schema;
+                    });
+                });
+            } else {
+                cognito.userPool.opts.ignoreChanges = [
+                    ...(cognito.userPool.opts.ignoreChanges || []),
+                    "schemas"
+                ];
+            }
+
+            // Setup event bus
+            const eventBus = app.addModule(CoreEventBus);
+
+            // Setup file core bucket
+            const { bucket: fileManagerBucket } = app.addModule(CoreFileManger, { protect });
+
+            let opensearch;
+            if (searchEngineType === "opensearch") {
+                const prevDomainName = coreStackOutput?.opensearchDomainName;
+
+                // When upgrading from old code that never stored opensearchDomainName, the old
+                // code always generated domain names without any prefix (app.params.create
+                // .pulumiResourceNamePrefix was never a real Pulumi param, so it returned "").
+                // Using the SDK default "wby-" prefix here would generate a different name and
+                // cause Pulumi to destroy and recreate the cluster.
+                const isUpgradeFromOldCode =
+                    !!coreStackOutput?.primaryDynamodbTableName && !prevDomainName;
+                const namePrefixForOs = isUpgradeFromOldCode ? "" : pulumiResourceNamePrefix || "";
+
+                opensearch = app.addModule(OpenSearch, {
+                    protect,
+                    namePrefix: namePrefixForOs,
+                    prevDomainName
+                });
+            }
+
+            app.addModule(WatchCommand, { deploymentId: deploymentId.hex });
+
+            app.addOutputs({
+                deploymentId: deploymentId.hex,
+                region: aws.config.region,
+                fileManagerBucketId: fileManagerBucket.output.id,
+                primaryDynamodbTableArn: dynamoDbTable.output.arn,
+                primaryDynamodbTableName: dynamoDbTable.output.name,
+                primaryDynamodbTableHashKey: dynamoDbTable.output.hashKey,
+                primaryDynamodbTableRangeKey: dynamoDbTable.output.rangeKey,
+                auditLogsDynamodbTableArn: auditLogsDynamoDbTable.output.arn,
+                auditLogsDynamodbTableName: auditLogsDynamoDbTable.output.name,
+                auditLogsDynamodbTableHashKey: auditLogsDynamoDbTable.output.hashKey,
+                auditLogsDynamodbTableRangeKey: auditLogsDynamoDbTable.output.rangeKey,
+                cognitoUserPoolId: cognito.userPool.output.id,
+                cognitoUserPoolArn: cognito.userPool.output.arn,
+                cognitoUserPoolPasswordPolicy: cognito.userPool.output.passwordPolicy,
+                cognitoAppClientId: cognito.userPoolClient.output.id,
+                eventBusName: eventBus.output.name,
+                eventBusArn: eventBus.output.arn
+            });
+
+            // Applies internal and user-defined AWS tags.
+            await applyAwsResourceTags("core");
+
+            return {
+                dynamoDbTable,
+                vpc,
+                ...cognito,
+                fileManagerBucket,
+                eventBus,
+                opensearch
+            };
+        }
+    });
+
+    const app = withServiceManifest(baseApp, manifests => {
+        const dynamoTable = baseApp.resources.dynamoDbTable;
+
+        const table: TableDefinition = {
+            tableName: dynamoTable.output.name,
+            hashKey: dynamoTable.output.hashKey,
+            rangeKey: dynamoTable.output.rangeKey
+        };
+
+        manifests.forEach(manifest => addServiceManifestTableItem(baseApp, table, manifest));
+    });
+
+    app.addHandler(() => {
+        app.addServiceManifest({
+            name: "core",
+            manifest: {
+                eventBus: {
+                    arn: baseApp.resources.eventBus.output.arn,
+                    name: baseApp.resources.eventBus.output.name
+                },
+                dynamodbTable: {
+                    arn: baseApp.resources.dynamoDbTable.output.arn,
+                    name: baseApp.resources.dynamoDbTable.output.name,
+                    hashKey: baseApp.resources.dynamoDbTable.output.hashKey,
+                    rangeKey: baseApp.resources.dynamoDbTable.output.rangeKey
+                }
+            }
+        });
+    });
+
+    return app;
+}

@@ -1,0 +1,126 @@
+import type { GraphQLHandlerParams } from "./useGraphQLHandler";
+import { useGraphQLHandler } from "./useGraphQLHandler";
+import type { CmsModel } from "~/types";
+import { getCmsModel } from "~tests/contentAPI/mocks/contentModels";
+
+const productFields = `
+    id
+    entryId
+    createdOn
+    modifiedOn
+    savedOn
+    lastPublishedOn
+    firstPublishedOn
+    # user defined fields
+    values {
+        title
+        category {
+            id
+            values {
+                title
+            }
+        }
+        image
+        price
+        inStock
+        itemsInStock
+        availableOn
+        color
+        availableSizes
+        richText
+        variant {
+            name
+            price
+            images
+            category {
+                id
+                values {
+                    title
+                }
+            }
+            options {
+                name
+                price
+                image
+                longText
+                category {
+                    id
+                    values {
+                        title
+                    }
+                }
+                categories {
+                    id
+                    values {
+                        title
+                    }
+                }
+            }
+        }
+    }
+`;
+
+const errorFields = `
+    error {
+        code
+        message
+        data
+    }
+`;
+
+const getProductQuery = (model: CmsModel) => {
+    return /* GraphQL */ `
+        query GetProduct($where: ${model.singularApiName}GetWhereInput!) {
+            getProduct: get${model.singularApiName}(where: $where) {
+                data {
+                    ${productFields}
+                }
+                ${errorFields}
+            }
+        }
+    `;
+};
+const listProductsQuery = (model: CmsModel) => {
+    return /* GraphQL */ `
+        query ListProducts(
+            $where: ${model.singularApiName}ListWhereInput
+            $sort: [${model.singularApiName}ListSorter]
+            $limit: Int
+            $after: String
+        ) {
+            listProducts: list${model.pluralApiName}(where: $where, sort: $sort, limit: $limit, after: $after) {
+                data {
+                    ${productFields}
+                }
+                meta {
+                    cursor
+                    hasMoreItems
+                    totalCount
+                }
+                ${errorFields}
+            }
+        }
+    `;
+};
+
+export const useProductReadHandler = (params: GraphQLHandlerParams) => {
+    const contentHandler = useGraphQLHandler(params);
+
+    const model = getCmsModel("product");
+
+    return {
+        ...contentHandler,
+        async getProduct(variables: Record<string, any>, headers: Record<string, any> = {}) {
+            return await contentHandler.invoke({
+                body: { query: getProductQuery(model), variables },
+                headers
+            });
+        },
+        async listProducts(variables: Record<string, any>, headers: Record<string, any> = {}) {
+            return await contentHandler.invoke({
+                body: { query: listProductsQuery(model), variables },
+                headers
+            });
+        }
+    };
+};

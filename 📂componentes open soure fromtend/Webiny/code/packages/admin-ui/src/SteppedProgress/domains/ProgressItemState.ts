@@ -1,0 +1,6 @@
+export enum ProgressItemState {
+    IN_PROGRESS = "IN_PROGRESS",
+    IDLE = "IDLE",
+    COMPLETED = "COMPLETED",
+    COMPLETED_AFFIRMATIVE = "COMPLETED_AFFIRMATIVE"
+}

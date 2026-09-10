@@ -1,0 +1,45 @@
+{
+  "name": "@webiny/i18n",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./*": "./*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webiny/webiny-js.git"
+  },
+  "contributors": [
+    "Pavel Denisjuk <pavel@webiny.com>",
+    "Sven Al Hamad <sven@webiny.com>",
+    "Adrian Smijulj <adrian@webiny.com>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "accounting": "^0.4.1",
+    "fast-glob": "^3.3.3",
+    "fecha": "^4.2.3",
+    "lodash": "^4.18.1",
+    "ohash": "^2.0.12",
+    "yargs": "^18.1.0"
+  },
+  "peerDependencies": {
+    "react": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/accounting": "^0.4.5",
+    "@types/lodash": "^4.17.25",
+    "@webiny/build-tools": "0.0.0",
+    "rimraf": "^6.1.3",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "8476da73b653c89cc1474d968baf55c1b0ae0e5f",
+  "webiny": {
+    "publishFrom": "dist"
+  }
+}

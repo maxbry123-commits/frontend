@@ -1,0 +1,155 @@
+import { Container } from "@webiny/di";
+import { RequestContainer } from "@webiny/event-handler-core";
+import { GraphQLContextEnhancer, GraphQLContextualSchema } from "@webiny/api-graphql";
+import { ApiCoreFeature, registerApiCoreStorageOperations } from "@webiny/api-core";
+import { HeadlessCmsFeature } from "@webiny/api-headless-cms";
+import { TenantContext } from "@webiny/api-core/features/tenancy/TenantContext/abstractions.js";
+import { AuthenticationContext } from "@webiny/api-core/features/security/authentication/AuthenticationContext/index.js";
+import { IdentityContext } from "@webiny/api-core/features/security/IdentityContext/index.js";
+import { CreateTenantUseCase } from "@webiny/api-core/exports/api/tenancy.js";
+import { WcpLicenseLoader } from "@webiny/api-core/features/wcp/WcpLicenseLoader.js";
+import { createTestWcpLicense } from "@webiny/wcp/testing/createTestWcpLicense.js";
+import { RegisterExtensionPlugin } from "@webiny/handler";
+import { BackgroundTasksFeature, TasksCrud } from "@webiny/background-tasks/api";
+import { SearchIndexTasksFeature } from "@webiny/api-search-index-tasks";
+import { SearchIndexTasksDdbOsFeature } from "@webiny/api-search-index-tasks-ddb-os";
+import { TimerFeature } from "@webiny/utils/features/Timer/feature.js";
+import { timerFactory } from "@webiny/utils/features/Timer/factory.js";
+import { ProcessEnvFeature } from "@webiny/stdlib/node";
+import { createTestOpenSearchClient } from "@webiny/api-opensearch/testing";
+import { getStorageOps } from "@webiny/api-core/testing/environment.js";
+import type { ApiCoreStorageOperations } from "@webiny/api-core/types/core.js";
+import type { SecurityPermission } from "@webiny/api-core/types/security.js";
+import type { IdentityData } from "@webiny/api-core/features/security/IdentityContext/index.js";
+import type { Plugin, PluginCollection } from "@webiny/plugins/types";
+import type { CmsContext } from "~/types";
+import { TestIdentity, TestAuthenticator } from "@webiny/api-core-testing";
+import { TestPermissions, TestAuthorizer } from "@webiny/api-core-testing";
+import { processLegacyPlugins } from "~tests/helpers/bridgeLegacyPlugins";
+import type { CreateTenantInput } from "@webiny/api-core/types/tenancy.js";
+
+export interface CreateHandlerCoreParams {
+    setupTenancyAndSecurityGraphQL?: boolean;
+    permissions?: SecurityPermission[];
+    identity?: IdentityData;
+    topPlugins?: Plugin | Plugin[] | Plugin[][] | PluginCollection;
+    plugins?: Plugin | Plugin[] | Plugin[][] | PluginCollection;
+    bottomPlugins?: Plugin | Plugin[] | Plugin[][] | PluginCollection;
+    path?: string;
+}
+
+export const defaultIdentity: IdentityData = {
+    id: "id-12345678",
+    type: "admin",
+    displayName: "John Doe"
+};
+
+// Root container is created once across all handler() calls.
+let rootContainer: Container | null = null;
+
+export const useHandler = <C extends CmsContext = CmsContext>(params: CreateHandlerCoreParams) => {
+    const elasticsearchClient = createTestOpenSearchClient();
+
+    const apiCoreStorage = getStorageOps<ApiCoreStorageOperations>("apiCore");
+    const cmsStorage = getStorageOps("cms");
+
+    const resolvedIdentity = params.identity ?? defaultIdentity;
+    const resolvedPermissions = (params.permissions ?? [{ name: "*" }]) as SecurityPermission[];
+
+    const flatPlugins = ([params.plugins ?? []].flat(Infinity as 1) as any[]).filter(Boolean);
+    const legacyPlugins = flatPlugins.filter(p => p instanceof RegisterExtensionPlugin);
+    const extraCmsPlugins = flatPlugins.filter(p => !(p instanceof RegisterExtensionPlugin));
+
+    const buildContext = async (): Promise<C> => {
+        if (!rootContainer) {
+            rootContainer = new Container();
+            rootContainer.registerInstance(TestIdentity, resolvedIdentity);
+            rootContainer.registerInstance(TestPermissions, { list: resolvedPermissions });
+            rootContainer.register(TestAuthenticator);
+            rootContainer.register(TestAuthorizer);
+        }
+
+        const container = rootContainer.createChildContainer();
+        container.registerInstance(RequestContainer, container);
+
+        const wcpLicense = await WcpLicenseLoader.load(createTestWcpLicense());
+        registerApiCoreStorageOperations(container, apiCoreStorage.storageOperations);
+        ApiCoreFeature.register(container, { wcpLicense });
+        processLegacyPlugins(container, cmsStorage.plugins);
+        processLegacyPlugins(container, legacyPlugins);
+
+        HeadlessCmsFeature.register(container, {
+            type: "manage",
+            extraPlugins: extraCmsPlugins
+        });
+
+        const createTenantUseCase = container.resolve(CreateTenantUseCase);
+        for (const tenant of [
+            { id: "root", name: "Root", parent: "" },
+            { id: "webiny", name: "Webiny", parent: "" },
+            { id: "dev", name: "Dev", parent: "" },
+            { id: "sales", name: "Sales", parent: "" }
+        ] as CreateTenantInput[]) {
+            try {
+                await createTenantUseCase.execute(tenant);
+            } catch {
+                // Tenant may already exist in DynamoDB
+            }
+        }
+
+        ProcessEnvFeature.register(container);
+        BackgroundTasksFeature.register(container);
+        TimerFeature.register(container, timerFactory());
+        SearchIndexTasksFeature.register(container);
+        SearchIndexTasksDdbOsFeature.register(container);
+
+        const tenantCtx = container.resolve(TenantContext);
+        tenantCtx.setTenant({
+            id: "root",
+            name: "Root",
+            description: "",
+            status: "enabled",
+            isInstalled: false,
+            settings: {
+                name: { full: "Root", slug: "root" },
+                social: {},
+                favicon: {},
+                logo: {}
+            } as any,
+            tags: [],
+            parent: null,
+            createdOn: new Date().toISOString(),
+            savedOn: new Date().toISOString()
+        });
+
+        const authCtx = container.resolve(AuthenticationContext);
+        const identityCtx = container.resolve(IdentityContext);
+        const identity = await authCtx.authenticate("");
+        identityCtx.setIdentity(identity);
+
+        const enhancers = container.resolveAll(GraphQLContextEnhancer);
+        const ctx: Record<string, any> = { container };
+        for (const enhancer of enhancers) {
+            await enhancer.enhance(ctx);
+        }
+        const schemas = container.resolveAll(GraphQLContextualSchema);
+        for (const schema of schemas) {
+            await schema.build(ctx);
+        }
+
+        // DI-native source for the legacy `context.tasks` service-locator: resolve the CRUD
+        // aggregate from the container and expose it on the captured context. See the "full-DI
+        // tasks" cleanup note to retire this bridge.
+        const [tasksCrud] = container.resolveAll(TasksCrud);
+        if (tasksCrud) {
+            ctx.tasks = tasksCrud;
+        }
+
+        return ctx as C;
+    };
+
+    return {
+        elasticsearch: elasticsearchClient,
+        handler: (_payload?: any) => buildContext()
+    };
+};

@@ -1,0 +1,86 @@
+import React from "react";
+import { Button, Grid, Input } from "@webiny/admin-ui";
+import { Bind, Form, useForm } from "@webiny/form";
+import { validation } from "@webiny/validation";
+import { Center } from "./Center.js";
+import { Container } from "./Container.js";
+import type { ISystemInstallerPresenter } from "~/presentation/installation/presenters/SystemInstaller/abstractions.js";
+import { usePasswordValidator } from "./AdminUserStep/usePasswordValidator.js";
+
+interface StepProps {
+    nextStep: ISystemInstallerPresenter["nextStep"];
+}
+
+export const AdminUserStep = ({ nextStep }: StepProps) => {
+    return (
+        <Container
+            title={"Admin account"}
+            message={"This is the account you’ll use to access and manage your Webiny instance."}
+        >
+            <Center>
+                <div style={{ width: 400 }}>
+                    <Form onSubmit={data => nextStep(data)}>{() => <AdminUserInputs />}</Form>
+                </div>
+            </Center>
+        </Container>
+    );
+};
+
+const AdminUserInputs = () => {
+    const form = useForm();
+    const passwordValidator = usePasswordValidator();
+
+    // The install wizard renders BEFORE any auth-provider extension is mounted (it replaces the app
+    // tree), so the installer's app name can't come from DI here — it must be a build-time value.
+    // The submitted data is keyed under this name, becoming `installationInput: [{ app, data }]`, so
+    // it has to match the API-side AppInstaller's `appName`. Defaults to "Cognito" (AWS hosting type);
+    // the self-hosted hosting type sets REACT_APP_AUTH_INSTALLER_APP_NAME="SelfHostedAuth".
+    const appName = process.env.REACT_APP_AUTH_INSTALLER_APP_NAME || "Cognito";
+
+    return (
+        <Grid>
+            <Grid.Column span={6}>
+                <Bind name={`${appName}.firstName`} validators={validation.create("required")}>
+                    <Input label={"First name"} />
+                </Bind>
+            </Grid.Column>
+            <Grid.Column span={6}>
+                <Bind name={`${appName}.lastName`} validators={validation.create("required")}>
+                    <Input label={"Last name"} />
+                </Bind>
+            </Grid.Column>
+            <Grid.Column span={12}>
+                <Bind
+                    name={`${appName}.email`}
+                    beforeChange={(value: string, cb) => cb(value.toLowerCase())}
+                    validators={validation.create("required,email")}
+                >
+                    <Input label={"Your email"} autoComplete={"new-password"} />
+                </Bind>
+            </Grid.Column>
+            <Grid.Column span={12}>
+                <Bind
+                    name={`${appName}.password`}
+                    validators={[passwordValidator, validation.create("required")]}
+                >
+                    <Input
+                        label={"Choose password"}
+                        type={"password"}
+                        autoComplete={"new-password"}
+                    />
+                </Bind>
+            </Grid.Column>
+
+            <Grid.Column span={12}>
+                <Button
+                    containerClassName={"w-full"}
+                    className={"w-full"}
+                    variant={"primary"}
+                    size={"lg"}
+                    text={"Next step"}
+                    onClick={form.submit}
+                />
+            </Grid.Column>
+        </Grid>
+    );
+};

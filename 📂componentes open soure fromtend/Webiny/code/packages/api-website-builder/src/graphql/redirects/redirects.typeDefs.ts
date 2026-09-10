@@ -1,0 +1,138 @@
+const getStringFilters = (name: string) => {
+    return `
+        ${name}: String
+        ${name}_not: String
+        ${name}_contains: String
+        ${name}_not_contains: String
+        ${name}_in: [String!]
+        ${name}_not_in: [String!]
+        ${name}_startsWith: String
+        ${name}_not_startsWith: String
+    `;
+};
+
+export const redirectsTypeDefs = /* GraphQL */ `
+    type WbRedirect {
+        id: ID!
+        location: WbLocation
+        createdOn: DateTime
+        modifiedOn: DateTime
+        savedOn: DateTime
+        deletedOn: DateTime
+        createdBy: WbIdentity
+        modifiedBy: WbIdentity
+        savedBy: WbIdentity
+        deletedBy: WbIdentity
+        redirectFrom: String!
+        redirectTo: String!
+        redirectType: String!
+        isEnabled: Boolean!
+    }
+
+    input WbRedirectCreateInput {
+        location: WbLocationInput!
+        redirectFrom: String!
+        redirectTo: String!
+        redirectType: String!
+        isEnabled: Boolean!
+    }
+
+    input WbRedirectUpdateInput {
+        redirectFrom: String!
+        redirectTo: String!
+        redirectType: String!
+        isEnabled: Boolean!
+        location: WbLocationInput
+    }
+
+    input WbRedirectsListWhereInput {
+        location: WbLocationWhereInput
+        id: ID
+        id_not: ID
+        id_in: [ID!]
+        id_not_in: [ID!]
+        createdOn: DateTime
+        createdOn_gt: DateTime
+        createdOn_gte: DateTime
+        createdOn_lt: DateTime
+        createdOn_lte: DateTime
+        createdOn_between: [DateTime!]
+        createdOn_not_between: [DateTime!]
+        modifiedOn: DateTime
+        modifiedOn_gt: DateTime
+        modifiedOn_gte: DateTime
+        modifiedOn_lt: DateTime
+        modifiedOn_lte: DateTime
+        modifiedOn_between: [DateTime!]
+        modifiedOn_not_between: [DateTime!]
+        savedOn: DateTime
+        savedOn_gt: DateTime
+        savedOn_gte: DateTime
+        savedOn_lt: DateTime
+        savedOn_lte: DateTime
+        savedOn_between: [DateTime!]
+        savedOn_not_between: [DateTime!]
+        createdBy: ID
+        createdBy_not: ID
+        createdBy_in: [ID!]
+        createdBy_not_in: [ID!]
+        modifiedBy: ID
+        modifiedBy_not: ID
+        modifiedBy_in: [ID!]
+        modifiedBy_not_in: [ID!]
+        savedBy: ID
+        savedBy_not: ID
+        savedBy_in: [ID!]
+        savedBy_not_in: [ID!]
+        isEnabled: Boolean
+        ${getStringFilters("redirectFrom")}
+        ${getStringFilters("redirectTo")}
+        ${getStringFilters("redirectType")}
+        AND: [WbRedirectsListWhereInput!]
+        OR: [WbRedirectsListWhereInput!]
+    }
+
+    type WbRedirectResponse {
+        data: WbRedirect
+        error: WbError
+    }
+
+    type WbRedirectsListResponse {
+        data: [WbRedirect]
+        error: WbError
+        meta: WbMeta
+    }
+
+    type WbRedirectModelResponse {
+        data: JSON
+        error: WbError
+    }
+
+    enum WbRedirectListSorter {
+        id_ASC
+        id_DESC
+        createdOn_ASC
+        createdOn_DESC
+        modifiedOn_ASC
+        modifiedOn_DESC
+        savedOn_ASC
+        savedOn_DESC
+    }
+
+    extend type WbQuery {
+        listRedirects(
+            where: WbRedirectsListWhereInput
+            limit: Int
+            after: String
+            sort: [WbRedirectListSorter]
+            search: String
+        ): WbRedirectsListResponse
+    }
+
+    extend type WbMutation {
+        createRedirect(data: WbRedirectCreateInput!): WbRedirectResponse
+        updateRedirect(id: ID!, data: WbRedirectUpdateInput!): WbRedirectResponse
+        moveRedirect(id: ID!, folderId: ID!): WbBooleanResponse
+        deleteRedirect(id: ID!): WbBooleanResponse
+    }
+`;

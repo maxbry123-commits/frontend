@@ -1,0 +1,132 @@
+import type { CmsGroup, CmsIcon, CmsModel } from "~/types";
+import allModels from "../contentAPI/mocks/contentModels";
+import type { useGraphQLHandler } from "./useGraphQLHandler";
+import type { TestCmsModel } from "../types";
+
+interface SetupContentModelParams {
+    manager: ReturnType<typeof useGraphQLHandler>;
+    model: TestCmsModel;
+    group: CmsGroup;
+}
+
+const setupContentModel = async (params: SetupContentModelParams) => {
+    const { manager, model, group } = params;
+    const [createResponse] = await manager.createContentModelMutation({
+        data: {
+            name: model.name,
+            modelId: model.modelId,
+            singularApiName: model.singularApiName,
+            pluralApiName: model.pluralApiName,
+            group: group.slug,
+            fields: model.fields,
+            layout: model.layout
+        }
+    });
+
+    if (createResponse.errors) {
+        console.log(`[setupContentModel] ${createResponse.errors[0].message}`);
+        process.exit(1);
+    } else if (createResponse.data.createContentModel.error) {
+        console.log(`[setupContentModel] ${createResponse.data.createContentModel.error.message}`);
+        console.log(createResponse.data.createContentModel.error.message);
+        process.exit(1);
+    }
+
+    return createResponse.data.createContentModel.data;
+};
+
+export const getModel = (item: TestCmsModel | string): TestCmsModel => {
+    if (typeof item === "string") {
+        const model = allModels.find(m => m.modelId === item);
+        if (!model) {
+            console.log(`[setupContentModel] There is no model "${item}" defined.`);
+            process.exit(1);
+        }
+        return model;
+    }
+    return item;
+};
+
+interface SetupGroupAndModelsParams {
+    manager: ReturnType<typeof useGraphQLHandler>;
+    models: (TestCmsModel | string)[] | "*" | undefined;
+}
+
+export const setupGroupAndModels = async (params: SetupGroupAndModelsParams) => {
+    const { manager, models: initialModels } = params;
+    const group = await setupContentModelGroup(manager);
+
+    if (!initialModels) {
+        return {
+            group,
+            models: [],
+            getModel(modelId: string) {
+                console.log(`[setupGroupAndModels] There is no model "${modelId}" defined.`);
+                process.exit(1);
+            }
+        };
+    }
+    const models = initialModels === "*" ? allModels : initialModels;
+
+    const results: CmsModel[] = [];
+    for (const item of models) {
+        const model = getModel(item);
+        const result = await setupContentModel({
+            manager,
+            group,
+            model
+        });
+        results.push(result);
+    }
+    return {
+        models: results,
+        getModel(modelId: string) {
+            const model = results.find(m => m.modelId === modelId);
+            if (!model) {
+                console.log(`[setupGroupAndModels] There is no model "${modelId}" defined.`);
+                process.exit(1);
+            }
+            return model;
+        },
+        group
+    };
+};
+
+interface SetupContentModelGroupGqlVars {
+    data: {
+        name: string;
+        slug: string;
+        icon: CmsIcon;
+        description: string;
+    };
+}
+
+const setupContentModelGroup = async (
+    manager: ReturnType<typeof useGraphQLHandler>,
+    vars?: SetupContentModelGroupGqlVars
+): Promise<CmsGroup> => {
+    if (!vars) {
+        vars = {
+            data: {
+                name: "Group",
+                slug: "group",
+                icon: {
+                    name: "icon-name",
+                    type: "icon",
+                    value: "icon-value"
+                },
+                description: "description"
+            }
+        };
+    }
+
+    const [response] = await manager.createContentModelGroupMutation(vars);
+
+    const error = response?.data?.createContentModelGroup?.error || response?.errors?.shift();
+    if (error) {
+        console.log("[setupContentModelGroup] could not create group");
+        console.log(error.message);
+        process.exit(1);
+    }
+    return response.data.createContentModelGroup.data;
+};

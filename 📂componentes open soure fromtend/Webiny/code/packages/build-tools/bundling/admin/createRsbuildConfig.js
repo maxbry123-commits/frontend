@@ -1,0 +1,179 @@
+import fs from "fs";
+import path from "path";
+import { pluginReact } from "@rsbuild/plugin-react";
+import { pluginSvgr } from "@rsbuild/plugin-svgr";
+import { pluginSass } from "@rsbuild/plugin-sass";
+import { pluginTypeCheck } from "@rsbuild/plugin-type-check";
+import tailwindcss from "@tailwindcss/postcss";
+import { createImportValidatorPlugin } from "../importValidatorPlugin.js";
+
+export const createRsbuildConfig = ({ cwd }) => {
+    const paths = getPaths(cwd);
+    const envVars = getEnvVars();
+    const mode = getMode();
+
+    return /** @type {import("@rsbuild/core").RsbuildConfig} */ ({
+        source: {
+            entry: {
+                index: paths.admin.entryFile
+            },
+            define: envVars
+        },
+        output: { distPath: { root: paths.admin.outputFolder } },
+        mode,
+        dev: { hmr: true },
+        performance: {
+            printFileSize: false
+        },
+        tools: {
+            postcss: (_, { addPlugins }) => {
+                addPlugins([
+                    createInjectTailwindSourcePlugin(
+                        path.join(paths.projectRootFolder, "extensions")
+                    ),
+                    tailwindcss({
+                        base: getTailwindBasePath(paths.projectRootFolder)
+                    }),
+                    createStripTailwindSourceLeftoverPlugin()
+                ]);
+            },
+            rspack: {
+                watchOptions: {
+                    // Wait for dependency builds to finish before triggering a recompilation.
+                    aggregateTimeout: 500,
+                    ignored: ["**/node_modules/**", "**/.git/**"]
+                }
+            }
+        },
+        // Port precedence matches the served admin app (`webiny serve admin`): an explicit
+        // WEBINY_ADMIN_PORT wins, then a PORT injected by the environment, then the 3001 default.
+        server: {
+            port: process.env.WEBINY_ADMIN_PORT || process.env.PORT || 3001,
+            host: "0.0.0.0"
+        },
+        html: {
+            template: paths.projectRootFolder + "/public/index.html"
+        },
+        plugins: [
+            createImportValidatorPlugin(),
+            pluginTypeCheck({
+                tsCheckerOptions: {
+                    typescript: { configFile: paths.admin.tsConfig },
+                    async: mode === "development"
+                }
+            }),
+            pluginReact({
+                splitChunks: false
+            }),
+            pluginSass(),
+            pluginSvgr({
+                mixedImport: true,
+                svgrOptions: {
+                    exportType: "named",
+                    svgoConfig: {
+                        plugins: [
+                            {
+                                name: "pres" + "et-default",
+                                params: { overrides: { removeViewBox: false } }
+                            }
+                        ]
+                    }
+                }
+            })
+        ]
+    });
+};
+
+const getPaths = cwd => {
+    const adminRootFolderPath = cwd;
+    const adminOutputFolderPath = path.join(adminRootFolderPath, "build");
+    const adminEntryFilePath = path.join(adminRootFolderPath, "src", "index.tsx");
+
+    const adminTsConfigFilePath = path.join(adminRootFolderPath, "tsconfig.json");
+
+    return {
+        projectRootFolder: process.cwd(),
+        admin: {
+            rootFolder: adminRootFolderPath,
+            tsConfig: adminTsConfigFilePath,
+            outputFolder: adminOutputFolderPath,
+            entryFile: adminEntryFilePath
+        }
+    };
+};
+
+const getTailwindBasePath = projectRootFolderPath => {
+    const adminUiPkgPath = path.join(projectRootFolderPath, "packages", "admin-ui");
+
+    const isWebinyJsRepo = fs.existsSync(adminUiPkgPath);
+
+    if (isWebinyJsRepo) {
+        return path.join(projectRootFolderPath, "packages");
+    }
+
+    return path.join(projectRootFolderPath, "node_modules", "@webiny");
+};
+
+/*
+    Injects an `@source` directive into the Tailwind CSS AST at build time, pointing to the
+    given absolute path. https://tailwindcss.com/docs/functions-and-directives#source-directive
+*/
+const createInjectTailwindSourcePlugin = sourcePath => ({
+    postcssPlugin: "inject-tailwind-source",
+    Once(root) {
+        root.prepend(`@source "${sourcePath}";`);
+    }
+});
+
+/*
+    Removes any leftover `@source` at-rule from the output. Tailwind v4 strips the
+    directive from files it processes, but `@tailwindcss/postcss` only processes
+    files containing one of its trigger at-rules; for other files (e.g., pre-bundled
+    component CSS imported through JS), the injected directive would otherwise
+    survive into the production bundle, exposing the absolute build-machine path.
+*/
+const createStripTailwindSourceLeftoverPlugin = () => ({
+    postcssPlugin: "strip-tailwind-source-leftover",
+    Once(root) {
+        root.walkAtRules("source", node => node.remove());
+    }
+});
+
+const getEnvVars = () => {
+    const raw = Object.keys(process.env)
+        .filter(key => {
+            if (new RegExp(/^REACT_APP_/i).test(key)) {
+                return true;
+            }
+
+            return new RegExp(/^WEBINY_ADMIN_/i).test(key);
+        })
+        .reduce(
+            (env, key) => {
+                env[key] = process.env[key];
+                return env;
+            },
+            {
+                // Useful for determining whether we're running in production mode.
+                // Most importantly, it switches React into the correct mode.
+                NODE_ENV: process.env.NODE_ENV || "development"
+            }
+        );
+
+    // Stringify all values so we can feed into Webpack DefinePlugin.
+    // Provide values one by one, not as a single process.env object,
+    // because otherwise plugin will put a big JSON object every time process.env is used in code.
+    // This way minifier also removes redundant code on prod (like if(process.env.NODE_ENV === 'development')).
+    const envVarsAsStrings = {
+        "process.env": "{}"
+    };
+    for (const key of Object.keys(raw)) {
+        envVarsAsStrings[`process.env.${key}`] = JSON.stringify(raw[key]);
+    }
+
+    return envVarsAsStrings;
+};
+
+const getMode = () => {
+    return process.env.NODE_ENV === "production" ? "production" : "development";
+};

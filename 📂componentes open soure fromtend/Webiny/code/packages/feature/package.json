@@ -1,0 +1,50 @@
+{
+  "name": "@webiny/feature",
+  "description": "A small utility library to build application features in a Webiny project.",
+  "version": "0.0.0",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webiny/webiny-js.git"
+  },
+  "author": "Webiny LTD",
+  "license": "MIT",
+  "exports": {
+    "./api": "./api/index.js",
+    "./admin": "./admin/index.js",
+    "./*": "./*"
+  },
+  "webiny": {
+    "exports": {
+      "./api/index.ts": {
+        "exportPath": "./api",
+        "namedExports": [
+          "createFeature",
+          "createAbstraction",
+          "BaseError",
+          "Result",
+          "ResultAsync"
+        ]
+      },
+      "./admin/index.ts": {
+        "exportPath": "./admin",
+        "namedExports": [
+          "createFeature",
+          "createAbstraction",
+          "BaseError"
+        ]
+      }
+    },
+    "publishFrom": "dist"
+  },
+  "dependencies": {
+    "@webiny/di": "^1.0.2"
+  },
+  "devDependencies": {
+    "@webiny/build-tools": "0.0.0",
+    "typescript": "^7.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

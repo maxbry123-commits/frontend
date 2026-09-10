@@ -1,0 +1,486 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as DrawerStories from "./Drawer.stories";
+
+<Meta of={DrawerStories} />
+
+# Drawer
+
+A Drawer is a UI component used to display additional or expanded content options without leaving the current view. The drawer should slide in from left or right side of the screen, overlaying the main content.
+
+## Usage
+
+<Canvas of={DrawerStories.Documentation} source={ { code: `
+import React, { useState } from "react";
+import { Drawer, Button } from "@webiny/admin-ui";
+
+const DrawerExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Drawer"
+                onClick={() => setOpen(true)}
+            />
+
+            <Drawer
+                open={open}
+                onOpenChange={open => setOpen(open)}
+                title="Drawer Title"
+                description="A short drawer description."
+                info={<>Learn more about this <a href={"#"}>here</a>.</>}
+                side="right"
+                showCloseButton={true}
+                bodyPadding={true}
+                headerSeparator={true}
+                footerSeparator={true}
+                actions={
+                    <>
+                        <Drawer.CancelButton />
+                        <Drawer.ConfirmButton />
+                    </>
+                }
+            >
+                <p className={"mb-md, mt-md"}>
+                    This is the drawer content area. You can place any content here including
+                    forms, text, images, or other components.
+                </p>
+                <p className={"mb-md"}>
+                    Drawers are useful for displaying additional information or actions
+                    without navigating away from the current page.
+                </p>
+            </Drawer>
+        </>
+    );
+
+};
+
+export default DrawerExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Drawer/Drawer.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={DrawerStories.Documentation} exclude={["onOpenChange", "trigger"]} />
+
+```tsx
+import React, { useState } from "react";
+import { Drawer, Button } from "@webiny/admin-ui";
+
+const DrawerExample = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="primary" text="Open Drawer" onClick={() => setOpen(true)} />
+
+      <Drawer
+        open={open}
+        onOpenChange={open => setOpen(open)}
+        title="Drawer Title"
+        description="A short drawer description."
+        info={
+          <>
+            Learn more about this <a href={"#"}>here</a>.
+          </>
+        }
+        side="right"
+        showCloseButton={true}
+        bodyPadding={true}
+        headerSeparator={true}
+        footerSeparator={true}
+        actions={
+          <>
+            <Drawer.CancelButton />
+            <Drawer.ConfirmButton />
+          </>
+        }
+      >
+        <p className={"mb-md, mt-md"}>
+          This is the drawer content area. You can place any content here including forms, text,
+          images, or other components.
+        </p>
+        <p className={"mb-md"}>
+          Drawers are useful for displaying additional information or actions without navigating
+          away from the current page.
+        </p>
+      </Drawer>
+    </>
+  );
+};
+
+export default DrawerExample;
+```
+
+## Examples
+
+### Controlled Visibility
+
+Controlled Visibility demonstrates how to manually control the open state of the Drawer component from the outside, using React useState. Here we are following the “controlled component” pattern, where the visibility (open state) of the Drawer is not managed internally by the component itself, but instead controlled by the parent using React state.
+
+<Canvas of={DrawerStories.ControlledVisibility} source={ { code: `
+import React, { useState } from "react";
+import { Drawer, Button } from "@webiny/admin-ui";
+
+const ControlledVisibilityExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Drawer"
+                onClick={() => setOpen(true)}
+            />
+
+            <Drawer
+                open={open}
+                onOpenChange={open => {
+                    if (!open) {
+                        setOpen(false);
+                    }
+                }}
+                title="Drawer Title"
+                description="A short drawer description."
+                info={<>Learn more about this <a href={"#"}>here</a>.</>}
+                side="right"
+                showCloseButton={true}
+                bodyPadding={true}
+                headerSeparator={true}
+                footerSeparator={true}
+                actions={
+                    <>
+                        <Drawer.CancelButton />
+                        <Drawer.ConfirmButton />
+                    </>
+                }
+            >
+                <p className={"mb-md, mt-md"}>
+                  This drawer&apos;s visibility is controlled by the open state.
+                 </p>
+            </Drawer>
+        </>
+    );
+
+};
+
+export default ControlledVisibilityExample;
+` } } />
+
+### With Dropdown Menu
+
+<Canvas of={DrawerStories.WithDropdownMenu} source={ { code: `
+import React, { useState } from "react";
+import { Drawer, Button, DropdownMenu } from "@webiny/admin-ui";
+
+const WithDropdownMenuExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <DropdownMenu trigger={<Button variant="primary" text="Open Menu" />}>
+                <DropdownMenu.Ite text={"Open Drawer"} content="Open Drawer" onClick={() => setOpen(true)} />
+            </DropdownMenu>
+
+            <Drawer
+                open={open}
+                onOpenChange={() => setOpen(false)}
+                title="Drawer Title"
+                description="A short drawer description."
+                info={<>Learn more about this <a href={"#"}>here</a>.</>}
+                side="right"
+                showCloseButton={true}
+                bodyPadding={true}
+                headerSeparator={true}
+                footerSeparator={true}
+                actions={
+                    <>
+                        <Drawer.CancelButton />
+                        <Drawer.ConfirmButton />
+                    </>
+                }
+            >
+                This drawer is opened from a dropdown menu item.
+            </Drawer>
+        </>
+    );
+
+};
+
+export default WithDropdownMenuExample;
+` } } />
+
+### Without Close Button
+
+<Canvas of={DrawerStories.WithoutCloseButton} source={ { code: `
+import React, { useState } from "react";
+import { Drawer, Button } from "@webiny/admin-ui";
+
+const WithoutCloseButtonExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Drawer"
+                onClick={() => setOpen(true)}
+            />
+
+            <Drawer
+                open={open}
+                onOpenChange={open => setOpen(open)}
+                title="Drawer Title"
+                description="A short drawer description."
+                info={<>Learn more about this <a href={"#"}>here</a>.</>}
+                side="right"
+                showCloseButton={true}
+                bodyPadding={true}
+                headerSeparator={true}
+                footerSeparator={true}
+                showCloseButton={false}
+                actions={
+                    <>
+                        <Drawer.CancelButton />
+                        <Drawer.ConfirmButton />
+                    </>
+                }
+            >
+                This drawer doesn&apos;t have a close button in the top-right corner.
+            </Drawer>
+        </>
+    );
+
+};
+
+export default WithoutCloseButtonExample;
+` } } />
+
+### Custom Width
+
+<Canvas of={DrawerStories.CustomWidth} source={ { code: `
+import React, { useState } from "react";
+import { Drawer, Button } from "@webiny/admin-ui";
+
+const CustomWidthExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Wide Drawer"
+                onClick={() => setOpen(true)}
+            />
+
+            <Drawer
+                open={open}
+                onOpenChange={open => setOpen(open)}
+                title="Drawer Title"
+                description="A short drawer description."
+                info={<>Learn more about this <a href={"#"}>here</a>.</>}
+                side="right"
+                showCloseButton={true}
+                bodyPadding={true}
+                headerSeparator={true}
+                footerSeparator={true}
+                width={1000}
+                actions={
+                    <>
+                        <Drawer.CancelButton />
+                        <Drawer.ConfirmButton />
+                    </>
+                }
+            >
+                This drawer has a custom width of 1000px, making it wider than the default.
+            </Drawer>
+        </>
+    );
+
+};
+
+export default CustomWidthExample;
+` } } />
+
+### With Tabs
+
+<Canvas of={DrawerStories.WithTabs} source={ { code: `
+import React, { useState } from "react";
+import { Drawer, Button, Tabs } from "@webiny/admin-ui";
+
+const WithTabsExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Drawer with Tabs"
+                onClick={() => setOpen(true)}
+            />
+
+            <Drawer
+                open={open}
+                onOpenChange={open => setOpen(open)}
+                title="Settings"
+                description="Configure your preferences"
+                bodyPadding={false}
+                headerSeparator={false}
+                actions={
+                    <>
+                        <Drawer.CancelButton />
+                        <Drawer.ConfirmButton text="Save" />
+                    </>
+                }
+            >
+                <Tabs
+                    spacing="lg"
+                    tabs={[
+                        <Tabs.Tab
+                            key="account"
+                            value="account"
+                            trigger="Account"
+                            content="Make changes to your account here."
+                        />,
+                        <Tabs.Tab
+                            key="company"
+                            value="company"
+                            trigger="Company"
+                            content="Make changes to your company info here."
+                        />,
+                        <Tabs.Tab
+                            key="security"
+                            value="security"
+                            trigger="Security"
+                            content="Make changes to your security settings here."
+                        />,
+                        <Tabs.Tab
+                            key="development"
+                            value="development"
+                            trigger="Development"
+                            content="Make changes to your development settings here."
+                        />
+                    ]}
+                />
+            </Drawer>
+        </>
+    );
+
+};
+
+export default WithTabsExample;
+` } } />
+
+### With Icon
+
+<Canvas of={DrawerStories.WithIcon} source={ { code: `
+import React, { useState } from "react";
+import { Drawer, Button } from "@webiny/admin-ui";
+import { ReactComponent as DoorbellIcon } from "@webiny/icons/ring_volume.svg";
+
+const WithIconExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Drawer with Icon"
+                onClick={() => setOpen(true)}
+            />
+
+            <Drawer
+                open={open}
+                onOpenChange={open => setOpen(open)}
+                title="Drawer with Icon"
+                description="This drawer has an icon in the header."
+                icon={<Drawer.Icon icon={<DoorbellIcon />} label="Title icon" />}
+                actions={
+                    <>
+                        <Drawer.CancelButton />
+                        <Drawer.ConfirmButton />
+                    </>
+                }
+            >
+                The icon helps to visually identify the purpose of this drawer.
+            </Drawer>
+        </>
+    );
+
+};
+
+export default WithIconExample;
+` } } />
+
+### As Modal
+
+<Canvas of={DrawerStories.AsModal} source={ { code: `
+import React, { useState } from "react";
+import { Drawer, Button } from "@webiny/admin-ui";
+
+const AsModalExample = () => {
+const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button
+                variant="primary"
+                text="Open Modal Drawer"
+                onClick={() => setOpen(true)}
+            />
+
+            <Drawer
+                open={open}
+                onOpenChange={open => setOpen(open)}
+                title="Modal Drawer"
+                description="This drawer behaves as a modal."
+                modal={true}
+                actions={
+                    <>
+                        <Drawer.CancelButton />
+                        <Drawer.ConfirmButton />
+                    </>
+                }
+            >
+                This drawer has modal={true}, which means it will show an overlay behind it
+                and prevent interaction with the content underneath.
+            </Drawer>
+        </>
+    );
+
+};
+
+export default AsModalExample;
+` } } />
+
+## Anatomy
+
+### Construction
+
+<img src="/images/storybook/drawer/anatomy.png" alt="Anatomy" />
+
+### Header
+
+Header needs to support multiple formation options that can be independently enabled or disabled.
+
+<img src="/images/storybook/drawer/header.png" alt="Header" />
+
+## Usage
+
+### Positioning
+
+Drawers should slide in from either the left or right side, depending on the context. The drawer should overlay the content, and clicking outside of it should close it. There also needs to be an option to use an overlay behind the drawer.
+
+<img src="/images/storybook/drawer/positioning.png" alt="Positioning" />

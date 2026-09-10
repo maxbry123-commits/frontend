@@ -1,0 +1,103 @@
+import { createTestHttpHandler } from "@webiny/event-handler-core/features/testing";
+import { ApiCoreFeature, registerApiCoreStorageOperations } from "@webiny/api-core";
+import { HeadlessCmsFeature } from "@webiny/api-headless-cms";
+import { GraphQLEngineFeature, GraphQLContextualSchema } from "@webiny/api-graphql";
+import { buildSchema } from "graphql";
+import { WcpLicenseLoader } from "@webiny/api-core/features/wcp/WcpLicenseLoader.js";
+import { createTestWcpLicense } from "@webiny/wcp/testing/createTestWcpLicense.js";
+import { getStorageOps } from "@webiny/api-core/testing/environment.js";
+import type { ApiCoreStorageOperations } from "@webiny/api-core/types/core.js";
+import { processLegacyPlugins } from "./bridgeLegacyPlugins";
+import { WebsocketsFeature } from "@webiny/api-websockets/features/feature.js";
+import { WebsocketsGraphQLFactoryFeature } from "@webiny/api-websockets/graphql/feature.js";
+import { WebsocketsRouteHandler } from "@webiny/api-websockets/features/Routes/abstractions.js";
+import { ConnectionRegistry } from "@webiny/api-websockets/features/ConnectionRegistry/abstractions.js";
+import { TestIdentity, TestAuthenticator } from "@webiny/api-core-testing";
+import { TestPermissions, TestAuthorizer } from "@webiny/api-core-testing";
+import { AuthTriggerHandler } from "@webiny/api-core-testing";
+import { RootTenantInitializer } from "@webiny/api-core-testing";
+import type { SecurityPermission } from "@webiny/api-core/types/security.js";
+import type { IdentityData } from "@webiny/api-core/features/security/IdentityContext/index.js";
+
+export interface UseHandlerParams {
+    permissions?: SecurityPermission[];
+    identity?: IdentityData;
+    plugins?: any[];
+}
+
+const defaultIdentity: IdentityData = {
+    id: "id-12345678",
+    type: "admin",
+    displayName: "John Doe"
+};
+
+const defaultPermissions: SecurityPermission[] = [
+    { name: "task.entry", rwd: "rwd" },
+    { name: "*" }
+];
+
+export const useHandler = (params?: UseHandlerParams) => {
+    const apiCoreStorage = getStorageOps<ApiCoreStorageOperations>("apiCore");
+    const cmsStorage = getStorageOps("cms");
+    const websocketsStorage = getStorageOps("websockets");
+
+    const resolvedIdentity = params?.identity ?? defaultIdentity;
+    const resolvedPermissions = (params?.permissions ?? defaultPermissions) as SecurityPermission[];
+
+    let capturedCtx: any = null;
+
+    const handler = createTestHttpHandler({
+        root: container => {
+            container.registerInstance(TestIdentity, resolvedIdentity);
+            container.registerInstance(TestPermissions, { list: resolvedPermissions });
+            container.register(TestAuthenticator);
+            container.register(TestAuthorizer);
+            container.registerDecorator(AuthTriggerHandler);
+            container.registerDecorator(RootTenantInitializer);
+        },
+        child: async container => {
+            const wcpLicense = await WcpLicenseLoader.load(createTestWcpLicense());
+            registerApiCoreStorageOperations(container, apiCoreStorage.storageOperations);
+            ApiCoreFeature.register(container, { wcpLicense });
+            processLegacyPlugins(container, cmsStorage.plugins);
+            HeadlessCmsFeature.register(container, { type: "manage" });
+
+            container.registerInstance(
+                ConnectionRegistry,
+                websocketsStorage.createConnectionRegistry()
+            );
+            WebsocketsFeature.register(container);
+            WebsocketsGraphQLFactoryFeature.register(container);
+
+            // Built-in routes are registered by WebsocketsFeature; register any custom routes.
+            for (const route of params?.plugins ?? []) {
+                container.registerInstance(WebsocketsRouteHandler, route);
+            }
+            const STUB_SCHEMA = buildSchema("type Query { _empty: String }");
+            container.registerInstance(GraphQLContextualSchema, {
+                async build(ctx: Record<string, any>) {
+                    capturedCtx = ctx;
+                    return STUB_SCHEMA;
+                }
+            });
+
+            GraphQLEngineFeature.register(container);
+        }
+    });
+
+    return {
+        handle: async () => {
+            await handler({
+                method: "POST",
+                path: "/graphql",
+                headers: {
+                    "x-tenant": "root",
+                    "content-type": "application/json",
+                    authorization: "Bearer test-token"
+                },
+                body: { query: "{ __typename }" }
+            });
+            return capturedCtx;
+        }
+    };
+};

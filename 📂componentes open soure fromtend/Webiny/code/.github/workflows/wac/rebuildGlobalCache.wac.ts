@@ -1,0 +1,81 @@
+import { ACTION } from "./utils/index.js";
+import { createJob } from "./jobs/index.js";
+import {
+    createGlobalBuildCacheSteps,
+    createInstallBuildSteps,
+    createYarnCacheSteps
+} from "./steps/index.js";
+
+const createRebuildGlobalCacheWorkflow = (branchName: string) => ({
+    name: `Rebuild Global Cache ("${branchName}" branch)`,
+    on: {
+        workflow_dispatch: {},
+        schedule: [{ cron: "0 4 * * *" }]
+    },
+    jobs: {
+        constants: createJob({
+            name: "Create constants",
+            outputs: {
+                "global-cache-key": "${{ steps.global-cache-key.outputs.global-cache-key }}"
+            },
+            checkout: false,
+            steps: [
+                {
+                    name: "Create global cache key",
+                    id: "global-cache-key",
+                    run: `echo "global-cache-key=${branchName}-\${{ runner.os }}-$(/bin/date -u "+%m%d")-\${{ vars.RANDOM_CACHE_KEY_SUFFIX }}" >> $GITHUB_OUTPUT`
+                }
+            ]
+        }),
+        cacheDependenciesPackages: createJob({
+            name: `Cache dependencies and packages`,
+            needs: "constants",
+            checkout: { path: branchName, ref: branchName },
+            steps: [
+                ...createYarnCacheSteps({ workingDirectory: branchName }),
+                ...createGlobalBuildCacheSteps({ workingDirectory: branchName }),
+                ...createInstallBuildSteps({ workingDirectory: branchName }),
+                ...(branchName === "next"
+                    ? [
+                          {
+                              name: "Upload build cache artifact",
+                              uses: ACTION.uploadArtifactV6,
+                              with: {
+                                  name: "build-cache",
+                                  "retention-days": 1,
+                                  "include-hidden-files": true,
+                                  path: `${branchName}/.webiny/cached-packages`
+                              }
+                          },
+                          {
+                              name: "Upload yarn cache artifact",
+                              uses: ACTION.uploadArtifactV6,
+                              with: {
+                                  name: "yarn-cache",
+                                  "retention-days": 1,
+                                  "include-hidden-files": true,
+                                  path: `${branchName}/.yarn/cache`
+                              }
+                          },
+                          {
+                              name: "Upload packages artifact",
+                              uses: ACTION.uploadArtifactV6,
+                              with: {
+                                  name: "packages",
+                                  "retention-days": 1,
+                                  "include-hidden-files": true,
+                                  path: `${branchName}/packages`
+                              }
+                          }
+                      ]
+                    : [])
+            ]
+        })
+    }
+});
+
+export const rebuildGlobalCacheDev = createRebuildGlobalCacheWorkflow("dev");
+export const rebuildGlobalCacheNext = createRebuildGlobalCacheWorkflow("next");
+
+// The v5 "rebuildGlobalCacheV5" workflow is intentionally not exported: v5 flows
+// are frozen. Its generated `rebuildGlobalCacheV5.yml` is left untouched.

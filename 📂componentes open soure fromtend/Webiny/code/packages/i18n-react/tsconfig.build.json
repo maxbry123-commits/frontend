@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.build.json",
+  "include": ["src"],
+  "references": [{ "path": "../i18n/tsconfig.build.json" }],
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "declarationDir": "./dist",
+    "paths": {
+      "~/*": ["./src/*"],
+      "~tests/*": ["./__tests__/*"],
+      "@webiny/i18n/*": ["../i18n/src/*"],
+      "@webiny/i18n": ["../i18n/src"]
+    }
+  }
+}

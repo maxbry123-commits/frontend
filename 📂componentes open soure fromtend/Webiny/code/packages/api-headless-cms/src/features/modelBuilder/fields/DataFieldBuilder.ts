@@ -1,0 +1,455 @@
+import camelCase from "lodash/camelCase.js";
+import type {
+    CmsModelField,
+    CmsModelFieldPredefinedValues,
+    CmsModelFieldValidation
+} from "~/types/index.js";
+import { getBaseFieldType } from "~/utils/getBaseFieldType.js";
+import { BaseFieldBuilder, type DataFieldBuildResult } from "./BaseFieldBuilder.js";
+
+export interface FieldBuilderConfig extends Omit<
+    CmsModelField,
+    "id" | "fieldId" | "storageId" | "type"
+> {
+    _storageId?: string;
+    _fieldId?: string;
+    description?: string | null;
+    note?: string | null;
+}
+
+/**
+ * Augmentable renderer registry. Each entry maps a renderer name to its applicable field type(s) and settings.
+ */
+export interface IFieldRendererRegistry {
+    switch: {
+        fieldType: "boolean";
+        settings: undefined;
+    };
+    checkboxes: {
+        fieldType: "text" | "number";
+        settings: undefined;
+    };
+    dateTimeInput: {
+        fieldType: "datetime";
+        settings: undefined;
+    };
+    dateTimeInputs: {
+        fieldType: "datetime";
+        settings?: {
+            addItemLabel?: string;
+        };
+    };
+    dynamicZone: {
+        fieldType: "dynamicZone";
+        settings?: {
+            /** Whether the accordion is expanded by default. */
+            open?: boolean;
+            /** Wrap the zone in a container panel. Set to `false` for a flat inline layout. */
+            container?: boolean;
+            /** Label for the "add item" button (defaults to "Add Item"). */
+            addItemLabel?: string;
+        };
+    };
+    hidden: {
+        fieldType: string;
+        settings: undefined;
+    };
+    lexicalEditor: {
+        fieldType: "rich-text";
+        settings: undefined;
+    };
+    lexicalEditors: {
+        fieldType: "rich-text";
+        settings?: {
+            addItemLabel?: string;
+        };
+    };
+    textarea: {
+        fieldType: "long-text";
+        settings: undefined;
+    };
+    textareas: {
+        fieldType: "long-text";
+        settings: {
+            addItemLabel?: string;
+        };
+    };
+    numberInput: {
+        fieldType: "number";
+        settings: undefined;
+    };
+    numberInputs: {
+        fieldType: "number";
+        settings?: {
+            addItemLabel?: string;
+        };
+    };
+    objectAccordionSingle: {
+        fieldType: "object";
+        settings?: {
+            /** Whether the accordion is expanded by default. */
+            open?: boolean;
+            /** Wrap the object in a container panel. Set to `false` for a flat inline layout. */
+            container?: boolean;
+            /** Field ID whose value is used as the accordion title, or a function receiving the object data. */
+            itemTitle?: string;
+            /** Field ID whose value is used as the accordion description, or a function receiving the object data. */
+            itemDescription?: string;
+        };
+    };
+    objectAccordionMultiple: {
+        fieldType: "object";
+        settings?: {
+            /** Whether each accordion item is expanded by default. */
+            open?: boolean;
+            /** Wrap the list in a container panel. Set to `false` for a flat inline layout. */
+            container?: boolean;
+            /** Field ID whose value is used as each item's accordion title. */
+            itemTitle?: string;
+            /** Field ID whose value is used as each item's accordion description. */
+            itemDescription?: string;
+            /** Label for the "add item" button (defaults to "Add {fieldLabel}"). */
+            addItemLabel?: string;
+        };
+    };
+    passthrough: {
+        fieldType: string;
+        settings: undefined;
+    };
+    radioButtons: {
+        fieldType: "text" | "number";
+        settings: undefined;
+    };
+    refDialogSingle: {
+        fieldType: "ref";
+        settings: undefined;
+    };
+    refDialogMultiple: {
+        fieldType: "ref";
+        settings?: {
+            /** Where newly picked references are inserted: `"first"` (top) or `"last"` (bottom, default). */
+            newItemPosition?: "first" | "last";
+        };
+    };
+    refAutocompleteSingle: {
+        fieldType: "ref";
+        settings: undefined;
+    };
+    refAutocompleteMultiple: {
+        fieldType: "ref";
+        settings: undefined;
+    };
+    refCheckboxes: {
+        fieldType: "ref";
+        settings: undefined;
+    };
+    refRadioButtons: {
+        fieldType: "ref";
+        settings: undefined;
+    };
+    select: {
+        fieldType: "text" | "number";
+        settings: undefined;
+    };
+    /** @deprecated Use "select" instead. */
+    dropdown: {
+        fieldType: "text" | "number";
+        settings: undefined;
+    };
+    tags: {
+        fieldType: "text";
+        settings: undefined;
+    };
+    textInput: {
+        fieldType: "text";
+        settings: undefined;
+    };
+    textInputs: {
+        fieldType: "text";
+        settings?: {
+            addItemLabel?: string;
+        };
+    };
+    /** @deprecated Use `assetField` instead. */
+    file: {
+        fieldType: "file";
+        settings?: {
+            /** Only allow image files to be selected. */
+            imagesOnly?: boolean;
+        };
+    };
+    /** @deprecated Use `assetFields` instead. */
+    files: {
+        fieldType: "file";
+        settings?: {
+            /** Only allow image files to be selected. */
+            imagesOnly?: boolean;
+        };
+    };
+    assetField: {
+        fieldType: "asset";
+        settings?: {
+            /** Only allow image files to be selected. */
+            imagesOnly?: boolean;
+            /** MIME types or extensions to allow (e.g. `["image/png", "application/pdf"]`). Leave empty to allow all. */
+            accept?: string[];
+        };
+    };
+    assetFields: {
+        fieldType: "asset";
+        settings?: {
+            /** Only allow image files to be selected. */
+            imagesOnly?: boolean;
+            /** MIME types or extensions to allow (e.g. `["image/png", "application/pdf"]`). Leave empty to allow all. */
+            accept?: string[];
+        };
+    };
+    uiSeparator: {
+        fieldType: "ui";
+        settings: undefined;
+    };
+    uiAlert: {
+        fieldType: "ui";
+        settings: {
+            type: "info" | "success" | "warning" | "danger";
+        };
+    };
+    uiTabs: {
+        fieldType: "ui";
+        settings: undefined;
+    };
+}
+
+/**
+ * Maps camelCase renderer names (used in the builder API) to the
+ * kebab-case names expected by the frontend renderer registry.
+ */
+const rendererNameMap: Record<keyof IFieldRendererRegistry, string> = {
+    switch: "boolean-input",
+    checkboxes: "checkboxes",
+    dateTimeInput: "date-time-input",
+    dateTimeInputs: "date-time-inputs",
+    dynamicZone: "dynamicZone",
+    hidden: "hidden",
+    lexicalEditor: "lexical-text-input",
+    lexicalEditors: "lexical-text-inputs",
+    textarea: "long-text-text-area",
+    textareas: "long-text-inputs",
+    numberInput: "number-input",
+    numberInputs: "number-inputs",
+    objectAccordionSingle: "object-accordion",
+    objectAccordionMultiple: "objects-accordion",
+    passthrough: "passthrough",
+    radioButtons: "radio-buttons",
+    refDialogSingle: "ref-advanced-single",
+    refDialogMultiple: "ref-advanced-multiple",
+    refAutocompleteSingle: "ref-input",
+    refAutocompleteMultiple: "ref-inputs",
+    refCheckboxes: "ref-simple-multiple",
+    refRadioButtons: "ref-simple-single",
+    select: "select-box",
+    dropdown: "select-box",
+    tags: "tags",
+    textInput: "text-input",
+    textInputs: "text-inputs",
+    file: "file-input",
+    files: "file-inputs",
+    assetField: "asset-input",
+    assetFields: "asset-inputs",
+    uiSeparator: "uiSeparator",
+    uiAlert: "uiAlert",
+    uiTabs: "uiTabs"
+};
+
+/**
+ * Resolves a camelCase renderer name to the kebab-case name used by the frontend.
+ */
+function resolveRendererName(name: string): string {
+    return rendererNameMap[name as keyof IFieldRendererRegistry] ?? name;
+}
+
+/**
+ * Extracts renderer names valid for the given field type.
+ * When TType is a broad `string`, all renderer names are returned.
+ */
+export type FieldRendererName<TType extends string = string> = string extends TType
+    ? keyof IFieldRendererRegistry & string
+    : {
+          [K in keyof IFieldRendererRegistry]: TType extends IFieldRendererRegistry[K]["fieldType"]
+              ? K
+              : never;
+      }[keyof IFieldRendererRegistry] &
+          string;
+
+export type FieldRendererSettings<TName extends string> = TName extends keyof IFieldRendererRegistry
+    ? IFieldRendererRegistry[TName]["settings"]
+    : Record<string, any> | undefined;
+
+/**
+ * DataFieldBuilder class for data fields that produce CmsModelField instances.
+ * Provides storageId, list, validation, renderer, and other data-field methods.
+ */
+export class DataFieldBuilder<TType extends string = string> extends BaseFieldBuilder<TType> {
+    protected override config: FieldBuilderConfig;
+
+    public constructor(type: TType, label?: string) {
+        super(type, label);
+        this.config = {
+            label: label || "",
+            validation: [],
+            listValidation: [],
+            list: false,
+            predefinedValues: {
+                enabled: false,
+                values: []
+            },
+            help: null,
+            placeholder: null,
+            description: null,
+            note: null,
+            renderer: null,
+            settings: {},
+            tags: []
+        };
+    }
+
+    placeholder(text: string): this {
+        this.config.placeholder = text;
+        return this;
+    }
+
+    storageId(id: string): this {
+        // We do not allow developers to specify the field type!
+        this.config._storageId = id.split("@").pop();
+        return this;
+    }
+
+    defaultValue(value: any): this {
+        this.config.settings = { ...this.config.settings, defaultValue: value };
+        return this;
+    }
+
+    list(): this {
+        this.config.list = true;
+        return this as this;
+    }
+
+    tags(tags: string[]): this {
+        this.config.tags = tags;
+        return this;
+    }
+
+    /**
+     * List validators - these methods are available after calling list()
+     */
+    listMinLength(value: number, message?: string): this {
+        return this.listValidation({
+            name: "minLength",
+            message: message || `At least ${value} item(s) required.`,
+            settings: { value }
+        });
+    }
+
+    listMaxLength(value: number, message?: string): this {
+        return this.listValidation({
+            name: "maxLength",
+            message: message || `At most ${value} item(s) allowed.`,
+            settings: { value }
+        });
+    }
+
+    /**
+     * Add a validation rule to this field.
+     * This method is protected and should only be used by field-specific validator methods.
+     * @internal
+     */
+    protected validation(validation: CmsModelFieldValidation): this {
+        this.config.validation = this.config.validation || [];
+        this.config.validation.push(validation);
+        return this;
+    }
+
+    /**
+     * Add a list validation rule to this field (for list fields).
+     * This method is protected and should only be used by field-specific validator methods.
+     * @internal
+     */
+    protected listValidation(validation: CmsModelFieldValidation): this {
+        this.config.listValidation = this.config.listValidation || [];
+        this.config.listValidation.push(validation);
+        return this;
+    }
+
+    predefinedValues(values: CmsModelFieldPredefinedValues["values"]): this {
+        this.config.predefinedValues = {
+            enabled: true,
+            values
+        };
+        return this;
+    }
+
+    renderer<TName extends FieldRendererName<TType>>(
+        name: TName,
+        ...args: undefined extends FieldRendererSettings<TName>
+            ? [settings?: FieldRendererSettings<TName>]
+            : FieldRendererSettings<TName> extends undefined
+              ? []
+              : [settings: FieldRendererSettings<TName>]
+    ): this {
+        this.config.renderer = {
+            name: resolveRendererName(name),
+            settings: args[0] ?? null
+        };
+        return this;
+    }
+
+    settings(settings: Record<string, any>): this {
+        this.config.settings = { ...this.config.settings, ...settings };
+        return this;
+    }
+
+    /**
+     * Build the final CmsModelField
+     * @internal
+     */
+    build(): DataFieldBuildResult {
+        const fieldId = this.config._fieldId || camelCase(this.config.label);
+        const baseType = getBaseFieldType({
+            type: this.type
+        });
+        const storageId = `${baseType}@${this.config._storageId ?? fieldId}`;
+
+        return {
+            type: "data",
+            field: {
+                id: fieldId,
+                fieldId,
+                storageId,
+                type: this.getFieldType(),
+                label: this.config.label,
+                validation: this.config.validation || [],
+                listValidation: this.config.listValidation || [],
+                list: this.config.list || false,
+                predefinedValues: this.config.predefinedValues || {
+                    enabled: false,
+                    values: []
+                },
+                help: this.config.help || null,
+                placeholder: this.config.placeholder || null,
+                description: this.config.description || null,
+                note: this.config.note || null,
+                renderer: this.config.renderer || null,
+                settings: this.config.settings || {},
+                tags: this.config.tags || [],
+                rules: this.config.rules
+            }
+        };
+    }
+
+    private getFieldType(): string {
+        if (!this.subType?.length) {
+            return this.type;
+        }
+        return `${this.type}:${this.subType}`;
+    }
+}

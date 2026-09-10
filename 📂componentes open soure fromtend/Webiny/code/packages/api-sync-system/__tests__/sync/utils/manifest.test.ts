@@ -1,0 +1,115 @@
+import { ServiceDiscovery } from "@webiny/api-core/features/serviceDiscovery/index.js";
+import { DdbServiceManifestLoader } from "@webiny/api-core-ddb";
+import { getManifest } from "~/sync/utils/manifest.js";
+import { getDocumentClient } from "@webiny/db-dynamodb/testing/getDocumentClient.js";
+import type { DynamoDBDocument } from "@webiny/aws-sdk/client-dynamodb/index.js";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+describe("manifest", () => {
+    let client: DynamoDBDocument;
+    beforeEach(() => {
+        client = getDocumentClient({});
+        ServiceDiscovery.setLoader(new DdbServiceManifestLoader(client));
+        ServiceDiscovery.clear();
+    });
+
+    it("should return error because no manifest is provided", async () => {
+        const result = await getManifest();
+
+        expect(result.data).toBeUndefined();
+        expect(result.error.message).toEqual(
+            "Sync System Manifest not found. Probably Sync System is not turned on."
+        );
+    });
+
+    it("should return error because sync is missing in manifest", async () => {
+        await client.put({
+            TableName: process.env.DB_TABLE,
+            Item: {
+                PK: `SERVICE_MANIFEST#api#sync`,
+                SK: "default",
+                GSI1_PK: "SERVICE_MANIFESTS",
+                GSI1_SK: `api#sync`,
+                data: {
+                    name: "sync",
+                    manifest: {}
+                }
+            }
+        });
+        const result = await getManifest();
+        expect(result.data).toBeUndefined();
+        expect(result.error.message).toEqual("Validation failed.");
+        expect(result.error.data).toEqual({
+            invalidFields: {
+                "sync.eventBusArn": {
+                    code: "invalid_type",
+                    data: {
+                        path: ["sync", "eventBusArn"]
+                    },
+                    message: "Invalid input: expected string, received undefined"
+                },
+                "sync.eventBusName": {
+                    code: "invalid_type",
+                    data: {
+                        path: ["sync", "eventBusName"]
+                    },
+                    message: "Invalid input: expected string, received undefined"
+                },
+                "sync.region": {
+                    code: "invalid_type",
+                    data: {
+                        path: ["sync", "region"]
+                    },
+                    message: "Invalid input: expected string, received undefined"
+                }
+            }
+        });
+    });
+
+    it("should return manifest", async () => {
+        const eventBusArn = "arn:aws:events:eu-central-1:123456789012:event-bus/sync";
+        const eventBusName = "sync";
+        const region = "eu-central-1";
+        await client.put({
+            TableName: process.env.DB_TABLE,
+            Item: {
+                PK: `SERVICE_MANIFEST#api#sync`,
+                SK: "default",
+                GSI1_PK: "SERVICE_MANIFESTS",
+                GSI1_SK: `api#sync`,
+                data: {
+                    name: "sync",
+                    manifest: {
+                        eventBusArn,
+                        eventBusName,
+                        region
+                    }
+                }
+            }
+        });
+        const result = await getManifest();
+
+        expect(result.error).toBeUndefined();
+        expect(result.data).toEqual({
+            sync: {
+                eventBusArn,
+                eventBusName,
+                region
+            }
+        });
+    });
+
+    it("should return error because some strange error happened on ServiceDiscovery", async () => {
+        const original = ServiceDiscovery.load;
+
+        ServiceDiscovery.load = vi.fn(() => {
+            throw new Error("Some strange error.");
+        });
+
+        const result = await getManifest();
+
+        expect(result.data).toBeUndefined();
+        expect(result.error.message).toEqual("Some strange error.");
+        ServiceDiscovery.load = original;
+    });
+});

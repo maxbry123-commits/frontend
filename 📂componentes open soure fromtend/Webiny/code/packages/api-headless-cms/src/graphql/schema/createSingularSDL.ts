@@ -1,0 +1,114 @@
+import type { ApiEndpoint, CmsModel } from "~/types/index.js";
+import { renderInputFields } from "~/utils/renderInputFields.js";
+import { renderFields } from "~/utils/renderFields.js";
+import { ENTRY_META_FIELDS, isDateTimeEntryMetaField } from "~/constants.js";
+import type { CmsModelFieldToGraphQLRegistry } from "~/features/graphql/index.js";
+
+interface CreateSingularSDLParams {
+    models: CmsModel[];
+    model: CmsModel;
+    fieldRegistry: CmsModelFieldToGraphQLRegistry.Interface;
+    type: ApiEndpoint;
+}
+
+interface CreateSingularSDL {
+    (params: CreateSingularSDLParams): string;
+}
+
+export const createSingularSDL: CreateSingularSDL = ({
+    models,
+    model,
+    fieldRegistry,
+    type
+}): string => {
+    const inputFields = renderInputFields({
+        models,
+        model,
+        fields: model.fields,
+        fieldRegistry
+    });
+    if (inputFields.length === 0) {
+        return "";
+    }
+
+    const fields = renderFields({
+        models,
+        model,
+        fields: model.fields,
+        type,
+        fieldRegistry
+    });
+
+    const { singularApiName: singularName } = model;
+
+    const inputGqlFields = inputFields.map(f => f.fields).join("\n");
+
+    const onByMetaInputGqlFields = ENTRY_META_FIELDS.map(field => {
+        const fieldType = isDateTimeEntryMetaField(field) ? "DateTime" : "CmsIdentityInput";
+
+        return `${field}: ${fieldType}`;
+    }).join("\n");
+
+    const onByMetaGqlFields = ENTRY_META_FIELDS.map(field => {
+        const fieldType = isDateTimeEntryMetaField(field) ? "DateTime" : "CmsIdentity";
+
+        return `${field}: ${fieldType}`;
+    }).join("\n");
+
+    // Had to remove /* GraphQL */ because it causes issues with oxfmt formatting.
+    const read = `
+        """${model.description || singularName}"""
+        
+        type ${singularName}Values {
+            ${fields.map(f => f.fields).join("\n") || "_empty: String"}
+        }
+        
+        type ${singularName} {
+            id: ID!
+            entryId: String!
+            
+            ${onByMetaGqlFields}
+            values: ${singularName}Values
+            live: CmsEntryLive
+            
+            revisionDescription: String
+        }
+
+        ${fields.map(f => f.typeDefs).join("\n")}
+        
+        input ${singularName}ListWhereInput {
+            id: String
+        }
+
+        type ${singularName}Response {
+            data: ${singularName}
+            error: CmsError
+        }
+        
+        extend type Query {
+            get${singularName}: ${singularName}Response
+        }
+
+    `;
+    if (type !== "manage") {
+        return read;
+    }
+    return `
+        ${read}
+    
+        ${inputFields.map(f => f.typeDefs).join("\n")}
+        
+        input ${singularName}InputValues {
+            ${inputGqlFields || "_empty: String"}
+        }
+        
+        input ${singularName}Input {
+            ${onByMetaInputGqlFields}
+            values: ${singularName}InputValues!
+        }
+    
+        extend type Mutation {
+            update${singularName}(data: ${singularName}Input!, options: UpdateCmsEntryOptionsInput): ${singularName}Response
+        }
+    `;
+};

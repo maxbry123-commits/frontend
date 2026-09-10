@@ -1,0 +1,363 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as TooltipStories from "./Tooltip.stories";
+
+<Meta of={TooltipStories} />
+
+# Tooltip
+
+The Tooltip component is a UI element that displays informative text when users hover over, focus on, or tap an element. Tooltips are useful for providing additional context, explanations, or guidance without cluttering the interface.
+
+## Usage
+
+<Canvas of={TooltipStories.Documentation} source={ { code: `
+import React from "react";
+import { Tooltip } from "@webiny/admin-ui";
+
+const TooltipExample = () => {
+return (
+
+<Tooltip.Provider>
+  <Tooltip
+    trigger={<p>Tooltip trigger</p>}
+    content={
+      <>
+        <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Donec viverra sit
+        amet massa sagittis sollicitudin.
+      </>
+    }
+    align="center"
+    side="top"
+    variant="accent"
+    showArrow={true}
+  />
+</Tooltip.Provider>
+); };
+
+export default TooltipExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Tooltip/Tooltip.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={TooltipStories.Documentation} />
+
+```tsx
+import React from "react";
+import { Tooltip } from "@webiny/admin-ui";
+
+const TooltipExample = () => {
+  return (
+    <Tooltip.Provider>
+      <Tooltip
+        trigger={<p>Tooltip trigger</p>}
+        content={
+          <>
+            <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Donec viverra
+            sit amet massa sagittis sollicitudin.
+          </>
+        }
+        align="center"
+        side="top"
+        variant="accent"
+        showArrow={true}
+      />
+    </Tooltip.Provider>
+  );
+};
+
+export default TooltipExample;
+```
+
+## Examples
+
+### Basic Tooltip
+
+A basic tooltip with default styling.
+
+<Canvas of={TooltipStories.Default} source={ { code: `
+import React from "react";
+import { Tooltip } from "@webiny/admin-ui";
+
+const BasicTooltipExample = () => {
+return (
+
+<Tooltip.Provider>
+  <Tooltip
+    trigger={<p>Tooltip trigger</p>}
+    content={
+      <>
+        <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Donec viverra sit
+        amet massa sagittis sollicitudin.
+      </>
+    }
+  />
+</Tooltip.Provider>
+); };
+
+export default BasicTooltipExample;
+` } } />
+
+### Accent Variant
+
+A tooltip with the accent color variant for higher contrast.
+
+<Canvas of={TooltipStories.AccentVariant} source={ { code: `
+import React from "react";
+import { Tooltip } from "@webiny/admin-ui";
+
+const AccentVariantExample = () => {
+return (
+
+<Tooltip.Provider>
+  <Tooltip
+    trigger={<p>Tooltip trigger</p>}
+    content={
+      <>
+        <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Donec viverra sit
+        amet massa sagittis sollicitudin.
+      </>
+    }
+    variant="accent"
+  />
+</Tooltip.Provider>
+); };
+
+export default AccentVariantExample;
+` } } />
+
+### Subtle Variant
+
+A tooltip with the subtle variant, which is useful on dark backgrounds.
+
+<Canvas of={TooltipStories.SubtleVariant} source={ { code: `
+import React from "react";
+import { Tooltip } from "@webiny/admin-ui";
+
+const SubtleVariantExample = () => {
+return (
+
+<Tooltip.Provider>
+  <Tooltip
+    trigger={<p>Tooltip trigger</p>}
+    content={
+      <>
+        <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Donec viverra sit
+        amet massa sagittis sollicitudin.
+      </>
+    }
+    variant="subtle"
+  />
+</Tooltip.Provider>
+); };
+
+export default SubtleVariantExample;
+` } } />
+
+### Without Arrow
+
+A tooltip without the pointing arrow.
+
+<Canvas of={TooltipStories.WithoutArrow} source={ { code: `
+import React from "react";
+import { Tooltip } from "@webiny/admin-ui";
+
+const WithoutArrowExample = () => {
+return (
+
+<Tooltip.Provider>
+  <Tooltip
+    trigger={<p>Tooltip trigger</p>}
+    content={
+      <>
+        <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Donec viverra sit
+        amet massa sagittis sollicitudin.
+      </>
+    }
+    showArrow={false}
+  />
+</Tooltip.Provider>
+); };
+
+export default WithoutArrowExample;
+` } } />
+
+### With Icon Trigger
+
+Tooltips are commonly used with icon buttons to provide context about the icon's function.
+
+<Canvas of={TooltipStories.WithIconTrigger} source={ { code: `
+import React from "react";
+import { Tooltip, Icon } from "@webiny/admin-ui";
+import { ReactComponent as InfoIcon } from "@webiny/icons/info.svg";
+
+const WithIconTriggerExample = () => {
+return (
+
+<Tooltip.Provider>
+  <Tooltip
+    trigger={<Icon icon={<InfoIcon />} label="Information" />}
+    content="This is a helpful tooltip"
+  />
+</Tooltip.Provider>
+); };
+
+export default WithIconTriggerExample;
+` } } />
+
+### Positioning
+
+Tooltips can be positioned in different ways relative to the trigger element.
+
+<Canvas of={TooltipStories.Positioning} source={ { code: `
+import React from "react";
+import { Tooltip } from "@webiny/admin-ui";
+
+const PositioningExample = () => {
+return (
+
+<Tooltip.Provider>
+  <div className="flex justify-center items-center h-48">
+    <Tooltip
+      trigger={<p>&nbsp;&nbsp;Top&nbsp;&nbsp;</p>}
+      content={<div>Tooltip on top</div>}
+      side="top"
+    />
+    <Tooltip
+      trigger={<p>&nbsp;&nbsp;Right&nbsp;&nbsp;</p>}
+      content={<div>Tooltip on right</div>}
+      side="right"
+    />
+    <Tooltip
+      trigger={<p>&nbsp;&nbsp;Bottom&nbsp;&nbsp;</p>}
+      content={<div>Tooltip on bottom</div>}
+      side="bottom"
+    />
+    <Tooltip
+      trigger={<p>&nbsp;&nbsp;Left&nbsp;&nbsp;</p>}
+      content={<div>Tooltip on left</div>}
+      side="left"
+    />
+  </div>
+</Tooltip.Provider>
+); };
+
+export default PositioningExample;
+` } } />
+
+### Alignment
+
+Tooltips can be aligned differently relative to the trigger element.
+
+<Canvas of={TooltipStories.Alignment} source={ { code: `
+import React from "react";
+import { Tooltip } from "@webiny/admin-ui";
+
+const AlignmentExample = () => {
+return (
+
+<Tooltip.Provider>
+  <div className="flex justify-center items-center h-48">
+    <Tooltip
+      trigger={<p>&nbsp;&nbsp;Start&nbsp;&nbsp;</p>}
+      content={<div>Aligned to start</div>}
+      align="start"
+    />
+    <Tooltip
+      trigger={<p>&nbsp;&nbsp;Center&nbsp;&nbsp;</p>}
+      content={<div>Aligned to center</div>}
+      align="center"
+    />
+    <Tooltip
+      trigger={<p>&nbsp;&nbsp;End&nbsp;&nbsp;</p>}
+      content={<div>Aligned to end</div>}
+      align="end"
+    />
+  </div>
+</Tooltip.Provider>
+); };
+
+export default AlignmentExample;
+` } } />
+
+### With Button Trigger
+
+Tooltips can be used with buttons to provide additional information about the button's action.
+
+<Canvas of={TooltipStories.WithButtonTrigger} source={ { code: `
+import React from "react";
+import { Tooltip, Button } from "@webiny/admin-ui";
+
+const WithButtonTriggerExample = () => {
+return (
+
+<Tooltip.Provider>
+  <Tooltip trigger={<Button text="Hover me" />} content="This tooltip is triggered by a button" />
+</Tooltip.Provider>
+); };
+
+export default WithButtonTriggerExample;
+` } } />
+
+### With Formatted Content
+
+Tooltips can contain rich, formatted content with multiple elements.
+
+<Canvas of={TooltipStories.WithFormattedContent} source={ { code: `
+import React from "react";
+import { Tooltip, Text } from "@webiny/admin-ui";
+
+const WithFormattedContentExample = () => {
+return (
+
+<Tooltip.Provider>
+  <Tooltip
+    trigger={<p>Hover for more info</p>}
+    content={
+      <div className="flex flex-col gap-xs">
+        <Text size="sm" className="font-bold">
+          Important Information
+        </Text>
+        <Text size="sm">This tooltip contains formatted content with multiple paragraphs.</Text>
+        <Text size="sm">You can include various elements inside tooltips.</Text>
+      </div>
+    }
+  />
+</Tooltip.Provider>
+); };
+
+export default WithFormattedContentExample;
+` } } />
+
+### With Help Icon
+
+A common pattern is to use tooltips with help icons to provide contextual help.
+
+<Canvas of={TooltipStories.WithHelpIcon} source={ { code: `
+import React from "react";
+import { Tooltip, Icon } from "@webiny/admin-ui";
+import { ReactComponent as HelpIcon } from "@webiny/icons/help.svg";
+
+const WithHelpIconExample = () => {
+return (
+
+<Tooltip.Provider>
+  <Tooltip
+    trigger={<Icon icon={<HelpIcon />} label="Help" />}
+    content="Need help? Contact support at support@example.com"
+  />
+</Tooltip.Provider>
+); };
+
+export default WithHelpIconExample;
+` } } />

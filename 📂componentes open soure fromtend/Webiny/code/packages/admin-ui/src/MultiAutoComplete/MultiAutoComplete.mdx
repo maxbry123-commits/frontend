@@ -1,0 +1,122 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as MultiAutoCompleteStories from "./MultiAutoComplete.stories";
+
+<Meta of={MultiAutoCompleteStories} />
+
+# MultiAutoComplete
+
+The MultiAutoComplete component is a form control that allows users to select multiple values from a dropdown list of options. It supports both selecting from predefined options and adding custom values, making it ideal for tags, categories, or any scenario where multiple selections are needed.
+
+<Canvas of={MultiAutoCompleteStories.Documentation} source={ { code: `
+
+import React, { useState } from "react";
+import { MultiAutoComplete } from "@webiny/admin-ui";
+
+const MultiAutoCompleteExample = () => {
+const [values, setValues] = useState<string[]>([]);
+const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+    const handleValidation = () => {
+        if (values.length === 0) {
+            setValidation({ isValid: false, message: "Please select at least one option" });
+        } else {
+            setValidation({ isValid: true, message: "" });
+        }
+    };
+
+    const timeZones = [
+        "Eastern Standard Time (EST)",
+        "Central Standard Time (CST)",
+        "Pacific Standard Time (PST)",
+        "Greenwich Mean Time (GMT)",
+    ];
+
+    return (
+        <div>
+            <MultiAutoComplete
+                label="Time Zones"
+                description="Select one or more time zones"
+                placeholder="Search or select time zones"
+                options={timeZones}
+                values={values}
+                onValuesChange={newValues => {
+                    setValues(newValues);
+                    handleValidation();
+                }}
+                validation={validation}
+                allowFreeInput={true}
+                required={true}
+                note="You can add custom time zones if needed"
+            />
+        </div>
+    );
+
+};
+
+export default MultiAutoCompleteExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/MultiAutoComplete/MultiAutoComplete.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={MultiAutoCompleteStories.Documentation} />
+
+## Usage
+
+```tsx
+import React, { useState } from "react";
+import { MultiAutoComplete } from "@webiny/admin-ui";
+
+const MultiAutoCompleteExample = () => {
+  const [values, setValues] = useState<string[]>([]);
+  const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+  const handleValidation = () => {
+    if (values.length === 0) {
+      setValidation({ isValid: false, message: "Please select at least one option" });
+    } else {
+      setValidation({ isValid: true, message: "" });
+    }
+  };
+
+  const timeZones = [
+    "Eastern Standard Time (EST)",
+    "Central Standard Time (CST)",
+    "Pacific Standard Time (PST)",
+    "Greenwich Mean Time (GMT)"
+  ];
+
+  return (
+    <div>
+      <MultiAutoComplete
+        label="Time Zones"
+        description="Select one or more time zones"
+        placeholder="Search or select time zones"
+        options={timeZones}
+        values={values}
+        onValuesChange={newValues => {
+          setValues(newValues);
+          handleValidation();
+        }}
+        validation={validation}
+        allowFreeInput={true}
+        required={true}
+        note="You can add custom time zones if needed"
+      />
+    </div>
+  );
+};
+
+export default MultiAutoCompleteExample;
+```

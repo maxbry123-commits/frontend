@@ -1,0 +1,161 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as FilePickerStories from "./FilePicker.stories";
+
+<Meta of={FilePickerStories} />
+
+# File Picker
+
+The File Picker component allows users to select, preview, and manage files. It provides an intuitive interface for file uploads in forms and content management systems, with support for different file types and preview options.
+
+## Usage
+
+The FilePicker component is typically used with [Webiny's File Manager](https://www.webiny.com/enterprise-serverless-cms/file-manager) to provide a complete file selection experience.
+
+> ⚠️ **Note**: The FilePicker component is designed to work seamlessly with [Webiny's File Manager](https://www.webiny.com/enterprise-serverless-cms/file-manager).
+> In the Storybook example below, we’ve used random images from Picsum for demonstration purposes.
+> However, if you use this example code in a real Webiny project, the FilePicker will integrate with the actual File Manager as expected.
+
+<Canvas of={FilePickerStories.Documentation} source={ { code: `
+import React, { useState } from "react";
+import { FilePicker, type FileItemDto } from "@webiny/admin-ui";
+import { FileManager } from "@webiny/app-admin/components";
+import type { FileManagerFileItem } from "@webiny/app-admin/base/ui/FileManager";
+
+const FilePickerExample = () => {
+const [selectedFile, setSelectedFile] = useState<FileItemDto | null>(null);
+const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+    return (
+        <FileManager
+            accept={["image/*", "application/pdf"]}
+            onChange={(file: FileManagerFileItem) => {
+                if (file) {
+                    // Convert FileManager file to the format FilePicker expects
+                    const metaItems = file.meta || [];
+                    const getName = () => {
+                        const nameItem = metaItems.find((item: { key: string }) => item.key === "name");
+                        return nameItem ? nameItem.value : "";
+                    };
+                    const getSize = () => {
+                        const sizeItem = metaItems.find((item: { key: string }) => item.key === "size");
+                        return sizeItem ? sizeItem.value : 0;
+                    };
+                    const getType = () => {
+                        const typeItem = metaItems.find((item: { key: string }) => item.key === "type");
+                        return typeItem ? typeItem.value : "";
+                    };
+
+                    setSelectedFile({
+                        id: file.id,
+                        name: getName(),
+                        size: getSize(),
+                        mimeType: getType(),
+                        url: file.src || ""
+                    });
+                    setValidation({ isValid: true, message: "" });
+                }
+            }}
+            render={({ showFileManager }) => (
+                <FilePicker
+                    label="Upload Image"
+                    description="Select a file to upload (JPG, PNG, PDF)"
+                    note="Note: Maximum file size is 5MB"
+                    type="area"
+                    required={true}
+                    value={selectedFile}
+                    onSelectItem={() => showFileManager()}
+                    onRemoveItem={() => {
+                        setSelectedFile(null);
+                        setValidation({ isValid: false, message: "Please select a file" });
+                    }}
+                    onEditItem={() => showFileManager()}
+                    validation={validation}
+                />
+            )}
+        />
+    );
+
+};
+
+export default FilePickerExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/FilePicker/FilePicker.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={FilePickerStories.Documentation} />
+
+```tsx
+import React, { useState } from "react";
+import { FilePicker, type FileItemDto } from "@webiny/admin-ui";
+import { FileManager } from "@webiny/app-admin/components";
+import type { FileManagerFileItem } from "@webiny/app-admin/base/ui/FileManager";
+
+const FilePickerExample = () => {
+  const [selectedFile, setSelectedFile] = useState<FileItemDto | null>(null);
+  const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+  return (
+    <FileManager
+      accept={["image/*", "application/pdf"]}
+      onChange={(file: FileManagerFileItem) => {
+        if (file) {
+          // Convert FileManager file to the format FilePicker expects
+          const metaItems = file.meta || [];
+          const getName = () => {
+            const nameItem = metaItems.find((item: { key: string }) => item.key === "name");
+            return nameItem ? nameItem.value : "";
+          };
+          const getSize = () => {
+            const sizeItem = metaItems.find((item: { key: string }) => item.key === "size");
+            return sizeItem ? sizeItem.value : 0;
+          };
+          const getType = () => {
+            const typeItem = metaItems.find((item: { key: string }) => item.key === "type");
+            return typeItem ? typeItem.value : "";
+          };
+
+          setSelectedFile({
+            id: file.id,
+            name: getName(),
+            size: getSize(),
+            mimeType: getType(),
+            url: file.src || ""
+          });
+          setValidation({ isValid: true, message: "" });
+        }
+      }}
+      render={({ showFileManager }) => (
+        <FilePicker
+          label="Upload Image"
+          description="Select a file to upload (JPG, PNG, PDF)"
+          note="Note: Maximum file size is 5MB"
+          type="area"
+          required={true}
+          value={selectedFile}
+          onSelectItem={() => showFileManager()}
+          onRemoveItem={() => {
+            setSelectedFile(null);
+            setValidation({ isValid: false, message: "Please select a file" });
+          }}
+          onEditItem={() => showFileManager()}
+          validation={validation}
+        />
+      )}
+    />
+  );
+};
+
+export default FilePickerExample;
+```

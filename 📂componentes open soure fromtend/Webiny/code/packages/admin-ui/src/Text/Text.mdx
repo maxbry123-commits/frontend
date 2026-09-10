@@ -1,0 +1,147 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as TextStories from "./Text.stories";
+
+<Meta of={TextStories} />
+
+# Text
+
+The Text component is a fundamental UI element used for displaying text content with consistent styling across the application. It provides a standardized way to render text with different sizes while maintaining the design system's typography guidelines. The component is designed to be flexible, allowing it to be rendered as different HTML elements while preserving consistent styling.
+
+## Usage
+
+<Canvas of={TextStories.Documentation} source={ { code: `
+import React from "react";
+import { Text } from "@webiny/admin-ui";
+
+const TextExample = () => {
+return <Text size="md">Text component example</Text>;
+};
+
+export default TextExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Text/Text.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={TextStories.Documentation} />
+
+```tsx
+import React from "react";
+import { Text } from "@webiny/admin-ui";
+
+const TextExample = () => {
+  return <Text size="md">Text component example</Text>;
+};
+
+export default TextExample;
+```
+
+## Examples
+
+### Extra Large Text
+
+<Canvas of={TextStories.TextXl} source={ { code: `
+import React from "react";
+import { Text } from "@webiny/admin-ui";
+
+const TextXlExample = () => {
+return (
+
+<Text size="xl">
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus tortor eu sapien interdum
+  rhoncus.
+</Text>
+); };
+
+export default TextXlExample;
+` } } />
+
+### Large Text
+
+<Canvas of={TextStories.TextLg} source={ { code: `
+import React from "react";
+import { Text } from "@webiny/admin-ui";
+
+const TextLgExample = () => {
+return (
+
+<Text size="lg">
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus tortor eu sapien interdum
+  rhoncus.
+</Text>
+); };
+
+export default TextLgExample;
+` } } />
+
+### Medium Text
+
+<Canvas of={TextStories.TextMd} source={ { code: `
+import React from "react";
+import { Text } from "@webiny/admin-ui";
+
+const TextMdExample = () => {
+return (
+
+<Text size="md">
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus tortor eu sapien interdum
+  rhoncus.
+</Text>
+); };
+
+export default TextMdExample;
+` } } />
+
+### Small Text
+
+<Canvas of={TextStories.TextSm} source={ { code: `
+import React from "react";
+import { Text } from "@webiny/admin-ui";
+
+const TextSmExample = () => {
+return (
+
+<Text size="sm">
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus tortor eu sapien interdum
+  rhoncus.
+</Text>
+); };
+
+export default TextSmExample;
+` } } />
+
+### Using Different HTML Elements
+
+The Text component can be rendered as different HTML elements using the `as` prop. This is useful when you want to maintain semantic structure but want different visual styling.
+
+```tsx
+import React from "react";
+import { Text } from "@webiny/admin-ui";
+
+const TextAsExample = () => {
+  return (
+    <>
+      {/* Render as a div element */}
+      <Text as="div" size="md">
+        This text is rendered as a div
+      </Text>
+
+      {/* Default is span */}
+      <Text size="md">This text is rendered as a span</Text>
+    </>
+  );
+};
+
+export default TextAsExample;
+```

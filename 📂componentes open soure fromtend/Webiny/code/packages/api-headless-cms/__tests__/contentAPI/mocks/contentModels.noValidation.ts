@@ -1,0 +1,71 @@
+import { createContentModelGroup } from "./contentModelGroup";
+import type { CmsModel } from "~/types";
+import { generateAlphaNumericLowerCaseId } from "@webiny/utils";
+
+const ids = {
+    field11: generateAlphaNumericLowerCaseId(8),
+    field12: generateAlphaNumericLowerCaseId(8)
+};
+
+const contentModelGroup = createContentModelGroup();
+
+const models: CmsModel[] = [
+    {
+        createdOn: new Date().toISOString(),
+        savedOn: new Date().toISOString(),
+        titleFieldId: "title",
+        name: "Category",
+        description: "Product category",
+        modelId: "category",
+        singularApiName: "CategoryApiNameWhichIsABitDifferentThanModelId",
+        pluralApiName: "CategoriesApiModel",
+        group: {
+            id: contentModelGroup.id,
+            name: contentModelGroup.name
+        },
+        layout: [[ids.field11], [ids.field12]],
+        fields: [
+            {
+                id: ids.field11,
+                list: false,
+                help: "",
+                label: "Title",
+                type: "text",
+                storageId: `text@${ids.field11}`,
+                fieldId: "title",
+                validation: [],
+                listValidation: [],
+                placeholder: "placeholder text",
+                predefinedValues: {
+                    enabled: false,
+                    values: []
+                },
+                renderer: {
+                    name: "renderer"
+                }
+            },
+            {
+                id: ids.field12,
+                list: false,
+                help: "",
+                label: "Slug",
+                type: "text",
+                storageId: `text@${ids.field12}`,
+                fieldId: "slug",
+                validation: [],
+                listValidation: [],
+                placeholder: "placeholder text",
+                predefinedValues: {
+                    enabled: false,
+                    values: []
+                },
+                renderer: {
+                    name: "renderer"
+                }
+            }
+        ],
+        tenant: "root"
+    }
+];
+
+export default models;

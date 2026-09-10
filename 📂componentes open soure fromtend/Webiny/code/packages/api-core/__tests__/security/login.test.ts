@@ -1,0 +1,42 @@
+import { describe, test, expect, beforeEach } from "vitest";
+import { useGqlHandler } from "../useGqlHandler";
+
+describe(`"Login" test`, () => {
+    const { install, securityIdentity } = useGqlHandler({ registrations: [] });
+
+    beforeEach(async () => {
+        const [response] = await install.install({
+            "x-tenant": "root"
+        });
+
+        if (response.data.system.installSystem.error) {
+            throw new Error(response.data.system.installSystem.error.message);
+            // @ts-expect-error
+            process.exit(0);
+        }
+    });
+
+    test("Should be able to login", async () => {
+        const [response] = await securityIdentity.login();
+
+        expect(response).toEqual({
+            data: {
+                security: {
+                    login: {
+                        data: {
+                            id: "123456789",
+                            displayName: "John Doe",
+                            type: "admin",
+                            permissions: [
+                                {
+                                    name: "*"
+                                }
+                            ]
+                        },
+                        error: null
+                    }
+                }
+            }
+        });
+    });
+});

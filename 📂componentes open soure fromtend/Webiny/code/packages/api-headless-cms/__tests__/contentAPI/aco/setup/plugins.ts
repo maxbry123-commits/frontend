@@ -1,0 +1,88 @@
+import { createTestHttpHandler } from "@webiny/event-handler-core/features/testing";
+import { ApiCoreFeature, registerApiCoreStorageOperations } from "@webiny/api-core";
+import { GraphQLContextualSchema, GraphQLEngineFeature } from "@webiny/api-graphql";
+import { buildSchema } from "graphql";
+import { HeadlessCmsFeature } from "~/index";
+import { getStorageOps } from "@webiny/api-core/testing/environment.js";
+import { createTestWcpLicense } from "@webiny/wcp/testing/createTestWcpLicense.js";
+import { WcpLicenseLoader } from "@webiny/api-core/features/wcp/WcpLicenseLoader.js";
+import type { ApiCoreStorageOperations } from "@webiny/api-core/types/core.js";
+import type { PermissionsArg } from "./helpers";
+import { createPermissions } from "./helpers";
+import type { IdentityData } from "@webiny/api-core/features/security/IdentityContext/index.js";
+import { TestIdentity, TestAuthenticator } from "@webiny/api-core-testing";
+import { TestPermissions, TestAuthorizer } from "@webiny/api-core-testing";
+import { RootTenantInitializer } from "@webiny/api-core-testing";
+import { AuthTriggerHandler } from "@webiny/api-core-testing";
+import { CmsEndpointAccessDecorator } from "~tests/testHelpers/handlers/CmsEndpointAccessDecorator";
+import { defaultIdentity } from "~tests/testHelpers/helpers";
+import { processLegacyPlugins } from "~tests/testHelpers/bridgeLegacyPlugins";
+
+export interface CreateHandlerCoreParams {
+    permissions?: PermissionsArg[];
+    identity?: IdentityData;
+    path?: string;
+    extraPlugins?: any[];
+}
+
+export const createHandlerCore = (params: CreateHandlerCoreParams = {}) => {
+    const tenant = { id: "root", name: "Root", parent: null };
+    const { identity = defaultIdentity, permissions, extraPlugins = [] } = params;
+
+    const apiCoreStorage = getStorageOps<ApiCoreStorageOperations>("apiCore");
+    const cmsStorage = getStorageOps("cms");
+    const resolvedPermissions = createPermissions(permissions);
+
+    const capturedCtx: { value?: Record<string, any> } = {};
+
+    const handler = createTestHttpHandler({
+        root: container => {
+            container.registerInstance(TestIdentity, identity);
+            container.registerInstance(TestPermissions, { list: resolvedPermissions });
+            container.register(TestAuthenticator);
+            container.register(TestAuthorizer);
+            container.registerDecorator(CmsEndpointAccessDecorator);
+            container.registerDecorator(AuthTriggerHandler);
+            container.registerDecorator(RootTenantInitializer);
+        },
+        child: async container => {
+            const wcpLicense = await WcpLicenseLoader.load(createTestWcpLicense());
+
+            registerApiCoreStorageOperations(container, apiCoreStorage.storageOperations);
+            ApiCoreFeature.register(container, { wcpLicense });
+
+            await processLegacyPlugins(container, cmsStorage.plugins);
+
+            const allExtraPlugins: any[] = [];
+            for (const p of [cmsStorage.plugins].flat(Infinity as 1)) {
+                if (p && typeof (p as any).apply !== "function" && typeof p !== "function") {
+                    allExtraPlugins.push(p);
+                }
+            }
+            for (const p of extraPlugins) {
+                allExtraPlugins.push(...[p].flat());
+            }
+
+            HeadlessCmsFeature.register(container, {
+                type: "manage",
+                extraPlugins: allExtraPlugins
+            });
+            const STUB_SCHEMA = buildSchema("type Query { _empty: String }");
+            container.registerInstance(GraphQLContextualSchema, {
+                async build(ctx: Record<string, any>) {
+                    capturedCtx.value = ctx;
+                    return STUB_SCHEMA;
+                }
+            });
+            GraphQLEngineFeature.register(container);
+        }
+    });
+
+    return {
+        handler,
+        tenant,
+        identity,
+        capturedCtx,
+        storageOperations: cmsStorage.storageOperations
+    };
+};

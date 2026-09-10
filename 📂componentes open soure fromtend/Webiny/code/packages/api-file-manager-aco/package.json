@@ -1,0 +1,50 @@
+{
+  "name": "@webiny/api-file-manager-aco",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./*": "./*"
+  },
+  "keywords": [
+    "api-file-manager-aco:base"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webiny/webiny-js.git",
+    "directory": "packages/api-file-manager-aco"
+  },
+  "description": "Connect File Manager to ACO",
+  "author": "Webiny Ltd.",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@webiny/api-aco": "0.0.0",
+    "@webiny/api-file-manager": "0.0.0",
+    "@webiny/api-graphql": "0.0.0",
+    "@webiny/error": "0.0.0",
+    "@webiny/feature": "0.0.0"
+  },
+  "devDependencies": {
+    "@webiny/api": "0.0.0",
+    "@webiny/api-core": "0.0.0",
+    "@webiny/api-core-testing": "0.0.0",
+    "@webiny/api-graphql": "0.0.0",
+    "@webiny/api-headless-cms": "0.0.0",
+    "@webiny/build-tools": "0.0.0",
+    "@webiny/di": "^1.0.2",
+    "@webiny/event-handler-core": "0.0.0",
+    "@webiny/handler": "0.0.0",
+    "@webiny/plugins": "0.0.0",
+    "@webiny/utils": "0.0.0",
+    "@webiny/wcp": "0.0.0",
+    "graphql": "^16.14.2",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
+  },
+  "webiny": {
+    "publishFrom": "dist"
+  }
+}

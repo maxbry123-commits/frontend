@@ -1,0 +1,94 @@
+import React from "react";
+import { Grid, Input, Switch, Textarea, Tags } from "@webiny/admin-ui";
+import { validation } from "@webiny/validation";
+import type { BindComponent } from "@webiny/form";
+import GroupSelect from "./GroupSelect.js";
+import { IconPicker } from "~/admin/components/IconPicker.js";
+
+interface GeneralSettingsProps {
+    Bind: BindComponent;
+}
+
+const GeneralSettings = ({ Bind }: GeneralSettingsProps) => {
+    return (
+        <React.Fragment>
+            <Grid>
+                <Grid.Column span={12}>
+                    <Bind name={"name"}>
+                        <Input label={"Content model name"} />
+                    </Bind>
+                </Grid.Column>
+                <Grid.Column span={12}>
+                    <Bind name={"modelId"}>
+                        <Input disabled={true} label={"Content model ID"} />
+                    </Bind>
+                </Grid.Column>
+                <Grid.Column span={12}>
+                    <Bind name={"singularApiName"}>
+                        <Input disabled={true} label={"Singular API Name"} />
+                    </Bind>
+                </Grid.Column>
+                <Grid.Column span={12}>
+                    <Bind name={"pluralApiName"}>
+                        <Input disabled={true} label={"Plural API Name"} />
+                    </Bind>
+                </Grid.Column>
+                <Grid.Column span={12}>
+                    <Bind name={"description"}>
+                        <Textarea rows={5} label={"Content model description"} />
+                    </Bind>
+                </Grid.Column>
+                <Grid.Column span={12}>
+                    <Bind name={"group"} validators={validation.create("required")}>
+                        <GroupSelect />
+                    </Bind>
+                </Grid.Column>
+                <Grid.Column span={12}>
+                    <Bind name="icon">
+                        <IconPicker
+                            label={`Icon`}
+                            description={`Choose an icon to represent the model.`}
+                        />
+                    </Bind>
+                </Grid.Column>
+                <Grid.Column span={12}>
+                    <Bind name={"tags"}>
+                        <Tags label={"Tags"} protectedValues={["type:model"]} />
+                    </Bind>
+                </Grid.Column>
+                <Grid.Column span={12}>
+                    <Bind name={"settings.aiEntryWizard"}>
+                        <Switch
+                            label={"Generate with AI"}
+                            note={
+                                "Show an AI-powered wizard that generates content before opening the editor."
+                            }
+                        />
+                    </Bind>
+                </Grid.Column>
+                <Grid.Column span={6}>
+                    <Bind name={"settings.previewPrefix"}>
+                        <Input
+                            label={"Preview URL Prefix"}
+                            placeholder={"http://localhost:3000/articles"}
+                            description={"Base URL for live preview."}
+                        />
+                    </Bind>
+                </Grid.Column>
+                <Grid.Column span={6}>
+                    <Bind name={"settings.previewSlug"}>
+                        <Input
+                            label={"Preview Slug"}
+                            placeholder={"{values.slug}"}
+                            description={
+                                "Entry field pattern for the URL slug. Use {values.fieldId}."
+                            }
+                        />
+                    </Bind>
+                </Grid.Column>
+            </Grid>
+        </React.Fragment>
+    );
+};
+
+export default GeneralSettings;

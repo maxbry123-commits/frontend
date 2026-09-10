@@ -1,0 +1,545 @@
+import { ErrorResponse, Response } from "@webiny/api-graphql";
+import type {
+    CmsContext,
+    CmsEntry,
+    CmsEntryListWhere,
+    CmsIdentity,
+    CmsModel
+} from "~/types/index.js";
+import { getEntryTitle } from "~/utils/getEntryTitle.js";
+import type { ICmsGraphQLSchemaPlugin } from "~/plugins/index.js";
+import { createCmsGraphQLSchemaPlugin } from "~/plugins/index.js";
+import { getEntryDescription } from "~/utils/getEntryDescription.js";
+import { getEntryImage } from "~/utils/getEntryImage.js";
+import { entryFieldFromStorageTransform } from "~/utils/entryStorage.js";
+import type { GraphQLFieldResolver } from "@webiny/api-graphql/types.js";
+import { ENTRY_META_FIELDS, isDateTimeEntryMetaField } from "~/constants.js";
+import NotAuthorizedResponse from "@webiny/api-core/graphql/security/NotAuthorizedResponse.js";
+import { ListLatestEntriesUseCase } from "~/features/contentEntry/ListEntries/index.js";
+import { ListModelsUseCase } from "~/features/contentModel/ListModels/index.js";
+import { GetLatestEntriesByIdsUseCase } from "~/features/contentEntry/GetLatestEntriesByIds/index.js";
+import { GetPublishedEntriesByIdsUseCase } from "~/features/contentEntry/GetPublishedEntriesByIds/index.js";
+import { GetEntriesByIdsUseCase } from "~/features/contentEntry/GetEntriesByIds/index.js";
+import { HeadlessCmsEndpointConfig } from "~/HeadlessCmsEndpointConfig.js";
+
+interface EntriesByModel {
+    [key: string]: string[];
+}
+
+type GetContentEntryType = "latest" | "published" | "exact";
+
+const createDate = (date: string | null): Date | null => {
+    if (!date) {
+        return null;
+    }
+
+    try {
+        return new Date(date);
+    } catch {
+        return new Date();
+    }
+};
+
+interface CmsEntryRecord {
+    id: string;
+    entryId: string;
+    model: {
+        modelId: string;
+        name: string;
+    };
+    status: string;
+    title: string;
+    description?: string | null;
+    image?: string | null;
+
+    /**
+     * Entry-level meta fields. 👇
+     */
+    createdOn: Date;
+    modifiedOn: Date | null;
+    savedOn: Date;
+    createdBy: CmsIdentity;
+    modifiedBy: CmsIdentity | null;
+    savedBy: CmsIdentity;
+    firstPublishedOn: Date | null;
+    lastPublishedOn: Date | null;
+    firstPublishedBy: CmsIdentity | null;
+    lastPublishedBy: CmsIdentity | null;
+
+    /**
+     * Revision-level meta fields. 👇
+     */
+    revisionCreatedOn: Date;
+    revisionModifiedOn: Date | null;
+    revisionSavedOn: Date;
+    revisionCreatedBy: CmsIdentity;
+    revisionModifiedBy: CmsIdentity | null;
+    revisionSavedBy: CmsIdentity;
+    revisionFirstPublishedOn: Date | null;
+    revisionLastPublishedOn: Date | null;
+    revisionFirstPublishedBy: CmsIdentity | null;
+    revisionLastPublishedBy: CmsIdentity | null;
+
+    wbyAco_location?: {
+        folderId?: string | null;
+    };
+}
+
+const createCmsEntryRecord = (model: CmsModel, entry: CmsEntry): CmsEntryRecord => {
+    return {
+        id: entry.id,
+        entryId: entry.entryId,
+        model: {
+            modelId: model.modelId,
+            name: model.name
+        },
+        status: entry.status,
+        title: getEntryTitle(model, entry),
+        description: getEntryDescription(model, entry),
+        image: getEntryImage(model, entry),
+
+        /**
+         * Entry-level meta fields. 👇
+         */
+        createdOn: createDate(entry.createdOn)!,
+        modifiedOn: createDate(entry.modifiedOn),
+        savedOn: createDate(entry.savedOn)!,
+        createdBy: entry.createdBy,
+        savedBy: entry.savedBy,
+        modifiedBy: entry.modifiedBy,
+        firstPublishedOn: createDate(entry.firstPublishedOn),
+        lastPublishedOn: createDate(entry.lastPublishedOn),
+        firstPublishedBy: entry.firstPublishedBy,
+        lastPublishedBy: entry.lastPublishedBy,
+
+        /**
+         * Revision-level meta fields. 👇
+         */
+        revisionCreatedOn: createDate(entry.revisionCreatedOn)!,
+        revisionSavedOn: createDate(entry.revisionSavedOn)!,
+        revisionModifiedOn: createDate(entry.revisionModifiedOn),
+        revisionCreatedBy: entry.revisionCreatedBy,
+        revisionModifiedBy: entry.revisionModifiedBy,
+        revisionSavedBy: entry.revisionSavedBy,
+        revisionFirstPublishedOn: createDate(entry.revisionFirstPublishedOn),
+        revisionLastPublishedOn: createDate(entry.revisionLastPublishedOn),
+        revisionFirstPublishedBy: entry.revisionFirstPublishedBy,
+        revisionLastPublishedBy: entry.revisionLastPublishedBy,
+
+        wbyAco_location: {
+            folderId: entry.location?.folderId || null
+        }
+    };
+};
+
+interface FetchMethod {
+    (model: CmsModel, ids: string[]): Promise<CmsEntry[]>;
+}
+
+const getFetchMethod = (type: GetContentEntryType, context: CmsContext): FetchMethod => {
+    if (type === "latest") {
+        return async (model, ids) => {
+            const result = await context.container
+                .resolve(GetLatestEntriesByIdsUseCase)
+                .execute(model, ids);
+            if (result.isFail()) {
+                throw result.error;
+            }
+            return result.value;
+        };
+    } else if (type === "published") {
+        return async (model, ids) => {
+            const result = await context.container
+                .resolve(GetPublishedEntriesByIdsUseCase)
+                .execute(model, ids);
+            if (result.isFail()) {
+                throw result.error;
+            }
+            return result.value;
+        };
+    } else {
+        return async (model, ids) => {
+            const result = await context.container
+                .resolve(GetEntriesByIdsUseCase)
+                .execute(model, ids);
+            if (result.isFail()) {
+                throw result.error;
+            }
+            return result.value;
+        };
+    }
+};
+
+/**
+ * Function to get the list of content entries depending on latest, published or exact GraphQL queries.
+ */
+interface GetContentEntriesParams {
+    args: {
+        entries: Pick<CmsEntry, "id" | "modelId">[];
+    };
+    context: CmsContext;
+    type: GetContentEntryType;
+}
+
+const getContentEntries = async (
+    params: GetContentEntriesParams
+): Promise<Response | ErrorResponse> => {
+    const { args, context, type } = params;
+
+    const method = getFetchMethod(type, context);
+
+    const modelsResult = await context.container.resolve(ListModelsUseCase).execute();
+    if (modelsResult.isFail()) {
+        throw modelsResult.error;
+    }
+    const models = modelsResult.value;
+
+    const modelsMap = models.reduce(
+        (collection, model) => {
+            collection[model.modelId] = model;
+            return collection;
+        },
+        {} as Record<string, CmsModel>
+    );
+
+    const argsEntries = args.entries as Pick<CmsEntry, "id" | "modelId">[];
+
+    const entriesByModel = argsEntries.reduce((collection, ref) => {
+        if (!collection[ref.modelId]) {
+            collection[ref.modelId] = [];
+        } else if (collection[ref.modelId].includes(ref.id)) {
+            return collection;
+        }
+        collection[ref.modelId].push(ref.id);
+        return collection;
+    }, {} as EntriesByModel);
+
+    const getters: Promise<CmsEntry[]>[] = Object.keys(entriesByModel).map(async modelId => {
+        return method(modelsMap[modelId], entriesByModel[modelId]);
+    });
+
+    if (getters.length === 0) {
+        return new Response([]);
+    }
+
+    try {
+        const results = await Promise.all(getters);
+
+        const entries = results
+            .reduce<CmsEntryRecord[]>((collection, items) => {
+                return collection.concat(
+                    items.map(item => {
+                        const model = modelsMap[item.modelId];
+
+                        return createCmsEntryRecord(model, item);
+                    })
+                );
+            }, [])
+            .filter(Boolean);
+
+        return new Response(entries);
+    } catch (ex) {
+        return new ErrorResponse(ex);
+    }
+};
+
+/**
+ * Function to fetch a single content entry depending on latest, published or exact GraphQL query.
+ */
+interface GetContentEntryParams {
+    args: {
+        entry: Pick<CmsEntry, "id" | "modelId">;
+    };
+    context: CmsContext;
+    type: "latest" | "published" | "exact";
+}
+
+const getContentEntry = async (
+    params: GetContentEntryParams
+): Promise<Response<CmsEntryRecord | null> | NotAuthorizedResponse> => {
+    const { args, context, type } = params;
+
+    const method = getFetchMethod(type, context);
+
+    const { modelId, id } = args.entry;
+    const modelsResult = await context.container.resolve(ListModelsUseCase).execute();
+    if (modelsResult.isFail()) {
+        throw modelsResult.error;
+    }
+    const model = modelsResult.value.find(m => m.modelId === modelId);
+
+    if (!model) {
+        return new NotAuthorizedResponse({
+            data: {
+                modelId
+            }
+        });
+    }
+
+    const result = await method(model, [id]);
+
+    const entry = result.shift();
+    if (!entry) {
+        return new Response(null);
+    }
+
+    return new Response(createCmsEntryRecord(model, entry));
+};
+/**
+ * As we support description field, we need to transform the value from storage.
+ */
+const createResolveDescription = (): GraphQLFieldResolver<any, any, CmsContext> => {
+    return async (parent, _, context) => {
+        const modelsResult = await context.container.resolve(ListModelsUseCase).execute();
+        if (modelsResult.isFail()) {
+            return null;
+        }
+        const model = modelsResult.value.find(({ modelId }) => {
+            return parent.model.modelId === modelId;
+        });
+        if (!model) {
+            return null;
+        }
+        const field = model.fields.find(f => f.fieldId === model.descriptionFieldId);
+        if (!field) {
+            return null;
+        }
+        const value = parent.description || parent[field.fieldId];
+        if (!value) {
+            return null;
+        }
+        return entryFieldFromStorageTransform({
+            context,
+            model,
+            field,
+            value
+        });
+    };
+};
+
+interface Params {
+    context: CmsContext;
+}
+
+export const createContentEntriesSchema = ({
+    context
+}: Params): ICmsGraphQLSchemaPlugin<CmsContext> => {
+    const enhancerConfig = context.container.resolve(HeadlessCmsEndpointConfig);
+    if (enhancerConfig.type !== "manage") {
+        const plugin = createCmsGraphQLSchemaPlugin({
+            typeDefs: "",
+            resolvers: {}
+        });
+        plugin.name = `headless-cms.graphql.schema.${enhancerConfig.type}.empty`;
+        return plugin;
+    }
+
+    const onByMetaFields = ENTRY_META_FIELDS.map(field => {
+        const fieldType = isDateTimeEntryMetaField(field) ? "DateTime" : "CmsIdentity";
+
+        return `${field}: ${fieldType}`;
+    }).join("\n");
+
+    const plugin = createCmsGraphQLSchemaPlugin({
+        // Had to remove /* GraphQL */ because it causes issues with oxfmt formatting.
+        typeDefs: `
+            type CmsModelMeta {
+                modelId: String!
+                name: String!
+            }
+
+            type CmsPublishedContentEntry {
+                id: ID!
+                entryId: String!
+                title: String
+                description: String
+                image: String
+            }
+
+            type CmsContentEntry {
+                id: ID!
+                entryId: String!
+                model: CmsModelMeta!
+                status: String!
+                published: CmsPublishedContentEntry
+                title: String!
+                description: String
+                image: String
+                
+                ${onByMetaFields}
+            
+                wbyAco_location: WbyAcoLocation
+            }
+
+            type CmsContentEntriesResponse {
+                data: [CmsContentEntry!]
+                error: CmsError
+            }
+
+            type CmsContentEntryResponse {
+                data: CmsContentEntry
+                error: CmsError
+            }
+
+            input CmsModelEntryInput {
+                modelId: ID!
+                id: ID!
+            }
+
+            extend type Query {
+                # Search content entries for given content models using the query string.
+                searchContentEntries(
+                    modelIds: [ID!]!
+                    query: String
+                    fields: [String!]
+                    limit: Int
+                ): CmsContentEntriesResponse!
+
+                # Get content entry meta data
+                getContentEntry(entry: CmsModelEntryInput!): CmsContentEntryResponse!
+
+                getLatestContentEntry(entry: CmsModelEntryInput!): CmsContentEntryResponse!
+                getPublishedContentEntry(entry: CmsModelEntryInput!): CmsContentEntryResponse!
+
+                # Get content entries meta data
+                getContentEntries(entries: [CmsModelEntryInput!]!): CmsContentEntriesResponse!
+                getLatestContentEntries(entries: [CmsModelEntryInput!]!): CmsContentEntriesResponse!
+                getPublishedContentEntries(
+                    entries: [CmsModelEntryInput!]!
+                ): CmsContentEntriesResponse!
+            }
+        `,
+        resolvers: {
+            CmsContentEntry: {
+                published: async (parent, _, context) => {
+                    try {
+                        const modelsResult = await context.container
+                            .resolve(ListModelsUseCase)
+                            .execute();
+                        if (modelsResult.isFail()) {
+                            return null;
+                        }
+                        const model = modelsResult.value.find(({ modelId }) => {
+                            return parent.model.modelId === modelId;
+                        });
+                        if (!model) {
+                            return null;
+                        }
+                        const result = await context.container
+                            .resolve(GetPublishedEntriesByIdsUseCase)
+                            .execute(model, [parent.id]);
+                        if (result.isFail()) {
+                            return null;
+                        }
+                        const entry = result.value[0];
+                        if (!entry) {
+                            return null;
+                        }
+                        return createCmsEntryRecord(model, entry);
+                    } catch {
+                        return null;
+                    }
+                },
+                description: createResolveDescription()
+            },
+            CmsPublishedContentEntry: {
+                description: createResolveDescription()
+            },
+            Query: {
+                async searchContentEntries(_, args: any, context) {
+                    const { modelIds, fields, query, limit = 10 } = args;
+                    const modelsResult = await context.container
+                        .resolve(ListModelsUseCase)
+                        .execute();
+                    if (modelsResult.isFail()) {
+                        return new ErrorResponse(modelsResult.error);
+                    }
+                    const models = modelsResult.value;
+
+                    const getters = models
+                        .filter(model => modelIds.includes(model.modelId))
+                        .map(async model => {
+                            const listLatest =
+                                await context.container.resolve(ListLatestEntriesUseCase);
+                            const where: CmsEntryListWhere = {};
+
+                            const result = await listLatest.execute(model, {
+                                limit,
+                                where,
+                                search: !!query ? query : undefined,
+                                fields: fields || []
+                            });
+                            // TODO figure a better way to handle errors in parallel execution
+                            if (result.isFail()) {
+                                throw result.error;
+                            }
+                            const { entries } = result.value;
+                            return entries.map((entry: CmsEntry) => {
+                                return createCmsEntryRecord(model, entry);
+                            });
+                        });
+
+                    try {
+                        const entries = await Promise.all(getters).then(results =>
+                            results.reduce((result, item) => result.concat(item), [])
+                        );
+
+                        return new Response(
+                            entries
+                                .sort((a, b) => b.savedOn.getTime() - a.savedOn.getTime())
+                                .slice(0, limit)
+                        );
+                    } catch (ex) {
+                        return new ErrorResponse(ex);
+                    }
+                },
+                async getContentEntry(_, args: any, context) {
+                    return getContentEntry({
+                        args,
+                        context,
+                        type: "exact"
+                    });
+                },
+                async getLatestContentEntry(_, args: any, context) {
+                    return getContentEntry({
+                        args,
+                        context,
+                        type: "latest"
+                    });
+                },
+                async getPublishedContentEntry(_, args: any, context) {
+                    return getContentEntry({
+                        args,
+                        context,
+                        type: "published"
+                    });
+                },
+                async getContentEntries(_, args: any, context) {
+                    return getContentEntries({
+                        args,
+                        context,
+                        type: "exact"
+                    });
+                },
+                async getLatestContentEntries(_, args: any, context) {
+                    return getContentEntries({
+                        args,
+                        context,
+                        type: "latest"
+                    });
+                },
+                async getPublishedContentEntries(_, args: any, context) {
+                    return getContentEntries({
+                        args,
+                        context,
+                        type: "published"
+                    });
+                }
+            }
+        }
+    });
+
+    plugin.name = `headless-cms.graphql.schema.${context.container.resolve(HeadlessCmsEndpointConfig).type}.content-entries`;
+
+    return plugin;
+};

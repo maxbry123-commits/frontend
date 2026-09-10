@@ -1,0 +1,246 @@
+import type { App } from "~/types.js";
+
+export enum ActionType {
+    CREATE = "CREATE",
+    UPDATE = "UPDATE",
+    DELETE = "DELETE",
+    MOVE_TO_TRASH = "MOVE_TO_TRASH",
+    RESTORE_FROM_TRASH = "RESTORE_FROM_TRASH",
+    PUBLISH = "PUBLISH",
+    UNPUBLISH = "UNPUBLISH",
+    IMPORT = "IMPORT",
+    EXPORT = "EXPORT",
+    MOVE = "MOVE",
+    CREATE_REVISION_FROM = "CREATE_REVISION_FROM",
+    DUPLICATE = "DUPLICATE",
+    GENERATE = "GENERATE"
+}
+
+const commonActions = {
+    CREATE: { type: ActionType.CREATE, displayName: "Create" },
+    UPDATE: { type: ActionType.UPDATE, displayName: "Update" },
+    DELETE: { type: ActionType.DELETE, displayName: "Delete" },
+    MOVE: { type: ActionType.MOVE, displayName: "Move" },
+    CREATE_REVISION_FROM: {
+        type: ActionType.CREATE_REVISION_FROM,
+        displayName: "Create revision from"
+    },
+    DUPLICATE: { type: ActionType.DUPLICATE, displayName: "Duplicate" },
+    GENERATE: { type: ActionType.GENERATE, displayName: "Generate" }
+};
+
+const publishActions = {
+    PUBLISH: { type: ActionType.PUBLISH, displayName: "Publish" },
+    UNPUBLISH: { type: ActionType.UNPUBLISH, displayName: "Unpublish" }
+};
+
+const trashBinActions = {
+    MOVE_TO_TRASH: { type: ActionType.MOVE_TO_TRASH, displayName: "Move to trash" },
+    RESTORE_FROM_TRASH: { type: ActionType.RESTORE_FROM_TRASH, displayName: "Restore from trash" }
+};
+
+export const apps: App[] = [
+    {
+        app: "APW",
+        displayName: "APW",
+        entities: [
+            {
+                type: "CHANGE_REQUEST",
+                displayName: "Change Request",
+                actions: [
+                    commonActions.CREATE,
+                    commonActions.UPDATE,
+                    commonActions.DELETE,
+                    { type: "MARK_RESOLVED", displayName: "Mark resolved" },
+                    { type: "MARK_UNRESOLVED", displayName: "Mark unresolved" }
+                ]
+            },
+            {
+                type: "COMMENT",
+                displayName: "Comment",
+                actions: [commonActions.CREATE]
+            },
+            {
+                type: "CONTENT_REVIEW",
+                displayName: "Content Review",
+                linkToEntity(id) {
+                    return `/apw/content-reviews/${id}`;
+                },
+                actions: [commonActions.CREATE]
+            },
+            {
+                type: "WORKFLOW",
+                displayName: "Workflow",
+                linkToEntity(id) {
+                    return `/apw/publishing-workflows?id=${id}`;
+                },
+                actions: [commonActions.CREATE, commonActions.UPDATE, commonActions.DELETE]
+            }
+        ]
+    },
+    {
+        app: "FILE_MANAGER",
+        displayName: "File Manager",
+        entities: [
+            {
+                type: "FILE",
+                displayName: "File",
+                actions: [commonActions.CREATE, commonActions.UPDATE, commonActions.DELETE]
+            },
+            {
+                type: "FILE_FOLDER",
+                displayName: "File folder",
+                actions: [commonActions.CREATE, commonActions.UPDATE, commonActions.DELETE]
+            },
+            {
+                type: "SETTINGS",
+                displayName: "Settings",
+                actions: [commonActions.UPDATE]
+            }
+        ]
+    },
+    {
+        app: "HEADLESS_CMS",
+        displayName: "Headless CMS",
+        entities: [
+            {
+                type: "ENTRY",
+                displayName: "Entry",
+                actions: [
+                    commonActions.CREATE,
+                    commonActions.DELETE,
+                    trashBinActions.MOVE_TO_TRASH,
+                    trashBinActions.RESTORE_FROM_TRASH
+                ]
+            },
+            {
+                type: "ENTRY_REVISION",
+                displayName: "Entry revision",
+                actions: [
+                    commonActions.CREATE,
+                    commonActions.UPDATE,
+                    commonActions.DELETE,
+                    publishActions.PUBLISH,
+                    publishActions.UNPUBLISH
+                ]
+            },
+            {
+                type: "GROUP",
+                displayName: "Group",
+                linkToEntity(id) {
+                    return `/cms/content-model-groups?id=${id}`;
+                },
+                actions: [commonActions.CREATE, commonActions.UPDATE, commonActions.DELETE]
+            },
+            {
+                type: "MODEL",
+                displayName: "Model",
+                linkToEntity(modelId) {
+                    return `/cms/content-models/${modelId}`;
+                },
+                actions: [commonActions.CREATE, commonActions.UPDATE, commonActions.DELETE]
+            },
+            {
+                type: "MODEL_FOLDER",
+                displayName: "Model folder",
+                actions: [commonActions.CREATE, commonActions.UPDATE, commonActions.DELETE]
+            }
+        ]
+    },
+    {
+        app: "MAILER",
+        displayName: "Mailer",
+        entities: [
+            {
+                type: "SETTINGS",
+                displayName: "Settings",
+                actions: [commonActions.UPDATE]
+            }
+        ]
+    },
+    {
+        app: "SECURITY",
+        displayName: "Security",
+        entities: [
+            {
+                type: "API_KEY",
+                displayName: "API Key",
+                linkToEntity(id) {
+                    return `/access-management/api-keys?id=${id}`;
+                },
+                actions: [commonActions.CREATE, commonActions.UPDATE, commonActions.DELETE]
+            },
+            {
+                type: "ROLE",
+                displayName: "Role",
+                linkToEntity(id) {
+                    return `/access-management/roles?id=${id}`;
+                },
+                actions: [commonActions.CREATE, commonActions.UPDATE, commonActions.DELETE]
+            },
+            {
+                type: "TEAM",
+                displayName: "Team",
+                linkToEntity(id) {
+                    return `/access-management/teams?id=${id}`;
+                },
+                actions: [commonActions.CREATE, commonActions.UPDATE, commonActions.DELETE]
+            },
+            {
+                type: "USER",
+                displayName: "User",
+                linkToEntity(id) {
+                    return `/admin-users?id=${id}`;
+                },
+                actions: [commonActions.CREATE, commonActions.UPDATE, commonActions.DELETE]
+            }
+        ]
+    },
+    {
+        app: "WEBSITE_BUILDER",
+        displayName: "Website Builder",
+        entities: [
+            {
+                type: "PAGE",
+                displayName: "Page",
+                linkToEntity(id) {
+                    return `/website-builder/pages/editor/${id}`;
+                },
+                actions: [
+                    commonActions.CREATE,
+                    commonActions.UPDATE,
+                    commonActions.DELETE,
+                    commonActions.MOVE,
+                    commonActions.CREATE_REVISION_FROM,
+                    commonActions.DUPLICATE,
+                    publishActions.PUBLISH,
+                    publishActions.UNPUBLISH
+                ]
+            },
+            {
+                type: "REDIRECT",
+                displayName: "Redirect",
+                linkToEntity(id) {
+                    return `/website-builder/redirects?id=${id}`;
+                },
+                actions: [
+                    commonActions.CREATE,
+                    commonActions.UPDATE,
+                    commonActions.DELETE,
+                    commonActions.MOVE
+                ]
+            }
+        ]
+    },
+    {
+        app: "AI",
+        displayName: "AI",
+        entities: [
+            {
+                type: "TEXT",
+                displayName: "Text",
+                actions: [{ type: "GENERATE", displayName: "Generate", newEntryDelay: 600 }]
+            }
+        ]
+    }
+];

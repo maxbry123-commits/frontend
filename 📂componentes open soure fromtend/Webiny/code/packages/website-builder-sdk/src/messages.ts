@@ -1,0 +1,11 @@
+export const DOCUMENT_SET = "document.set";
+export const DOCUMENT_PATCH = "document.patch";
+export const PREVIEW_COMPONENT_REGISTER = "preview.component.register";
+export const PREVIEW_READY = "preview.ready";
+export const PREVIEW_COMPONENTGROUP_REGISTER = "preview.componentGroup.register";
+export const PREVIEW_VIEWPORT_CHANGE_START = "preview.viewport.change.start";
+export const PREVIEW_VIEWPORT_CHANGE_END = "preview.viewport.change.end";
+export const PREVIEW_ELEMENT_POSITIONS = "preview.element.positions";
+export const PREVIEW_ELEMENT_CLICK = "preview.element.click";
+export const PREVIEW_ELEMENT_ENTER = "preview.element.enter";
+export const PREVIEW_ELEMENT_LEAVE = "preview.element.leave";

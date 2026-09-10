@@ -1,0 +1,188 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as SidebarStories from "./Sidebar.stories";
+
+<Meta of={SidebarStories} />
+
+# Sidebar
+
+The Sidebar component is a navigation element that provides a collapsible and expandable menu structure for application navigation. It supports nested menu items, links, groups, and icons, making it ideal for organizing complex navigation hierarchies.
+
+## Usage
+
+<Canvas of={SidebarStories.MainMenu} source={ { code: `
+import React from "react";
+import { Sidebar, SidebarProvider } from "@webiny/admin-ui";
+import { ReactComponent as CmsIcon } from "@webiny/icons/web.svg";
+import { ReactComponent as PageBuilderIcon } from "@webiny/icons/table_chart.svg";
+
+const SidebarExample = () => {
+return (
+
+<SidebarProvider>
+  <Sidebar
+    title={"Webiny"}
+    icon={<Sidebar.Icon element={<img src="/logo.png" alt="Webiny" />} label={"Webiny"} />}
+  >
+    <Sidebar.Link
+      text={"Headless CMS"}
+      to={"/cms"}
+      icon={<Sidebar.Item.Icon label="Headless CMS" element={<CmsIcon />} />}
+    />
+    <Sidebar.Item
+      text={"Page Builder"}
+      icon={<Sidebar.Item.Icon label="Page Builder" element={<PageBuilderIcon />} />}
+    >
+      <Sidebar.Group text={"Pages"} />
+      <Sidebar.Link to={"/page-builder/pages"} text={"Pages"} />
+      <Sidebar.Link to={"/page-builder/templates"} text={"Templates"} />
+    </Sidebar.Item>
+  </Sidebar>
+</SidebarProvider>
+); };
+
+export default SidebarExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Sidebar/Sidebar.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+```tsx
+import React from "react";
+import { Sidebar, SidebarProvider } from "@webiny/admin-ui";
+import { ReactComponent as CmsIcon } from "@webiny/icons/web.svg";
+import { ReactComponent as PageBuilderIcon } from "@webiny/icons/table_chart.svg";
+
+const SidebarExample = () => {
+  return (
+    <SidebarProvider>
+      <Sidebar
+        title={"Webiny"}
+        icon={<Sidebar.Icon element={<img src="/logo.png" alt="Webiny" />} label={"Webiny"} />}
+      >
+        <Sidebar.Link
+          text={"Headless CMS"}
+          to={"/cms"}
+          icon={<Sidebar.Item.Icon label="Headless CMS" element={<CmsIcon />} />}
+        />
+        <Sidebar.Item
+          text={"Page Builder"}
+          icon={<Sidebar.Item.Icon label="Page Builder" element={<PageBuilderIcon />} />}
+        >
+          <Sidebar.Group text={"Pages"} />
+          <Sidebar.Link to={"/page-builder/pages"} text={"Pages"} />
+          <Sidebar.Link to={"/page-builder/templates"} text={"Templates"} />
+        </Sidebar.Item>
+      </Sidebar>
+    </SidebarProvider>
+  );
+};
+
+export default SidebarExample;
+```
+
+## Components
+
+The Sidebar component is composed of several subcomponents that work together to create a complete navigation experience:
+
+### Sidebar
+
+The main container component that holds the entire sidebar structure.
+
+```jsx
+<Sidebar
+  title="Application Title"
+  icon={<Sidebar.Icon element={<Logo />} label="Logo" />}
+  footer={<FooterContent />}
+>
+  {/* Menu items */}
+</Sidebar>
+```
+
+### Sidebar.Item
+
+Used to create menu items that can either be clickable or serve as containers for nested items.
+
+```jsx
+// Clickable item
+<Sidebar.Item
+    text="Settings"
+    icon={<Sidebar.Item.Icon label="Settings" element={<SettingsIcon />} />}
+    onClick={() => handleClick()}
+/>
+
+// Container for nested items
+<Sidebar.Item
+    text="Content"
+    icon={<Sidebar.Item.Icon label="Content" element={<ContentIcon />} />}
+>
+    {/* Nested items */}
+</Sidebar.Item>
+```
+
+### Sidebar.Link
+
+Used to create menu items that link to different routes in the application.
+
+```jsx
+<Sidebar.Link
+  text="Dashboard"
+  to="/dashboard"
+  icon={<Sidebar.Item.Icon label="Dashboard" element={<DashboardIcon />} />}
+  active={currentPath === "/dashboard"}
+/>
+```
+
+### Sidebar.Group
+
+Used to create group labels for organizing related menu items.
+
+```jsx
+<Sidebar.Group text="Settings" />
+<Sidebar.Link text="General" to="/settings/general" />
+<Sidebar.Link text="Security" to="/settings/security" />
+```
+
+### Sidebar.Icon
+
+Used to create icons for the sidebar header or menu items.
+
+```jsx
+<Sidebar.Icon element={<Logo />} label="Application Logo" />
+```
+
+## Features
+
+### Collapsible/Expandable
+
+The sidebar can be collapsed to save space or expanded to show full menu text. It automatically collapses when the mouse leaves and expands when the mouse enters.
+
+### Pinnable
+
+Users can pin the sidebar to keep it expanded permanently, which is useful for frequent navigation.
+
+### Nested Navigation
+
+Support for nested menu items allows for organizing complex navigation hierarchies.
+
+### Active State
+
+Menu items can be marked as active to indicate the current location in the application.
+
+### Disabled State
+
+Menu items can be disabled to indicate that they are not currently available.
+
+### Footer Content
+
+The sidebar supports footer content, which is useful for displaying additional information or actions at the bottom of the sidebar.

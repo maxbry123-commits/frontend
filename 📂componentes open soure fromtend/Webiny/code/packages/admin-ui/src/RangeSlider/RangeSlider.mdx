@@ -1,0 +1,109 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as RangeSliderStories from "./RangeSlider.stories";
+
+<Meta of={RangeSliderStories} />
+
+# Range Slider
+
+The Range Slider component is an interactive input control that allows users to select a range of values by moving two thumbs along a track. It provides a visual and intuitive way for users to define minimum and maximum values within a predefined range.
+
+## Usage
+
+<Canvas of={RangeSliderStories.Documentation} source={ { code: `
+import React, { useState } from "react";
+import { RangeSlider } from "@webiny/admin-ui";
+
+const RangeSliderExample = () => {
+const [values, setValues] = useState([25, 75]);
+const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+    const handleChange = (newValues: number[]) => {
+        setValues(newValues);
+
+        if (newValues[0] === 0 && newValues[1] === 0) {
+            setValidation({ isValid: false, message: "Please select a range" });
+        } else {
+            setValidation({ isValid: true, message: "" });
+        }
+    };
+
+    return (
+        <div>
+            <RangeSlider
+                label="Price Range"
+                description="Select the minimum and maximum price range"
+                note="Note: The selected range will filter available products"
+                min={0}
+                max={100}
+                step={1}
+                values={values}
+                required={true}
+                onValuesChange={handleChange}
+                showTooltip={true}
+                transformValue={(value) => \`$\${value}\`}
+                validation={validation}
+            />
+        </div>
+    );
+
+};
+
+export default RangeSliderExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/RangeSlider/RangeSlider.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={RangeSliderStories.Documentation} exclude={["onValuesChange", "onValuesCommit"]} />
+
+```tsx
+import React, { useState } from "react";
+import { RangeSlider } from "@webiny/admin-ui";
+
+const RangeSliderExample = () => {
+  const [values, setValues] = useState([25, 75]);
+  const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+  const handleChange = (newValues: number[]) => {
+    setValues(newValues);
+
+    if (newValues[0] === 0 && newValues[1] === 0) {
+      setValidation({ isValid: false, message: "Please select a range" });
+    } else {
+      setValidation({ isValid: true, message: "" });
+    }
+  };
+
+  return (
+    <div>
+      <RangeSlider
+        label="Price Range"
+        description="Select the minimum and maximum price range"
+        note="Note: The selected range will filter available products"
+        min={0}
+        max={100}
+        step={1}
+        values={values}
+        required={true}
+        onValuesChange={handleChange}
+        showTooltip={true}
+        transformValue={value => `$${value}`}
+        validation={validation}
+      />
+    </div>
+  );
+};
+
+export default RangeSliderExample;
+```

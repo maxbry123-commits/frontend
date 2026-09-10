@@ -1,0 +1,45 @@
+{
+  "name": "@webiny/api-workflows",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./*": "./*"
+  },
+  "description": "Workflows API",
+  "keywords": [
+    "api-workflows:base"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webiny/webiny-js.git",
+    "directory": "packages/api-workflows"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@webiny/api": "0.0.0",
+    "@webiny/api-core": "0.0.0",
+    "@webiny/api-graphql": "0.0.0",
+    "@webiny/api-headless-cms": "0.0.0",
+    "@webiny/api-mailer": "0.0.0",
+    "@webiny/feature": "0.0.0",
+    "@webiny/utils": "0.0.0",
+    "graphql": "^16.14.2",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@webiny/api-core-testing": "0.0.0",
+    "@webiny/api-headless-cms-testing": "0.0.0",
+    "@webiny/build-tools": "0.0.0",
+    "@webiny/plugins": "0.0.0",
+    "type-fest": "^5.8.0",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "webiny": {
+    "publishFrom": "dist"
+  }
+}

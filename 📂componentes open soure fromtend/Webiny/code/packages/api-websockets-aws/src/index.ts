@@ -1,0 +1,23 @@
+import { createFeature } from "@webiny/feature/api";
+import { AwsWebsocketsTransport } from "~/transport/AwsWebsocketsTransport.js";
+import { WebSocketLambdaHandler } from "~/WebSocketLambdaHandler.js";
+
+export { AwsWebsocketsTransport } from "~/transport/AwsWebsocketsTransport.js";
+export { WebsocketsConnectionRegistry } from "~/WebsocketsConnectionRegistry.js";
+export { WebsocketsDdbFeature } from "~/WebsocketsDdbFeature.js";
+
+export const WebsocketsAwsFeature = createFeature({
+    name: "WebsocketsAws",
+    register(container) {
+        container.register(WebSocketLambdaHandler);
+        container.register(AwsWebsocketsTransport);
+    }
+});
+
+/** @deprecated use WebsocketsAwsFeature.register(container) */
+export const createAwsWebsockets = () => {
+    console.warn(
+        "[api-websockets-aws] createAwsWebsockets() is deprecated. Use WebsocketsAwsFeature.register(container) instead."
+    );
+    return [];
+};

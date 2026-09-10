@@ -1,0 +1,251 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as SeparatorStories from "./Separator.stories";
+
+<Meta of={SeparatorStories} />
+
+# Separator
+
+The Separator component is a visual divider that creates a clear distinction between different sections of content. It helps organize and structure information, making interfaces more scannable and easier to navigate.
+
+## Usage
+
+<Canvas of={SeparatorStories.Documentation} source={ { code: `
+import React from "react";
+import { Separator, Heading, Text } from "@webiny/admin-ui";
+
+const SeparatorExample = () => {
+return (
+
+<div>
+  <div className="space-y-1">
+    <Heading level={6}>{"This is a heading."}</Heading>
+    <Text size="sm" className={"text-neutral-strong"}>
+      {"This is a short description here"}
+    </Text>
+  </div>
+  <Separator margin="lg" variant="subtle" orientation="horizontal" decorative={true} />
+  <div className="flex items-center h-6 text-sm">
+    <Text>{"This is text 1."}</Text>
+  </div>
+</div>
+); };
+
+export default SeparatorExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Separator/Separator.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={SeparatorStories.Documentation} />
+
+```tsx
+import React from "react";
+import { Separator, Heading, Text } from "@webiny/admin-ui";
+
+const SeparatorExample = () => {
+  return (
+    <div>
+      <div className="space-y-1">
+        <Heading level={6}>{"This is a heading."}</Heading>
+        <Text size="sm" className={"text-neutral-strong"}>
+          {"This is a short description here"}
+        </Text>
+      </div>
+      <Separator margin="lg" variant="subtle" orientation="horizontal" decorative={true} />
+      <div className="flex items-center h-6 text-sm">
+        <Text>{"This is text 1."}</Text>
+      </div>
+    </div>
+  );
+};
+
+export default SeparatorExample;
+```
+
+## Examples
+
+### Default
+
+A basic horizontal separator with subtle styling and large margin.
+
+<Canvas of={SeparatorStories.Default} source={ { code: `
+import React from "react";
+import { Separator, Heading, Text } from "@webiny/admin-ui";
+
+const DefaultSeparatorExample = () => {
+return (
+
+<div>
+  <div className="space-y-1">
+    <Heading level={6}>{"This is a heading."}</Heading>
+    <Text size="sm" className={"text-neutral-strong"}>
+      {"This is a short description here"}
+    </Text>
+  </div>
+  <Separator margin="lg" variant="subtle" />
+  <div className="flex items-center h-6 text-sm">
+    <Text>{"This is text 1."}</Text>
+  </div>
+</div>
+); };
+
+export default DefaultSeparatorExample;
+` } } />
+
+### Vertical and Horizontal
+
+Using both vertical and horizontal separators to create a structured layout.
+
+<Canvas of={SeparatorStories.VerticalAndHorizontal} source={ { code: `
+import React from "react";
+import { Separator, Heading, Text } from "@webiny/admin-ui";
+
+const VerticalAndHorizontalExample = () => {
+return (
+
+<div>
+  <div className="space-y-1">
+    <Heading level={6}>{"This is a heading."}</Heading>
+    <Text size="sm" className={"text-neutral-strong"}>
+      {"This is a short description here"}
+    </Text>
+  </div>
+  <Separator margin={"lg"} />
+  <div className="flex items-center h-6 text-sm">
+    <Text>{"This is text 1."}</Text>
+    <Separator orientation="vertical" margin={"lg"} />
+    <Text>{"This is text 2."}</Text>
+    <Separator orientation="vertical" margin={"lg"} />
+    <Text>{"This is text 3."}</Text>
+  </div>
+</div>
+); };
+
+export default VerticalAndHorizontalExample;
+` } } />
+
+### Horizontal Orientation
+
+A separator with horizontal orientation, which is the default.
+
+<Canvas of={SeparatorStories.HorizontalOrientation} source={ { code: `
+import React from "react";
+import { Separator, Heading, Text } from "@webiny/admin-ui";
+
+const HorizontalOrientationExample = () => {
+return (
+
+<div>
+  <div className="space-y-1">
+    <Heading level={6}>{"This is a heading."}</Heading>
+    <Text size="sm" className={"text-neutral-strong"}>
+      {"This is a short description here"}
+    </Text>
+  </div>
+  <Separator margin={"lg"} orientation="horizontal" />
+  <div className="flex items-center h-6 text-sm">
+    <Text>{"This is text 1."}</Text>
+  </div>
+</div>
+); };
+
+export default HorizontalOrientationExample;
+` } } />
+
+### Vertical Orientation
+
+A separator with vertical orientation, useful for creating columns or dividing inline elements.
+
+<Canvas of={SeparatorStories.VerticalOrientation} source={ { code: `
+import React from "react";
+import { Separator, Text } from "@webiny/admin-ui";
+
+const VerticalOrientationExample = () => {
+return (
+
+<div className="flex justify-center h-6 text-sm">
+  <Text>{"This is text 1."}</Text>
+  <Separator orientation="vertical" margin={"lg"} />
+  <Text>{"This is text 2."}</Text>
+  <Separator orientation="vertical" margin={"lg"} />
+  <Text>{"This is text 3."}</Text>
+</div>
+); };
+
+export default VerticalOrientationExample;
+` } } />
+
+### Less Margin
+
+A separator with medium margin, creating a tighter layout.
+
+<Canvas of={SeparatorStories.LessMargin} source={ { code: `
+import React from "react";
+import { Separator, Heading, Text } from "@webiny/admin-ui";
+
+const LessMarginExample = () => {
+return (
+
+<div>
+  <div className="space-y-1">
+    <Heading level={6}>{"This is a heading."}</Heading>
+    <Text size="sm" className={"text-neutral-strong"}>
+      {"This is a short description here"}
+    </Text>
+  </div>
+  <Separator margin={"md"} />
+  <div className="flex items-center h-6 text-sm">
+    <Text>{"This is text 1."}</Text>
+    <Separator orientation="vertical" margin={"md"} />
+    <Text>{"This is text 2."}</Text>
+    <Separator orientation="vertical" margin={"md"} />
+    <Text>{"This is text 3."}</Text>
+  </div>
+</div>
+); };
+
+export default LessMarginExample;
+` } } />
+
+### More Margin
+
+A separator with extra large margin, creating more space between sections.
+
+<Canvas of={SeparatorStories.MoreMargin} source={ { code: `
+import React from "react";
+import { Separator, Heading, Text } from "@webiny/admin-ui";
+
+const MoreMarginExample = () => {
+return (
+
+<div>
+  <div className="space-y-1">
+    <Heading level={6}>{"This is a heading."}</Heading>
+    <Text size="sm" className={"text-neutral-strong"}>
+      {"This is a short description here"}
+    </Text>
+  </div>
+  <Separator margin={"xl"} />
+  <div className="flex items-center h-6 text-sm">
+    <Text>{"This is text 1."}</Text>
+    <Separator orientation="vertical" margin={"xl"} />
+    <Text>{"This is text 2."}</Text>
+    <Separator orientation="vertical" margin={"xl"} />
+    <Text>{"This is text 3."}</Text>
+  </div>
+</div>
+); };
+
+export default MoreMarginExample;
+` } } />

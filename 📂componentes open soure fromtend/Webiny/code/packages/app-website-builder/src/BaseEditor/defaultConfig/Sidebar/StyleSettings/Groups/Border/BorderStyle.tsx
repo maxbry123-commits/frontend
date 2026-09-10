@@ -1,0 +1,58 @@
+import React from "react";
+import { observer } from "mobx-react-lite";
+import { Select } from "@webiny/admin-ui";
+import { useStyles } from "../../useStyles.js";
+import { InheritanceLabel } from "~/BaseEditor/defaultConfig/Sidebar/InheritanceLabel.js";
+import { SidebarRow } from "~/BaseEditor/defaultConfig/Sidebar/StyleSettings/SidebarRow.js";
+
+const options = [
+    { label: "None", value: "none" },
+    { label: "Solid", value: "solid" },
+    { label: "Dashed", value: "dashed" },
+    { label: "Dotted", value: "dotted" },
+    { label: "Double", value: "double" }
+];
+
+interface BorderStyleProps {
+    elementId: string;
+}
+
+export const BorderStyle = observer(({ elementId }: BorderStyleProps) => {
+    const { styles, onChange, inheritanceMap } = useStyles(elementId);
+
+    const onValueChange = (value: string) => {
+        onChange(({ styles }) => {
+            styles.set("borderStyle", value);
+        });
+    };
+
+    const onReset = () => {
+        onChange(({ styles }) => {
+            styles.unset("borderStyle");
+        });
+    };
+
+    const inheritance = inheritanceMap?.borderStyle ?? {};
+
+    return (
+        <SidebarRow
+            label={
+                <InheritanceLabel
+                    onReset={onReset}
+                    isOverridden={inheritance?.overridden ?? false}
+                    inheritedFrom={inheritance?.inheritedFrom}
+                    text={"Border style"}
+                />
+            }
+        >
+            <Select
+                size={"md"}
+                variant={"secondary"}
+                value={styles.borderStyle ?? "none"}
+                displayResetAction={false}
+                onChange={onValueChange}
+                options={options}
+            />
+        </SidebarRow>
+    );
+});

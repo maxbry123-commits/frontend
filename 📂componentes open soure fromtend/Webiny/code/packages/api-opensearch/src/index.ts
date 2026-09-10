@@ -1,0 +1,18 @@
+export { registerOpenSearchCore } from "./registerOpenSearchCore.js";
+export { getCommonMappings, getBaseConfiguration } from "./indexConfiguration/index.js";
+export * from "./sort.js";
+export * from "./where.js";
+export * from "./limit.js";
+export * from "./normalize.js";
+export * from "./cursors.js";
+export {
+    createOpenSearchClient,
+    type Client,
+    type ClientOptions,
+    type OpenSearchClientOptions
+} from "./client.js";
+export * from "./utils/index.js";
+export * from "./operations/index.js";
+export * from "./sharedIndex.js";
+export * from "./indexPrefix.js";
+export * from "./types.js";

@@ -1,0 +1,189 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as InputStories from "./Input.stories";
+
+<Meta of={InputStories} />
+
+# Input
+
+The Input component is a form control that allows users to enter and edit text. It supports various types of input (text, number, email, etc.), can be customized with icons, and includes built-in validation support.
+
+## Usage
+
+<Canvas of={InputStories.Documentation} source={ { code: `
+import React, { useState } from "react";
+
+import { Input } from "@webiny/admin-ui";
+
+const InputExample = () => {
+const [value, setValue] = useState("");
+const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+    const handleValidation = () => {
+        if (!value.trim()) {
+            setValidation({ isValid: false, message: "This field is required" });
+        } else if (value.trim().length < 3) {
+            setValidation({ isValid: false, message: "Must be at least 3 characters long" });
+        } else {
+            setValidation({ isValid: true, message: "" });
+        }
+    };
+
+    return (
+        <div>
+            <Input
+                type="text"
+                label="Full Name"
+                description="Enter your full name as it appears on your ID"
+                note="This will be used for official documentation"
+                placeholder="Enter your full name"
+                required={true}
+                value={value}
+                validation={validation}
+                onChange={newValue => setValue(newValue)}
+                onBlur={handleValidation}
+                onEnter={handleValidation}
+            />
+        </div>
+    );
+
+};
+
+export default InputExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Input/Input.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={InputStories.Documentation} />
+
+```jsx
+import React, { useState } from "react";
+
+import { Input } from "@webiny/admin-ui";
+
+const InputExample = () => {
+  const [value, setValue] = useState("");
+  const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+  const handleValidation = () => {
+    if (!value.trim()) {
+      setValidation({ isValid: false, message: "This field is required" });
+    } else if (value.trim().length < 3) {
+      setValidation({ isValid: false, message: "Must be at least 3 characters long" });
+    } else {
+      setValidation({ isValid: true, message: "" });
+    }
+  };
+
+  return (
+    <div>
+      <Input
+        type="text"
+        label="Full Name"
+        description="Enter your full name as it appears on your ID"
+        note="This will be used for official documentation"
+        placeholder="Enter your full name"
+        required={true}
+        value={value}
+        validation={validation}
+        onChange={newValue => setValue(newValue)}
+        onBlur={handleValidation}
+        onEnter={handleValidation}
+      />
+    </div>
+  );
+};
+
+export default InputExample;
+```
+
+## Examples
+
+### With Validate Function
+
+The Input component supports validation using the validation prop, as shown in the example above.
+For more complex or reusable validation scenarios, you can use the validate prop, which accepts a custom validation function.
+Try entering **exists@** in the input box to see it in action, and click on **Show code** to view the validation function.
+
+<Canvas of={InputStories.WithValidateFunction} source={ { code: `
+import React, { useState } from "react";
+
+import { Input } from "@webiny/admin-ui";
+
+const EmailInput = () => {
+const [value, setValue] = useState("");
+const [validation, setValidation] = useState({ isValid: true, message: undefined });
+
+    const validate = async () => {
+        // Simulate API call delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // Example validation: check if email already exists
+        if (value.includes("exists@")) {
+            setValidation({ isValid: false, message: "This email is already registered" });
+        } else {
+            setValidation({ isValid: true, message: undefined });
+        }
+    };
+
+    return (
+        <Input
+            type="email"
+            label="Email"
+            placeholder="Enter your email"
+            value={value}
+            onChange={newValue => setValue(newValue)}
+            validate={validate}
+            validation={validation}
+        />
+    );
+
+};` } }
+/>
+
+## Anatomy
+
+### Input Anatomy
+
+<img src="/images/storybook/input/anatomy.png" alt="Input Anatomy" />
+
+### Styles
+
+<img src="/images/storybook/input/styles.png" alt="Styles" />
+
+### Field Size
+
+<img src="/images/storybook/input/field-size.png" alt="Field Size" />
+
+### States and Styles
+
+<img src="/images/storybook/input/states-and-styles.png" alt="States and Styles" />
+
+### Label Anatomy
+
+<img src="/images/storybook/input/label-anatomy.png" alt="Label Anatomy" />
+
+### Label Properties
+
+<img src="/images/storybook/input/label-properties.png" alt="Label Properties" />
+
+### Label Options
+
+<img src="/images/storybook/input/label-options.png" alt="Label Options" />
+
+## Usage
+
+### Used in forms
+
+<img src="/images/storybook/input/used-in-forms.png" alt="Used in forms" />

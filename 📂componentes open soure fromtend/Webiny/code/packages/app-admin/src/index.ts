@@ -1,0 +1,212 @@
+// IMPORTANT — do not import from this file (~/index.js) inside this package.
+// Files exported here are part of the public API, but importing ~/index.js
+// from within the package creates circular ESM dependency chains. In Babel's
+// CJS output these cycles resolved lazily; in ESM the module body executes
+// before the cycle resolves, so exported values are undefined at call time.
+// Always import directly from the source file instead (e.g. "@webiny/react-composition"
+// for makeDecoratable, "~/base/ui/Layout.js" for Layout, etc.).
+export * from "@webiny/app";
+export type { HigherOrderComponent, ProviderProps, ComposeProps } from "@webiny/app";
+// UI components
+export * from "./base/ui/Tags.js";
+export * from "./base/ui/Layout.js";
+export * from "./base/ui/TenantSelector.js";
+export type { LayoutProps } from "./base/ui/Layout.js";
+export * from "./base/ui/Navigation.js";
+export * from "./base/ui/Brand.js";
+export * from "./base/ui/Logo.js";
+export * from "./base/ui/UserMenu.js";
+export * from "./base/ui/LoginScreen.js";
+export * from "./base/ui/CenteredView.js";
+export * from "./base/ui/Dashboard.js";
+export * from "./base/ui/NotFound.js";
+
+export { observer as createReactiveComponent } from "mobx-react-lite";
+
+// Base admin app
+export { Admin } from "./base/Admin.js";
+export * from "./config/AdminConfig.js";
+export type { ColumnConfig as TableColumnConfig } from "./config/table/Column.js";
+export type { SortingConfig as TableSortingConfig } from "./config/table/Sorting.js";
+export { Column as TableColumn } from "./config/table/Column.js";
+export { Sorting as TableSorting } from "./config/table/Sorting.js";
+
+export type { AdminProps } from "./base/Admin.js";
+
+// Permissions
+export * from "./permissions/index.js";
+
+// Components
+export * from "./components/index.js";
+export type { RichTextValueWithHtml } from "./components/index.js";
+export { HasPermission } from "./presentation/security/components/HasPermission.js";
+export { SecureRoute } from "./presentation/security/components/SecureRoute.js";
+
+export { FileManager } from "./base/ui/FileManager.js";
+export type {
+    FileManagerProps,
+    FileManagerRendererProps,
+    FileManagerFileItem,
+    FileManagerOnChange
+} from "./base/ui/FileManager.js";
+
+export { SystemInstallerProvider } from "./presentation/installation/components/SystemInstaller/index.js";
+
+// Feature types
+export type { AaclPermission } from "./features/wcp/types.js";
+export type { Tenant } from "./features/tenancy/types.js";
+
+export { BuildParamsFeature } from "./features/buildParams/feature.js";
+export { ToolsFeature } from "./features/tools/feature.js";
+export { Tool, ToolRegistry, ToolPipelineRunner } from "./features/tools/abstractions.js";
+export type { ITool, IToolRegistry, IToolPipelineRunner } from "./features/tools/abstractions.js";
+
+export { DateFormatter } from "./features/dateFormatter/abstractions.js";
+export type { IDateFormatter, FormattableDate } from "./features/dateFormatter/abstractions.js";
+export { DateFormatterFeature } from "./features/dateFormatter/feature.js";
+export { useDateFormatter } from "./features/dateFormatter/useDateFormatter.js";
+
+export { StringFormatter } from "./features/stringFormatter/abstractions.js";
+export type { IStringFormatter } from "./features/stringFormatter/abstractions.js";
+export { StringFormatterFeature } from "./features/stringFormatter/feature.js";
+export { useStringFormatter } from "./features/stringFormatter/useStringFormatter.js";
+
+// Fine-grained, decoratable transform behind StringFormatter.slugify(). Decorate this to change slug
+// logic without touching the rest of the string formatter.
+export { Slugify } from "./features/slugify/abstractions.js";
+export type { ISlugify } from "./features/slugify/abstractions.js";
+
+// Hooks
+export * from "./hooks/index.js";
+export { useFeatureFlags } from "./presentation/featureFlags/useFeatureFlags.js";
+export { useTenantContext } from "./presentation/tenancy/useTenantContext.js";
+export { useIdentity } from "./presentation/security/hooks/useIdentity.js";
+export { useAuthentication } from "./presentation/security/hooks/useAuthentication.js";
+export { useBuildParams } from "./presentation/buildParams/useBuildParams.js";
+
+// Command palette (DI-based command registration)
+export {
+    Command,
+    CommandPaletteFeature,
+    CommandPalettePresenter
+} from "./presentation/commandPalette/index.js";
+export type {
+    ICommand,
+    CommandDetailProps,
+    CommandItemVm,
+    ActiveCommandVm,
+    CommandPaletteViewModel
+} from "./presentation/commandPalette/index.js";
+
+// Breadcrumbs — pure-presentation trail via the React Config API. Drop a `<Breadcrumb>`
+// anywhere in a view; the header renders every mounted one as the trail.
+export { Breadcrumb } from "./config/AdminConfig/Breadcrumbs.js";
+export type {
+    BreadcrumbProps,
+    BreadcrumbConfig,
+    BreadcrumbLink
+} from "./config/AdminConfig/Breadcrumbs.js";
+
+// Legacy hook for easier migration
+export { useSecurity } from "./presentation/security/hooks/useSecurity.js";
+
+export * from "@webiny/app/renderApp.js";
+
+// FormModel
+import "./features/formModel/renderers.js";
+import "./features/formModel/fieldTypes/TextFieldType.js";
+import "./features/formModel/fieldTypes/NumberFieldType.js";
+import "./features/formModel/fieldTypes/BooleanFieldType.js";
+import "./features/formModel/fieldTypes/DateTimeFieldType.js";
+import "./features/formModel/fieldTypes/FileFieldType.js";
+import "./features/formModel/fieldTypes/FileUrlFieldType.js";
+import "./features/formModel/fieldTypes/ObjectFieldType.js";
+import "./features/formModel/fieldTypes/LexicalFieldType.js";
+export { FormModelFactory } from "./features/formModel/abstractions.js";
+export type { FormModel } from "./features/formModel/abstractions.js";
+export type {
+    IFieldRendererRegistry,
+    FieldRendererName,
+    FieldRendererSettings,
+    IFormModelFactory,
+    IFormModelConfig,
+    ILayoutBuilder,
+    ILayoutNodeBuilder,
+    IRowBuilder,
+    ISeparatorBuilder,
+    ITabsBuilder,
+    IElementBuilder,
+    IObjectBuilder,
+    IFieldBuilder,
+    IOptionsFieldBuilder,
+    IFieldBuilderRegistry,
+    IFormModel,
+    IField,
+    FieldTypeMap,
+    IFieldConfig,
+    IFieldVM,
+    IFieldValidation,
+    IFormVM,
+    IFormError,
+    IValueOption,
+    IRowNode,
+    IRowNodeVM,
+    LayoutNode,
+    LayoutNodeVM,
+    LayoutPosition,
+    IPositionedLayoutNode,
+    ILayoutNodeHandle,
+    ILayoutModifier,
+    IFormModifier,
+    BeforeChangeCallback,
+    AfterChangeCallback,
+    AfterSetValueCallback
+} from "./features/formModel/abstractions.js";
+export {
+    FormView,
+    LayoutNodeRenderer,
+    useFormViewRenderers
+} from "./features/formModel/FormView.js";
+export { FormErrors } from "./features/formModel/FormErrors.js";
+export { PresenterErrors } from "./features/formModel/PresenterErrors.js";
+
+export { useFieldRenderers } from "./features/formModel/useFieldRenderers.js";
+export { useLayoutRenderers } from "./features/formModel/useLayoutRenderers.js";
+
+// Import all field renderers to ensure their module augmentations are applied.
+import "./base/Base/FieldRenderers/InputRenderer.js";
+import "./base/Base/FieldRenderers/SelectRenderer.js";
+import "./base/Base/FieldRenderers/MultiSelectRenderer.js";
+import "./base/Base/FieldRenderers/TextareaRenderer.js";
+import "./base/Base/FieldRenderers/SwitchRenderer.js";
+import "./base/Base/FieldRenderers/NumberInputRenderer.js";
+import "./base/Base/FieldRenderers/NumberInputsRenderer.js";
+import "./base/Base/FieldRenderers/TextInputsRenderer.js";
+import "./base/Base/FieldRenderers/TextareasRenderer.js";
+import "./base/Base/FieldRenderers/TagsRenderer.js";
+import "./base/Base/FieldRenderers/RadioButtonsRenderer.js";
+import "./base/Base/FieldRenderers/CheckboxesRenderer.js";
+import "./base/Base/FieldRenderers/DateTimeRenderer.js";
+import "./base/Base/FieldRenderers/DateTimeInputsRenderer.js";
+import "./base/Base/FieldRenderers/HiddenRenderer.js";
+import "./base/Base/FieldRenderers/PassthroughRenderer.js";
+import "./base/Base/FieldRenderers/FilePickerRenderer.js";
+import "./base/Base/FieldRenderers/FileUrlPickerRenderer.js";
+import "./base/Base/FieldRenderers/MultiFilePickerRenderer.js";
+import "./base/Base/FieldRenderers/CodeEditorRenderer.js";
+import "./base/Base/FieldRenderers/LexicalRenderer.js";
+import "./base/Base/FieldRenderers/PasswordInputRenderer.js";
+import "./base/Base/FieldRenderers/PermissionsRenderer.js";
+import "./base/Base/FieldRenderers/RolesMultiSelectRenderer.js";
+import "./base/Base/FieldRenderers/ApiKeyTokenRenderer.js";
+import "./base/Base/FieldRenderers/MultiAutoCompleteRenderer.js";
+import "./base/Base/FieldRenderers/ObjectRenderer/ObjectRenderer.js";
+import "./base/Base/FieldRenderers/ObjectRenderer/ObjectAccordionMultipleRenderer.js";
+import "./base/Base/FieldRenderers/ObjectRenderer/DynamicZoneRenderer.js";
+import "./base/Base/FieldRenderers/ObjectRenderer/KeyValueTagsRenderer.js";
+export type {
+    FieldRenderers,
+    FieldRendererComponent,
+    LayoutRenderers,
+    TabsNodeRendererProps
+} from "./features/formModel/FormView.js";

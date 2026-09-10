@@ -1,0 +1,176 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as IconPickerStories from "./IconPicker.stories";
+
+<Meta of={IconPickerStories} />
+
+# Icon Picker
+
+The Icon Picker component allows users to select icons from a predefined set of options. It provides an intuitive interface for icon selection in forms and design tools, with search functionality to quickly find specific icons.
+
+## Usage
+
+<Canvas of={IconPickerStories.Documentation} source={ { code: `
+import React, { useState } from "react";
+import { IconPicker } from "@webiny/admin-ui";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+
+// Initialize FontAwesome library
+library.add(fas as any);
+
+const IconPickerExample = () => {
+const [selectedIcon, setSelectedIcon] = useState("");
+const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+    const handleChange = (newIcon: string) => {
+        setSelectedIcon(newIcon);
+
+        if (!newIcon && true) { // true represents required field
+            setValidation({ isValid: false, message: "Please select an icon" });
+        } else {
+            setValidation({ isValid: true, message: "" });
+        }
+    };
+
+    return (
+        <IconPicker
+            label="Select an Icon"
+            description="Choose an icon for your button"
+            note="Note: The selected icon will be displayed on your button"
+            required={true}
+            icons={[
+                { prefix: "fas", name: "trash-restore-alt" },
+                { prefix: "fas", name: "file-pen" },
+                { prefix: "fas", name: "receipt" },
+                { prefix: "fas", name: "user-circle" },
+                { prefix: "fas", name: "circle-user" }
+                // Add more icons as needed
+            ]}
+            value={selectedIcon}
+            onChange={handleChange}
+            validation={validation}
+        />
+    );
+
+};
+
+export default IconPickerExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/IconPicker/IconPicker.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={IconPickerStories.Documentation} exclude={"onChange"} />
+
+```tsx
+import React, { useState } from "react";
+import { IconPicker } from "@webiny/admin-ui";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+
+// Initialize FontAwesome library
+library.add(fas as any);
+
+const IconPickerExample = () => {
+  const [selectedIcon, setSelectedIcon] = useState("");
+  const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+  const handleChange = (newIcon: string) => {
+    setSelectedIcon(newIcon);
+
+    if (!newIcon && true) {
+      // true represents required field
+      setValidation({ isValid: false, message: "Please select an icon" });
+    } else {
+      setValidation({ isValid: true, message: "" });
+    }
+  };
+
+  return (
+    <IconPicker
+      label="Select an Icon"
+      description="Choose an icon for your button"
+      note="Note: The selected icon will be displayed on your button"
+      required={true}
+      icons={[
+        { prefix: "fas", name: "trash-restore-alt" },
+        { prefix: "fas", name: "file-pen" },
+        { prefix: "fas", name: "receipt" },
+        { prefix: "fas", name: "user-circle" },
+        { prefix: "fas", name: "circle-user" }
+        // Add more icons as needed
+      ]}
+      value={selectedIcon}
+      onChange={handleChange}
+      validation={validation}
+    />
+  );
+};
+
+export default IconPickerExample;
+```
+
+## Dynamic Loading All Font Awesome Icons
+
+> ⚠️ **Note**: Importing all icons will increase your bundle size. Use this approach only when necessary, or pair it with a search interface to maintain a good user experience.
+
+To automatically load all Font Awesome icons (solid, regular, and brands) for use in the `IconPicker`, you can register them with the Font Awesome library and extract them from the internal `definitions` object. This approach provides a scalable and maintainable way to manage icon sets across your application.
+
+```tsx
+import React, { useState } from "react";
+import { IconPicker, IconPickerIconDto } from "@webiny/admin-ui";
+import { library, IconName } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+import { IconPrefix } from "@fortawesome/fontawesome-common-types";
+
+// Register all Font Awesome icons
+// Initialize FontAwesome library
+library.add(fab as any, fas as any, far as any);
+
+// Define allowed prefixes
+const validPrefixes: IconPrefix[] = ["fas", "far", "fab"];
+
+// Extract icons into { prefix, name } format
+const definitions = (library as any).definitions;
+const allIcons: IconPickerIconDto[] = [];
+
+Object.keys(definitions)
+  .filter((pack): pack is IconPrefix => validPrefixes.includes(pack as IconPrefix))
+  .forEach(prefix => {
+    const icons = definitions[prefix];
+    Object.keys(icons).forEach(icon => {
+      allIcons.push({
+        prefix,
+        name: icon as IconName
+      });
+    });
+  });
+```
+
+You can then pass the `allIcons` array to the `IconPicker` component:
+
+```tsx
+<IconPicker
+  label="Select an Icon"
+  description="Choose an icon for your button"
+  note="Note: The selected icon will be displayed on your button"
+  required={true}
+  icons={allIcons}
+  value={selectedIcon}
+  onChange={handleChange}
+  validation={validation}
+/>
+```

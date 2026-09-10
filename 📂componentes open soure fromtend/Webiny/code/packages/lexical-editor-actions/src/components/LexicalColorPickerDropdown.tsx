@@ -1,0 +1,35 @@
+import React from "react";
+import { useFontColorPicker, useRichTextEditor, DropDown } from "@webiny/lexical-editor";
+import { LexicalColorPicker } from "~/components/LexicalColorPicker/LexicalColorPicker.js";
+import { ReactComponent as FontColorIcon } from "@webiny/icons/format_color_text.svg";
+
+export interface LexicalColorPickerDropdownProps {
+    allowCustomColor?: boolean;
+}
+
+export const LexicalColorPickerDropdown = ({
+    allowCustomColor
+}: LexicalColorPickerDropdownProps) => {
+    const { value, applyColor } = useFontColorPicker();
+    const { theme } = useRichTextEditor();
+
+    return (
+        <DropDown
+            buttonClassName="toolbar-item color-picker"
+            buttonAriaLabel={"Formatting options for text color"}
+            buttonIcon={
+                // Tint the A icon with the current font color.
+                <FontColorIcon className="icon" style={value ? { fill: value } : undefined} />
+            }
+            stopCloseOnClickSelf={true}
+            disabled={false}
+            showScroll={false}
+        >
+            <LexicalColorPicker
+                value={value}
+                onChangeComplete={applyColor}
+                allowCustomColor={allowCustomColor ?? theme.allowCustomColors}
+            />
+        </DropDown>
+    );
+};

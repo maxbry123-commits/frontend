@@ -1,0 +1,329 @@
+import { describe, expect, it, vi } from "vitest";
+import { useGraphQLHandler } from "../testHelpers/useGraphQLHandler";
+import { useFruitManageHandler } from "../testHelpers/useFruitManageHandler";
+import { setupGroupAndModels } from "../testHelpers/setup";
+import { useFruitReadHandler } from "../testHelpers/useFruitReadHandler";
+import { Fruit } from "./mocks/contentModels";
+import { CmsGraphQLSchemaSorter } from "~/features/graphql/index.js";
+import { createRegisterExtensionPlugin } from "@webiny/handler";
+
+const appleData: Fruit = {
+    values: {
+        name: "A’p ` pl ' e",
+        isSomething: false,
+        rating: 400,
+        numbers: [5, 6, 7.2, 10.18, 12.05],
+        email: "john@doe.com",
+        url: "https://apple.test",
+        lowerCase: "apple",
+        upperCase: "APPLE",
+        date: "2020-12-15",
+        dateTime: new Date("2020-12-15T12:12:21").toISOString(),
+        dateTimeZ: "2020-12-15T14:52:41+01:00",
+        time: "11:39:58",
+        description: ""
+    }
+};
+
+const strawberryData: Fruit = {
+    values: {
+        name: "Straw `er ' ry",
+        isSomething: true,
+        rating: 500,
+        numbers: [5, 6, 7.2, 10.18, 12.05],
+        email: "john@doe.com",
+        url: "https://strawberry.test",
+        lowerCase: "strawberry",
+        upperCase: "STRAWBERRY",
+        date: "2020-12-18",
+        dateTime: new Date("2020-12-19T12:12:21").toISOString(),
+        dateTimeZ: "2020-12-25T14:52:41+01:00",
+        time: "12:44:55",
+        description: ""
+    }
+};
+
+const bananaData: Fruit = {
+    values: {
+        name: "Ban ` a 'na",
+        isSomething: false,
+        rating: 450,
+        numbers: [5, 6, 7.2, 10.18, 12.05],
+        email: "john@doe.com",
+        url: "https://banana.test",
+        lowerCase: "banana",
+        upperCase: "BANANA",
+        date: "2020-12-03",
+        dateTime: new Date("2020-12-03T12:12:21").toISOString(),
+        dateTimeZ: "2020-12-03T14:52:41+01:00",
+        time: "11:59:01",
+        description: ""
+    }
+};
+
+const grahamData: Fruit = {
+    values: {
+        name: "Graham O’Keeffe",
+        isSomething: false,
+        rating: 450,
+        numbers: [5, 6, 7.2, 10.18, 12.05],
+        email: "graham@doe.com",
+        url: "https://graham.test",
+        lowerCase: "graham",
+        upperCase: "GRAHAM",
+        date: "2020-12-03",
+        dateTime: new Date("2020-12-03T12:12:21").toISOString(),
+        dateTimeZ: "2020-12-03T14:52:41+01:00",
+        time: "11:59:01",
+        description: ""
+    }
+};
+
+vi.setConfig({
+    testTimeout: 100_000
+});
+
+describe("sorting + cursor", () => {
+    const manageOpts = { path: "manage" };
+    const readOpts = { path: "read" };
+
+    const mainManager = useGraphQLHandler(manageOpts);
+
+    const { createFruit, publishFruit } = useFruitManageHandler({
+        ...manageOpts
+    });
+
+    const filterOutFields = ["meta", "deletedOn", "deletedBy", "restoredOn", "restoredBy"];
+
+    const createAndPublishFruit = async (data: Fruit) => {
+        const [response] = await createFruit({
+            data: {
+                ...data
+            }
+        });
+
+        if (response.data.createFruit.error) {
+            throw new Error(response.data.createFruit.error.message);
+        }
+        const createdFruit = response.data.createFruit.data;
+
+        const [publish] = await publishFruit({
+            revision: createdFruit.id
+        });
+
+        const fruit = publish.data.publishFruit.data;
+
+        return Object.keys(fruit).reduce(
+            (acc, key) => {
+                if (filterOutFields.includes(key)) {
+                    return acc;
+                }
+                acc[key] = fruit[key];
+                return acc;
+            },
+            {} as Record<string, string>
+        ) as unknown as Fruit;
+    };
+
+    const createFruits = async () => {
+        return {
+            apple: await createAndPublishFruit(appleData),
+            strawberry: await createAndPublishFruit(strawberryData),
+            banana: await createAndPublishFruit(bananaData),
+            graham: await createAndPublishFruit(grahamData)
+        };
+    };
+
+    const setupFruits = async () => {
+        await setupGroupAndModels({
+            manager: mainManager,
+            models: ["fruit"]
+        });
+        return createFruits();
+    };
+
+    it("should load items with after cursor with special characters", async () => {
+        const { apple, graham, banana, strawberry } = await setupFruits();
+
+        const handler = useFruitReadHandler({
+            ...readOpts
+        });
+        const { listFruits } = handler;
+
+        const [appleListResponse] = await listFruits({
+            sort: ["values_name_ASC"],
+            limit: 1
+        });
+
+        expect(appleListResponse).toEqual({
+            data: {
+                listFruits: {
+                    data: [
+                        {
+                            ...apple
+                        }
+                    ],
+                    meta: {
+                        hasMoreItems: true,
+                        totalCount: 4,
+                        cursor: expect.any(String)
+                    },
+                    error: null
+                }
+            }
+        });
+
+        const [bananaListResponse] = await listFruits({
+            sort: ["values_name_ASC"],
+            limit: 1,
+            after: appleListResponse.data.listFruits.meta.cursor
+        });
+
+        expect(bananaListResponse).toEqual({
+            data: {
+                listFruits: {
+                    data: [
+                        {
+                            ...banana
+                        }
+                    ],
+                    meta: {
+                        hasMoreItems: true,
+                        totalCount: 4,
+                        cursor: expect.any(String)
+                    },
+                    error: null
+                }
+            }
+        });
+
+        const [grahamListResponse] = await listFruits({
+            sort: ["values_name_ASC"],
+            limit: 1,
+            after: bananaListResponse.data.listFruits.meta.cursor
+        });
+
+        expect(grahamListResponse).toEqual({
+            data: {
+                listFruits: {
+                    data: [
+                        {
+                            ...graham
+                        }
+                    ],
+                    meta: {
+                        hasMoreItems: true,
+                        totalCount: 4,
+                        cursor: expect.any(String)
+                    },
+                    error: null
+                }
+            }
+        });
+
+        const [strawberryListResponse] = await listFruits({
+            sort: ["values_name_ASC"],
+            limit: 1,
+            after: grahamListResponse.data.listFruits.meta.cursor
+        });
+
+        expect(strawberryListResponse).toEqual({
+            data: {
+                listFruits: {
+                    data: [
+                        {
+                            ...strawberry
+                        }
+                    ],
+                    meta: {
+                        hasMoreItems: false,
+                        totalCount: 4,
+                        cursor: null
+                    },
+                    error: null
+                }
+            }
+        });
+    });
+
+    it("should sort via custom sort", async () => {
+        const { apple, graham, banana, strawberry } = await setupFruits();
+
+        class TestSorter implements CmsGraphQLSchemaSorter.Interface {
+            public execute(params: CmsGraphQLSchemaSorter.Params): string[] {
+                const { model, sorters } = params;
+                if (model.modelId !== "fruit") {
+                    return sorters;
+                }
+                return [...sorters, "customSorter_ASC", "customSorter_DESC"];
+            }
+        }
+
+        const testSorter = CmsGraphQLSchemaSorter.createImplementation({
+            implementation: TestSorter,
+            dependencies: []
+        });
+
+        const handler = useFruitReadHandler({
+            ...readOpts,
+            plugins: [
+                createRegisterExtensionPlugin(({ container }) => {
+                    container.register(testSorter);
+                })
+            ]
+        });
+        const { listFruits } = handler;
+
+        const [resultAsc] = await listFruits({
+            sort: ["customSorter_ASC"]
+        });
+
+        expect(resultAsc).toMatchObject({
+            data: {
+                listFruits: {
+                    data: [
+                        {
+                            id: apple.id
+                        },
+                        {
+                            id: strawberry.id
+                        },
+                        {
+                            id: banana.id
+                        },
+                        {
+                            id: graham.id
+                        }
+                    ],
+                    error: null
+                }
+            }
+        });
+
+        const [resultDesc] = await listFruits({
+            sort: ["customSorter_DESC"]
+        });
+
+        expect(resultDesc).toMatchObject({
+            data: {
+                listFruits: {
+                    data: [
+                        {
+                            id: graham.id
+                        },
+                        {
+                            id: banana.id
+                        },
+                        {
+                            id: strawberry.id
+                        },
+                        {
+                            id: apple.id
+                        }
+                    ],
+                    error: null
+                }
+            }
+        });
+    });
+});

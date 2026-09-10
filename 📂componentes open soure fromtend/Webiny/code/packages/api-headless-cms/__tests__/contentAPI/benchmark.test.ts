@@ -1,0 +1,104 @@
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { useGraphQLHandler } from "~tests/testHelpers/useGraphQLHandler";
+import { BenchmarkAbstraction } from "@webiny/api";
+import { GraphQLContextualSchema } from "@webiny/api-graphql";
+import { buildSchema } from "graphql";
+import type { Container } from "@webiny/di";
+import { createIcon } from "~tests/__helpers/icon.js";
+
+describe("benchmark points", () => {
+    let elapsed = 0;
+
+    const { createContentModelGroupMutation } = useGraphQLHandler({
+        path: "manage",
+        topPlugins: [
+            (container: Container) => {
+                // Benchmark moved from `context.benchmark` to the DI container during the DI
+                // migration; resolve the same instance createCmsRoute flushes per request. It's
+                // registered by HeadlessCmsFeature — AFTER this plugins loop — so enable it from
+                // GraphQLContextualSchema, the per-request hook createCmsRoute runs before the
+                // resolvers. The route ignores the returned schema, hence the empty stub.
+                container.registerInstance(GraphQLContextualSchema, {
+                    async build(ctx: Record<string, any>) {
+                        const benchmark = ctx.container.resolve(BenchmarkAbstraction);
+                        benchmark.enable();
+
+                        benchmark.onOutput(async ({ benchmark }: any) => {
+                            elapsed = benchmark.elapsed;
+                        });
+
+                        return buildSchema("type Query { _empty: String }");
+                    }
+                });
+            }
+        ]
+    });
+    beforeEach(async () => {
+        elapsed = 0;
+    });
+
+    it("should run benchmark and have required points present in the log", async () => {
+        const logs: any[] = [];
+        vi.spyOn(console, "log").mockImplementation((...args) => {
+            logs.push(...args);
+        });
+
+        const data = {
+            name: "My group",
+            slug: "my-group",
+            icon: createIcon("fas/star"),
+            description: "My group description"
+        };
+        const [result] = await createContentModelGroupMutation({
+            data: {
+                ...data
+            }
+        });
+        expect(result).toMatchObject({
+            data: {
+                createContentModelGroup: {
+                    data: {
+                        ...data
+                    },
+                    error: null
+                }
+            }
+        });
+
+        expect(logs).toHaveLength(3);
+        // The GraphQL request flow is measured at the graphql layer (getSchema ->
+        // createRequestBody -> processRequestBody). Per-operation CRUD measures live on the
+        // HeadlessCms facade, which the DI resolvers no longer route through, so they are not
+        // part of the request's benchmark output.
+        expect(logs).toMatchObject([
+            `Benchmark total time elapsed: ${elapsed}ms`,
+            "Benchmark measurements:",
+            [
+                {
+                    elapsed: expect.any(Number),
+                    end: expect.any(Date),
+                    memory: expect.any(Number),
+                    name: "headlessCms.graphql.getSchema",
+                    category: "webiny",
+                    start: expect.any(Date)
+                },
+                {
+                    elapsed: expect.any(Number),
+                    end: expect.any(Date),
+                    memory: expect.any(Number),
+                    name: "headlessCms.graphql.createRequestBody",
+                    category: "webiny",
+                    start: expect.any(Date)
+                },
+                {
+                    elapsed: expect.any(Number),
+                    end: expect.any(Date),
+                    memory: expect.any(Number),
+                    name: "headlessCms.graphql.processRequestBody",
+                    category: "webiny",
+                    start: expect.any(Date)
+                }
+            ]
+        ]);
+    });
+});

@@ -1,0 +1,330 @@
+import { beforeEach, describe, expect, it } from "vitest";
+import { useGraphQLHandler } from "../testHelpers/useGraphQLHandler";
+import { useBugManageHandler } from "../testHelpers/useBugManageHandler";
+import { setupGroupAndModels } from "~tests/testHelpers/setup.js";
+import type { CmsModel } from "~/types/index.js";
+
+describe("predefined values", () => {
+    const manageOpts = { path: "manage" };
+
+    const manager = useGraphQLHandler(manageOpts);
+
+    let bugModel: CmsModel;
+
+    beforeEach(async () => {
+        const result = await setupGroupAndModels({
+            manager,
+            models: ["bug"]
+        });
+        bugModel = result.getModel("bug");
+    });
+
+    it("should create an entry with predefined values selected", async () => {
+        const { createBug } = useBugManageHandler({
+            ...manageOpts
+        });
+
+        const [response] = await createBug({
+            data: {
+                values: {
+                    name: "A hard debuggable bug",
+                    bugType: "critical",
+                    bugValue: 2,
+                    bugFixed: 1
+                }
+            }
+        });
+
+        expect(response).toEqual({
+            data: {
+                createBug: {
+                    data: {
+                        id: expect.any(String),
+                        createdOn: expect.stringMatching(/^20/),
+                        modifiedOn: null,
+                        savedOn: expect.stringMatching(/^20/),
+                        createdBy: {
+                            id: "id-12345678",
+                            displayName: "John Doe",
+                            type: "admin"
+                        },
+                        lastPublishedOn: null,
+                        firstPublishedOn: null,
+                        meta: {
+                            locked: false,
+                            modelId: "bug",
+                            status: "draft",
+                            title: "A hard debuggable bug",
+                            version: 1
+                        },
+                        values: {
+                            name: "A hard debuggable bug",
+                            bugType: "critical",
+                            bugValue: 2,
+                            bugFixed: 1
+                        }
+                    },
+                    error: null
+                }
+            }
+        });
+    });
+
+    it("should fail creating an entry with wrong predefined text value selected", async () => {
+        const { createBug } = useBugManageHandler({
+            ...manageOpts
+        });
+
+        const [response] = await createBug({
+            data: {
+                values: {
+                    name: "A hard debuggable bug",
+                    bugType: "nonExistingBugType",
+                    bugValue: 2,
+                    bugFixed: 3
+                }
+            }
+        });
+
+        expect(response).toEqual({
+            data: {
+                createBug: {
+                    data: null,
+                    error: {
+                        message: "Validation failed.",
+                        code: "Cms/Entry/ValidationError",
+                        data: [
+                            {
+                                storageId: expect.stringMatching("text@"),
+                                fieldId: "bugType",
+                                id: "bugType",
+                                error: "Value sent does not match any of the available predefined values.",
+                                parents: []
+                            }
+                        ]
+                    }
+                }
+            }
+        });
+    });
+
+    it("should fail creating an entry with wrong predefined number value selected", async () => {
+        const { createBug } = useBugManageHandler({
+            ...manageOpts
+        });
+
+        const [response] = await createBug({
+            data: {
+                values: {
+                    name: "A hard debuggable bug",
+                    bugType: "critical",
+                    bugValue: 4567,
+                    bugFixed: 3
+                }
+            }
+        });
+
+        expect(response).toEqual({
+            data: {
+                createBug: {
+                    data: null,
+                    error: {
+                        message: "Validation failed.",
+                        code: "Cms/Entry/ValidationError",
+                        data: [
+                            {
+                                fieldId: "bugValue",
+                                id: "bugValue",
+                                storageId: expect.stringMatching("number@"),
+                                error: "Value sent does not match any of the available predefined values.",
+                                parents: []
+                            }
+                        ]
+                    }
+                }
+            }
+        });
+    });
+
+    it("should fail creating an entry with wrong predefined number and text values selected", async () => {
+        const { createBug } = useBugManageHandler({
+            ...manageOpts
+        });
+
+        const [response] = await createBug({
+            data: {
+                values: {
+                    name: "A hard debuggable bug",
+                    bugType: "nonExistingBug",
+                    bugValue: 4567,
+                    bugFixed: 3
+                }
+            }
+        });
+
+        expect(response).toEqual({
+            data: {
+                createBug: {
+                    data: null,
+                    error: {
+                        message: "Validation failed.",
+                        code: "Cms/Entry/ValidationError",
+                        data: [
+                            {
+                                fieldId: "bugType",
+                                id: "bugType",
+                                storageId: expect.stringMatching("text@"),
+                                error: "Value sent does not match any of the available predefined values.",
+                                parents: []
+                            },
+                            {
+                                fieldId: "bugValue",
+                                id: "bugValue",
+                                storageId: expect.stringMatching("number@"),
+                                error: "Value sent does not match any of the available predefined values.",
+                                parents: []
+                            }
+                        ]
+                    }
+                }
+            }
+        });
+    });
+
+    it("should be able to create an entry with default bug type value", async () => {
+        const { createBug } = useBugManageHandler({
+            ...manageOpts
+        });
+
+        const [responseNothing] = await createBug({
+            data: {
+                values: {
+                    name: "A hard debuggable bug - none",
+                    /**
+                     * do not send bug type at all
+                     */
+                    bugValue: 3,
+                    bugFixed: 3
+                }
+            }
+        });
+
+        expect(responseNothing).toEqual({
+            data: {
+                createBug: {
+                    data: {
+                        id: expect.any(String),
+                        createdOn: expect.stringMatching(/^20/),
+                        modifiedOn: null,
+                        savedOn: expect.stringMatching(/^20/),
+                        createdBy: {
+                            id: "id-12345678",
+                            displayName: "John Doe",
+                            type: "admin"
+                        },
+                        lastPublishedOn: null,
+                        firstPublishedOn: null,
+                        meta: {
+                            locked: false,
+                            modelId: "bug",
+                            status: "draft",
+                            title: "A hard debuggable bug - none",
+                            version: 1
+                        },
+                        values: {
+                            name: "A hard debuggable bug - none",
+                            bugType: "critical",
+                            bugValue: 3,
+                            bugFixed: 3
+                        }
+                    },
+                    error: null
+                }
+            }
+        });
+        /**
+         * Lets update field default value to something else.
+         */
+        const fields = bugModel.fields.concat([]);
+        for (const field of fields) {
+            if (field.fieldId !== "bugType") {
+                continue;
+            }
+            if (!field.settings) {
+                field.settings = {};
+            }
+            field.settings.defaultValue = "when-you-have-time";
+        }
+        /**
+         * Make sure that content model is updated
+         */
+        const [updateBugModelResponse] = await manager.updateContentModelMutation({
+            modelId: bugModel.modelId,
+            data: {
+                fields,
+                layout: bugModel.layout
+            }
+        });
+        expect(updateBugModelResponse).toEqual({
+            data: {
+                updateContentModel: {
+                    data: {
+                        ...bugModel,
+                        description: null,
+                        fields,
+                        savedOn: expect.stringMatching(/^20/)
+                    },
+                    error: null
+                }
+            }
+        });
+
+        const [responseUndefined] = await createBug({
+            data: {
+                values: {
+                    name: "A hard debuggable bug - undefined",
+                    /**
+                     * send a bug type as undefined
+                     */
+                    bugType: undefined,
+                    bugValue: 3,
+                    bugFixed: 3
+                }
+            }
+        });
+
+        expect(responseUndefined).toEqual({
+            data: {
+                createBug: {
+                    data: {
+                        id: expect.any(String),
+                        createdOn: expect.stringMatching(/^20/),
+                        modifiedOn: null,
+                        savedOn: expect.stringMatching(/^20/),
+                        createdBy: {
+                            id: "id-12345678",
+                            displayName: "John Doe",
+                            type: "admin"
+                        },
+                        lastPublishedOn: null,
+                        firstPublishedOn: null,
+                        meta: {
+                            locked: false,
+                            modelId: "bug",
+                            status: "draft",
+                            title: "A hard debuggable bug - undefined",
+                            version: 1
+                        },
+                        values: {
+                            name: "A hard debuggable bug - undefined",
+                            bugType: "when-you-have-time",
+                            bugValue: 3,
+                            bugFixed: 3
+                        }
+                    },
+                    error: null
+                }
+            }
+        });
+    });
+});

@@ -1,0 +1,52 @@
+import type * as React from "react";
+import type { CSSProperties } from "react";
+import { Plugin } from "@webiny/plugins/types.js";
+
+export type GenericRecordKey = string | number | symbol;
+
+export type GenericRecord<K extends GenericRecordKey = GenericRecordKey, V = any> = Record<K, V>;
+
+export type NonEmptyArray<T> = [T, ...T[]];
+
+export type UiStatePlugin = Plugin & {
+    type: "ui-state";
+    render(): React.ReactElement;
+};
+
+export type { Plugin };
+
+export interface ImageProps {
+    src: string;
+    preset?: string;
+    transform?: {
+        [key: string]: any;
+    };
+    // "auto" is a special keyword - if present, plugins insert their own srcSet.
+    srcSet?: { [key: string]: any } | "auto";
+    className?: string;
+    title?: string;
+    alt?: string;
+    style?: CSSProperties;
+    width?: string | number;
+    height?: string | number;
+}
+
+/**
+ * "getImageSrc" has to be defined as a separate property, so its functionality can be reused outside of
+ * the Image component. This is ideal in cases where manual creation of image src is needed.
+ */
+export type ImageComponentPlugin = Plugin & {
+    type: "image-component";
+    render: (props: ImageProps) => React.ReactElement;
+    getImageSrc: (props?: Record<string, any>) => string;
+    presets: { [key: string]: any };
+};
+
+/**
+ * Enables registering new routes.
+ * @see https://docs.webiny.com/docs/webiny-apps/admin/development/plugins-reference/app#route
+ */
+export type RoutePlugin = Plugin & {
+    type: "route";
+    route: React.ReactElement<{ path: string }>;
+};

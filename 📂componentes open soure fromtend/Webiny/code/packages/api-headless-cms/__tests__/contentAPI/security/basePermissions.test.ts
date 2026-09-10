@@ -1,0 +1,315 @@
+import type { IdentityData } from "@webiny/api-core/features/security/IdentityContext/index.js";
+import { describe, expect, it } from "vitest";
+import { useTestModelHandler } from "~tests/testHelpers/useTestModelHandler";
+
+const identityA: IdentityData = { id: "a", type: "admin", displayName: "A" };
+const identityB: IdentityData = { id: "b", type: "admin", displayName: "B" };
+const identityC: IdentityData = { id: "c", type: "admin", displayName: "C" };
+
+const gqlApiTypesPermissions = [
+    { _src: "x", name: "cms.endpoint.read" },
+    { _src: "x", name: "cms.endpoint.manage" },
+    { _src: "x", name: "cms.endpoint.preview" }
+];
+
+describe("Content Groups / Models / Entries - Base Permissions Checks", () => {
+    it("group access scope: only groups created by the user", async () => {
+        const permissions = [
+            ...gqlApiTypesPermissions,
+            { _src: "x", name: "cms.contentModel", own: true, rwd: "rwd", pw: "" },
+            { _src: "x", name: "cms.contentModelGroup", own: true, rwd: "rwd", pw: "" },
+            { _src: "x", name: "cms.contentEntry", own: false, rwd: "r", pw: "" }
+        ];
+
+        // Identity A's content model group and content model.
+        const { manage: manageApiA } = useTestModelHandler({
+            identity: identityA,
+            permissions
+        });
+
+        const [modelGroupA] = await manageApiA.createContentModelGroupMutation({
+            data: { name: "Group A", icon: "x", slug: "group-a" }
+        });
+
+        await manageApiA.createContentModelMutation({
+            data: {
+                name: "Test Entry A",
+                singularApiName: "TestEntryA",
+                pluralApiName: "TestEntryAs",
+                group: modelGroupA.data.createContentModelGroup.data.slug
+            }
+        });
+
+        // Identity A's content model group and content model.
+        const { manage: manageApiB } = useTestModelHandler({
+            identity: identityB,
+            permissions
+        });
+
+        const [modelGroupB] = await manageApiB.createContentModelGroupMutation({
+            data: { name: "Group B", icon: "x", slug: "group-b" }
+        });
+
+        await manageApiB.createContentModelMutation({
+            data: {
+                name: "Test Entry B",
+                singularApiName: "TestEntryB",
+                pluralApiName: "TestEntryBs",
+                group: modelGroupB.data.createContentModelGroup.data.slug
+            }
+        });
+
+        const [contentModelsListA] = await manageApiA.listContentModelsQuery();
+        expect(contentModelsListA).toMatchObject({
+            data: {
+                listContentModels: {
+                    data: [{ modelId: "testEntryA" }],
+                    error: null
+                }
+            }
+        });
+
+        const [contentModelsListB] = await manageApiB.listContentModelsQuery();
+        expect(contentModelsListB).toMatchObject({
+            data: {
+                listContentModels: {
+                    data: [{ modelId: "testEntryB" }],
+                    error: null
+                }
+            }
+        });
+    });
+
+    it("group access scope: only specific groups", async () => {
+        // Identity A's content model group and content model.
+        const { manage: manageApiA } = useTestModelHandler({
+            identity: identityA
+        });
+
+        const [modelGroup1] = await manageApiA.createContentModelGroupMutation({
+            data: { name: "Group 1", icon: "x", slug: "group-1" }
+        });
+
+        const [modelGroup2] = await manageApiA.createContentModelGroupMutation({
+            data: { name: "Group 2", icon: "x", slug: "group-2" }
+        });
+
+        await manageApiA.createContentModelMutation({
+            data: {
+                name: "Test Entry 1",
+                singularApiName: "TestEntryOne",
+                pluralApiName: "TestEntryOnes",
+                group: modelGroup1.data.createContentModelGroup.data.slug
+            }
+        });
+
+        await manageApiA.createContentModelMutation({
+            data: {
+                name: "Test Entry 2",
+                singularApiName: "TestEntryTwo",
+                pluralApiName: "TestEntryTwos",
+                group: modelGroup2.data.createContentModelGroup.data.slug
+            }
+        });
+
+        const { manage: manageApiB } = useTestModelHandler({
+            identity: identityB,
+            permissions: [
+                ...gqlApiTypesPermissions,
+                { _src: "x", name: "cms.contentModel", own: false, rwd: "r", pw: "" },
+                {
+                    _src: "x",
+                    name: "cms.contentModelGroup",
+                    own: false,
+                    rwd: "r",
+                    pw: "",
+                    groups: [modelGroup1.data.createContentModelGroup.data.slug]
+                },
+                { _src: "x", name: "cms.contentEntry", own: false, rwd: "r", pw: "" }
+            ]
+        });
+
+        const { manage: manageApiC } = useTestModelHandler({
+            identity: identityC,
+            permissions: [
+                ...gqlApiTypesPermissions,
+                { _src: "y", name: "cms.contentModel", own: false, rwd: "r", pw: "" },
+                {
+                    _src: "y",
+                    name: "cms.contentModelGroup",
+                    own: false,
+                    rwd: "r",
+                    pw: "",
+                    groups: [modelGroup2.data.createContentModelGroup.data.slug]
+                },
+                { _src: "y", name: "cms.contentEntry", own: false, rwd: "r", pw: "" }
+            ]
+        });
+
+        const [contentModelsListB] = await manageApiB.listContentModelsQuery();
+        expect(contentModelsListB).toMatchObject({
+            data: {
+                listContentModels: {
+                    data: [{ modelId: "testEntry1" }],
+                    error: null
+                }
+            }
+        });
+
+        const [contentModelsListC] = await manageApiC.listContentModelsQuery();
+        expect(contentModelsListC).toMatchObject({
+            data: {
+                listContentModels: {
+                    data: [{ modelId: "testEntry2" }],
+                    error: null
+                }
+            }
+        });
+    });
+
+    it("model access scope: only models created by the user", async () => {
+        const permissions = [
+            ...gqlApiTypesPermissions,
+            { name: "cms.contentModel", own: true, rwd: "rwd", pw: "" },
+            { name: "cms.contentModelGroup", own: false, rwd: "rwd", pw: "" },
+            { name: "cms.contentEntry", own: false, rwd: "r", pw: "" }
+        ];
+
+        // Identity A's content model group and content model.
+        const { manage: manageApiA } = useTestModelHandler({
+            identity: identityA,
+            permissions
+        });
+
+        const [modelGroup] = await manageApiA.createContentModelGroupMutation({
+            data: { name: "Group", icon: "x" }
+        });
+
+        await manageApiA.createContentModelMutation({
+            data: {
+                name: "Test Entry A",
+                singularApiName: "TestEntryA",
+                pluralApiName: "TestEntryAs",
+                group: modelGroup.data.createContentModelGroup.data.slug
+            }
+        });
+
+        // Identity A's content model group and content model.
+        const { manage: manageApiB } = useTestModelHandler({
+            identity: identityB,
+            permissions
+        });
+
+        await manageApiB.createContentModelMutation({
+            data: {
+                name: "Test Entry B",
+                singularApiName: "TestEntryB",
+                pluralApiName: "TestEntryBs",
+                group: modelGroup.data.createContentModelGroup.data.slug
+            }
+        });
+
+        const [contentModelsListA] = await manageApiA.listContentModelsQuery();
+        expect(contentModelsListA).toMatchObject({
+            data: {
+                listContentModels: {
+                    data: [{ modelId: "testEntryA" }],
+                    error: null
+                }
+            }
+        });
+
+        const [contentModelsListB] = await manageApiB.listContentModelsQuery();
+        expect(contentModelsListB).toMatchObject({
+            data: {
+                listContentModels: {
+                    data: [{ modelId: "testEntryB" }],
+                    error: null
+                }
+            }
+        });
+    });
+
+    it("model access scope: only specific models", async () => {
+        // Identity A's content model group and content model.
+        const { manage: manageApiA } = useTestModelHandler({
+            identity: identityA
+        });
+
+        const [modelGroup] = await manageApiA.createContentModelGroupMutation({
+            data: { name: "Group 1", icon: "x" }
+        });
+
+        await manageApiA.createContentModelMutation({
+            data: {
+                name: "Test Entry 1",
+                singularApiName: "TestEntryOne",
+                pluralApiName: "TestEntryOnes",
+                group: modelGroup.data.createContentModelGroup.data.slug
+            }
+        });
+
+        await manageApiA.createContentModelMutation({
+            data: {
+                name: "Test Entry 2",
+                singularApiName: "TestEntryTwo",
+                pluralApiName: "TestEntryTwos",
+                group: modelGroup.data.createContentModelGroup.data.slug
+            }
+        });
+
+        const { manage: manageApiB } = useTestModelHandler({
+            identity: identityB,
+            permissions: [
+                ...gqlApiTypesPermissions,
+                { _src: "x", name: "cms.contentModelGroup", own: false, rwd: "rwd", pw: "" },
+                {
+                    _src: "x",
+                    name: "cms.contentModel",
+                    own: false,
+                    rwd: "rwd",
+                    pw: "",
+                    models: ["testEntry1"]
+                },
+                { _src: "x", name: "cms.contentEntry", own: true, rwd: "rwd", pw: "" }
+            ]
+        });
+
+        const { manage: manageApiC } = useTestModelHandler({
+            identity: identityC,
+            permissions: [
+                ...gqlApiTypesPermissions,
+                { _src: "y", name: "cms.contentModelGroup", own: false, rwd: "rwd", pw: "" },
+                {
+                    _src: "y",
+                    name: "cms.contentModel",
+                    own: false,
+                    rwd: "rwd",
+                    pw: "",
+                    models: ["testEntry2"]
+                },
+                { _src: "y", name: "cms.contentEntry", own: true, rwd: "rwd", pw: "" }
+            ]
+        });
+
+        const [contentModelsListB] = await manageApiB.listContentModelsQuery();
+        expect(contentModelsListB).toMatchObject({
+            data: {
+                listContentModels: {
+                    data: [{ modelId: "testEntry1" }],
+                    error: null
+                }
+            }
+        });
+
+        const [contentModelsListC] = await manageApiC.listContentModelsQuery();
+        expect(contentModelsListC).toMatchObject({
+            data: {
+                listContentModels: {
+                    data: [{ modelId: "testEntry2" }],
+                    error: null
+                }
+            }
+        });
+    });
+});

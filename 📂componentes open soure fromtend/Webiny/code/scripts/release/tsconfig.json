@@ -1,0 +1,7 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["./buildMultiCore.ts"],
+  "compilerOptions": {
+    "rootDirs": ["."]
+  }
+}

@@ -1,0 +1,66 @@
+declare namespace NodeJS {
+    export interface ProcessEnv {
+        NODE_ENV?: "test" | "prod" | "dev" | string;
+        DB_TABLE?: string;
+        DB_TABLE_OPENSEARCH?: string;
+        DB_TABLE_AUDIT_LOGS?: string;
+        OPENSEARCH_SHARED_INDEXES?: "true" | "false" | string;
+        WEBINY_VERSION?: string;
+        WEBINY_IS_PRE_529?: "true" | "false";
+        WEBINY_ENABLE_VERSION_HEADER?: "true" | "false" | string;
+        WEBINY_LOGS_FORWARD_URL?: string;
+        WEBINY_FILE_UPLOAD_CHUNK_SIZE?: string;
+        WEBINY_FILE_UPLOAD_PARALLEL_CHUNKS?: string;
+        WEBINY_TRASH_BIN_RETENTION_PERIOD_DAYS?: string;
+        WEBINY_ADMIN_TRASH_BIN_RETENTION_PERIOD_DAYS?: string;
+        AWS_LAMBDA_FUNCTION_NAME?: string;
+        PATH?: string;
+        DEBUG?: "true" | "false" | string;
+        PULUMI_HOME?: string;
+        PULUMI_SKIP_UPDATE_CHECK?: "true" | "false" | string;
+        MOCK_DYNAMODB_ENDPOINT?: string;
+        OPENSEARCH_PORT?: string;
+        WEBINY_ENV?: string;
+        WEBINY_ENV_VARIANT?: string;
+        WEBINY_ADMIN_ENV?: string;
+        WEBINY_WEBSITE_ENV?: string;
+        REACT_APP_DEBUG?: "true" | "false" | string;
+        AWS_REGION?: string;
+        REACT_APP_WEBINY_VERSION?: string;
+        REACT_APP_GRAPHQL_API_URL?: string;
+        REACT_APP_API_URL?: string;
+        REACT_APP_USER_POOL_REGION?: string;
+        REACT_APP_USER_POOL_ID?: string;
+        REACT_APP_USER_POOL_WEB_CLIENT_ID?: string;
+        REACT_APP_USER_POOL_PASSWORD_POLICY?: string;
+        REACT_APP_ADMIN_USER_CAN_CHANGE_EMAIL?: string;
+        COGNITO_USER_POOL_ID?: string;
+        COGNITO_REGION?: string;
+        IMAGE_TRANSFORMER_FUNCTION?: string;
+        S3_BUCKET?: string;
+        OPENSEARCH_INDEX_PREFIX?: string;
+        EXPORT_PROCESS_HANDLER?: string;
+        IMPORT_CREATE_HANDLER?: string;
+        PUBLIC_URL?: string;
+        WEBINY_HEADLESS_CMS_GRAPHQL_INPUT_REQUIRE_ARRAY_ITEM?: "false" | string;
+        APW_SCHEDULER_SCHEDULE_ACTION_HANDLER?: string;
+        OPENSEARCH_ENDPOINT?: string;
+        EVENT_BUS?: string;
+        WEBINY_FUNCTION_TYPE?: string;
+        WEBINY_DEV_DEBUG?: "true" | string;
+        /**
+         * Okta
+         */
+        OKTA_ISSUER?: string;
+        OKTA_CLIENT_ID?: string;
+        REACT_APP_OKTA_ISSUER?: string;
+        REACT_APP_OKTA_CLIENT_ID?: string;
+        /**
+         * Auth0
+         */
+        AUTH0_ISSUER?: string;
+        AUTH0_CLIENT_ID?: string;
+        REACT_APP_AUTH0_ISSUER?: string;
+        REACT_APP_AUTH0_CLIENT_ID?: string;
+    }
+}

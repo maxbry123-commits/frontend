@@ -1,0 +1,67 @@
+import type { DecryptedWcpProjectLicense } from "~/types.js";
+import { MT_OPTIONS_MAX_COUNT_TYPE, PROJECT_PACKAGE_FEATURE_NAME } from "~/types.js";
+
+interface LicenseOptions {
+    recordLocking?: boolean;
+    folderLevelPermissions?: boolean;
+    hcmsFieldPermissions?: boolean;
+}
+
+export const createTestWcpLicense = (options?: LicenseOptions): DecryptedWcpProjectLicense => {
+    return {
+        orgId: "org-id",
+        projectId: "project-id",
+        package: {
+            features: {
+                [PROJECT_PACKAGE_FEATURE_NAME.AACL]: {
+                    enabled: true,
+                    options: {
+                        teams: true,
+                        folderLevelPermissions: options?.folderLevelPermissions ?? true,
+                        privateFiles: true,
+                        hcmsFieldPermissions: options?.hcmsFieldPermissions ?? true
+                    }
+                },
+                [PROJECT_PACKAGE_FEATURE_NAME.MT]: {
+                    enabled: true,
+                    options: {
+                        maxCount: {
+                            type: MT_OPTIONS_MAX_COUNT_TYPE.SEAT_BASED
+                        }
+                    }
+                },
+                [PROJECT_PACKAGE_FEATURE_NAME.APW]: {
+                    enabled: true
+                },
+                [PROJECT_PACKAGE_FEATURE_NAME.AUDIT_LOGS]: {
+                    enabled: false
+                },
+                [PROJECT_PACKAGE_FEATURE_NAME.RECORD_LOCKING]: {
+                    enabled: options?.recordLocking ?? false
+                },
+                [PROJECT_PACKAGE_FEATURE_NAME.SEATS]: {
+                    enabled: true,
+                    options: {
+                        maxCount: 100
+                    }
+                },
+                [PROJECT_PACKAGE_FEATURE_NAME.FILE_MANAGER]: {
+                    enabled: false,
+                    options: {
+                        threatDetection: false
+                    }
+                },
+                [PROJECT_PACKAGE_FEATURE_NAME.AI_POWERUPS]: {
+                    enabled: false,
+                    options: {}
+                },
+                [PROJECT_PACKAGE_FEATURE_NAME.AB_TESTING]: {
+                    enabled: false
+                },
+                [PROJECT_PACKAGE_FEATURE_NAME.REMOTE_COMPONENTS]: {
+                    enabled: false
+                }
+            }
+        }
+    };
+};

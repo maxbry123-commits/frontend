@@ -1,0 +1,90 @@
+import * as React from "react";
+import type { ConnectDropTarget } from "react-dnd";
+import { useDrop } from "react-dnd";
+import type { DragSource } from "~/types.js";
+import { dropZoneOverState } from "./dropZoneOverState.js";
+
+export interface DroppableChildrenFunctionParams {
+    isDragging: boolean;
+    isDroppable: boolean;
+    isOver: boolean;
+    item: any;
+    drop: ConnectDropTarget;
+}
+export interface DroppableChildrenFunction {
+    (params: DroppableChildrenFunctionParams): React.ReactElement;
+}
+
+interface IsVisibleParams {
+    type: DragSource["type"];
+    item: DragSource;
+    isDragging: boolean;
+}
+export interface IsVisibleCallable {
+    (params: IsVisibleParams): boolean;
+}
+export interface OnDropCallable {
+    (item: DragSource): void;
+}
+export interface DroppableProps {
+    type?: string;
+    children: DroppableChildrenFunction;
+    isDragging?: boolean;
+    isDroppable?: (item: DragSource) => boolean;
+    isVisible?: IsVisibleCallable;
+    onDrop?: OnDropCallable;
+}
+
+export type DragObject = {
+    item: IsVisibleParams;
+    isOver: boolean;
+};
+
+const DroppableComponent = (props: DroppableProps) => {
+    const { children, onDrop, isVisible = () => true } = props;
+
+    const [{ item, isOver }, drop] = useDrop<DragSource, void, DragObject>({
+        accept: "element",
+        collect: monitor => ({
+            isOver: monitor.isOver() && monitor.isOver({ shallow: true }),
+            item: monitor.getItem()
+        }),
+        drop(item, monitor) {
+            if (typeof props.isDroppable === "function" && !props.isDroppable(item)) {
+                return;
+            }
+
+            if (typeof onDrop === "function") {
+                return onDrop(monitor.getItem());
+            }
+        }
+    });
+
+    const prevIsOverRef = React.useRef(false);
+    React.useEffect(() => {
+        if (isOver === prevIsOverRef.current) {
+            return;
+        }
+        dropZoneOverState.notify(isOver);
+        prevIsOverRef.current = isOver;
+        return () => {
+            if (prevIsOverRef.current) {
+                dropZoneOverState.notify(false);
+                prevIsOverRef.current = false;
+            }
+        };
+    }, [isOver]);
+
+    if (item && !isVisible(item)) {
+        return null;
+    }
+
+    let isDroppable = true;
+    if (item) {
+        isDroppable = props.isDroppable ? props.isDroppable(item) : isOver;
+    }
+
+    return children({ isDragging: Boolean(item), isOver, isDroppable, item, drop });
+};
+
+export const Droppable: React.ComponentType<DroppableProps> = React.memo(DroppableComponent);

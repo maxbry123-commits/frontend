@@ -1,0 +1,2311 @@
+{
+  "data": {
+    "__schema": {
+      "types": [
+        {
+          "name": "CmsIdentity",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "displayName",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "type",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "String",
+          "kind": "SCALAR",
+          "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
+          "fields": null
+        },
+        {
+          "name": "CmsError",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "code",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "message",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "data",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "JSON", "ofType": null }
+            },
+            {
+              "name": "stack",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsCursors",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "next",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "previous",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsListMeta",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "cursor",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "hasMoreItems",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null }
+            },
+            {
+              "name": "totalCount",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "Int", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "Boolean",
+          "kind": "SCALAR",
+          "description": "The `Boolean` scalar type represents `true` or `false`.",
+          "fields": null
+        },
+        {
+          "name": "Int",
+          "kind": "SCALAR",
+          "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
+          "fields": null
+        },
+        {
+          "name": "CmsDeleteEntryOptions",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsDeleteResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsDeleteMultipleDataResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "ID" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "ID",
+          "kind": "SCALAR",
+          "description": "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted as an ID.",
+          "fields": null
+        },
+        {
+          "name": "CmsDeleteMultipleResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsBooleanResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "WbyAcoLocation",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "folderId",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "ID", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "WbyAcoLocationInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "WbyAcoLocationWhereInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CreateCmsEntryOptionsInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CreateRevisionCmsEntryOptionsInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "UpdateCmsEntryOptionsInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        { "name": "CmsIdentityInput", "kind": "INPUT_OBJECT", "description": null, "fields": null },
+        {
+          "name": "CmsEntryValidationResponseData",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "error",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "fieldId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "parents",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            }
+          ]
+        },
+        {
+          "name": "CmsEntryValidationResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsEntrySystem",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "_empty",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsEntryLive",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "version",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "Int" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "CmsEntryLiveWhereInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "ListWhereInputCmsEntrySystem",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsExportStructureResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsImportStructureGroupInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsImportStructureModelInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsImportGroupStructureAction",
+          "kind": "ENUM",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsImportModelStructureAction",
+          "kind": "ENUM",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsImportStructureInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsImportValidateResponseDataGroupResultItem",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "name",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "slug",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsImportValidateResponseDataGroupResult",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "group",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsImportValidateResponseDataGroupResultItem"
+                }
+              }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            },
+            {
+              "name": "action",
+              "description": null,
+              "type": { "kind": "ENUM", "name": "CmsImportGroupStructureAction", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsImportValidateResponseDataModelResultItem",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "modelId",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "name",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "group",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsImportValidateResponseDataModelResult",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "model",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsImportValidateResponseDataModelResultItem"
+                }
+              }
+            },
+            {
+              "name": "related",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            },
+            {
+              "name": "action",
+              "description": null,
+              "type": { "kind": "ENUM", "name": "CmsImportModelStructureAction", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsImportValidateResponseData",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "groups",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            },
+            {
+              "name": "models",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            },
+            {
+              "name": "message",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "CmsImportValidateResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsImportValidateResponseData", "ofType": null }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsImportStructureResponseDataGroupResultItem",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "CmsImportStructureResponseDataGroupResult",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "group",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "CmsImportStructureResponseDataGroupResultItem"
+                }
+              }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            },
+            {
+              "name": "action",
+              "description": null,
+              "type": { "kind": "ENUM", "name": "CmsImportGroupStructureAction", "ofType": null }
+            },
+            {
+              "name": "imported",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsImportStructureResponseDataResultItem",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "modelId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "group",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "CmsImportStructureResponseDataModelResult",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "model",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsImportStructureResponseDataResultItem" }
+              }
+            },
+            {
+              "name": "related",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            },
+            {
+              "name": "action",
+              "description": null,
+              "type": { "kind": "ENUM", "name": "CmsImportModelStructureAction", "ofType": null }
+            },
+            {
+              "name": "imported",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsImportStructureResponseData",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "groups",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            },
+            {
+              "name": "models",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            },
+            {
+              "name": "message",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsImportStructureResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsImportStructureResponseData", "ofType": null }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "Query",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "exportStructure",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsExportStructureResponse" }
+              }
+            },
+            {
+              "name": "getContentModel",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsContentModelResponse", "ofType": null }
+            },
+            {
+              "name": "listContentModels",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsContentModelListResponse", "ofType": null }
+            },
+            {
+              "name": "searchContentEntries",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsContentEntriesResponse" }
+              }
+            },
+            {
+              "name": "getContentEntry",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsContentEntryResponse" }
+              }
+            },
+            {
+              "name": "getLatestContentEntry",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsContentEntryResponse" }
+              }
+            },
+            {
+              "name": "getPublishedContentEntry",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsContentEntryResponse" }
+              }
+            },
+            {
+              "name": "getContentEntries",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsContentEntriesResponse" }
+              }
+            },
+            {
+              "name": "getLatestContentEntries",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsContentEntriesResponse" }
+              }
+            },
+            {
+              "name": "getPublishedContentEntries",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsContentEntriesResponse" }
+              }
+            },
+            {
+              "name": "getContentModelGroup",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsContentModelGroupResponse", "ofType": null }
+            },
+            {
+              "name": "listContentModelGroups",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "CmsContentModelGroupListResponse",
+                "ofType": null
+              }
+            }
+          ]
+        },
+        {
+          "name": "Mutation",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "validateImportStructure",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsImportValidateResponse" }
+              }
+            },
+            {
+              "name": "importStructure",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsImportStructureResponse" }
+              }
+            },
+            {
+              "name": "_empty",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "createContentModel",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsContentModelResponse", "ofType": null }
+            },
+            {
+              "name": "createContentModelFrom",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsContentModelResponse", "ofType": null }
+            },
+            {
+              "name": "updateContentModel",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsContentModelResponse", "ofType": null }
+            },
+            {
+              "name": "deleteContentModel",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsDeleteResponse", "ofType": null }
+            },
+            {
+              "name": "createContentModelGroup",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsContentModelGroupResponse", "ofType": null }
+            },
+            {
+              "name": "updateContentModelGroup",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsContentModelGroupResponse", "ofType": null }
+            },
+            {
+              "name": "deleteContentModelGroup",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsDeleteResponse", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "RevisionId",
+          "kind": "SCALAR",
+          "description": "A Headless CMS Reference field input type.",
+          "fields": null
+        },
+        {
+          "name": "JSON",
+          "kind": "SCALAR",
+          "description": "The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).",
+          "fields": null
+        },
+        {
+          "name": "Long",
+          "kind": "SCALAR",
+          "description": "A custom input type to be used for large integers (Long).",
+          "fields": null
+        },
+        {
+          "name": "RefInput",
+          "kind": "SCALAR",
+          "description": "A custom input type to be used with references. Supports plain ID and `{ id: ID }` Object literal.",
+          "fields": null
+        },
+        {
+          "name": "Number",
+          "kind": "SCALAR",
+          "description": "A custom input type to be used with numbers. Supports Int and Float.",
+          "fields": null
+        },
+        {
+          "name": "Any",
+          "kind": "SCALAR",
+          "description": "A scalar type that represents an ambiguous value.",
+          "fields": null
+        },
+        {
+          "name": "Date",
+          "kind": "SCALAR",
+          "description": "A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.",
+          "fields": null
+        },
+        {
+          "name": "DateTime",
+          "kind": "SCALAR",
+          "description": "A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.",
+          "fields": null
+        },
+        {
+          "name": "DateTimeZ",
+          "kind": "SCALAR",
+          "description": "A custom type for dateTime with the timezone.",
+          "fields": null
+        },
+        {
+          "name": "Time",
+          "kind": "SCALAR",
+          "description": "A custom type to support time-only input.",
+          "fields": null
+        },
+        {
+          "name": "Icon",
+          "kind": "SCALAR",
+          "description": "Icon scalar that accepts string or object {type, name, value}",
+          "fields": null
+        },
+        { "name": "CmsEntryStatusType", "kind": "ENUM", "description": null, "fields": null },
+        {
+          "name": "CmsFieldValidation",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "message",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "settings",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "JSON", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsFieldRenderer",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "name",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "settings",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "JSON", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsPredefinedValue",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "label",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "value",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "selected",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsPredefinedValues",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "enabled",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null }
+            },
+            {
+              "name": "values",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsPredefinedValue" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "CmsFieldRule",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "type",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "target",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "operator",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "value",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "JSON", "ofType": null }
+            },
+            {
+              "name": "action",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "CmsContentModelField",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "ID" }
+              }
+            },
+            {
+              "name": "storageId",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "fieldId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "label",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "help",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "note",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "placeholder",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "type",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "tags",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            },
+            {
+              "name": "list",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null }
+            },
+            {
+              "name": "predefinedValues",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsPredefinedValues", "ofType": null }
+            },
+            {
+              "name": "renderer",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsFieldRenderer", "ofType": null }
+            },
+            {
+              "name": "validation",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "listValidation",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "settings",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "JSON", "ofType": null }
+            },
+            {
+              "name": "rules",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            }
+          ]
+        },
+        {
+          "name": "CmsContentModelRefModel",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "valuesSelection",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsContentModelMetadata",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "valuesSelection",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "componentMap",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "JSON", "ofType": null }
+            },
+            {
+              "name": "refModels",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "JSON", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsContentModel",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "singularApiName",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "pluralApiName",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "modelId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "group",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "icon",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "Icon", "ofType": null }
+            },
+            {
+              "name": "createdOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "savedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "createdBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "fields",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            },
+            {
+              "name": "layout",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "JSON" }
+              }
+            },
+            {
+              "name": "titleFieldId",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "descriptionFieldId",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "imageFieldId",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "tags",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            },
+            {
+              "name": "tenant",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "settings",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "JSON", "ofType": null }
+            },
+            {
+              "name": "plugin",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "Boolean" }
+              }
+            },
+            {
+              "name": "valuesSelection",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "metadata",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsContentModelMetadata", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsContentModelResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsContentModel", "ofType": null }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsContentModelListResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsContentModel" }
+              }
+            },
+            {
+              "name": "meta",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsListMeta", "ofType": null }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsPredefinedValueInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsPredefinedValuesInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsFieldRendererInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsFieldValidationInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsFieldRuleInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsContentModelFieldInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsContentModelCreateInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsContentModelCreateFromInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsContentModelUpdateInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsModelMeta",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "modelId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "CmsPublishedContentEntry",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "ID" }
+              }
+            },
+            {
+              "name": "entryId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "title",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "image",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsContentEntry",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "ID" }
+              }
+            },
+            {
+              "name": "entryId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "model",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsModelMeta" }
+              }
+            },
+            {
+              "name": "status",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "published",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsPublishedContentEntry", "ofType": null }
+            },
+            {
+              "name": "title",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "image",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "createdOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "modifiedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "savedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "deletedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "restoredOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "firstPublishedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "lastPublishedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "createdBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "modifiedBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "savedBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "deletedBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "restoredBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "firstPublishedBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "lastPublishedBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "revisionCreatedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "revisionModifiedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "revisionSavedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "revisionDeletedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "revisionRestoredOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "revisionFirstPublishedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "revisionLastPublishedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "revisionCreatedBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "revisionModifiedBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "revisionSavedBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "revisionDeletedBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "revisionRestoredBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "revisionFirstPublishedBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "revisionLastPublishedBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "wbyAco_location",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "WbyAcoLocation", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsContentEntriesResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsContentEntryResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsContentEntry", "ofType": null }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsModelEntryInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsContentModelGroup",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "ID" }
+              }
+            },
+            {
+              "name": "createdOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "savedOn",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "DateTime", "ofType": null }
+            },
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "contentModels",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "totalContentModels",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "Int" }
+              }
+            },
+            {
+              "name": "slug",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "icon",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "Icon", "ofType": null }
+            },
+            {
+              "name": "createdBy",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsIdentity", "ofType": null }
+            },
+            {
+              "name": "plugin",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "Boolean" }
+              }
+            }
+          ]
+        },
+        {
+          "name": "CmsContentModelGroupInput",
+          "kind": "INPUT_OBJECT",
+          "description": null,
+          "fields": null
+        },
+        {
+          "name": "CmsContentModelGroupResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsContentModelGroup", "ofType": null }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "CmsContentModelGroupListResponse",
+          "kind": "OBJECT",
+          "description": null,
+          "fields": [
+            {
+              "name": "data",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "CmsContentModelGroup" }
+              }
+            },
+            {
+              "name": "meta",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsListMeta", "ofType": null }
+            },
+            {
+              "name": "error",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "CmsError", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "__Schema",
+          "kind": "OBJECT",
+          "description": "A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations.",
+          "fields": [
+            {
+              "name": "description",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "types",
+              "description": "A list of all types supported by this server.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            },
+            {
+              "name": "queryType",
+              "description": "The type that query operations will be rooted at.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "__Type" }
+              }
+            },
+            {
+              "name": "mutationType",
+              "description": "If this server supports mutation, the type that mutation operations will be rooted at.",
+              "type": { "kind": "OBJECT", "name": "__Type", "ofType": null }
+            },
+            {
+              "name": "subscriptionType",
+              "description": "If this server support subscription, the type that subscription operations will be rooted at.",
+              "type": { "kind": "OBJECT", "name": "__Type", "ofType": null }
+            },
+            {
+              "name": "directives",
+              "description": "A list of all directives supported by this server.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            }
+          ]
+        },
+        {
+          "name": "__Type",
+          "kind": "OBJECT",
+          "description": "The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.\n\nDepending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.",
+          "fields": [
+            {
+              "name": "kind",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "ENUM", "name": "__TypeKind" }
+              }
+            },
+            {
+              "name": "name",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "specifiedByURL",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "fields",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "interfaces",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "possibleTypes",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "enumValues",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "inputFields",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": { "kind": "NON_NULL", "name": null }
+              }
+            },
+            {
+              "name": "ofType",
+              "description": null,
+              "type": { "kind": "OBJECT", "name": "__Type", "ofType": null }
+            },
+            {
+              "name": "isOneOf",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "Boolean", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "__TypeKind",
+          "kind": "ENUM",
+          "description": "An enum describing what kind of type a given `__Type` is.",
+          "fields": null
+        },
+        {
+          "name": "__Field",
+          "kind": "OBJECT",
+          "description": "Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type.",
+          "fields": [
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "args",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            },
+            {
+              "name": "type",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "__Type" }
+              }
+            },
+            {
+              "name": "isDeprecated",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "Boolean" }
+              }
+            },
+            {
+              "name": "deprecationReason",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "__InputValue",
+          "kind": "OBJECT",
+          "description": "Arguments provided to Fields or Directives and the input fields of an InputObject are represented as Input Values which describe their type and optionally a default value.",
+          "fields": [
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "type",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "OBJECT", "name": "__Type" }
+              }
+            },
+            {
+              "name": "defaultValue",
+              "description": "A GraphQL-formatted string representing the default value for this input value.",
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "isDeprecated",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "Boolean" }
+              }
+            },
+            {
+              "name": "deprecationReason",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "__EnumValue",
+          "kind": "OBJECT",
+          "description": "One possible value for a given Enum. Enum values are unique values, not a placeholder for a string or numeric value. However an Enum value is returned in a JSON response as a string.",
+          "fields": [
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "isDeprecated",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "Boolean" }
+              }
+            },
+            {
+              "name": "deprecationReason",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "__Directive",
+          "kind": "OBJECT",
+          "description": "A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.\n\nIn some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.",
+          "fields": [
+            {
+              "name": "name",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "String" }
+              }
+            },
+            {
+              "name": "description",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            {
+              "name": "isRepeatable",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "Boolean" }
+              }
+            },
+            {
+              "name": "locations",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            },
+            {
+              "name": "args",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "LIST", "name": null }
+              }
+            },
+            {
+              "name": "isDeprecated",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": { "kind": "SCALAR", "name": "Boolean" }
+              }
+            },
+            {
+              "name": "deprecationReason",
+              "description": null,
+              "type": { "kind": "SCALAR", "name": "String", "ofType": null }
+            }
+          ]
+        },
+        {
+          "name": "__DirectiveLocation",
+          "kind": "ENUM",
+          "description": "A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies.",
+          "fields": null
+        }
+      ]
+    }
+  }
+}

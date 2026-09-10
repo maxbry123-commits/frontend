@@ -1,0 +1,67 @@
+import React, { memo } from "react";
+import type { AdminProps as BaseAdminProps } from "@webiny/app-admin";
+import { Admin as BaseAdmin, SystemInstallerProvider } from "@webiny/app-admin";
+import { HeadlessCMS } from "@webiny/app-headless-cms";
+import { AdminUI } from "@webiny/app-admin-ui";
+import { FileManager } from "@webiny/app-file-manager/app.js";
+import { GraphQLPlayground } from "@webiny/app-graphql-playground";
+import { SdkPlayground } from "@webiny/app-sdk-playground";
+import { imagePlugin } from "@webiny/app/plugins/index.js";
+import { AuditLogs } from "@webiny/app-audit-logs";
+import { LexicalEditorActions } from "@webiny/lexical-editor-actions";
+import { Extension as MailerSettings } from "@webiny/app-mailer";
+import { Websockets } from "@webiny/app-websockets";
+import { RecordLocking } from "@webiny/app-record-locking";
+import { TrashBinConfigs } from "@webiny/app-admin/presentation/trashBin/index.js";
+import { AdvancedContentOrganisation } from "@webiny/app-aco";
+import { Extension as WebsiteBuilder } from "@webiny/app-website-builder/Extension.js";
+import { SchedulerModule } from "@webiny/app-scheduler";
+import { CmsScheduler } from "@webiny/app-headless-cms-scheduler";
+import { WorkflowsAdminApp } from "@webiny/app-workflows";
+import { CmsWorkflows } from "@webiny/app-headless-cms-workflows";
+import { WebsiteBuilderWorkflows } from "@webiny/app-website-builder-workflows";
+import type { Container } from "@webiny/di";
+import type { PluginCollection } from "@webiny/plugins/types.js";
+import { WbScheduler } from "@webiny/app-website-builder-scheduler";
+import { Webhooks } from "@webiny/webhooks/admin";
+import { BackgroundTasks } from "@webiny/background-tasks/admin";
+
+export interface AdminProps extends Omit<BaseAdminProps, "createLegacyPlugins"> {
+    children?: React.ReactNode;
+}
+
+const App = (props: AdminProps) => {
+    const createLegacyPlugins = (_container: Container): PluginCollection => {
+        return [imagePlugin()];
+    };
+
+    return (
+        <BaseAdmin createLegacyPlugins={createLegacyPlugins}>
+            <AdminUI />
+            <SystemInstallerProvider />
+            <GraphQLPlayground />
+            <SdkPlayground />
+            <Websockets />
+            <RecordLocking />
+            <LexicalEditorActions />
+            <HeadlessCMS />
+            <FileManager />
+            <AuditLogs />
+            <MailerSettings />
+            <SchedulerModule />
+            <CmsScheduler />
+            <TrashBinConfigs />
+            <AdvancedContentOrganisation />
+            <WebsiteBuilder />
+            <WorkflowsAdminApp />
+            <CmsWorkflows />
+            <WebsiteBuilderWorkflows />
+            <WbScheduler />
+            <Webhooks />
+            <BackgroundTasks />
+            {props.children}
+        </BaseAdmin>
+    );
+};
+
+export const Admin = memo<AdminProps>(App);

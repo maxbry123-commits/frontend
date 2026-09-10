@@ -1,0 +1,448 @@
+import type {
+    CmsContext,
+    CmsDynamicZoneTemplate,
+    CmsEntry,
+    CmsEntryValues,
+    CmsModel,
+    CmsModelField,
+    CmsModelFieldValidation
+} from "~/types/index.js";
+import { EntryValidationError } from "~/domain/contentEntry/errors.js";
+import {
+    type CmsModelFieldValidator,
+    CmsModelFieldValidatorRegistry
+} from "~/features/validation/index.js";
+
+type PluginValidationCallable = (
+    params: CmsModelFieldValidator.Params
+) => CmsModelFieldValidator.Response;
+type PluginValidationList = Record<string, PluginValidationCallable[]>;
+
+interface ExecuteValidationParams<TValues extends CmsEntryValues = CmsEntryValues> {
+    validatorList: PluginValidationList;
+    field: CmsModelField;
+    model: CmsModel;
+    values: TValues;
+    context: CmsContext;
+    entry?: CmsEntry<TValues>;
+}
+
+type PossibleValue = boolean | number | string | null | undefined;
+
+const validateValue = async <TValues extends CmsEntryValues = CmsEntryValues>(
+    params: ExecuteValidationParams<TValues>,
+    fieldValidators: CmsModelFieldValidation[],
+    value: PossibleValue | PossibleValue[]
+): Promise<string | null> => {
+    if (!fieldValidators) {
+        return null;
+    }
+    const { validatorList, context, field, model, entry } = params;
+    try {
+        for (const fieldValidator of fieldValidators) {
+            const name = fieldValidator.name;
+            const validations = validatorList[name];
+            if (!validations || validations.length === 0) {
+                return `There are no "${name}" validators defined.`;
+            }
+            for (const validate of validations) {
+                const result = await validate({
+                    value,
+                    context,
+                    validator: fieldValidator,
+                    field,
+                    model,
+                    entry
+                });
+                if (!result) {
+                    return fieldValidator.message;
+                }
+            }
+        }
+    } catch (ex) {
+        return ex.message;
+    }
+
+    return null;
+};
+
+const validatePredefinedValue = (field: CmsModelField, value: any | any[]): string | null => {
+    const { enabled = false, values: predefinedValues = [] } = field.predefinedValues || {};
+    if (!enabled) {
+        return null;
+    } else if (Array.isArray(predefinedValues) === false || predefinedValues.length === 0) {
+        return "Missing predefined values to validate against.";
+    } else if (value === "" || value === null || value === undefined) {
+        return null;
+    }
+    for (const predefinedValue of predefinedValues) {
+        /**
+         * No strict compare because the value sent can be 12345 (number) and predefinedValue can be "12345" (string),
+         * and we want it to match.
+         */
+        if (predefinedValue.value == value) {
+            return null;
+        }
+    }
+    return "Value sent does not match any of the available predefined values.";
+};
+
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+const TIME_RE = /^\d{2}:\d{2}(:\d{2})?$/;
+const DATETIME_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
+
+const validateDatetimeFormat = (field: CmsModelField, value: any): string | null => {
+    if (field.type !== "datetime") {
+        return null;
+    }
+    if (value === null || value === undefined || value === "") {
+        return null;
+    }
+    if (typeof value !== "string") {
+        return null;
+    }
+
+    const dateType = field.settings?.type;
+
+    switch (dateType) {
+        case "date":
+            if (!DATE_RE.test(value)) {
+                return `Invalid date format for field "${field.fieldId}". Expected YYYY-MM-DD.`;
+            }
+            return null;
+        case "time":
+            if (!TIME_RE.test(value)) {
+                return `Invalid time format for field "${field.fieldId}". Expected HH:mm or HH:mm:ss.`;
+            }
+            return null;
+        case "dateTimeWithTimezone":
+        case "dateTimeWithoutTimezone":
+            if (!DATETIME_RE.test(value)) {
+                return `Invalid dateTime format for field "${field.fieldId}". Expected ISO 8601 dateTime.`;
+            }
+            return null;
+        default:
+            return null;
+    }
+};
+
+const getFieldValidation = (
+    listValidation?: CmsModelFieldValidation[]
+): CmsModelFieldValidation[] => {
+    if (!listValidation?.length) {
+        return [];
+    }
+    // Filter out the legacy "dynamicZone" validator that was never implemented.
+    // Existing models may still have it in their persisted listValidation data.
+    return listValidation.filter(item => item.name !== "dynamicZone");
+};
+/**
+ * When multiple values is selected we must run validations on the array containing the values
+ * And then on each value in the array
+ */
+const runFieldMultipleValuesValidations = async <TValues extends CmsEntryValues = CmsEntryValues>(
+    params: ExecuteValidationParams<TValues>
+): Promise<string | null> => {
+    const { field, values: initialValues } = params;
+    const values = initialValues[field.fieldId as keyof TValues] as
+        | PossibleValue[]
+        | null
+        | undefined;
+    const valuesError = await validateValue(
+        params,
+        getFieldValidation(field.listValidation),
+        values
+    );
+    if (valuesError) {
+        return valuesError;
+    }
+    if (values === null || values === undefined) {
+        return null;
+    }
+    for (const value of values) {
+        const datetimeError = validateDatetimeFormat(field, value);
+        if (datetimeError) {
+            return datetimeError;
+        }
+        const valueError = await validateValue(params, getFieldValidation(field.validation), value);
+        if (valueError) {
+            return valueError;
+        }
+        const predefinedValueError = validatePredefinedValue(field, value);
+        if (predefinedValueError) {
+            return predefinedValueError;
+        }
+    }
+    return null;
+};
+/**
+ * Runs validation on given value.
+ */
+const runFieldValueValidations = async <TValues extends CmsEntryValues = CmsEntryValues>(
+    params: ExecuteValidationParams<TValues>
+): Promise<string | null> => {
+    const { values, field } = params;
+    const value = values[field.fieldId as keyof TValues];
+    const datetimeError = validateDatetimeFormat(field, value);
+    if (datetimeError) {
+        return datetimeError;
+    }
+    const error = await validateValue(params, field.validation || [], value);
+    if (error) {
+        return error;
+    }
+    return validatePredefinedValue(field, value);
+};
+
+const execValidation = async (params: ExecuteValidationParams): Promise<string | null> => {
+    const { field } = params;
+    if (field.list) {
+        return await runFieldMultipleValuesValidations(params);
+    }
+    return await runFieldValueValidations(params);
+};
+
+interface IValidateModelEntryDataParams<TValues extends CmsEntryValues = CmsEntryValues> {
+    context: CmsContext;
+    model: CmsModel;
+    values: TValues;
+    entry?: CmsEntry<TValues>;
+    skipValidation?: boolean;
+}
+
+export const validateModelEntryData = async <TValues extends CmsEntryValues = CmsEntryValues>(
+    params: IValidateModelEntryDataParams<TValues>
+) => {
+    const { context, model, entry, values, skipValidation } = params;
+
+    if (skipValidation) {
+        return [];
+    }
+
+    const validatorList: PluginValidationList = {};
+    const registry = context.container.resolve(CmsModelFieldValidatorRegistry);
+    const validators = registry.getAll();
+    for (const validator of validators) {
+        const name = validator.name;
+        if (!validatorList[name]) {
+            validatorList[name] = [];
+        }
+        validatorList[name].push(params => {
+            return validator.validate(params);
+        });
+    }
+
+    return await validate<TValues>({
+        validatorList,
+        context,
+        model,
+        entry,
+        parents: [],
+        fields: model.fields,
+        values: {
+            ...entry?.values,
+            ...values
+        }
+    });
+};
+
+export const validateModelEntryDataOrThrow = async <
+    TValues extends CmsEntryValues = CmsEntryValues
+>(
+    params: IValidateModelEntryDataParams<TValues>
+) => {
+    const invalidFields = await validateModelEntryData(params);
+    if (invalidFields.length === 0) {
+        return;
+    }
+    throw new EntryValidationError("Validation failed.", invalidFields);
+};
+
+/**
+ *
+ */
+interface FieldError {
+    id: string;
+    fieldId: string;
+    storageId: string;
+    error: any;
+    parents: string[];
+}
+
+interface ValidateFieldParams<TValues extends CmsEntryValues = CmsEntryValues> {
+    validatorList: PluginValidationList;
+    parents: string[];
+    model: CmsModel;
+    values: TValues;
+    context: CmsContext;
+    field: CmsModelField;
+    entry?: CmsEntry<TValues>;
+}
+
+const executeFieldValidation = async <TValues extends CmsEntryValues = CmsEntryValues>(
+    params: ValidateFieldParams<TValues>
+): Promise<FieldError[]> => {
+    // TODO put per-field validation into plugins.
+    const { field } = params;
+    /**
+     * Object field.
+     */
+    if (field.type === "object") {
+        const fields = field.settings?.fields;
+        if (!Array.isArray(fields)) {
+            return [];
+        }
+        const validations: FieldError[] = [];
+        /**
+         * We need to validate the object field as well.
+         */
+        const error = await execValidation({
+            ...params,
+            field
+        });
+        if (error) {
+            validations.push({
+                id: field.id,
+                fieldId: field.fieldId,
+                storageId: field.storageId,
+                error,
+                parents: params.parents
+            });
+        }
+        const objectValue = params.values[field.fieldId as keyof TValues];
+        if (!objectValue) {
+            return validations;
+        }
+        const values = (Array.isArray(objectValue) ? objectValue : [objectValue]) as TValues[];
+        for (const index in values) {
+            const parents = field.list ? [field.fieldId, index] : [field.fieldId];
+            const value = values[index] as TValues;
+            for (const childField of fields) {
+                const errors = await executeFieldValidation<typeof value>({
+                    ...params,
+                    parents: params.parents.concat(parents),
+                    field: childField,
+                    values: value
+                });
+                if (errors.length === 0) {
+                    continue;
+                }
+                validations.push(...errors);
+            }
+        }
+        return validations;
+    }
+    /**
+     * Dynamic Zone Field
+     */
+    //
+    else if (field.type === "dynamicZone") {
+        const validations: FieldError[] = [];
+
+        const error = await execValidation({
+            ...params,
+            field
+        });
+        if (error) {
+            validations.push({
+                id: field.id,
+                fieldId: field.fieldId,
+                storageId: field.storageId,
+                error,
+                parents: params.parents
+            });
+        }
+
+        const templates = (field.settings?.templates || []) as CmsDynamicZoneTemplate[];
+        for (const template of templates) {
+            const fields = template.fields;
+            const fieldData = params.values[field.fieldId as keyof TValues];
+            if (!fieldData) {
+                continue;
+            }
+            const values: TValues[keyof TValues][] = Array.isArray(fieldData)
+                ? fieldData
+                : [fieldData];
+            for (const index in values) {
+                const templateValue = values[index]?.[template.gqlTypeName];
+                if (!templateValue) {
+                    continue;
+                }
+                /**
+                 * Order of the parents must be
+                 * - fieldId
+                 * - index (if multiple values)
+                 * - gqlTypeName
+                 */
+                const parents = [field.fieldId];
+                if (field.list) {
+                    parents.push(index);
+                }
+                parents.push(template.gqlTypeName);
+                for (const childField of fields) {
+                    const errors = await executeFieldValidation({
+                        ...params,
+                        parents: params.parents.concat(parents),
+                        field: childField,
+                        values: templateValue
+                    });
+                    if (errors.length === 0) {
+                        continue;
+                    }
+                    validations.push(...errors);
+                }
+            }
+        }
+
+        return validations;
+    }
+    const error = await execValidation({
+        ...params
+    });
+    if (!error) {
+        return [];
+    }
+    return [
+        {
+            id: field.id,
+            fieldId: field.fieldId,
+            storageId: field.storageId,
+            error,
+            parents: params.parents
+        }
+    ];
+};
+
+interface ValidateFieldsParams<TValues extends CmsEntryValues = CmsEntryValues> {
+    validatorList: PluginValidationList;
+    parents: string[];
+    model: CmsModel;
+    values: TValues;
+    fields: CmsModelField[];
+    context: CmsContext;
+    entry?: CmsEntry<TValues>;
+}
+
+const validate = async <TValues extends CmsEntryValues = CmsEntryValues>(
+    params: ValidateFieldsParams<TValues>
+): Promise<FieldError[]> => {
+    const { fields } = params;
+    const errors: FieldError[] = [];
+
+    const results = await Promise.all(
+        fields.map(async field => {
+            return await executeFieldValidation<TValues>({
+                ...params,
+                field
+            });
+        })
+    );
+
+    for (const result of results) {
+        if (result.length === 0) {
+            continue;
+        }
+        errors.push(...result);
+    }
+    return errors;
+};

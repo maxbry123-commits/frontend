@@ -1,0 +1,481 @@
+import { beforeEach, describe, expect, it } from "vitest";
+import { createEntries } from "./mocks/entry.model";
+import { ValueFilterRegistry } from "@webiny/db-utils";
+import {
+    createExpressions,
+    type Expression,
+    createFields,
+    filter,
+    type Field,
+    FieldFilterPathRegistry,
+    FieldFilterValueTransformRegistry,
+    FieldFilterCreateRegistry
+} from "@webiny/api-headless-cms-storage";
+import { CmsModel } from "@webiny/api-headless-cms/types";
+import { createModel } from "../../helpers/createModel";
+import { getSearchableFields } from "@webiny/api-headless-cms/crud/contentEntry/searchableFields";
+import { GraphQLFeature } from "@webiny/api-headless-cms/features/graphql/index.js";
+import { createTestContainer } from "../../helpers/createTestContainer";
+
+describe("filtering cms ddb", () => {
+    let filterCreateRegistry: FieldFilterCreateRegistry.Interface;
+    let transformRegistry: FieldFilterValueTransformRegistry.Interface;
+    let model: CmsModel;
+    let fields: Record<string, Field>;
+    let valueFilterRegistry: ValueFilterRegistry.Interface;
+    let container: ReturnType<typeof createTestContainer>;
+
+    beforeEach(() => {
+        model = createModel();
+        container = createTestContainer();
+        GraphQLFeature.register(container);
+        const pathRegistry = container.resolve(FieldFilterPathRegistry);
+        transformRegistry = container.resolve(FieldFilterValueTransformRegistry);
+        filterCreateRegistry = container.resolve(FieldFilterCreateRegistry);
+        valueFilterRegistry = container.resolve(ValueFilterRegistry);
+        fields = createFields({
+            pathRegistry,
+            transformRegistry,
+            fields: model.fields
+        });
+    });
+
+    const filterByCreatedOn: [number, number][] = [
+        [25, 75],
+        [1, 99],
+        [100, 0],
+        [0, 100]
+    ];
+
+    it.each(filterByCreatedOn)(
+        "should filter entries by createdOn - %s results",
+        async (expectedResults, modifier) => {
+            const records = createEntries(100).map(r => {
+                // @ts-expect-error
+                delete r.values;
+
+                return r;
+            });
+
+            const createdOn = new Date();
+            /**
+             * We want to filter out all the records which are not created after current date + modifier.
+             * We reduce 5000ms from the time because test can be slower so results will be inconsistent.
+             *
+             */
+            createdOn.setTime(createdOn.getTime() + modifier * 1000 * 86400 - 5000);
+
+            const createExpressionsParams = {
+                filterCreateRegistry,
+                transformRegistry,
+                valueFilterRegistry,
+                where: {
+                    createdOn_gte: createdOn.toISOString()
+                },
+                fields
+            };
+
+            /**
+             * We want to make sure that filters are properly constructed
+             */
+            const expressions = createExpressions(createExpressionsParams);
+
+            const expectedExpressions: Expression = {
+                condition: "AND",
+                expressions: [],
+                filters: [
+                    {
+                        compareValue: createdOn.getTime(),
+                        field: expect.objectContaining({
+                            fieldId: "createdOn"
+                        }),
+                        filter: expect.objectContaining({
+                            operation: "gte"
+                        }),
+                        negate: false,
+                        fieldPathId: "createdOn",
+                        path: "createdOn",
+                        transformValue: expect.any(Function)
+                    }
+                ]
+            };
+            expect(expressions).toEqual(expectedExpressions);
+
+            const result = filter({
+                items: records,
+                where: createExpressionsParams.where,
+                filterCreateRegistry,
+                transformRegistry,
+                valueFilterRegistry,
+                fields
+            });
+
+            expect(result).toHaveLength(expectedResults);
+
+            expect(result).toEqual(records.slice(modifier));
+        }
+    );
+
+    it("should filter by title", async () => {
+        const records = createEntries(100);
+
+        const result = filter({
+            items: records,
+            where: {
+                values: {
+                    title_contains: "tttt"
+                }
+            },
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields
+        });
+
+        expect(result).toHaveLength(10);
+
+        expect(result).toMatchObject(
+            [...Array(10)].map((_, index) => {
+                return {
+                    values: {
+                        title: `Title modeled entry ${String(index).padStart(5, "t")}`
+                    }
+                };
+            })
+        );
+    });
+
+    it("should filter by nested options keys", async () => {
+        const records = createEntries(100);
+
+        const resultBoth = filter({
+            items: records,
+            where: {
+                values: {
+                    options: {
+                        keys_contains: "the modeled entry kkkk"
+                    }
+                }
+            },
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields
+        });
+
+        expect(resultBoth).toHaveLength(10);
+
+        expect(resultBoth).toMatchObject(
+            [...Array(10)].map((_, index) => {
+                return {
+                    values: {
+                        options: [
+                            {
+                                keys: `keys of the modeled entry kkkk${index} - 1`
+                            },
+                            {
+                                keys: `keys of the modeled entry kkkk${index} - 2`
+                            }
+                        ]
+                    }
+                };
+            })
+        );
+
+        const resultNumber2 = filter({
+            items: records,
+            where: {
+                values: {
+                    options: {
+                        keys_contains: " - 2"
+                    }
+                }
+            },
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields
+        });
+
+        expect(resultNumber2).toHaveLength(100);
+
+        expect(resultNumber2).toMatchObject(
+            [...Array(100)].map((_, index) => {
+                return {
+                    values: {
+                        options: [
+                            {
+                                keys: `keys of the modeled entry ${String(index).padStart(
+                                    5,
+                                    "k"
+                                )} - 1`
+                            },
+                            {
+                                keys: `keys of the modeled entry ${String(index).padStart(
+                                    5,
+                                    "k"
+                                )} - 2`
+                            }
+                        ]
+                    }
+                };
+            })
+        );
+
+        const resultNumber3 = filter({
+            items: records,
+            where: {
+                values: {
+                    options: {
+                        keys_contains: " - 3"
+                    }
+                }
+            },
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields
+        });
+
+        expect(resultNumber3).toHaveLength(19);
+    });
+
+    it("should filter by nested options variant colors", async () => {
+        const records = createEntries(100);
+
+        const resultRed = filter({
+            items: records,
+            where: {
+                values: {
+                    options: {
+                        variant: {
+                            colors: ["red"]
+                        }
+                    }
+                }
+            },
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields
+        });
+
+        expect(resultRed).toHaveLength(50);
+
+        expect(resultRed).toMatchObject(
+            [...Array(50)].map(() => {
+                return {
+                    values: {
+                        options: [
+                            {
+                                variant: {
+                                    colors: ["red", "blue"]
+                                }
+                            },
+                            {
+                                variant: {
+                                    colors: ["yellow", "green"]
+                                }
+                            }
+                        ]
+                    }
+                };
+            })
+        );
+
+        const resultTeal = filter({
+            items: records,
+            where: {
+                values: {
+                    options: {
+                        variant: {
+                            colors: ["teal"]
+                        }
+                    }
+                }
+            },
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields
+        });
+
+        expect(resultTeal).toHaveLength(50);
+
+        expect(resultTeal).toMatchObject(
+            [...Array(50)].map(() => {
+                return {
+                    values: {
+                        options: [
+                            {
+                                variant: {
+                                    colors: ["black", "white"]
+                                }
+                            },
+                            {
+                                variant: {
+                                    colors: ["teal", "grey"]
+                                }
+                            }
+                        ]
+                    }
+                };
+            })
+        );
+
+        const resultBoth = filter({
+            items: records,
+            where: {
+                values: {
+                    options: {
+                        variant: {
+                            colors_in: ["teal", "green"]
+                        }
+                    }
+                }
+            },
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields
+        });
+
+        expect(resultBoth).toHaveLength(100);
+
+        expect(resultBoth).toMatchObject(
+            [...Array(100)].map((_, index) => {
+                return {
+                    values: {
+                        options: [
+                            {
+                                variant: {
+                                    colors: index % 2 === 0 ? ["red", "blue"] : ["black", "white"]
+                                }
+                            },
+                            {
+                                variant: {
+                                    colors: index % 2 === 0 ? ["yellow", "green"] : ["teal", "grey"]
+                                }
+                            }
+                        ]
+                    }
+                };
+            })
+        );
+
+        const resultNoneOrange = filter({
+            items: records,
+            where: {
+                values: {
+                    options: {
+                        variant: {
+                            colors_in: ["orange"]
+                        }
+                    }
+                }
+            },
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields
+        });
+
+        expect(resultNoneOrange).toHaveLength(0);
+
+        const resultNoneEmpty = filter({
+            items: records,
+            where: {
+                values: {
+                    options: {
+                        variant: {
+                            colors_in: []
+                        }
+                    }
+                }
+            },
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields
+        });
+
+        expect(resultNoneEmpty).toHaveLength(0);
+    });
+
+    it("should run a full text search", async () => {
+        const records = createEntries(5);
+
+        const searchableFields = getSearchableFields({
+            fields: model.fields,
+            input: [],
+            context: { container }
+        });
+        /**
+         * Find yellow color items.
+         */
+        const resultsYellow = filter({
+            items: records,
+            where: {},
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields,
+            fullTextSearch: {
+                term: "yellow",
+                fields: searchableFields
+            }
+        });
+        expect(resultsYellow).toHaveLength(3);
+
+        /**
+         * Find yellow color items.
+         */
+        const resultsWhite = filter({
+            items: records,
+            where: {},
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields,
+            fullTextSearch: {
+                term: "white",
+                fields: searchableFields
+            }
+        });
+        expect(resultsWhite).toHaveLength(2);
+
+        /**
+         * Find grey color items.
+         */
+        const resultsGrey = filter({
+            items: records,
+            where: {},
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields,
+            fullTextSearch: {
+                term: "grey",
+                fields: searchableFields
+            }
+        });
+        expect(resultsGrey).toHaveLength(2);
+
+        /**
+         * Find red color items.
+         */
+        const resultsRed = filter({
+            items: records,
+            where: {},
+            filterCreateRegistry,
+            transformRegistry,
+            valueFilterRegistry,
+            fields,
+            fullTextSearch: {
+                term: "red",
+                fields: searchableFields
+            }
+        });
+        expect(resultsRed).toHaveLength(3);
+    });
+});

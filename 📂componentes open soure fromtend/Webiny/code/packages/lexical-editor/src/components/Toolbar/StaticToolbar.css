@@ -1,0 +1,566 @@
+.static-toolbar {
+  display: flex;
+  position: relative;
+  padding: 4px;
+  vertical-align: middle;
+  border: 1px solid var(--border-color-neutral-muted);
+  /* No divider between toolbar and body (matches Figma): the body carries the
+     bottom border, the toolbar the top — together one seamless rounded box. */
+  border-bottom: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  will-change: transform;
+  background: var(--color-neutral-base);
+  flex-wrap: wrap;
+  z-index: 1;
+}
+
+.static-toolbar button.popup-item {
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border-radius: var(--radius-md);
+  padding: 8px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.static-toolbar button.popup-item:disabled {
+  cursor: not-allowed;
+}
+
+.static-toolbar button.popup-item.spaced {
+  margin-right: 2px;
+}
+
+.static-toolbar button.popup-item .format {
+  display: flex;
+  height: 16px;
+  width: 16px;
+  flex-shrink: 0;
+}
+
+.static-toolbar button.popup-item:disabled i.format {
+  opacity: 0.2;
+}
+
+.static-toolbar button.popup-item.active {
+  background-color: var(--color-primary-subtle);
+}
+
+.static-toolbar button.popup-item.active i {
+  opacity: 1;
+}
+
+.static-toolbar .popup-item:hover:not([disabled]) {
+  /* Matches admin-ui ghost IconButton hover (bg-neutral-dark/5). */
+  background-color: color-mix(in oklab, var(--color-neutral-dark) 5%, transparent);
+}
+
+.static-toolbar select.popup-item {
+  border: 0;
+  display: flex;
+  border-radius: var(--radius-md);
+  padding: 8px;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 70px;
+  font-size: 14px;
+  color: var(--text-color-neutral-strong);
+  text-overflow: ellipsis;
+}
+
+.static-toolbar select.code-language {
+  text-transform: capitalize;
+  width: 130px;
+}
+
+.static-toolbar .popup-item .text {
+  display: flex;
+  line-height: 20px;
+  width: 200px;
+  vertical-align: middle;
+  font-size: 14px;
+  color: var(--text-color-neutral-strong);
+  text-overflow: ellipsis;
+  width: 70px;
+  overflow: hidden;
+  height: 20px;
+  text-align: left;
+}
+
+.static-toolbar .popup-item .icon {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  user-select: none;
+  line-height: 16px;
+  background-size: contain;
+}
+
+.static-toolbar .chevron-down {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  user-select: none;
+}
+
+.static-toolbar .chevron-down.inside {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  margin-left: -25px;
+  margin-top: 11px;
+  margin-right: 10px;
+  pointer-events: none;
+}
+
+.static-toolbar .divider {
+  width: 1px;
+  background-color: var(--border-color-neutral-dimmed);
+  margin: 0 4px;
+}
+
+.static-toolbar .link-editor .button.active,
+.static-toolbar .button.active {
+  background-color: var(--color-primary-subtle);
+}
+
+.static-toolbar button.toolbar-item {
+  border: 0;
+  display: flex;
+  background: none;
+  border-radius: var(--radius-md);
+  padding: 8px;
+  cursor: pointer;
+  vertical-align: middle;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.static-toolbar button.toolbar-item:disabled {
+  cursor: not-allowed;
+}
+
+.static-toolbar button.toolbar-item.spaced {
+  margin-right: 2px;
+}
+
+.static-toolbar button.toolbar-item .format {
+  display: flex;
+  height: 16px;
+  width: 16px;
+  flex-shrink: 0;
+}
+
+.static-toolbar button.toolbar-item:disabled .icon,
+.static-toolbar button.toolbar-item:disabled .text,
+.static-toolbar button.toolbar-item:disabled i.format,
+.static-toolbar button.toolbar-item:disabled .chevron-down {
+  opacity: 0.2;
+}
+
+.static-toolbar button.toolbar-item.active {
+  background-color: var(--color-primary-subtle);
+}
+
+.static-toolbar button.toolbar-item.active i {
+  opacity: 1;
+}
+
+.static-toolbar .toolbar-item:hover:not([disabled]) {
+  /* Matches admin-ui ghost IconButton hover (bg-neutral-dark/5). */
+  background-color: color-mix(in oklab, var(--color-neutral-dark) 5%, transparent);
+}
+
+.static-toolbar .toolbar-item.font-family .text {
+  display: block;
+  max-width: 40px;
+}
+
+.static-toolbar .code-language {
+  width: 150px;
+}
+
+/* Fixed-width label so the trigger doesn't resize as the selected heading changes. */
+.static-toolbar .block-type-dropdown .dropdown-button-text {
+  width: 92px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.static-toolbar .toolbar-item .text {
+  display: flex;
+  line-height: 20px;
+  vertical-align: middle;
+  font-size: 14px;
+  color: var(--text-color-neutral-strong);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 20px;
+  text-align: left;
+  padding-right: 10px;
+}
+
+.static-toolbar .toolbar-item .icon {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  user-select: none;
+  margin-right: 8px;
+  line-height: 16px;
+  background-size: contain;
+}
+
+.static-toolbar .chevron-down {
+  margin-top: 3px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  user-select: none;
+}
+
+.static-toolbar .chevron-down.inside {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  margin-left: -25px;
+  margin-top: 11px;
+  margin-right: 10px;
+  pointer-events: none;
+}
+
+.static-toolbar .divider {
+  width: 1px;
+  background-color: var(--border-color-neutral-dimmed);
+  margin: 0 4px;
+}
+
+.link-editor .button.active,
+.toolbar .button.active {
+  background-color: var(--color-primary-subtle);
+}
+
+.toolbar .divider {
+  width: 1px;
+  background-color: var(--border-color-neutral-dimmed);
+  margin: 0 4px;
+}
+
+.lexical-dropdown {
+  /* Matches admin-ui DropdownMenu: border-defined (no heavy shadow), rounded-md. */
+  display: block;
+  border: 1px solid var(--border-color-neutral-muted);
+  border-radius: var(--radius-md);
+  background-color: var(--color-neutral-base);
+  color: var(--text-color-neutral-primary);
+  max-height: 250px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.lexical-dropdown.no-scroll {
+  max-height: inherit;
+  overflow: auto;
+  overflow-y: auto;
+}
+
+.lexical-dropdown .item {
+  margin: 0 8px 0 8px;
+  padding: var(--padding-xs-plus) var(--padding-sm);
+  cursor: pointer;
+  line-height: 20px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex-shrink: 0;
+  gap: var(--spacing-sm);
+  background-color: transparent;
+  color: var(--text-color-neutral-primary);
+  border-radius: var(--radius-sm);
+  border: 0;
+  max-width: 250px;
+}
+
+.lexical-dropdown .item.fontsize-item,
+.lexical-dropdown .item.fontsize-item .text {
+  min-width: unset;
+}
+
+/* Selected-item check indicator (admin-ui style): a check, no background tint. */
+.lexical-dropdown .item-check {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: var(--fill-neutral-xstrong);
+}
+
+.lexical-dropdown .item:first-child {
+  margin-top: 8px;
+}
+
+.lexical-dropdown .item:last-child {
+  margin-bottom: 8px;
+}
+
+.lexical-dropdown .item:hover {
+  background-color: var(--color-neutral-dimmed);
+}
+
+.lexical-dropdown .item .text {
+  display: flex;
+  line-height: 20px;
+  flex-grow: 1;
+}
+
+.lexical-dropdown .item .icon {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  user-select: none;
+  fill: var(--fill-neutral-xstrong);
+}
+
+.lexical-dropdown .divider {
+  width: auto;
+  background-color: var(--border-color-neutral-dimmed);
+  margin: 4px 8px;
+  height: 1px;
+}
+
+@media screen and (max-width: 1100px) {
+  .dropdown-button-text {
+    display: none !important;
+  }
+  .font-size .dropdown-button-text {
+    display: flex !important;
+  }
+  .code-language .dropdown-button-text {
+    display: flex !important;
+  }
+}
+
+.editor-shell span.editor-image {
+  cursor: default;
+  display: inline-block;
+  position: relative;
+  user-select: none;
+}
+
+.editor-shell .editor-image img {
+  max-width: 100%;
+  cursor: default;
+}
+
+.editor-shell .editor-image img.focused {
+  outline: 2px solid rgb(60, 132, 244);
+  user-select: none;
+}
+
+.editor-shell .editor-image img.focused.draggable {
+  cursor: grab;
+}
+
+.editor-shell .editor-image img.focused.draggable:active {
+  cursor: grabbing;
+}
+
+.editor-shell .editor-image .image-caption-container .tree-view-output {
+  margin: 0;
+  border-radius: 0;
+}
+
+.editor-shell .editor-image .image-caption-container {
+  display: block;
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid #fff;
+  background-color: #ffffffe6;
+  min-width: 100px;
+  color: #000;
+  overflow: hidden;
+}
+
+.editor-shell .editor-image .image-caption-button {
+  display: block;
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  width: 30%;
+  padding: 10px;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  background-color: #00000080;
+  min-width: 100px;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.editor-shell .editor-image .image-caption-button:hover {
+  background-color: #3c84f480;
+}
+
+.editor-shell .editor-image .image-resizer {
+  display: block;
+  width: 7px;
+  height: 7px;
+  position: absolute;
+  background-color: #3c84f4;
+  border: 1px solid #fff;
+}
+
+.editor-shell .editor-image .image-resizer.image-resizer-n {
+  top: -6px;
+  left: 48%;
+  cursor: n-resize;
+}
+
+.editor-shell .editor-image .image-resizer.image-resizer-ne {
+  top: -6px;
+  right: -6px;
+  cursor: ne-resize;
+}
+
+.editor-shell .editor-image .image-resizer.image-resizer-e {
+  bottom: 48%;
+  right: -6px;
+  cursor: e-resize;
+}
+
+.editor-shell .editor-image .image-resizer.image-resizer-se {
+  bottom: -2px;
+  right: -6px;
+  cursor: nwse-resize;
+}
+
+.editor-shell .editor-image .image-resizer.image-resizer-s {
+  bottom: -2px;
+  left: 48%;
+  cursor: s-resize;
+}
+
+.editor-shell .editor-image .image-resizer.image-resizer-sw {
+  bottom: -2px;
+  left: -6px;
+  cursor: sw-resize;
+}
+
+.editor-shell .editor-image .image-resizer.image-resizer-w {
+  bottom: 48%;
+  left: -6px;
+  cursor: w-resize;
+}
+
+.editor-shell .editor-image .image-resizer.image-resizer-nw {
+  top: -6px;
+  left: -6px;
+  cursor: nw-resize;
+}
+
+.editor-shell span.inline-editor-image {
+  cursor: default;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+}
+
+.editor-shell .inline-editor-image img {
+  max-width: 100%;
+  cursor: default;
+}
+
+.editor-shell .inline-editor-image img.focused {
+  outline: 2px solid rgb(60, 132, 244);
+}
+
+.editor-shell .inline-editor-image img.focused.draggable {
+  cursor: grab;
+}
+
+.editor-shell .inline-editor-image img.focused.draggable:active {
+  cursor: grabbing;
+}
+
+.editor-shell .inline-editor-image .image-caption-container .tree-view-output {
+  margin: 0;
+  border-radius: 0;
+}
+
+.editor-shell .inline-editor-image.position-full {
+  margin: 1em 0;
+}
+
+.editor-shell .inline-editor-image.position-left {
+  float: left;
+  width: 50%;
+  margin: 1em 1em 0 0;
+}
+
+.editor-shell .inline-editor-image.position-right {
+  float: right;
+  width: 50%;
+  margin: 1em 0 0 1em;
+}
+
+.editor-shell .inline-editor-image .image-edit-button {
+  display: block;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 8px;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  background-color: #00000080;
+  min-width: 60px;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.editor-shell .inline-editor-image .image-edit-button:hover {
+  background-color: #3c84f480;
+}
+
+.editor-shell .inline-editor-image .image-caption-container {
+  display: block;
+  background-color: #f4f4f4;
+  min-width: 100%;
+  color: #000;
+  overflow: hidden;
+}
+
+/*
+ * Toolbar icons are inline SVGs from @webiny/icons (Material Symbols), replacing the
+ * legacy background-image glyphs. Sizing is handled per-button above; color via `fill`.
+ */
+.static-toolbar .format,
+.static-toolbar .icon,
+.lexical-dropdown .item .icon {
+  fill: var(--fill-neutral-xstrong);
+}
+
+.static-toolbar .chevron-down {
+  fill: var(--fill-neutral-strong);
+}
+
+.static-toolbar button:disabled .format,
+.static-toolbar button:disabled .icon,
+.static-toolbar button:disabled .chevron-down {
+  fill: var(--fill-neutral-disabled);
+}

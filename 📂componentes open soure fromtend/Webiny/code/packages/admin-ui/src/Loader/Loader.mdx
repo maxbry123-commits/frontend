@@ -1,0 +1,331 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as LoaderStories from "./Loader.stories";
+import * as OverlayLoaderStories from "./OverlayLoader.stories";
+
+<Meta title="Components/Loader" />
+
+# Loader
+
+The Loader components provide visual feedback to users when content is loading or an operation is in progress.
+Webiny offers two loader components:
+
+1.  - **Loader** - A standalone circular progress indicator.
+2.  - **OverlayLoader** - The OverlayLoader covers its parent container with a semi-transparent overlay, typically used to indicate a loading state while keeping the background content visible but inactive. Please refer below for more examples.
+
+## Loader
+
+The Loader component displays a circular progress indicator that can be used to show loading states or progress of operations.
+
+<Canvas of={LoaderStories.Documentation} source={ { code: `
+import React from "react";
+import { Loader } from "@webiny/admin-ui";
+
+const LoaderExample = () => {
+return (
+
+<div className="flex flex-col items-center gap-4">
+  <Loader size="md" variant="accent" indeterminate={true} text="Loading..." />
+</div>
+); };
+
+export default LoaderExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Loader/Loader.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={LoaderStories.Documentation} />
+
+```tsx
+import React from "react";
+import { Loader } from "@webiny/admin-ui";
+
+const LoaderExample = () => {
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <Loader size="md" variant="accent" indeterminate={true} text="Loading..." />
+    </div>
+  );
+};
+
+export default LoaderExample;
+```
+
+### Loader Sizes
+
+The Loader component supports four different sizes: xs, sm, md, and lg.
+
+<Canvas of={LoaderStories.ExtraSmall} source={ { code: `
+import React from "react";
+import { Loader } from "@webiny/admin-ui";
+
+const ExtraSmallLoaderExample = () => (
+
+<Loader size="xs" />
+);
+
+export default ExtraSmallLoaderExample;
+` } } />
+
+<Canvas of={LoaderStories.Small} source={ { code: `
+import React from "react";
+import { Loader } from "@webiny/admin-ui";
+
+const SmallLoaderExample = () => (
+
+<Loader size="sm" />
+);
+
+export default SmallLoaderExample;
+` } } />
+
+<Canvas of={LoaderStories.Medium} source={ { code: `
+import React from "react";
+import { Loader } from "@webiny/admin-ui";
+
+const MediumLoaderExample = () => (
+
+<Loader size="md" />
+);
+
+export default MediumLoaderExample;
+` } } />
+
+<Canvas of={LoaderStories.Large} source={ { code: `
+import React from "react";
+import { Loader } from "@webiny/admin-ui";
+
+const LargeLoaderExample = () => (
+
+<Loader size="lg" />
+);
+
+export default LargeLoaderExample;
+` } } />
+
+### Loader Variants
+
+The Loader component supports three different visual variants: accent, subtle, and negative.
+
+<Canvas of={LoaderStories.Accent} source={ { code: `
+import React from "react";
+import { Loader } from "@webiny/admin-ui";
+
+const AccentLoaderExample = () => (
+
+<Loader variant="accent" />
+);
+
+export default AccentLoaderExample;
+` } } />
+
+<Canvas of={LoaderStories.Subtle} source={ { code: `
+import React from "react";
+import { Loader } from "@webiny/admin-ui";
+
+const SubtleLoaderExample = () => (
+
+<Loader variant="subtle" />
+);
+
+export default SubtleLoaderExample;
+` } } />
+
+<Canvas of={LoaderStories.Negative} source={ { code: `
+import React from "react";
+import { Loader } from "@webiny/admin-ui";
+
+const NegativeLoaderExample = () => (
+
+<div className="bg-primary p-md rounded-md">
+  <Loader variant="negative" />
+</div>
+);
+
+export default NegativeLoaderExample;
+` } } />
+
+### Controlled Progress
+
+You can use the Loader component to display determinate progress by setting the `indeterminate` prop to `false` and providing a `value`.
+
+<Canvas of={LoaderStories.WithControlledValue} source={ { code: `
+import React, { useState, useEffect } from "react";
+import { Loader } from "@webiny/admin-ui";
+
+const ControlledProgressExample = () => {
+const [value, setValue] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setValue((prevValue = 0) => {
+                if (prevValue === 100) {
+                    return prevValue;
+                }
+                return prevValue + 5;
+            });
+        }, 50);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <Loader
+            value={value}
+            indeterminate={false}
+            text={"Loading " + value + "%"}
+        />
+    );
+
+};
+
+export default ControlledProgressExample;
+` } } />
+
+### Loader with Text
+
+You can add descriptive text below the loader using the `text` prop.
+
+<Canvas of={LoaderStories.WithText} source={ { code: `
+import React from "react";
+import { Loader } from "@webiny/admin-ui";
+
+const LoaderWithTextExample = () => (
+
+<Loader text="Loading..." />
+);
+
+export default LoaderWithTextExample;
+` } } />
+
+## OverlayLoader
+
+The OverlayLoader component displays a loader on top of its parent container with a semi-transparent overlay. It's useful for indicating loading states for specific sections of your UI.
+
+<Canvas of={OverlayLoaderStories.Documentation} source={ { code: `
+import React from "react";
+import { OverlayLoader } from "@webiny/admin-ui";
+
+const OverlayLoaderExample = () => {
+return (
+
+<div className="relative h-64 w-full bg-neutral-light rounded-md p-4">
+  <OverlayLoader size="lg" variant="accent" text="Loading content..." />
+  <div className="h-full flex items-center justify-center">
+    <p className="text-neutral-strong">Content is loading...</p>
+  </div>
+</div>
+); };
+
+export default OverlayLoaderExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Loader/OverlayLoader.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={OverlayLoaderStories.Documentation} />
+
+```tsx
+import React from "react";
+import { OverlayLoader } from "@webiny/admin-ui";
+
+const DefaultOverlayLoaderExample = () => (
+  <div>
+    <OverlayLoader />
+    The OverlayLoader component covers its parent container with a semi-transparent overlay,
+    typically used to indicate a loading state while keeping the background content visible but
+    inactive.
+  </div>
+);
+
+export default DefaultOverlayLoaderExample;
+```
+
+### Default OverlayLoader
+
+<Canvas of={OverlayLoaderStories.Default} source={ { code: `
+import React from "react";
+import { OverlayLoader } from "@webiny/admin-ui";
+
+const DefaultOverlayLoaderExample = () => (
+
+<div>
+  <OverlayLoader />
+  The OverlayLoader component covers its parent container with a semi-transparent overlay, typically
+  used to indicate a loading state while keeping the background content visible but inactive.
+</div>
+);
+
+export default DefaultOverlayLoaderExample;
+` } } />
+
+### OverlayLoader with Text
+
+<Canvas of={OverlayLoaderStories.CircularProgressWithText} source={ { code: `
+import React from "react";
+import { OverlayLoader } from "@webiny/admin-ui";
+
+const OverlayLoaderWithTextExample = () => (
+
+<div>
+  <OverlayLoader text="Loading..." />
+  The OverlayLoader component covers its parent container with a semi-transparent overlay, typically
+  used to indicate a loading state while keeping the background content visible but inactive.
+</div>
+);
+
+export default OverlayLoaderWithTextExample;
+` } } />
+
+## Anatomy
+
+### Construction
+
+<img src="/images/storybook/loader/construction.png" alt="Construction" />
+
+### Style
+
+<img src="/images/storybook/loader/style.png" alt="Style" />
+
+### Type
+
+A **determinate** circular loader visually represents progress with a circular arc that fills proportionally based on the completed percentage, providing users with a clear indication of task completion.
+
+An **indeterminate loader** does not display exact progress but continuously animates, signaling that a process is ongoing without a known completion time.
+
+<img src="/images/storybook/loader/type.png" alt="Type" />
+
+### Size
+
+<img src="/images/storybook/loader/size.png" alt="Size" />
+
+### Background Overlay
+
+<img src="/images/storybook/loader/background-overlay.png" alt="Background Overlay" />
+
+## Usage
+
+<img src="/images/storybook/loader/usage-1.png" alt="Usage" />
+
+<img src="/images/storybook/loader/usage-2.png" alt="Usage" />

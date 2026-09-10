@@ -1,0 +1,114 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as AvatarStories from "./Avatar.stories";
+
+<Meta of={AvatarStories} />
+
+# Avatar
+
+The Avatar component is a UI element that displays a user’s profile image, initials, or icon, often used to represent a person or entity in an application. Its purpose is to personalize the user experience, making interactions feel more engaging and identifiable and improve recognition and user interaction.
+
+## Usage
+
+<Canvas of={AvatarStories.Documentation} source={ { code: `
+import React from "react";
+import { Avatar } from "@webiny/admin-ui";
+
+const AvatarExample = () => {
+return (
+
+<Avatar
+  image={<Avatar.Image src="https://i.pravatar.cc/300" alt="User" />}
+  fallback={<Avatar.Fallback>JD</Avatar.Fallback>}
+  size="md"
+  variant="strong"
+/>
+); };
+
+export default AvatarExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Avatar/Avatar.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={AvatarStories.Documentation} />
+
+```tsx
+import React from "react";
+import { Avatar } from "@webiny/admin-ui";
+
+const AvatarExample = () => {
+  return (
+    <Avatar
+      image={<Avatar.Image src="https://i.pravatar.cc/300" alt="User" />}
+      fallback={<Avatar.Fallback>JD</Avatar.Fallback>}
+      size="md"
+      variant="strong"
+    />
+  );
+};
+
+export default AvatarExample;
+```
+
+## Example
+
+### Icon Avatar
+
+<Canvas of={AvatarStories.Icon} source={ { code: `
+import React from "react";
+import { ReactComponent as StormIcon } from "@webiny/icons/storm.svg";
+import { Avatar } from "@webiny/admin-ui";
+
+const AvatarExample = () => {
+return (
+
+<Avatar
+  fallback={
+    <Avatar.Fallback>
+      <StormIcon />
+    </Avatar.Fallback>
+  }
+  size="md"
+  variant="strong"
+/>
+); };
+
+export default AvatarExample;
+
+` } }
+/>
+
+## Anatomy
+
+### Size
+
+<img src="/images/storybook/avatar/size.png" alt="Size" />
+
+### Type
+
+<img src="/images/storybook/avatar/type.png" alt="Type" />
+
+### Style
+
+<img src="/images/storybook/avatar/style.png" alt="Style" />
+
+## Usage
+
+### Header
+
+<img src="/images/storybook/avatar/header.png" alt="Header" />
+
+### Table
+
+<img src="/images/storybook/avatar/table.png" alt="Table" />

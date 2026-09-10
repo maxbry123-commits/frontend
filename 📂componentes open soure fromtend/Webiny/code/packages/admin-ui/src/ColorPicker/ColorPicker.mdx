@@ -1,0 +1,95 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as ColorPickerStories from "./ColorPicker.stories";
+
+<Meta of={ColorPickerStories} />
+
+# Color Picker
+
+The Color Picker component allows users to select colors from a predefined palette or specify custom colors using various formats (hex, RGB, or named colors). It provides an intuitive interface for color selection in forms and design tools.
+
+## Usage
+
+<Canvas of={ColorPickerStories.Documentation} source={ { code: `
+import React, { useState } from "react";
+import { ColorPicker } from "@webiny/admin-ui";
+
+const ColorPickerExample = () => {
+const [color, setColor] = useState("#4285F4");
+const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+    const handleChange = (newColor: string) => {
+        setColor(newColor);
+
+        if (!newColor) {
+            setValidation({ isValid: false, message: "Please select a color" });
+        } else {
+            setValidation({ isValid: true, message: "" });
+        }
+    };
+
+    return (
+        <ColorPicker
+            label="Brand Color"
+            description="Select your primary brand color"
+            note="Note: Choose a color that aligns with your brand identity"
+            required={true}
+            value={color}
+            onChange={handleChange}
+            validation={validation}
+        />
+    );
+
+};
+
+export default ColorPickerExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/ColorPicker/ColorPicker.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={ColorPickerStories.Documentation} exclude={"onChange"} />
+
+```tsx
+import React, { useState } from "react";
+import { ColorPicker } from "@webiny/admin-ui";
+
+const ColorPickerExample = () => {
+  const [color, setColor] = useState("#4285F4");
+  const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+  const handleChange = (newColor: string) => {
+    setColor(newColor);
+
+    if (!newColor) {
+      setValidation({ isValid: false, message: "Please select a color" });
+    } else {
+      setValidation({ isValid: true, message: "" });
+    }
+  };
+
+  return (
+    <ColorPicker
+      label="Brand Color"
+      description="Select your primary brand color"
+      note="Note: Choose a color that aligns with your brand identity"
+      required={true}
+      value={color}
+      onChange={handleChange}
+      validation={validation}
+    />
+  );
+};
+
+export default ColorPickerExample;
+```

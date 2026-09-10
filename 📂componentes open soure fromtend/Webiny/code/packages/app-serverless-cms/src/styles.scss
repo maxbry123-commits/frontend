@@ -1,0 +1,5 @@
+// Import `app-admin-ui` styles
+@use "~@webiny/app-admin-ui/styles.scss" as *;
+
+// Import Lexical theme styles
+@import "@webiny/lexical-theme/theme.css";

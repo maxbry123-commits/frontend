@@ -1,0 +1,169 @@
+import { getIntrospectionQuery } from "graphql";
+import { FileModel } from "@webiny/api-file-manager/domain/file/file.model.js";
+import { getStorageOps } from "@webiny/api-core/testing/environment.js";
+import { until } from "@webiny/api/testing/until.js";
+import { createCmsTestHandler, processLegacyPlugins } from "@webiny/api-headless-cms-testing";
+import type { SecurityPermission } from "@webiny/api-core/types/security.js";
+import type { IdentityData } from "@webiny/api-core/features/security/IdentityContext/index.js";
+import type { DecryptedWcpProjectLicense } from "@webiny/wcp/types";
+import type { CmsModel } from "@webiny/api-headless-cms/types";
+import { AcoFeature } from "~/index";
+import { createIdentity } from "@webiny/api-core-testing";
+import { createAcoSdk } from "~tests/utils/createAcoSdk.js";
+
+import {
+    CREATE_RECORD,
+    DELETE_RECORD,
+    GET_RECORD,
+    LIST_RECORDS,
+    LIST_TAGS,
+    MOVE_RECORD,
+    UPDATE_RECORD
+} from "~tests/graphql/record.gql";
+
+import {
+    CREATE_CONTENT_MODEL,
+    CREATE_CONTENT_MODEL_GROUP,
+    CREATE_ENTRY,
+    DELETE_ENTRY,
+    GET_ENTRY,
+    LIST_ENTRIES,
+    UPDATE_ENTRY
+} from "~tests/graphql/cms";
+
+export interface UseGQLHandlerParams {
+    permissions?: SecurityPermission[];
+    identity?: IdentityData | null;
+    plugins?: any;
+    storageOperationPlugins?: any[];
+    testProjectLicense?: DecryptedWcpProjectLicense;
+}
+
+export const useGraphQlHandler = (params: UseGQLHandlerParams = {}) => {
+    const { permissions, identity } = params;
+
+    const apiAcoStorage = getStorageOps<any>("aco");
+
+    const resolvedIdentity = identity === undefined ? createIdentity() : identity;
+
+    const { handler, invoke, invokeCms } = createCmsTestHandler({
+        identity: resolvedIdentity,
+        permissions,
+        testProjectLicense: params.testProjectLicense,
+        setup: async container => {
+            // ACO storage operations + any test-supplied extensions, then the ACO feature itself.
+            // Mirrors the app: registered after HeadlessCmsFeature, before the GraphQL engine.
+            processLegacyPlugins(container, apiAcoStorage.plugins);
+
+            if (params.plugins) {
+                const extraPlugins = [params.plugins].flat(Infinity as 1).filter(Boolean);
+                // DI-native plugins are plain `container => {}` functions; call them directly.
+                // Everything else (storage RegisterExtension presets) goes via processLegacyPlugins.
+                const isFn = (p: any) => typeof p === "function" && !p.prototype;
+                for (const plugin of extraPlugins.filter(isFn)) {
+                    (plugin as (c: any) => void)(container);
+                }
+                processLegacyPlugins(
+                    container,
+                    extraPlugins.filter(p => !isFn(p))
+                );
+            }
+
+            container.register(FileModel);
+            AcoFeature.register(container);
+        }
+    });
+
+    const search = {
+        async createRecord(variables = {}) {
+            return invoke({ body: { query: CREATE_RECORD, variables } });
+        },
+        async updateRecord(variables = {}) {
+            return invoke({ body: { query: UPDATE_RECORD, variables } });
+        },
+        async moveRecord(variables = {}) {
+            return invoke({ body: { query: MOVE_RECORD, variables } });
+        },
+        async deleteRecord(variables = {}) {
+            return invoke({ body: { query: DELETE_RECORD, variables } });
+        },
+        async listRecords(variables = {}) {
+            return invoke({ body: { query: LIST_RECORDS, variables } });
+        },
+        async getRecord(variables = {}) {
+            return invoke({ body: { query: GET_RECORD, variables } });
+        },
+        async listTags(variables = {}) {
+            return invoke({ body: { query: LIST_TAGS, variables } });
+        }
+    };
+
+    const cms = {
+        async createContentModel(variables: Record<string, any>) {
+            return invokeCms({ body: { query: CREATE_CONTENT_MODEL, variables } });
+        },
+        async createContentModelGroup(variables: Record<string, any>) {
+            return invokeCms({ body: { query: CREATE_CONTENT_MODEL_GROUP, variables } });
+        },
+        async createTestModelGroup() {
+            return cms
+                .createContentModelGroup({
+                    data: {
+                        name: "Group",
+                        slug: "group",
+                        icon: "ico/ico",
+                        description: "description"
+                    }
+                })
+                .then(([response]) => {
+                    return response.data.createContentModelGroup.data;
+                });
+        },
+        async createBasicModel(variables: Record<string, any>) {
+            return cms
+                .createContentModel({
+                    data: {
+                        modelId: "basicTestModel",
+                        group: variables.modelGroup,
+                        defaultFields: true,
+                        name: "BasicTestModel",
+                        singularApiName: "BasicTestModel",
+                        pluralApiName: "BasicTestModels"
+                    }
+                })
+                .then(([response]) => {
+                    return response.data.createContentModel.data as CmsModel;
+                });
+        },
+        async createEntry(model: CmsModel, variables: Record<string, any>) {
+            return invokeCms({ body: { query: CREATE_ENTRY(model), variables } });
+        },
+        async updateEntry(model: CmsModel, variables: Record<string, any>) {
+            return invokeCms({ body: { query: UPDATE_ENTRY(model), variables } });
+        },
+        async deleteEntry(model: CmsModel, variables: Record<string, any>) {
+            return invokeCms({ body: { query: DELETE_ENTRY(model), variables } });
+        },
+        async listEntries(model: CmsModel, variables: Record<string, any> = {}) {
+            return invokeCms({ body: { query: LIST_ENTRIES(model), variables } });
+        },
+        async getEntry(model: CmsModel, variables: Record<string, any>) {
+            return invokeCms({ body: { query: GET_ENTRY(model), variables } });
+        }
+    };
+
+    const aco = createAcoSdk(invoke);
+
+    return {
+        until,
+        params,
+        handler,
+        invoke,
+        aco,
+        search,
+        cms,
+        async introspect() {
+            return invoke({ body: { query: getIntrospectionQuery() } });
+        }
+    };
+};

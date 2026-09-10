@@ -1,0 +1,263 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as IconStories from "./Icon.stories";
+
+<Meta of={IconStories} />
+
+# Icon
+
+The Icon component is a versatile UI element used to display SVG icons with consistent styling across the application. It provides accessibility features and supports various sizes and colors to match your design system requirements.
+
+## Usage
+
+<Canvas of={IconStories.Documentation} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const IconExample = () => {
+return (
+
+<Icon icon={<CloseIcon />} label="Close icon" size="md" color="accent" />
+); };
+
+export default IconExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Icon/Icon.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={IconStories.Documentation} />
+
+```tsx
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const IconExample = () => {
+  return <Icon icon={<CloseIcon />} label="Close icon" size="md" color="accent" />;
+};
+
+export default IconExample;
+```
+
+## Examples
+
+### Default
+
+<Canvas of={IconStories.Default} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const DefaultIconExample = () => {
+return (
+
+<Icon icon={<CloseIcon />} label="This is an icon" size="md" color="accent" />
+); };
+
+export default DefaultIconExample;
+` } } />
+
+### Color Variants
+
+#### Inherit Color
+
+<Canvas of={IconStories.ColorInherit} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const InheritColorIconExample = () => {
+return (
+
+<div className="fill-success">
+  <Icon icon={<CloseIcon />} label="This is an icon" size="md" color="inherit" />
+</div>
+); };
+
+    export default InheritColorIconExample;
+
+` } } />
+
+#### Accent Color
+
+<Canvas of={IconStories.ColorAccent} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const AccentIconExample = () => {
+return (
+
+<Icon icon={<CloseIcon />} label="This is an icon" size="md" color="accent" />
+); };
+
+export default AccentIconExample;
+` } } />
+
+#### Neutral Light Color
+
+<Canvas of={IconStories.ColorNeutralLight} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const NeutralLightIconExample = () => {
+return (
+
+<Icon icon={<CloseIcon />} label="This is an icon" size="md" color="neutral-light" />
+); };
+
+    export default NeutralLightIconExample;
+
+` } } />
+
+#### Neutral Strong Color
+
+<Canvas of={IconStories.ColorNeutralStrong} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const NeutralStrongIconExample = () => {
+return (
+
+<Icon icon={<CloseIcon />} label="This is an icon" size="md" color="neutral-strong" />
+); };
+
+        export default NeutralStrongIconExample;
+
+` } } />
+
+#### Neutral Strong Transparent Color
+
+<Canvas of={IconStories.ColorNeutralStrongTransparent} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const NeutralStrongTransparentIconExample = () => {
+return (
+
+<div className="bg-neutral-disabled p-3xl rounded-md">
+  <Icon icon={<CloseIcon />} label="This is an icon" size="md" color="neutral-strong-transparent" />
+</div>
+); };
+
+export default NeutralStrongTransparentIconExample;
+` } } />
+
+#### Neutral Base Color
+
+<Canvas of={IconStories.ColorNeutralBase} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const NeutralBaseIconExample = () => {
+return (
+
+<div className="bg-neutral-dark p-3xl rounded-md">
+  <Icon icon={<CloseIcon />} label="This is an icon" size="md" color="neutral-base" />
+</div>
+); };
+
+    export default NeutralBaseIconExample;
+
+` } } />
+
+#### Neutral Negative Color
+
+<Canvas of={IconStories.ColorNeutralNegative} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const NeutralNegativeIconExample = () => {
+return (
+
+<div className="bg-neutral-dark p-3xl rounded-md">
+  <Icon icon={<CloseIcon />} label="This is an icon" size="md" color="neutral-negative" />
+</div>
+); };
+
+        export default NeutralNegativeIconExample;
+
+` } } />
+
+### Size Variants
+
+#### Extra Small
+
+<Canvas of={IconStories.SizeXs} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const XsIconExample = () => {
+return (
+
+<Icon icon={<CloseIcon />} label="This is an icon" size="xs" color="accent" />
+); };
+
+export default XsIconExample;
+` } } />
+
+#### Small
+
+<Canvas of={IconStories.SizeSm} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const SmIconExample = () => {
+return (
+
+<Icon icon={<CloseIcon />} label="This is an icon" size="sm" color="accent" />
+); };
+
+export default SmIconExample;
+` } } />
+
+#### Medium
+
+<Canvas of={IconStories.SizeMd} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const MdIconExample = () => {
+return (
+
+<Icon icon={<CloseIcon />} label="This is an icon" size="md" color="accent" />
+); };
+
+export default MdIconExample;
+` } } />
+
+#### Large
+
+<Canvas of={IconStories.SizeLg} source={ { code: `
+import React from "react";
+import { Icon } from "@webiny/admin-ui";
+import { ReactComponent as CloseIcon } from "@webiny/icons/close.svg";
+
+const LgIconExample = () => {
+return (
+
+<Icon icon={<CloseIcon />} label="This is an icon" size="lg" color="accent" />
+); };
+
+export default LgIconExample;
+` } } />

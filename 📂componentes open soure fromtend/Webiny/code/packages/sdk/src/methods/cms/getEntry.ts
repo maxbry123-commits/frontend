@@ -1,0 +1,88 @@
+import type { WebinyConfig } from "../../types.js";
+import { Result } from "../../Result.js";
+import type { HttpError, NetworkError, ValidationError } from "../../errors.js";
+import type { CmsEntryValues, CmsEntryData } from "./cmsTypes.js";
+import { transformFieldErrors } from "../../utils/transformFieldErrors.js";
+import { createMethod } from "../../utils/createMethod.js";
+import { getEntrySchema } from "./schemas.js";
+import { executeGraphQL } from "../executeGraphQL.js";
+import { ApiError } from "../../errors.js";
+
+export interface GetEntryWhere {
+    id?: string;
+    entryId?: string;
+    values?: Record<string, unknown>;
+}
+
+export interface GetEntryParams {
+    modelId: string;
+    where: GetEntryWhere;
+    fields: string[];
+    preview?: boolean;
+}
+
+/**
+ * Retrieves a single entry from the CMS.
+ *
+ * @template TValues - Type of the entry values object
+ * @param config - SDK configuration
+ * @param fetchFn - Fetch function to use for HTTP requests
+ * @param params - Parameters for retrieving the entry
+ * @param params.modelId - The model ID of the entry to retrieve
+ * @param params.where - Where conditions to filter the entry. Can filter by id, entryId, or values
+ * @param params.fields - Fields to include in the response
+ * @param params.preview - When true, uses preview API to access unpublished/draft content
+ * @returns Result containing the entry data or an error
+ */
+const _impl = createMethod(
+    getEntrySchema,
+    async (config, fetchFn, { modelId, where, fields, preview }) => {
+        const query = `
+        query GetEntry($modelId: ID!, $where: JSON!, $fields: [String!]!, $preview: Boolean) {
+            cms {
+                getEntry(modelId: $modelId, where: $where, fields: $fields, preview: $preview) {
+                    data
+                    error {
+                        message
+                        code
+                    }
+                }
+            }
+        }
+    `;
+
+        const result = await executeGraphQL(config, fetchFn, query, {
+            modelId,
+            where,
+            fields,
+            preview
+        });
+
+        if (result.isFail()) {
+            return Result.fail(result.error);
+        }
+
+        const responseData = result.value;
+
+        if (responseData.cms.getEntry.error) {
+            return Result.fail(
+                new ApiError(
+                    transformFieldErrors(responseData.cms.getEntry.error.message, fields),
+                    responseData.cms.getEntry.error.code
+                )
+            );
+        }
+
+        return Result.ok(responseData.cms.getEntry.data);
+    }
+);
+
+export function getEntry<TValues extends CmsEntryValues = CmsEntryValues>(
+    config: WebinyConfig,
+    fetchFn: typeof fetch,
+    params: GetEntryParams
+): Promise<Result<CmsEntryData<TValues>, HttpError | ApiError | NetworkError | ValidationError>> {
+    return _impl(config, fetchFn, params) as Promise<
+        Result<CmsEntryData<TValues>, HttpError | ApiError | NetworkError | ValidationError>
+    >;
+}

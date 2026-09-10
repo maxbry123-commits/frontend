@@ -1,0 +1,385 @@
+/**
+ * Important documents to read:
+ *
+ * https://docs.aws.amazon.com/opensearch-service/latest/developerguide/limits.html#network-limits
+ */
+import path from "path";
+import * as pulumi from "@pulumi/pulumi";
+import * as aws from "@pulumi/aws";
+import * as random from "@pulumi/random";
+import {
+    createAppModule,
+    type PulumiApp,
+    type PulumiAppRemoteResource,
+    type PulumiAppResource,
+    type PulumiAppResourceConstructor
+} from "@webiny/pulumi";
+
+import { getAwsAccountId } from "../awsUtils.js";
+import { CoreVpc } from "./CoreVpc.js";
+import { LAMBDA_RUNTIME } from "~/pulumi/constants.js";
+
+export interface OpenSearchParams {
+    protect: boolean;
+    namePrefix: string;
+    prevDomainName: string | undefined;
+}
+
+function getDevClusterConfig(): aws.types.input.opensearch.DomainClusterConfig {
+    return {
+        instanceType: "t3.small.search"
+    };
+}
+
+function getProdClusterConfig(): aws.types.input.opensearch.DomainClusterConfig {
+    return {
+        // For production deployments, we create 3 instances and configure multi-AZ across 3 zones.
+        instanceType: "t3.medium.search",
+        instanceCount: 3,
+        zoneAwarenessEnabled: true,
+        zoneAwarenessConfig: {
+            availabilityZoneCount: 3
+        }
+    };
+}
+
+const OS_ENGINE_VERSION = "OpenSearch_3.3";
+
+export const OpenSearch = createAppModule({
+    name: "OpenSearch",
+    config(app, params: OpenSearchParams) {
+        const isProduction = app.env.isProduction;
+
+        const vpc = app.getModule(CoreVpc, { optional: true });
+
+        let domain:
+            | PulumiAppResource<PulumiAppResourceConstructor<aws.opensearch.Domain>>
+            | PulumiAppRemoteResource<aws.opensearch.GetDomainResult>
+            | null = null;
+
+        let domainPolicy;
+        let domainEndpoint: pulumi.Output<string> | string;
+        let domainArn: pulumi.Output<string>;
+
+        const providedEndpoint = process.env.OPENSEARCH_ENDPOINT;
+        const providedDomainName = process.env.AWS_OS_DOMAIN_NAME;
+
+        if (providedEndpoint && !providedDomainName) {
+            throw new Error(
+                "OPENSEARCH_ENDPOINT was provided but AWS_OS_DOMAIN_NAME is missing. " +
+                    "A domain name is required to look up the domain ARN when using a custom endpoint."
+            );
+        }
+
+        if (providedDomainName) {
+            // Look up the existing domain by name to obtain its ARN and (if no explicit endpoint is
+            // provided) its endpoint. This covers both the ephemeral-environment pattern and the
+            // case where an external endpoint is supplied alongside a domain name.
+            // https://www.webiny.com/docs/key-topics/ci-cd/testing/slow-ephemeral-environments
+            domain = app.addRemoteResource(providedDomainName, () => {
+                return aws.opensearch.getDomain(
+                    { domainName: providedDomainName },
+                    { async: true }
+                );
+            });
+            domainArn = domain.output.arn;
+            // Prefer an explicitly provided endpoint; fall back to the one reported by AWS.
+            domainEndpoint = providedEndpoint ?? domain.output.endpoint;
+        } else {
+            const randomId = new random.RandomId("osDomainRandomId", { byteLength: 8 });
+
+            const domainLogicalName = "webiny-js";
+
+            /**
+             * The physical domain name must remain stable across re-deploys. Changing it causes
+             * Pulumi to delete and recreate the cluster, which is a destructive operation.
+             *
+             * To avoid this, we read the domain name that was stored in the previous deploy's
+             * stack output (via `sdk.getAppStackOutput`) and reuse it unchanged. Only on the
+             * very first deploy, when there is no previous output, do we generate a new name
+             * (with the resource name prefix applied for consistent naming going forward).
+             *
+             * NOTE: `params.namePrefix` may be "" when upgrading from old code that never stored
+             * the domain name in the stack output. In that case the caller passes "" explicitly so
+             * the fallback formula reproduces the legacy name (`webiny-js-<hex>`) rather than
+             * prepending the SDK default prefix and triggering an unintended cluster replacement.
+             * See `createCorePulumiApp.ts` → `isUpgradeFromOldCode` for details.
+             */
+            const domainPhysicalName = randomId.hex.apply(
+                hex =>
+                    params.prevDomainName ??
+                    `${params.namePrefix}${domainLogicalName}-${hex.slice(-7)}`
+            );
+
+            domain = app.addResource(aws.opensearch.Domain, {
+                name: domainLogicalName,
+                config: {
+                    domainName: domainPhysicalName,
+                    engineVersion: OS_ENGINE_VERSION,
+                    clusterConfig: isProduction ? getProdClusterConfig() : getDevClusterConfig(),
+                    vpcOptions: vpc
+                        ? {
+                              subnetIds: vpc.subnets.private.map(s => s.output.id),
+                              securityGroupIds: [vpc.vpc.output.defaultSecurityGroupId]
+                          }
+                        : undefined,
+                    ebsOptions: {
+                        ebsEnabled: true,
+                        volumeSize: 10,
+                        volumeType: "gp2"
+                    },
+                    advancedOptions: {
+                        "rest.action.multi.allow_explicit_index": "true"
+                    },
+                    snapshotOptions: {
+                        automatedSnapshotStartHour: 23
+                    }
+                },
+                opts: { protect: params.protect }
+            });
+
+            domainEndpoint = domain.output.endpoint;
+            domainArn = domain.output.arn;
+
+            /**
+             * Domain policy defines who can access your OpenSearch Domain.
+             * For details on OpenSearch security, read the official documentation:
+             * https://docs.aws.amazon.com/openSearch-service/latest/developerguide/security.html
+             */
+            const accountId = getAwsAccountId(app);
+
+            domainPolicy = app.addResource(aws.opensearch.DomainPolicy, {
+                name: `${domainLogicalName}-policy`,
+                config: {
+                    domainName: domain.output.domainName,
+                    accessPolicies: pulumi
+                        .all([accountId, domainArn])
+                        .apply(([accountId, domainArn]) => {
+                            return JSON.stringify({
+                                Version: "2012-10-17",
+                                Statement: [
+                                    /**
+                                     * Allow requests signed with current account
+                                     */
+                                    {
+                                        Effect: "Allow",
+                                        Principal: {
+                                            AWS: accountId
+                                        },
+                                        Action: "es:*",
+                                        Resource: `${domainArn}/*`
+                                    }
+                                ]
+                            });
+                        })
+                },
+                opts: { protect: params.protect }
+            });
+        }
+
+        /**
+         * Create a table for OpenSearch records. All ES records are stored in this table to dramatically improve
+         * performance and stability on write operations (especially massive data imports). This table also serves as a backup and
+         * a single source of truth for your OpenSearch domain. Streaming is enabled on this table, and it will
+         * allow asynchronous synchronization of data with OpenSearch domain.
+         */
+        const table = app.addResource(aws.dynamodb.Table, {
+            name: "webiny-es",
+            config: {
+                attributes: [
+                    { name: "PK", type: "S" },
+                    { name: "SK", type: "S" },
+                    { name: "GSI_TENANT", type: "S" }
+                ],
+                streamEnabled: true,
+                streamViewType: "NEW_AND_OLD_IMAGES",
+                billingMode: "PAY_PER_REQUEST",
+                hashKey: "PK",
+                rangeKey: "SK",
+                globalSecondaryIndexes: [
+                    {
+                        name: "GSI_TENANT",
+                        keySchemas: [
+                            {
+                                attributeName: "GSI_TENANT",
+                                keyType: "HASH"
+                            }
+                        ],
+                        projectionType: "KEYS_ONLY"
+                    }
+                ],
+                ttl: {
+                    attributeName: "expiresAt",
+                    enabled: true
+                }
+            },
+            opts: { protect: params.protect }
+        });
+
+        const roleName = "dynamo-to-elastic-lambda-role";
+
+        const role = app.addResource(aws.iam.Role, {
+            name: roleName,
+            config: {
+                assumeRolePolicy: {
+                    Version: "2012-10-17",
+                    Statement: [
+                        {
+                            Action: "sts:AssumeRole",
+                            Principal: {
+                                Service: "lambda.amazonaws.com"
+                            },
+                            Effect: "Allow"
+                        }
+                    ]
+                }
+            },
+            meta: { isLambdaFunctionRole: true }
+        });
+
+        const policy = getDynamoDbToElasticLambdaPolicy(app, domainArn);
+
+        app.addResource(aws.iam.RolePolicyAttachment, {
+            name: `${roleName}-DynamoDbToElasticLambdaPolicy`,
+            config: {
+                role: role.output,
+                policyArn: policy.output.arn
+            }
+        });
+
+        // Only use `AWSLambdaVPCAccessExecutionRole` policy if VPC feature is enabled.
+        if (vpc) {
+            app.addResource(aws.iam.RolePolicyAttachment, {
+                name: `${roleName}-AWSLambdaVPCAccessExecutionRole`,
+                config: {
+                    role: role.output,
+                    policyArn: aws.iam.ManagedPolicy.AWSLambdaVPCAccessExecutionRole
+                }
+            });
+        } else {
+            app.addResource(aws.iam.RolePolicyAttachment, {
+                name: `${roleName}-AWSLambdaBasicExecutionRole`,
+                config: {
+                    role: role.output,
+                    policyArn: aws.iam.ManagedPolicy.AWSLambdaBasicExecutionRole
+                }
+            });
+        }
+
+        app.addResource(aws.iam.RolePolicyAttachment, {
+            name: `${roleName}-AWSLambdaDynamoDBExecutionRole`,
+            config: {
+                role: role.output,
+                policyArn: aws.iam.ManagedPolicy.AWSLambdaDynamoDBExecutionRole
+            }
+        });
+
+        /**
+         * This Lambda will process the stream events from DynamoDB table that contains OpenSearch items.
+         * OpenSearch can't take large amount of individual writes in a short period of time, so this way
+         * we store data for OpenSearch in a DynamoDB table, and asynchronously insert it into OpenSearch
+         * using batching.
+         */
+        const lambda = app.addResource(aws.lambda.Function, {
+            name: "dynamo-to-elastic",
+            config: {
+                role: role.output.arn,
+                runtime: LAMBDA_RUNTIME,
+                handler: "handler.handler",
+                timeout: 900,
+                memorySize: 1024,
+                environment: {
+                    variables: {
+                        DEBUG: String(process.env.DEBUG),
+                        OPENSEARCH_ENDPOINT: domainEndpoint,
+                        OPENSEARCH_USERNAME: process.env.OPENSEARCH_USERNAME ?? "",
+                        OPENSEARCH_PASSWORD: process.env.OPENSEARCH_PASSWORD ?? ""
+                    }
+                },
+                description: "Process DynamoDB Stream.",
+                code: new pulumi.asset.AssetArchive({
+                    ".": new pulumi.asset.FileArchive(
+                        path.join(app.paths.workspace, "dynamoToElastic/build")
+                    )
+                }),
+                vpcConfig: vpc
+                    ? {
+                          subnetIds: vpc.subnets.private.map(s => s.output.id),
+                          securityGroupIds: [vpc.vpc.output.defaultSecurityGroupId]
+                      }
+                    : undefined,
+                loggingConfig: {
+                    logFormat: "JSON"
+                }
+            }
+        });
+
+        const eventSourceMapping = app.addResource(aws.lambda.EventSourceMapping, {
+            name: "dynamo-to-elastic",
+            config: {
+                eventSourceArn: table.output.streamArn,
+                functionName: lambda.output.arn,
+                startingPosition: "LATEST",
+                maximumRetryAttempts: 3,
+                batchSize: 50,
+                maximumBatchingWindowInSeconds: 1
+            }
+        });
+
+        app.addOutputs({
+            opensearchDomainArn: domainArn,
+            opensearchDomainEndpoint: domainEndpoint,
+            opensearchDomainName: domain!.output.domainName,
+            opensearchDynamodbTableArn: table.output.arn,
+            opensearchDynamodbTableName: table.output.name
+        });
+
+        return {
+            domain,
+            domainPolicy,
+            table,
+            dynamoToElastic: {
+                role,
+                policy,
+                lambda,
+                eventSourceMapping
+            }
+        };
+    }
+});
+
+function getDynamoDbToElasticLambdaPolicy(app: PulumiApp, domainArn: pulumi.Output<string>) {
+    return app.addResource(aws.iam.Policy, {
+        name: "DynamoDbToElasticLambdaPolicy-updated",
+        config: {
+            description: "This policy enables access to ES and Dynamodb streams",
+            policy: {
+                Version: "2012-10-17",
+                Statement: [
+                    {
+                        Sid: "PermissionForES",
+                        Effect: "Allow",
+                        Action: [
+                            "es:ESHttpGet",
+                            "es:ESHttpDelete",
+                            "es:ESHttpPatch",
+                            "es:ESHttpPost",
+                            "es:ESHttpPut",
+                            "dynamodb:BatchGetItem",
+                            "dynamodb:BatchWriteItem",
+                            "dynamodb:PutItem",
+                            "dynamodb:GetItem",
+                            "dynamodb:DeleteItem",
+                            "dynamodb:Query",
+                            "dynamodb:UpdateItem"
+                        ],
+                        Resource: [
+                            pulumi.interpolate`${domainArn}`,
+                            pulumi.interpolate`${domainArn}/*`
+                        ]
+                    }
+                ]
+            }
+        }
+    });
+}

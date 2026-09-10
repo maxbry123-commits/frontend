@@ -1,0 +1,177 @@
+import { describe, expect, it } from "vitest";
+import { createFieldRegistry, createFieldIndexRegistry } from "./helpers/createTestContainer.js";
+import type { CmsEntry, CmsModel, CmsModelField } from "@webiny/api-headless-cms/types/index.js";
+import {
+    extractEntriesFromIndex,
+    prepareEntryToIndex
+} from "@webiny/api-headless-cms-utils-os/helpers/index.js";
+import type { CmsIndexEntry } from "~/types.js";
+
+const mockRichTextValue = [
+    {
+        tag: "p",
+        content: "some long text"
+    }
+];
+
+const createMockField = (
+    field: Partial<CmsModelField> & Pick<CmsModelField, "fieldId" | "type">
+): CmsModelField => {
+    return {
+        ...field,
+        validation: [],
+        listValidation: [],
+        id: field.fieldId,
+        storageId: field.fieldId,
+        label: field.fieldId
+    };
+};
+
+const mockTextValue = "some short searchable text";
+
+const mockModel: Pick<CmsModel, "fields"> = {
+    fields: [
+        createMockField({
+            fieldId: "notAffectedNumber",
+            type: "number"
+        }),
+        createMockField({
+            fieldId: "notAffectedString",
+            type: "text"
+        }),
+        createMockField({
+            fieldId: "richText",
+            type: "rich-text"
+        }),
+        createMockField({
+            fieldId: "text",
+            type: "text"
+        }),
+        createMockField({
+            fieldId: "page",
+            type: "object",
+            settings: {
+                fields: [
+                    createMockField({
+                        fieldId: "title",
+                        type: "text"
+                    }),
+                    createMockField({
+                        fieldId: "number",
+                        type: "number"
+                    }),
+                    createMockField({
+                        fieldId: "richText",
+                        type: "rich-text"
+                    }),
+                    createMockField({
+                        fieldId: "settings",
+                        type: "object",
+                        settings: {
+                            fields: [
+                                createMockField({
+                                    fieldId: "title",
+                                    type: "text"
+                                }),
+                                createMockField({
+                                    fieldId: "snippet",
+                                    type: "rich-text"
+                                })
+                            ]
+                        }
+                    })
+                ]
+            }
+        })
+    ]
+};
+
+const mockInputEntry: Partial<CmsEntry> = {
+    values: {
+        notAffectedNumber: 1,
+        notAffectedString: "some text",
+        richText: mockRichTextValue,
+        text: mockTextValue,
+        page: {
+            title: "Title",
+            number: 155.75,
+            richText: [
+                {
+                    tag: "p",
+                    content: "full"
+                }
+            ],
+            settings: {
+                title: "Settings Title",
+                snippet: [
+                    {
+                        tag: "p",
+                        content: "snippet"
+                    }
+                ]
+            }
+        }
+    }
+};
+
+const mockIndexedEntry: Partial<CmsEntry> & Record<string, any> = {
+    values: {
+        notAffectedNumber: 1,
+        notAffectedString: "some text",
+        text: mockTextValue,
+        page: {
+            title: "Title",
+            number: 155.75,
+            settings: {
+                title: "Settings Title"
+            }
+        }
+    },
+    rawValues: {
+        richText: mockRichTextValue,
+        page: {
+            richText: [
+                {
+                    tag: "p",
+                    content: "full"
+                }
+            ],
+            settings: {
+                snippet: [
+                    {
+                        tag: "p",
+                        content: "snippet"
+                    }
+                ]
+            }
+        }
+    }
+};
+
+const fieldRegistry = createFieldRegistry();
+const fieldIndexRegistry = createFieldIndexRegistry();
+
+describe("entryIndexing", () => {
+    it("should prepare entry for indexing", () => {
+        const entryToIndex = prepareEntryToIndex({
+            entry: mockInputEntry as CmsEntry,
+            storageEntry: mockInputEntry as CmsEntry,
+            model: mockModel as unknown as CmsModel,
+            fieldRegistry,
+            fieldIndexRegistry
+        });
+
+        expect(entryToIndex).toEqual(mockIndexedEntry);
+    });
+
+    it("should extract original entry from indexed data", () => {
+        const [entryFromIndex] = extractEntriesFromIndex({
+            model: mockModel as unknown as CmsModel,
+            fieldRegistry,
+            fieldIndexRegistry,
+            entries: [mockIndexedEntry as CmsIndexEntry]
+        });
+
+        expect(entryFromIndex.values).toEqual(mockInputEntry.values);
+    });
+});

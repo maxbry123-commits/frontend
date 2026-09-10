@@ -1,0 +1,313 @@
+import { describe, test, expect, vi, beforeEach } from "vitest";
+import { mockCreateGetWcpProjectEnvironment } from "./mocks/mockCreateGetWcpProjectEnvironment.js";
+import { mockCreateGetWcpProjectLicense } from "./mocks/mockCreateGetWcpProjectLicense.js";
+import { useGqlHandler } from "../useGqlHandler.js";
+vi.mock("~/features/wcp/WcpContext/utils.js", async () => {
+    // The mock returned only mocks the generateServerSeed method.
+    const actual = await vi.importActual("~/features/wcp/WcpContext/utils.js");
+
+    return {
+        ...actual,
+        wcpFetch: () => ({ error: false })
+    };
+});
+
+vi.mock("@webiny/wcp", async () => {
+    // The mock returned only mocks the generateServerSeed method.
+    const actual = await vi.importActual("@webiny/wcp");
+
+    return {
+        ...actual,
+        getWcpProjectEnvironment: mockCreateGetWcpProjectEnvironment(),
+        getWcpProjectLicense: mockCreateGetWcpProjectLicense(license => {
+            license.package.features.advancedAccessControlLayer.enabled = true;
+        })
+    };
+});
+
+describe("Security API Key Test", () => {
+    const { install, securityApiKeys } = useGqlHandler();
+
+    beforeEach(async () => {
+        await install.install();
+    });
+
+    // `description` is declared `String` (nullable) in the GraphQL schema, but the create schema
+    // required a bare `z.string()` - so an API key created without a description was rejected
+    // whether the client sent null or left the field out entirely.
+    test("should accept a null or missing `description`", async () => {
+        const [nullResponse] = await securityApiKeys.create({
+            data: { name: "Null desc", slug: "null-desc", description: null, permissions: [] }
+        });
+
+        expect(nullResponse).toMatchObject({
+            data: {
+                security: {
+                    createApiKey: {
+                        data: { name: "Null desc", slug: "null-desc", description: "" },
+                        error: null
+                    }
+                }
+            }
+        });
+
+        const [missingResponse] = await securityApiKeys.create({
+            data: { name: "No desc", slug: "no-desc", permissions: [] }
+        });
+
+        expect(missingResponse).toMatchObject({
+            data: {
+                security: {
+                    createApiKey: {
+                        data: { name: "No desc", slug: "no-desc", description: "" },
+                        error: null
+                    }
+                }
+            }
+        });
+    });
+
+    // An update that does not mention `description` must leave the stored one alone.
+    test("should not clear `description` on an update that omits it", async () => {
+        const [createResponse] = await securityApiKeys.create({
+            data: {
+                name: "Keep desc",
+                slug: "keep-desc",
+                description: "Original description",
+                permissions: []
+            }
+        });
+
+        const apiKey = createResponse.data.security.createApiKey.data;
+
+        // `SecurityApiKeyInput` is shared by create and update, so `name` and `permissions` are
+        // required here even though only `description` is under test.
+        const [updateResponse] = await securityApiKeys.update({
+            id: apiKey.id,
+            data: { name: "Keep desc renamed", permissions: [] }
+        });
+
+        expect(updateResponse.data.security.updateApiKey).toMatchObject({
+            data: { name: "Keep desc renamed", description: "Original description" },
+            error: null
+        });
+    });
+
+    // Length cap matches teams and roles. This was the one description field without one.
+    test("should reject a `description` longer than 500 characters", async () => {
+        const [response] = await securityApiKeys.create({
+            data: {
+                name: "Too long",
+                slug: "too-long",
+                description: "x".repeat(501),
+                permissions: []
+            }
+        });
+
+        expect(response.data.security.createApiKey).toMatchObject({
+            data: null,
+            error: { code: "ApiKey/Validation" }
+        });
+    });
+
+    test("should create, list, update and delete an API key", async () => {
+        // Create a token
+        const [createResponse] = await securityApiKeys.create({
+            data: {
+                name: "Github Actions",
+                slug: "github-actions",
+                description: "Github Actions Token",
+                permissions: []
+            }
+        });
+
+        expect(createResponse).toEqual({
+            data: {
+                security: {
+                    createApiKey: {
+                        data: {
+                            id: expect.any(String),
+                            name: "Github Actions",
+                            slug: "github-actions",
+                            description: "Github Actions Token",
+                            token: expect.any(String),
+                            permissions: [],
+                            createdOn: expect.any(String)
+                        },
+                        error: null
+                    }
+                }
+            }
+        });
+
+        const { data: token } = createResponse.data.security.createApiKey;
+
+        // List tokens
+        const [listResponse] = await securityApiKeys.list();
+
+        expect(listResponse).toEqual({
+            data: {
+                security: {
+                    listApiKeys: {
+                        data: [
+                            {
+                                id: token.id,
+                                name: "Github Actions",
+                                slug: "github-actions",
+                                token: token.token,
+                                description: "Github Actions Token",
+                                permissions: []
+                            }
+                        ],
+                        error: null
+                    }
+                }
+            }
+        });
+
+        // Get token
+        const [getResponse] = await securityApiKeys.get({ id: token.id });
+
+        expect(getResponse).toEqual({
+            data: {
+                security: {
+                    getApiKey: {
+                        data: {
+                            id: token.id,
+                            name: "Github Actions",
+                            slug: "github-actions",
+                            token: token.token,
+                            description: "Github Actions Token",
+                            permissions: []
+                        },
+                        error: null
+                    }
+                }
+            }
+        });
+
+        // Update token
+        const [updateResponse] = await securityApiKeys.update({
+            id: token.id,
+            data: { name: "Renamed token", description: "Updated description", permissions: [] }
+        });
+
+        expect(updateResponse).toEqual({
+            data: {
+                security: {
+                    updateApiKey: {
+                        data: {
+                            id: token.id,
+                            name: "Renamed token",
+                            slug: "github-actions",
+                            description: "Updated description",
+                            token: token.token,
+                            permissions: []
+                        },
+                        error: null
+                    }
+                }
+            }
+        });
+
+        // List again to make sure that an updated token is accessible.
+        const [listResponse2] = await securityApiKeys.list();
+
+        expect(listResponse2).toEqual({
+            data: {
+                security: {
+                    listApiKeys: {
+                        data: [
+                            {
+                                id: token.id,
+                                name: "Renamed token",
+                                slug: "github-actions",
+                                token: token.token,
+                                description: "Updated description",
+                                permissions: []
+                            }
+                        ],
+                        error: null
+                    }
+                }
+            }
+        });
+
+        // Delete token
+        const [deleteResponse] = await securityApiKeys.delete({
+            id: token.id
+        });
+
+        expect(deleteResponse).toEqual({
+            data: {
+                security: {
+                    deleteApiKey: {
+                        data: true,
+                        error: null
+                    }
+                }
+            }
+        });
+    });
+
+    test("should authenticate using API key sent via headers", async () => {
+        const { securityApiKeys } = useGqlHandler();
+
+        const { securityRole } = useGqlHandler();
+
+        const [createResponse] = await securityApiKeys.create({
+            data: {
+                name: "API Key",
+                slug: "api-key",
+                description: "API key description",
+                permissions: [{ name: "security.role" }]
+            }
+        });
+
+        const { data: apiKey } = createResponse.data.security.createApiKey;
+
+        expect(createResponse).toEqual({
+            data: {
+                security: {
+                    createApiKey: {
+                        data: {
+                            id: expect.any(String),
+                            name: "API Key",
+                            slug: "api-key",
+                            description: "API key description",
+                            permissions: [{ name: "security.role" }],
+                            token: expect.stringMatching(/wat_[a-f0-9]{36}/),
+                            createdOn: expect.stringMatching(/^20/)
+                        },
+                        error: null
+                    }
+                }
+            }
+        });
+
+        // Should throw Not Authorized error
+        const [listErrorResponse] = await securityRole.list({}, { Authorization: "123" });
+
+        expect(listErrorResponse).toEqual({
+            data: {
+                security: {
+                    listRoles: {
+                        data: null,
+                        error: {
+                            message: "Not authorized!",
+                            code: "NOT_AUTHORIZED",
+                            data: {}
+                        }
+                    }
+                }
+            }
+        });
+
+        // "listRoles" should return an array of users
+        const [listResponse] = await securityRole.list({}, { Authorization: apiKey.token });
+
+        // Expect 1 role: ful-access
+        expect(listResponse.data.security.listRoles.data.length).toEqual(1);
+        expect(listResponse.data.security.listRoles.data[0].slug).toBe("full-access");
+    });
+});

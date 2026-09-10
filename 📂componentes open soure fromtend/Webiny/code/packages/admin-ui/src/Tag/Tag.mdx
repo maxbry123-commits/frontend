@@ -1,0 +1,207 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as TagStories from "./Tag.stories";
+
+<Meta of={TagStories} />
+
+# Tag
+
+The Tag component is a visual element used to display brief, contextual information or status, such as counts, labels, or indicators. It enhances UI clarity by drawing attention to critical updates (e.g., notifications), item counts, or states (e.g., "new," "active").
+
+## Usage
+
+<Canvas of={TagStories.Documentation} source={ { code: `
+import React from "react";
+import { Tag } from "@webiny/admin-ui";
+
+const TagExample = () => {
+return <Tag content="Label" />;
+};
+
+export default TagExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Tag/Tag.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={TagStories.Documentation} />
+
+```jsx
+import React from "react";
+import { Tag } from "@webiny/admin-ui";
+
+const TagExample = () => {
+  return <Tag content="Label" />;
+};
+
+export default TagExample;
+```
+
+## Examples
+
+### Basic Tag
+
+A basic tag displays a simple label without any interaction.
+
+<Canvas of={TagStories.Default} source={ { code: `
+import React from "react";
+import { Tag } from "@webiny/admin-ui";
+
+const BasicTagExample = () => {
+return <Tag content="Label" />;
+};
+
+export default BasicTagExample;
+` } } />
+
+### Interactive Tag
+
+Tags can be made interactive by adding an onClick handler.
+
+<Canvas of={TagStories.WithOnClickCallback} source={ { code: `
+import React from "react";
+import { Tag } from "@webiny/admin-ui";
+
+const InteractiveTagExample = () => {
+return <Tag
+content="Click me"
+onClick={evt => {
+console.log("Tag clicked", evt);
+}}
+/>;
+};
+
+export default InteractiveTagExample;
+` } } />
+
+### Dismissible Tag
+
+Tags can include a dismiss button by providing an onDismiss handler.
+
+<Canvas of={TagStories.WithOnDismissCallback} source={ { code: `
+import React from "react";
+import { Tag } from "@webiny/admin-ui";
+
+const DismissibleTagExample = () => {
+return <Tag
+content="Dismissible"
+onDismiss={evt => {
+console.log("Tag dismissed", evt);
+}}
+/>;
+};
+
+export default DismissibleTagExample;
+` } } />
+
+### Custom Dismiss Icon
+
+You can customize the dismiss icon by providing a custom icon element.
+
+<Canvas of={TagStories.WithCustomDismissIconElement} source={ { code: `
+import React from "react";
+import { Tag } from "@webiny/admin-ui";
+import { ReactComponent as AddIcon } from "@webiny/icons/add.svg";
+
+const CustomDismissIconExample = () => {
+return <Tag
+content="Custom Icon"
+onDismiss={evt => {
+console.log("Tag dismissed", evt);
+}}
+dismissIconElement={<AddIcon />}
+dismissIconLabel="Custom dismiss label"
+/>;
+};
+
+export default CustomDismissIconExample;
+` } } />
+
+### Variants
+
+Tags come in various color variants to represent different states or categories.
+
+<Canvas of={TagStories.FullExample} source={ { code: `
+import React from "react";
+import { Tag } from "@webiny/admin-ui";
+
+const TagVariantsExample = () => {
+return (
+
+<div className={"flex gap-sm"}>
+  <Tag content={"Neutral base"} variant={"neutral-base"} onDismiss={() => {}} />
+  <Tag content={"Neutral base outline"} variant={"neutral-base-outline"} onDismiss={() => {}} />
+  <Tag content={"Neutral light"} variant={"neutral-light"} onDismiss={() => {}} />
+  <Tag content={"Neutral muted"} variant={"neutral-muted"} onDismiss={() => {}} />
+  <Tag content={"Neutral strong"} variant={"neutral-strong"} onDismiss={() => {}} />
+  <Tag content={"Neutral xstrong"} variant={"neutral-xstrong"} onDismiss={() => {}} />
+  <Tag content={"Neutral dark"} variant={"neutral-dark"} onDismiss={() => {}} />
+  <Tag content={"Success"} variant={"success"} onDismiss={() => {}} />
+  <Tag content={"Success light"} variant={"success-light"} onDismiss={() => {}} />
+  <Tag content={"Warning"} variant={"warning"} onDismiss={() => {}} />
+  <Tag content={"Destructive"} variant={"destructive"} onDismiss={() => {}} />
+  <Tag content={"Accent"} variant={"accent"} onDismiss={() => {}} />
+  <Tag content={"Accent light"} variant={"accent-light"} onDismiss={() => {}} />
+</div>
+); };
+
+export default TagVariantsExample;
+` } } />
+
+### Disabled Tags
+
+Tags can be disabled to indicate that they are not interactive.
+
+<Canvas of={TagStories.NeutralBaseDisabled} source={ { code: `
+import React from "react";
+import { Tag } from "@webiny/admin-ui";
+
+const DisabledTagExample = () => {
+return <Tag
+content="Disabled"
+variant="neutral-base"
+onDismiss={() => {}}
+disabled={true}
+/>;
+};
+
+export default DisabledTagExample;
+` } } />
+
+## Anatomy
+
+### Construction
+
+<img src="/images/storybook/tag/construction.png" alt="Construction" />
+
+### Style
+
+<img src="/images/storybook/tag/style.png" alt="Style" />
+
+### States
+
+<img src="/images/storybook/tag/states.png" alt="States" />
+
+## Usage Guidelines
+
+<img src="/images/storybook/tag/usage.png" alt="Usage" />
+
+## Best Practices
+
+- Use tags to categorize content or indicate status
+- Keep tag content concise and clear
+- Choose appropriate color variants to convey meaning
+- Use dismissible tags when users need to remove or filter items
+- Consider using interactive tags for filtering or navigation
+- Ensure sufficient contrast between tag text and background
+- Maintain consistent spacing when displaying multiple tags

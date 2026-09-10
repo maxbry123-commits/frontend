@@ -1,0 +1,49 @@
+import { beforeEach, describe, expect, it } from "vitest";
+import { CmsEntryListWhere } from "@webiny/api-headless-cms/types";
+import { CreateExecFilteringResponse } from "~tests/filtering/mocks/filtering";
+import { OpenSearchBoolQueryConfig } from "@webiny/api-opensearch/types";
+import { createQuery, Query } from "./mocks";
+import { normalizeValue } from "@webiny/api-opensearch";
+import { createExecFiltering } from "./mocks/filtering";
+
+describe("not_contains filter", () => {
+    let query: Query;
+    let execFiltering: CreateExecFilteringResponse;
+
+    beforeEach(() => {
+        query = createQuery();
+        execFiltering = createExecFiltering();
+    });
+
+    it("should add not_contains filter", async () => {
+        const title = "Webiny";
+        const where: CmsEntryListWhere = {
+            values: {
+                title_not_contains: title
+            }
+        };
+
+        execFiltering({
+            query,
+            where
+        });
+
+        const expected: OpenSearchBoolQueryConfig = {
+            should: [],
+            must: [],
+            filter: [],
+            must_not: [
+                {
+                    query_string: {
+                        allow_leading_wildcard: true,
+                        fields: ["values.title"],
+                        query: `*${normalizeValue(title)}*`,
+                        default_operator: "and"
+                    }
+                }
+            ]
+        };
+
+        expect(query).toEqual(expected);
+    });
+});

@@ -1,0 +1,48 @@
+import React from "react";
+import { cn } from "@webiny/admin-ui";
+
+interface GrowProps {
+    flex: number;
+    className?: string;
+}
+
+const Grow = ({ flex, children, className }: React.PropsWithChildren<GrowProps>) => {
+    return (
+        <div
+            className={cn(
+                "overflow-y-scroll last-of-type:border-l-sm border-neutral-dimmed",
+                className
+            )}
+            style={{ flex }}
+        >
+            {children}
+        </div>
+    );
+};
+
+interface ContentProps {
+    children: React.ReactNode;
+    className?: string;
+}
+
+export const Content = ({ children, className }: ContentProps) => {
+    // `min-h-0` matters: without it this flex child refuses to shrink below its content height, so
+    // the panels' own scrollbars never engage and the whole drawer body scrolls instead.
+    return <div className={cn("flex min-h-0", className)}>{children}</div>;
+};
+
+interface PanelProps {
+    flex?: number;
+    children: React.ReactNode;
+    className?: string;
+}
+
+const Panel = ({ flex, children, className }: PanelProps) => {
+    return (
+        <Grow data-role={"panel"} flex={flex ?? 1} className={className}>
+            {children}
+        </Grow>
+    );
+};
+
+Content.Panel = Panel;

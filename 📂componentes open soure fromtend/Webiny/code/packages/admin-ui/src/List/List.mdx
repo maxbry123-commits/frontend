@@ -1,0 +1,578 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as ListStories from "./List.stories";
+
+<Meta of={ListStories} />
+
+# List
+
+The List component provides a way to display a collection of items. It's designed to present related content in a consistent and accessible format, with support for various styling options and interactive behaviors.
+
+## Usage
+
+<Canvas of={ListStories.Documentation} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+import { ReactComponent as UserIcon } from "@webiny/icons/person.svg";
+import { ReactComponent as SettingsIcon } from "@webiny/icons/settings.svg";
+import { ReactComponent as HelpIcon } from "@webiny/icons/help.svg";
+
+const ListExample = () => {
+return (
+
+<List variant="underline" background="base">
+  <List.Item
+    icon={<UserIcon />}
+    title="User Profile"
+    description="View and edit your profile information"
+    onClick={() => console.log("User Profile clicked")}
+  />
+  <List.Item
+    icon={<SettingsIcon />}
+    title="Settings"
+    description="Configure application settings"
+    onClick={() => console.log("Settings clicked")}
+  />
+  <List.Item
+    icon={<HelpIcon />}
+    title="Help & Support"
+    description="Get assistance and view documentation"
+    onClick={() => console.log("Help & Support clicked")}
+  />
+</List>
+); };
+
+export default ListExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/List/List.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={ListStories.Documentation} />
+
+```tsx
+import React from "react";
+import { List } from "@webiny/admin-ui";
+import { ReactComponent as UserIcon } from "@webiny/icons/person.svg";
+import { ReactComponent as SettingsIcon } from "@webiny/icons/settings.svg";
+import { ReactComponent as HelpIcon } from "@webiny/icons/help.svg";
+
+const ListExample = () => {
+  return (
+    <List variant="underline" background="base">
+      <List.Item
+        icon={<UserIcon />}
+        title="User Profile"
+        description="View and edit your profile information"
+        onClick={() => console.log("User Profile clicked")}
+      />
+      <List.Item
+        icon={<SettingsIcon />}
+        title="Settings"
+        description="Configure application settings"
+        onClick={() => console.log("Settings clicked")}
+      />
+      <List.Item
+        icon={<HelpIcon />}
+        title="Help & Support"
+        description="Get assistance and view documentation"
+        onClick={() => console.log("Help & Support clicked")}
+      />
+    </List>
+  );
+};
+
+export default ListExample;
+```
+
+## Examples
+
+### Default
+
+<Canvas of={ListStories.Default} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+
+const DefaultListExample = () => {
+return (
+
+<List>
+  <List.Item title="Item 1" />
+  <List.Item title="Item 2" />
+  <List.Item title="Item 3" />
+</List>
+); };
+
+export default DefaultListExample;
+` } } />
+
+### With Icons
+
+<Canvas of={ListStories.WithIcon} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+import { ReactComponent as UserIcon } from "@webiny/icons/person.svg";
+import { ReactComponent as SettingsIcon } from "@webiny/icons/settings.svg";
+import { ReactComponent as HelpIcon } from "@webiny/icons/help.svg";
+
+const WithIconsExample = () => {
+return (
+
+<List>
+  <List.Item icon={<UserIcon />} title="User Profile" />
+  <List.Item icon={<SettingsIcon />} title="Settings" />
+  <List.Item icon={<HelpIcon />} title="Help & Support" />
+</List>
+); };
+
+export default WithIconsExample;
+` } } />
+
+### With Descriptions
+
+<Canvas of={ListStories.WithDescription} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+
+const WithDescriptionsExample = () => {
+return (
+
+<List>
+  <List.Item title="User Profile" description="View and edit your profile information" />
+  <List.Item title="Settings" description="Configure application settings" />
+  <List.Item title="Help & Support" description="Get assistance and view documentation" />
+</List>
+); };
+
+export default WithDescriptionsExample;
+` } } />
+
+### With Icons and Descriptions
+
+<Canvas of={ListStories.WithIconsAndDescriptions} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+import { ReactComponent as UserIcon } from "@webiny/icons/person.svg";
+import { ReactComponent as SettingsIcon } from "@webiny/icons/settings.svg";
+import { ReactComponent as HelpIcon } from "@webiny/icons/help.svg";
+
+const WithIconsAndDescriptionsExample = () => {
+return (
+
+<List>
+  <List.Item
+    icon={<UserIcon />}
+    title="User Profile"
+    description="View and edit your profile information"
+  />
+  <List.Item
+    icon={<SettingsIcon />}
+    title="Settings"
+    description="Configure application settings"
+  />
+  <List.Item
+    icon={<HelpIcon />}
+    title="Help & Support"
+    description="Get assistance and view documentation"
+  />
+</List>
+); };
+
+export default WithIconsAndDescriptionsExample;
+` } } />
+
+### Container Variant
+
+<Canvas of={ListStories.WithContainerVariant} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+import { ReactComponent as UserIcon } from "@webiny/icons/person.svg";
+import { ReactComponent as SettingsIcon } from "@webiny/icons/settings.svg";
+import { ReactComponent as HelpIcon } from "@webiny/icons/help.svg";
+
+const ContainerVariantExample = () => {
+return (
+
+<List variant="container">
+  <List.Item
+    icon={<UserIcon />}
+    title="User Profile"
+    description="View and edit your profile information"
+  />
+  <List.Item
+    icon={<SettingsIcon />}
+    title="Settings"
+    description="Configure application settings"
+  />
+  <List.Item
+    icon={<HelpIcon />}
+    title="Help & Support"
+    description="Get assistance and view documentation"
+  />
+</List>
+); };
+
+export default ContainerVariantExample;
+` } } />
+
+### Light Background
+
+<Canvas of={ListStories.WithLightBackground} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+import { ReactComponent as UserIcon } from "@webiny/icons/person.svg";
+import { ReactComponent as SettingsIcon } from "@webiny/icons/settings.svg";
+import { ReactComponent as HelpIcon } from "@webiny/icons/help.svg";
+
+const LightBackgroundExample = () => {
+return (
+
+<List background="light">
+  <List.Item
+    icon={<UserIcon />}
+    title="User Profile"
+    description="View and edit your profile information"
+  />
+  <List.Item
+    icon={<SettingsIcon />}
+    title="Settings"
+    description="Configure application settings"
+  />
+  <List.Item
+    icon={<HelpIcon />}
+    title="Help & Support"
+    description="Get assistance and view documentation"
+  />
+</List>
+); };
+
+export default LightBackgroundExample;
+` } } />
+
+### Transparent Background
+
+<Canvas of={ListStories.WithTransparentBackground} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+import { ReactComponent as UserIcon } from "@webiny/icons/person.svg";
+import { ReactComponent as SettingsIcon } from "@webiny/icons/settings.svg";
+import { ReactComponent as HelpIcon } from "@webiny/icons/help.svg";
+
+const TransparentBackgroundExample = () => {
+return (
+
+<div className="bg-neutral-light p-md">
+  <List background="transparent">
+    <List.Item
+      icon={<UserIcon />}
+      title="User Profile"
+      description="View and edit your profile information"
+    />
+    <List.Item
+      icon={<SettingsIcon />}
+      title="Settings"
+      description="Configure application settings"
+    />
+    <List.Item
+      icon={<HelpIcon />}
+      title="Help & Support"
+      description="Get assistance and view documentation"
+    />
+  </List>
+</div>
+); };
+
+export default TransparentBackgroundExample;
+` } } />
+
+### With Click Handlers
+
+<Canvas of={ListStories.WithClickHandlers} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+
+const WithClickHandlersExample = () => {
+return (
+
+<List>
+  <List.Item
+    title="User Profile"
+    description="View and edit your profile information"
+    onClick={() => alert("User Profile clicked")}
+  />
+  <List.Item
+    title="Settings"
+    description="Configure application settings"
+    onClick={() => alert("Settings clicked")}
+  />
+  <List.Item
+    title="Help & Support"
+    description="Get assistance and view documentation"
+    onClick={() => alert("Help & Support clicked")}
+  />
+</List>
+); };
+
+export default WithClickHandlersExample;
+` } } />
+
+### With Selected Item
+
+<Canvas of={ListStories.WithSelectedItem} source={ { code: `
+import React, { useState } from "react";
+import { List } from "@webiny/admin-ui";
+
+const WithSelectedItemExample = () => {
+const [selectedIndex, setSelectedIndex] = useState(0);
+
+    return (
+        <List>
+            <List.Item
+                title="User Profile"
+                description="View and edit your profile information"
+                selected={selectedIndex === 0}
+                onClick={() => setSelectedIndex(0)}
+            />
+            <List.Item
+                title="Settings"
+                description="Configure application settings"
+                selected={selectedIndex === 1}
+                onClick={() => setSelectedIndex(1)}
+            />
+            <List.Item
+                title="Help & Support"
+                description="Get assistance and view documentation"
+                selected={selectedIndex === 2}
+                onClick={() => setSelectedIndex(2)}
+            />
+        </List>
+    );
+
+};
+
+export default WithSelectedItemExample;
+` } } />
+
+### With Disabled Item
+
+<Canvas of={ListStories.WithDisabled} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+
+const WithDisabledItemExample = () => {
+return (
+
+<List>
+  <List.Item
+    title="User Profile"
+    description="View and edit your profile information"
+    onClick={() => alert("User Profile clicked")}
+  />
+  <List.Item
+    title="Settings"
+    description="Configure application settings"
+    disabled={true}
+    onClick={() => alert("This alert won't show because the item is disabled")}
+  />
+  <List.Item
+    title="Help & Support"
+    description="Get assistance and view documentation"
+    onClick={() => alert("Help & Support clicked")}
+  />
+</List>
+); };
+
+export default WithDisabledItemExample;
+` } } />
+
+### With Activated Item
+
+<Canvas of={ListStories.WithActivated} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+
+const WithActivatedItemExample = () => {
+return (
+
+<List>
+  <List.Item
+    title="User Profile"
+    description="View and edit your profile information"
+    activated={true}
+    onClick={() => console.log("User Profile clicked")}
+  />
+  <List.Item
+    title="Settings"
+    description="Configure application settings"
+    onClick={() => console.log("Settings clicked")}
+  />
+  <List.Item
+    title="Help & Support"
+    description="Get assistance and view documentation"
+    onClick={() => console.log("Help & Support clicked")}
+  />
+</List>
+); };
+
+export default WithActivatedItemExample;
+` } } />
+
+### With Avatar
+
+<Canvas of={ListStories.WithAvatar} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+import { Avatar } from "@webiny/admin-ui";
+
+const WithAvatarExample = () => {
+return (
+
+<List>
+  <List.Item
+    title="List item 1"
+    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    icon={
+      <Avatar
+        image={<Avatar.Image src="https://i.pravatar.cc/300?img=1" alt="@webiny" />}
+        fallback={<Avatar.Fallback>W</Avatar.Fallback>}
+      />
+    }
+  />
+  <List.Item
+    title="List item 2"
+    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    icon={
+      <Avatar
+        image={<Avatar.Image src="https://i.pravatar.cc/300?img=2" alt="@webiny" />}
+        fallback={<Avatar.Fallback>W</Avatar.Fallback>}
+      />
+    }
+  />
+</List>
+); };
+
+export default WithAvatarExample;
+` } } />
+
+### With Handle
+
+<Canvas of={ListStories.WithHandle} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+
+const WithHandleExample = () => {
+return (
+
+<List>
+  <List.Item
+    title="List Item 1"
+    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    handle={<List.Item.Handle />}
+  />
+  <List.Item
+    title="List Item 2"
+    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    handle={<List.Item.Handle />}
+  />
+</List>
+); };
+
+export default WithHandleExample;
+` } } />
+
+### With Actions
+
+<Canvas of={ListStories.WithActions} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+import { ReactComponent as EditIcon } from "@webiny/icons/edit.svg";
+import { ReactComponent as TrashIcon } from "@webiny/icons/delete.svg";
+import { ReactComponent as OpenIcon } from "@webiny/icons/visibility.svg";
+import { ReactComponent as MoreIcon } from "@webiny/icons/more_vert.svg";
+import { ReactComponent as ChartIcon } from "@webiny/icons/insert_chart.svg";
+
+const WithActionsExample = () => {
+return (
+
+<List>
+  <List.Item
+    title="List Item 1"
+    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    icon={<List.Item.Icon icon={<ChartIcon />} label={"Chart"} />}
+    actions={
+      <>
+        <List.Item.Action icon={<EditIcon />} />
+        <List.Item.Action icon={<TrashIcon />} />
+        <List.Item.Action.Separator />
+        <List.Item.Action icon={<OpenIcon />} />
+        <List.Item.Action icon={<MoreIcon />} />
+      </>
+    }
+  />
+  <List.Item
+    title="List Item 2"
+    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+    icon={<List.Item.Icon icon={<ChartIcon />} label={"Chart"} />}
+    actions={
+      <>
+        <List.Item.Action icon={<EditIcon />} />
+        <List.Item.Action icon={<TrashIcon />} />
+        <List.Item.Action.Separator />
+        <List.Item.Action icon={<OpenIcon />} />
+        <List.Item.Action icon={<MoreIcon />} />
+      </>
+    }
+  />
+</List>
+); };
+
+export default WithActionsExample;
+` } } />
+
+### With Base Background
+
+<Canvas of={ListStories.WithBaseBackground} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+
+const WithBaseBackgroundExample = () => {
+return (
+
+<List background="base">
+  <List.Item title="List Item 1" />
+  <List.Item title="List Item 2" />
+  <List.Item title="List Item 3" />
+</List>
+); };
+
+export default WithBaseBackgroundExample;
+` } } />
+
+### With Underline Variant
+
+<Canvas of={ListStories.WithUnderlineVariant} source={ { code: `
+import React from "react";
+import { List } from "@webiny/admin-ui";
+
+const WithUnderlineVariantExample = () => {
+return (
+
+<List variant="underline">
+  <List.Item title="List Item 1" />
+  <List.Item title="List Item 2" />
+  <List.Item title="List Item 3" />
+</List>
+); };
+
+export default WithUnderlineVariantExample;
+` } } />

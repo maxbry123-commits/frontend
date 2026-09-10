@@ -1,0 +1,143 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as AutoCompleteStories from "./AutoComplete.stories";
+
+<Meta of={AutoCompleteStories} />
+
+# AutoComplete
+
+The Input component is a user interface element that allows users to enter textual, numerical or any other kind of data into system database. It is essential for collecting user information, enabling interaction, and driving application functionality. As the user input is one of the most crucial aspects of using a system, we are ensuring that all our input options have necessary mechanism to make the data input as frictionless as possible.
+
+## Usage
+
+<Canvas of={AutoCompleteStories.Documentation} source={ { code: `
+import React, { useState } from "react";
+import { AutoComplete } from "@webiny/admin-ui";
+
+const TimezoneSelector = () => {
+const [value, setValue] = useState("");
+const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+    const handleValueChange = (newValue: string) => {
+        setValue(newValue);
+
+        if (!newValue) {
+            setValidation({ isValid: false, message: "This field is required" });
+        } else {
+            setValidation({ isValid: true, message: "" });
+        }
+    };
+
+    const timezones = [
+        "Eastern Standard Time (EST)",
+        "Central Standard Time (CST)",
+        "Pacific Standard Time (PST)",
+        "Greenwich Mean Time (GMT)"
+    ];
+
+    return (
+        <AutoComplete
+            label="Time Zone"
+            required={true}
+            description="Select your timezone from the list"
+            placeholder="Select timezone..."
+            options={timezones}
+            value={value}
+            onValueChange={handleValueChange}
+            validation={validation}
+        />
+    );
+
+};
+
+export default TimezoneSelector;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/AutoComplete/AutoComplete.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={AutoCompleteStories.Documentation} />
+
+```tsx
+import React, { useState } from "react";
+import { AutoComplete } from "@webiny/admin-ui";
+
+const TimezoneSelector = () => {
+  const [value, setValue] = useState("");
+  const [validation, setValidation] = useState({ isValid: true, message: "" });
+
+  const handleValueChange = (newValue: string) => {
+    setValue(newValue);
+
+    if (!newValue) {
+      setValidation({ isValid: false, message: "This field is required" });
+    } else {
+      setValidation({ isValid: true, message: "" });
+    }
+  };
+
+  const timezones = [
+    "Eastern Standard Time (EST)",
+    "Central Standard Time (CST)",
+    "Pacific Standard Time (PST)",
+    "Greenwich Mean Time (GMT)"
+  ];
+
+  return (
+    <AutoComplete
+      label="Time Zone"
+      required={true}
+      description="Select your timezone from the list"
+      placeholder="Select timezone..."
+      options={timezones}
+      value={value}
+      onValueChange={handleValueChange}
+      validation={validation}
+    />
+  );
+};
+
+export default TimezoneSelector;
+```
+
+## Anatomy
+
+### Input Anatomy
+
+<img src="/images/storybook/autocomplete/input-anatomy.png" alt="Input Anatomy" />
+
+### Style
+
+<img src="/images/storybook/autocomplete/style.png" alt="Style" />
+
+### Option
+
+<img src="/images/storybook/autocomplete/option.png" alt="Option" />
+
+### States and Styles
+
+<img src="/images/storybook/autocomplete/states-and-styles.png" alt="States and Styles" />
+
+### Label Anatomy
+
+<img src="/images/storybook/autocomplete/label-anatomy.png" alt="Label Anatomy" />
+
+### Label Properties
+
+<img src="/images/storybook/autocomplete/label-properties.png" alt="Label Properties" />
+
+## Usage
+
+### Used in forms
+
+<img src="/images/storybook/autocomplete/used-in-forms.png" alt="Used in forms" />

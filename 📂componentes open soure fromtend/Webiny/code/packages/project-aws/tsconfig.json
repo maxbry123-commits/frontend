@@ -1,0 +1,33 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src", "__tests__"],
+  "references": [
+    { "path": "../aws-sdk" },
+    { "path": "../cli-core" },
+    { "path": "../project" },
+    { "path": "../pulumi" },
+    { "path": "../pulumi-sdk" },
+    { "path": "../utils" }
+  ],
+  "compilerOptions": {
+    "rootDirs": ["./src", "./__tests__"],
+    "outDir": "./dist",
+    "declarationDir": "./dist",
+    "paths": {
+      "~/*": ["./src/*"],
+      "~tests/*": ["./__tests__/*"],
+      "@webiny/aws-sdk/*": ["../aws-sdk/src/*"],
+      "@webiny/aws-sdk": ["../aws-sdk/src"],
+      "@webiny/cli-core/*": ["../cli-core/src/*"],
+      "@webiny/cli-core": ["../cli-core/src"],
+      "@webiny/project/*": ["../project/src/*"],
+      "@webiny/project": ["../project/src"],
+      "@webiny/pulumi/*": ["../pulumi/src/*"],
+      "@webiny/pulumi": ["../pulumi/src"],
+      "@webiny/pulumi-sdk/*": ["../pulumi-sdk/src/*"],
+      "@webiny/pulumi-sdk": ["../pulumi-sdk/src"],
+      "@webiny/utils/*": ["../utils/src/*"],
+      "@webiny/utils": ["../utils/src"]
+    }
+  }
+}

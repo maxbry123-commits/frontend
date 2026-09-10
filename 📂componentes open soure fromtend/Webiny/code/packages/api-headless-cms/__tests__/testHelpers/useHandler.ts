@@ -1,0 +1,123 @@
+import { createTestHttpHandler } from "@webiny/event-handler-core/features/testing";
+import { ApiCoreFeature, registerApiCoreStorageOperations } from "@webiny/api-core";
+import { GraphQLContextualSchema, GraphQLEngineFeature } from "@webiny/api-graphql";
+import { buildSchema } from "graphql";
+import { HeadlessCmsFeature } from "~/index";
+import { getStorageOps } from "@webiny/api-core/testing/environment.js";
+import { createTestWcpLicense } from "@webiny/wcp/testing/createTestWcpLicense.js";
+import { WcpLicenseLoader } from "@webiny/api-core/features/wcp/WcpLicenseLoader.js";
+import type { ApiCoreStorageOperations } from "@webiny/api-core/types/core.js";
+import type { PermissionsArg } from "~tests/testHelpers/helpers";
+import { createPermissions } from "~tests/testHelpers/helpers";
+import type { IdentityData } from "@webiny/api-core/features/security/IdentityContext/index.js";
+import { TestIdentity, TestAuthenticator } from "@webiny/api-core-testing";
+import { TestPermissions, TestAuthorizer } from "@webiny/api-core-testing";
+import { RootTenantInitializer } from "@webiny/api-core-testing";
+import { AuthTriggerHandler } from "@webiny/api-core-testing";
+import { defaultIdentity } from "~tests/testHelpers/helpers";
+import { processLegacyPlugins } from "~tests/testHelpers/bridgeLegacyPlugins";
+
+export interface CmsHandlerEvent {
+    path: string;
+    headers: {
+        ["x-tenant"]: string;
+        [key: string]: string;
+    };
+}
+
+export type UseHandlerParams = {
+    setupTenancyAndSecurityGraphQL?: boolean;
+    permissions?: PermissionsArg[];
+    identity?: IdentityData;
+    topPlugins?: any[];
+    plugins?: any[];
+    bottomPlugins?: any[];
+    path?: string;
+};
+
+export const useHandler = (params: UseHandlerParams = {}) => {
+    const {
+        identity = defaultIdentity,
+        permissions,
+        plugins = [],
+        topPlugins = [],
+        bottomPlugins = []
+    } = params;
+    const allPlugins = [
+        ...[topPlugins].flat(Infinity as 1),
+        ...[plugins].flat(Infinity as 1),
+        ...[bottomPlugins].flat(Infinity as 1)
+    ];
+
+    const apiCoreStorage = getStorageOps<ApiCoreStorageOperations>("apiCore");
+    const cmsStorage = getStorageOps("cms");
+    const resolvedPermissions = createPermissions(permissions);
+
+    const capturedCtx: { value?: Record<string, any> } = {};
+
+    const handler = createTestHttpHandler({
+        root: container => {
+            container.registerInstance(TestIdentity, identity);
+            container.registerInstance(TestPermissions, { list: resolvedPermissions });
+            container.register(TestAuthenticator);
+            container.register(TestAuthorizer);
+            container.registerDecorator(AuthTriggerHandler);
+            container.registerDecorator(RootTenantInitializer);
+        },
+        child: async container => {
+            const wcpLicense = await WcpLicenseLoader.load(createTestWcpLicense());
+
+            registerApiCoreStorageOperations(container, apiCoreStorage.storageOperations);
+            ApiCoreFeature.register(container, { wcpLicense });
+
+            await processLegacyPlugins(container, cmsStorage.plugins);
+
+            const extraCmsPlugins: any[] = [];
+            for (const p of [cmsStorage.plugins].flat(Infinity as 1)) {
+                if (p && typeof (p as any).apply !== "function" && typeof p !== "function") {
+                    extraCmsPlugins.push(p);
+                }
+            }
+            for (const plugin of allPlugins) {
+                if (typeof plugin === "function" && !plugin.prototype) {
+                    await (plugin as (container: any) => void)(container);
+                } else {
+                    extraCmsPlugins.push(...[plugin].flat());
+                }
+            }
+
+            HeadlessCmsFeature.register(container, {
+                type: "manage",
+                extraPlugins: extraCmsPlugins
+            });
+            const STUB_SCHEMA = buildSchema("type Query { _empty: String }");
+            container.registerInstance(GraphQLContextualSchema, {
+                async build(ctx: Record<string, any>) {
+                    capturedCtx.value = ctx;
+                    return STUB_SCHEMA;
+                }
+            });
+            GraphQLEngineFeature.register(container);
+        }
+    });
+
+    const tenant = { id: "root", name: "Root", parent: null };
+
+    return {
+        tenant,
+        identity: identity || defaultIdentity,
+        handler: async (_payload: CmsHandlerEvent) => {
+            await handler({
+                method: "POST",
+                path: "/graphql",
+                headers: {
+                    "x-tenant": "root",
+                    "content-type": "application/json",
+                    authorization: "Bearer test-token"
+                },
+                body: { query: "{ __typename }" }
+            });
+            return capturedCtx.value!;
+        }
+    };
+};

@@ -1,0 +1,219 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as SkeletonStories from "./Skeleton.stories";
+
+<Meta of={SkeletonStories} />
+
+# Skeleton
+
+The Skeleton component is a placeholder UI element used to indicate that content is loading. It provides a visual representation of the content's structure before the actual content is loaded, improving the perceived performance and user experience during loading states.
+
+## Usage
+
+<Canvas of={SkeletonStories.Documentation} source={ { code: `
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const SkeletonExample = () => {
+return <Skeleton />;
+};
+
+export default SkeletonExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Skeleton/Skeleton.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={SkeletonStories.Documentation} />
+
+```tsx
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const SkeletonExample = () => {
+  return <Skeleton />;
+};
+
+export default SkeletonExample;
+```
+
+## Examples
+
+### Types
+
+The Skeleton component supports three different types: `area`, `text`, and `thumbnail`.
+
+#### Area
+
+The default type, used for general content areas.
+
+<Canvas of={SkeletonStories.Area} source={ { code: `
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const AreaSkeletonExample = () => {
+return <Skeleton type="area" className="w-1/2 h-32" />;
+};
+
+export default AreaSkeletonExample;
+` } } />
+
+#### Text
+
+Used for text content, spans the full width of its container.
+
+<Canvas of={SkeletonStories.Text} source={ { code: `
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const TextSkeletonExample = () => {
+return <Skeleton type="text" />;
+};
+
+export default TextSkeletonExample;
+` } } />
+
+#### Thumbnail
+
+Used for square-shaped content like images or avatars.
+
+<Canvas of={SkeletonStories.Thumbnail} source={ { code: `
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const ThumbnailSkeletonExample = () => {
+return <Skeleton type="thumbnail" />;
+};
+
+export default ThumbnailSkeletonExample;
+` } } />
+
+### Sizes
+
+The Skeleton component comes in various sizes to match different content dimensions.
+
+#### Extra Small (XS)
+
+<Canvas of={SkeletonStories.ExtraSmall} source={ { code: `
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const XsSkeletonExample = () => {
+return <Skeleton size="xs" />;
+};
+
+export default XsSkeletonExample;
+` } } />
+
+#### Small (SM)
+
+<Canvas of={SkeletonStories.Small} source={ { code: `
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const SmSkeletonExample = () => {
+return <Skeleton size="sm" />;
+};
+
+export default SmSkeletonExample;
+` } } />
+
+#### Medium (MD)
+
+<Canvas of={SkeletonStories.Medium} source={ { code: `
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const MdSkeletonExample = () => {
+return <Skeleton size="md" />;
+};
+
+export default MdSkeletonExample;
+` } } />
+
+#### Large (LG)
+
+<Canvas of={SkeletonStories.Large} source={ { code: `
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const LgSkeletonExample = () => {
+return <Skeleton size="lg" />;
+};
+
+export default LgSkeletonExample;
+` } } />
+
+#### Extra Large (XL)
+
+<Canvas of={SkeletonStories.ExtraLarge} source={ { code: `
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const XlSkeletonExample = () => {
+return <Skeleton size="xl" />;
+};
+
+export default XlSkeletonExample;
+` } } />
+
+#### Double Extra Large (XXL)
+
+<Canvas of={SkeletonStories.DoubleExtraLarge} source={ { code: `
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const XxlSkeletonExample = () => {
+return <Skeleton size="xxl" />;
+};
+
+export default XxlSkeletonExample;
+` } } />
+
+#### Triple Extra Large (3XL)
+
+<Canvas of={SkeletonStories.TripleExtraLarge} source={ { code: `
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const ThreeXlSkeletonExample = () => {
+return <Skeleton size="3xl" />;
+};
+
+export default ThreeXlSkeletonExample;
+` } } />
+
+### Complex Layouts
+
+You can combine multiple Skeleton components to create more complex loading states.
+
+<Canvas of={SkeletonStories.MultipleAreas} source={ { code: `
+import React from "react";
+import { Skeleton } from "@webiny/admin-ui";
+
+const MultipleAreasExample = () => {
+return (
+
+<div className="flex gap-md">
+  <div className="flex flex-col gap-md">
+    <Skeleton type="area" className={"w-32 h-32"} />
+    <Skeleton type="area" className={"w-32 h-32"} />
+  </div>
+  <div>
+    <Skeleton type="area" className="w-32 h-full" />
+  </div>
+</div>
+); };
+
+export default MultipleAreasExample;
+` } } />

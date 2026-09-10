@@ -1,0 +1,189 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as HeadingStories from "./Heading.stories";
+
+<Meta of={HeadingStories} />
+
+# Heading
+
+The Heading component is used to display titles and section headings in the UI. It provides consistent typography and semantic HTML structure through six different heading levels (h1-h6).
+
+## Usage
+
+<Canvas of={HeadingStories.Documentation} source={ { code: `
+import React from "react";
+import { Heading } from "@webiny/admin-ui";
+
+const HeadingExample = () => {
+return <Heading level={1}>This is a heading</Heading>;
+};
+
+export default HeadingExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Heading/Heading.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={HeadingStories.Documentation} />
+
+```tsx
+import React from "react";
+import { Heading } from "@webiny/admin-ui";
+
+const HeadingExample = () => {
+  return <Heading level={1}>This is a heading</Heading>;
+};
+
+export default HeadingExample;
+```
+
+## Examples
+
+### Heading Level 1
+
+The largest heading, typically used for page titles.
+
+<Canvas of={HeadingStories.Heading1} source={ { code: `
+import React from "react";
+import { Heading } from "@webiny/admin-ui";
+
+const Heading1Example = () => {
+return (
+
+<Heading level={1}>
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus tortor eu sapien interdum
+  rhoncus.
+</Heading>
+); };
+
+export default Heading1Example;
+` } } />
+
+### Heading Level 2
+
+Used for major section headings.
+
+<Canvas of={HeadingStories.Heading2} source={ { code: `
+import React from "react";
+import { Heading } from "@webiny/admin-ui";
+
+const Heading2Example = () => {
+return (
+
+<Heading level={2}>
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus tortor eu sapien interdum
+  rhoncus.
+</Heading>
+); };
+
+export default Heading2Example;
+` } } />
+
+### Heading Level 3
+
+Used for subsection headings.
+
+<Canvas of={HeadingStories.Heading3} source={ { code: `
+import React from "react";
+import { Heading } from "@webiny/admin-ui";
+
+const Heading3Example = () => {
+return (
+
+<Heading level={3}>
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus tortor eu sapien interdum
+  rhoncus.
+</Heading>
+); };
+
+export default Heading3Example;
+` } } />
+
+### Heading Level 4
+
+Used for minor subsection headings.
+
+<Canvas of={HeadingStories.Heading4} source={ { code: `
+import React from "react";
+import { Heading } from "@webiny/admin-ui";
+
+const Heading4Example = () => {
+return (
+
+<Heading level={4}>
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus tortor eu sapien interdum
+  rhoncus.
+</Heading>
+); };
+
+export default Heading4Example;
+` } } />
+
+### Heading Level 5
+
+Used for small headings within sections.
+
+<Canvas of={HeadingStories.Heading5} source={ { code: `
+import React from "react";
+import { Heading } from "@webiny/admin-ui";
+
+const Heading5Example = () => {
+return (
+
+<Heading level={5}>
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus tortor eu sapien interdum
+  rhoncus.
+</Heading>
+); };
+
+export default Heading5Example;
+` } } />
+
+### Heading Level 6
+
+The smallest heading, used for the least significant section headings.
+
+<Canvas of={HeadingStories.Heading6} source={ { code: `
+import React from "react";
+import { Heading } from "@webiny/admin-ui";
+
+const Heading6Example = () => {
+return (
+
+<Heading level={6}>
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce tempus tortor eu sapien interdum
+  rhoncus.
+</Heading>
+); };
+
+export default Heading6Example;
+` } } />
+
+### as Example
+
+`as` prop is used to change the HTML tag of the heading. This is useful when you want to maintain semantic structure but want different visual styling.
+
+<Canvas of={HeadingStories.As} source={ { code: `
+import React from "react";
+import { Heading } from "@webiny/admin-ui";
+
+const AsExample = () => {
+return (
+
+<Heading level={2} as="h1">
+  This is visually a Heading level 2, but semantically an h1
+</Heading>
+); };
+
+export default AsExample;
+` } } />

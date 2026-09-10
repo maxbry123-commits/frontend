@@ -1,0 +1,198 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as PopoverStories from "./Popover.stories";
+
+<Meta of={PopoverStories} />
+
+# Popover
+
+The Popover component is a UI element that displays floating content when a trigger element is clicked. It's commonly used for contextual information, additional options, or interactive forms that don't require a full modal dialog.
+
+## Usage
+
+<Canvas of={PopoverStories.Documentation} source={ { code: `
+import React from "react";
+import { Popover } from "@webiny/admin-ui";
+
+const PopoverExample = () => {
+return (
+
+<div className="bg-[#f4f4f4] flex items-center justify-center w-full h-[300px]">
+  <Popover
+    trigger={<p>Popover trigger</p>}
+    content={
+      <div className={"w-[260px]"}>
+        <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Morbi lectus leo,
+        dapibus vitae mollis dictum, vulputate eget lorem. Aliquam rutrum auctor tempus.
+      </div>
+    }
+    align="center"
+    side="bottom"
+    variant="subtle"
+    arrow={false}
+    close={false}
+  />
+</div>
+); };
+
+export default PopoverExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Popover/Popover.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={PopoverStories.Documentation} />
+
+```tsx
+import React from "react";
+import { Popover } from "@webiny/admin-ui";
+
+const PopoverExample = () => {
+  return (
+    <div className="bg-[#f4f4f4] flex items-center justify-center w-full h-[300px]">
+      <Popover
+        trigger={<p>Popover trigger</p>}
+        content={
+          <div className={"w-[260px]"}>
+            <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Morbi lectus
+            leo, dapibus vitae mollis dictum, vulputate eget lorem. Aliquam rutrum auctor tempus.
+          </div>
+        }
+        align="center"
+        side="bottom"
+        variant="subtle"
+        arrow={false}
+        close={false}
+      />
+    </div>
+  );
+};
+
+export default PopoverExample;
+```
+
+## Examples
+
+### Accent Variant
+
+A popover with the accent color variant for higher contrast.
+
+<Canvas of={PopoverStories.AccentVariant} source={ { code: `
+import React from "react";
+import { Popover } from "@webiny/admin-ui";
+
+const AccentVariantExample = () => {
+return (
+
+<div className="bg-[#f4f4f4] flex items-center justify-center w-full h-[300px]">
+  <Popover
+    trigger={<p>Popover trigger</p>}
+    content={
+      <div className={"w-[260px]"}>
+        <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Morbi lectus leo,
+        dapibus vitae mollis dictum, vulputate eget lorem. Aliquam rutrum auctor tempus.
+      </div>
+    }
+    variant="accent"
+  />
+</div>
+); };
+
+export default AccentVariantExample;
+` } } />
+
+### With Arrow (Accent Variant)
+
+A popover with an arrow pointing to the trigger element.
+
+<Canvas of={PopoverStories.WithArrowAccentVariant} source={ { code: `
+import React from "react";
+import { Popover } from "@webiny/admin-ui";
+
+const WithArrowAccentExample = () => {
+return (
+
+<div className="bg-[#f4f4f4] flex items-center justify-center w-full h-[300px]">
+  <Popover
+    trigger={<p>Popover trigger</p>}
+    content={
+      <div className={"w-[260px]"}>
+        <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Morbi lectus leo,
+        dapibus vitae mollis dictum, vulputate eget lorem. Aliquam rutrum auctor tempus.
+      </div>
+    }
+    variant="accent"
+    arrow={true}
+  />
+</div>
+); };
+
+export default WithArrowAccentExample;
+` } } />
+
+### Subtle Variant
+
+A popover with the subtle variant, which is the default style.
+
+<Canvas of={PopoverStories.SubtleVariant} source={ { code: `
+import React from "react";
+import { Popover } from "@webiny/admin-ui";
+
+const SubtleVariantExample = () => {
+return (
+
+<div className="flex items-center justify-center bg-neutral-dark text-neutral-light w-full h-[300px]">
+  <Popover
+    trigger={<p>Popover trigger</p>}
+    content={
+      <div className={"w-[260px]"}>
+        <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Morbi lectus leo,
+        dapibus vitae mollis dictum, vulputate eget lorem. Aliquam rutrum auctor tempus.
+      </div>
+    }
+    variant="subtle"
+  />
+</div>
+); };
+
+export default SubtleVariantExample;
+` } } />
+
+### With Arrow (Subtle Variant)
+
+A subtle variant popover with an arrow pointing to the trigger element.
+
+<Canvas of={PopoverStories.WithArrowSubtleVariant} source={ { code: `
+import React from "react";
+import { Popover } from "@webiny/admin-ui";
+
+const WithArrowSubtleExample = () => {
+return (
+
+<div className="flex items-center justify-center bg-neutral-dark text-neutral-light w-full h-[300px]">
+  <Popover
+    trigger={<p>Popover trigger</p>}
+    content={
+      <div className={"w-[260px]"}>
+        <strong>Lorem ipsum dolor sit amet</strong>, consectetur adipiscing elit. Morbi lectus leo,
+        dapibus vitae mollis dictum, vulputate eget lorem. Aliquam rutrum auctor tempus.
+      </div>
+    }
+    variant="subtle"
+    arrow={true}
+  />
+</div>
+); };
+
+export default WithArrowSubtleExample;
+` } } />

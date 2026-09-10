@@ -1,0 +1,17 @@
+import React, { useCallback } from "react";
+import { Button } from "@webiny/admin-ui";
+import { useTenantContext } from "@webiny/app-admin";
+import type { TenantEntry } from "../types.js";
+
+interface ManageTenantProps {
+    tenant: TenantEntry;
+}
+
+export const ManageTenant = ({ tenant }: ManageTenantProps) => {
+    const { setTenant } = useTenantContext();
+    const switchToTenant = useCallback(() => {
+        setTenant(tenant.entryId);
+    }, [tenant]);
+
+    return <Button variant={"secondary"} onClick={switchToTenant} text={"Manage"} />;
+};

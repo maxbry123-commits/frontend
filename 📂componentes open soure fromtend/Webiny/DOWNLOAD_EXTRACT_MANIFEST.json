@@ -1,0 +1,43 @@
+{
+  "bundle_bytes": 31153193,
+  "bundle_sha256": "bd47c459b27044e991b3c0e972bd23296f26589bcb2d9e0e2e0c4557e1d33e63",
+  "extracted_tree": {
+    "bytes": 61268359,
+    "files": 15678,
+    "sha256": "f04993d5e481991185d383e67de34408ef394862b608ab3b8c1ef4221efc5435"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "Webiny.bundle.zip.part-0001",
+      "sha256": "5726d2c549b3a445c16d20384ff1cdc763aa27372fa65aee9bb280fd3edd6956"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Webiny.bundle.zip.part-0002",
+      "sha256": "00cbc4e0650c4710f2a1a0c879bd0c1033e23d26720aecba399e1aa94cdc19e1"
+    },
+    {
+      "bytes": 5987369,
+      "name": "Webiny.bundle.zip.part-0003",
+      "sha256": "a7bfd1e001c7b53ac191ac5d885231b5753e38d5134b268d217bc309c90769f5"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Webiny",
+  "source_bytes": 61268359,
+  "source_commit": "270b8058d50500eed4d7eaa136b3e662f48f3402",
+  "source_files": 15678,
+  "source_ref": "HEAD",
+  "source_repo": "webiny/webiny-js",
+  "source_tree": {
+    "bytes": 61268359,
+    "files": 15678,
+    "sha256": "f04993d5e481991185d383e67de34408ef394862b608ab3b8c1ef4221efc5435"
+  }
+}

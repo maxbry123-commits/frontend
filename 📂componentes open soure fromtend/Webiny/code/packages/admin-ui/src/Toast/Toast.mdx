@@ -1,0 +1,477 @@
+import { Canvas, Meta, Controls } from "@storybook/addon-docs/blocks";
+
+import * as ToastStories from "./useToast.stories";
+
+<Meta of={ToastStories} />
+
+# Toast
+
+The Toast component is a non-intrusive notification element that appears temporarily to provide feedback, confirmation, or important information to users. Toasts are displayed in a consistent location (typically top-right) and automatically disappear after a set duration, making them ideal for transient messages that don't require user action.
+
+## Usage
+
+<Canvas of={ToastStories.Documentation} source={ { code: `
+import React, { useState } from "react";
+import { useToast, Toast, Button } from "@webiny/admin-ui";
+
+const ToastExample = () => {
+const [lastToast, setLastToast] = useState<string | number>("");
+const { showToast, hideToast, hideAllToasts } = useToast();
+
+        const handleShowToast = () => {
+            const toast = showToast({
+                title: "New entry created"
+            });
+            setLastToast(toast);
+        };
+
+        return (
+            <>
+                <Button text="Show Toast" onClick={handleShowToast} />
+                <Button text="Hide latest toast" onClick={() => hideToast(lastToast)} />
+                <Button text="Hide all toasts" onClick={() => hideAllToasts()} />
+                <Toast.Provider />
+            </>
+        );
+    };
+
+    export default ToastExample;
+
+` } }
+additionalActions={[
+{
+title: 'Open in GitHub',
+onClick: () => {
+window.open(
+'https://github.com/webiny/webiny-js/blob/feat/new-admin-ui/packages/admin-ui/src/Toast/Toast.tsx',
+'_blank'
+);
+},
+}
+]}
+/>
+
+<Controls of={ToastStories.Documentation} />
+
+```tsx
+import React, { useState } from "react";
+import { useToast, Toast, Button } from "@webiny/admin-ui";
+
+const ToastExample = () => {
+  const [lastToast, setLastToast] = useState<string | number>("");
+  const { showToast, hideToast, hideAllToasts } = useToast();
+
+  const handleShowToast = () => {
+    const toast = showToast({
+      title: "New entry created"
+    });
+    setLastToast(toast);
+  };
+
+  return (
+    <>
+      <Button text="Show Toast" onClick={handleShowToast} />
+      <Button text="Hide latest toast" onClick={() => hideToast(lastToast)} />
+      <Button text="Hide all toasts" onClick={() => hideAllToasts()} />
+      <Toast.Provider />
+    </>
+  );
+};
+
+export default ToastExample;
+```
+
+## Examples
+
+### Basic Toast
+
+The simplest form of toast with just a title.
+
+<Canvas of={ToastStories.Default} source={ { code: `
+import React, { useState } from "react";
+import { useToast, Toast, Button } from "@webiny/admin-ui";
+
+const BasicToastExample = () => {
+const [lastToast, setLastToast] = useState<string | number>("");
+const { showToast, hideToast, hideAllToasts } = useToast();
+
+    return (
+        <>
+            <Button
+                text="Show Toast"
+                onClick={() => {
+                    const toast = showToast({
+                        title: "New entry created"
+                    });
+                    setLastToast(toast);
+                }}
+            />
+            <Button text="Hide latest toast" onClick={() => hideToast(lastToast)} />
+            <Button text="Hide all toasts" onClick={() => hideAllToasts()} />
+            <Toast.Provider />
+        </>
+    );
+
+};
+
+export default BasicToastExample;
+` } } />
+
+### Subtle Variant
+
+A more subtle toast style with a light background.
+
+<Canvas of={ToastStories.SubtleVariant} source={ { code: `
+import React, { useState } from "react";
+import { useToast, Toast, Button } from "@webiny/admin-ui";
+
+const SubtleToastExample = () => {
+const [lastToast, setLastToast] = useState<string | number>("");
+const { showToast, hideToast, hideAllToasts } = useToast();
+
+    return (
+        <>
+            <Button
+                text="Show Subtle Toast"
+                onClick={() => {
+                    const toast = showToast({
+                        title: "New entry created",
+                        variant: "subtle"
+                    });
+                    setLastToast(toast);
+                }}
+            />
+            <Button text="Hide latest toast" onClick={() => hideToast(lastToast)} />
+            <Button text="Hide all toasts" onClick={() => hideAllToasts()} />
+            <Toast.Provider />
+        </>
+    );
+
+};
+
+export default SubtleToastExample;
+` } } />
+
+### With Description
+
+Add more context with a description.
+
+<Canvas of={ToastStories.WithDescription} source={ { code: `
+import React, { useState } from "react";
+import { useToast, Toast, Button } from "@webiny/admin-ui";
+
+const ToastWithDescriptionExample = () => {
+const [lastToast, setLastToast] = useState<string | number>("");
+const { showToast, hideToast, hideAllToasts } = useToast();
+
+    return (
+        <>
+            <Button
+                text="Show Toast with Description"
+                onClick={() => {
+                    const toast = showToast({
+                        title: "New entry created",
+                        description: 'Entry "Article One" has been successfully created'
+                    });
+                    setLastToast(toast);
+                }}
+            />
+            <Button text="Hide latest toast" onClick={() => hideToast(lastToast)} />
+            <Button text="Hide all toasts" onClick={() => hideAllToasts()} />
+            <Toast.Provider />
+        </>
+    );
+
+};
+
+export default ToastWithDescriptionExample;
+` } } />
+
+### With Component Elements
+
+Use the component versions of title and description for more control.
+
+<Canvas of={ToastStories.WithDescriptionComponent} source={ { code: `
+import React, { useState } from "react";
+import { useToast, Toast, Button } from "@webiny/admin-ui";
+
+const ToastWithComponentsExample = () => {
+const [lastToast, setLastToast] = useState<string | number>("");
+const { showToast, hideToast, hideAllToasts } = useToast();
+
+    return (
+        <>
+            <Button
+                text="Show Toast with Components"
+                onClick={() => {
+                    const toast = showToast({
+                        title: <Toast.Title text={"New entry created"} />,
+                        description: (
+                            <Toast.Description text={'Entry "Article One" has been successfully created'} />
+                        )
+                    });
+                    setLastToast(toast);
+                }}
+            />
+            <Button text="Hide latest toast" onClick={() => hideToast(lastToast)} />
+            <Button text="Hide all toasts" onClick={() => hideAllToasts()} />
+            <Toast.Provider />
+        </>
+    );
+
+};
+
+export default ToastWithComponentsExample;
+` } } />
+
+### With Actions
+
+Add action buttons to the toast for user interaction.
+
+<Canvas of={ToastStories.WithActions} source={ { code: `
+import React, { useState } from "react";
+import { useToast, Toast, Button } from "@webiny/admin-ui";
+
+const ToastWithActionsExample = () => {
+const [lastToast, setLastToast] = useState<string | number>("");
+const { showToast, hideToast, hideAllToasts } = useToast();
+
+    return (
+        <>
+            <Button
+                text="Show Toast with Actions"
+                onClick={() => {
+                    const toast = showToast({
+                        title: "New entry created",
+                        actions: (
+                            <Toast.Actions>
+                                <Button
+                                    key={"action-1"}
+                                    text={"Do the action"}
+                                    onClick={() => console.log("doTheAction")}
+                                />
+                                <Button
+                                    key={"action-2"}
+                                    text={"Dismiss"}
+                                    onClick={() => console.log("dismiss")}
+                                    variant={"secondary"}
+                                />
+                            </Toast.Actions>
+                        )
+                    });
+                    setLastToast(toast);
+                }}
+            />
+            <Button text="Hide latest toast" onClick={() => hideToast(lastToast)} />
+            <Button text="Hide all toasts" onClick={() => hideAllToasts()} />
+            <Toast.Provider />
+        </>
+    );
+
+};
+
+export default ToastWithActionsExample;
+` } } />
+
+### With Description and Actions
+
+Combine description and actions for a comprehensive toast.
+
+<Canvas of={ToastStories.WithDescriptionAndActions} source={ { code: `
+import React, { useState } from "react";
+import { useToast, Toast, Button } from "@webiny/admin-ui";
+
+const ToastWithDescriptionAndActionsExample = () => {
+const [lastToast, setLastToast] = useState<string | number>("");
+const { showToast, hideToast, hideAllToasts } = useToast();
+
+    return (
+        <>
+            <Button
+                text="Show Complete Toast"
+                onClick={() => {
+                    const toast = showToast({
+                        title: "New entry created",
+                        description: (
+                            <Toast.Description text={'Entry "Article One" has been successfully created'} />
+                        ),
+                        actions: (
+                            <Toast.Actions>
+                                <Button
+                                    key={"action-1"}
+                                    text={"Do the action"}
+                                    onClick={() => console.log("doTheAction")}
+                                />
+                                <Button
+                                    key={"action-2"}
+                                    text={"Dismiss"}
+                                    onClick={() => console.log("dismiss")}
+                                    variant={"secondary"}
+                                />
+                            </Toast.Actions>
+                        )
+                    });
+                    setLastToast(toast);
+                }}
+            />
+            <Button text="Hide latest toast" onClick={() => hideToast(lastToast)} />
+            <Button text="Hide all toasts" onClick={() => hideAllToasts()} />
+            <Toast.Provider />
+        </>
+    );
+
+};
+
+export default ToastWithDescriptionAndActionsExample;
+` } } />
+
+### With Custom Icon
+
+Customize the icon to match the context of your notification.
+
+<Canvas of={ToastStories.WithCustomIcon} source={ { code: `
+import React, { useState } from "react";
+import { useToast, Toast, Button, Icon } from "@webiny/admin-ui";
+import { ReactComponent as SettingsIcon } from "@webiny/icons/settings.svg";
+
+const ToastWithCustomIconExample = () => {
+const [lastToast, setLastToast] = useState<string | number>("");
+const { showToast, hideToast, hideAllToasts } = useToast();
+
+    return (
+        <>
+            <Button
+                text="Show Toast with Custom Icon"
+                onClick={() => {
+                    const toast = showToast({
+                        title: "New entry created",
+                        icon: <Icon icon={<SettingsIcon />} label={"Settings"} />
+                    });
+                    setLastToast(toast);
+                }}
+            />
+            <Button text="Hide latest toast" onClick={() => hideToast(lastToast)} />
+            <Button text="Hide all toasts" onClick={() => hideAllToasts()} />
+            <Toast.Provider />
+        </>
+    );
+
+};
+
+export default ToastWithCustomIconExample;
+` } } />
+
+### With Infinite Duration
+
+Create a toast that doesn't automatically dismiss.
+
+<Canvas of={ToastStories.WithInfiniteDuration} source={ { code: `
+import React, { useState } from "react";
+import { useToast, Toast, Button } from "@webiny/admin-ui";
+
+const ToastWithInfiniteDurationExample = () => {
+const [lastToast, setLastToast] = useState<string | number>("");
+const { showToast, hideToast, hideAllToasts } = useToast();
+
+    return (
+        <>
+            <Button
+                text="Show Persistent Toast"
+                onClick={() => {
+                    const toast = showToast({
+                        title: "New entry created",
+                        duration: Infinity
+                    });
+                    setLastToast(toast);
+                }}
+            />
+            <Button text="Hide latest toast" onClick={() => hideToast(lastToast)} />
+            <Button text="Hide all toasts" onClick={() => hideAllToasts()} />
+            <Toast.Provider />
+        </>
+    );
+
+};
+
+export default ToastWithInfiniteDurationExample;
+` } } />
+
+### Not Dismissible
+
+Create a toast that can't be manually dismissed.
+
+<Canvas of={ToastStories.NotDismissible} source={ { code: `
+import React, { useState } from "react";
+import { useToast, Toast, Button } from "@webiny/admin-ui";
+
+const ToastNotDismissibleExample = () => {
+const [lastToast, setLastToast] = useState<string | number>("");
+const { showToast, hideToast, hideAllToasts } = useToast();
+
+    return (
+        <>
+            <Button
+                text="Show Non-Dismissible Toast"
+                onClick={() => {
+                    const toast = showToast({
+                        title: "New entry created",
+                        dismissible: false
+                    });
+                    setLastToast(toast);
+                }}
+            />
+            <Button text="Hide latest toast" onClick={() => hideToast(lastToast)} />
+            <Button text="Hide all toasts" onClick={() => hideAllToasts()} />
+            <Toast.Provider />
+        </>
+    );
+
+};
+
+export default ToastNotDismissibleExample;
+` } } />
+
+### Custom Position
+
+Change the position where toasts appear on the screen.
+
+<Canvas of={ToastStories.withCustomPosition} source={ { code: `
+import React, { useState } from "react";
+import { useToast, Toast, Button } from "@webiny/admin-ui";
+
+const ToastWithCustomPositionExample = () => {
+const [lastToast, setLastToast] = useState<string | number>("");
+const { showToast, hideToast, hideAllToasts } = useToast();
+
+    return (
+        <>
+            <Button
+                text="Show Bottom-Right Toast"
+                onClick={() => {
+                    const toast = showToast({
+                        title: "New entry created",
+                        position: "bottom-right"
+                    });
+                    setLastToast(toast);
+                }}
+            />
+            <Button text="Hide latest toast" onClick={() => hideToast(lastToast)} />
+            <Button text="Hide all toasts" onClick={() => hideAllToasts()} />
+            <Toast.Provider />
+        </>
+    );
+
+};
+
+export default ToastWithCustomPositionExample;
+` } } />
+
+## API
+
+### useToast Hook
+
+The `useToast` hook provides the following methods:
+
+- `showToast(params)`: Displays a toast with the specified parameters and returns a toast ID
+- `hideToast(id)`: Hides a specific toast by its ID
+- `hideAllToasts()`: Hides all currently displayed toasts

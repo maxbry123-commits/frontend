@@ -1,0 +1,93 @@
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import type { DragLayerMonitor } from "react-dnd";
+import { useDragLayer } from "react-dnd";
+import { useContainer } from "@webiny/app";
+import { DragCursor } from "@webiny/admin-ui";
+import { dropZoneOverState } from "./dropZoneOverState.js";
+import { getDragInfo } from "./getDragInfo.js";
+import type { DragSource } from "~/types.js";
+import {
+    CmsFieldType,
+    CmsLayoutFieldType,
+    type ICmsFieldType
+} from "~/presentation/fieldTypes/abstractions.js";
+
+let dragPreviewRef: HTMLDivElement | null = null;
+
+const DragPreview = () => {
+    const [opacity, setOpacity] = useState(0);
+    const [isOverSlot, setIsOverSlot] = useState(false);
+    const monitorRef = useRef<DragLayerMonitor | null>(null);
+    const container = useContainer();
+    const fieldTypesMap = useMemo(() => {
+        const all = container.resolveAll(CmsFieldType);
+        const map = new Map<string, ICmsFieldType>();
+        for (const ft of all) {
+            map.set(ft.type, ft);
+        }
+        return map;
+    }, [container]);
+    const layoutFieldTypesMap = useMemo(() => {
+        const all = container.resolveAll(CmsLayoutFieldType);
+        const map = new Map<string, CmsLayoutFieldType.Interface>();
+        for (const lft of all) {
+            map.set(lft.type, lft);
+        }
+        return map;
+    }, [container]);
+
+    const { isDragging, item } = useDragLayer((monitor: DragLayerMonitor) => {
+        monitorRef.current = monitor;
+
+        const offset = monitor.getClientOffset();
+        if (offset && dragPreviewRef) {
+            dragPreviewRef.style.transform = `translate(${offset.x + 12}px, ${offset.y + 12}px)`;
+        }
+
+        return {
+            isDragging: monitor.isDragging(),
+            item: monitor.getItem() as DragSource | null
+        };
+    });
+
+    useEffect(() => {
+        if (isDragging) {
+            const t = setTimeout(() => setOpacity(1), 80);
+            return () => clearTimeout(t);
+        }
+        setOpacity(0);
+        return undefined;
+    }, [isDragging]);
+
+    useEffect(() => {
+        return dropZoneOverState.subscribe(setIsOverSlot);
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            dragPreviewRef = null;
+        };
+    }, []);
+
+    if (!isDragging) {
+        return null;
+    }
+
+    const { label, icon } = getDragInfo(item, fieldTypesMap, layoutFieldTypesMap);
+
+    return (
+        <div className={"fixed pointer-events-none left-0 top-0 w-full h-full z-[1001]"}>
+            <div
+                ref={el => {
+                    dragPreviewRef = el;
+                }}
+                className={"absolute transition-opacity duration-100"}
+                style={{ opacity }}
+            >
+                <DragCursor label={label} icon={icon} isOverSlot={isOverSlot} />
+            </div>
+        </div>
+    );
+};
+
+export default DragPreview;

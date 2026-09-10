@@ -1,0 +1,41 @@
+{
+  "name": "@webiny/mcp",
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./*": "./*"
+  },
+  "bin": {
+    "webiny-mcp": "./bin.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/webiny/webiny-js.git"
+  },
+  "description": "Webiny Model Context Protocol (MCP) server.",
+  "author": "Webiny Ltd",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "front-matter": "^4.0.2",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.25",
+    "@types/ncp": "^2.0.8",
+    "@webiny/build-tools": "0.0.0",
+    "execa": "^10.0.1",
+    "tsx": "4.23.12",
+    "typescript": "^7.0.2"
+  },
+  "scripts": {
+    "prepublishOnly": "bash ./prepublishOnly.sh"
+  },
+  "webiny": {
+    "publishFrom": "dist"
+  }
+}

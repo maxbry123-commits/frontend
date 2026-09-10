@@ -1,0 +1,20 @@
+import { ErrorResponse } from "@webiny/api-graphql/responses.js";
+
+interface NotAuthorizedResponseArgsType {
+    message: string;
+    code: string | null;
+    data: any | null;
+}
+
+/** GraphQL not-authorized response helper. */
+export class NotAuthorizedResponse extends ErrorResponse {
+    constructor({ message, code, data }: Partial<NotAuthorizedResponseArgsType> = {}) {
+        super({
+            message: message || "Not authorized!",
+            code: code || "SECURITY_NOT_AUTHORIZED",
+            data
+        });
+    }
+}
+
+export default NotAuthorizedResponse;

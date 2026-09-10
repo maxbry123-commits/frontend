@@ -1,0 +1,129 @@
+import { beforeEach, describe, expect, it } from "vitest";
+import { CmsEntryListWhere } from "@webiny/api-headless-cms/types";
+import { CreateExecFilteringResponse } from "~tests/filtering/mocks/filtering";
+import { OpenSearchBoolQueryConfig } from "@webiny/api-opensearch/types";
+import { createQuery, Query } from "./mocks";
+import { createExecFiltering } from "./mocks/filtering";
+
+describe("equals filter", () => {
+    let query: Query;
+    let execFiltering: CreateExecFilteringResponse;
+
+    beforeEach(() => {
+        query = createQuery();
+        execFiltering = createExecFiltering();
+    });
+
+    it("should add equal filter - null", async () => {
+        const where: CmsEntryListWhere = {
+            values: {
+                title: null
+            }
+        };
+
+        execFiltering({
+            query,
+            where
+        });
+
+        const expected: OpenSearchBoolQueryConfig = {
+            should: [],
+            must: [],
+            filter: [],
+            must_not: [
+                {
+                    exists: {
+                        field: "values.title.keyword"
+                    }
+                }
+            ]
+        };
+
+        expect(query).toEqual(expected);
+    });
+
+    it("should add equal filter - string", async () => {
+        const title = "Webiny Serverless";
+        const where: CmsEntryListWhere = {
+            values: {
+                title
+            }
+        };
+
+        execFiltering({
+            query,
+            where
+        });
+
+        const expected: OpenSearchBoolQueryConfig = {
+            should: [],
+            must: [],
+            filter: [
+                {
+                    term: {
+                        "values.title.keyword": title
+                    }
+                }
+            ],
+            must_not: []
+        };
+
+        expect(query).toEqual(expected);
+    });
+
+    it("should add equal filter - boolean", async () => {
+        const where: CmsEntryListWhere = {
+            values: {
+                isMarried: true
+            }
+        };
+
+        execFiltering({
+            query,
+            where
+        });
+
+        const expected: OpenSearchBoolQueryConfig = {
+            must: [],
+            should: [],
+            filter: [
+                {
+                    term: {
+                        "values.isMarried": true
+                    }
+                }
+            ],
+            must_not: []
+        };
+
+        expect(query).toEqual(expected);
+    });
+
+    it("should add equal filter - number", async () => {
+        const where: CmsEntryListWhere = {
+            values: {
+                age: 2
+            }
+        };
+
+        execFiltering({
+            query,
+            where
+        });
+
+        const expected: OpenSearchBoolQueryConfig = {
+            must: [],
+            should: [],
+            filter: [
+                {
+                    term: {
+                        "values.age": 2
+                    }
+                }
+            ],
+            must_not: []
+        };
+
+        expect(query).toEqual(expected);
+    });
+});

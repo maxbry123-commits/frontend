@@ -1,0 +1,57 @@
+import React from "react";
+import { ReactComponent as Close } from "@webiny/icons/close.svg";
+import { ReactComponent as ChevronDown } from "@webiny/icons/keyboard_arrow_down.svg";
+import { IconButton } from "~/Button/index.js";
+import { Icon } from "~/Icon/index.js";
+import { Loader } from "~/Loader/index.js";
+
+interface AutoCompleteInputIconsProps {
+    displayResetAction: boolean;
+    inputVariant?: "primary" | "secondary" | "ghost" | "ghost-negative" | null;
+    inputSize?: "md" | "lg" | "xl" | null;
+    loading?: boolean;
+    disabled?: boolean;
+    onOpenChange: (open: boolean) => void;
+    onResetValue: () => void;
+}
+
+export const AutoCompleteInputIcons = (props: AutoCompleteInputIconsProps) => {
+    return (
+        <div className={"flex items-center gap-sm"}>
+            {props.loading && <Loader size={props.inputSize === "xl" ? "sm" : "xs"} />}
+            {props.displayResetAction && (
+                <IconButton
+                    size={props.inputSize === "xl" ? "sm" : "xs"} // Map button size based on the input size.
+                    variant={
+                        props.inputVariant === "ghost-negative" ? "ghost-negative" : "secondary"
+                    }
+                    icon={
+                        <Icon
+                            icon={<Close />}
+                            label={"Reset"}
+                            color={
+                                props.inputVariant === "ghost-negative"
+                                    ? "neutral-negative"
+                                    : "inherit"
+                            }
+                        />
+                    }
+                    disabled={props.disabled}
+                    onClick={event => {
+                        event.stopPropagation();
+                        props.onResetValue();
+                    }}
+                />
+            )}
+            <Icon
+                size={props.inputSize === "xl" ? "lg" : "sm"} // Map icon size based on the input size.
+                icon={<ChevronDown />}
+                label={"Open list"}
+                onClick={event => {
+                    event.stopPropagation();
+                    props.onOpenChange(true);
+                }}
+            />
+        </div>
+    );
+};
