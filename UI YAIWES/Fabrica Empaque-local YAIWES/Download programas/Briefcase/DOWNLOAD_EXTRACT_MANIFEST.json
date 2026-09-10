@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 3007171,
+  "bundle_sha256": "9718d886da860c9b32a5c5d215b4a0e488e5cb4d0b65806ec3963a09e638e544",
+  "extracted_tree": {
+    "bytes": 6724608,
+    "files": 781,
+    "sha256": "d087ad02a215525df4b51a60659b2217be012e024572b428f8fcda88ca7cf2a9"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 3007171,
+      "name": "Briefcase.bundle.zip.part-0001",
+      "sha256": "9718d886da860c9b32a5c5d215b4a0e488e5cb4d0b65806ec3963a09e638e544"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Briefcase",
+  "source_bytes": 6724608,
+  "source_commit": "74308e1e6bd2263e95487f5092747f96bf920ac0",
+  "source_files": 781,
+  "source_ref": "HEAD",
+  "source_repo": "beeware/briefcase",
+  "source_tree": {
+    "bytes": 6724608,
+    "files": 781,
+    "sha256": "d087ad02a215525df4b51a60659b2217be012e024572b428f8fcda88ca7cf2a9"
+  }
+}
