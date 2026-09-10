@@ -1,0 +1,91 @@
+import type * as React from 'react';
+import { StyleSheet, View } from 'react-native';
+import type { StyleProp, ViewProps, ViewStyle } from 'react-native';
+
+import { useInternalTheme } from '../core/theming';
+import type { ThemeProp } from '../theme/types';
+
+export type Props = Omit<React.PropsWithoutRef<ViewProps>, 'children'> & {
+  /**
+   * @renamed Renamed from 'inset' to 'leftInset` in v5.x
+   * Whether divider has a left inset.
+   */
+  leftInset?: boolean;
+  /**
+   * @supported Available in v5.x with theme version 3
+   *  Whether divider has a horizontal inset on both sides.
+   */
+  horizontalInset?: boolean;
+  /**
+   * @supported Available in v5.x with theme version 3
+   *  Whether divider should be bolded.
+   */
+  bold?: boolean;
+  style?: StyleProp<ViewStyle>;
+  /**
+   * @optional
+   */
+  theme?: ThemeProp;
+};
+
+/**
+ * A divider is a thin, lightweight separator that groups content in lists and page layouts.
+ *
+ * ## Usage
+ * ```js
+ * import * as React from 'react';
+ * import { View } from 'react-native';
+ * import { Divider, Text } from 'react-native-paper';
+ *
+ * const MyComponent = () => (
+ *   <View>
+ *     <Text>Lemon</Text>
+ *     <Divider />
+ *     <Text>Mango</Text>
+ *     <Divider />
+ *   </View>
+ * );
+ *
+ * export default MyComponent;
+ * ```
+ */
+const Divider = ({
+  leftInset,
+  horizontalInset = false,
+  style,
+  theme: themeOverrides,
+  bold = false,
+  ...rest
+}: Props) => {
+  const theme = useInternalTheme(themeOverrides);
+
+  const dividerColor = theme.colors.outlineVariant;
+
+  return (
+    <View
+      {...rest}
+      style={[
+        { height: StyleSheet.hairlineWidth, backgroundColor: dividerColor },
+        leftInset && styles.v3LeftInset,
+        horizontalInset && styles.horizontalInset,
+        bold && styles.bold,
+        style,
+      ]}
+    />
+  );
+};
+
+const styles = StyleSheet.create({
+  v3LeftInset: {
+    marginLeft: 16,
+  },
+  horizontalInset: {
+    marginLeft: 16,
+    marginRight: 16,
+  },
+  bold: {
+    height: 1,
+  },
+});
+
+export default Divider;

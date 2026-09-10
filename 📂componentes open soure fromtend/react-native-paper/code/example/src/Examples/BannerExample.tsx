@@ -1,0 +1,121 @@
+import * as React from 'react';
+import { Dimensions, Image, Platform, StyleSheet, View } from 'react-native';
+
+import { Banner, FAB, Palette, useTheme } from 'react-native-paper';
+
+import ScreenWrapper from '../ScreenWrapper';
+
+const PHOTOS = Array.from({ length: 24 }).map(
+  (_, i) => `https://unsplash.it/300/300/?random&__id=${i}`
+);
+
+const BannerExample = () => {
+  const [visible, setVisible] = React.useState<boolean>(true);
+  const [useCustomTheme, setUseCustomTheme] = React.useState<boolean>(false);
+  const defaultTheme = useTheme();
+
+  const customTheme = {
+    ...defaultTheme,
+    colors: {
+      ...defaultTheme.colors,
+      onSurface: Palette.tertiary100,
+      elevation: {
+        ...defaultTheme.colors.elevation,
+        level1: Palette.tertiary50,
+      },
+      primary: Palette.tertiary10,
+    },
+  };
+
+  return (
+    <View style={styles.container}>
+      <Banner
+        actions={[
+          {
+            label: `Set ${useCustomTheme ? 'default' : 'custom'} theme`,
+            onPress: () => setUseCustomTheme(!useCustomTheme),
+          },
+          {
+            label: 'Fix it',
+            onPress: () => setVisible(false),
+          },
+        ]}
+        icon={require('../../assets/images/email-icon.png')}
+        visible={visible}
+        onShowAnimationFinished={() =>
+          console.log('Completed opening animation')
+        }
+        onHideAnimationFinished={() =>
+          console.log('Completed closing animation')
+        }
+        theme={useCustomTheme ? customTheme : defaultTheme}
+      >
+        Two line text string with two actions. One to two lines is preferable on
+        mobile.
+      </Banner>
+      <ScreenWrapper>
+        <View style={styles.grid}>
+          {PHOTOS.map((uri) => (
+            <View key={uri} style={styles.item}>
+              <Image
+                source={{ uri }}
+                resizeMode="cover"
+                style={styles.photo}
+                accessibilityIgnoresInvertColors
+              />
+            </View>
+          ))}
+        </View>
+      </ScreenWrapper>
+      <FAB icon="eye" style={styles.fab} onPress={() => setVisible(!visible)} />
+    </View>
+  );
+};
+
+BannerExample.title = 'Banner';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  ...Platform.select({
+    web: {
+      grid: {
+        // there is no 'grid' type in RN :(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-type-assertion
+        display: 'grid' as 'none',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+        gridRowGap: '8px',
+        gridColumnGap: '8px',
+        padding: 8,
+      },
+      item: {
+        width: '100%',
+        height: 150,
+      },
+    },
+    default: {
+      grid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        padding: 4,
+      },
+      item: {
+        height: Dimensions.get('window').width / 2,
+        width: '50%',
+        padding: 4,
+      },
+    },
+  }),
+  photo: {
+    flex: 1,
+  },
+  fab: {
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 0,
+    margin: 16,
+  },
+});
+
+export default BannerExample;

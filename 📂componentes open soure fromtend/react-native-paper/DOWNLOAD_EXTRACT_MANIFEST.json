@@ -1,0 +1,123 @@
+{
+  "bundle_bytes": 235681634,
+  "bundle_sha256": "55194b66eead2ee9680b506a180624de157e93d09bc41c7f09b405072442fd00",
+  "extracted_tree": {
+    "bytes": 269585837,
+    "files": 1448,
+    "sha256": "b27df3c83cd03902116d866864e826e55b0beb7e49225fe9a3f2e2c595252357"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0001",
+      "sha256": "35e401d6e23d2efd105aa51528d9656ebcb227905a92a341569e8f5ea960066c"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0002",
+      "sha256": "890a4d55d035df45b78f9c4a7ec51ba623e3d6384049ea4e01f9be85fa352ef3"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0003",
+      "sha256": "34f9e582542fb3531c05521b0703a8a3777ef7cc68ebbfcbdc82a8bd3d5235c0"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0004",
+      "sha256": "e23df6dfe8116888a6ecadb91a024433c21c87c04003a893e7851c83bc28eaaf"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0005",
+      "sha256": "78525f8ca3078b5e947d42ca046eace76c6434b5903f7012e325505cb72c2bee"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0006",
+      "sha256": "baa0138d74691c77468fe4a1f5a908afdfdb715cc4f312826178523a15044b5a"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0007",
+      "sha256": "ad60240e101f607947f61bad550f759f5ed6b9117c176463a5e89da62c136ea4"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0008",
+      "sha256": "b09f070a82e184aba4ee421bcda6163ce5dfba69ed7471595ae659419b865e7d"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0009",
+      "sha256": "a823d35bb915fea0545d5bc95c573ca369aca3a45d91ac286aba3ab541f9806c"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0010",
+      "sha256": "a9aecc28edc7ab878ea15af527653997bc0e331700a3dfe6d0ce049498b95621"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0011",
+      "sha256": "d16aaff8bd4f1429611317ae970a214ad4db979af47cbb4baae4943ad3d99f62"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0012",
+      "sha256": "0646b3f2e7f9e49937a33a17a1c78a1e8f13076863d7f3c18ccee256bc9104be"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0013",
+      "sha256": "ab75a1fb384625d964c7ce76463c67c4e667e8dc07742116d55b5bc60ce16faa"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0014",
+      "sha256": "701cd53074e338dea6674600e4b755933f3c95a2574da7599b962a8737a6831b"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0015",
+      "sha256": "c2e6f81c9ed61daa86f314fed1c6dffc970f7a55c1c98175346919ddca7f2179"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0016",
+      "sha256": "cc0dd5df0b41883449f1bbcf9735f5fd808f74a05a883dc94535fc0d1e351401"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0017",
+      "sha256": "e1bd339e6045fda408ffa97d299ddff8653ba3e7739ed1527372d7e4af4bdea6"
+    },
+    {
+      "bytes": 12582912,
+      "name": "react-native-paper.bundle.zip.part-0018",
+      "sha256": "3ac31ee6fdf9eeacc51d19dc719d82cb62e17211a5f7c464ffe1d4f70bb33ad0"
+    },
+    {
+      "bytes": 9189218,
+      "name": "react-native-paper.bundle.zip.part-0019",
+      "sha256": "eb2e01317eafb1614fd5fe52c1993a30a4f874c4e489c15a9ee53840780850cf"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "react-native-paper",
+  "source_bytes": 269585837,
+  "source_commit": "84fdd8e6dbb0346c76a11dd1e783ebefe4733546",
+  "source_files": 1448,
+  "source_ref": "HEAD",
+  "source_repo": "callstack/react-native-paper",
+  "source_tree": {
+    "bytes": 269585837,
+    "files": 1448,
+    "sha256": "b27df3c83cd03902116d866864e826e55b0beb7e49225fe9a3f2e2c595252357"
+  }
+}

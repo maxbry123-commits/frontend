@@ -1,0 +1,102 @@
+import * as React from 'react';
+import { StyleSheet, View } from 'react-native';
+import type {
+  GestureResponderEvent,
+  StyleProp,
+  ViewProps,
+  ViewStyle,
+} from 'react-native';
+
+import { useInternalTheme } from '../../core/theming';
+import type { ThemeProp } from '../../theme/types';
+import TouchableRipple from '../TouchableRipple/TouchableRipple';
+import type { Props as TouchableRippleProps } from '../TouchableRipple/TouchableRipple';
+
+export type Props = Omit<
+  React.PropsWithoutRef<TouchableRippleProps>,
+  'children'
+> & {
+  /**
+   * Content of the `DataTableRow`.
+   */
+  children: React.ReactNode;
+  /**
+   * Function to execute on press.
+   */
+  onPress?: (e: GestureResponderEvent) => void;
+  style?: StyleProp<ViewStyle>;
+  /**
+   * @optional
+   */
+  theme?: ThemeProp;
+  /**
+   * `pointerEvents` passed to the `View` container, which is wrapping children within `TouchableRipple`.
+   */
+  pointerEvents?: ViewProps['pointerEvents'];
+};
+
+/**
+ * A component to show a single row inside of a table.
+ *
+ * ## Usage
+ * ```js
+ * import * as React from 'react';
+ * import { DataTable } from 'react-native-paper';
+ *
+ * const MyComponent = () => (
+ *  <DataTable.Row>
+ *    <DataTable.Cell numeric>1</DataTable.Cell>
+ *    <DataTable.Cell numeric>2</DataTable.Cell>
+ *    <DataTable.Cell numeric>3</DataTable.Cell>
+ *    <DataTable.Cell numeric>4</DataTable.Cell>
+ *  </DataTable.Row>
+ * );
+ *
+ * export default MyComponent;
+ * ```
+ *
+ * @extends TouchableRipple props https://callstack.github.io/react-native-paper/docs/components/TouchableRipple
+ */
+const DataTableRow = ({
+  onPress,
+  style,
+  children,
+  pointerEvents,
+  theme: themeOverrides,
+  ...rest
+}: Props) => {
+  const theme = useInternalTheme(themeOverrides);
+  const borderBottomColor = theme.colors.surfaceVariant;
+
+  return (
+    <TouchableRipple
+      {...rest}
+      onPress={onPress}
+      style={[styles.container, { borderBottomColor }, style]}
+    >
+      <View style={styles.content} pointerEvents={pointerEvents}>
+        {children}
+      </View>
+    </TouchableRipple>
+  );
+};
+
+DataTableRow.displayName = 'DataTable.Row';
+
+const styles = StyleSheet.create({
+  container: {
+    borderStyle: 'solid',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    minHeight: 48,
+    paddingHorizontal: 16,
+  },
+  content: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+});
+
+export default DataTableRow;
+
+// @component-docs ignore-next-line
+export { DataTableRow };

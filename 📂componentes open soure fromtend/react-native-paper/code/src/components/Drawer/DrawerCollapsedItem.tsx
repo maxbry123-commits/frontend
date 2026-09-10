@@ -1,0 +1,270 @@
+import * as React from 'react';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import type {
+  GestureResponderEvent,
+  NativeSyntheticEvent,
+  StyleProp,
+  TextLayoutEventData,
+  ViewProps,
+  ViewStyle,
+} from 'react-native';
+
+import Animated, {
+  Easing,
+  ReduceMotion,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+
+import { useInternalTheme } from '../../core/theming';
+import type { ThemeProp } from '../../theme/types';
+import Badge from '../Badge';
+import Icon from '../Icon';
+import type { IconSource } from '../Icon';
+import Text from '../Typography/Text';
+
+export type Props = ViewProps & {
+  /**
+   * The label text of the item.
+   */
+  label?: string;
+  /**
+   * Badge to show on the icon, can be `true` to show a dot, `string` or `number` to show text.
+   */
+  badge?: string | number | boolean;
+  /**
+   * Whether the item is disabled.
+   */
+  disabled?: boolean;
+  /**
+   * @renamed Renamed from 'icon' to 'focusedIcon' in v5.x
+   * Icon to use as the focused destination icon, can be a string, an image source or a react component
+   */
+  focusedIcon?: IconSource;
+  /**
+   * @renamed Renamed from 'icon' to 'focusedIcon' in v5.x
+   * Icon to use as the unfocused destination icon, can be a string, an image source or a react component
+   */
+  unfocusedIcon?: IconSource;
+  /**
+   * Whether to highlight the drawer item as active.
+   */
+  active?: boolean;
+  /**
+   * Function to execute on press.
+   */
+  onPress?: (e: GestureResponderEvent) => void;
+  /**
+   * Specifies the largest possible scale a label font can reach.
+   */
+  labelMaxFontSizeMultiplier?: number;
+  /**
+   * Accessibility label for the button. This is read by the screen reader when the user taps the button.
+   */
+  'aria-label'?: string;
+  style?: StyleProp<ViewStyle>;
+  /**
+   * @optional
+   */
+  theme?: ThemeProp;
+
+  /**
+   * TestID used for testing purposes
+   */
+  testID?: string;
+};
+
+const iconSize = 24;
+const itemSize = 56;
+const outlineHeight = 32;
+
+/**
+ * Note: Available in v5.x with theme version 3
+ *
+ * Collapsed component used to show an action item with an icon and optionally label in a navigation drawer.
+ *
+ * ## Usage
+ * ```js
+ * import * as React from 'react';
+ * import { Drawer } from 'react-native-paper';
+ *
+ * const MyComponent = () => (
+ *   <Drawer.CollapsedItem
+ *     focusedIcon="inbox"
+ *     unfocusedIcon="inbox-outline"
+ *     label="Inbox"
+ *   />
+ * );
+ *
+ * export default MyComponent;
+ * ```
+ */
+const DrawerCollapsedItem = ({
+  focusedIcon,
+  unfocusedIcon,
+  label,
+  active,
+  theme: themeOverrides,
+  style,
+  onPress,
+  disabled,
+  'aria-label': ariaLabel,
+  badge = false,
+  testID,
+  labelMaxFontSizeMultiplier,
+  ...rest
+}: Props) => {
+  const theme = useInternalTheme(themeOverrides);
+  const { scale } = theme.animation;
+
+  const [numOfLines, setNumOfLines] = React.useState(1);
+
+  const outlineScale = useSharedValue(active ? 1 : 0.5);
+
+  React.useEffect(() => {
+    if (!active) {
+      outlineScale.value = 0.5;
+    }
+  }, [active, outlineScale]);
+
+  const handlePressOut = () => {
+    outlineScale.value = withTiming(1, {
+      duration: 150 * scale,
+      easing: Easing.inOut(Easing.ease),
+      reduceMotion: ReduceMotion.Never,
+    });
+  };
+
+  const iconPadding = ((!label ? itemSize : outlineHeight) - iconSize) / 2;
+
+  const backgroundColor = active
+    ? theme.colors.secondaryContainer
+    : 'transparent';
+
+  const labelColor = active
+    ? theme.colors.onSurface
+    : theme.colors.onSurfaceVariant;
+
+  const iconColor = active
+    ? theme.colors.onSecondaryContainer
+    : theme.colors.onSurfaceVariant;
+
+  const onTextLayout = ({
+    nativeEvent,
+  }: NativeSyntheticEvent<TextLayoutEventData>) => {
+    setNumOfLines(nativeEvent.lines.length);
+  };
+
+  // Label is cut off on Android, when centered "labelMedium" text
+  // has more than 4 lines, so there is a need to decrease the letter spacing.
+  const androidLetterSpacingStyle =
+    Platform.OS === 'android' && numOfLines > 4 && styles.letterSpacing;
+
+  const labelTextStyle = {
+    color: labelColor,
+    ...theme.fonts.labelMedium,
+  };
+
+  const icon =
+    !active && unfocusedIcon !== undefined ? unfocusedIcon : focusedIcon;
+
+  const animatedOutlineStyle = useAnimatedStyle(() => ({
+    transform: [
+      label ? { scaleX: outlineScale.value } : { scale: outlineScale.value },
+    ],
+  }));
+
+  return (
+    <View {...rest}>
+      <Pressable
+        onPress={onPress}
+        onPressOut={onPress ? handlePressOut : undefined}
+        disabled={disabled}
+        role="button"
+        aria-selected={active}
+        aria-label={ariaLabel}
+        testID={testID}
+      >
+        <View style={styles.wrapper}>
+          <Animated.View
+            style={[
+              styles.outline,
+              !label && styles.roundedOutline,
+              { backgroundColor },
+              style,
+              animatedOutlineStyle,
+            ]}
+          />
+
+          <View style={[styles.icon, { top: iconPadding }]}>
+            {badge !== false && (
+              <View style={styles.badgeContainer}>
+                {typeof badge === 'boolean' ? (
+                  <Badge visible={badge} />
+                ) : (
+                  <Badge visible={badge != null}>{badge}</Badge>
+                )}
+              </View>
+            )}
+            <Icon source={icon} size={iconSize} color={iconColor} />
+          </View>
+
+          {label ? (
+            <Text
+              variant="labelMedium"
+              selectable={false}
+              numberOfLines={2}
+              onTextLayout={onTextLayout}
+              style={[styles.label, androidLetterSpacingStyle, labelTextStyle]}
+              maxFontSizeMultiplier={labelMaxFontSizeMultiplier}
+            >
+              {label}
+            </Text>
+          ) : null}
+        </View>
+      </Pressable>
+    </View>
+  );
+};
+
+DrawerCollapsedItem.displayName = 'Drawer.CollapsedItem';
+
+const styles = StyleSheet.create({
+  wrapper: {
+    width: 80,
+    marginBottom: 12,
+    minHeight: itemSize,
+    alignItems: 'center',
+  },
+  outline: {
+    width: itemSize,
+    height: outlineHeight,
+    borderRadius: itemSize / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  roundedOutline: {
+    height: itemSize,
+  },
+  icon: {
+    position: 'absolute',
+  },
+  letterSpacing: {
+    letterSpacing: 0.3,
+    alignSelf: 'stretch',
+  },
+  label: {
+    marginHorizontal: 12,
+    marginTop: 4,
+    textAlign: 'center',
+  },
+  badgeContainer: {
+    position: 'absolute',
+    left: 20,
+    bottom: 20,
+    zIndex: 2,
+  },
+});
+
+export default DrawerCollapsedItem;

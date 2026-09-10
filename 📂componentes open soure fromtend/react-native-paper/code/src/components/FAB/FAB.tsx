@@ -1,0 +1,162 @@
+import * as React from 'react';
+import { View } from 'react-native';
+import type {
+  ColorValue,
+  GestureResponderEvent,
+  PressableAndroidRippleConfig,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
+
+import type { AnimatedStyle } from 'react-native-reanimated';
+
+import Shell from './Shell';
+import type { Size, Variant } from './tokens';
+import type { ThemeProp } from '../../theme/types';
+import type { IconSource } from '../Icon';
+
+export type Props = {
+  /**
+   * Icon to display inside the FAB.
+   */
+  icon: IconSource;
+  /**
+   * Role-color preset. Defaults to `tonalPrimary`.
+   */
+  variant?: Variant;
+  /**
+   * Override the container (background) color.
+   */
+  containerColor?: ColorValue;
+  /**
+   * Override the content (icon) color.
+   */
+  contentColor?: ColorValue;
+  /**
+   * Spec size. Defaults to `default`.
+   */
+  size?: Size;
+  /**
+   * Whether the FAB is currently visible. Toggling animates the spec'd enter
+   * and exit (scale + alpha) on the FAB itself.
+   */
+  visible?: boolean;
+  /**
+   * Function to execute on press.
+   */
+  onPress?: (e: GestureResponderEvent) => void;
+  /**
+   * Accessibility label. Falls back to nothing if unset.
+   */
+  'aria-label'?: string;
+  /**
+   * Indicates whether the element is checked. Accepts `true`, `false`,
+   * or `'mixed'` for an indeterminate state.
+   */
+  'aria-checked'?: boolean | 'mixed';
+  /**
+   * Indicates whether the element is selected.
+   */
+  'aria-selected'?: boolean;
+  /**
+   * Indicates whether the element is currently busy (e.g. loading).
+   */
+  'aria-busy'?: boolean;
+  /**
+   * Indicates whether the element's controlled content is expanded.
+   */
+  'aria-expanded'?: boolean;
+  /**
+   * Type of background drawable to display the feedback (Android).
+   * https://reactnative.dev/docs/pressable#rippleconfig
+   */
+  background?: PressableAndroidRippleConfig;
+  /**
+   * Style for positioning the FAB. The visual treatment (size, shape, color)
+   * is driven by `variant` and `size`.
+   */
+  style?: StyleProp<AnimatedStyle<ViewStyle>>;
+  /**
+   * TestID used for testing purposes.
+   */
+  testID?: string;
+  /**
+   * @optional
+   */
+  theme?: ThemeProp;
+  ref?: React.Ref<View>;
+};
+
+/**
+ * A floating action button represents the primary action on a screen.
+ *
+ * ## Usage
+ * ```js
+ * import * as React from 'react';
+ * import { StyleSheet } from 'react-native';
+ * import { FAB } from 'react-native-paper';
+ *
+ * const MyComponent = () => (
+ *   <FAB
+ *     icon="plus"
+ *     style={styles.fab}
+ *     onPress={() => console.log('Pressed')}
+ *   />
+ * );
+ *
+ * const styles = StyleSheet.create({
+ *   fab: {
+ *     position: 'absolute',
+ *     margin: 16,
+ *     right: 0,
+ *     bottom: 0,
+ *   },
+ * });
+ *
+ * export default MyComponent;
+ * ```
+ */
+const FAB = ({
+  icon,
+  variant = 'tonalPrimary',
+  size = 'default',
+  visible = true,
+  onPress,
+  containerColor,
+  contentColor,
+  'aria-label': ariaLabel,
+  'aria-checked': ariaChecked,
+  'aria-selected': ariaSelected,
+  'aria-busy': ariaBusy,
+  'aria-expanded': ariaExpanded,
+  background,
+  style,
+  testID,
+  theme,
+  ref,
+}: Props) => (
+  <Shell
+    ref={ref}
+    icon={icon}
+    variant={variant}
+    size={size}
+    visible={visible}
+    onPress={onPress}
+    containerColor={containerColor}
+    contentColor={contentColor}
+    aria-label={ariaLabel}
+    aria-checked={ariaChecked}
+    aria-selected={ariaSelected}
+    aria-busy={ariaBusy}
+    aria-expanded={ariaExpanded}
+    background={background}
+    style={style}
+    testID={testID}
+    theme={theme}
+  />
+);
+
+export default FAB;
+
+// @component-docs ignore-next-line
+export { FAB };

@@ -1,0 +1,21 @@
+name: Check versions
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-versions:
+    if: ${{ github.event.label.name == 'bug' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: react-navigation/check-versions-action@1f7edac18020a4dc38c4d174bb04311b196f9b75 # v1.2.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          required-packages: |
+            react-native-paper
+          optional-packages: |
+            @react-native-vector-icons/material-design-icons

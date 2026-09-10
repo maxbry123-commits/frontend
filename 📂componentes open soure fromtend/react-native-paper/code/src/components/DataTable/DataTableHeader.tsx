@@ -1,0 +1,75 @@
+import * as React from 'react';
+import { StyleSheet, View } from 'react-native';
+import type { StyleProp, ViewProps, ViewStyle } from 'react-native';
+
+import { useInternalTheme } from '../../core/theming';
+import type { ThemeProp } from '../../theme/types';
+
+export type Props = ViewProps & {
+  /**
+   * Content of the `DataTableHeader`.
+   */
+  children: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
+  /**
+   * @optional
+   */
+  theme?: ThemeProp;
+};
+
+/**
+ * A component to display title in table header.
+ *
+ * ## Usage
+ * ```js
+ * import * as React from 'react';
+ * import { DataTable } from 'react-native-paper';
+ *
+ * const MyComponent = () => (
+ *   <DataTable>
+ *     <DataTable.Header>
+ *       <DataTable.Title
+ *         sortDirection='descending'
+ *       >
+ *         Dessert
+ *       </DataTable.Title>
+ *       <DataTable.Title numeric>Calories</DataTable.Title>
+ *       <DataTable.Title numeric>Fat (g)</DataTable.Title>
+ *     </DataTable.Header>
+ *   </DataTable>
+ * );
+ *
+ * export default MyComponent;
+ * ```
+ */
+
+const DataTableHeader = ({
+  children,
+  style,
+  theme: themeOverrides,
+  ...rest
+}: Props) => {
+  const theme = useInternalTheme(themeOverrides);
+  const borderBottomColor = theme.colors.surfaceVariant;
+
+  return (
+    <View {...rest} style={[styles.header, { borderBottomColor }, style]}>
+      {children}
+    </View>
+  );
+};
+
+DataTableHeader.displayName = 'DataTable.Header';
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    borderBottomWidth: StyleSheet.hairlineWidth * 2,
+  },
+});
+
+export default DataTableHeader;
+
+// @component-docs ignore-next-line
+export { DataTableHeader };
