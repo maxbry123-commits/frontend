@@ -1,0 +1,53 @@
+{
+  "bundle_bytes": 53069823,
+  "bundle_sha256": "1df47b9244b4732e946270fe320e3e15795b19330083804e2bcb6caa6f168607",
+  "extracted_tree": {
+    "bytes": 144390814,
+    "files": 6698,
+    "sha256": "69508974fc33c2023058a952e7c44c31ee3a4561810337ec567a886b3ed4a524"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "PlantUML.bundle.zip.part-0001",
+      "sha256": "3b37d0ead2869a19069b66fe47a41a37eae1416e884fff17c8926d61385edb58"
+    },
+    {
+      "bytes": 12582912,
+      "name": "PlantUML.bundle.zip.part-0002",
+      "sha256": "1f76383aeaa06406ac347703f19cf33699b03cfdfef4f2f9bbae95e51f878f31"
+    },
+    {
+      "bytes": 12582912,
+      "name": "PlantUML.bundle.zip.part-0003",
+      "sha256": "a80959ee645bfc5c12ac436e26d6bd79d5a7d28e7a3aa2cacbc0b27ee74e8c6c"
+    },
+    {
+      "bytes": 12582912,
+      "name": "PlantUML.bundle.zip.part-0004",
+      "sha256": "55a9da5b8731fa1cbeb723a4b76f425c0c5f60b2156bbe888d53b4cf2caea035"
+    },
+    {
+      "bytes": 2738175,
+      "name": "PlantUML.bundle.zip.part-0005",
+      "sha256": "0d9e00f4b370687f74fa9f3a265ae202e2f07a1432ed3c82eaecb9336cac0f85"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "PlantUML",
+  "source_bytes": 144390814,
+  "source_commit": "c9d62097ff5a838d760846ee2e2b559f47651265",
+  "source_files": 6698,
+  "source_ref": "HEAD",
+  "source_repo": "plantuml/plantuml",
+  "source_tree": {
+    "bytes": 144390814,
+    "files": 6698,
+    "sha256": "69508974fc33c2023058a952e7c44c31ee3a4561810337ec567a886b3ed4a524"
+  }
+}
