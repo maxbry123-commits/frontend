@@ -1,0 +1,48 @@
+{
+  "bundle_bytes": 41397233,
+  "bundle_sha256": "21dad78a3247ae54704cb8a8aa7cfd523f14b04c09eb2151809a68211735b4dd",
+  "extracted_tree": {
+    "bytes": 147018338,
+    "files": 15476,
+    "sha256": "9b923996c10385a16a067f876888bd507d8b7598037edbc69b809e0297a7d98e"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "Flutter.bundle.zip.part-0001",
+      "sha256": "933dc5de8d6f8102f82d65314f38b8b30912c3bad9eb673a1686042a1333022f"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Flutter.bundle.zip.part-0002",
+      "sha256": "ad4f8acbf1cf8cf9138a9e90c545be0a31ea20d449461dfab1bf935bf5cd1603"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Flutter.bundle.zip.part-0003",
+      "sha256": "365f8fc4435b41c54e0030b335b57f2be61e8f2c3f74acef7ea4cd5ef7d94ae5"
+    },
+    {
+      "bytes": 3648497,
+      "name": "Flutter.bundle.zip.part-0004",
+      "sha256": "ad3be9e23d2a4a1904d985989c64a3fd4c6a4805e0920ffa6b60056d6f15168d"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Flutter",
+  "source_bytes": 147018338,
+  "source_commit": "f26041bf437282c16be8f54a82e3ec3c4256d52b",
+  "source_files": 15476,
+  "source_ref": "f26041bf437282c16be8f54a82e3ec3c4256d52b",
+  "source_repo": "https://github.com/flutter/flutter",
+  "source_tree": {
+    "bytes": 147018338,
+    "files": 15476,
+    "sha256": "9b923996c10385a16a067f876888bd507d8b7598037edbc69b809e0297a7d98e"
+  }
+}
