@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 2228341,
+  "bundle_sha256": "07a48e023ea2326f9b5edbe9988c5913582276e3b2e25066e273f609f2471384",
+  "extracted_tree": {
+    "bytes": 8924161,
+    "files": 835,
+    "sha256": "5d06638d9a37bc4eee79b138fcbe2b1286bbc8ac562a26fb3beb10a96f157f53"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 2228341,
+      "name": "NSIS.bundle.zip.part-0001",
+      "sha256": "07a48e023ea2326f9b5edbe9988c5913582276e3b2e25066e273f609f2471384"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "NSIS",
+  "source_bytes": 8924161,
+  "source_commit": "81625d0d6d9ef3328d779a462ba52de1f5d71343",
+  "source_files": 835,
+  "source_ref": "HEAD",
+  "source_repo": "kichik/nsis",
+  "source_tree": {
+    "bytes": 8924161,
+    "files": 835,
+    "sha256": "5d06638d9a37bc4eee79b138fcbe2b1286bbc8ac562a26fb3beb10a96f157f53"
+  }
+}
