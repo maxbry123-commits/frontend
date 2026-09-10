@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 48756,
+  "bundle_sha256": "56988c6f75404ad9f112d90bd1b69192317eee590c49b26b9ecc3908bf927b92",
+  "extracted_tree": {
+    "bytes": 188032,
+    "files": 23,
+    "sha256": "921a6ea39387bbf1cf92e5b7acfa1c771d4f53d913ed051bcf9a60c048bfb82f"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 48756,
+      "name": "Voluptuous.bundle.zip.part-0001",
+      "sha256": "56988c6f75404ad9f112d90bd1b69192317eee590c49b26b9ecc3908bf927b92"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Voluptuous",
+  "source_bytes": 188032,
+  "source_commit": "1fcf849f16279d43010c89c5d8cf69d5de96a800",
+  "source_files": 23,
+  "source_ref": "0.14.2",
+  "source_repo": "alecthomas/voluptuous",
+  "source_tree": {
+    "bytes": 188032,
+    "files": 23,
+    "sha256": "921a6ea39387bbf1cf92e5b7acfa1c771d4f53d913ed051bcf9a60c048bfb82f"
+  }
+}
