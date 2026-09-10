@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 1484288,
+  "bundle_sha256": "809876a32747ff2e29c40056bfbf81bf0af8d79fc3ebc874ec7387cd3c56eafe",
+  "extracted_tree": {
+    "bytes": 3381402,
+    "files": 486,
+    "sha256": "c33de2d921cab7983c57ca4f48d19754ff87338a31121041b742d96620b93c14"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 1484288,
+      "name": "ajv.bundle.zip.part-0001",
+      "sha256": "809876a32747ff2e29c40056bfbf81bf0af8d79fc3ebc874ec7387cd3c56eafe"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "ajv",
+  "source_bytes": 3381402,
+  "source_commit": "f177fe323420ccb23e1a79445fd470cbf80aee7c",
+  "source_files": 486,
+  "source_ref": "HEAD",
+  "source_repo": "ajv-validator/ajv",
+  "source_tree": {
+    "bytes": 3381402,
+    "files": 486,
+    "sha256": "c33de2d921cab7983c57ca4f48d19754ff87338a31121041b742d96620b93c14"
+  }
+}
