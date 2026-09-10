@@ -1,0 +1,38 @@
+{
+  "bundle_bytes": 22291891,
+  "bundle_sha256": "93dc92192eb55847e6b3fb68cc1f22c72d84394d81babc903635dfb36922600c",
+  "extracted_tree": {
+    "bytes": 40301690,
+    "files": 4597,
+    "sha256": "bdf9eb815b4688c88077c227d0778db5ed1a4ea577089ce63b6f4fe0d9fb1fdb"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "AppFlowy.bundle.zip.part-0001",
+      "sha256": "08e33b42f7f8478c5193bba981bb734cbd8cfcf90ecd707c1b328245dc110ba8"
+    },
+    {
+      "bytes": 9708979,
+      "name": "AppFlowy.bundle.zip.part-0002",
+      "sha256": "8a97d3c7a12a8ad4fd5c684080544b0afa0c19e57c0bd005240f1cf2e51bff19"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "AppFlowy",
+  "source_bytes": 40301690,
+  "source_commit": "5cf3a365dec0d59f64bad1ee4bb1050471a39b93",
+  "source_files": 4597,
+  "source_ref": "HEAD",
+  "source_repo": "AppFlowy-IO/AppFlowy",
+  "source_tree": {
+    "bytes": 40301690,
+    "files": 4597,
+    "sha256": "bdf9eb815b4688c88077c227d0778db5ed1a4ea577089ce63b6f4fe0d9fb1fdb"
+  }
+}
