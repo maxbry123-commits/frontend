@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 10419748,
+  "bundle_sha256": "f12642e388c767ce70954bf4aed589b52a45290b2774c93bd3ac8cbe38cb9076",
+  "extracted_tree": {
+    "bytes": 14315365,
+    "files": 710,
+    "sha256": "b1ce638812997ffb7918a579c00d22662e29209bffb3f36d20a32d87ce5daa7e"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 10419748,
+      "name": "Hypothesis.bundle.zip.part-0001",
+      "sha256": "f12642e388c767ce70954bf4aed589b52a45290b2774c93bd3ac8cbe38cb9076"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Hypothesis",
+  "source_bytes": 14315365,
+  "source_commit": "cd434f23be1a3598085cf096e28e6738c63b29b3",
+  "source_files": 710,
+  "source_ref": "HEAD",
+  "source_repo": "HypothesisWorks/hypothesis",
+  "source_tree": {
+    "bytes": 14315365,
+    "files": 710,
+    "sha256": "b1ce638812997ffb7918a579c00d22662e29209bffb3f36d20a32d87ce5daa7e"
+  }
+}
