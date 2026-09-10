@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 923428,
+  "bundle_sha256": "942750565959577da77e03acdf0e89da561448d4111800d115f6539c4ef32fd3",
+  "extracted_tree": {
+    "bytes": 7458537,
+    "files": 65,
+    "sha256": "da20481f0151ab354d2b55ead71f92f3d986a09287123fd401bef8c0efb4810c"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 923428,
+      "name": "cerberus.bundle.zip.part-0001",
+      "sha256": "942750565959577da77e03acdf0e89da561448d4111800d115f6539c4ef32fd3"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "cerberus",
+  "source_bytes": 7458537,
+  "source_commit": "65e977de08ab76d4b40ca981972f9ff68926ed63",
+  "source_files": 65,
+  "source_ref": "HEAD",
+  "source_repo": "pyeve/cerberus",
+  "source_tree": {
+    "bytes": 7458537,
+    "files": 65,
+    "sha256": "da20481f0151ab354d2b55ead71f92f3d986a09287123fd401bef8c0efb4810c"
+  }
+}
