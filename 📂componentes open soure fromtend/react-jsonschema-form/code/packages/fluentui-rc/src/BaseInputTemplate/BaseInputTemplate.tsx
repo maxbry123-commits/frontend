@@ -1,0 +1,100 @@
+import type { ChangeEvent, FocusEvent, MouseEvent } from 'react';
+import { useCallback } from 'react';
+import type { InputProps } from '@fluentui/react-components';
+import { Input, Label, makeStyles } from '@fluentui/react-components';
+import { SchemaExamples } from '@rjsf/core';
+import type { BaseInputTemplateProps, FormContextType, RJSFSchema, StrictRJSFSchema } from '@rjsf/utils';
+import { ariaDescribedByIds, examplesId, getInputProps, labelValue } from '@rjsf/utils';
+
+const useStyles = makeStyles({
+  input: {
+    width: '100%',
+  },
+  label: {
+    paddingTop: '2px',
+    paddingBottom: '2px',
+    marginBottom: '2px',
+  },
+});
+
+/** The `BaseInputTemplate` is the template to use to render the basic `<input>` component for the `core` theme.
+ * It is used as the template for rendering many of the <input> based widgets that differ by `type` and callbacks only.
+ * It can be customized/overridden for other themes or individual implementations as needed.
+ *
+ * @param props - The `WidgetProps` for this template
+ */
+export default function BaseInputTemplate<
+  T = any,
+  S extends StrictRJSFSchema = RJSFSchema,
+  F extends FormContextType = any,
+>(props: BaseInputTemplateProps<T, S, F>) {
+  const {
+    id,
+    htmlName,
+    placeholder,
+    required,
+    readonly,
+    disabled,
+    type,
+    value,
+    label,
+    hideLabel,
+    onChange,
+    onChangeOverride,
+    onBlur,
+    onFocus,
+    autofocus,
+    options,
+    schema,
+    registry,
+  } = props;
+  const { ClearButton } = registry.templates.ButtonTemplates;
+  const classes = useStyles();
+  const inputProps = getInputProps<T, S, F>(schema, type, options);
+  // Now we need to pull out the step, min, max into an inner `inputProps` for fluentui-rc
+  const handleChange = ({ target: { value: newValue } }: ChangeEvent<HTMLInputElement>) =>
+    onChange(newValue === '' ? options.emptyValue : newValue);
+  const handleBlur = ({ target }: FocusEvent<HTMLInputElement>) => onBlur(id, target?.value);
+  const handleFocus = ({ target }: FocusEvent<HTMLInputElement>) => onFocus(id, target?.value);
+  const handleClear = useCallback(
+    (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onChange(options.emptyValue);
+    },
+    [onChange, options.emptyValue],
+  );
+  return (
+    <>
+      {labelValue(
+        <Label htmlFor={id} required={required} disabled={disabled} className={classes.label}>
+          {label}
+        </Label>,
+        hideLabel,
+      )}
+      <Input
+        id={id}
+        name={htmlName || id}
+        placeholder={placeholder}
+        autoFocus={autofocus}
+        required={required}
+        disabled={disabled || readonly}
+        {...(inputProps as InputProps)}
+        input={{
+          className: classes.input,
+          // Due to Fluent UI this does not work correctly
+          list: schema.examples ? examplesId(id) : undefined,
+        }}
+        value={value || value === 0 ? value : ''}
+        onChange={onChangeOverride || handleChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        aria-describedby={ariaDescribedByIds(id, !!schema.examples)}
+      />
+      {options.allowClearTextInputs && !readonly && !disabled && value && (
+        <ClearButton registry={registry} onClick={handleClear} />
+      )}
+      <SchemaExamples id={id} schema={schema} />
+    </>
+  );
+}

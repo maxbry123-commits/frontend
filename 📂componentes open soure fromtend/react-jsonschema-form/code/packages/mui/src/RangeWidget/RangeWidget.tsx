@@ -1,0 +1,60 @@
+import type { FocusEvent } from 'react';
+import FormLabel from '@mui/material/FormLabel';
+import type { SliderProps } from '@mui/material/Slider';
+import Slider from '@mui/material/Slider';
+import type { FormContextType, GenericObjectType, RJSFSchema, StrictRJSFSchema, WidgetProps } from '@rjsf/utils';
+import { ariaDescribedByIds, labelValue, rangeSpec } from '@rjsf/utils';
+
+import { getMuiProps } from '../util.ts';
+
+/** Properties available for the `rjsfSlotProps` target of the RangeWidget. */
+export interface RangeWidgetMuiProps extends GenericObjectType {
+  /** RJSF-specific slot props for targeting child elements of the RangeWidget. */
+  rjsfSlotProps?: {
+    /** Props applied to the MUI `Slider` component. */
+    slider?: SliderProps;
+  };
+}
+
+/** The `RangeWidget` component uses the `BaseInputTemplate` changing the type to `range` and wrapping the result
+ * in a div, with the value along side it.
+ *
+ * @param props - The `WidgetProps` for this component
+ */
+export default function RangeWidget<T = any, S extends StrictRJSFSchema = RJSFSchema, F extends FormContextType = any>(
+  props: WidgetProps<T, S, F>,
+) {
+  const { value, readonly, disabled, onBlur, onFocus, options, schema, onChange, required, label, hideLabel, id } =
+    props;
+  const sliderProps = { value, label, id, name: id, ...rangeSpec<S>(schema) };
+
+  const handleChange = (_: any, newValue?: number | number[]) => {
+    onChange(newValue ?? options.emptyValue);
+  };
+  const handleBlur = ({ target }: FocusEvent<HTMLInputElement>) => onBlur(id, target?.value);
+  const handleFocus = ({ target }: FocusEvent<HTMLInputElement>) => onFocus(id, target?.value);
+
+  const { rjsfSlotProps: muiSlotProps, ...otherMuiProps } = getMuiProps<T, S, F, RangeWidgetMuiProps>(options);
+
+  return (
+    <>
+      {labelValue(
+        <FormLabel required={required} htmlFor={id}>
+          {label || undefined}
+        </FormLabel>,
+        hideLabel,
+      )}
+      <Slider
+        disabled={disabled || readonly}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        valueLabelDisplay='auto'
+        {...otherMuiProps}
+        {...muiSlotProps?.slider}
+        {...sliderProps}
+        aria-describedby={ariaDescribedByIds(id)}
+      />
+    </>
+  );
+}

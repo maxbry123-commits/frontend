@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 6026339,
+  "bundle_sha256": "19cfb42a1351b547d7dfe23f502c868132d67d19716781b2aa8bd55ca59488b8",
+  "extracted_tree": {
+    "bytes": 29817512,
+    "files": 1489,
+    "sha256": "eb3c7c0e6ada84dd02e05da582be3bd61fbc6c43b386617df7075ffdf648ca7a"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 6026339,
+      "name": "react-jsonschema-form.bundle.zip.part-0001",
+      "sha256": "19cfb42a1351b547d7dfe23f502c868132d67d19716781b2aa8bd55ca59488b8"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "react-jsonschema-form",
+  "source_bytes": 29817512,
+  "source_commit": "8d317b07411c7d0171d2753d818b6a07eab6355a",
+  "source_files": 1489,
+  "source_ref": "HEAD",
+  "source_repo": "rjsf-team/react-jsonschema-form",
+  "source_tree": {
+    "bytes": 29817512,
+    "files": 1489,
+    "sha256": "eb3c7c0e6ada84dd02e05da582be3bd61fbc6c43b386617df7075ffdf648ca7a"
+  }
+}

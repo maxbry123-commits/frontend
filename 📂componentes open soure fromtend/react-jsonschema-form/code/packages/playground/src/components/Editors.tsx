@@ -1,0 +1,213 @@
+import type { Dispatch, SetStateAction } from 'react';
+import { useCallback, useState } from 'react';
+import MonacoEditor from '@monaco-editor/react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import MuiAccordionSummary from '@mui/material/AccordionSummary';
+import Grid from '@mui/material/Grid';
+import { styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import type { ErrorSchema, RJSFSchema, UiSchema } from '@rjsf/utils';
+import { Panel, Group, Separator } from 'react-resizable-panels';
+
+import type { SubthemeType } from './SubthemeSelector.tsx';
+import SubthemeSelector from './SubthemeSelector.tsx';
+import type { ThemesType } from './ThemeSelector.tsx';
+import ThemeSelector from './ThemeSelector.tsx';
+
+const monacoEditorOptions = {
+  minimap: {
+    enabled: false,
+  },
+  automaticLayout: true,
+  scrollBeyondLastLine: false,
+  scrollbar: {
+    alwaysConsumeMouseWheel: false,
+  },
+};
+
+const AccordionSummary = styled(MuiAccordionSummary)({
+  '.MuiAccordionSummary-content': {
+    margin: 0,
+  },
+});
+
+interface EditorProps {
+  title: string;
+  code: string;
+  onChange: (data: any) => void;
+}
+
+function Editor({ title, code, onChange }: EditorProps) {
+  const [valid, setValid] = useState(true);
+
+  const onCodeChange = useCallback(
+    (newCode: string | undefined) => {
+      if (!newCode) {
+        return;
+      }
+
+      try {
+        const parsedCode = JSON.parse(newCode);
+        setValid(true);
+        onChange(parsedCode);
+      } catch {
+        setValid(false);
+      }
+    },
+    [setValid, onChange],
+  );
+
+  const icon = valid ? 'ok' : 'remove';
+  const cls = valid ? 'valid' : 'invalid';
+
+  return (
+    <div className='panel panel-default' style={{ marginBottom: 0 }}>
+      <div className='panel-heading'>
+        <span className={`${cls} glyphicon glyphicon-${icon}`} />
+        {` ${title}`}
+      </div>
+      <div style={{ overscrollBehavior: 'auto' }}>
+        <MonacoEditor
+          language='json'
+          value={code}
+          theme='vs-light'
+          onChange={onCodeChange}
+          height={400}
+          options={monacoEditorOptions}
+        />
+      </div>
+    </div>
+  );
+}
+
+const toJson = (val: unknown) => JSON.stringify(val, null, 2);
+
+interface EditorsProps {
+  schema: RJSFSchema;
+  setSchema: React.Dispatch<React.SetStateAction<RJSFSchema>>;
+  uiSchema: UiSchema;
+  setUiSchema: React.Dispatch<React.SetStateAction<UiSchema>>;
+  formData: any;
+  setFormData: React.Dispatch<React.SetStateAction<any>>;
+  extraErrors: ErrorSchema | undefined;
+  setExtraErrors: React.Dispatch<React.SetStateAction<ErrorSchema | undefined>>;
+  setShareURL: React.Dispatch<React.SetStateAction<string | null>>;
+  hasUiSchemaGenerator: boolean;
+  themes: Record<string, ThemesType>;
+  theme: string;
+  subtheme: string | null;
+  onThemeSelected: (theme: string, themeObj: ThemesType) => void;
+  setSubtheme: Dispatch<SetStateAction<string | null>>;
+  setStylesheet: Dispatch<SetStateAction<string | null>>;
+}
+
+export default function Editors({
+  extraErrors,
+  formData,
+  schema,
+  uiSchema,
+  setExtraErrors,
+  setFormData,
+  setSchema,
+  setShareURL,
+  setUiSchema,
+  hasUiSchemaGenerator,
+  themes,
+  theme,
+  subtheme,
+  onThemeSelected,
+  setSubtheme,
+  setStylesheet,
+}: EditorsProps) {
+  const onSubthemeSelected = useCallback(
+    (newSubtheme: any, { stylesheet }: SubthemeType) => {
+      setSubtheme(newSubtheme);
+      setStylesheet(stylesheet || null);
+    },
+    [setSubtheme, setStylesheet],
+  );
+  const onSchemaEdited = useCallback(
+    (newSchema: any) => {
+      setSchema(newSchema);
+      setShareURL(null);
+    },
+    [setSchema, setShareURL],
+  );
+
+  const onUISchemaEdited = useCallback(
+    (newUiSchema: any) => {
+      setUiSchema(newUiSchema);
+      setShareURL(null);
+    },
+    [setUiSchema, setShareURL],
+  );
+
+  const onFormDataEdited = useCallback(
+    (newFormData: any) => {
+      // Since this is coming from the editor which uses JSON.stringify to trim undefined values compare the values
+      // using JSON.stringify to see if the trimmed formData is the same as the untrimmed state
+      // Sometimes passing the trimmed value back into the Form causes the defaults to be improperly assigned
+      if (JSON.stringify(formData) !== JSON.stringify(newFormData)) {
+        setFormData(newFormData);
+        setShareURL(null);
+      }
+    },
+    [formData, setFormData, setShareURL],
+  );
+
+  const onExtraErrorsEdited = useCallback(
+    (newExtraErrors: any) => {
+      setExtraErrors(newExtraErrors);
+      setShareURL(null);
+    },
+    [setExtraErrors, setShareURL],
+  );
+  const uiSchemaTitle = hasUiSchemaGenerator ? 'UISchema (regenerated on theme change)' : 'UiSchema';
+
+  return (
+    <Accordion defaultExpanded disableGutters>
+      <AccordionSummary expandIcon={<ExpandMoreIcon fontSize='large' />} title='Toggle Editors'>
+        <Grid container spacing={1} sx={{ width: '100%' }}>
+          <Grid size={6}>
+            <Typography component='div' variant='h2' sx={{ pr: 1 }}>
+              react-jsonschema-form
+            </Typography>
+          </Grid>
+          <Grid size={3}>
+            <ThemeSelector themes={themes} theme={theme} select={onThemeSelected} />
+          </Grid>
+          <Grid size={3}>
+            {themes[theme] && themes[theme].subthemes && (
+              <SubthemeSelector subthemes={themes[theme].subthemes} subtheme={subtheme} select={onSubthemeSelected} />
+            )}
+          </Grid>
+        </Grid>
+      </AccordionSummary>
+      <AccordionDetails sx={{ p: 0 }}>
+        <Group orientation='horizontal'>
+          <Panel defaultSize={extraErrors ? '34%' : '25%'} minSize='10%'>
+            <Editor title='JSONSchema' code={toJson(schema)} onChange={onSchemaEdited} />
+          </Panel>
+          <Separator style={{ width: '4px', cursor: 'col-resize' }} />
+          <Panel defaultSize={extraErrors ? '33%' : '25%'} minSize='10%'>
+            <Editor title={uiSchemaTitle} code={toJson(uiSchema)} onChange={onUISchemaEdited} />
+          </Panel>
+          <Separator style={{ width: '4px', cursor: 'col-resize' }} />
+          <Panel defaultSize={extraErrors ? '33%' : '25%'} minSize='10%'>
+            <Editor title='formData' code={toJson(formData)} onChange={onFormDataEdited} />
+          </Panel>
+          {extraErrors && (
+            <>
+              <Separator style={{ width: '4px', cursor: 'col-resize' }} />
+              <Panel defaultSize='25%' minSize='10%'>
+                <Editor title='extraErrors' code={toJson(extraErrors)} onChange={onExtraErrorsEdited} />
+              </Panel>
+            </>
+          )}
+        </Group>
+      </AccordionDetails>
+    </Accordion>
+  );
+}

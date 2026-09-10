@@ -1,0 +1,80 @@
+import type { FocusEvent } from 'react';
+import type { RadioGroupOnChangeData } from '@fluentui/react-components';
+import { Label, Radio, RadioGroup } from '@fluentui/react-components';
+import type { FormContextType, RJSFSchema, StrictRJSFSchema, WidgetProps } from '@rjsf/utils';
+import {
+  ariaDescribedByIds,
+  enumOptionValueDecoder,
+  enumOptionValueEncoder,
+  enumOptionsIndexForValue,
+  getOptionValueFormat,
+  labelValue,
+  optionId,
+} from '@rjsf/utils';
+
+/** The `RadioWidget` is a widget for rendering a radio group.
+ *  It is typically used with a string property constrained with enum options.
+ *
+ * @param props - The `WidgetProps` for this component
+ */
+export default function RadioWidget<T = any, S extends StrictRJSFSchema = RJSFSchema, F extends FormContextType = any>({
+  id,
+  htmlName,
+  options,
+  value,
+  required,
+  disabled,
+  readonly,
+  label,
+  hideLabel,
+  onChange,
+  onBlur,
+  onFocus,
+}: WidgetProps<T, S, F>) {
+  const { enumOptions, enumDisabled, emptyValue, inline } = options;
+  const optionValueFormat = getOptionValueFormat(options);
+
+  const handleChange = (_: any, data: RadioGroupOnChangeData) =>
+    onChange(enumOptionValueDecoder<S>(data.value, enumOptions, optionValueFormat, emptyValue));
+  const handleBlur = ({ target }: FocusEvent<HTMLInputElement>) =>
+    onBlur(id, enumOptionValueDecoder<S>(target?.value, enumOptions, optionValueFormat, emptyValue));
+  const handleFocus = ({ target }: FocusEvent<HTMLInputElement>) =>
+    onFocus(id, enumOptionValueDecoder<S>(target?.value, enumOptions, optionValueFormat, emptyValue));
+
+  const selectedIndex = enumOptionsIndexForValue<S>(value, enumOptions) ?? undefined;
+
+  return (
+    <>
+      {labelValue(
+        <Label required={required} htmlFor={id}>
+          {label || undefined}
+        </Label>,
+        hideLabel,
+      )}
+      <RadioGroup
+        id={id}
+        name={htmlName || id}
+        layout={inline ? 'horizontal' : 'vertical'}
+        value={selectedIndex as string | undefined}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        aria-describedby={ariaDescribedByIds(id)}
+      >
+        {Array.isArray(enumOptions) &&
+          enumOptions.map((option, index) => {
+            const itemDisabled = Array.isArray(enumDisabled) && enumDisabled.includes(option.value);
+            return (
+              <Radio
+                id={optionId(id, index)}
+                label={option.label}
+                value={enumOptionValueEncoder(option.value, index, optionValueFormat)}
+                key={String(option.value)}
+                disabled={disabled || itemDisabled || readonly}
+              />
+            );
+          })}
+      </RadioGroup>
+    </>
+  );
+}

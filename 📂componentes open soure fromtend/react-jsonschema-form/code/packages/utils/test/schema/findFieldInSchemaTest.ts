@@ -1,0 +1,140 @@
+import type { RJSFSchema } from '../../src/index.ts';
+import { createSchemaUtils, getByPath, PROPERTIES_KEY } from '../../src/index.ts';
+import { ANSWER_1, CHOICES, testAnyOfSchema, testOneOfSchema } from '../testUtils/testData.ts';
+import type { TestValidatorType } from './types.ts';
+
+const simpleSchema: RJSFSchema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+    },
+    age: {
+      type: 'number',
+    },
+  },
+  required: ['name'],
+};
+
+const nestedSimpleSchema: RJSFSchema = {
+  type: 'object',
+  properties: {
+    nested: simpleSchema,
+  },
+};
+
+const NOT_FOUND = { field: undefined, isRequired: undefined };
+
+const nestedOneOf: RJSFSchema = {
+  type: 'object',
+  properties: {
+    nested: testOneOfSchema,
+  },
+};
+
+const nestedAnyOf: RJSFSchema = {
+  type: 'object',
+  properties: {
+    nested: testAnyOfSchema,
+  },
+};
+
+export default function findFieldInSchemaTest(testValidator: TestValidatorType) {
+  // Root schema is not needed for these tests
+  const schemaUtils = createSchemaUtils(testValidator, {});
+  const expectedAnswerField = getByPath(CHOICES[0], [PROPERTIES_KEY, 'answer']);
+
+  describe('findFieldInSchema', () => {
+    it('returns NOT_FOUND when path is empty', () => {
+      expect(schemaUtils.findFieldInSchema({}, [])).toEqual(NOT_FOUND);
+    });
+    it('returns NOT_FOUND when schema does not have properties', () => {
+      expect(schemaUtils.findFieldInSchema({}, 'foo')).toEqual(NOT_FOUND);
+    });
+    it('return NOT_FOUND when field does not exist in the schema', () => {
+      expect(schemaUtils.findFieldInSchema(simpleSchema, 'foo')).toEqual(NOT_FOUND);
+    });
+    it('returns NOT_FOUND when the path traverses a boolean subschema', () => {
+      const booleanPropSchema: RJSFSchema = {
+        type: 'object',
+        properties: { a: false },
+      };
+      expect(schemaUtils.findFieldInSchema(booleanPropSchema, 'a.b')).toEqual(NOT_FOUND);
+    });
+    it('returns field as required', () => {
+      const path = ['name'];
+      const expectedField = getByPath(simpleSchema, [PROPERTIES_KEY, path[0]]);
+      expect(schemaUtils.findFieldInSchema(simpleSchema, path)).toEqual({
+        field: expectedField,
+        isRequired: true,
+      });
+    });
+    it('returns field as not required', () => {
+      const path = ['age'];
+      const expectedField = getByPath(simpleSchema, [PROPERTIES_KEY, path[0]]);
+      expect(schemaUtils.findFieldInSchema(simpleSchema, path)).toEqual({
+        field: expectedField,
+        isRequired: false,
+      });
+    });
+    it('returns nested field as required', () => {
+      const path = ['nested', 'name'];
+      const expectedField = getByPath(simpleSchema, [PROPERTIES_KEY, path[1]]);
+      expect(schemaUtils.findFieldInSchema(nestedSimpleSchema, path)).toEqual({
+        field: expectedField,
+        isRequired: true,
+      });
+    });
+    it('returns nested field as not required', () => {
+      const path = ['nested', 'age'];
+      const expectedField = getByPath(simpleSchema, [PROPERTIES_KEY, path[1]]);
+      expect(schemaUtils.findFieldInSchema(nestedSimpleSchema, path)).toEqual({
+        field: expectedField,
+        isRequired: false,
+      });
+    });
+    it('resolves numeric path segments (FieldPathList) the same as string keys', () => {
+      const schemaWithNumericPropertyName: RJSFSchema = {
+        type: 'object',
+        properties: {
+          '0': {
+            type: 'string',
+          },
+        },
+      };
+      const fieldPathList = [0] as (string | number)[];
+      expect(schemaUtils.findFieldInSchema(schemaWithNumericPropertyName, fieldPathList)).toEqual({
+        field: { type: 'string' },
+        isRequired: false,
+      });
+    });
+    it('schema has oneOf field in properties key and isRequired true', () => {
+      const path = 'answer';
+      expect(schemaUtils.findFieldInSchema(testOneOfSchema, path, ANSWER_1)).toEqual({
+        field: expectedAnswerField,
+        isRequired: true,
+      });
+    });
+    it('schema has anyOf field in properties key and isRequired false', () => {
+      const path = 'answer';
+      expect(schemaUtils.findFieldInSchema(testAnyOfSchema, path, ANSWER_1)).toEqual({
+        field: expectedAnswerField,
+        isRequired: true,
+      });
+    });
+    it('schema has oneOf in nested field in properties key and isRequired true', () => {
+      const path = 'nested.answer';
+      expect(schemaUtils.findFieldInSchema(nestedOneOf, path, { nested: ANSWER_1 })).toEqual({
+        field: expectedAnswerField,
+        isRequired: true,
+      });
+    });
+    it('schema has anyOf in nested field in properties key and isRequired false', () => {
+      const path = 'nested.answer';
+      expect(schemaUtils.findFieldInSchema(nestedAnyOf, path, { nested: ANSWER_1 })).toEqual({
+        field: expectedAnswerField,
+        isRequired: true,
+      });
+    });
+  });
+}
