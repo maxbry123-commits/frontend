@@ -1,0 +1,10 @@
+{
+  "extends": "@uppy-dev/tsconfig/build",
+  "compilerOptions": {
+    "exactOptionalPropertyTypes": false,
+    "noImplicitOverride": false,
+    "noUncheckedIndexedAccess": false,
+    "types": ["google.accounts", "google.picker", "gapi"],
+    "useUnknownInCatchVariables": false
+  }
+}

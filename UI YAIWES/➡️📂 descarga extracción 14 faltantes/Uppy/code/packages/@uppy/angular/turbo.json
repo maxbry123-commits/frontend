@@ -1,0 +1,20 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "dependsOn": [
+        "@uppy/core#build",
+        "@uppy/dashboard#build",
+        "@uppy/status-bar#build"
+      ],
+      "inputs": [
+        "src/**/*.{js,ts,jsx,tsx}",
+        "package.json",
+        "ng-package.json",
+        "tsconfig.lib.json",
+        "tsconfig.lib.prod.json"
+      ],
+      "outputs": ["dist/**", "fesm2022/**", "types/**"]
+    }
+  }
+}

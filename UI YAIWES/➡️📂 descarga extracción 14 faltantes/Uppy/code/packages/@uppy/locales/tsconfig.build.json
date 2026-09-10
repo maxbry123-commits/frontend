@@ -1,0 +1,4 @@
+{
+  "extends": "@uppy-dev/tsconfig/build",
+  "references": [{ "path": "../core/tsconfig.build.json" }]
+}

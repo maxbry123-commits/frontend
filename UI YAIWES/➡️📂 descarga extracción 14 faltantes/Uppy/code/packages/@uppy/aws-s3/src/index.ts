@@ -1,0 +1,419 @@
+import {
+  BasePlugin,
+  type DefinePluginOpts,
+  type PluginOpts,
+  type Uppy,
+} from '@uppy/core'
+import type { RequestClient } from '@uppy/core/companion-client'
+import type {
+  Body,
+  LocalUppyFile,
+  Meta,
+  RemoteUppyFile,
+  UppyFile,
+} from '@uppy/core/utils'
+import {
+  filterFilesToEmitUploadStarted,
+  filterFilesToUpload,
+  getAllowedMetaFields,
+  TaskQueue,
+} from '@uppy/core/utils'
+import packageJson from '../package.json' with { type: 'json' }
+import S3Uploader, { type UploadResult } from './S3Uploader.js'
+import S3Companion from './s3-client/CompanionS3.js'
+import type S3Client from './s3-client/S3Client.js'
+import S3mini from './s3-client/S3mini.js'
+import type * as IT from './s3-client/types.js'
+
+// ============================================================================
+// Types
+// ============================================================================
+
+/** Part information for multipart uploads */
+export interface AwsS3Part {
+  PartNumber?: number
+  Size?: number
+  ETag?: string
+}
+
+type PartUploadedCallback<M extends Meta, B extends Body> = (
+  file: UppyFile<M, B>,
+  part: { PartNumber: number; ETag: string },
+) => void
+
+declare module '@uppy/core' {
+  export interface UppyEventMap<M extends Meta, B extends Body> {
+    's3-multipart:part-uploaded': PartUploadedCallback<M, B>
+  }
+}
+
+export type AwsS3Options<M extends Meta, B extends Body> = PluginOpts & {
+  /**
+   * Whether to use multipart uploads.
+   * - `true`: Always use multipart
+   * - `false`: Always use simple PUT
+   * - `function`: Called with file, return true for multipart
+   * Default: Use multipart for files > 100MB
+   */
+  shouldUseMultipart?: boolean | ((file: UppyFile<M, B>) => boolean)
+  getChunkSize?: (file: { size: number }) => number
+  allowedMetaFields?: string[] | boolean
+
+  /**
+   * Maximum number of files uploading concurrently.
+   * Each file uploads its parts sequentially.
+   *
+   * Default: 6 — chosen to match the browser's HTTP/1.1 per-origin connection
+   * limit. Most browsers allow 6 concurrent connections per host, so this
+   * prevents queueing at the browser level while maximizing throughput.
+   */
+  limit?: number
+
+  /**
+   * Custom function to generate the S3 object key.
+   * Default: `{randomId}-{filename}`
+   */
+  generateObjectKey?: (file: UppyFile<M, B>) => string
+} & (
+    | {
+        /** S3 upload endpoint */
+        s3Endpoint: string
+
+        /** AWS region, required for signing */
+        region?: string
+
+        /**
+         * Function to retrieve temporary credentials for client-side signing.
+         * When provided, S3mini handles signing internally using SigV4.
+         * Alternative to signRequest or endpoint.
+         */
+        getCredentials: IT.GetCredentialsFn
+      }
+    | {
+        /**
+         * Custom function to sign requests.
+         * Called with request details, should return signed headers.
+         * Alternative to using Companion endpoint.
+         */
+        signRequest: IT.SignRequestFn
+      }
+    | {
+        /** Companion URL if you want to use Companion for signing */
+        companionEndpoint: string
+      }
+  )
+
+// ============================================================================
+// Constants
+// ============================================================================
+
+const MB = 1024 * 1024
+
+const defaultOptions = {
+  shouldUseMultipart: (file: UppyFile<any, any>) => (file.size || 0) > 100 * MB,
+  allowedMetaFields: true,
+  // 6 matches browser HTTP/1.1 per-origin connection limit
+  limit: 6,
+} satisfies Partial<AwsS3Options<any, any>>
+
+// ============================================================================
+// S3Uploader Types
+// ============================================================================
+
+export default class AwsS3<M extends Meta, B extends Body> extends BasePlugin<
+  DefinePluginOpts<AwsS3Options<M, B>, keyof typeof defaultOptions>,
+  M,
+  B
+> {
+  static VERSION = packageJson.version
+
+  #s3Client!: S3Client
+  #queue!: TaskQueue
+  #uploaders: Record<string, S3Uploader<M, B> | null> = {}
+
+  constructor(uppy: Uppy<M, B>, opts: AwsS3Options<M, B>) {
+    super(uppy, { ...defaultOptions, ...opts })
+    this.type = 'uploader'
+    this.id = this.opts.id || 'AwsS3'
+  }
+
+  install(): void {
+    this.#setResumableUploadsCapability(true)
+    this.#initS3Client()
+    this.#queue = new TaskQueue({ concurrency: this.opts.limit })
+    this.uppy.addUploader(this.#upload)
+    this.uppy.on('cancel-all', this.#handleCancelAll)
+  }
+
+  uninstall(): void {
+    this.#setResumableUploadsCapability(false)
+    this.uppy.removeUploader(this.#upload)
+    this.uppy.off('cancel-all', this.#handleCancelAll)
+    this.#queue.clear()
+    // Abort and clean up any in-flight uploads
+    for (const fileId of Object.keys(this.#uploaders)) {
+      const uploader = this.#uploaders[fileId]
+      if (uploader) {
+        uploader.abort()
+      }
+    }
+  }
+
+  #setResumableUploadsCapability = (value: boolean): void => {
+    const { capabilities } = this.uppy.getState()
+    this.uppy.setState({
+      capabilities: {
+        ...capabilities,
+        resumableUploads: value,
+      },
+    })
+  }
+
+  #handleCancelAll = (): void => {
+    this.#setResumableUploadsCapability(true)
+    this.#queue.clear()
+  }
+
+  // --------------------------------------------------------------------------
+  // S3 Client Initialization
+  // --------------------------------------------------------------------------
+
+  #initS3Client(): void {
+    if ('companionEndpoint' in this.opts) {
+      if (typeof this.opts.companionEndpoint !== 'string') {
+        throw new TypeError('companionEndpoint must be a string')
+      }
+      this.#s3Client = new S3Companion({
+        companionEndpoint: this.opts.companionEndpoint,
+      })
+    } else if ('getCredentials' in this.opts) {
+      if (typeof this.opts.s3Endpoint !== 'string') {
+        throw new TypeError('s3Endpoint must be a string')
+      }
+      if (typeof this.opts.getCredentials !== 'function') {
+        throw new TypeError('getCredentials must be a function')
+      }
+      if (this.opts.region != null && typeof this.opts.region !== 'string') {
+        throw new TypeError('region must be a string')
+      }
+
+      // Mode: Temporary credentials (client-side signing)
+      this.#s3Client = new S3mini({
+        endpoint: this.opts.s3Endpoint,
+        getCredentials: this.opts.getCredentials,
+        region: this.opts.region,
+      })
+    } else if ('signRequest' in this.opts) {
+      if (typeof this.opts.signRequest !== 'function') {
+        throw new TypeError('signRequest must be a function')
+      }
+      // Mode: Custom signing function
+      this.#s3Client = new S3mini({
+        signRequest: this.opts.signRequest,
+      })
+    } else {
+      throw new TypeError(
+        'One of options `companionEndpoint`, `signRequest`, or `getCredentials` is required',
+      )
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // Upload Entry Point
+  // --------------------------------------------------------------------------
+
+  #upload = async (fileIDs: string[]): Promise<void> => {
+    if (fileIDs.length === 0) return
+
+    const files = this.uppy.getFilesByIds(fileIDs)
+    const filesToUpload = filterFilesToUpload(files)
+    const filesToEmit = filterFilesToEmitUploadStarted(filesToUpload)
+
+    this.uppy.emit('upload-start', filesToEmit)
+
+    const promises = filesToUpload.map((file) => {
+      if (file.isRemote) {
+        // Remote uploads are queued internally by RequestClient.uploadRemoteFile()
+        // via getQueue(), so no outer queue wrapping is needed here.
+        return this.#uploadRemoteFile(file)
+      }
+      return this.#queue.add(async () => {
+        // File may have been removed while waiting in the queue.
+        // Unlike actively uploading files, queued files don't have an S3Uploader
+        // instance yet, so there's no event listener to catch the removal.
+        // Re-fetch the file to ensure it still exists before starting upload.
+        const currentFile = this.uppy.getFile(file.id)
+        if (!currentFile) {
+          return
+        }
+        return this.#uploadLocalFile(currentFile as LocalUppyFile<M, B>) // assume it's still a local file since remote files aren't queued
+      })
+    })
+
+    await Promise.allSettled(promises)
+    // After the upload batch is done, restore resumable uploads capability.
+    // It may have been set to false if there were remote files in this batch.
+    this.#setResumableUploadsCapability(true)
+  }
+
+  // --------------------------------------------------------------------------
+  // Local File Upload
+  // --------------------------------------------------------------------------
+
+  async #uploadLocalFile(file: LocalUppyFile<M, B>): Promise<void> {
+    try {
+      return await new Promise((resolve, reject) => {
+        // Create uploader (events are wired internally).
+        // S3Uploader detects resume state from file.s3Multipart internally.
+        const uploader = new S3Uploader<M, B>({
+          uppy: this.uppy,
+          s3Client: this.#s3Client,
+          file,
+          metadata: this.#getAllowedMeta(file),
+          key: this.#generateKey(file),
+          shouldUseMultipart: this.#shouldUseMultipart(file),
+          getChunkSize: this.opts.getChunkSize,
+          log: (...args) => this.uppy.log(...args),
+
+          onProgress: (bytesUploaded, bytesTotal) => {
+            this.uppy.emit('upload-progress', file, {
+              uploadStarted: file.progress.uploadStarted ?? Date.now(),
+              bytesUploaded,
+              bytesTotal,
+            })
+          },
+
+          onPartComplete: (part) => {
+            this.uppy.emit('s3-multipart:part-uploaded', file, part)
+          },
+
+          onSuccess: (result: UploadResult) => {
+            this.uppy.emit('upload-success', file, {
+              status: 200,
+              body: {
+                location: result.location,
+                key: result.key,
+              } satisfies AwsBody as unknown as B,
+              uploadURL: result.location,
+            })
+            resolve()
+          },
+
+          onError: (err) => {
+            this.uppy.emit('upload-error', file, err)
+            reject(err)
+          },
+
+          onAbort: () => {
+            resolve() // Normal completion, not an error
+          },
+        })
+
+        // Store uploader for external abort if needed
+        this.#uploaders[file.id] = uploader
+
+        // Start the upload
+        uploader.start()
+      })
+    } finally {
+      // Clean up uploader instance after upload completes or fails
+      delete this.#uploaders[file.id]
+    }
+  }
+
+  #shouldUseMultipart(file: UppyFile<M, B>): boolean {
+    const { shouldUseMultipart } = this.opts
+    if (typeof shouldUseMultipart === 'function') {
+      return shouldUseMultipart(file)
+    }
+    if (typeof shouldUseMultipart === 'boolean') {
+      return shouldUseMultipart
+    }
+    // Default: multipart for files > 100MB
+    return (file.size ?? 0) > 100 * MB
+  }
+
+  #generateKey(file: UppyFile<M, B>): string {
+    // in companion mode, no need to run the generateObjectKey function even if it's passed by the user,
+    // because the key is generated on the server side and we need to remove the option to pass generateObjectKey in companion mode.
+    if ('companionEndpoint' in this.opts) {
+      return file.name
+    }
+    return (
+      this.opts.generateObjectKey?.(file) ??
+      `${crypto.randomUUID()}-${file.name}`
+    )
+  }
+
+  // --------------------------------------------------------------------------
+  // Remote File Upload
+  // --------------------------------------------------------------------------
+
+  #getAllowedMeta(file: UppyFile<M, B>) {
+    const allowedMetaFields = getAllowedMetaFields(
+      this.opts.allowedMetaFields,
+      file.meta,
+    )
+    return Object.fromEntries(
+      allowedMetaFields.map((key) => [key, file.meta[key]]),
+    )
+  }
+
+  /**
+   * Builds the request body sent to Companion's provider get endpoint.
+   * Tells Companion to use its server-side S3 upload path.
+   */
+  #getCompanionClientArgs(file: RemoteUppyFile<M, B>): Record<string, unknown> {
+    return {
+      ...file.remote.body,
+      protocol: 's3-multipart',
+      size: file.data.size,
+      metadata: this.#getAllowedMeta(file),
+    }
+  }
+
+  async #uploadRemoteFile(file: RemoteUppyFile<M, B>): Promise<void> {
+    this.#setResumableUploadsCapability(false)
+
+    const controller = new AbortController()
+
+    const removedHandler = (removedFile: UppyFile<M, B>) => {
+      if (removedFile.id === file.id) controller.abort()
+    }
+    this.uppy.on('file-removed', removedHandler)
+
+    try {
+      await this.uppy
+        .getRequestClientForFile<RequestClient<M, B>>(file)
+        .uploadRemoteFile(file, this.#getCompanionClientArgs(file), {
+          signal: controller.signal,
+          getQueue: () => this.#queue,
+        })
+    } finally {
+      this.uppy.off('file-removed', removedHandler)
+    }
+  }
+}
+
+export type { AwsS3Options as AwsS3MultipartOptions }
+
+/** Body type for AWS S3 upload responses */
+export interface AwsBody extends Body {
+  location: string
+  key: string
+}
+
+/** Persisted S3 multipart state for Golden Retriever resume support */
+interface S3MultipartState {
+  uploadId: string
+  key: string
+}
+
+declare module '@uppy/core/utils' {
+  export interface LocalUppyFile<M extends Meta, B extends Body> {
+    s3Multipart?: S3MultipartState
+  }
+  export interface RemoteUppyFile<M extends Meta, B extends Body> {
+    s3Multipart?: S3MultipartState
+  }
+}

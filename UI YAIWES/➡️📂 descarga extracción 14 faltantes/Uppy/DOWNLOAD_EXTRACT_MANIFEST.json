@@ -1,0 +1,43 @@
+{
+  "bundle_bytes": 31166222,
+  "bundle_sha256": "f04d0d1b06d57dba7a858db761502876dcf81eb429578385655de5440bde2571",
+  "extracted_tree": {
+    "bytes": 34253500,
+    "files": 1169,
+    "sha256": "fcb5d232f6352be748c6d2a61f4b991c010369d8e53f345dc7f4e34c6a24c34d"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "Uppy.bundle.zip.part-0001",
+      "sha256": "b33e8bc589c6ff446ab1e7a45cb55fbf7611d0a752d1975affe1b642c58005d2"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Uppy.bundle.zip.part-0002",
+      "sha256": "8339ad0297f5cb905881449cdf712a83bb526966ddde51d328580d26bb0bdc99"
+    },
+    {
+      "bytes": 6000398,
+      "name": "Uppy.bundle.zip.part-0003",
+      "sha256": "4b1ebab95a47655382a756b3a4f7b000b774d27341e14db122f0b8943419d091"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Uppy",
+  "source_bytes": 34253500,
+  "source_commit": "980e3ee418f99d27995b3f292044afe19853a063",
+  "source_files": 1169,
+  "source_ref": "HEAD",
+  "source_repo": "https://github.com/transloadit/uppy",
+  "source_tree": {
+    "bytes": 34253500,
+    "files": 1169,
+    "sha256": "fcb5d232f6352be748c6d2a61f4b991c010369d8e53f345dc7f4e34c6a24c34d"
+  }
+}

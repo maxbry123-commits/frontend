@@ -1,0 +1,9 @@
+{
+  "extends": "@uppy-dev/tsconfig/build",
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "noEmitOnError": true,
+    "outDir": "dist",
+    "types": ["node"]
+  }
+}
