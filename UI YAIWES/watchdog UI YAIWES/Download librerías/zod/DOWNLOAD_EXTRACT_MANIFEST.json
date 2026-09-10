@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 9683572,
+  "bundle_sha256": "74b441455ee100061937db988b01c9eab405b7486913a3fae2dbbb65a172e4ca",
+  "extracted_tree": {
+    "bytes": 12506756,
+    "files": 448,
+    "sha256": "97478f73fbec69f3b5ca0e6bb0334020dc551fd783720a5aea88ae14c748a54d"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 9683572,
+      "name": "zod.bundle.zip.part-0001",
+      "sha256": "74b441455ee100061937db988b01c9eab405b7486913a3fae2dbbb65a172e4ca"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "zod",
+  "source_bytes": 12506756,
+  "source_commit": "5477ea2068879e1e408fe126bb7cb819471473d9",
+  "source_files": 448,
+  "source_ref": "v3.25.25",
+  "source_repo": "colinhacks/zod",
+  "source_tree": {
+    "bytes": 12506756,
+    "files": 448,
+    "sha256": "97478f73fbec69f3b5ca0e6bb0334020dc551fd783720a5aea88ae14c748a54d"
+  }
+}
