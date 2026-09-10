@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 3465552,
+  "bundle_sha256": "44de6022b448b1e4716d54d7230004bc03dbd777d48efa8228c6fdcc2d3fc1a3",
+  "extracted_tree": {
+    "bytes": 5718647,
+    "files": 495,
+    "sha256": "613b427d3533917f884d256452aeddafb576a9bcd2d798faae37597e9d9ff9ef"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 3465552,
+      "name": "react-hook-form.bundle.zip.part-0001",
+      "sha256": "44de6022b448b1e4716d54d7230004bc03dbd777d48efa8228c6fdcc2d3fc1a3"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "react-hook-form",
+  "source_bytes": 5718647,
+  "source_commit": "1d551eb5af972a45a01948e83fc23a462be8bf02",
+  "source_files": 495,
+  "source_ref": "HEAD",
+  "source_repo": "react-hook-form/react-hook-form",
+  "source_tree": {
+    "bytes": 5718647,
+    "files": 495,
+    "sha256": "613b427d3533917f884d256452aeddafb576a9bcd2d798faae37597e9d9ff9ef"
+  }
+}
