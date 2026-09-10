@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 158223,
+  "bundle_sha256": "538f4ce32681b8cbe92d673710e7003b63647cda48e99e2f50833afdda197a05",
+  "extracted_tree": {
+    "bytes": 337633,
+    "files": 26,
+    "sha256": "978171df139f2bdc03da2e8b71e488ade466cbed208d8f992fcf43774338e7f6"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 158223,
+      "name": "frappe-gantt.bundle.zip.part-0001",
+      "sha256": "538f4ce32681b8cbe92d673710e7003b63647cda48e99e2f50833afdda197a05"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "frappe-gantt",
+  "source_bytes": 337633,
+  "source_commit": "5c83708d300a99d9142edea0d4d52f421e3a2e68",
+  "source_files": 26,
+  "source_ref": "HEAD",
+  "source_repo": "frappe/gantt",
+  "source_tree": {
+    "bytes": 337633,
+    "files": 26,
+    "sha256": "978171df139f2bdc03da2e8b71e488ade466cbed208d8f992fcf43774338e7f6"
+  }
+}
