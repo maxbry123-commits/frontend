@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 395043,
+  "bundle_sha256": "5344f74c19c23f5f56f4eab744af116affc4af5fd701f64208b1adce7563e6a0",
+  "extracted_tree": {
+    "bytes": 1301543,
+    "files": 119,
+    "sha256": "482b6d2e7b7fc8aaf8fa3c7d2a2af81bf13f141e44ccb6c26259f1e1dd0e60ba"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 395043,
+      "name": "io-ts.bundle.zip.part-0001",
+      "sha256": "5344f74c19c23f5f56f4eab744af116affc4af5fd701f64208b1adce7563e6a0"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "io-ts",
+  "source_bytes": 1301543,
+  "source_commit": "864a3a2f03c5d7b974afeb1da0faf46c21758779",
+  "source_files": 119,
+  "source_ref": "HEAD",
+  "source_repo": "gcanti/io-ts",
+  "source_tree": {
+    "bytes": 1301543,
+    "files": 119,
+    "sha256": "482b6d2e7b7fc8aaf8fa3c7d2a2af81bf13f141e44ccb6c26259f1e1dd0e60ba"
+  }
+}
