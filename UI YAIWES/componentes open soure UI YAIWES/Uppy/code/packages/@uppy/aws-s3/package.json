@@ -1,0 +1,55 @@
+{
+  "name": "@uppy/aws-s3",
+  "description": "Upload to Amazon S3 with Uppy",
+  "version": "6.1.0",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc --build tsconfig.build.json",
+    "typecheck": "tsc --build",
+    "test": "vitest run --silent='passed-only'"
+  },
+  "keywords": [
+    "file uploader",
+    "aws s3",
+    "amazon s3",
+    "s3",
+    "uppy",
+    "uppy-plugin",
+    "multipart"
+  ],
+  "homepage": "https://uppy.io",
+  "bugs": {
+    "url": "https://github.com/transloadit/uppy/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/transloadit/uppy.git"
+  },
+  "files": [
+    "src",
+    "lib",
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    ".": "./lib/index.js",
+    "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-s3": "^3.362.0",
+    "@aws-sdk/client-sts": "^3.362.0",
+    "@aws-sdk/s3-request-presigner": "^3.362.0",
+    "@types/node": "^22.20.1",
+    "@uppy-dev/tsconfig": "workspace:^",
+    "@uppy/core": "workspace:^",
+    "@vitest/browser-playwright": "^4.1.6",
+    "playwright": "1.61.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.11"
+  },
+  "peerDependencies": {
+    "@uppy/core": "workspace:^"
+  }
+}

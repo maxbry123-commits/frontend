@@ -1,0 +1,42 @@
+{
+  "name": "@uppy/locales",
+  "description": "Uppy language packs",
+  "version": "5.2.0",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "build": "yarn node script/build-en_US.mjs && tsc --build tsconfig.build.json && yarn format",
+    "format": "cd ../../ && yarn check packages/@uppy/locales/src/en_US.ts",
+    "test": "yarn node script/test.mjs unused && yarn node script/test.mjs placeholders && yarn node script/test.mjs warnings",
+    "test:coverage-report": "yarn node script/test.mjs warnings --verbose",
+    "typecheck": "tsc --build"
+  },
+  "keywords": [
+    "uppy",
+    "uppy-plugin",
+    "language packs"
+  ],
+  "homepage": "https://uppy.io",
+  "bugs": {
+    "url": "https://github.com/transloadit/uppy/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/transloadit/uppy.git"
+  },
+  "files": [
+    "lib",
+    "src",
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "dependencies": {
+    "@uppy/core": "workspace:^"
+  },
+  "devDependencies": {
+    "@uppy-dev/tsconfig": "workspace:^",
+    "glob": "^13.0.6",
+    "typescript": "^6.0.3"
+  }
+}

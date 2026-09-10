@@ -1,0 +1,66 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "globalDependencies": ["private/tsconfig/tsconfig*.json"],
+  "tasks": {
+    "build": {
+      "outputLogs": "new-only",
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/**/*.{js,ts,jsx,tsx}",
+        "package.json",
+        "tsconfig.json",
+        "tsconfig.build.json"
+      ],
+      "outputs": ["lib/**", "dist/**"]
+    },
+    "uppy#build": {
+      "outputLogs": "new-only",
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/**/*.{js,ts,jsx,tsx}",
+        "package.json",
+        "bundle.mjs",
+        "build-bundle.mjs"
+      ],
+      "outputs": ["lib/**", "dist/**", "README.md"]
+    },
+    "uppy#build:css": {
+      "outputLogs": "new-only",
+      "dependsOn": ["^build:css"],
+      "inputs": ["src/**/*.scss"],
+      "outputs": ["lib/**/*.css", "dist/**/*.css"]
+    },
+    "build:css": {
+      "outputLogs": "new-only",
+      "inputs": ["src/**/*.scss"],
+      "outputs": ["lib/**/*.css", "dist/**/*.css"]
+    },
+    "typecheck": {
+      "outputLogs": "new-only",
+      "dependsOn": ["build", "^build"],
+      "inputs": [
+        "{src,test}/**/*.{js,ts,jsx,tsx}",
+        "tsconfig.json",
+        "tsconfig.build.json"
+      ]
+    },
+    "check": {
+      "outputLogs": "new-only",
+      "dependsOn": ["^build"],
+      "inputs": [
+        "{src,test}/**/*.{js,ts,jsx,tsx,svelte}",
+        "tsconfig.json",
+        "tsconfig.build.json"
+      ]
+    },
+    "test": {
+      "dependsOn": ["^test"],
+      "cache": false,
+      "passThroughEnv": ["VITE_MINIO_CONFIG"]
+    },
+    "test:e2e": {
+      "dependsOn": ["^test:e2e"],
+      "cache": false
+    }
+  }
+}

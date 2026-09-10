@@ -1,0 +1,8 @@
+{
+  "extends": "@uppy-dev/tsconfig",
+  "references": [{ "path": "./tsconfig.build.json" }],
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "types": ["node"]
+  }
+}
