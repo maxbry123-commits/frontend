@@ -1,0 +1,68 @@
+{
+  "bundle_bytes": 90326296,
+  "bundle_sha256": "11731009ebea63432cc6289ef7ede049b764c21b4b1ad09403cd7243ebcf1224",
+  "extracted_tree": {
+    "bytes": 95569332,
+    "files": 957,
+    "sha256": "06c16d053f11f97eaaaa6512fb7f43f050c1ddf415b3f283c2e71c7801341f11"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "compose-samples.bundle.zip.part-0001",
+      "sha256": "0216bd7e740ef393be201f15061da496232b8e5f6dc6289fbe521e04d6b8f440"
+    },
+    {
+      "bytes": 12582912,
+      "name": "compose-samples.bundle.zip.part-0002",
+      "sha256": "328fcd455b7d89ba3e23c52b628a30d8d7327851ea1c7ed1330a5dd06348f84c"
+    },
+    {
+      "bytes": 12582912,
+      "name": "compose-samples.bundle.zip.part-0003",
+      "sha256": "6c24272f4a3fa3438a9c73c900c0c359f565b705d83e07b7c81d731258065233"
+    },
+    {
+      "bytes": 12582912,
+      "name": "compose-samples.bundle.zip.part-0004",
+      "sha256": "5c8c93f57a42a994bbd5a94528c4fa2cfab8bc216b147d1746e369245870858d"
+    },
+    {
+      "bytes": 12582912,
+      "name": "compose-samples.bundle.zip.part-0005",
+      "sha256": "59839675a0711be3997b0be558d3224aadcc0f192230da48ddcb071ba4716de7"
+    },
+    {
+      "bytes": 12582912,
+      "name": "compose-samples.bundle.zip.part-0006",
+      "sha256": "7f007c68cddac1abd24afcfd24fa2d35ca74df64bea89be123a0d513b852cf79"
+    },
+    {
+      "bytes": 12582912,
+      "name": "compose-samples.bundle.zip.part-0007",
+      "sha256": "9637d265886411131a3a47d8a2be5551dd8b325ed54fa632ea3c83d005dc2d3b"
+    },
+    {
+      "bytes": 2245912,
+      "name": "compose-samples.bundle.zip.part-0008",
+      "sha256": "8cdadd30c01c7528942bcb911855d578740566c6a9b225dd9e568fbf27a3eb15"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "compose-samples",
+  "source_bytes": 95569332,
+  "source_commit": "018c5207fb63c4f78e5841bd8ddd4faabdf19d3a",
+  "source_files": 957,
+  "source_ref": "HEAD",
+  "source_repo": "android/compose-samples",
+  "source_tree": {
+    "bytes": 95569332,
+    "files": 957,
+    "sha256": "06c16d053f11f97eaaaa6512fb7f43f050c1ddf415b3f283c2e71c7801341f11"
+  }
+}
