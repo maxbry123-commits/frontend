@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 1783259,
+  "bundle_sha256": "29a35a8617551cf7fbb00b680a5db3410e652516d465074569f2b5323f37237b",
+  "extracted_tree": {
+    "bytes": 2119317,
+    "files": 300,
+    "sha256": "e45030bd95e0bd7fd99fe5af1accc018b1c567ba1c54708b53db53a0e409cbda"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 1783259,
+      "name": "superstruct.bundle.zip.part-0001",
+      "sha256": "29a35a8617551cf7fbb00b680a5db3410e652516d465074569f2b5323f37237b"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "superstruct",
+  "source_bytes": 2119317,
+  "source_commit": "e414c8afd3b69f6bc0173b8ee25f71d8e5694f01",
+  "source_files": 300,
+  "source_ref": "HEAD",
+  "source_repo": "ianstormtaylor/superstruct",
+  "source_tree": {
+    "bytes": 2119317,
+    "files": 300,
+    "sha256": "e45030bd95e0bd7fd99fe5af1accc018b1c567ba1c54708b53db53a0e409cbda"
+  }
+}
