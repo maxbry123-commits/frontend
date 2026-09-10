@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 6348340,
+  "bundle_sha256": "52d486abe562829b8e7a027608efaad406d1b7d9c3ccec248ad20fcef5af44d0",
+  "extracted_tree": {
+    "bytes": 19280701,
+    "files": 2207,
+    "sha256": "b67bf4c6325353121e3858640ca877baef621286e21e58c67172070f220c3558"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 6348340,
+      "name": "PracticalSwan-agent-skills.bundle.zip.part-0001",
+      "sha256": "52d486abe562829b8e7a027608efaad406d1b7d9c3ccec248ad20fcef5af44d0"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "PracticalSwan-agent-skills",
+  "source_bytes": 19280701,
+  "source_commit": "afbb609dec5b7bf08c8384a013b6b3b535517da2",
+  "source_files": 2207,
+  "source_ref": "HEAD",
+  "source_repo": "PracticalSwan/agent-skills",
+  "source_tree": {
+    "bytes": 19280701,
+    "files": 2207,
+    "sha256": "b67bf4c6325353121e3858640ca877baef621286e21e58c67172070f220c3558"
+  }
+}
