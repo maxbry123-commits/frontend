@@ -1,0 +1,6 @@
+{
+  "queue": [
+    {"id":"0018:Vite","slug":"Vite","source_repo":"https://github.com/vitejs/vite","source_ref":"0b78b2a40e5809bde51df8d4873f64226ee7fe3d","publish":false},
+    {"id":"0019:Vercel-AI-SDK","slug":"Vercel AI SDK","source_repo":"https://github.com/vercel/ai","source_ref":"916da300b87610a84c58dc5bb2da15f9f9dbae98","publish":false}
+  ]
+}
