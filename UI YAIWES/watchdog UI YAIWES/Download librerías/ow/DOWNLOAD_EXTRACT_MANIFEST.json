@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 205160,
+  "bundle_sha256": "f43f13c5a47368f726bdd4e71893fe25e71bc235b89222d6820691be3a5865ee",
+  "extracted_tree": {
+    "bytes": 553775,
+    "files": 89,
+    "sha256": "6f6e18688f2ef98513d1805bb17b4720db9d22d7a65efa616db0f59f6f6b7542"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 205160,
+      "name": "ow.bundle.zip.part-0001",
+      "sha256": "f43f13c5a47368f726bdd4e71893fe25e71bc235b89222d6820691be3a5865ee"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "ow",
+  "source_bytes": 553775,
+  "source_commit": "3975eab08762ba1823f07e2aa3cb05f20c86296c",
+  "source_files": 89,
+  "source_ref": "HEAD",
+  "source_repo": "sindresorhus/ow",
+  "source_tree": {
+    "bytes": 553775,
+    "files": 89,
+    "sha256": "6f6e18688f2ef98513d1805bb17b4720db9d22d7a65efa616db0f59f6f6b7542"
+  }
+}

@@ -1,0 +1,127 @@
+{
+	"name": "ow",
+	"version": "3.1.1",
+	"description": "Function argument validation for humans",
+	"license": "MIT",
+	"repository": "sindresorhus/ow",
+	"funding": "https://github.com/sponsors/sindresorhus",
+	"author": {
+		"name": "Sindre Sorhus",
+		"email": "sindresorhus@gmail.com",
+		"url": "https://sindresorhus.com"
+	},
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./dev-only": {
+			"types": "./dist/index.d.ts",
+			"default": "./dev-only.js"
+		}
+	},
+	"sideEffects": false,
+	"engines": {
+		"node": ">=20"
+	},
+	"scripts": {
+		"test": "xo && NODE_OPTIONS='--import=tsx/esm' c8 ava",
+		"docs": "typedoc source/index.ts",
+		"build": "del-cli dist && tsc",
+		"prepare": "npm run build",
+		"prepublishOnly": "npm test",
+		"postpublish": "npm run docs && gh-pages --dist docs --no-history --message \"Deploy documentation\"",
+		"example": "npm run build && node example.js"
+	},
+	"files": [
+		"dist",
+		"dev-only.js"
+	],
+	"keywords": [
+		"type",
+		"types",
+		"check",
+		"checking",
+		"guard",
+		"guards",
+		"assert",
+		"assertion",
+		"predicate",
+		"predicates",
+		"is",
+		"validate",
+		"validation",
+		"utility",
+		"util",
+		"typeof",
+		"instanceof",
+		"object"
+	],
+	"dependencies": {
+		"@sindresorhus/is": "^7.1.0",
+		"callsites": "^4.2.0",
+		"dot-prop": "^10.1.0",
+		"environment": "^1.1.0",
+		"fast-equals": "^5.3.2",
+		"is-identifier": "^1.0.1"
+	},
+	"devDependencies": {
+		"@sindresorhus/tsconfig": "^8.0.1",
+		"@types/node": "^24.7.1",
+		"ava": "^6.4.1",
+		"c8": "^10.1.3",
+		"del-cli": "^7.0.0",
+		"expect-type": "^1.2.2",
+		"gh-pages": "^6.3.0",
+		"tsx": "^4.20.6",
+		"typedoc": "^0.28.13",
+		"typescript": "^5.9.3",
+		"xo": "^1.2.3"
+	},
+	"browser": {
+		"./dist/utils/infer-label.js": "./dist/utils/infer-label.browser.js"
+	},
+	"xo": {
+		"ignores": [
+			"example.js",
+			"dev-only.js",
+			"source/utils/infer-label.browser.ts"
+		],
+		"rules": {
+			"no-useless-return": "off",
+			"@typescript-eslint/explicit-function-return-type": "off",
+			"@typescript-eslint/ban-types": "off",
+			"@typescript-eslint/no-explicit-any": "off",
+			"@typescript-eslint/no-empty-function": "off",
+			"@typescript-eslint/restrict-template-expressions": "off",
+			"@typescript-eslint/no-unsafe-return": "off",
+			"@typescript-eslint/no-unsafe-argument": "off",
+			"@typescript-eslint/no-unsafe-function-type": "off",
+			"@typescript-eslint/no-unsafe-call": "off",
+			"@typescript-eslint/no-unsafe-assignment": "off",
+			"@typescript-eslint/prefer-nullish-coalescing": "off",
+			"import-x/no-mutable-exports": "off",
+			"@typescript-eslint/no-base-to-string": "off",
+			"@typescript-eslint/no-restricted-types": "off",
+			"@typescript-eslint/parameter-properties": "off",
+			"@typescript-eslint/member-ordering": "off"
+		}
+	},
+	"ava": {
+		"files": [
+			"test/**",
+			"!test/fixtures/**"
+		],
+		"extensions": {
+			"ts": "module"
+		},
+		"workerThreads": false
+	},
+	"c8": {
+		"reporter": [
+			"text",
+			"lcov"
+		]
+	}
+}
