@@ -1,0 +1,63 @@
+{
+  "bundle_bytes": 81193084,
+  "bundle_sha256": "88fc12dfb1e857f4c96c62d29011b886d6687f713344f8d593cacb919b63e401",
+  "extracted_tree": {
+    "bytes": 104997175,
+    "files": 357,
+    "sha256": "11368e921ab31aee75230b36d7beaaadb3953909a8131337ce444f0f52f68388"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "Squirrel.bundle.zip.part-0001",
+      "sha256": "ee2a72c0ca7b69a90eed32d9ff95a9dd4ebddd414519cdd6609a861224ccf2ca"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Squirrel.bundle.zip.part-0002",
+      "sha256": "c709e4d9727dcd7264dbeb9d9e44390011942239690f491587db9175e1e0fe5a"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Squirrel.bundle.zip.part-0003",
+      "sha256": "94cf0b27216b7ee82ba285eef4b0ea72696e0b6cd9ba9147a43e3659a11c4083"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Squirrel.bundle.zip.part-0004",
+      "sha256": "8238dfea148763a3a7a5ddb0f2a0b8ad79e59596f0d081061b7722f1423392fb"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Squirrel.bundle.zip.part-0005",
+      "sha256": "df5074bef8e0f24f9c7cdb9d32d97f0a9940f49fdf8a40069dcd8275e3be6617"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Squirrel.bundle.zip.part-0006",
+      "sha256": "ba9caf5e94b527fa0d4f027a80f87849bc1668ba6eaa9326a2c9c36ee0f66a85"
+    },
+    {
+      "bytes": 5695612,
+      "name": "Squirrel.bundle.zip.part-0007",
+      "sha256": "7e8a270faad0200d3f3ce5a88508b60feb0d48afa42728d24bdfa090a8594bd8"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Squirrel",
+  "source_bytes": 104997175,
+  "source_commit": "51f5e2cb01add79280a53d51e8d0cfa20f8c9f9f",
+  "source_files": 357,
+  "source_ref": "HEAD",
+  "source_repo": "Squirrel/Squirrel.Windows",
+  "source_tree": {
+    "bytes": 104997175,
+    "files": 357,
+    "sha256": "11368e921ab31aee75230b36d7beaaadb3953909a8131337ce444f0f52f68388"
+  }
+}
