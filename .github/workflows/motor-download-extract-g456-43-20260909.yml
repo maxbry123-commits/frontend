@@ -1,0 +1,14 @@
+name: Pause G456
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/motor-download-extract-g456-43-20260909.yml'
+concurrency:
+  group: motor-download-extract-g456-43-20260909
+  cancel-in-progress: true
+jobs:
+  pause:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo paused
