@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 1384824,
+  "bundle_sha256": "ea2c6103dc8a1f568e90e60ce34038b7f7055cd9c7f6e20c3667801016e8f350",
+  "extracted_tree": {
+    "bytes": 3882836,
+    "files": 692,
+    "sha256": "11713239f464f3bb10b09c0bae288a2fd60d32c202ff66058098e3f2c0575c64"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 1384824,
+      "name": "Radix-UI.bundle.zip.part-0001",
+      "sha256": "ea2c6103dc8a1f568e90e60ce34038b7f7055cd9c7f6e20c3667801016e8f350"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Radix-UI",
+  "source_bytes": 3882836,
+  "source_commit": "f7ecd5ab16f5e1e820eb5786a1419a98a2d594ae",
+  "source_files": 692,
+  "source_ref": "HEAD",
+  "source_repo": "radix-ui/primitives",
+  "source_tree": {
+    "bytes": 3882836,
+    "files": 692,
+    "sha256": "11713239f464f3bb10b09c0bae288a2fd60d32c202ff66058098e3f2c0575c64"
+  }
+}
