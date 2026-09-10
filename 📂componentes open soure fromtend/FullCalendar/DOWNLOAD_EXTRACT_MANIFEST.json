@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 1318227,
+  "bundle_sha256": "f4e878986d02946054a7b7066574f662900eab782343c2834400ce87a20396fa",
+  "extracted_tree": {
+    "bytes": 4064806,
+    "files": 1124,
+    "sha256": "c3d0953e5dbb18c3baa1ceef77b4cf8d12fb0697ed4be442144d19812419ee04"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 1318227,
+      "name": "FullCalendar.bundle.zip.part-0001",
+      "sha256": "f4e878986d02946054a7b7066574f662900eab782343c2834400ce87a20396fa"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "FullCalendar",
+  "source_bytes": 4064806,
+  "source_commit": "f34b025203bf143c7313f7078cf717303f76d112",
+  "source_files": 1124,
+  "source_ref": "HEAD",
+  "source_repo": "fullcalendar/fullcalendar",
+  "source_tree": {
+    "bytes": 4064806,
+    "files": 1124,
+    "sha256": "c3d0953e5dbb18c3baa1ceef77b4cf8d12fb0697ed4be442144d19812419ee04"
+  }
+}
