@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 4594842,
+  "bundle_sha256": "207485340427ea89e8b21ac1c044129b677c29ad152a87bafb879cf7b26670e0",
+  "extracted_tree": {
+    "bytes": 11486539,
+    "files": 1143,
+    "sha256": "6c3b0aba2b27ce5e4aef9637dda9667b095570ee3d59f5181a33f8d42ce111cf"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 4594842,
+      "name": "NodeGui.bundle.zip.part-0001",
+      "sha256": "207485340427ea89e8b21ac1c044129b677c29ad152a87bafb879cf7b26670e0"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "NodeGui",
+  "source_bytes": 11486539,
+  "source_commit": "d54943ce929d3098dd785952090d1666c35ff219",
+  "source_files": 1143,
+  "source_ref": "HEAD",
+  "source_repo": "nodegui/nodegui",
+  "source_tree": {
+    "bytes": 11486539,
+    "files": 1143,
+    "sha256": "6c3b0aba2b27ce5e4aef9637dda9667b095570ee3d59f5181a33f8d42ce111cf"
+  }
+}

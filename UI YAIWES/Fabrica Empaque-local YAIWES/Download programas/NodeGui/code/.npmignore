@@ -1,0 +1,11 @@
+*.test.*
+build
+website
+.*
+!dist
+extras/*
+!extras/legal
+src/*
+!src/cpp
+prebuilds/*
+miniqt/
