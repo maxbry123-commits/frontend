@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 1036114,
+  "bundle_sha256": "90ff27a101006b6dd3138af3ef92f18bf14533750a530d322fad536080d195d7",
+  "extracted_tree": {
+    "bytes": 2718332,
+    "files": 802,
+    "sha256": "1a2884b59d41276b48eb4f22c65c71ceae189b57343be799534d4ca441143f97"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 1036114,
+      "name": "Puck.bundle.zip.part-0001",
+      "sha256": "90ff27a101006b6dd3138af3ef92f18bf14533750a530d322fad536080d195d7"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Puck",
+  "source_bytes": 2718332,
+  "source_commit": "74a42c74db2b52da13ce1fc49087a07a6653dac8",
+  "source_files": 802,
+  "source_ref": "HEAD",
+  "source_repo": "measuredco/puck",
+  "source_tree": {
+    "bytes": 2718332,
+    "files": 802,
+    "sha256": "1a2884b59d41276b48eb4f22c65c71ceae189b57343be799534d4ca441143f97"
+  }
+}
