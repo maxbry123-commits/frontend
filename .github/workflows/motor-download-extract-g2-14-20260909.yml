@@ -13,18 +13,21 @@ permissions:
 
 concurrency:
   group: motor-download-extract-g2-14-20260909
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   motor-group-2:
     runs-on: ubuntu-latest
     timeout-minutes: 330
     steps:
-      - name: Checkout main
+      - name: Checkout canonical motor
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
           lfs: false
+          sparse-checkout: |
+            ➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip
+          sparse-checkout-cone-mode: false
 
       - name: Verify canonical motor blobs
         shell: bash
