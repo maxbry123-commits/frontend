@@ -1,0 +1,68 @@
+name: UI YAIWES Diagnostic Critical 02 V2 Canonical Motors
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/automation/diagnostic-critical-02-v2-motores-20260910/QUEUE.json'
+      - '.github/workflows/ui-yaiwes-diagnostic-critical-02-v2-motores-20260910.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: maxbry123-commits-frontend-main-ui-yaiwes-diagnostic-critical-02-v2
+  cancel-in-progress: false
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Bootstrap canonical motors and queue
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git init -q
+          git remote add origin 'https://github.com/maxbry123-commits/frontend.git'
+          git sparse-checkout init --no-cone
+          cat > .git/info/sparse-checkout <<'EOF'
+          /UI YAIWES/➡️📂motores de descarga extracción copiado movimiento archivos frontend/
+          /UI YAIWES/automation/diagnostic-critical-02-v2-motores-20260910/QUEUE.json
+          EOF
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
+          git checkout -q --detach FETCH_HEAD
+      - name: Verify immutable Motor 2 and engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='UI YAIWES/➡️📂motores de descarga extracción copiado movimiento archivos frontend'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py")" = '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py")" = '91e6e4486692eab314be5c7130d8310d3c855397'
+      - name: Execute immutable Motor 2 diagnostic
+        shell: bash
+        env:
+          QUEUE_FILE: UI YAIWES/automation/diagnostic-critical-02-v2-motores-20260910/QUEUE.json
+          STATE_FILE: ${{ runner.temp }}/motor2-state.json
+          ENGINE_PATH: UI YAIWES/➡️📂motores de descarga extracción copiado movimiento archivos frontend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py
+          INDEX_PATH: ${{ runner.temp }}/motor2-index.md
+          MAX_RETRIES: '1'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -uo pipefail
+          python 'UI YAIWES/➡️📂motores de descarga extracción copiado movimiento archivos frontend/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py' | tee "${RUNNER_TEMP}/motor2-final.json"
+          test "${PIPESTATUS[0]}" -eq 0
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-yaiwes-diagnostic-critical-02-v2-evidence
+          path: |
+            ${{ runner.temp }}/motor2-state.json
+            ${{ runner.temp }}/motor2-index.md
+            ${{ runner.temp }}/motor2-final.json
+          if-no-files-found: warn
