@@ -1,0 +1,83 @@
+{
+  "bundle_bytes": 134008990,
+  "bundle_sha256": "ce5ec2e3e0e6c7de0be5531a77244e0e27762d77fdd36a28980cedd95dcf546d",
+  "extracted_tree": {
+    "bytes": 193661196,
+    "files": 10108,
+    "sha256": "949977426060fccc5e22c7d6862f36340780ffab54d874e1aef96848042bdde5"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "React-Spectrum.bundle.zip.part-0001",
+      "sha256": "17c1b2cccdd98c202aafa3ad8772f8a0dfc9ce05c5ecc7cc3c24403c2cb5949b"
+    },
+    {
+      "bytes": 12582912,
+      "name": "React-Spectrum.bundle.zip.part-0002",
+      "sha256": "89972dcdea4df1f31df203be90bc77e98d5cb6958492a644640ea57c2d2ab422"
+    },
+    {
+      "bytes": 12582912,
+      "name": "React-Spectrum.bundle.zip.part-0003",
+      "sha256": "1bae6668e646ce7595ac8c3c568d212380aabf0631b25d1a209bc5cd8cac290d"
+    },
+    {
+      "bytes": 12582912,
+      "name": "React-Spectrum.bundle.zip.part-0004",
+      "sha256": "735dcfc773f5e01a3f9734d06417992e7df03afed361bf52443894f0a97941e8"
+    },
+    {
+      "bytes": 12582912,
+      "name": "React-Spectrum.bundle.zip.part-0005",
+      "sha256": "8713c1021f0f45cf3fef2f21c1b65083ef752be0ef37c5c9a49608fdec621a91"
+    },
+    {
+      "bytes": 12582912,
+      "name": "React-Spectrum.bundle.zip.part-0006",
+      "sha256": "bea3572054bc304577321668e3e581e7e6493477901005fafb3cd2019aa5dfc1"
+    },
+    {
+      "bytes": 12582912,
+      "name": "React-Spectrum.bundle.zip.part-0007",
+      "sha256": "cbd147d5bf46dee8f867adfdb2abca6c585767e0258ee17acb8c30031e2d3d31"
+    },
+    {
+      "bytes": 12582912,
+      "name": "React-Spectrum.bundle.zip.part-0008",
+      "sha256": "f443ed88d5cb01c3bed88d8e1a5c9029301926938cab82502880c7f9aa787ad4"
+    },
+    {
+      "bytes": 12582912,
+      "name": "React-Spectrum.bundle.zip.part-0009",
+      "sha256": "47e44001948dfce4879cca01b334a55ae7d6f9ee38a4b8035b6ffcaad660f39e"
+    },
+    {
+      "bytes": 12582912,
+      "name": "React-Spectrum.bundle.zip.part-0010",
+      "sha256": "ab8ad0a53e805bcc4a8cb16a02032732ff62d8ae07ef110354c44611af43c32b"
+    },
+    {
+      "bytes": 8179870,
+      "name": "React-Spectrum.bundle.zip.part-0011",
+      "sha256": "7b811b5b228f7c33e5083346a88b4493aedafc53eaebc3344db36e90cb343e94"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "React-Spectrum",
+  "source_bytes": 193661196,
+  "source_commit": "4693fcc844a341107e7dd26fe456edb1e269e44c",
+  "source_files": 10108,
+  "source_ref": "HEAD",
+  "source_repo": "adobe/react-spectrum",
+  "source_tree": {
+    "bytes": 193661196,
+    "files": 10108,
+    "sha256": "949977426060fccc5e22c7d6862f36340780ffab54d874e1aef96848042bdde5"
+  }
+}
