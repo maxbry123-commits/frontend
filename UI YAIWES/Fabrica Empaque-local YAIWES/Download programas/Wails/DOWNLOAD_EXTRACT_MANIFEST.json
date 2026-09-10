@@ -1,0 +1,68 @@
+{
+  "bundle_bytes": 90221951,
+  "bundle_sha256": "5f7ffada2433ee60dddae91b534b949e52af0b4dc25fa3ec595876ffe919f865",
+  "extracted_tree": {
+    "bytes": 133351184,
+    "files": 13020,
+    "sha256": "077ee0b6fbafe6d54be1db52d4c75967a74276796f477087d664f27e696f1a28"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "Wails.bundle.zip.part-0001",
+      "sha256": "835dc18965b37e07582d5a02eed77a4068a0b22475d9a707bb0dcb7c59beb6e5"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Wails.bundle.zip.part-0002",
+      "sha256": "a9fb3a56b31d1ee2b851abea9cf0c7b9fd4443365778f9cd0b8fbf762d31c7f2"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Wails.bundle.zip.part-0003",
+      "sha256": "5e45eddea35e5a2b1e36930ea4414d5bd3ee38f13b95d42b69be21a3d7ebadc1"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Wails.bundle.zip.part-0004",
+      "sha256": "cd751dc85bbb5822780913fa438e927e7eba99fa057c5c7838d7ce795fcf579b"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Wails.bundle.zip.part-0005",
+      "sha256": "0c76ec49f9c0b37b74076015d5b41de4c05d0f1f35f0148293767042584446d9"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Wails.bundle.zip.part-0006",
+      "sha256": "f3deaa8426ba76606fc4171a2a2700f0663ed4e40a4b7cf2edb73c8cb7ccac8b"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Wails.bundle.zip.part-0007",
+      "sha256": "e19a8945dc768918b9b0d925708027513b6172c94578842499675546b094a091"
+    },
+    {
+      "bytes": 2141567,
+      "name": "Wails.bundle.zip.part-0008",
+      "sha256": "d971c140e0419a336b147ee31b679b07a9d68e6b2f64ba5f2fd9c574c7425826"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Wails",
+  "source_bytes": 133351184,
+  "source_commit": "3465799f2dcda85b8a2b336bf58b0014c047a930",
+  "source_files": 13020,
+  "source_ref": "HEAD",
+  "source_repo": "wailsapp/wails",
+  "source_tree": {
+    "bytes": 133351184,
+    "files": 13020,
+    "sha256": "077ee0b6fbafe6d54be1db52d4c75967a74276796f477087d664f27e696f1a28"
+  }
+}
