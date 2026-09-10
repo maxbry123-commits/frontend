@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 1202084,
+  "bundle_sha256": "ec28af9d8196568d16b8e141e3b3b4d0464d8f31a071838f5682c81a31f3e102",
+  "extracted_tree": {
+    "bytes": 1783310,
+    "files": 138,
+    "sha256": "801853348af06d20518920bc444d4f535dde1474d0b5747dbe55fa6b86df373a"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 1202084,
+      "name": "AppJS.bundle.zip.part-0001",
+      "sha256": "ec28af9d8196568d16b8e141e3b3b4d0464d8f31a071838f5682c81a31f3e102"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "AppJS",
+  "source_bytes": 1783310,
+  "source_commit": "003a0d9615e34855460761139554218ba2c2942d",
+  "source_files": 138,
+  "source_ref": "HEAD",
+  "source_repo": "appjs/appjs",
+  "source_tree": {
+    "bytes": 1783310,
+    "files": 138,
+    "sha256": "801853348af06d20518920bc444d4f535dde1474d0b5747dbe55fa6b86df373a"
+  }
+}
