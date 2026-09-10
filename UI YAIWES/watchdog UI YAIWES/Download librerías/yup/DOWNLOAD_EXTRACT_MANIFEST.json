@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 303313,
+  "bundle_sha256": "c17a00094ec3db1b761b8102aed860c23c8035ab8a653a2f495324280af41742",
+  "extracted_tree": {
+    "bytes": 1020941,
+    "files": 74,
+    "sha256": "db54734096159419fa9bd99b4bede82091b68c0516ebeacc228459359c5f01a7"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 303313,
+      "name": "yup.bundle.zip.part-0001",
+      "sha256": "c17a00094ec3db1b761b8102aed860c23c8035ab8a653a2f495324280af41742"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "yup",
+  "source_bytes": 1020941,
+  "source_commit": "ff31eee8a2b10c938bb3a22544d9e33957a8cf01",
+  "source_files": 74,
+  "source_ref": "HEAD",
+  "source_repo": "jquense/yup",
+  "source_tree": {
+    "bytes": 1020941,
+    "files": 74,
+    "sha256": "db54734096159419fa9bd99b4bede82091b68c0516ebeacc228459359c5f01a7"
+  }
+}
