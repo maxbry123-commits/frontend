@@ -1,41 +1,82 @@
 {
-  "schema": "yaiwes.astra.factory.state.v1",
+  "schema": "yaiwes.astra.factory.state.v2",
   "contract": "tel.workflow/v3",
   "updated_date": "2026-09-10",
   "owner_identity": "➡️ Astra plan fábrica UI YAIWES",
+  "scope": "ONLY_FACTORY_AND_UI_YAIWES_INTERFACE",
   "status": "ACTIVE_LOOP",
-  "primary_goal": "Persistent frontend YAIWES + Factory UI zero-friction; understand backend contracts and prepare non-conflicting backend donors.",
+  "primary_goal": "Persistent frontend YAIWES + Factory UI zero-friction; understand backend contracts and prepare non-conflicting backend donors; after T1 VERIFIED_CLOSED, build Interface UI YAIWES with the factory.",
   "integration_allowlist": ["GitHub", "Hugging Face"],
   "task_gate": {
     "T1_FACTORY_FRONTEND": "ACTIVE_LOOP",
     "T2_INTERFACE_YAIWES": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED"
   },
   "roots": {
-    "frontend_canonical_candidate": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/Frontend/",
-    "backend": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/backend/"
+    "frontend": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/Frontend/",
+    "backend_donor_staging": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/backend/"
   },
-  "gaps": [
+  "gaps_open": [
+    {
+      "id": "GAP_T1_COMPONENT_XRAY_INCOMPLETE",
+      "status": "OPEN",
+      "evidence": "Initial matrix maps 46 candidates as SOURCE_PRESENT_ONLY; full root capability/readme/license/source verification is not complete.",
+      "next_action": "Continue T1_03_COMPONENT_XRAY before canvas owner selection."
+    },
+    {
+      "id": "GAP_FACTORY_NOT_IMPLEMENTED_TESTED",
+      "status": "OPEN",
+      "evidence": "Architecture/plan exist but Factory Shell, M1-M5, sandbox, tests, evidence and independent audit are not yet implemented/verified.",
+      "next_action": "Complete T1_04..T1_16 in queue1x1 order."
+    }
+  ],
+  "gaps_closed": [
     {
       "id": "GAP_CASE_COLLISION_FRONTEND",
-      "status": "OPEN",
-      "evidence": "Both Frontend/ and frontend/ exist in Astra staging; must canonicalize before cross-platform code promotion.",
-      "safe_action": "Do not place production code in either duplicate path until canonical path is selected and migration is verified."
+      "status": "VERIFIED_CLOSED",
+      "evidence": "Canonical Frontend/ exists; lowercase frontend/README.md was deleted at commit 518d9d7aeab71efe5f84c27bfffbc88626f17be1 and read-back returned 404."
+    },
+    {
+      "id": "GAP_LITERAL_SOURCE_URLS_OMITTED",
+      "status": "VERIFIED_CLOSED",
+      "evidence": "INPUT-BLOCK-LITERAL-ADDENDUM-2026-09-10.md created at commit d7d26c0a7200f497b6b7366a748a9e8bc5da6ab3 with all four URLs and latest audit input."
+    },
+    {
+      "id": "GAP_CRAZY_WALL_SCOPE",
+      "status": "VERIFIED_CLOSED",
+      "evidence": "Dedicated Crazy Wall for Astra factory/interface created at commit 7891c6033e03b4de587095035fefcaf6667cb41b."
+    },
+    {
+      "id": "GAP_HANDOFF_RECOVERY_BACKEND_CENTRIC",
+      "status": "VERIFIED_CLOSED_DOCUMENTAL",
+      "evidence": "Factory/interface-specific Recovery V2 and Handoff V2 created; legacy global files retained as historical cross-team references."
     }
   ],
   "inventory": {
     "component_root": "UI YAIWES/componentes open soure UI YAIWES/",
     "components_mapped_initial": 46,
-    "matrix": "MATRIZ-FUSION-46-COMPONENTES-FRONTEND-BACKEND.md",
-    "state": "SOURCE_PRESENT_ONLY"
+    "matrix": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/MATRIZ-FUSION-46-COMPONENTES-FRONTEND-BACKEND.md",
+    "state": "SOURCE_PRESENT_ONLY",
+    "exhaustive": false
   },
-  "architecture": {
-    "detailed": "ARQUITECTURA-DETALLADA-FABRICA-E-INTERFACE-YAIWES-V1.md",
-    "profile": "PERFIL-TRABAJO-Y-PERFIL-UI-YAIWES.md",
-    "input_literal": "INPUT-BLOCK-LITERAL-2026-09-10.md"
+  "canonical_files": {
+    "input_literal_base": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/INPUT-BLOCK-LITERAL-2026-09-10.md",
+    "input_literal_addendum": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/INPUT-BLOCK-LITERAL-ADDENDUM-2026-09-10.md",
+    "profile": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/PERFIL-TRABAJO-Y-PERFIL-UI-YAIWES.md",
+    "architecture": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/ARQUITECTURA-DETALLADA-FABRICA-E-INTERFACE-YAIWES-V1.md",
+    "crazy_wall": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/CRAZY-WALL-ASTRA-FABRICA-INTERFACE-UI-YAIWES.json",
+    "plan": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/PLAN-MAESTRO-TAREA1-TAREA2-ASTRA-V2.md",
+    "audit": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/AUDITORIA-FORENSE-4-PASADAS-ASTRA-V2.md",
+    "recovery": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/RECOVERY-PATCH-ASTRA-FABRICA-INTERFACE-YAIWES-V2.md",
+    "handoff": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/HANDOFF-ASTRA-CLAUDE-FABRICA-INTERFACE-YAIWES-V2.md"
   },
   "factory_steps": ["DESIGN/CREATE", "COMPOSE", "CONNECT", "AI/TRANSFORM", "VALIDATE/PUBLISH/EDIT"],
   "factory_modules": ["ELEMENT_BUILDER", "UI_COMPOSER", "COMPONENT_TRANSFORMER", "AI_OPERATOR", "DETERMINISTIC_MODULE_KIT"],
+  "canonical_frontend_cable": "drag/drop | Jarvis prompt | command palette -> TypedAction -> Frontend Guard -> Factory Step Engine / Universal Action Bus -> adapter -> BackendBinding when applicable -> result event -> Normalizer -> UIStateDelta -> verifier/evidence -> frontend store -> render",
+  "component_import_cable": "source -> provenance/license/hash -> static inspection -> capability extraction -> FRONTEND/BACKEND split -> manifest -> universal contract -> adapter -> sandbox preview -> tests -> registry candidate -> version/evidence",
+  "backend_boundary": "Sol backend is external dependency/reference; Astra backend root is donor staging only; no write to Sol-owned paths without explicit handoff.",
   "loop": "INPUT literal -> GOALS12 -> priorities -> plan -> queue1x1 -> execute/review -> verify/refute -> GAP/FLAG -> research up to 20 -> StrategyDelta -> Council12 -> 3 simulations -> 3 refutations -> cross-check -> CODA -> verify_final",
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
-  "next_node": "T1_COMPONENT_CAPABILITY_READBACK_AND_CANVAS_SELECTION"
+  "current_node": "T1_03_COMPONENT_XRAY",
+  "next_node": "T1_04_CANVAS_OWNER_SELECTION",
+  "t2_resume_policy": "Astra or Claude may implement a T2 node only after T1_16 independent audit marks T1 VERIFIED_CLOSED and owner/write_paths/base_sha are explicit."
 }
