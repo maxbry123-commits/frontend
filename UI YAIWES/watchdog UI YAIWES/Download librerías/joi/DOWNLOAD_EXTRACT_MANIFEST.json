@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 297188,
+  "bundle_sha256": "4ce8b9814f9f82382709b8f88b1accac32cfd5cb977435d06991db0a7432cd44",
+  "extracted_tree": {
+    "bytes": 2124590,
+    "files": 84,
+    "sha256": "2870bb76fc037473be9bfc72ced86cf30395caee1c686838a90e4d81fbbdd1fa"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 297188,
+      "name": "joi.bundle.zip.part-0001",
+      "sha256": "4ce8b9814f9f82382709b8f88b1accac32cfd5cb977435d06991db0a7432cd44"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "joi",
+  "source_bytes": 2124590,
+  "source_commit": "e30b50e242c91ae9f54bf3c3be0e48a03a13cca0",
+  "source_files": 84,
+  "source_ref": "HEAD",
+  "source_repo": "hapijs/joi",
+  "source_tree": {
+    "bytes": 2124590,
+    "files": 84,
+    "sha256": "2870bb76fc037473be9bfc72ced86cf30395caee1c686838a90e4d81fbbdd1fa"
+  }
+}
