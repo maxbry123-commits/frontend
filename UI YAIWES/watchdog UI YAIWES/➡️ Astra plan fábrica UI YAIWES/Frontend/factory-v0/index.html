@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>YAIWES UI Factory V0</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="ribbon">
+      <div class="brand">YAIWES UI Factory</div>
+      <nav id="steps" aria-label="Pasos de fábrica"></nav>
+      <div class="mode-switch">
+        <button data-mode="MANUAL">Manual</button>
+        <button data-mode="AI_ASSIST">AI Assist</button>
+        <button data-mode="AUTOPILOT">Autopilot</button>
+      </div>
+    </header>
+    <main class="workspace">
+      <aside class="library">
+        <h2>Componentes</h2>
+        <div id="component-library"></div>
+        <button id="new-component">+ Crear componente</button>
+      </aside>
+      <section class="canvas-shell">
+        <div class="canvas-toolbar">
+          <strong id="step-title"></strong>
+          <span id="status"></span>
+        </div>
+        <div id="canvas" class="canvas" aria-label="Canvas de composición"></div>
+      </section>
+      <aside class="inspector">
+        <h2>Inspector</h2>
+        <div id="inspector-content"></div>
+        <h3>IA / Delta</h3>
+        <textarea id="ai-goal" placeholder="Describe una mejora..."></textarea>
+        <button id="propose-delta">Proponer delta</button>
+        <pre id="delta-preview"></pre>
+      </aside>
+    </main>
+    <footer class="footer-bar">
+      <button id="prev-step">← Atrás</button>
+      <button id="undo">Deshacer</button>
+      <button id="redo">Rehacer</button>
+      <button id="save-version">Guardar V+</button>
+      <button id="export-json">Exportar JSON</button>
+      <button id="next-step">Siguiente →</button>
+    </footer>
+  </div>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
