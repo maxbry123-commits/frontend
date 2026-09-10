@@ -1,0 +1,43 @@
+{
+  "bundle_bytes": 28071232,
+  "bundle_sha256": "974e76133e1a5ed97b73769648231927baa53a18d2ba246f2842a779675be4fc",
+  "extracted_tree": {
+    "bytes": 43614271,
+    "files": 3390,
+    "sha256": "58108598623fed0b2b7ee8be49e052830e4fecf93d9ec68261bba4773c29e293"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "typia.bundle.zip.part-0001",
+      "sha256": "755930599977b03c2a9df4972844f129719b7f2009bef2179076fbed08269416"
+    },
+    {
+      "bytes": 12582912,
+      "name": "typia.bundle.zip.part-0002",
+      "sha256": "bd00d5cbe852b6c5eadfb87eabed860be9da77f92e066d5c3e3258878021d300"
+    },
+    {
+      "bytes": 2905408,
+      "name": "typia.bundle.zip.part-0003",
+      "sha256": "89c2f3fcd1401254ce29e287d618ad61dcef5197f116304c3cfeee1ae8288319"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "typia",
+  "source_bytes": 43614271,
+  "source_commit": "0e4aeeec65d81d8024ad5bd7fb382a6f104aac75",
+  "source_files": 3390,
+  "source_ref": "HEAD",
+  "source_repo": "samchon/typia",
+  "source_tree": {
+    "bytes": 43614271,
+    "files": 3390,
+    "sha256": "58108598623fed0b2b7ee8be49e052830e4fecf93d9ec68261bba4773c29e293"
+  }
+}
