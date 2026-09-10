@@ -1,0 +1,86 @@
+name: UI YAIWES Motor Canonico Repair 09 V2
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/automation/repair-09-motores-canonicos-20260910/QUEUE.json'
+      - '.github/workflows/ui-yaiwes-motor-canonico-repair-09-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: maxbry123-commits-frontend-main-ui-yaiwes-motor-canonico-repair-09-v2
+  cancel-in-progress: false
+
+jobs:
+  download_extract_publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Bootstrap sparse main for canonical motors only
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git init -q
+          git remote add origin 'https://github.com/maxbry123-commits/frontend.git'
+          git config core.sparseCheckout true
+          git sparse-checkout init --no-cone
+          cat > .git/info/sparse-checkout <<'EOF'
+          /UI YAIWES/➡️📂motores de descarga extracción copiado movimiento archivos frontend/
+          /UI YAIWES/automation/repair-09-motores-canonicos-20260910/QUEUE.json
+          EOF
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
+          git checkout -q --detach FETCH_HEAD
+
+      - name: Verify immutable canonical motor blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='UI YAIWES/➡️📂motores de descarga extracción copiado movimiento archivos frontend'
+          test "$(git hash-object "$ROOT/➡️📂 Motor de extracción zip/motor_1_extract_only.py")" = 'a52d5dc0e6ff26f75d753b848dcc1a40c5dd4500'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py")" = '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py")" = '91e6e4486692eab314be5c7130d8310d3c855397'
+          test "$(git hash-object "$ROOT/➡️📂motor de copiar archivos/motor_3_copy_batches.py")" = '3689924361ce4a1a9fde4ae2b6f6009c37a6042d'
+          test "$(git hash-object "$ROOT/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py")" = '8281211da76db3080fe1f1ea38b3eb0c45d655cb'
+          test "$(git hash-object "$ROOT/➡️📂motor de moves archivos/motor_4_move_batches.py")" = '9a21facfe11327cf60a2afca8f415ad52f0ecbe5'
+
+      - name: Execute canonical Motor 2 queue download extract publish
+        shell: bash
+        env:
+          QUEUE_FILE: UI YAIWES/automation/repair-09-motores-canonicos-20260910/QUEUE.json
+          STATE_FILE: ${{ runner.temp }}/motor2-state.json
+          ENGINE_PATH: UI YAIWES/➡️📂motores de descarga extracción copiado movimiento archivos frontend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py
+          INDEX_PATH: ${{ runner.temp }}/motor2-index.md
+          MAX_RETRIES: '1'
+          LOOP_SLEEP_SECONDS: '0'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: UI YAIWES/componentes open soure UI YAIWES
+        run: |
+          set -euo pipefail
+          python 'UI YAIWES/➡️📂motores de descarga extracción copiado movimiento archivos frontend/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py' | tee "${RUNNER_TEMP}/motor2-final.json"
+          python - <<'PY'
+          import json, os, pathlib, sys
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'motor2-final.json'
+          data=json.loads([x for x in p.read_text().splitlines() if x.strip()][-1])
+          print(json.dumps(data, indent=2, sort_keys=True))
+          if data.get('verdict') != 'VERIFIED_CLOSED': sys.exit(2)
+          PY
+
+      - name: Upload motor evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-yaiwes-motor-canonico-repair-09-v2-evidence
+          path: |
+            ${{ runner.temp }}/motor2-state.json
+            ${{ runner.temp }}/motor2-index.md
+            ${{ runner.temp }}/motor2-final.json
+          if-no-files-found: warn
