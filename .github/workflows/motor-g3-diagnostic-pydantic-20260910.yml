@@ -1,0 +1,58 @@
+name: Motor G3 Diagnostic Pydantic 20260910
+run-name: Motor G3 Diagnostic Pydantic • ${{ github.sha }}
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/motor-g3-diagnostic-pydantic-20260910.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: motor-g3-diagnostic-pydantic-20260910
+  cancel-in-progress: false
+
+jobs:
+  diagnostic-pydantic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout canonical motor
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout: |
+            ➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip
+          sparse-checkout-cone-mode: false
+      - name: Verify canonical motor blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          MOTOR_DIR='➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip'
+          test "$(git hash-object "$MOTOR_DIR/motor_2_queue_download_extract.py")" = '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          test "$(git hash-object "$MOTOR_DIR/hf_download_extract_engine.py")" = '91e6e4486692eab314be5c7130d8310d3c855397'
+      - name: Execute and expose state
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: UI YAIWES/watchdog UI YAIWES/Download librerías
+          MAX_RETRIES: '1'
+        run: |
+          set -uo pipefail
+          MOTOR_DIR="$GITHUB_WORKSPACE/➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip"
+          export ENGINE_PATH="$MOTOR_DIR/hf_download_extract_engine.py"
+          export QUEUE_FILE="$RUNNER_TEMP/pydantic.queue.json"
+          export STATE_FILE="$RUNNER_TEMP/pydantic.state.json"
+          export INDEX_PATH="$RUNNER_TEMP/pydantic.index.md"
+          printf '%s\n' '{"queue":[{"id":"diag-pydantic","source_repo":"pydantic/pydantic","slug":"Pydantic","publish":true}]}' > "$QUEUE_FILE"
+          python3 "$MOTOR_DIR/motor_2_queue_download_extract.py"
+          RC=$?
+          echo '---STATE---'
+          cat "$STATE_FILE" || true
+          exit "$RC"
