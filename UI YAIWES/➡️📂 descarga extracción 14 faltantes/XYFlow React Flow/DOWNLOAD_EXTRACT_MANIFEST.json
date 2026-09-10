@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 822704,
+  "bundle_sha256": "473960ee3d25065f742d752d0bf042e939e15794c326d4b3e4944497acd6cec3",
+  "extracted_tree": {
+    "bytes": 2303810,
+    "files": 697,
+    "sha256": "58d10b6b54ac94e3f8b05e0d705c44c67bd8d6becdf054e3751df8772bacc52a"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 822704,
+      "name": "XYFlow React Flow.bundle.zip.part-0001",
+      "sha256": "473960ee3d25065f742d752d0bf042e939e15794c326d4b3e4944497acd6cec3"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "XYFlow React Flow",
+  "source_bytes": 2303810,
+  "source_commit": "0a1f9575b25679f2880175de8d3eae21aedde921",
+  "source_files": 697,
+  "source_ref": "HEAD",
+  "source_repo": "https://github.com/xyflow/xyflow",
+  "source_tree": {
+    "bytes": 2303810,
+    "files": 697,
+    "sha256": "58d10b6b54ac94e3f8b05e0d705c44c67bd8d6becdf054e3751df8772bacc52a"
+  }
+}
