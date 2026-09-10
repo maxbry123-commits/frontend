@@ -1,7 +1,7 @@
 {
-  "schema": "yaiwes.astra.factory_interface.checkpoint.v3",
+  "schema": "yaiwes.astra.factory_interface.checkpoint.v4",
   "contract": "tel.workflow/v3",
-  "timestamp": "2026-09-10T17:06:00-05:00",
+  "timestamp": "2026-09-10T17:12:00-05:00",
   "owner_identity": "➡️ Astra plan fábrica UI YAIWES",
   "scope": "ONLY_FACTORY_AND_UI_YAIWES_INTERFACE",
   "status": "ACTIVE_LOOP",
@@ -9,8 +9,8 @@
     "T1_FACTORY": "ACTIVE_LOOP",
     "T2_INTERFACE": "BLOCKED_BY_T1_FOR_PRODUCTIVE_EXECUTION"
   },
-  "current_node": "T1_03_COMPONENT_XRAY",
-  "next_node": "T1_04_CANVAS_OWNER_SELECTION",
+  "current_node": "T1_05_RUNTIME_BROWSER_AND_DEPLOY_VERIFY",
+  "next_node": "T1_06_COMPONENT_DONOR_ADAPTER_MAP_AND_HF_PRIVATE_PREVIEW",
   "canonical_read_order": [
     "INPUT-BLOCK-LITERAL-2026-09-10.md",
     "INPUT-BLOCK-LITERAL-ADDENDUM-2026-09-10.md",
@@ -27,37 +27,57 @@
     "HANDOFF-ASTRA-CLAUDE-FABRICA-INTERFACE-YAIWES-V3.md"
   ],
   "physical_roots": {
-    "factory": "fabrica de UI INTERFACE fromtend/",
+    "factory_source_and_donors": "fabrica de UI INTERFACE fromtend/",
     "oss_library": "UI YAIWES/componentes open soure UI YAIWES/",
-    "historical_product_interface": "UI YAIWES interface/",
     "astra_workspace": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/",
     "astra_frontend": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/Frontend/",
+    "astra_factory_runtime_v1": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/Frontend/factory-v1/",
     "astra_backend_donor": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/backend/",
     "sol_backend_read_only": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/"
   },
+  "factory_runtime_v1": {
+    "commit": "a9f9818dd76025141333df5102fc885646df8d70",
+    "blob": "a6d078c9accca130344f7ceddefb5482d15c4978",
+    "entry": "Frontend/factory-v1/index.html",
+    "readback": true,
+    "implemented": [
+      "5-step ribbon: CREAR/COMPONER/TRANSFORMAR/IA/VALIDAR",
+      "drag/drop canvas",
+      "8 registered module types",
+      "inspector + responsive spans",
+      "undo/redo + localStorage",
+      "component source -> draft universal ficha transform",
+      "MANUAL/AI_ASSIST/AUTOPILOT modes",
+      "candidate delta before apply",
+      "provider selector using secret_ref only",
+      "local static validation",
+      "JSON project export"
+    ],
+    "verification_state": "CLOSED_UNVERIFIED",
+    "reason": "GitHub source+readback verified; independent browser runtime/E2E and private Hugging Face deployment not yet evidenced"
+  },
   "verified_repairs": [
     "dedicated Astra Crazy Wall created",
-    "Frontend/ lowercase collision removed",
     "literal source URL addendum persisted",
-    "literal part-02 persisted without secrets",
     "physical factory root corrected",
-    "architecture V2 separates proposed frontend contracts from verified Sol backend capabilities"
+    "architecture V2 separates proposed frontend contracts from verified Sol backend capabilities",
+    "functional zero-dependency factory runtime v1 created and read back"
   ],
   "open_gaps": [
     "GAP_COMPONENT_XRAY_NOT_COMPLETE",
-    "GAP_CANVAS_OWNER_NOT_SELECTED",
+    "GAP_DONOR_ADAPTER_MAP_NOT_COMPLETE",
+    "GAP_BROWSER_RUNTIME_E2E_NOT_VERIFIED",
     "GAP_PROVIDER_MODEL_AVAILABILITY",
     "GAP_HF_PRIVATE_FACTORY_DEPLOYMENT_NOT_VERIFIED",
-    "GAP_BACKEND_LLM_CAPABILITY_FOR_FACTORY",
     "GAP_REAL_BACKEND_BINDINGS_NOT_VERIFIED_T2"
   ],
   "backend_crosscheck": {
     "contracts": "NodeContract/Evidence/LayerResult found",
     "registry": "ComponentSpec registry found; WIRED is not VERIFIED_CLOSED",
-    "llm_gate": "current reasons limited to ambiguity_resolution, semantic_ranking, bounded_summary; general factory Autopilot not verified",
+    "boundary": "frontend uses contracts/secret_ref; no Sol backend write",
     "rule": "Backend PASS maps to RUNTIME_PASS only until independent verification"
   },
-  "resume_algorithm": "read literals -> read Crazy Wall/STATE/profile/architecture V2/matrix/plan/audits/recovery/handoff -> fetch fresh main HEAD -> verify current_node + ownership + path -> execute one safe node -> test/evidence -> update state/checkpoint/handoff",
+  "resume_algorithm": "read literals -> fetch fresh main/CrazyWall -> verify ownership -> inspect donor components -> adapter map -> browser/HF private preview verification -> evidence -> only then T1 VERIFIED_CLOSED",
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
   "secrets_policy": "Never persist user API keys; use secret_ref only."
 }
