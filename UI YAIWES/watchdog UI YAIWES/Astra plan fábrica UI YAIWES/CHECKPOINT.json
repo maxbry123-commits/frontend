@@ -1,7 +1,7 @@
 {
-  "schema": "yaiwes.astra.factory_interface.checkpoint.v4",
+  "schema": "yaiwes.astra.factory_interface.checkpoint.v5",
   "contract": "tel.workflow/v3",
-  "timestamp": "2026-09-10T17:12:00-05:00",
+  "timestamp": "2026-09-10T17:13:30-05:00",
   "owner_identity": "➡️ Astra plan fábrica UI YAIWES",
   "scope": "ONLY_FACTORY_AND_UI_YAIWES_INTERFACE",
   "status": "ACTIVE_LOOP",
@@ -9,75 +9,86 @@
     "T1_FACTORY": "ACTIVE_LOOP",
     "T2_INTERFACE": "BLOCKED_BY_T1_FOR_PRODUCTIVE_EXECUTION"
   },
-  "current_node": "T1_05_RUNTIME_BROWSER_AND_DEPLOY_VERIFY",
-  "next_node": "T1_06_COMPONENT_DONOR_ADAPTER_MAP_AND_HF_PRIVATE_PREVIEW",
+  "current_node": "T1_03_COMPONENT_XRAY",
+  "next_node": "T1_04_CANVAS_OWNER_SELECTION",
   "canonical_read_order": [
     "INPUT-BLOCK-LITERAL-2026-09-10.md",
     "INPUT-BLOCK-LITERAL-ADDENDUM-2026-09-10.md",
     "INPUT-BLOCK-LITERAL-PART-02-2026-09-10.md",
     "CRAZY-WALL-ASTRA-FABRICA-INTERFACE-UI-YAIWES.json",
     "STATE.json",
+    "CHECKPOINT.json",
     "PERFIL-TRABAJO-Y-PERFIL-UI-YAIWES.md",
     "ARQUITECTURA-DETALLADA-FABRICA-E-INTERFACE-YAIWES-V2.md",
     "MATRIZ-FUSION-46-COMPONENTES-FRONTEND-BACKEND.md",
-    "PLAN-MAESTRO-TAREA1-TAREA2-ASTRA-V2.md",
+    "PLAN-MAESTRO-TAREA1-TAREA2-ASTRA-V3.md",
     "AUDITORIA-FORENSE-4-PASADAS-ASTRA-V2.md",
     "AUDITORIA-4-PASADAS-INPUT-PLAN-ARQUITECTURA-CABLEADO-2026-09-10.md",
+    "AUDITORIA-POSTCHECK-FACTORY-RUNTIME-V1-2026-09-10.md",
     "RECOVERY-PATCH-ASTRA-FABRICA-INTERFACE-YAIWES-V3.md",
     "HANDOFF-ASTRA-CLAUDE-FABRICA-INTERFACE-YAIWES-V3.md"
   ],
   "physical_roots": {
     "factory_source_and_donors": "fabrica de UI INTERFACE fromtend/",
     "oss_library": "UI YAIWES/componentes open soure UI YAIWES/",
+    "historical_product_interface": "UI YAIWES interface/",
     "astra_workspace": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/",
     "astra_frontend": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/Frontend/",
-    "astra_factory_runtime_v1": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/Frontend/factory-v1/",
     "astra_backend_donor": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/backend/",
     "sol_backend_read_only": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/"
   },
   "factory_runtime_v1": {
+    "path": "UI YAIWES/watchdog UI YAIWES/Astra plan fábrica UI YAIWES/Frontend/factory-v1/index.html",
     "commit": "a9f9818dd76025141333df5102fc885646df8d70",
     "blob": "a6d078c9accca130344f7ceddefb5482d15c4978",
-    "entry": "Frontend/factory-v1/index.html",
-    "readback": true,
-    "implemented": [
-      "5-step ribbon: CREAR/COMPONER/TRANSFORMAR/IA/VALIDAR",
-      "drag/drop canvas",
-      "8 registered module types",
-      "inspector + responsive spans",
-      "undo/redo + localStorage",
-      "component source -> draft universal ficha transform",
-      "MANUAL/AI_ASSIST/AUTOPILOT modes",
-      "candidate delta before apply",
-      "provider selector using secret_ref only",
-      "local static validation",
-      "JSON project export"
-    ],
+    "source_readback": true,
+    "classification": "EXPERIMENTAL_REFERENCE_AND_DONOR",
     "verification_state": "CLOSED_UNVERIFIED",
-    "reason": "GitHub source+readback verified; independent browser runtime/E2E and private Hugging Face deployment not yet evidenced"
+    "does_not_advance_canonical_node": true,
+    "useful_features": [
+      "5-step ribbon",
+      "palette + drag/drop canvas",
+      "simple inspector/responsive spans",
+      "undo/redo/localStorage",
+      "component transform draft",
+      "MANUAL/AI_ASSIST/AUTOPILOT labels with local candidate delta",
+      "provider selector using secret_ref wording",
+      "local static validation",
+      "JSON export"
+    ],
+    "refutation": [
+      "single monolithic index.html mixes HTML/CSS/state/registry/importer/AI/provider/validation/export",
+      "does not satisfy required contracts/adapters/plugins/registry/loader/guards/tests separation",
+      "CanvasOwner bakeoff not completed",
+      "provider health and backend calls are not real",
+      "browser E2E/accessibility/visual/sandbox/HF private deployment not evidenced"
+    ],
+    "evidence": "AUDITORIA-POSTCHECK-FACTORY-RUNTIME-V1-2026-09-10.md"
   },
   "verified_repairs": [
     "dedicated Astra Crazy Wall created",
-    "literal source URL addendum persisted",
+    "literal base/addendum/part-02 persisted without raw secrets",
     "physical factory root corrected",
+    "Frontend/ case collision removed",
     "architecture V2 separates proposed frontend contracts from verified Sol backend capabilities",
-    "functional zero-dependency factory runtime v1 created and read back"
+    "Recovery/Handoff V3 created",
+    "premature checkpoint node advancement caused by factory-v1 prototype refuted"
   ],
   "open_gaps": [
     "GAP_COMPONENT_XRAY_NOT_COMPLETE",
-    "GAP_DONOR_ADAPTER_MAP_NOT_COMPLETE",
-    "GAP_BROWSER_RUNTIME_E2E_NOT_VERIFIED",
+    "GAP_CANVAS_OWNER_NOT_SELECTED",
     "GAP_PROVIDER_MODEL_AVAILABILITY",
     "GAP_HF_PRIVATE_FACTORY_DEPLOYMENT_NOT_VERIFIED",
+    "GAP_BACKEND_LLM_CAPABILITY_FOR_FACTORY",
     "GAP_REAL_BACKEND_BINDINGS_NOT_VERIFIED_T2"
   ],
   "backend_crosscheck": {
     "contracts": "NodeContract/Evidence/LayerResult found",
     "registry": "ComponentSpec registry found; WIRED is not VERIFIED_CLOSED",
-    "boundary": "frontend uses contracts/secret_ref; no Sol backend write",
+    "llm_gate": "current gate does not evidence general factory Autopilot",
     "rule": "Backend PASS maps to RUNTIME_PASS only until independent verification"
   },
-  "resume_algorithm": "read literals -> fetch fresh main/CrazyWall -> verify ownership -> inspect donor components -> adapter map -> browser/HF private preview verification -> evidence -> only then T1 VERIFIED_CLOSED",
+  "resume_algorithm": "read canonical chain -> fresh main -> verify CrazyWall/STATE/CHECKPOINT all current_node T1_03 -> continue component XRAY -> evidence -> T1_04 only after gate",
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
   "secrets_policy": "Never persist user API keys; use secret_ref only."
 }
