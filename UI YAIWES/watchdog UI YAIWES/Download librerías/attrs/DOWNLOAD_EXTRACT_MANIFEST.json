@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 998440,
+  "bundle_sha256": "b584cd808623479f4072aed3d217cebed3366dbd46ccdba88fbb86c336c6b9b2",
+  "extracted_tree": {
+    "bytes": 2030083,
+    "files": 140,
+    "sha256": "a8abca27fbb42cf00c569de1501ee66318d092a4625d56a40936e56bf1dd49f0"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 998440,
+      "name": "attrs.bundle.zip.part-0001",
+      "sha256": "b584cd808623479f4072aed3d217cebed3366dbd46ccdba88fbb86c336c6b9b2"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "attrs",
+  "source_bytes": 2030083,
+  "source_commit": "8f767776326faaed11e6c2974798787f6e19b343",
+  "source_files": 140,
+  "source_ref": "HEAD",
+  "source_repo": "python-attrs/attrs",
+  "source_tree": {
+    "bytes": 2030083,
+    "files": 140,
+    "sha256": "a8abca27fbb42cf00c569de1501ee66318d092a4625d56a40936e56bf1dd49f0"
+  }
+}
