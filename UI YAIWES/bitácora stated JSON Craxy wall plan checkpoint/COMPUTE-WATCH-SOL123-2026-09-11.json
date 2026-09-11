@@ -1,0 +1,53 @@
+{
+  "schema": "yaiwes.compute-watch.sol123.v1",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_MONITORING_LOOP",
+  "monitor": "🌞👷 sol osquestador plan 🎯",
+  "monitoring_rule": "No role is marked ACTIVE from assumption. ACTIVE requires fresh STATE/Crazy Wall heartbeat or real run/log evidence. GAP blocks only its node; next FREE node must be visible.",
+  "roles": {
+    "SOL1": {
+      "current_node": "S1-05_LOCAL_FIRST_PERSISTENCE_AND_MEMORY_BOUNDARY_CROSSCHECK",
+      "current_task": "Cross-check user-owned/local-first storage, restart recovery, chat/project memory vs agent memory against truth docs and runtime.",
+      "status": "ASSIGNED_WAITING_FRESH_HEARTBEAT",
+      "blocker_if_any": "Vite/Supabase acquisition still DESTINATION_INPUT_GAP; this does not block S1-05 read-only analysis.",
+      "evidence_or_run": "roles/SOL-PLAN-ORQUESTADOR-REPLY-S1.json",
+      "next_free_node": "Publish document/code anchors + missing tests, then take next S1 FREE node.",
+      "watch": "MONITORED_BY_SOL_ORQUESTADOR"
+    },
+    "SOL2": {
+      "current_node": "S2-AVF-CAPABILITY-PROBE-CONTRACT",
+      "current_task": "Define AVF provider/host capability/permission/guest boot/fallback contract; keep DuckDB special-file and AVF provider gaps fail-closed.",
+      "status": "ASSIGNED_WAITING_FRESH_HEARTBEAT",
+      "blocker_if_any": "DuckDB SOURCE_SPECIAL_FILE_GAP and AVF PROVIDER_GAP block only acquisition nodes.",
+      "evidence_or_run": "DuckDB run 34565130195 job 103155580176 + roles/SOL-PLAN-ORQUESTADOR-REPLY-S2.json",
+      "next_free_node": "Publish API fields/platform matrix/refutation, then take next S2 FREE node.",
+      "watch": "MONITORED_BY_SOL_ORQUESTADOR"
+    },
+    "SOL3": {
+      "current_node": "S3-STRATEGYDELTA-21-40",
+      "current_task": "Continue #22 React Virtuoso, #25 Tailwind CSS, #27 Shiki, #28 CodeMirror 6, #30 xterm.js, then 31-40; no false WIRED.",
+      "status": "ACTIVE_BY_FRESH_STATE_EVIDENCE",
+      "blocker_if_any": "Fables wiring waits for CI VERIFIED; independent vendor/runtime tests continue.",
+      "evidence_or_run": "roles/SOL-GPT3-BACKEND-STATE.json; L06 run 34568696244 job 103165989964 = 4 passed",
+      "next_free_node": "After each StrategyDelta publish PASS/FAIL+run/log and immediately take next component.",
+      "watch": "MONITORED_BY_SOL_ORQUESTADOR"
+    },
+    "SOL_ORQUESTADOR": {
+      "current_node": "VERIFY_L05_FABLES_GATE_AND_CONSOLIDATE",
+      "current_task": "Verify latest GitHub gate, consolidate Sol heartbeats, update debate/architecture, correct only concrete code gaps.",
+      "status": "ACTIVE_AUTOMATION_VERIFIED",
+      "blocker_if_any": "Latest Fables/L05 CI must reach SUCCESS before VERIFIED handoff.",
+      "evidence_or_run": "ChatGPT automation 6a9dd6b174548191840938a63cb45675 enabled hourly; GitHub gate 34570113308 queued after prior run.",
+      "next_free_node": "Consume CI result; if fail classify log and StrategyDelta; if pass publish Fables/L05 handoff and advance integration.",
+      "watch": "SELF_WATCHDOG_PLUS_ROLE_MONITOR"
+    }
+  },
+  "heartbeat_contract": {
+    "required_fields": ["current_task","current_node","status","evidence_or_run","blocker_if_any","next_free_node","heartbeat_at"],
+    "on_pass": "publish heartbeat then take next FREE node",
+    "on_gap": "publish GAP evidence then take next independent FREE node",
+    "on_no_fresh_heartbeat": "mark WAITING_FRESH_HEARTBEAT, never fake ACTIVE"
+  },
+  "meeting_rule": "After each role publishes an analysis result, Orchestrator opens/consolidates the common debate round; each role must refute or support at least one peer conclusion with evidence, then return to its next FREE node.",
+  "closure": "OPEN"
+}
