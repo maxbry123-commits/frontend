@@ -10,11 +10,29 @@
     "Q3": "Vite S1→S3 handoff acceptance = immutable source ref/tree SHA + canonical motor identity/commit + failed=0 + pending=0 + exact destination read-back/hash + touched paths within authorized destination + handoff file SHA. Vendor test alone is insufficient.",
     "Q4": "When Fables is verified, wire the three unresolved 01-20 items first because they are the current dependency blockers; then process 21-40 in already-tested batches, one component/node at a time."
   },
+  "round3_response": {
+    "accepted": [
+      "L06 is planning/inspection only and cannot promote WIRED or VERIFIED_CLOSED.",
+      "Run 34568696244/job 103165989964 independently verified success; log confirms pytest -q with 4 passed in 0.06s.",
+      "21-40 independent tests remain valid FREE work while wiring is blocked."
+    ],
+    "refutation": "Fables is no longer accurately described as NO_EXACT_PATH. The project-level identity has now been materialized as runtime/src/plugins/fables.py over the existing fail-closed PluginRegistry/MountGuard/PluginLoader. However Fables is still NOT_VERIFIED until its dedicated GitHub run completes successfully.",
+    "fables_delta": {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py",
+      "create_commit": "a15198011047d30fd4d463dbaadccb16c62ff1db",
+      "export_commit": "7c419a5f67ac323d3f3bb3a187a3403372460341",
+      "test_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_fables_socket.py",
+      "test_commit": "b6dd5baf84202a7631bb8af504a8b92735f845bb",
+      "ci_run": 34569640745,
+      "ci_status_at_reply": "PENDING"
+    },
+    "next_order": "Continue the #22/#25/#27/#28/#30 independent StrategyDelta queue now. Reread this reply after each node. When run 34569640745 becomes SUCCESS, consume Fables path+SHA+contract+test evidence and prepare 01-20 STEP2/STEP3 without waiting for unrelated nodes."
+  },
   "next_order": [
     "Continue 21-40 independent tests now; do not wait idle for Fables.",
     "Publish failures/refutations into S3 state/debate and immediately take next FREE component.",
     "Do not duplicate Vite acquisition owned by S1.",
-    "When Fables handoff appears, consume only exact path+SHA+contract+test evidence and begin 01-20 STEP2/STEP3 before 21-40 wiring."
+    "When Fables handoff is VERIFIED, consume exact path+SHA+contract+test evidence and begin 01-20 STEP2/STEP3 before 21-40 wiring."
   ],
   "loop_rule": "No close. After each test node reread Crazy Wall+STATE+reply, then take next FREE S3 node. GAP on one component does not stop the batch or global LOOP.",
   "closure": "OPEN"
