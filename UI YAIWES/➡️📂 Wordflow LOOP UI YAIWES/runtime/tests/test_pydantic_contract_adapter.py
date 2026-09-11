@@ -59,9 +59,11 @@ class PydanticContractAdapterTests(unittest.TestCase):
         ).mount("pydantic")
         self.assertTrue(runtime.healthy)
 
-    def test_current_environment_mismatch_fails_closed(self):
-        with self.assertRaises(PydanticVersionMismatchError):
-            create_pydantic_runtime()
+    def test_current_environment_matches_canonical_versions(self):
+        runtime = create_pydantic_runtime()
+        self.assertTrue(runtime.healthy)
+        self.assertEqual(runtime.compatibility.pydantic_version, EXPECTED_PYDANTIC_VERSION)
+        self.assertEqual(runtime.compatibility.core_version, EXPECTED_PYDANTIC_CORE_VERSION)
 
 
 if __name__ == "__main__":
