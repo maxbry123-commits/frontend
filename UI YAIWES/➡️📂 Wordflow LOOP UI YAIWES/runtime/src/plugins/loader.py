@@ -1,35 +1,27 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Mapping
+from collections.abc import Callable
 from typing import Any
 
-from .mount_guard import MountGuard
+from .mount_guard import MountGuard, MountRejectedError
 from .registry import PluginRegistry
 
 
-class PluginFactoryNotFoundError(KeyError):
-    pass
-
-
 class PluginLoader:
-    """Mount only pre-registered factories; arbitrary import strings are forbidden."""
-
     def __init__(
         self,
         registry: PluginRegistry,
-        factories: Mapping[str, Callable[[], Any]],
+        factories: dict[str, Callable[[], Any]],
         guard: MountGuard | None = None,
     ) -> None:
-        self._registry = registry
-        self._factories = dict(factories)
-        self._guard = guard or MountGuard()
+        self.registry = registry
+        self.factories = factories
+        self.guard = guard or MountGuard()
 
     def mount(self, name: str) -> Any:
-        spec = self._registry.get(name)
-        self._guard.validate(spec)
-        assert spec.factory_key is not None
-        try:
-            factory = self._factories[spec.factory_key]
-        except KeyError as exc:
-            raise PluginFactoryNotFoundError(spec.factory_key) from exc
+        spec = self.registry.get(name)
+        self.guard.validate(spec)
+        factory = self.factories.get(spec.factory_key)
+        if factory is None:
+            raise MountRejectedError(f"factory unavailable: {spec.factory_key}")
         return factory()

@@ -1,29 +1,28 @@
 from __future__ import annotations
 
 from .contract import PluginKind, PluginSpec
+from .registry import PluginRegistry
 
 
-COMPONENTS: tuple[PluginSpec, ...] = (
-    PluginSpec("apache_pycasbin", PluginKind.POLICY, ("policy.authorization",), "UI YAIWES/componentes open soure UI YAIWES/Apache PyCasbin", "ca8d5efdcb1b63bbfabf07e6679075134391b314", "casbin"),
-    PluginSpec("bulkman", PluginKind.RESILIENCE, ("resilience.bulkhead",), "UI YAIWES/componentes open soure UI YAIWES/Bulkman", "271c64e915a38926db06754adc6c20841a4a4dd0", "bulkman"),
-    PluginSpec("dagu", PluginKind.DONOR, ("donor.workflow_patterns",), "UI YAIWES/componentes open soure UI YAIWES/Dagu", "766403bfa76c123b3d8bf9f2a9be3008e4e0d2eb", None),
-    PluginSpec("httpx", PluginKind.ADAPTER, ("transport.http",), "UI YAIWES/componentes open soure UI YAIWES/HTTPX", "50f3492d7c603cfd94e5029870ac7546666dec5e", "httpx"),
-    PluginSpec("hypothesis", PluginKind.TEST, ("test.property",), "UI YAIWES/componentes open soure UI YAIWES/Hypothesis", "c7a0b0e22f5d5b63fd1f97fbd4dbf65a781e865c", "hypothesis"),
-    PluginSpec("opentelemetry_python", PluginKind.OBSERVABILITY, ("observability.trace", "observability.metrics"), "UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Python", "2a74339d862124f2637247862f53497448619d49", "opentelemetry-api/src/opentelemetry"),
-    PluginSpec("pydantic", PluginKind.ADAPTER, ("contract.validation",), "UI YAIWES/componentes open soure UI YAIWES/Pydantic", "41f2003ff0dd618e9f0b751b01bcea3f1deb5c6f", "pydantic"),
-    PluginSpec("rule_engine", PluginKind.POLICY, ("policy.rules",), "UI YAIWES/componentes open soure UI YAIWES/Rule Engine", "ab1bbafa70cc9fb0dc1f82c138e5a6a734e9a882", "lib"),
-    PluginSpec("stabilize_core", PluginKind.CORE, ("workflow.owner", "workflow.dag", "workflow.recovery", "workflow.streaming"), "UI YAIWES/componentes open soure UI YAIWES/Stabilize CORE", "4698f403b847a5cc7aecd4b6f22a1636ca8be98b", "src/stabilize", workflow_owner=True),
-    PluginSpec("starlette", PluginKind.ADAPTER, ("api.asgi", "api.websocket", "api.streaming"), "UI YAIWES/componentes open soure UI YAIWES/Starlette", "9d9ad977106de6488276491f051c93a2698954e7", "starlette"),
-    PluginSpec("pytest", PluginKind.TEST, ("test.unit", "test.integration"), "UI YAIWES/componentes open soure UI YAIWES/pytest", "05ba709ff69eab1ecb554ed1da1b7982b36dd64c", "src"),
-    PluginSpec("redun", PluginKind.DONOR, ("donor.provenance", "donor.hashing"), "UI YAIWES/componentes open soure UI YAIWES/redun", "e301e8967ebdcb0b27734a820bd2608999b08541", None),
-    PluginSpec("resilient_circuit", PluginKind.RESILIENCE, ("resilience.circuit_breaker",), "UI YAIWES/componentes open soure UI YAIWES/resilient-circuit", "32c7a96fee897e44e20a85b6e78995cc9bd5a9e3", "resilient_circuit"),
-    PluginSpec("structlog", PluginKind.OBSERVABILITY, ("observability.logging",), "UI YAIWES/componentes open soure UI YAIWES/structlog", "5393fcee00ae1ed638601ed9915c78dd862988d5", "src/structlog"),
+COMPONENTS = (
+    PluginSpec("stabilize_core", PluginKind.CORE, ("workflow.owner", "workflow.durable", "workflow.recovery"), "runtime/vendor/stabilize", "35c7f5b60ee6cf8fd5ae3187d6e92fe15012499b", "runtime/vendor/stabilize", workflow_owner=True, factory_key="stabilize.orchestrator"),
+    PluginSpec("pydantic", PluginKind.ADAPTER, ("contracts.typed",), "runtime/vendor/pydantic", "c04b6070f1a19b5c7dfdecc10ce28ba1a4afee9b", "runtime/vendor/pydantic", factory_key="pydantic"),
+    PluginSpec("starlette", PluginKind.ADAPTER, ("transport.asgi",), "runtime/vendor/starlette", "820b2cdde800811062b2be43abd909e27b38854f", "runtime/vendor/starlette", factory_key="starlette"),
+    PluginSpec("httpx", PluginKind.ADAPTER, ("transport.http",), "runtime/vendor/httpx", "21eaf49210613909be2f7a864389a312a484d0eb", "runtime/vendor/httpx", factory_key="httpx"),
+    PluginSpec("rule_engine", PluginKind.ADAPTER, ("rules.deterministic",), "runtime/vendor/rule_engine", "3ca8717fb4ce3561b1e76053afc487061c76cfe3", "runtime/vendor/rule_engine", factory_key="rule_engine"),
+    PluginSpec("pycasbin", PluginKind.ADAPTER, ("policy.authz",), "runtime/vendor/pycasbin", "0c9f126dd92deaa7bacc75db4da46ba4a49ce1a7", "runtime/vendor/pycasbin", factory_key="pycasbin"),
+    PluginSpec("opentelemetry_python", PluginKind.ADAPTER, ("observability.telemetry",), "runtime/vendor/opentelemetry_python", "39196d42f612ff214bd2bf987e167028b5a0bb25", "runtime/vendor/opentelemetry_python", factory_key="opentelemetry_python"),
+    PluginSpec("pytest", PluginKind.TOOL, ("test.runner",), "runtime/vendor/pytest", "ff7a4ded2d8fd81e70d8a567babd84e73e5084c9", "runtime/vendor/pytest", factory_key="pytest"),
+    PluginSpec("hypothesis", PluginKind.TOOL, ("test.property",), "runtime/vendor/hypothesis", "3d335f309bbf1d0b22f5a6906a06e05218d51abe", "runtime/vendor/hypothesis", factory_key="hypothesis"),
+    PluginSpec("dagu", PluginKind.DONOR, ("workflow.patterns",), "runtime/vendor/dagu", "4d48d945a1ce614e56c0560e8d6671872fc54d98", "runtime/vendor/dagu", factory_key="dagu"),
+    PluginSpec("redun", PluginKind.DONOR, ("provenance.hashing",), "runtime/vendor/redun", "a5cf758746537c3555c2f831ab068581c46786b1", "runtime/vendor/redun", factory_key="redun"),
+    PluginSpec("librechat", PluginKind.UI, ("workspace.chat",), "runtime/vendor/librechat", "e4359ffa59cb8390dd321361cf8d09d76aa76880", "runtime/vendor/librechat", factory_key="librechat"),
+    PluginSpec("big_agi", PluginKind.UI, ("workspace.multimodel",), "component-source/big-AGI", "39ee2280e85c95db1b20309f1bc440222b71f798", "runtime/vendor/big_agi", factory_key="big_agi"),
+    PluginSpec("open_webui", PluginKind.UI, ("workspace.admin",), "runtime/vendor/open_webui", "330c665e90d805274126c8286c2f2ede553e36ce", "runtime/vendor/open_webui", factory_key="open_webui"),
 )
 
 
-def build_registry():
-    from .registry import PluginRegistry
-
+def build_registry() -> PluginRegistry:
     registry = PluginRegistry()
     for spec in COMPONENTS:
         registry.register(spec)

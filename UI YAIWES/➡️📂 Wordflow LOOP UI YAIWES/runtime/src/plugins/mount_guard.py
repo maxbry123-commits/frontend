@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .contract import PluginKind, PluginSpec
+from .contract import PluginSpec
 
 
 class MountRejectedError(RuntimeError):
@@ -8,20 +8,12 @@ class MountRejectedError(RuntimeError):
 
 
 class MountGuard:
-    WORKFLOW_OWNER_NAME = "stabilize_core"
-
     def validate(self, spec: PluginSpec) -> None:
         if not spec.enabled:
-            raise MountRejectedError(f"{spec.name}: disabled")
-        if spec.kind in {PluginKind.DONOR, PluginKind.TEST}:
-            raise MountRejectedError(
-                f"{spec.name}: {spec.kind.value} plugins are not production-mountable"
-            )
-        if spec.code_root is None:
-            raise MountRejectedError(f"{spec.name}: code_root missing")
-        if spec.factory_key is None:
-            raise MountRejectedError(f"{spec.name}: factory_key missing")
-        if spec.workflow_owner and spec.name != self.WORKFLOW_OWNER_NAME:
-            raise MountRejectedError(
-                f"{spec.name}: only {self.WORKFLOW_OWNER_NAME} may own workflow"
-            )
+            raise MountRejectedError(f"plugin disabled: {spec.name}")
+        if not spec.valid_identity():
+            raise MountRejectedError(f"invalid plugin identity: {spec.name}")
+        if spec.workflow_owner and spec.name != "stabilize_core":
+            raise MountRejectedError("workflow owner must be stabilize_core")
+        if not spec.factory_key:
+            raise MountRejectedError(f"missing factory key: {spec.name}")

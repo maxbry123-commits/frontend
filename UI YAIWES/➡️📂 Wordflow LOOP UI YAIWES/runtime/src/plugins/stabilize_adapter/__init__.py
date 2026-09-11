@@ -1,12 +1,17 @@
-from .dependencies import StabilizeBootstrapError, StabilizeDependencies
-from .factory import FACTORY_KEY, build_stabilize_factories, create_stabilize_runtime
-from .runtime import StabilizeRuntime
+from .factory import (
+    StabilizeBootstrapError,
+    StabilizeDependencies,
+    StabilizeRuntime,
+    build_stabilize_factories,
+    create_stabilize_runtime,
+    vendor_root,
+)
 
 __all__ = [
-    "FACTORY_KEY",
     "StabilizeBootstrapError",
     "StabilizeDependencies",
     "StabilizeRuntime",
     "build_stabilize_factories",
     "create_stabilize_runtime",
+    "vendor_root",
 ]
