@@ -5,7 +5,7 @@
   "status": "CLOSED_UNVERIFIED",
   "gate": "T1_FACTORY_FRONTEND",
   "t2_interface": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED",
-  "base_audited_sha": "155488f0f274547c114a69bc0f00962939382e4b",
+  "base_audited_sha": "f4117830f2141ce8363aff694b3fb513b20b02ca",
   "completed_nodes": [
     "P0_INPUT_LITERAL_READBACK",
     "P1_CAPABILITY_MATRIX",
@@ -33,7 +33,10 @@
     "P4D_GITHUB_PAGES_DEPLOY_WORKFLOW_EXECUTED",
     "P4D_GITHUB_PAGES_ENABLEMENT_BLOCKER_VERIFIED",
     "P4D_HF_SPACE_CREATE_ATTEMPT_EXECUTED",
-    "P4D_HF_SPACE_CREATE_403_BLOCKER_VERIFIED"
+    "P4D_HF_SPACE_CREATE_403_BLOCKER_VERIFIED",
+    "P4E_S3_SOL_CONTRACT_ADAPTER_BOUNDARY_MATERIALIZED",
+    "P4E_S3_SOL_CONTRACT_ADAPTER_SWAP_PASS_3_OF_3",
+    "P4E_CURRENT_FACTORY_COMBINED_VERIFY_PASS"
   ],
   "current_node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY",
   "publish_blocker": "EXTERNAL_PERMISSION_REQUIRED",
@@ -48,7 +51,11 @@
     "e2e_result": "PASS_14_OF_14",
     "responsive_gate_pass": true,
     "independent_verifier_pass": true,
-    "tested_commit": "fe544a5f94ab41c25847f4745d326a4aff72e09e",
+    "tested_commit": "f4117830f2141ce8363aff694b3fb513b20b02ca",
+    "s3_adapter_boundary_path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/backend-adapter.js",
+    "s3_adapter_test_path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/backend-adapter.test.mjs",
+    "s3_adapter_result": "PASS_3_OF_3",
+    "current_combined_verify_result": "PASS_LOGIC_6_OF_6_ADAPTER_3_OF_3_E2E_14_OF_14",
     "persistent_web_preview_published": false,
     "persistent_web_preview_url": null,
     "deployed_url_http_readback_pass": false,
@@ -69,7 +76,9 @@
     "e2e_responsive_14_of_14": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d1521047bf1b037477c",
     "independent_verifier": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d4e5527934177ec3fba",
     "deploy_bundle_http_smoke": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa398225527934177ec4c49",
-    "hf_space_create_attempt": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa3bcbb21047bf1b03752e2"
+    "hf_space_create_attempt": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa3bcbb21047bf1b03752e2",
+    "s3_adapter_swap": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa3d99c21047bf1b0375826",
+    "current_factory_combined_verify": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa3d9e05527934177ec5c7a"
   },
   "verified_donors": {
     "playwright_test_harness": {
