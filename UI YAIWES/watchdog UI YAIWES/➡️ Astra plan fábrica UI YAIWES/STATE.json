@@ -2,10 +2,10 @@
   "schema": "yaiwes.astra.factory.state.v1",
   "identity": "➡️ Astra plan fábrica UI YAIWES",
   "contract": "tel.workflow/v3",
-  "status": "VERIFIED_CLOSED",
+  "status": "CLOSED_UNVERIFIED",
   "gate": "T1_FACTORY_FRONTEND",
-  "t2_interface": "BLOCKED_PENDING_EXPLICIT_PRODUCT_PATH_HANDOFF",
-  "base_audited_sha": "fe544a5f94ab41c25847f4745d326a4aff72e09e",
+  "t2_interface": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED",
+  "base_audited_sha": "2ef0954f7e497fd9ecf4222237072bfab4e27abc",
   "completed_nodes": [
     "P0_INPUT_LITERAL_READBACK",
     "P1_CAPABILITY_MATRIX",
@@ -26,9 +26,10 @@
     "P4B_E2E_DESKTOP_MOBILE_PASS_14_OF_14",
     "P4B_RESPONSIVE_GATE_PASS",
     "P4B_INDEPENDENT_VERIFIER_PASS",
-    "T1_FACTORY_FRONTEND_VERIFIED_CLOSED"
+    "P4C_HF_SPACE_DEPLOY_BUNDLE_CREATED",
+    "P4C_DEPLOY_BUNDLE_LOCAL_HTTP_SMOKE_PASS"
   ],
-  "current_node": "WAIT_PRODUCT_PATH_HANDOFF_BEFORE_T2_INTERFACE_YAIWES",
+  "current_node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY",
   "factory_v0": {
     "path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/",
     "source_present": true,
@@ -40,14 +41,18 @@
     "e2e_result": "PASS_14_OF_14",
     "responsive_gate_pass": true,
     "independent_verifier_pass": true,
-    "verified_commit": "fe544a5f94ab41c25847f4745d326a4aff72e09e",
-    "final_evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/FINAL-VERIFICATION-2026-09-10.md",
-    "verified_closed": true
+    "tested_commit": "fe544a5f94ab41c25847f4745d326a4aff72e09e",
+    "persistent_web_preview_published": false,
+    "persistent_web_preview_url": null,
+    "deployed_url_http_readback_pass": false,
+    "deployed_url_smoke_e2e_pass": false,
+    "verified_closed": false
   },
   "verification_jobs": {
     "e2e_12_of_12": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35ce55527934177ec3f9e",
     "e2e_responsive_14_of_14": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d1521047bf1b037477c",
-    "independent_verifier": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d4e5527934177ec3fba"
+    "independent_verifier": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d4e5527934177ec3fba",
+    "deploy_bundle_http_smoke": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa398225527934177ec4c49"
   },
   "verified_donors": {
     "playwright_test_harness": {
@@ -70,13 +75,17 @@
     "plan": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/PLAN-ASTRA-FABRICA-UI-YAIWES.md",
     "handoff": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/HANDOFF-ASTRA-FABRICA-UI-YAIWES.md",
     "recovery": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/RECOVERY-PATCH-ASTRA-FABRICA-UI-YAIWES.md",
-    "audit": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/AUDITORIA-5-PASADAS-CROSSCHECK-2026-09-10.md",
-    "final_verification": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/FINAL-VERIFICATION-2026-09-10.md"
+    "audit_5_passes": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/AUDITORIA-5-PASADAS-CROSSCHECK-2026-09-10.md",
+    "forensic_reopen_audit": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/AUDITORIA-FORENSE-XRAY-CIERRE-WEB-2026-09-11.md"
   },
   "open_gaps": [
+    "PERSISTENT_WEB_PREVIEW_NOT_PUBLISHED",
+    "HF_SPACE_WRITE_SCOPE_UNAVAILABLE_IN_CURRENT_CONNECTOR",
+    "DEPLOYED_URL_HTTP_READBACK_PENDING",
+    "DEPLOYED_URL_E2E_SMOKE_PENDING",
     "PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT"
   ],
-  "closure_rule": "path+SHA/diff+runtime test/log+visual responsive preview/readback+independent verifier",
-  "closure_result": "T1_FACTORY_FRONTEND_VERIFIED_CLOSED_IN_ASTRA_STAGING",
-  "next_node": "WAIT_PRODUCT_PATH_HANDOFF_BEFORE_T2_INTERFACE_YAIWES"
+  "closure_rule": "source SHA+build+deployment persistent+visible URL+HTTP/readback+smoke E2E against deployed URL+evidence+independent reviewer",
+  "closure_result": "REOPENED_AFTER_FORENSIC_CROSSCHECK",
+  "next_node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY"
 }
