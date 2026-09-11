@@ -17,6 +17,12 @@
     "global_verified_percent": null,
     "global_reason": "No existe todavía un denominador verificado de WIRED para 124/124; presencia física no equivale a integración."
   },
+  "watchdog": {
+    "id": "6aa237226ad48191b4dc2b1eb07c0400",
+    "required_for_all_roles": true,
+    "cadence": "1 hour",
+    "rule": "Cada rol mantiene su watchdog activo, relee Crazy Wall + STATE antes de cada nodo, registra GAP con evidencia y continúa con el siguiente nodo independiente de su propia cola; un bloqueo no detiene a los otros roles."
+  },
   "fables_plugin": {
     "required": true,
     "status": "GAP_NOT_LOCATED_IN_MAIN_CODE_SEARCH_2026-09-10",
@@ -42,12 +48,15 @@
     "force_push": false,
     "shared_path_rule": "Ningún rol edita la ruta de otro rol. El coordinador consolida el resumen central.",
     "blocked_node_rule": "Si un nodo queda bloqueado, registrar GAP y continuar con el siguiente nodo independiente de la cola propia; no apropiarse de la cola de otro rol.",
-    "github_actions_concurrency": "usar grupo único por rol/ruta y queue:max cuando se cree o edite un workflow de ese rol; no compartir grupos entre roles"
+    "github_actions_concurrency": "usar grupo único por rol/ruta; no compartir grupos entre roles; cancel-in-progress=false para trabajo activo"
   },
   "roles": {
     "ASTRA_GPT1_BACKEND": {
       "name": "🧑‍💻Astra gpt 1 backend UI YAIWES 🌀🌀🌀 👷👷🕵️‍♀️",
       "node_prefix": "A1",
+      "watchdog_active": true,
+      "watchdog_cadence": "1 hour",
+      "watchdog_rule": "Mantener watchdog activo y actualizar estado en cada ciclo; no detenerse por GAP ajeno.",
       "role_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-GPT1-BACKEND-STATE.json",
       "mission": "Watchdog horario; detectar GAPs grandes; revisar evidencia y trabajo realizado; cruzar contra documentos de verdad; refutar; dejar instrucciones concretas para los equipos Sol; completar code faltante sólo dentro de un nodo asignado.",
       "queue": ["A1-01 cross-check STATE/CHECKPOINT/HANDOFF", "A1-02 auditar evidencia de 4 residuales", "A1-03 revisar integración 01-20 y próximos gaps", "A1-04 publicar refutación/instrucción siguiente"],
@@ -56,6 +65,9 @@
     "ASTRA2_GPT_BACKEND": {
       "name": "🤯 Astra 2 gpt backend UI YAIWES 🕹️🛂🏗️👷",
       "node_prefix": "A2",
+      "watchdog_active": true,
+      "watchdog_cadence": "1 hour",
+      "watchdog_rule": "Mantener watchdog activo y actualizar estado en cada ciclo; no detenerse por GAP ajeno.",
       "role_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA2-GPT-BACKEND-STATE.json",
       "mission": "Resolver GAPs independientes, refutar propuestas y buscar mejoras simples; prioridad actual: localizar con evidencia el enchufe universal Fables/plugins y validar que sea utilizable antes del cableado.",
       "queue": ["A2-01 localizar Fables/plugins con ruta+SHA", "A2-02 validar contrato de conexión Fables", "A2-03 investigar GAP AVF sin modificar motores", "A2-04 refutar y proponer delta simple"],
@@ -64,6 +76,9 @@
     "SOL_GPT1_BACKEND": {
       "name": "Sol ☀️ 🏈gpt 1 backend",
       "node_prefix": "S1",
+      "watchdog_active": true,
+      "watchdog_cadence": "1 hour",
+      "watchdog_rule": "Mantener watchdog activo y actualizar estado en cada ciclo; no detenerse por GAP ajeno.",
       "role_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT1-BACKEND-STATE.json",
       "mission": "Ejecutar tareas pendientes sin detenerse; prioridad: cerrar Vite y Supabase con motores canónicos, hash/read-back y luego continuar su siguiente nodo independiente.",
       "queue": ["S1-01 Vite", "S1-02 Supabase", "S1-03 read-back destino", "S1-04 preparar siguiente componente WIRED cuando Fables esté verificado"],
@@ -72,6 +87,9 @@
     "SOL_GPT3_BACKEND": {
       "name": "Sol gpt 3 🕵️‍♀️ backend",
       "node_prefix": "S3",
+      "watchdog_active": true,
+      "watchdog_cadence": "1 hour",
+      "watchdog_rule": "Mantener watchdog activo y actualizar estado en cada ciclo; no detenerse por GAP ajeno.",
       "role_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT3-BACKEND-STATE.json",
       "mission": "Continuar integración/test sin colisionar; prioridad: cerrar los 3 pendientes del lote 01-20, preparar el lote siguiente y ejecutar STEP_1 mientras Fables se resuelve si STEP_2 está bloqueado.",
       "queue": ["S3-01 identificar 3 pending_source del lote 01-20", "S3-02 STEP_1 de esos nodos", "S3-03 cablear con Fables cuando exista evidencia", "S3-04 tests y siguiente lote"],
@@ -80,12 +98,15 @@
     "SOL_GPT2_BACKEND": {
       "name": "Sol gpt 2 🤯👷backend",
       "node_prefix": "S2",
+      "watchdog_active": true,
+      "watchdog_cadence": "1 hour",
+      "watchdog_rule": "Mantener watchdog activo y actualizar estado en cada ciclo; no detenerse por GAP ajeno.",
       "role_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT2-BACKEND-STATE.json",
       "mission": "Ejecutar tareas pendientes sin detenerse; prioridad: cerrar DuckDB y tratar AVF bajo fail-closed sin modificar motores; si AVF sigue provider GAP, registrar evidencia y avanzar a verificación independiente de los otros residuales.",
       "queue": ["S2-01 DuckDB", "S2-02 AVF provider check", "S2-03 read-back 4 residuales", "S2-04 verificar failed=0/pending=0 cuando corresponda"],
       "write_scope": ["nodos S2", "artefactos/evidencia creados por S2"]
     }
   },
-  "handoff_rule": "Cada rol lee este Crazy Wall antes de cada nodo, trabaja sólo su prefijo/ruta, deja evidencia en su role_state_path y continúa su propia cola. El coordinador consolida cambios y reasigna sólo mediante handoff explícito.",
+  "handoff_rule": "Cada rol lee este Crazy Wall antes de cada nodo, mantiene watchdog activo, trabaja sólo su prefijo/ruta, deja evidencia en su role_state_path y continúa su propia cola. El coordinador consolida cambios y reasigna sólo mediante handoff explícito.",
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
 }
