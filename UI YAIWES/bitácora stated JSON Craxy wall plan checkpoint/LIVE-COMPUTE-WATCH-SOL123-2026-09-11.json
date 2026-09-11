@@ -1,0 +1,53 @@
+{
+  "schema": "yaiwes.live-compute-watch.v1",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_SUPERVISION",
+  "director_rule": "Todos muestran telemetría operativa auditable; nadie queda idle mientras exista nodo FREE seguro. No publicar chain-of-thought privado.",
+  "SOL_GPT1": {
+    "visible_status": "ACTIVE_LOOP_ROUND3_FOLLOWUP_R4_OPEN",
+    "heartbeat_at": "2026-09-11T01:29:00-05:00",
+    "current_work": "R4 authority/motor/memory boundary cross-check",
+    "verified": ["REAL_GITHUB_CI_PASS", "DURABLE_LEDGER_PASS", "RESTART_RECOVERY_PASS"],
+    "gaps": ["MEMORY_SCOPE_SEPARATION_NOT_EVIDENCED", "MOTOR_BLOB_IDENTITY_GAP", "MOTOR_AUX_INPUT_CONTRACT_GAP", "DESTINATION_AUTHORITY_PROVENANCE_GAP"],
+    "state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT1-BACKEND-STATE.json",
+    "watch": "ACTIVE"
+  },
+  "SOL_GPT2": {
+    "visible_status": "CODE_ADVANCED_STATE_SYNC_PENDING",
+    "current_work": "L05 typed motor gap preservation + AVF capability-probe contract",
+    "verified_code": "L05 preserves SPECIAL_FILE_GAP and PROVIDER_GAP on main",
+    "gaps": ["STATE_NOT_YET_UPDATED_TO_LATEST_CODE", "DUCKDB_SPECIAL_FILE_GAP", "AVF_PROVIDER_RUNTIME_HARDWARE_GAPS"],
+    "state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT2-BACKEND-STATE.json",
+    "watch": "ACTIVE_REQUIRES_STATE_REFRESH"
+  },
+  "SOL_GPT3": {
+    "visible_status": "ACTIVE_LOOP_LAST_VISIBLE_HEARTBEAT_01_20",
+    "current_work": "StrategyDelta tests 21-40; failing 22,25,27,28,30 then 31-40",
+    "verified": ["L06 CI PASS 4 tests", "21 PASS", "23 PASS", "24 PASS", "26 PASS", "29 PASS"],
+    "gaps": ["22_FAIL", "25_FAIL", "27_FAIL", "28_FAIL", "30_FAIL", "31_40_TEST_PREP", "FABLES_WIRING_NOT_YET_VERIFIED"],
+    "state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT3-BACKEND-STATE.json",
+    "watch": "ACTIVE_REQUIRES_NEXT_HEARTBEAT"
+  },
+  "SOL_ORQUESTADOR": {
+    "visible_status": "ACTIVE_WATCHDOG",
+    "current_work": "supervise visible telemetry + consolidate Council + verify Fables/L05 CI",
+    "automation_id": "6a9dd6b174548191840938a63cb45675",
+    "watch": "ACTIVE_HOURLY"
+  },
+  "CI_GATE": {
+    "run_id": 34569726823,
+    "job_id": 103169993658,
+    "head_sha": "d005758d083c09a3ae6aa4dd999a04414bccadd3",
+    "status": "IN_PROGRESS",
+    "current_step": "actions/checkout@v4",
+    "pending_steps": ["setup-python", "install", "Wordflow LOOP tests", "universal socket and Fables tests"],
+    "verdict": "NO_PASS_UNTIL_COMPLETED"
+  },
+  "FABLES": {
+    "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py",
+    "blob_sha": "36ee0b1b184b709e292fd8c617f0e795e7e98451",
+    "contract": "yaiwes.fables.v1",
+    "status": "PRESENT_CI_PENDING"
+  },
+  "loop": "ANALYZE_DEEP -> VISIBLE_TELEMETRY -> EVIDENCE -> COUNCIL_4AI -> REFUTE -> NEXT_FREE_NODE -> EXECUTE/TEST -> READBACK -> NEW_COMMIT -> REPEAT"
+}
