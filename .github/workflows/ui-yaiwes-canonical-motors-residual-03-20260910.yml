@@ -1,0 +1,165 @@
+name: UI YAIWES Canonical Motors Residual 03
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ui-yaiwes-canonical-motors-residual-03-20260910.yml'
+      - 'UI YAIWES/automation/residual-03-motores-canonicos-20260910/QUEUE.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ui-yaiwes-canonical-motors-residual-03
+  cancel-in-progress: false
+
+jobs:
+  residual-download-extract-move:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Sparse bootstrap main
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git init -q
+          git remote add origin 'https://github.com/maxbry123-commits/frontend.git'
+          git sparse-checkout init --no-cone
+          cat > .git/info/sparse-checkout <<'EOF'
+          /➡️📂motores de descarga extracción copiado movimiento archivos fromtend/
+          /UI YAIWES/automation/residual-03-motores-canonicos-20260910/QUEUE.json
+          EOF
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
+          git checkout -q -B main FETCH_HEAD
+
+      - name: Verify immutable canonical motor blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend'
+          test "$(git hash-object "$ROOT/➡️📂 Motor de extracción zip/motor_1_extract_only.py")" = 'a52d5dc0e6ff26f75d753b848dcc1a40c5dd4500'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py")" = '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py")" = '91e6e4486692eab314be5c7130d8310d3c855397'
+          test "$(git hash-object "$ROOT/➡️📂motor de copiar archivos/motor_3_copy_batches.py")" = '3689924361ce4a1a9fde4ae2b6f6009c37a6042d'
+          test "$(git hash-object "$ROOT/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py")" = '8281211da76db3080fe1f1ea38b3eb0c45d655cb'
+          test "$(git hash-object "$ROOT/➡️📂motor de moves archivos/motor_4_move_batches.py")" = '9a21facfe11327cf60a2afca8f415ad52f0ecbe5'
+
+      - name: Copy canonical motor root exactly
+        shell: bash
+        env:
+          SOURCE_ROOT: ${{ github.workspace }}/➡️📂motores de descarga extracción copiado movimiento archivos fromtend
+          DEST_ROOT: ${{ runner.temp }}/➡️📂motores de descarga extracción copiado movimiento archivos frontend
+          DEST_REPO_NAME: frontend
+          BATCH_SIZE: '2'
+        run: |
+          set -euo pipefail
+          python "$SOURCE_ROOT/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py" | tee "$RUNNER_TEMP/copy-root.json"
+          grep -Eq '"verdict": "VERIFIED_(CLOSED|EXISTING)"' "$RUNNER_TEMP/copy-root.json"
+
+      - name: Execute exact Motor 2 for 3 residuals into staging
+        shell: bash
+        env:
+          QUEUE_FILE: ${{ github.workspace }}/UI YAIWES/automation/residual-03-motores-canonicos-20260910/QUEUE.json
+          STATE_FILE: ${{ runner.temp }}/motor2-residual03-state.json
+          INDEX_PATH: ${{ runner.temp }}/motor2-residual03-index.md
+          ENGINE_PATH: ${{ runner.temp }}/➡️📂motores de descarga extracción copiado movimiento archivos frontend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: UI YAIWES/➡️📂 descarga extracción 3 residuales 20260910/stage
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_RETRIES: '2'
+          LOOP_SLEEP_SECONDS: '0'
+        run: |
+          set -euo pipefail
+          MOTOR_ROOT="$RUNNER_TEMP/➡️📂motores de descarga extracción copiado movimiento archivos frontend"
+          python "$MOTOR_ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py" | tee "$RUNNER_TEMP/motor2-residual03-final.json"
+          python - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'motor2-residual03-final.json'
+          obj=json.loads([x for x in p.read_text().splitlines() if x.strip()][-1]); b=obj.get('balance',{})
+          assert obj.get('verdict')=='VERIFIED_CLOSED', obj
+          assert b=={'total':3,'download_verified':3,'extraction_verified':3,'published_readback_verified':3,'failed':0,'pending':0}, b
+          PY
+
+      - name: Refresh sparse main with staging and final targets
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cat > .git/info/sparse-checkout <<'EOF'
+          /➡️📂motores de descarga extracción copiado movimiento archivos fromtend/
+          /UI YAIWES/automation/residual-03-motores-canonicos-20260910/QUEUE.json
+          /UI YAIWES/➡️📂 descarga extracción 3 residuales 20260910/
+          /UI YAIWES/componentes open soure UI YAIWES/Vite/
+          /UI YAIWES/componentes open soure UI YAIWES/Supabase/
+          /UI YAIWES/componentes open soure UI YAIWES/DuckDB/
+          EOF
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
+          git reset --hard origin/main
+          git read-tree -mu HEAD
+
+      - name: Move 3 verified extracted trees with exact Motor 4
+        shell: bash
+        run: |
+          set -euo pipefail
+          MOTOR="$RUNNER_TEMP/➡️📂motores de descarga extracción copiado movimiento archivos frontend/➡️📂motor de moves archivos/motor_4_move_batches.py"
+          STAGE='UI YAIWES/➡️📂 descarga extracción 3 residuales 20260910/stage'
+          FINAL='UI YAIWES/componentes open soure UI YAIWES'
+          i=0
+          while IFS= read -r name; do
+            i=$((i+1))
+            env SOURCE_DIR="$STAGE/$name/code" DEST_DIR="$FINAL/$name" STATE_FILE="$RUNNER_TEMP/motor4-residual03-${i}.json" BATCH_SIZE='100' COLLISION_POLICY='fail' python "$MOTOR" | tee "$RUNNER_TEMP/motor4-residual03-${i}.out"
+            python - "$RUNNER_TEMP/motor4-residual03-${i}.out" <<'PY'
+          import json, pathlib, sys
+          obj=json.loads([x for x in pathlib.Path(sys.argv[1]).read_text().splitlines() if x.strip()][-1])
+          assert obj.get('verdict')=='VERIFIED_CLOSED' and obj.get('failed')==0 and obj.get('pending')==0, obj
+          PY
+          done <<'EOF'
+          Vite
+          Supabase
+          DuckDB
+          EOF
+
+      - name: Publish Motor 4 moves without force
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name 'yaiwes-canonical-motors'
+          git config user.email 'yaiwes-canonical-motors@users.noreply.github.com'
+          git add -A -- 'UI YAIWES/➡️📂 descarga extracción 3 residuales 20260910' 'UI YAIWES/componentes open soure UI YAIWES'
+          git diff --cached --quiet && { echo 'MOVE_PUBLICATION_GAP:no changes'; exit 1; }
+          git commit -m 'build(yaiwes): move 3 residual components via canonical Motor 4'
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch origin main
+          git rebase origin/main
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" push origin HEAD:main
+
+      - name: Independent final read-back 3 of 3
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch origin main
+          FINAL='UI YAIWES/componentes open soure UI YAIWES'
+          count=0
+          while IFS= read -r name; do
+            files="$(git ls-tree -r --name-only origin/main -- "$FINAL/$name" | wc -l | tr -d ' ')"
+            test "$files" -gt 0 || { echo "READBACK_GAP:$name"; exit 1; }
+            count=$((count+1))
+          done <<'EOF'
+          Vite
+          Supabase
+          DuckDB
+          EOF
+          test "$count" -eq 3
+          echo "VERIFIED_CLOSED components=3 failed=0 pending=0 final_sha=$(git rev-parse origin/main)"
