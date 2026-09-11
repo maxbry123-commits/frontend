@@ -6,13 +6,13 @@
   "name": "Sol gpt 2 🤯👷backend",
   "node_prefix": "S2",
   "status": "ACTIVE_DEBATE_LOOP_WITH_BLOCKING_GAPS",
-  "base_main_sha": "f9e8a190cbec48f92473163de6d98152ad98f1dc",
-  "crazy_wall_blob_sha": "69e65c730afebcf2a765713c408071e8a0109e93",
-  "state_blob_sha_observed": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
+  "base_main_sha": "5df552c3e7e50187390811a0d3edc167c62db5b5",
+  "crazy_wall_blob_sha": "a80cb5de08bb9c5000b65f5bd7104873f067f94b",
+  "state_blob_sha_observed": "4663adfd3110274271d1099b7800b24cce5538b7",
   "canonical_motors_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
   "canonical_policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
-  "director_delta_seen": "2026-09-11T05:24:00-05:00",
-  "loop_cycle": 5,
+  "director_delta_seen": "2026-09-11T06:31:47Z",
+  "loop_cycle": 6,
   "nodes": {
     "S2-01": {
       "component": "DuckDB",
@@ -58,11 +58,11 @@
       "source_sanitized": false,
       "publication_attempted": false,
       "move_attempted": false,
-      "verdict": "FAIL_CLOSED; no safe S2 mutation remains without explicit coordinator/user authorization for a symlink-aware canonical strategy or an authorized equivalent source"
+      "verdict": "FAIL_CLOSED; coordinator confirmed KEEP_FAIL_CLOSED; no blind retry"
     },
     "S2-02": {
       "component": "AVF",
-      "status": "MOTOR_PROVIDER_GAP_RUNTIME_CAPABILITY_PROBE_GAP_AND_HARDWARE_TEST_GAP",
+      "status": "MOTOR_PROVIDER_GAP_RUNTIME_CAPABILITY_AND_HARDWARE_TEST_GAP",
       "canonical_source": "https://android.googlesource.com/platform/packages/modules/Virtualization/",
       "evidence_file": "UI YAIWES/automation/S2-avf-capabilities-20260911/AVF-CAPABILITIES.json",
       "evidence_commit": "f10204204664b4756f2612a42ea0a7b9ce41937c",
@@ -76,21 +76,13 @@
       },
       "runtime_implementation_audit": {
         "runtime_src_tree_sha": "be46fd0fdb7694d3af0c6a76814fe139a0dbaf7e",
-        "identifiers_checked": [
-          "VirtualMachineManager",
-          "MANAGE_VIRTUAL_MACHINE",
-          "AndroidVMProvider",
-          "HypervisorCapabilityManager",
-          "CapabilityDetector",
-          "pKVM",
-          "AVF"
-        ],
+        "identifiers_checked": ["VirtualMachineManager","MANAGE_VIRTUAL_MACHINE","AndroidVMProvider","HypervisorCapabilityManager","CapabilityDetector","pKVM","AVF"],
         "code_search_matches": 0,
         "avf_or_android_backend_found": false,
         "gap": "AVF_CAPABILITY_PROBE_IMPLEMENTATION_GAP"
       },
       "runtime_capability_summary": {
-        "Android_ARM64_physical": "CONDITIONAL_SUPPORTED; requires device AVF capability plus restricted VM permission; guest boot not tested",
+        "Android_ARM64_physical": "CONDITIONAL_SUPPORTED; capability+permission+guest boot evidence required",
         "Android_x86_64_Cuttlefish": "TEST_ONLY_NON_PROTECTED_DOCUMENTED; not tested in S2",
         "Linux_desktop": "NOT_NATIVE_AVF_HOST",
         "Windows_desktop": "NOT_NATIVE_AVF_HOST",
@@ -98,31 +90,17 @@
         "Web_browser_PWA": "NOT_NATIVE_AVF_HOST"
       },
       "permissions": {
-        "MANAGE_VIRTUAL_MACHINE": "restricted platform/preinstalled/development SystemApi permission",
-        "USE_CUSTOM_VIRTUAL_MACHINE": "signature/development; not ordinary third-party app permission"
+        "MANAGE_VIRTUAL_MACHINE": "restricted SystemApi permission; third-party APK access must not be assumed",
+        "USE_CUSTOM_VIRTUAL_MACHINE": "restricted; custom path only when actually granted"
       },
-      "guest_constraints": "Microdroid/pVM is reference model; protected/non-protected support is device capability dependent; source availability alone does not demonstrate pVM/guest boot",
-      "github_mirror_search": {
-        "status": "CANDIDATES_REJECTED_WITHOUT_AUTHORIZATION",
-        "examples": [
-          "msft-mirror-aosp/platform.packages.modules.Virtualization",
-          "GrapheneOS/platform_packages_modules_Virtualization",
-          "aosp-mirror-neo/platform_packages_modules_Virtualization"
-        ],
-        "reason": "alternate provider/provenance is not the canonical android.googlesource source and no handoff authorizes substitution"
-      },
+      "guest_constraints": "Source availability/acquisition/API presence/capability bits do not demonstrate guest boot",
       "verdict": "FAIL_CLOSED_PROVIDER_RUNTIME_AND_HARDWARE_CAPABILITY_GAP"
     },
     "S2-03": {
       "status": "READBACK_COMPLETED_FRESH_MAIN_CYCLE_4",
       "readback_main_sha": "868d3fcc0fb8f9f7d092da4c0251eb733c0e7d81",
       "final_root": "UI YAIWES/componentes open soure UI YAIWES",
-      "readback": {
-        "Vite": "404_ABSENT",
-        "Supabase": "404_ABSENT",
-        "DuckDB": "404_ABSENT",
-        "AVF": "404_ABSENT"
-      },
+      "readback": {"Vite":"404_ABSENT","Supabase":"404_ABSENT","DuckDB":"404_ABSENT","AVF":"404_ABSENT"},
       "verdict": "0/4 residuals present at canonical final root in cycle 4"
     },
     "S2-04": {
@@ -137,6 +115,33 @@
       "four_residual_readback_present": 0,
       "four_residual_readback_expected": 4,
       "verdict": "VERIFIED_CLOSED prohibited"
+    },
+    "S2-R3-AVF-CAPABILITY-PROBE-CONTRACT": {
+      "status": "READ_ONLY_CONTRACT_DEFINED_AND_READBACK_VERIFIED",
+      "coordinator_reply_file": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S2.json",
+      "coordinator_reply_blob": "1c60fd01028cc67164fb2ac5cbfb3335fd0495a4",
+      "artifact": "UI YAIWES/automation/S2-avf-capabilities-20260911/AVF-CAPABILITY-PROBE-CONTRACT.json",
+      "artifact_commit": "a25e7f5966e4a482515c61d28923a648761067b2",
+      "artifact_blob_sha": "97619b9970377ab85a4409203ea5136ea3f95acd",
+      "gates": ["G1_TRANSPORT_PROVIDER","G2_HOST_CAPABILITY","G3_PERMISSION","G4_GUEST_BOOT_EVIDENCE","G5_PLATFORM_FALLBACK"],
+      "official_api": {
+        "minimum_api_level": 34,
+        "manager": "android.system.virtualmachine.VirtualMachineManager",
+        "feature": "android.software.virtualization_framework",
+        "CAPABILITY_PROTECTED_VM": 1,
+        "CAPABILITY_NON_PROTECTED_VM": 2,
+        "permission": "android.permission.MANAGE_VIRTUAL_MACHINE"
+      },
+      "platform_matrix": {
+        "Android_ARM64": "AVF conditional; capability + permission + real guest boot required",
+        "Android_x86_64_Cuttlefish": "test-only non-protected path; real test required",
+        "Linux": "KVM/QEMU; AVF N/A",
+        "Windows": "WHPX/QEMU; AVF N/A",
+        "iOS_iPadOS": "QEMU/UTM-style subject to Apple restrictions; AVF N/A",
+        "Web_PWA": "no native AVF claim; explicit runtime backend required"
+      },
+      "refutation": "Source presence/provider success/manager availability cannot be promoted to guest-boot PASS; each gate is independent.",
+      "next_safe_node": "S2 read-only CI consumption + debate. Runtime implementation mutation requires coordinator/explicit code-owner handoff."
     }
   },
   "debate": {
@@ -144,40 +149,25 @@
     "round_2": {
       "question": "Revisa si L05 debe representar provider/special-file gaps como DuckDB symlink y AVF non-GitHub sin intentar corregirlos dentro de la capa. Devuelve esquema mínimo fail-closed.",
       "answer": {
-        "decision": "YES. L05 must preserve typed acquisition GAPs and must never repair, sanitize, substitute provider, or select strategy inside the layer.",
-        "reason": "DuckDB and AVF prove two different acquisition-boundary failures. Collapsing both into canonical_motor_download_extract_not_verified loses causality needed by persistence, recovery, strategy selection, audit and cross-platform routing.",
-        "minimal_fail_closed_schema": {
-          "status": "BLOCKED for any provider/special-file acquisition incompatibility",
-          "gap_code": "PROVIDER_GAP | SPECIAL_FILE_GAP | DESTINATION_INPUT_GAP | SOURCE_LOCK_GAP | AUTHORIZATION_GAP | MOTOR_MISMATCH | READBACK_GAP",
-          "source": ["source_repo", "source_ref", "source_tree_sha_if_evidenced"],
-          "destination": ["dest_repo", "dest_branch", "dest_root"],
-          "motor": ["motor_commit", "motor_verdict", "failed_count", "pending_count"],
-          "typed_detail": ["provider", "provider_reason", "special_paths"],
-          "evidence": ["queue/input hash", "motor result/log ref", "manifest/tree hash when available", "destination read-back when mutation occurred"],
-          "mutation_on_blocked": "NONE beyond already-authorized motor attempt; L05 itself must not rewrite source or destination",
-          "actions_on_blocked": "only actual motor action/run identifiers; never synthetic PASS action"
-        },
-        "mapping": {
-          "DuckDB": "Motor reports SOURCE_SPECIAL_FILE_GAP with symlink paths -> L05 returns BLOCKED + SPECIAL_FILE_GAP + preserved special_paths; no symlink removal, dereference, tar rewrite or source filtering.",
-          "AVF": "Canonical source is android.googlesource and immutable motor transport is GitHub-only -> L05 returns BLOCKED + PROVIDER_GAP + canonical provider/provenance; no mirror substitution and no URL rewriting.",
-          "AVF_runtime": "AVF hardware/capability/permission probing is not an L05 acquisition concern. It remains a downstream platform/runtime capability GAP and must not be falsely merged into provider acquisition success."
-        },
-        "pass_gate": "PASS only when canonical motor commit matches, destination is literal and allowed, motor verdict VERIFIED_CLOSED, failed=0, pending=0, extraction_verified=total, published_readback_verified=total, strong tree hash exists and destination read-back matches. PASS means acquisition only, not WIRED/runtime/VERIFIED_CLOSED global."
+        "decision": "YES. L05 preserves typed acquisition GAPs and never repairs/sanitizes/substitutes provider inside the layer.",
+        "gap_code": "PROVIDER_GAP | SPECIAL_FILE_GAP | DESTINATION_INPUT_GAP | SOURCE_LOCK_GAP | AUTHORIZATION_GAP | MOTOR_MISMATCH | READBACK_GAP",
+        "pass_gate": "canonical motor + literal authorized destination + VERIFIED_CLOSED + failed=0 + pending=0 + strong read-back/hash"
       },
-      "refutation": "I refute keeping the current single generic GAP canonical_motor_download_extract_not_verified as the only failure output. It is fail-closed but operationally too lossy: DuckDB SPECIAL_FILE_GAP and AVF PROVIDER_GAP require different StrategyDelta owners and recovery paths. The layer should classify and preserve motor evidence, not solve it.",
-      "crosscheck": {
-        "source_docs": "Workflow runtime controls execution; memory/audit must retain evidence and provenance; cross-platform architecture requires platform-specific virtualization backends rather than pretending one provider works everywhere.",
-        "current_l05_blob": "a25afeab2379a6f69b404228cc230f79a51177fc",
-        "current_l05_gap_behavior": "preflight gaps are typed, but post-motor failure collapses to canonical_motor_download_extract_not_verified",
-        "tests_commit": "4a8f45c77e12ba7440ec19ed8556614e79207b48",
-        "runtime_recovery_ci": "34568696244 PASS for restored L05/L06; this validates existing gates but does not prove typed provider/special-file preservation"
+      "refutation": "Generic post-motor GAP alone is operationally lossy."
+    },
+    "round_3": {
+      "coordinator_reply_status": "ACTIONABLE_REPLY_LOOP_CONTINUES",
+      "coordinator_reply_blob": "1c60fd01028cc67164fb2ac5cbfb3335fd0495a4",
+      "order_consumed": "Define minimal AVF capability-probe contract; separate transport, host capability, permission, guest boot and fallback; do not stop while CI pending.",
+      "execution_status": "COMPLETED_READ_ONLY_NODE",
+      "artifact_blob_sha": "97619b9970377ab85a4409203ea5136ea3f95acd",
+      "l05_typed_gap_ci": {
+        "run_id": 34569726823,
+        "head_sha": "d005758d083c09a3ae6aa4dd999a04414bccadd3",
+        "observed_status": "IN_PROGRESS",
+        "conclusion": null
       },
-      "next_s2_free_node": {
-        "id": "S2-DEBATE-R2-L05-GAP-TYPING",
-        "owner": "SOL_GPT2_BACKEND",
-        "task": "Patch only L05 result normalization/tests so canonical motor failure evidence preserves PROVIDER_GAP vs SPECIAL_FILE_GAP without changing canonical motors or acquisition strategy; then run independent tests and publish SHA/log/read-back.",
-        "status": "FREE_SAFE"
-      }
+      "reply_to_coordinator": "AVF probe contract published/read-back verified. No runtime mutation performed. Continue debate; consume CI when complete and request/consume explicit runtime implementation handoff if coordinator wants S2 to mutate shared runtime."
     }
   },
   "watchdog": {
@@ -188,5 +178,5 @@
     "title": "SOL2 Backend YAIWES",
     "scope_aligned_to_s2_queue": true
   },
-  "next_action": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. Execute S2-DEBATE-R2-L05-GAP-TYPING as the next safe S2 node, then publish tests/evidence and continue cross-check/debate. DuckDB and AVF remain fail-closed; do not patch canonical motors, sanitize DuckDB source, or substitute AVF provenance."
+  "next_action": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. Re-read Crazy Wall and Sol Plan reply after this STATE write; consume CI 34569726823 when complete. DuckDB and AVF acquisition remain fail-closed; do not patch canonical motors, sanitize source, substitute AVF provenance or claim guest boot without real evidence."
 }
