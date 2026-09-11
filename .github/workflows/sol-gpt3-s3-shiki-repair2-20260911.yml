@@ -1,0 +1,52 @@
+name: S3 Shiki Repair 2
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/sol-gpt3-s3-shiki-repair2-20260911.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sol-gpt3-s3-shiki-repair2-20260911
+  cancel-in-progress: false
+
+jobs:
+  shiki:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            UI YAIWES/componentes open soure UI YAIWES/Shiki
+          sparse-checkout-cone-mode: false
+      - name: Copy snapshot to path without spaces
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/shiki"
+          cp -a "UI YAIWES/componentes open soure UI YAIWES/Shiki/." "$RUNNER_TEMP/shiki/"
+          git -C "$RUNNER_TEMP/shiki" init
+      - name: Setup pnpm 11.20.0
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.20.0
+          run_install: false
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Setup upstream ni runner
+        run: npm i -g @antfu/ni
+      - name: Install locked dependencies
+        working-directory: ${{ runner.temp }}/shiki
+        run: nci
+      - name: Build upstream workspace
+        working-directory: ${{ runner.temp }}/shiki
+        run: nr build
+      - name: Run upstream tests with coverage
+        working-directory: ${{ runner.temp }}/shiki
+        run: nr test --coverage
