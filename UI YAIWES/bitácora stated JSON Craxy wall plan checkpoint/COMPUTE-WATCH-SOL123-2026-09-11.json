@@ -3,7 +3,7 @@
   "contract": "tel.workflow/v3",
   "status": "ACTIVE_MONITORING_LOOP",
   "monitor": "🌞👷 sol osquestador plan 🎯",
-  "updated_at_utc": "2026-09-11T14:00:20Z",
+  "updated_at_utc": "2026-09-11T15:01:36Z",
   "monitoring_rule": "No role is marked ACTIVE from assumption. ACTIVE requires fresh STATE/Crazy Wall heartbeat, commit, or real run/log evidence. GAP blocks only its node; next FREE node must be visible.",
   "roles": {
     "SOL1": {
@@ -27,23 +27,23 @@
       "watch": "MONITORED_BY_SOL_ORQUESTADOR"
     },
     "SOL3": {
-      "current_node": "S3_ROUND6_COMPONENT_STRATEGYDELTA",
-      "current_task": "Continue #22/#25/#27/#28 and remaining 31-40 fail-closed one-by-one; preserve #30 xterm.js as RUNTIME_PASS_NOT_WIRED; consume current Fables evidence precedence before any wiring promotion.",
-      "status": "STALE_LAST_VERIFIED_EVIDENCE_NO_NEW_HEARTBEAT",
-      "blocker_if_any": "Last verified S3 debate evidence is commit 993cb7ed3747303fbff2531a367a50d1753159bb at 12:21:46Z; role-state blob b852f5ec08aac4eab4259626a9c243e5c0b4ad56 is older and still contains stale #30/Fables classifications. No newer S3 commit/run exists in the fresh main readback.",
-      "evidence_or_run": "last verified debate commit 993cb7ed3747303fbff2531a367a50d1753159bb; xterm.js run 34573682810/job 103181214320 success; no post-13:04Z repository commit and no newer main workflow run observed in this coordination pass.",
-      "next_free_node": "Publish a fresh S3 heartbeat that reconciles Fables=TESTED_NOT_WIRED and #30=RUNTIME_PASS_NOT_WIRED, then continue #22/#25/#27/#28 and 31-40 one-by-one; do not promote vendor/runtime PASS to WIRED.",
-      "heartbeat_at": "2026-09-11T12:21:46Z",
+      "current_node": "S3_ROUND7_COMPONENT_STRATEGYDELTA",
+      "current_task": "Keep #25 Tailwind and #27 Shiki as RUNTIME_PASS_NOT_WIRED; keep #22 React Virtuoso COMPONENT_TEST_FAIL_NOT_PASS; continue #28 CodeMirror exact gap and remaining 31-40 one-by-one; preserve #30 xterm.js RUNTIME_PASS_NOT_WIRED and consume current Fables evidence precedence before wiring promotion.",
+      "status": "ACTIVE_BY_FRESH_COMMIT_EVIDENCE",
+      "blocker_if_any": "#22 React Virtuoso real run 34573280051 failed at upstream tests and exact assertion is not yet verified; #28 CodeMirror cited workflow remains absent/404. Runtime PASS for #25/#27/#30 does not prove integration wiring.",
+      "evidence_or_run": "fresh S3 debate commit 14ddb51b4c0a4e7c3c77c98a4ddd87ed3543286c at 2026-09-11T14:42:38Z; Tailwind run 34573293066 success at head b2e9fa7576bc79c6f4784d6b64ed36659905a6b7; Shiki run 34573431767 success at head 3eb99f29278aa07f215ceaf27cdf8edcf066d356; Virtuoso run 34573280051 failure at head 2c1a1b6cac5b0049f20267efe53652165572cfb1; xterm prior run 34573682810 success remains NOT_WIRED.",
+      "next_free_node": "Verify exact failing Virtuoso assertion before any patch; continue #28 CodeMirror and remaining 31-40 by fresh evidence. Do not place #25/#27/#30 back in NOT_PASS repair queue and do not promote vendor/runtime PASS to WIRED.",
+      "heartbeat_at": "2026-09-11T14:42:38Z",
       "watch": "MONITORED_BY_SOL_ORQUESTADOR"
     },
     "SOL_ORQUESTADOR": {
       "current_node": "G12_GLOBAL_GOALS_COVERAGE_4PASS_MATRIX",
-      "current_task": "Execute next FREE global audit node: consolidate requirement/objective→layer→file/code→test/evidence→state without changing component/runtime status and without new acquisition.",
+      "current_task": "Continue the FREE global audit node while reconciling fresh S3 evidence: requirement/objective→layer→file/code→test/evidence→state; preserve independent G11/G18/G19 boundaries and no new acquisition.",
       "status": "ACTIVE_BY_FRESH_COORDINATION_HEARTBEAT",
-      "blocker_if_any": "Global verify_final remains open. Sol1/Sol2 have no fresh heartbeat; Sol3 has no evidence newer than 12:21:46Z. G01 remains TESTED_NOT_WIRED; G07-G19 remain independently governed.",
-      "evidence_or_run": "fresh readback of DIRECTOR-EXECUTION, AUDIT-GAP-LEDGER, FLOW-MASTER, DIRECTOR-INSTRUCTION-DEBATE, COMPUTE-WATCH and role directory; main HEAD before this heartbeat was f83819b964d942192c35d73543822ba437809d20 at 13:04:40Z; latest listed main workflow run remains 34591723668 success at 10:58:13Z.",
-      "next_free_node": "Continue G12 four-pass coverage matrix, then G11 remaining workspace/failover recovery verification; keep G18/G19 publish failures separate; no component acquisition unless a mandatory capability is proven absent after dedup.",
-      "heartbeat_at": "2026-09-11T14:00:20Z",
+      "blocker_if_any": "Global verify_final remains open. Sol1/Sol2 still have no fresh heartbeat. Sol3 has fresh Round7 evidence but G08 remains open because runtime/vendor PASS is not WIRED and Virtuoso/CodeMirror remain unresolved.",
+      "evidence_or_run": "fresh readback of DIRECTOR-EXECUTION, AUDIT-GAP-LEDGER, FLOW-MASTER, DIRECTOR-INSTRUCTION-DEBATE, COMPUTE-WATCH, Crazy Wall, STATE and role directory; main fresh commit 14ddb51b4c0a4e7c3c77c98a4ddd87ed3543286c; verified GitHub runs 34573293066 success, 34573431767 success, 34573280051 failure.",
+      "next_free_node": "Update G08 evidence delta without wiring promotion; continue G12 four-pass coverage matrix, then G11 workspace/failover recovery verification; keep G18/G19 publish failures separate; no component acquisition unless mandatory capability is proven absent after dedup.",
+      "heartbeat_at": "2026-09-11T15:01:36Z",
       "watch": "SELF_WATCHDOG_PLUS_ROLE_MONITOR"
     }
   },
