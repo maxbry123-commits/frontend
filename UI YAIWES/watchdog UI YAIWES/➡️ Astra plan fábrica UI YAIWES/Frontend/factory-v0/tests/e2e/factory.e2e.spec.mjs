@@ -66,4 +66,17 @@ test.describe('YAIWES Factory V0', () => {
     const download = await downloadPromise;
     expect(download.suggestedFilename()).toBe('yaiwes-ui-v0.json');
   });
+
+  test('layout responsive mantiene superficies clave visibles y sin overflow horizontal', async ({ page }) => {
+    await expect(page.locator('.library')).toBeVisible();
+    await expect(page.locator('.canvas-shell')).toBeVisible();
+    await expect(page.locator('.inspector')).toBeVisible();
+    const metrics = await page.evaluate(() => ({
+      innerWidth: window.innerWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+      workspaceColumns: getComputedStyle(document.querySelector('.workspace')).gridTemplateColumns
+    }));
+    expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.innerWidth + 1);
+    expect(metrics.workspaceColumns.length).toBeGreaterThan(0);
+  });
 });
