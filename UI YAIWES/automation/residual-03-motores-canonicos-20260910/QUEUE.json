@@ -1,0 +1,8 @@
+{
+  "schema": "yaiwes.frontend.download-extract-queue.v1",
+  "queue": [
+    {"id":"0018:Vite","canonical_index":18,"slug":"Vite","source_repo":"https://github.com/vitejs/vite","source_ref":"134ce6817984bad0f5fb043481502531fee9b1db","publish":true},
+    {"id":"0046:Supabase","canonical_index":46,"slug":"Supabase","source_repo":"https://github.com/supabase/supabase","source_ref":"0500c21b37cc11b6b6140dde9827f89fb7d3097d","publish":true},
+    {"id":"0056:DuckDB","canonical_index":56,"slug":"DuckDB","source_repo":"https://github.com/duckdb/duckdb","source_ref":"78c40873b9ac7e22b90dafd3883c12abf93b2466","publish":true}
+  ]
+}
