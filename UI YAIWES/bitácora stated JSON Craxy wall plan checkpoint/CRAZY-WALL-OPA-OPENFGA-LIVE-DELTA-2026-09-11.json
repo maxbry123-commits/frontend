@@ -1,0 +1,17 @@
+{
+  "schema":"yaiwes.crazy-wall.policy-live-delta.v1",
+  "contract":"tel.workflow/v3",
+  "status":"ACTIVE_LOOP",
+  "base_main_sha":"f55941154da1c77adb22ca5bc3911ebd74cb49d6",
+  "node_id":"OSS11-O-OPA-OPENFGA",
+  "owner":"SOL_ORQUESTADOR",
+  "source_components":["OPA","OpenFGA"],
+  "source_state":"SOURCE_PRESENT_READBACK_VERIFIED",
+  "wiring":{"adapter_path":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/governance/external_policy.py","adapter_commit":"6a768e36927f5eebe387cd488a9ef990fbf87002","test_commit":"05edd9cc62e02ee44bb9b5e999aa6f8d30126efc","fables":true,"workflow_owner":false,"stabilize_owner_preserved":true},
+  "unit_regression":{"run":34646998280,"result":"SUCCESS","evidence":"Wordflow 15 passed; runtime 47 passed + 6 subtests"},
+  "live_e2e":{"workflow":".github/workflows/ui-yaiwes-opa-openfga-live-fables-e2e-20260911.yml","workflow_commit":"031b7e498495d823109bec1143508ec132cec675","run":34647825462,"job":103422713669,"conclusion":"SUCCESS","build":"OPA and OpenFGA built from acquired source trees with Go 1.27.1","health":["OPA /health PASS","OpenFGA /healthz PASS"],"assertions":{"OPA":{"alice":true,"bob":false},"OpenFGA":{"alice_viewer_document1":true,"bob_viewer_document1":false}},"verdict":"LIVE_RUNTIME_PASS"},
+  "promotion":"SOURCE_PRESENT + FABLES_WIRED + LIVE_RUNTIME_PASS",
+  "scope_boundary":"Policy decision/authorization lane only; does not close global G12/project.",
+  "next":"Map policy lane evidence into G12 requirement→layer→file→test→evidence matrix and keep project LOOP active.",
+  "closure":"SUBLANE_PASS_GLOBAL_ACTIVE_LOOP"
+}
