@@ -5,51 +5,88 @@
   "role": "SOL_GPT2_BACKEND",
   "name": "Sol gpt 2 🤯👷backend",
   "node_prefix": "S2",
-  "status": "ACTIVE_LOOP",
-  "base_main_sha": "1621f6d4e25de62cdbc8490df3eadf4b1bb70fff",
+  "status": "ACTIVE_LOOP_WITH_BLOCKING_GAPS",
+  "base_main_sha": "dffa858bbaa93a404ac334051ca1442d1420066d",
   "crazy_wall_blob_sha": "a4253dbb786ad89358afbacccd43dc47b5d57ebb",
+  "state_blob_sha_observed": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
   "canonical_motors_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
   "canonical_policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
   "nodes": {
     "S2-01": {
       "component": "DuckDB",
-      "status": "IN_PROGRESS_EXISTING_CANONICAL_WORKFLOW",
-      "workflow": ".github/workflows/ui-yaiwes-canonical-motors-residual-03-20260910.yml",
-      "run_id": 34562705800,
-      "job_id": 103148530021,
-      "observed_step": "Execute exact Motor 2 for 3 residuals into staging",
-      "observed_step_status": "in_progress",
-      "note": "No se creó ni modificó otro workflow para evitar colisión; el workflow existente incluye DuckDB y exige Motor 2 + Motor 4 + read-back final. No PASS todavía."
+      "status": "BLOCKED_SOURCE_SPECIAL_FILE_GAP",
+      "source": "https://github.com/duckdb/duckdb",
+      "source_ref": "78c40873b9ac7e22b90dafd3883c12abf93b2466",
+      "source_ref_verified": true,
+      "aggregate_workflow": ".github/workflows/ui-yaiwes-canonical-motors-residual-03-20260910.yml",
+      "aggregate_run_id": 34562705800,
+      "aggregate_result": {
+        "verdict": "GAPS_PENDING",
+        "total": 3,
+        "download_verified": 0,
+        "extraction_verified": 0,
+        "published_readback_verified": 0,
+        "failed": 3,
+        "pending": 0
+      },
+      "diagnostic_queue": "UI YAIWES/automation/S2-duckdb-diagnostic-20260910/QUEUE.json",
+      "diagnostic_workflow": ".github/workflows/sol-gpt2-s2-01-duckdb-diagnostic-20260910.yml",
+      "diagnostic_run_id": 34562878473,
+      "diagnostic_job_id": 103149035048,
+      "diagnostic_result": {
+        "verdict": "GAPS_PENDING",
+        "total": 1,
+        "download_verified": 0,
+        "extraction_verified": 0,
+        "published_readback_verified": 0,
+        "failed": 1,
+        "pending": 0
+      },
+      "root_cause": "SOURCE_SPECIAL_FILE_GAP",
+      "special_paths": [
+        "test/sql/copy/csv/data/glob/crawl/symbolic_link/link_to_file",
+        "test/sql/copy/csv/data/glob/crawl/symbolic_link/mydir/link_to_upper_dir"
+      ],
+      "canonical_engine_blob_sha": "91e6e4486692eab314be5c7130d8310d3c855397",
+      "motor_modified": false,
+      "publication_attempted_by_s2_diagnostic": false,
+      "move_attempted_by_s2_diagnostic": false,
+      "verdict": "FAIL_CLOSED; canonical engine rejects source symlinks; no PASS and no source sanitization/motor patch authorized"
     },
     "S2-02": {
       "component": "AVF",
       "status": "MOTOR_PROVIDER_GAP_CONFIRMED",
       "source": "https://android.googlesource.com/platform/packages/modules/Virtualization/",
       "evidence": {
-        "official_provider_live": true,
         "canonical_engine_blob_sha": "91e6e4486692eab314be5c7130d8310d3c855397",
         "canonical_engine_behavior": "repo_url only accepts https://github.com/ directly; every other SOURCE_REPO is prefixed with https://github.com/, therefore android.googlesource.com is unsupported by the immutable engine"
       },
       "motor_modified": false,
-      "verdict": "GAP; registrar evidencia y continuar nodo independiente"
+      "alternate_provider_used": false,
+      "verdict": "FAIL_CLOSED_PROVIDER_GAP"
     },
     "S2-03": {
-      "status": "READBACK_PRE_COMPLETION",
+      "status": "READBACK_COMPLETED_CURRENT_MAIN",
+      "readback_main_sha": "dffa858bbaa93a404ac334051ca1442d1420066d",
       "final_root": "UI YAIWES/componentes open soure UI YAIWES",
-      "secondary_root_checked": "UI YAIWES/todos los componentes",
       "readback": {
-        "Vite": "404_ABSENT_AT_OBSERVATION",
-        "Supabase": "404_ABSENT_AT_OBSERVATION",
-        "DuckDB": "404_ABSENT_AT_OBSERVATION",
-        "AVF": "404_ABSENT_AT_OBSERVATION"
+        "Vite": "404_ABSENT",
+        "Supabase": "404_ABSENT",
+        "DuckDB": "404_ABSENT",
+        "AVF": "404_ABSENT"
       },
-      "note": "Read-back ejecutado mientras run 34562705800 seguía en progreso; debe repetirse tras cierre del run para los tres componentes GitHub."
+      "verdict": "0/4 residuals present at canonical final root at this observation"
     },
     "S2-04": {
-      "status": "BLOCKED_NOT_YET_APPLICABLE",
+      "status": "FAIL_CLOSED_NOT_VERIFIED",
       "failed_zero": false,
       "pending_zero": false,
-      "reason": "run 34562705800 sigue en progreso y AVF conserva provider GAP; prohibido declarar failed=0/pending=0 o VERIFIED_CLOSED sin evidencia final"
+      "duckdb_diagnostic_failed": 1,
+      "duckdb_diagnostic_pending": 0,
+      "avf_provider_gap": true,
+      "four_residual_readback_present": 0,
+      "four_residual_readback_expected": 4,
+      "verdict": "VERIFIED_CLOSED prohibited"
     }
   },
   "watchdog": {
@@ -57,7 +94,8 @@
     "cadence": "1 hour",
     "active_observed": true,
     "active_automation_id": "6aa308848f38819199dcbc74feda1d44",
-    "title": "YAIWES Watchdog LOOP"
+    "title": "SOL2 Backend YAIWES",
+    "scope_aligned_to_s2_queue": true
   },
-  "next_action": "Releer Crazy Wall + STATE; verificar conclusión de run 34562705800; si PASS, hacer read-back independiente Vite/Supabase/DuckDB y balance failed=0/pending=0 para ese sublote. Mantener AVF como provider GAP hasta handoff/autorización compatible con motores inmutables."
+  "next_action": "Wait for explicit coordinator handoff or an authorized canonical strategy for DuckDB SOURCE_SPECIAL_FILE_GAP and AVF provider support; hourly watchdog rereads Crazy Wall + STATE and may continue only independent S2 work. Do not modify motors, sanitize source, substitute AVF provider, or declare PASS without authorization/evidence."
 }
