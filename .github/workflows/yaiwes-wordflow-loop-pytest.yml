@@ -20,6 +20,13 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_universal_plugins.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_fables_socket.py
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
