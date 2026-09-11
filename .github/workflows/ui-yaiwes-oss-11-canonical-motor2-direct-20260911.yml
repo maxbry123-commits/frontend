@@ -1,0 +1,116 @@
+name: UI YAIWES OSS 11 Canonical Motor2 Direct
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ui-yaiwes-oss-11-canonical-motor2-direct-20260911.yml'
+      - 'UI YAIWES/automation/oss-11-canonical-motor2-20260911/QUEUE.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ui-yaiwes-oss-11-canonical-motor2-direct-20260911
+  cancel-in-progress: false
+
+jobs:
+  download-extract-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Sparse bootstrap main
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git init -q
+          git remote add origin 'https://github.com/maxbry123-commits/frontend.git'
+          git sparse-checkout init --no-cone
+          cat > .git/info/sparse-checkout <<'EOF'
+          /➡️📂motores de descarga extracción copiado movimiento archivos fromtend/
+          /UI YAIWES/automation/oss-11-canonical-motor2-20260911/QUEUE.json
+          EOF
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
+          git checkout -q -B main FETCH_HEAD
+
+      - name: Verify immutable canonical motor blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend'
+          test "$(git hash-object "$ROOT/➡️📂 Motor de extracción zip/motor_1_extract_only.py")" = 'a52d5dc0e6ff26f75d753b848dcc1a40c5dd4500'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py")" = '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py")" = '91e6e4486692eab314be5c7130d8310d3c855397'
+          test "$(git hash-object "$ROOT/➡️📂motor de copiar archivos/motor_3_copy_batches.py")" = '3689924361ce4a1a9fde4ae2b6f6009c37a6042d'
+          test "$(git hash-object "$ROOT/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py")" = '8281211da76db3080fe1f1ea38b3eb0c45d655cb'
+          test "$(git hash-object "$ROOT/➡️📂motor de moves archivos/motor_4_move_batches.py")" = '9a21facfe11327cf60a2afca8f415ad52f0ecbe5'
+
+      - name: Execute exact Motor 2 direct to component destination
+        shell: bash
+        env:
+          QUEUE_FILE: ${{ github.workspace }}/UI YAIWES/automation/oss-11-canonical-motor2-20260911/QUEUE.json
+          STATE_FILE: ${{ runner.temp }}/motor2-oss11-state.json
+          INDEX_PATH: ${{ runner.temp }}/motor2-oss11-index.md
+          ENGINE_PATH: ${{ github.workspace }}/➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: UI YAIWES/componentes open soure UI YAIWES
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_RETRIES: '2'
+          LOOP_SLEEP_SECONDS: '0'
+        run: |
+          set -uo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend'
+          set +e
+          python "$ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py" | tee "$RUNNER_TEMP/motor2-oss11-final.json"
+          rc=${PIPESTATUS[0]}
+          set -e
+          echo '--- MOTOR2 STATE ---'
+          cat "$STATE_FILE" || true
+          echo '--- MOTOR2 INDEX ---'
+          cat "$INDEX_PATH" || true
+          test "$rc" -eq 0
+          python - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'motor2-oss11-final.json'
+          obj=json.loads([x for x in p.read_text().splitlines() if x.strip()][-1]); b=obj.get('balance',{})
+          assert b.get('total') == 11, b
+          assert obj.get('verdict') == 'VERIFIED_CLOSED', obj
+          assert b.get('download_verified') == 11 and b.get('extraction_verified') == 11 and b.get('published_readback_verified') == 11, b
+          assert b.get('failed') == 0 and b.get('pending') == 0, b
+          PY
+
+      - name: Independent final read-back 11 of 11
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch origin main
+          FINAL='UI YAIWES/componentes open soure UI YAIWES'
+          count=0
+          while IFS= read -r name; do
+            files="$(git ls-tree -r --name-only origin/main -- "$FINAL/$name/code" | wc -l | tr -d ' ')"
+            manifest="$(git ls-tree -r --name-only origin/main -- "$FINAL/$name/DOWNLOAD_EXTRACT_MANIFEST.json" | wc -l | tr -d ' ')"
+            test "$files" -gt 0 || { echo "READBACK_CODE_GAP:$name"; exit 1; }
+            test "$manifest" -eq 1 || { echo "READBACK_MANIFEST_GAP:$name"; exit 1; }
+            count=$((count+1))
+          done <<'EOF'
+          OPA
+          OpenFGA
+          Litestream
+          rqlite
+          OpenTelemetry Collector
+          Grafana Tempo
+          Testcontainers Python
+          Schemathesis
+          Kata Containers
+          Grype
+          ORAS
+          EOF
+          test "$count" -eq 11
+          echo "VERIFIED_CLOSED components=11 failed=0 pending=0 final_sha=$(git rev-parse origin/main)"
