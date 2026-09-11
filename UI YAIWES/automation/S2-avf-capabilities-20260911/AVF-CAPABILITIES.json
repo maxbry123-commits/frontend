@@ -1,0 +1,76 @@
+{
+  "schema": "yaiwes.s2.avf.capabilities.v1",
+  "role": "SOL_GPT2_BACKEND",
+  "node": "S2-02",
+  "status": "FAIL_CLOSED_CAPABILITY_MATRIX_RECORDED",
+  "canonical_source": "https://android.googlesource.com/platform/packages/modules/Virtualization/",
+  "canonical_final_root": "UI YAIWES/componentes open soure UI YAIWES/AVF",
+  "source_transport": {
+    "canonical_motor_compatible": false,
+    "reason": "hf_download_extract_engine.py accepts GitHub URLs directly and prefixes non-GitHub SOURCE_REPO values with https://github.com/; android.googlesource.com therefore cannot be acquired through the immutable Motor 2 engine without a provider-compatible authorized path",
+    "motor_modified": false,
+    "alternate_mirror_used": false
+  },
+  "official_runtime_constraints": {
+    "architecture": "AVF production support is ARM64; x86_64 is documented for testing non-protected VMs",
+    "api_surface": "android.system.virtualmachine SystemApi",
+    "manage_permission": "android.permission.MANAGE_VIRTUAL_MACHINE; restricted platform/preinstalled/development permission",
+    "custom_vm_permission": "android.permission.USE_CUSTOM_VIRTUAL_MACHINE; signature/development; not for ordinary third-party applications",
+    "hypervisor": "pKVM/KVM on supported Android hosts",
+    "guest_model": "Microdroid pVM is the reference guest; custom guest/VM use has additional permission and image/signature constraints",
+    "capability_detection": "VirtualMachineManager availability plus getCapabilities() determines protected/non-protected VM support on a device"
+  },
+  "host_matrix": {
+    "Android_ARM64_physical": {
+      "avf_runtime": "CONDITIONAL_SUPPORTED",
+      "requirements": [
+        "device implements AVF",
+        "VirtualMachineManager available",
+        "required restricted permission granted to host application",
+        "pKVM/protected or non-protected capability reported by device"
+      ],
+      "guest_boot_claim": "NOT_TESTED_ON_PHYSICAL_DEVICE",
+      "test_status": "HARDWARE_DEVICE_EVIDENCE_REQUIRED"
+    },
+    "Android_x86_64_Cuttlefish": {
+      "avf_runtime": "TEST_ONLY_NON_PROTECTED_DOCUMENTED",
+      "guest_boot_claim": "NOT_TESTED_IN_CURRENT_S2_RUN",
+      "test_status": "CUTTLEFISH_ENVIRONMENT_REQUIRED"
+    },
+    "Linux_desktop": {
+      "avf_runtime": "NOT_NATIVE_AVF_HOST",
+      "note": "Linux KVM/crosvm can be separate virtualization technologies, but generic Linux host availability is not equivalent to Android AVF/VirtualizationService",
+      "guest_boot_claim": "NOT_PROVEN_BY_AVF_SOURCE",
+      "test_status": "NOT_APPLICABLE_AS_AVF_HOST"
+    },
+    "Windows_desktop": {
+      "avf_runtime": "NOT_NATIVE_AVF_HOST",
+      "guest_boot_claim": "NOT_PROVEN_BY_AVF_SOURCE",
+      "test_status": "NOT_APPLICABLE_AS_AVF_HOST"
+    },
+    "iOS_iPadOS": {
+      "avf_runtime": "NOT_NATIVE_AVF_HOST",
+      "guest_boot_claim": "NOT_PROVEN_BY_AVF_SOURCE",
+      "test_status": "NOT_APPLICABLE_AS_AVF_HOST"
+    },
+    "Web_browser_PWA": {
+      "avf_runtime": "NOT_NATIVE_AVF_HOST",
+      "guest_boot_claim": "NOT_PROVEN_BY_AVF_SOURCE",
+      "test_status": "NOT_APPLICABLE_AS_AVF_HOST"
+    }
+  },
+  "official_evidence": [
+    "https://source.android.com/docs/core/virtualization",
+    "https://source.android.com/docs/core/virtualization/architecture",
+    "https://source.android.com/docs/core/virtualization/tryavf",
+    "https://android.googlesource.com/platform/packages/modules/Virtualization/+/refs/heads/main/android/android.system.virtualmachine.res/AndroidManifest.xml"
+  ],
+  "acceptance_status": {
+    "source_identified": true,
+    "source_downloaded_to_final_root": false,
+    "final_readback_present": false,
+    "runtime_guest_boot_verified_android_physical": false,
+    "multiplatform_avf_claim": false
+  },
+  "verdict": "AVF cannot be declared VERIFIED_CLOSED. Source-provider transport is blocked by immutable Motor 2 and runtime is device/capability/permission dependent; source presence would not prove guest boot."
+}
