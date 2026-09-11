@@ -1,0 +1,47 @@
+{
+  "schema": "yaiwes.crosscheck.3sources.wordflow.v1",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_LOOP_NOT_CLOSED",
+  "audited_main_sha": "1e0a8969d23d79d50a74bf5a3af93c396e60a1a9",
+  "sources": [
+    "📌MAX-SYSTEM-100X-FINAL-1.md",
+    "📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR Q grock...14 objetivos....md",
+    "🤯🗃️memoria del Wordflow resumen...YAIWES.md"
+  ],
+  "component_state": {
+    "requested_new_oss": 11,
+    "downloaded_extracted_readback_verified": 6,
+    "blocked_provider_special_file_gap": 5,
+    "verified": ["OPA", "OpenFGA", "rqlite", "OpenTelemetry Collector", "ORAS", "Testcontainers Python"],
+    "blocked": ["Litestream", "Grafana Tempo", "Schemathesis", "Kata Containers", "Grype"],
+    "truth_rule": "No marcar los 11 como listos hasta descarga+extracción+read-back verificable; Motor2 permanece inmutable."
+  },
+  "crosscheck": {
+    "implemented_and_evidenced": [
+      "fail-closed literal-node runner",
+      "Sheriff/Validator/Sentinel/Verifier/Supervisor/Judge/Guardian governance",
+      "durable hash-chained ledger/replay",
+      "L01-L06 research/xray/copy-move/download-extract/source-evolution skeleton",
+      "Fables socket and Stabilize bridge tested",
+      "OPA/OpenFGA policy lane Fables-wired with live runtime E2E"
+    ],
+    "partial_or_missing_vs_sources": [
+      "Memory/Audit Orchestrator and Context Fabric are not materialized as a complete executable layer",
+      "runtime/src/agent is empty (.gitkeep): YAIWES Agent↔Memory↔Tools↔Workflow adapter missing",
+      "runtime/src/integration contains README only: global integration/consolidation implementation incomplete",
+      "runtime/src/recovery is empty (.gitkeep): project-level recovery/control-plane not materialized there although durable ledger/Stabilize subgates exist elsewhere",
+      "runtime/src/uek is empty (.gitkeep): VM/sandbox execution control-plane missing",
+      "VirtualMachineManager/platform backends AVF/WHPX/KVM/QEMU/iOS-Web capability routing not end-to-end implemented/verified",
+      "Memory/Audit retrieval operations GET_CONTEXT/GET_MEMORY/GET_EVIDENCE and canonical write pipeline are not fully implemented end-to-end",
+      "global Consolidator/Coverage/Final-Judge/API glue required by source documents is not fully materialized under the expected boundaries",
+      "G12 requirement→layer→file→test→evidence matrix is not 100% closed"
+    ]
+  },
+  "verdict": "PARTIAL_COMPLIANCE_NOT_PROJECT_COMPLETE",
+  "next": [
+    "close five provider-special-file acquisition gaps without modifying canonical motors",
+    "materialize Agent/Memory/Integration/UEK-recovery glue only where no equivalent exists",
+    "implement and verify platform capability routing and sandbox lifecycle",
+    "complete G12 bidirectional source→requirement→code→test→evidence matrix and final E2E"
+  ]
+}
