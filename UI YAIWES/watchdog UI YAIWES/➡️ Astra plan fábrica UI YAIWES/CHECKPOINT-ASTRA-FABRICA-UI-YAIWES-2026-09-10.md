@@ -22,6 +22,45 @@ La fábrica sigue técnicamente ejecutable y validada, pero no se promueve a VER
 - Independent verifier: PASS.
 - Playwright v1.55.0, source commit `f992162f04ae0b0b5a0f4b6114b894215be98995`, Apache-2.0.
 - HF deploy bundle smoke: `DEPLOY_BUNDLE_SMOKE=PASS HTTP=200`.
+- S3 backend adapter simulation: PASS 3/3.
+- Adapter boundary materializado en `Frontend/factory-v0/src/backend-adapter.js`.
+- Test S3 materializado en `Frontend/factory-v0/tests/backend-adapter.test.mjs`.
+
+## S3 simulación cerrada
+
+Se materializó un boundary frontend desacoplado con:
+- `createBackendBoundary(...)`;
+- `createMockAdapter(...)`;
+- `createSolContractAdapter(...)` con transport inyectado;
+- fail-closed para adapter, transport y normalized event inválidos.
+
+Prueba externa Hugging Face:
+https://huggingface.co/jobs/COMAND-CENTER-1/6aa3d99c21047bf1b0375826
+
+Resultado:
+`RESULT PASS 3/3`.
+
+La misma `TypedAction` fue aceptada primero por mock y luego por `sol-contract-adapter` sin cambiar la forma de acción frontend.
+
+## Verificación combinada sobre código actual
+
+SHA probado:
+`f4117830f2141ce8363aff694b3fb513b20b02ca`
+
+Job:
+https://huggingface.co/jobs/COMAND-CENTER-1/6aa3d9e05527934177ec5c7a
+
+Cadena ejecutada con `set -euo pipefail`:
+- `node tests/factory.test.mjs`;
+- `node tests/backend-adapter.test.mjs`;
+- `npx playwright test --reporter=line`.
+
+Resultado observado:
+- logic test PASS;
+- adapter S3 PASS 3/3;
+- E2E/responsive `14 passed (4.9s)`;
+- marcador final `CURRENT_FACTORY_COMBINED_VERIFY=PASS`;
+- job `COMPLETED`.
 
 ## StrategyDelta GitHub Pages ejecutado
 
@@ -53,7 +92,18 @@ https://huggingface.co/jobs/COMAND-CENTER-1/6aa3bcbb21047bf1b03752e2
 Resultado exacto:
 `403 Forbidden: You don't have the rights to create a space under the namespace "COMAND-CENTER-1".`
 
-Conclusión HF: el token efectivo no posee permiso de creación de Space.
+La sesión HF verificada posteriormente sigue autenticada como `COMAND-CENTER-1` con scopes `jobs`, `openid`, `profile`, `read-mcp`, `read-repos`; no hay write/create-Space.
+
+## Candidate de publicación GitHub
+
+Rama:
+`astra-factory-preview`
+
+HEAD:
+`bb470f7fd51e5d2c1f7fd3ddd5d3c888156365b3`
+
+Read-back de `index.html` en la rama:
+blob `f7cc1b14cc7b384025120c3fdd3cce96c8c3f924`, igual al artefacto Factory V0 probado.
 
 ## GAPs actuales
 
