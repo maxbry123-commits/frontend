@@ -150,5 +150,90 @@
     "Reconcile refreshed integration report and Fables contract.",
     "Record deltas only; preserve previous audit history."
   ],
-  "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+  "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
+  "research_delta": {
+    "observed_at": "2026-09-11T04:36:54.355Z",
+    "wall_blob_sha": "a4253dbb786ad89358afbacccd43dc47b5d57ebb",
+    "scope": "User requested project missing functions and OSS candidates; static inspection, no runtime execution",
+    "package_tree_sha": "fa162ab2e50e4653172c8cd149283431ce8608b6",
+    "package_tree_truncated": false,
+    "findings": [
+      {
+        "priority": 1,
+        "gap": "PACKAGE_RUNNER_MISSING",
+        "evidence": "__init__.py blob 99a74045185811f9c994560255b5fb3b7103543a imports .runner; runner.py returns 404 and is absent from complete package tree. layers/ also absent; parent listing lacks README-advertised tests/.",
+        "scope_limit": "Absence confirmed at documented package paths only, not repository-wide. No runtime test executed.",
+        "action": "Owner should locate prior approved implementation/history and reconcile package; preserve Stabilize as workflow owner."
+      },
+      {
+        "gap": "LEDGER_PERSISTENCE",
+        "evidence": "ledger.py blob 550393e3cf4dd64c4180489797ba5d50e009fde8 only appends to Python list and verifies hash chain; this module has no disk persistence/recovery.",
+        "candidate": "eventsourcing"
+      },
+      {
+        "gap": "EVIDENCE_VALIDATION_WEAK",
+        "evidence": "contracts.py blob 8dcd68d569beb29f44def3e7fba0576fac7abe4a Evidence.valid checks kind/ref only; hash optional.",
+        "action": "Reuse Pydantic and existing verifier; implement actual ref/hash/read-back rules per evidence type."
+      },
+      {
+        "gap": "REGISTRY_NOT_EXECUTION_PROOF",
+        "evidence": "component_registry.py blob c1f2854f0c0c72fe501a1ee292f6feddae61f5aa checks hard-coded WIRED status and nonempty directory; no vendor execution.",
+        "action": "Connect actual adapters and functional tests."
+      },
+      {
+        "gap": "LLM_ADAPTER_EXTERNAL",
+        "evidence": "llm_gate.py blob 0aded0b10f5233e4b1bd59bd7b402d63f04e9a8b requires injected caller; it is a gate, not provider adapter.",
+        "action": "Reuse catalog LiteLLM and HTTPX; verify actual wiring."
+      },
+      {
+        "gap": "S1_DESTINATION_BLOCK",
+        "evidence": "S1 role state blob 8d624aeafa96803cfd2c02e93a7f891b32106b78 reports DESTINATION_INPUT_GAP; catalog contains Vite runtime/vendor destination, but acquisition/staging scope requires coordinator reconciliation.",
+        "action": "Coordinator clarify operation destinations without replacing component or modifying motors."
+      }
+    ],
+    "candidates": [
+      {
+        "name": "eventsourcing",
+        "url": "https://github.com/pyeventsourcing/eventsourcing",
+        "license": "BSD-3-Clause",
+        "purpose": "Persistent event store, reconstruction and snapshots; configure file SQLite/PostgreSQL, never default memory for durable state.",
+        "priority": 1
+      },
+      {
+        "name": "Schemathesis",
+        "url": "https://github.com/schemathesis/schemathesis",
+        "license": "MIT",
+        "purpose": "OpenAPI/GraphQL generated and stateful API tests; after API exists.",
+        "priority": 2
+      },
+      {
+        "name": "pluggy",
+        "url": "https://github.com/pytest-dev/pluggy",
+        "license": "MIT",
+        "purpose": "Local Python hooks implementation candidate under approved Fables contract; does not replace Fables or provide sandbox isolation.",
+        "priority": 3
+      },
+      {
+        "name": "Dexie.js",
+        "url": "https://github.com/dexie/Dexie.js",
+        "license": "Apache-2.0",
+        "purpose": "Optional browser IndexedDB persistence; only if existing PGlite/native IndexedDB solution is insufficient. Encryption separate.",
+        "priority": 4
+      }
+    ],
+    "candidate_presence": "These four names are not entries in reviewed 124-component catalog. Repository-wide physical absence not established.",
+    "reuse_existing_catalog": [
+      "Pydantic",
+      "HTTPX",
+      "LiteLLM",
+      "MCP Python SDK",
+      "Oxigraph",
+      "Qdrant",
+      "FastEmbed",
+      "PGMQ or Taskiq (choose by need)",
+      "Playwright",
+      "Hypothesis"
+    ],
+    "decision": "Prioritize missing runner/layers reconciliation, durable state and evidence validation before adding components. No download/move/install performed."
+  }
 }
