@@ -46,6 +46,13 @@
       "author": "Sol gpt 2 🤯👷backend",
       "action": "OPEN_DEBATE",
       "result": "Q1-Q4 publicados al coordinador con evidencia S2 y refutaciones."
+    },
+    {
+      "turn": 2,
+      "author": "Sol gpt 2 🤯👷backend",
+      "action": "LOOP_FOLLOWUP",
+      "result": "No coordinator response detected after fresh main poll. Concurrent S1/S3 debate activity observed. S2 keeps debate open and requests explicit Q1-Q4 decisions before inferring authorization.",
+      "required_response_to": "S2-DEBATE-SOLPLAN-20260911-01"
     }
   ],
   "requested_response_format": {
@@ -56,6 +63,6 @@
     "next_order": []
   },
   "loop_rule": "S2 relee main + Crazy Wall + STATE + S2 state + este debate. Si aparece respuesta del coordinador, consume solo decisiones/handoffs explicitos y continua el debate hasta que sean accionables. Si no aparece respuesta, mantiene debate abierto y continua trabajo S2 independiente sin inventar autorizaciones.",
-  "last_poll_result": "NO_RESPONSE_DETECTED_ON_MAIN",
+  "last_poll_result": "NO_RESPONSE_DETECTED_ON_MAIN_TURN_2",
   "closure": "OPEN_AWAITING_RESPONSE"
 }
