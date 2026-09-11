@@ -3,7 +3,7 @@
   "contract": "tel.workflow/v3",
   "status": "ACTIVE_MONITORING_LOOP",
   "monitor": "🌞👷 sol osquestador plan 🎯",
-  "updated_at_utc": "2026-09-11T11:01:50Z",
+  "updated_at_utc": "2026-09-11T13:01:00Z",
   "monitoring_rule": "No role is marked ACTIVE from assumption. ACTIVE requires fresh STATE/Crazy Wall heartbeat, commit, or real run/log evidence. GAP blocks only its node; next FREE node must be visible.",
   "roles": {
     "SOL1": {
@@ -27,23 +27,23 @@
       "watch": "MONITORED_BY_SOL_ORQUESTADOR"
     },
     "SOL3": {
-      "current_node": "S3_ROUND5_COMPONENT_STRATEGYDELTA",
-      "current_task": "Continue #22/#25/#27/#28/#30 fail-closed one-by-one and consume current Fables evidence precedence before any wiring promotion.",
-      "status": "ACTIVE_BY_FRESH_COMMIT_EVIDENCE",
-      "blocker_if_any": "Fresh S3 commit 21aea6952e81676c77ad8f310f74e635b1543f9b still treats Fables as NOT_VERIFIED from cancelled run/workflow absence; stronger current evidence remains run 34573746304 success and later joint run 34591723668 success. TESTED still does not equal WIRED.",
-      "evidence_or_run": "commit 21aea6952e81676c77ad8f310f74e635b1543f9b at 2026-09-11T10:39:10Z; run 34573746304 success; run 34591723668 head 307d15215336c257d58d0297f9fa86cc740a7462 completed success with Wordflow LOOP tests and universal socket/Fables/Stabilize bridge test steps all success.",
-      "next_free_node": "Correct Fables evidence model to TESTED_NOT_WIRED using current successful runs, then continue only genuine component StrategyDelta nodes with real run/log evidence; no vendor PASS→WIRED promotion.",
-      "heartbeat_at": "2026-09-11T10:39:10Z",
+      "current_node": "S3_ROUND6_COMPONENT_STRATEGYDELTA",
+      "current_task": "Continue #22/#25/#27/#28 and remaining 31-40 fail-closed one-by-one; preserve #30 xterm.js as RUNTIME_PASS_NOT_WIRED; consume current Fables evidence precedence before any wiring promotion.",
+      "status": "ACTIVE_BY_FRESH_COMMIT_AND_VERIFIED_RUN_EVIDENCE",
+      "blocker_if_any": "S3 debate still carries stale Fables NOT_VERIFIED reasoning from cancelled/dedicated-workflow evidence. Stronger current Fables evidence remains run 34573746304 success and joint run 34591723668 success. TESTED still does not equal WIRED.",
+      "evidence_or_run": "fresh debate commit 993cb7ed3747303fbff2531a367a50d1753159bb at 2026-09-11T12:21:46Z; xterm.js run 34573682810/job 103181214320 completed success at head a4c1b66a63d5ab01bb178031bb0dda700b21a892; S3 records 2407 passing and explicitly keeps integration_state NOT_WIRED.",
+      "next_free_node": "Correct Fables evidence model to TESTED_NOT_WIRED, keep #30 out of repair queue, then continue #22/#25/#27/#28 and 31-40 one-by-one with real run/log evidence; no vendor/runtime PASS→WIRED promotion.",
+      "heartbeat_at": "2026-09-11T12:21:46Z",
       "watch": "MONITORED_BY_SOL_ORQUESTADOR"
     },
     "SOL_ORQUESTADOR": {
-      "current_node": "RECONCILE_RECOVERY_FIX_HF_PUBLISH_AND_4AI_LEDGER",
-      "current_task": "Reconcile fresh recovery code/tests, S3 evidence precedence and publish failures; update ledger/FLOW without false promotion and keep code/component boundaries explicit.",
+      "current_node": "RECONCILE_S3_XTERM_RUNTIME_AND_4AI_LEDGER",
+      "current_task": "Reconcile fresh S3 xterm runtime PASS at component boundary, preserve Fables evidence precedence, and keep publish/recovery/global wiring gates independent.",
       "status": "ACTIVE_BY_FRESH_COORDINATION_EVIDENCE",
-      "blocker_if_any": "Global verify_final remains open. Recovery node-status replay now has fresh CI success, but workspace/global recovery is not proven. HF Static Space publishing is blocked at credential resolution and remains PUBLISH/WORKFLOW_FAIL. G07/G08/G09-G17 remain independently governed.",
-      "evidence_or_run": "recovery fix a6df3e0925c5735890e79fe1fc5d3407927d5bd3 + regression tests 307d15215336c257d58d0297f9fa86cc740a7462; CI run 34591723668/job 103238355216 success; Astra1 audit d552d88539c6a78574b9851d1db86c434838ea7f; HF publish run 34591171118/job 103236571091 failure at token resolution.",
-      "next_free_node": "Promote only recovery latest-node-status subgate to TESTED; keep G11 global recovery open. Record HF credential failure separately from component/runtime. Reinject Fables evidence precedence to Sol3; keep Sol1/Sol2 WAITING until own fresh evidence; no new component acquisition without proven mandatory capacity gap.",
-      "heartbeat_at": "2026-09-11T11:01:50Z",
+      "blocker_if_any": "Global verify_final remains open. xterm.js runtime/vendor test PASS does not prove WIRED. G07/G08/G09-G19 remain independently governed; Sol1/Sol2 still lack fresh own heartbeat.",
+      "evidence_or_run": "commit 993cb7ed3747303fbff2531a367a50d1753159bb; xterm run 34573682810/job 103181214320 success; prior joint Fables/recovery CI 34591723668 success remains authoritative for TESTED-only Fables state.",
+      "next_free_node": "Update G08 with xterm runtime subgate PASS_NOT_WIRED; append FLOW revision; reinject Fables evidence precedence to Sol3; keep Sol1/Sol2 WAITING; continue next FREE GAP without new component acquisition.",
+      "heartbeat_at": "2026-09-11T13:01:00Z",
       "watch": "SELF_WATCHDOG_PLUS_ROLE_MONITOR"
     }
   },
