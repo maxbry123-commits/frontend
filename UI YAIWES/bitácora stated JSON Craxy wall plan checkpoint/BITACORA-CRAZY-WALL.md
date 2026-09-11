@@ -174,3 +174,22 @@ Test real de mount-guard/cableado 1×1: `17` PASS, `3` PENDING_SOURCE, `0` PRUNE
 
 <!-- YAIWES_COMPONENTS_01_20_STEP3_END -->
 
+---
+
+## UI-PLUG-0037 — 2026-09-10 22:03 — SUPERSEDES CURRENT COUNT ONLY
+
+La cifra histórica de 14 gaps físicos se conserva como evento previo. Read-back fresco sobre `main` de los 14 gaps previamente identificados muestra 10 materializados posteriormente y deja **4 gaps físicos residuales**. No se altera Action124 histórico ni sus clases.
+
+- Inventario operativo actual: `120/124 PRESENT_PHYSICAL`; `4/124 MISSING_PHYSICAL`.
+- Base del conteo: baseline verificado 110 + read-back fresco del delta original de 14 gaps; el wiring global 21–124 NO queda certificado por este conteo.
+- Resueltos desde los 14 anteriores: `big-AGI`, `Vercel AI SDK`, `TanStack Query`, `React Virtuoso`, `shadcn-ui`, `XYFlow React Flow`, `Lucide`, `Uppy`, `workerd`, `Flutter`.
+- Pendientes físicos exactos: `#18 Vite`, `#46 Supabase`, `#56 DuckDB`, `#66 AVF`.
+- Fuentes: `https://github.com/vitejs/vite`, `https://github.com/supabase/supabase`, `https://github.com/duckdb/duckdb`, `https://android.googlesource.com/platform/packages/modules/Virtualization/`.
+- Actions de recuperación observadas: run `34445055183` = completed/failure; run `34445142005` = completed/failure; snapshot posterior: `0 in_progress`, `0 queued`. La causa exacta no se inventa y permanece `NOT_YET_CLASSIFIED_FROM_LOGS` hasta evidencia del log.
+- Restricción de ejecución: únicamente motores canónicos inmutables de `frontend@ef0669bbc753861bfc33b86548f3f90c0f3d8df9/➡️📂motores de descarga extracción copiado movimiento archivos fromtend/`; `COPY_ONLY`, sin LFS, sin force y sin motor alternativo.
+- `AVF` queda `MOTOR_PROVIDER_GAP` mientras el engine canónico orientado a GitHub no pueda consumir `android.googlesource.com` sin modificar el motor; no se inventa sustituto.
+- TAREA 1=`ACTIVE_LOOP`: cerrar los 4 gaps con descarga+extracción+read-back y movimiento por Motor4 si se usó staging.
+- TAREA 2=`BLOCKED_BY_TASK_1`: después de 124/124 físico, cablear/conectar/integrar 1×1 y verificar. Regla: `presence != WIRED`.
+- Watchdog solicitado: `6aa237226ad48191b4dc2b1eb07c0400`; el alcance persistido es estos 4 gaps + Tarea 2, motores canónicos únicamente. Su reactivación está condicionada al límite de tareas activas de la cuenta.
+
+**Verdict:** `ACTIVE_LOOP`; este delta de ledger está documentado, pero el proyecto NO está `VERIFIED_CLOSED`.
