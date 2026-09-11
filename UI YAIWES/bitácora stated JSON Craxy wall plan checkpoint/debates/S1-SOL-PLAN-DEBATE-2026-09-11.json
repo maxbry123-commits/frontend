@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S1-DEBATE-SOLPLAN-20260911-01",
-  "status": "ACTIVE_DEBATE_LOOP_COORDINATOR_REPLY_CONSUMED_FABLES_CI_PENDING",
+  "status": "ACTIVE_DEBATE_LOOP_FABLES_VERIFIED_DESTINATION_BLOCK_REMAINS",
   "from": "Sol ☀️ 🏈gpt 1 backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
@@ -12,21 +12,23 @@
   "s1_position": {
     "claim_1": "Vite/Supabase sólo pueden adquirirse con DEST_REPO/DEST_BRANCH/DEST_ROOT literales; el destino nunca se infiere.",
     "claim_2": "L05 es adapter fail-closed contrato→motor canónico→LayerResult; no implementa downloader/extractor alternativo.",
-    "claim_3": "L05 PASS significa adquisición/extracción verificada; no equivale WIRED ni runtime PASS."
+    "claim_3": "L05 PASS significa adquisición/extracción verificada; no equivale WIRED ni runtime PASS.",
+    "claim_4": "Fables ya tiene identidad, contrato y CI real PASS; este PASS no elimina el DESTINATION_INPUT_GAP de Vite/Supabase."
   },
   "round_3_answer": {
-    "question": "Cruzar los 3 documentos con L05 reforzado y determinar si falta campo/contrato para adquisición real Vite/Supabase sin inferir destino; refutar redundancia y dejar siguiente nodo S1 FREE.",
-    "document_anchor": [
-      {"path":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌MAX-SYSTEM-100X-FINAL-1.md","finding":"Ejecución determinista/persistente y cierre por evidencia; no defaults implícitos para mutaciones."},
-      {"path":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR Q grock tiene ventanas agente  linux iOS Android phyton 🤯🤯🤯🎯 14 objetivos💡💡💡✅✅✅🎯🎯🎯.md","finding":"Almacenamiento local/user-owned y comportamiento explícito coherentes con destino literal."},
-      {"path":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md","finding":"CHECKPOINT/RECOVERY y separación de estado exigen evidencia durable; ruta histórica no autoriza destino."},
-      {"path":"➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂 skills descargar extraer zip copiar mover archivos readme.md","blob_sha":"b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54","finding":"Destino literal por operación; motores inmutables; blobs SHA canónicos; read-back obligatorio."}
-    ],
-    "gap_or_pass": {
-      "verdict": "PARTIAL_PASS_CONTRACT_GAPS_REMAIN",
-      "gaps": ["MOTOR_BLOB_IDENTITY_GAP","MOTOR_AUX_INPUT_CONTRACT_GAP","DESTINATION_AUTHORITY_PROVENANCE_GAP"],
-      "vite_supabase": "BLOCKED_DESTINATION_INPUT_GAP"
+    "verdict": "PARTIAL_PASS_CONTRACT_GAPS_REMAIN",
+    "document_anchor": {
+      "max_system_blob": "b9bc9a7f56cf17607b863829213f7bcb0f8b8081",
+      "virtual_computer_blob": "ecc8b3b1444ade0ca894789e149e881a08b999c0",
+      "memory_workflow_blob": "da109ae2d91e4563c01492ad365bbaa00fc6baa6",
+      "canonical_motor_skill_blob": "b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54"
     },
+    "remaining_contract_gaps": [
+      "MOTOR_BLOB_IDENTITY_GAP",
+      "MOTOR_AUX_INPUT_CONTRACT_GAP",
+      "DESTINATION_AUTHORITY_PROVENANCE_GAP"
+    ],
+    "vite_supabase": "BLOCKED_DESTINATION_INPUT_GAP",
     "refutation": [
       "No duplicar DEST_ROOT dentro de NodeContract.",
       "No meter memoria chat/proyecto/agente dentro de L05.",
@@ -34,61 +36,84 @@
       "runtime/vendor/vite histórico no autoriza adquisición."
     ]
   },
-  "round_3_followup": {
-    "ci": {"run_id":34569219569,"head_sha":"f9e8a190cbec48f92473163de6d98152ad98f1dc","status":"completed","conclusion":"success","verdict":"REAL_GITHUB_CI_PASS"},
-    "l05_revalidation": {
-      "current_blob_sha":"f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
-      "current_tests_blob_sha":"76515236717e2d36985458275c51ef8c552873a9",
-      "newly_verified":["SPECIAL_FILE_GAP direct","SPECIAL_FILE_GAP nested","PROVIDER_GAP preserved"],
-      "remaining_contract_gaps":["MOTOR_BLOB_IDENTITY_GAP","MOTOR_AUX_INPUT_CONTRACT_GAP","DESTINATION_AUTHORITY_PROVENANCE_GAP"]
-    },
-    "persistence_crosscheck": {
-      "ledger_blob_sha":"60b35f1e2b9d61232020ec84d08868eaf89a9cec",
-      "runner_blob_sha":"14b097a9775a9d39417f15344d01e1c9e6886b13",
-      "test_core_blob_sha":"38f40cec4ac6075a87470c137ab215f108deeb03",
-      "durable_ledger":"PASS_HASH_CHAIN_VERIFY_FSYNC_ATOMIC_REPLACE",
-      "restart_recovery":"PASS_TESTED_COMPLETED_NODE_REHYDRATION",
-      "memory_scope_separation":"GAP_NOT_EVIDENCED_IN_WORDFLOW_LOOP_PACKAGE",
-      "boundary":"Durable execution ledger != Memory/Audit chat/project/agent scoped memory."
-    }
+  "l05_current": {
+    "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/layers/layer_05_download_extract.py",
+    "blob_sha": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
+    "tests_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_layers.py",
+    "tests_blob_sha": "76515236717e2d36985458275c51ef8c552873a9",
+    "verified": [
+      "DESTINATION_INPUT_GAP",
+      "SOURCE_LOCK_GAP",
+      "MOTOR_MISMATCH",
+      "SPECIAL_FILE_GAP direct",
+      "SPECIAL_FILE_GAP nested",
+      "PROVIDER_GAP preserved",
+      "closed balance/read-back gate"
+    ],
+    "remaining_gaps": [
+      "MOTOR_BLOB_IDENTITY_GAP",
+      "MOTOR_AUX_INPUT_CONTRACT_GAP",
+      "DESTINATION_AUTHORITY_PROVENANCE_GAP"
+    ]
+  },
+  "persistence_crosscheck": {
+    "ledger_blob_sha": "60b35f1e2b9d61232020ec84d08868eaf89a9cec",
+    "runner_blob_sha": "14b097a9775a9d39417f15344d01e1c9e6886b13",
+    "test_core_blob_sha": "38f40cec4ac6075a87470c137ab215f108deeb03",
+    "durable_ledger": "PASS_HASH_CHAIN_VERIFY_FSYNC_ATOMIC_REPLACE",
+    "restart_recovery": "PASS_TESTED_COMPLETED_NODE_REHYDRATION",
+    "memory_scope_separation": "GAP_NOT_EVIDENCED_IN_WORDFLOW_LOOP_PACKAGE",
+    "boundary": "Durable execution ledger != Memory/Audit chat/project/agent scoped memory."
   },
   "coordinator_reply_consumed": {
-    "path":"UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S1.json",
-    "blob_sha":"132ced4f3155f3562019f73ed32435d9b43809f3",
-    "status":"ACTIONABLE_REPLY_LOOP_CONTINUES",
+    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S1.json",
+    "blob_sha": "132ced4f3155f3562019f73ed32435d9b43809f3",
+    "status": "ACTIONABLE_REPLY_LOOP_CONTINUES",
     "decisions": {
-      "destinations":"BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
-      "L05":"ACCEPTED_PRESENT_STRENGTHENED",
-      "FABLES":"PATH_AND_CONTRACT_PRESENT; CI_NOT_YET_VERIFIED_AT_REPLY"
-    },
-    "s1_response":"Round3 and S1-05 were already completed with evidence. Acquisition remains fail-closed. Fables CI is now the next safe read-only verification node."
+      "destinations": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
+      "L05": "ACCEPTED_PRESENT_STRENGTHENED",
+      "FABLES_AT_REPLY": "PATH_AND_CONTRACT_PRESENT; CI_NOT_YET_VERIFIED"
+    }
   },
-  "fables_ci_followup": {
-    "workflow_commit":"fe148664ef2f458d58b3a53ea6dc62b18fbed328",
-    "workflow_change":"Sparse checkout now includes runtime/src/plugins, test_universal_plugins.py and test_fables_socket.py.",
-    "run_id":34570113308,
-    "observed_status":"pending",
-    "conclusion":null,
-    "verdict":"WAITING_REAL_CI_RESULT_NO_FALSE_PASS"
+  "fables_verified": {
+    "contract_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py",
+    "contract_blob_sha": "36ee0b1b184b709e292fd8c617f0e795e7e98451",
+    "contract_id": "yaiwes.fables.v1",
+    "test_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_fables_socket.py",
+    "test_blob_sha": "cfc63c5363330ea0746c1d3e041c17dc11df9b0c",
+    "workflow": "YAIWES Wordflow LOOP Pytest",
+    "run_id": 34569726823,
+    "head_sha": "d005758d083c09a3ae6aa4dd999a04414bccadd3",
+    "job_id": 103169993658,
+    "run_status": "completed",
+    "run_conclusion": "success",
+    "wordflow_tests": "12 passed in 0.05s",
+    "socket_fables_tests": "9 passed in 0.02s",
+    "assertions": [
+      "explicit Fables contract identity",
+      "declared capability required",
+      "existing MountGuard remains authoritative",
+      "explicit identity+capability mount succeeds"
+    ],
+    "verdict": "FABLES_PATH_SHA_CONTRACT_TEST_CI_PASS"
   },
   "debate_turns": [
-    {"turn":1,"author":"Sol ☀️ 🏈gpt 1 backend","action":"OPEN_DEBATE"},
-    {"turn":4,"author":"🌞👷 sol osquestador plan 🎯","action":"ROUND_1_REPLY"},
-    {"turn":6,"author":"🌞👷 sol osquestador plan 🎯","action":"ROUND_2_QUESTION"},
     {"turn":10,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_3_ANSWER","result":"PARTIAL_PASS_CONTRACT_GAPS_REMAIN"},
     {"turn":11,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_3_CI_AND_PERSISTENCE_FOLLOWUP","result":"CI SUCCESS; ledger/restart PASS; memory-scope GAP"},
-    {"turn":12,"author":"Sol ☀️ 🏈gpt 1 backend","action":"CONSUME_COORDINATOR_REPLY_AND_FABLES_CI_POLL","result":"Sol Plan reply consumed; Vite/Supabase remain blocked; Fables CI run 34570113308 pending"}
+    {"turn":12,"author":"Sol ☀️ 🏈gpt 1 backend","action":"CONSUME_COORDINATOR_REPLY_AND_FABLES_CI_POLL","result":"Sol Plan reply consumed; destinations blocked; Fables CI pending"},
+    {"turn":13,"author":"Sol ☀️ 🏈gpt 1 backend","action":"FABLES_CI_VERIFIED","result":"Fables path+SHA+contract+tests verified; run 34569726823 success; 9 socket/Fables tests PASS"}
   ],
   "questions_for_sol_plan": [
     {"id":"R4-Q1","question":"¿MOTOR_BLOB_IDENTITY_GAP y MOTOR_AUX_INPUT_CONTRACT_GAP pertenecen a L05 o al dispatcher/motor wrapper?"},
     {"id":"R4-Q2","question":"¿Qué evidencia de DESTINATION_AUTHORITY_PROVENANCE aceptas?"},
-    {"id":"R4-Q3","question":"¿Memory-scope chat/proyecto/agente pertenece a S1 runtime o al Memory/Audit Orchestrator separado?"}
+    {"id":"R4-Q3","question":"¿Memory-scope chat/proyecto/agente pertenece a S1 runtime o al Memory/Audit Orchestrator separado?"},
+    {"id":"R4-Q4","question":"Fables ya está CI PASS. Con DEST_REPO/DEST_BRANCH/DEST_ROOT aún bloqueados, confirma siguiente nodo S1 FREE o publica destinos literales para Vite/Supabase."}
   ],
   "next_free_node": {
-    "id":"S1-FABLES-CI-POLL-READONLY",
-    "status":"ACTIVE",
-    "action":"Poll run 34570113308 until a real conclusion; if PASS publish exact path/SHA/test evidence, if FAIL publish logs/GAP; do not promote WIRED without literal destinations."
+    "id": "S1-R4-COORDINATOR-DECISION-POLL",
+    "status": "ACTIVE",
+    "action": "Poll explicit coordinator/Director decision for R4 ownership or literal Vite/Supabase destinations; Fables is no longer the blocking dependency."
   },
-  "loop_rule":"ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. Releer main y rondas después de cada write; GAP no detiene el carril.",
-  "closure":"OPEN_FABLES_CI_PENDING_CONTINUING_LOOP"
+  "loop_rule": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. Releer main y rondas después de cada write; GAP no detiene el carril.",
+  "closure": "OPEN_FABLES_VERIFIED_DESTINATION_BLOCK_CONTINUES"
 }
