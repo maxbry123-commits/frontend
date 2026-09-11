@@ -5,7 +5,7 @@
   "status": "CLOSED_UNVERIFIED",
   "gate": "T1_FACTORY_FRONTEND",
   "t2_interface": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED",
-  "base_audited_sha": "2ef0954f7e497fd9ecf4222237072bfab4e27abc",
+  "base_audited_sha": "b520791191b0d07fcbf8478fcebb757306993cfb",
   "completed_nodes": [
     "P0_INPUT_LITERAL_READBACK",
     "P1_CAPABILITY_MATRIX",
@@ -27,7 +27,9 @@
     "P4B_RESPONSIVE_GATE_PASS",
     "P4B_INDEPENDENT_VERIFIER_PASS",
     "P4C_HF_SPACE_DEPLOY_BUNDLE_CREATED",
-    "P4C_DEPLOY_BUNDLE_LOCAL_HTTP_SMOKE_PASS"
+    "P4C_DEPLOY_BUNDLE_LOCAL_HTTP_SMOKE_PASS",
+    "P4D_GITHUB_PREVIEW_BRANCH_CREATED",
+    "P4D_GITHUB_PREVIEW_PAYLOAD_MATERIALIZED"
   ],
   "current_node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY",
   "factory_v0": {
@@ -46,6 +48,9 @@
     "persistent_web_preview_url": null,
     "deployed_url_http_readback_pass": false,
     "deployed_url_smoke_e2e_pass": false,
+    "github_preview_branch": "astra-factory-preview",
+    "github_preview_branch_head": "bb470f7fd51e5d2c1f7fd3ddd5d3c888156365b3",
+    "github_pages_endpoint_access": "UNAVAILABLE_VIA_CURRENT_CONNECTOR",
     "verified_closed": false
   },
   "verification_jobs": {
@@ -76,11 +81,13 @@
     "handoff": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/HANDOFF-ASTRA-FABRICA-UI-YAIWES.md",
     "recovery": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/RECOVERY-PATCH-ASTRA-FABRICA-UI-YAIWES.md",
     "audit_5_passes": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/AUDITORIA-5-PASADAS-CROSSCHECK-2026-09-10.md",
-    "forensic_reopen_audit": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/AUDITORIA-FORENSE-XRAY-CIERRE-WEB-2026-09-11.md"
+    "forensic_reopen_audit": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/AUDITORIA-FORENSE-XRAY-CIERRE-WEB-2026-09-11.md",
+    "github_pages_strategydelta": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/GITHUB-PAGES-STRATEGYDELTA-2026-09-11.md"
   },
   "open_gaps": [
     "PERSISTENT_WEB_PREVIEW_NOT_PUBLISHED",
     "HF_SPACE_WRITE_SCOPE_UNAVAILABLE_IN_CURRENT_CONNECTOR",
+    "GITHUB_PAGES_CONFIGURATION_ENDPOINT_UNAVAILABLE_IN_CURRENT_CONNECTOR",
     "DEPLOYED_URL_HTTP_READBACK_PENDING",
     "DEPLOYED_URL_E2E_SMOKE_PENDING",
     "PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT"
