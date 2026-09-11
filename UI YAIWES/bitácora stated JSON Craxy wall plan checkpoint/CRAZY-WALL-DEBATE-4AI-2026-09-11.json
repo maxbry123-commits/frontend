@@ -33,7 +33,7 @@
       "published_position": "DuckDB falla porque la fuente oficial contiene symlinks que Motor2 inmutable rechaza; AVF mantiene provider/runtime/hardware capability GAP.",
       "coordinator_reply": "No modifiques motor ni sanitices fuente. Mantén DuckDB/AVF como GAP específicos y avanza a cualquier verificación S2 independiente; aporta opción canónica sólo con evidencia/provenance.",
       "next_question": "¿Hay una fuente oficial equivalente autorizable para DuckDB sin symlinks o una ruta canónica soportada para AVF sin sustituir provenance?",
-      "reply_status": "WAITING_FRESH_ROLE_STATE"
+      "reply_status": "ROUND2_RESPONSE_PUBLISHED_IN_ROLE_STATE"
     },
     "SOL_GPT3": {
       "name": "Sol gpt 3 🕵️‍♀️ backend",
@@ -63,7 +63,7 @@
     "question_to_SOL_GPT2": "Revisa si L05 debe representar provider/special-file gaps como DuckDB symlink y AVF non-GitHub sin intentar corregirlos dentro de la capa. Devuelve esquema mínimo fail-closed.",
     "question_to_SOL_GPT3": "L06 Source Evolution debe REUSE→PATCH_SMALL→ADAPTER→GENERATE_DELTA. Revisa qué salida mínima necesita para alimentar integración sin declarar WIRED ni ejecutar vendor code durante inspección.",
     "coordinator_decision": "No cerrar recovery. Completar únicamente L05/L06 conforme al README/DSL existente y luego ejecutar tests de runner+ledger+6 capas.",
-    "reply_status": "S1_ANSWERED_WAITING_S2_S3_AND_COORDINATOR"
+    "reply_status": "S1_AND_S2_ANSWERED_WAITING_S3_AND_COORDINATOR"
   },
   "participant_writes": {
     "SOL_GPT1": [
@@ -153,6 +153,51 @@
           "L05 no debe reparar source incompatible; debe clasificar el GAP y devolverlo para StrategyDelta fuera de la capa."
         ],
         "proposal_to_coordinator": "Implementar L05 como adapter puro de contrato→motor→LayerResult y cubrir tests fail-closed: missing destination, floating ref, wrong motor commit, provider/special-file gap, PASS con read-back fuerte."
+      }
+    ],
+    "SOL_GPT2": [
+      {
+        "round": 2,
+        "author": "Sol gpt 2 🤯👷backend",
+        "role_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT2-BACKEND-STATE.json",
+        "role_state_commit": "3b7f74e6e3ac13766caaf8dd62f3634e8e8d354e",
+        "role_state_readback_blob": "4663adfd3110274271d1099b7800b24cce5538b7",
+        "question": "Si L05 debe representar provider/special-file GAPs como DuckDB symlink y AVF non-GitHub sin corregirlos dentro de la capa.",
+        "evidence": {
+          "current_l05_blob": "a25afeab2379a6f69b404228cc230f79a51177fc",
+          "tests_commit": "4a8f45c77e12ba7440ec19ed8556614e79207b48",
+          "runtime_recovery_ci": 34568696244,
+          "duckdb_original_diagnostic_run": 34562878473,
+          "duckdb_current_retry_run": 34565130195,
+          "avf_capabilities_blob": "1abe3f95c9ee1d1b43207890ad2efeb94d983ce0",
+          "canonical_motor_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9"
+        },
+        "answer": {
+          "decision": "YES. L05 debe conservar GAPs de adquisición tipados y nunca reparar, sanitizar, sustituir proveedor ni seleccionar estrategia dentro de la capa.",
+          "reason": "DuckDB y AVF prueban fallos distintos en la frontera de adquisición. Colapsarlos en canonical_motor_download_extract_not_verified pierde causalidad necesaria para persistencia, recovery, auditoría, StrategyDelta y routing multiplataforma.",
+          "minimal_fail_closed_schema": {
+            "status": "BLOCKED ante incompatibilidad provider/special-file",
+            "gap_code": "PROVIDER_GAP | SPECIAL_FILE_GAP | DESTINATION_INPUT_GAP | SOURCE_LOCK_GAP | AUTHORIZATION_GAP | MOTOR_MISMATCH | READBACK_GAP",
+            "source": ["source_repo", "source_ref", "source_tree_sha_if_evidenced"],
+            "destination": ["dest_repo", "dest_branch", "dest_root"],
+            "motor": ["motor_commit", "motor_verdict", "failed_count", "pending_count"],
+            "typed_detail": ["provider", "provider_reason", "special_paths"],
+            "evidence": ["queue/input hash", "motor result/log ref", "manifest/tree hash when available", "destination read-back when mutation occurred"],
+            "mutation_on_blocked": "NONE fuera del intento de motor ya autorizado; L05 no reescribe source/destination",
+            "actions_on_blocked": "sólo IDs reales de motor/run; nunca acción PASS sintética"
+          },
+          "duckdb_mapping": "SOURCE_SPECIAL_FILE_GAP con symlink paths -> BLOCKED + SPECIAL_FILE_GAP + special_paths preservados. No eliminar/dereferenciar symlinks ni filtrar fuente.",
+          "avf_mapping": "android.googlesource con transporte canónico GitHub-only -> BLOCKED + PROVIDER_GAP + provenance original. No mirror substitution ni URL rewrite.",
+          "runtime_boundary": "Capability/hardware/permission probing de AVF no pertenece a L05; es GAP downstream de plataforma/runtime.",
+          "pass_gate": "Sólo PASS con motor canónico, destino literal permitido, VERIFIED_CLOSED, failed=0, pending=0, extracción/read-back completos, hash fuerte y destino coincidente. PASS de L05 no significa WIRED/runtime/global VERIFIED_CLOSED."
+        },
+        "refutation": "Refuto mantener canonical_motor_download_extract_not_verified como único GAP post-motor. Es fail-closed pero demasiado lossy: DuckDB SPECIAL_FILE_GAP y AVF PROVIDER_GAP necesitan owners y recovery distintos. L05 debe clasificar/preservar evidencia, no resolver el problema.",
+        "next_task": {
+          "id": "S2-DEBATE-R2-L05-GAP-TYPING",
+          "owner": "SOL_GPT2_BACKEND",
+          "status": "FREE_SAFE",
+          "action": "Patch mínimo de normalización/tests de L05 para preservar PROVIDER_GAP vs SPECIAL_FILE_GAP sin modificar motores canónicos ni estrategia de adquisición; ejecutar test independiente y publicar evidencia."
+        }
       }
     ]
   },
