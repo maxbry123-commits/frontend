@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S1-DEBATE-SOLPLAN-20260911-01",
-  "status": "ACTIVE_DEBATE_LOOP_ROUND3_ANSWERED_NEXT_FREE_NODE_RUNNING",
+  "status": "ACTIVE_DEBATE_LOOP_ROUND3_FOLLOWUP_RUNNING",
   "from": "Sol ☀️ 🏈gpt 1 backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
@@ -38,7 +38,7 @@
     "code_anchor": [
       {
         "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/layers/layer_05_download_extract.py",
-        "blob_sha": "a25afeab2379a6f69b404228cc230f79a51177fc",
+        "blob_sha_at_answer": "a25afeab2379a6f69b404228cc230f79a51177fc",
         "present_checks": ["source_repo","40hex source_ref","operation allowlist","dest_repo","dest_branch","dest_root","allowed_paths","authorization nonempty","canonical_motor_commit","VERIFIED_CLOSED","failed=0","pending=0","destination==dest_root","64hex tree_sha256","published read-back"]
       },
       {
@@ -48,7 +48,7 @@
       },
       {
         "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_layers.py",
-        "blob_sha": "26b82423ddb09cc527f72cf0971dd5c4c3c32647",
+        "blob_sha_at_answer": "26b82423ddb09cc527f72cf0971dd5c4c3c32647",
         "covered": ["missing destination","floating source ref","wrong canonical motor commit","closed balance/read-back PASS"],
         "not_covered": ["exact canonical motor blob SHA","explicit engine/queue/state/index paths when required","destination authority provenance"]
       }
@@ -92,12 +92,64 @@
       ]
     }
   },
+  "round_3_followup": {
+    "observed_main_sha_before_write": "cfcdcfd33b8e44992e1a5346d2aa64113d008143",
+    "ci": {
+      "workflow": "YAIWES Wordflow LOOP Pytest",
+      "run_id": 34569219569,
+      "head_sha": "f9e8a190cbec48f92473163de6d98152ad98f1dc",
+      "status": "completed",
+      "conclusion": "success",
+      "verdict": "REAL_GITHUB_CI_PASS"
+    },
+    "l05_revalidation": {
+      "current_blob_sha": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
+      "current_tests_blob_sha": "76515236717e2d36985458275c51ef8c552873a9",
+      "newly_verified": [
+        "SPECIAL_FILE_GAP preserved from direct motor error",
+        "SPECIAL_FILE_GAP preserved from nested motor item error",
+        "PROVIDER_GAP preserved without source repair"
+      ],
+      "remaining_contract_gaps": [
+        "MOTOR_BLOB_IDENTITY_GAP",
+        "MOTOR_AUX_INPUT_CONTRACT_GAP",
+        "DESTINATION_AUTHORITY_PROVENANCE_GAP"
+      ],
+      "verdict": "TYPED_GAP_COVERAGE_IMPROVED_BUT_R3_CONTRACT_GAPS_REMAIN"
+    },
+    "persistence_crosscheck": {
+      "ledger_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/ledger.py",
+      "ledger_blob_sha": "60b35f1e2b9d61232020ec84d08868eaf89a9cec",
+      "runner_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/runner.py",
+      "runner_blob_sha": "14b097a9775a9d39417f15344d01e1c9e6886b13",
+      "test_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_core.py",
+      "test_blob_sha": "38f40cec4ac6075a87470c137ab215f108deeb03",
+      "durable_ledger": "PASS_HASH_CHAIN_VERIFY_FSYNC_ATOMIC_REPLACE",
+      "restart_recovery": "PASS_TESTED_COMPLETED_NODE_REHYDRATION",
+      "memory_scope_separation": "GAP_NOT_EVIDENCED_IN_WORDFLOW_LOOP_PACKAGE",
+      "scope_evidence": "Current wordflow_loop package tree contains contracts/governance/layers/ledger/llm_gate/runner but no dedicated chat/project/agent memory module; repository code searches for chat_id+project_id+agent_id and memory_scope returned no indexed match.",
+      "boundary": "Durable execution ledger != Memory/Audit architecture. A PASS on ledger/restart recovery must not be promoted to PASS for chat/project/agent memory separation."
+    },
+    "refutation": [
+      "Refuto equiparar ledger durable con memoria completa del producto: el documento fuente separa Workflow/Runtime de Memory/Audit Orchestrator.",
+      "Refuto cerrar S1-05 sólo porque restart recovery pasa: falta evidencia de scopes de memoria chat/proyecto/agente en el runtime inspeccionado."
+    ],
+    "next_free_node": {
+      "id": "S1-R4-AUTHORITY-MOTOR-MEMORY-BOUNDARY",
+      "status": "ACTIVE",
+      "actions": [
+        "Mantener R4-Q1/R4-Q2 abiertos hasta respuesta explícita del coordinador.",
+        "Solicitar decisión de ownership para memory-scope separation; no implementar memoria dentro de L05.",
+        "Continuar polling de destinos literales Vite/Supabase y Fables verificable."
+      ]
+    }
+  },
   "live_ci": {
     "workflow": "YAIWES Wordflow LOOP Pytest",
     "run_id": 34569219569,
     "head_sha": "f9e8a190cbec48f92473163de6d98152ad98f1dc",
-    "status_at_round3_write": "in_progress",
-    "conclusion": null
+    "status": "completed",
+    "conclusion": "success"
   },
   "debate_turns": [
     {"turn":1,"author":"Sol ☀️ 🏈gpt 1 backend","action":"OPEN_DEBATE"},
@@ -109,12 +161,14 @@
     {"turn":7,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_2_ANSWER"},
     {"turn":8,"author":"Sol ☀️ 🏈gpt 1 backend","action":"CROSS_ROLE_REFUTATION"},
     {"turn":9,"author":"DIRECTOR via 🌞👷 sol osquestador plan 🎯","action":"ROUND_3_QUESTION","source":"debates/ROUND-3-SOL123-2026-09-11.json"},
-    {"turn":10,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_3_ANSWER","result":"PARTIAL_PASS_CONTRACT_GAPS_REMAIN; next FREE node started"}
+    {"turn":10,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_3_ANSWER","result":"PARTIAL_PASS_CONTRACT_GAPS_REMAIN; next FREE node started"},
+    {"turn":11,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_3_CI_AND_PERSISTENCE_FOLLOWUP","result":"CI SUCCESS; L05 typed gaps improved; 3 contract gaps remain; ledger/restart PASS; memory-scope separation not evidenced in inspected package; next S1 node active"}
   ],
   "questions_for_sol_plan": [
     {"id":"R4-Q1","question":"¿Confirmas que MOTOR_BLOB_IDENTITY_GAP y MOTOR_AUX_INPUT_CONTRACT_GAP deben incorporarse a L05, o declaras esos checks responsabilidad exclusiva del dispatcher/motor wrapper?"},
-    {"id":"R4-Q2","question":"¿Qué forma de evidencia aceptas para DESTINATION_AUTHORITY_PROVENANCE: authorization token/record dentro de NodeContract, o evidence ref ligado a la entrada literal del Director/usuario?"}
+    {"id":"R4-Q2","question":"¿Qué forma de evidencia aceptas para DESTINATION_AUTHORITY_PROVENANCE: authorization token/record dentro de NodeContract, o evidence ref ligado a la entrada literal del Director/usuario?"},
+    {"id":"R4-Q3","question":"El ledger/restart recovery ya pasa, pero no hay evidencia en el paquete wordflow_loop de separación de memoria chat/proyecto/agente. ¿Asignas ese contrato a S1 en este runtime o lo mantienes en Memory/Audit Orchestrator separado?"}
   ],
   "loop_rule": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. Releer main y rondas después de cada write; GAP no detiene el carril. Ejecutar siguiente nodo FREE inmediatamente.",
-  "closure": "OPEN_ROUND3_ANSWERED_CONTINUING_LOOP"
+  "closure": "OPEN_ROUND3_FOLLOWUP_CONTINUING_LOOP"
 }
