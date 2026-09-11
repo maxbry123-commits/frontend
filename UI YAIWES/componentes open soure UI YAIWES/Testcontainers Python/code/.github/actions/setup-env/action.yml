@@ -1,0 +1,16 @@
+name: setup-env
+description: set up the python environment
+
+inputs:
+  python-version:
+    description: "The python version to install and use"
+    default: "3.14"  # we default to latest supported
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Install uv
+      uses: astral-sh/setup-uv@v7
+      with:
+        python-version: ${{ inputs.python-version }}

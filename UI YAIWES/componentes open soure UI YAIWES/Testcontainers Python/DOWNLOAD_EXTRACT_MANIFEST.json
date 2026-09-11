@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 871834,
+  "bundle_sha256": "26b9cc887bcbfa7a0b5cb47d67566f064a3d556c23519962c8c2393d3c309ee3",
+  "extracted_tree": {
+    "bytes": 2458188,
+    "files": 460,
+    "sha256": "ebc82b8782a0e2ef5417afc432079df34260e81a648f6a7a48663e13f70eab70"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 871834,
+      "name": "Testcontainers Python.bundle.zip.part-0001",
+      "sha256": "26b9cc887bcbfa7a0b5cb47d67566f064a3d556c23519962c8c2393d3c309ee3"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Testcontainers Python",
+  "source_bytes": 2458188,
+  "source_commit": "5c70d540e0df919e2de77ce8cc75b5c50cd772e7",
+  "source_files": 460,
+  "source_ref": "5c70d540e0df919e2de77ce8cc75b5c50cd772e7",
+  "source_repo": "https://github.com/testcontainers/testcontainers-python",
+  "source_tree": {
+    "bytes": 2458188,
+    "files": 460,
+    "sha256": "ebc82b8782a0e2ef5417afc432079df34260e81a648f6a7a48663e13f70eab70"
+  }
+}
