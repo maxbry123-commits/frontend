@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import time
+from copy import deepcopy
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
@@ -24,10 +25,13 @@ class LayerRunner:
         self.ledger_path = Path(ledger_path) if ledger_path else None
         self.ledger = load_ledger(self.ledger_path) if self.ledger_path else []
         self.completed_nodes: set[str] = set()
+        self.latest_events: dict[str, dict[str, Any]] = {}
         for row in self.ledger:
             event = row.get("event", {})
-            if event.get("node_id"):
-                self._update_completion(event["node_id"], event.get("status"))
+            node_id = event.get("node_id")
+            if node_id:
+                self.latest_events[node_id] = deepcopy(event)
+                self._update_completion(node_id, event.get("status"))
 
     def _update_completion(self, node_id: str, status: str) -> None:
         # Replay the latest outcome, not any historical PASS.
@@ -36,29 +40,36 @@ class LayerRunner:
         else:
             self.completed_nodes.discard(node_id)
 
+    def recover_event(self, node_id: str) -> dict[str, Any] | None:
+        """Return a defensive copy of the latest durable event for one node."""
+        event = self.latest_events.get(node_id)
+        return deepcopy(event) if event is not None else None
+
     def _record(self, node: NodeContract, result: LayerResult) -> None:
-        append_event(
-            self.ledger,
-            {
-                "node_id": node.node_id,
-                "layer": node.layer,
-                "status": result.status.value,
-                "gaps": list(result.gaps),
-                "evidence": [
-                    {
-                        "kind": evidence.kind,
-                        "ref": evidence.ref,
-                        "sha256": evidence.sha256,
-                        "detail": evidence.detail,
-                    }
-                    for evidence in result.evidence
-                ],
-                "actions": list(result.actions),
-                "touched_paths": list(result.touched_paths),
-            },
-        )
+        event = {
+            "node_id": node.node_id,
+            "layer": node.layer,
+            "literal": node.literal,
+            "literal_sha256": node.literal_sha256,
+            "status": result.status.value,
+            "output": deepcopy(result.output),
+            "gaps": list(result.gaps),
+            "evidence": [
+                {
+                    "kind": evidence.kind,
+                    "ref": evidence.ref,
+                    "sha256": evidence.sha256,
+                    "detail": evidence.detail,
+                }
+                for evidence in result.evidence
+            ],
+            "actions": list(result.actions),
+            "touched_paths": list(result.touched_paths),
+        }
+        append_event(self.ledger, event)
         if self.ledger_path:
             save_ledger(self.ledger_path, self.ledger)
+        self.latest_events[node.node_id] = deepcopy(event)
         self._update_completion(node.node_id, result.status.value)
 
     def run(
