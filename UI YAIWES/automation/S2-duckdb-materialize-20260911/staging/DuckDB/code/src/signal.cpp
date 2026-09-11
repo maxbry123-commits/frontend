@@ -1,0 +1,88 @@
+#include "signal.hpp"
+
+#include "cpp11.hpp"
+#include "cpp11/R.hpp"
+#include "cpp11/function.hpp"
+#include "cpp11/protect.hpp" // for safe
+#include "duckdb/common/exception.hpp"
+
+#include <R_ext/GraphicsEngine.h>
+
+// Avoid clash with TRUE and FALSE macros in older rtools
+#undef TRUE
+#undef FALSE
+
+// Handbook: handbook/usage/interactive/README.md, which states how far an
+// interrupt reaches, and why a wait blocked inside an extension outlives it.
+
+// Toy repo: https://github.com/krlmlr/cancel.test
+
+namespace duckdb {
+
+ScopedInterruptHandler *ScopedInterruptHandler::instance = nullptr;
+
+ScopedInterruptHandler::ScopedInterruptHandler(shared_ptr<ClientContext> context_) : context(context_) {
+	if (instance) {
+		// ScopedInterruptHandler serves a dual purpose:
+		// 1. It allows for interrupting long-running queries.
+		// 2. It ensures that only one query can be interrupted at a time.
+		// If we see this error, it most likely means that a query is already being executed.
+		throw InternalException("Connection already working on another query");
+	}
+	if (context) {
+		instance = this;
+		oldhandler = std::signal(SIGINT, ScopedInterruptHandler::signal_handler);
+	}
+}
+
+ScopedInterruptHandler::~ScopedInterruptHandler() {
+	Disable();
+	// Only the instance that installed itself clears the slot: an instance
+	// constructed without a context never took it, and must not release
+	// another one's claim on the way out.
+	if (instance == this) {
+		instance = nullptr;
+	}
+}
+
+void ScopedInterruptHandler::HandleInterrupt() const {
+	// Never interrupted without context
+	if (!interrupted) {
+		return;
+	} else {
+		D_ASSERT(context);
+	}
+
+	// This seems necessary to work around a specificity with the RStudio IDE on Windows.
+	// Without the message, the interrupt is not available as a catchable condition.
+	// https://github.com/krlmlr/cancel.test/issues/1
+	cpp11::message("");
+
+	// FIXME: Is this equivalent to cpp11::safe[Rf_onintrNoResume](), or worse?
+	cpp11::safe[Rf_onintr]();
+
+	// Stop execution with an appropriate interruption message
+	cpp11::stop("Query execution was interrupted");
+}
+
+void ScopedInterruptHandler::Disable() {
+	// Restores unconditionally, and so discards a handler an extension
+	// installed during the call and did not remove itself. That is the
+	// deliberate half of the trade: declining to restore would leave R with
+	// someone else's handler for the rest of the session, which is the worse
+	// of the two. An extension that removes its own -- MotherDuck's sign-in
+	// wait does -- nests correctly here and loses nothing.
+	if (context) {
+		std::signal(SIGINT, oldhandler);
+		context.reset();
+	}
+}
+
+void ScopedInterruptHandler::signal_handler(int signum) {
+	if (instance) {
+		instance->interrupted = 1;
+		instance->context->Interrupt();
+	}
+}
+
+} // namespace duckdb

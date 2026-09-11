@@ -1,0 +1,2151 @@
+<!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
+
+# duckdb 1.5.5.9020
+
+## Bug fixes
+
+### rcc
+
+- Run the testsuite when `rcc-one.sh` runs outside Actions (#2669).
+
+### rcc
+
+- Tell a missing `clang-format` apart from a misformatted tree (#2671).
+
+### flavor
+
+- Run the flavor-rename guard where it can actually fire (#2676).
+
+### vendor
+
+- Refuse an upstream clone that cannot name a version (#2677).
+
+### vendor
+
+- Say how a retired patch reaches the vendor commit (#2679).
+
+### series
+
+- Report what stage 5 added, not what it set out to add (#2680).
+
+### ci
+
+- Backport kit fixes from `rigraph`, `duckdb-r` and `dm`.
+
+
+# duckdb 1.5.5.9019
+
+## Bug fixes
+
+### series
+
+- Register the `ours-version` driver before refusing over it (#2665).
+
+### series
+
+- Read every universe that publishes a green, not just `duckdb` (#2670).
+
+## Documentation
+
+### meta
+
+- Make `authoring/` obey itself, name evidence in the rules, and refresh the `meta/` node (#2673).
+
+
+# duckdb 1.5.5.9018
+
+## Documentation
+
+### meta
+
+- Consolidate the authoring rules, and split recorded evidence into its own leaf (#2672).
+
+
+# duckdb 1.5.5.9017
+
+## Bug fixes
+
+### series
+
+- Make the `ours-version` driver reach the clone that needs it (#2663).
+
+## Features
+
+### series
+
+- Explain the flavor surface in the convergence check (#2661).
+
+
+# duckdb 1.5.5.9016
+
+## Bug fixes
+
+### series
+
+- Refuse to replay when the `ours-version` merge driver is missing (#2659).
+
+### series-check
+
+- Classify an `R CMD check` gate failure instead of giving up on it (#2653).
+
+### series-advance
+
+- Carry the twin's work in a file the buffer also touched (#2657).
+
+## Features
+
+### series
+
+- Keep forwarding a base series with a live `-fwd`, and check the two converge (#2658).
+
+
+# duckdb 1.5.5.9015
+
+## Bug fixes
+
+### ci
+
+- Give the warning gate its own flags, and skip what a dropped `Suggests` cannot support (#2652).
+
+
+# duckdb 1.5.5.9014
+
+## Bug fixes
+
+### testing
+
+- Read a double-digit patch release as a release, and say that air runs here (#2638).
+
+### glue
+
+- Drop the semicolon after two namespace closings (#2645).
+
+### patch
+
+- Make the vendored tree compile without warnings (#2617).
+
+### vendoring
+
+- Pin the upstream clone's abbreviation, so a vendored tree is reproducible (#2489, #2631).
+
+### vendoring
+
+- Say when the glue check could not run, instead of blaming the glue (#2513, #2629).
+
+### scripts
+
+- Let `BASE_SCAN_DEPTH` raise the base scan in all four scanners (#2512, #2628).
+
+### rfuns
+
+- Unshadow two locals (#2612).
+
+### dbplyr
+
+- Render `n_distinct()` through the exported `sql_glue()`, and warn on an older dbplyr (#1982, #2605).
+
+### glue
+
+- Drop a stray semicolon after a constructor body (#2610).
+
+### glue
+
+- Suffix the one shadowing parameter left in a header (#2618).
+
+### glue
+
+- Build a `string_t` from R's `const char*` without a cast (#2619).
+
+### glue
+
+- Widen to R's double explicitly when copying a column out (#2611).
+
+### glue
+
+- Stop casting away `const` on R's read-only data pointers (#2609).
+
+### glue
+
+- Suffix constructor parameters that shadow their member (#2608).
+
+### ci
+
+- Read wrapped Config/gha/extra-packages values, bump auxiliary workflows to ubuntu-26.04 (#2603).
+
+### series
+
+- Keep stage 5 alive when the buffer is longer than the chunk (#2602).
+
+### scan
+
+- Materialize packed columns on R's thread, not on the scan's (#2582).
+
+### signal
+
+- State the interrupt handler's invariants where they are used (#2598).
+
+## Features
+
+### build
+
+- Gate the compiler warnings each scope answers for (#1829, #2620).
+
+### relational
+
+- Remove `allow_materialization` from `rel_to_altrep()` (#1052, #2643).
+
+### connections
+
+- Report instance settings a reused database cannot apply, and avoids treating URL-like paths like files (#2560, #2641).
+
+### build
+
+- Make the prebuilt-engine setup work without privileges (#22, #2622).
+
+### dbplyr
+
+- Translate `clock::date_build()` and `difftime()` (#2621).
+
+### series
+
+- Fold the base series' test-side fixes in as stage 5 consumes the buffer (#2594).
+
+## Chore
+
+- Format with air.
+
+## Documentation
+
+### build
+
+- Say that a vendored edit does not rebuild itself (#2648).
+
+### testing
+
+- Give the two undocumented testthat helpers a header (#2502, #2634).
+
+### branches
+
+- Point the invariants' deepen line at what is missing, not at notes `BRANCHES.md` lacks (#2516, #2633).
+
+- Convert the stray Rd spellings in roxygen to Markdown (#2616, #2635).
+
+### style
+
+- Spell out the tidyverse rules R here answers to, and the deviations (#2613).
+
+### testing
+
+- Say when a snapshot is the right tool, not only how to accept one (#2624).
+
+### interop
+
+- Say what two limits cost a caller, and pin them (#590, #1064, #2600).
+
+### authoring
+
+- Cut an entry to the shortest correct statement, and split the rest into a leaf (#2604).
+
+### dbplyr
+
+- Measure what `DISTINCT ON` would buy, and hand it over anyway (#384, #2601).
+
+### handbook
+
+- Close the last three days' issues into their leaves (#2595).
+
+### plan
+
+- Design a producer thread for streaming results, with a TPC-H fetch benchmark (#2583).
+
+## Code style
+
+### clang-format
+
+- Never reorder includes (#2642).
+
+## Refactoring
+
+- Raise every error through `abort()`, so it points at the caller (#2615, #2637).
+
+- Extract result data-frame allocation into a helper (#2585).
+
+## Performance
+
+### vendoring
+
+- Keep git's stat cache valid across a regeneration of the vendored tree (#2490, #2632).
+
+## Uncategorized
+
+- Docs(interactive): Give the interrupt its leaf, and answer #202 down to the client name (#2596).
+
+
+# duckdb 1.5.5.9013
+
+## Continuous integration
+
+- Skip arrow if uninstallable.
+
+## Testing
+
+### storage
+
+- Compare spill paths on one separator spelling (#2579).
+
+
+# duckdb 1.5.5.9012
+
+## Bug fixes
+
+### flavor
+
+- Answer rather than error when a series has no `README.Rmd` (#2576).
+
+### flavor
+
+- Catch a generated README that reached a series under the mainline name (#2575).
+
+- Respect the session `TimeZone` for `TIMESTAMPTZ` columns (#2401).
+
+### storage
+
+- Make temporary storage usable by default, with the CLI's semantics (#1604, #2562).
+
+## Continuous integration
+
+- Wrap the commit status update into an action.
+
+- Route ccache through one-word compiler wrappers on Unix.
+
+- Add context for cherry-picking.
+
+- Route ccache through one-word compiler wrappers on Unix.
+
+- Name every step and restore the log entry `setup-pandoc` swallows.
+
+## Documentation
+
+### handbook
+
+- Give timestamps and time zones their own leaf (#2567).
+
+### handbook
+
+- Prefer durable storage for hard-to-reproduce experiment results (#2564).
+
+## Refactoring
+
+### rcc
+
+- Cut the store's automatic writers down to the leg's own publish (#2578).
+
+## Testing
+
+### explain
+
+- Skip Windows inside each `test_that()` so the snapshot survives (#2577).
+
+
+# duckdb 1.5.5.9011
+
+## Bug fixes
+
+### readme
+
+- Vendor the DuckDB logos, and write two READMEs from one source (#2517, #2518, #2558).
+
+### flavor
+
+- Catch a renamed file that reached a series under its mainline name (#2559).
+
+### storage
+
+- Anchor the `~/.duckdb` consent default at `interactive()` (#2550).
+
+### series-advance
+
+- Set `-build-base`, rather than advance it (#2540).
+
+### patch
+
+- Fix the re2 clang warnings instead of hiding them (#2492).
+
+### series-advance
+
+- Clamp the replay anchor to the merge base (#2548).
+
+### rcc
+
+- Fetch the record a publish replaces, so a retry's verdict can land (#2547).
+
+### rcc
+
+- Stop the backstop recording a `pending` status as a verdict (#2544).
+
+### ci
+
+- Let `adbcdrivermanager` fail to build on Windows arm64 (#2539).
+
+## Documentation
+
+### handbook
+
+- Record the untyped-`NULL` mapping as designed, declining the flip to logical `NA` (#155, #2561).
+
+### integrations
+
+- Answer the frame-library request, Arrow and non-Arrow (#642, #2557).
+
+### statements
+
+- Move the multi-statement prepare rule to the leaf that owns it (#179, #2555).
+
+### connections
+
+- State where the instance's settings bind, and both ways `dbConnect()` gets them wrong (#83, #171, #2553).
+
+### data-import
+
+- Say what a virtual `filename` column changes (#1733, #2556).
+
+### types
+
+- Give the geometry write side its route, not just its absence (#1670, #2552).
+
+### types
+
+- State the UTF-8 repair that works, not the one that looks like it (#12, #2551).
+
+- Review DuckDB API usage in the glue code and assess a C API migration (#2413).
+
+### branches
+
+- State the mirrors' cadence, now that `krlmlr/duckdb-r` is a fork (#2494, #2542).
+
+- An entry that wraps its subject applies everywhere, so applying proves nothing (#2546).
+
+- Record the August 2026 forward, and turn the cpp11 gap it walked into into a check (#2545, #2543).
+
+## Refactoring
+
+### series-loop
+
+- Read verdicts from the `each-rcc` runs, keep `rcc2` as the fallback (#2549).
+
+
+# duckdb 1.5.5.9010
+
+## Bug fixes
+
+### tests
+
+- Expect the extension install to fail where DuckDB does not cover the platform (#2425, #2529).
+
+## Features
+
+- Mirror the fork's branches with the Pull app, and drop `sync.yaml` (#2534).
+
+### rcc
+
+- Move the verdict store to `rcc2`, one file per commit (#2505).
+
+## Chore
+
+- Increase retention to 180 days \[ci skip\].
+
+## Continuous integration
+
+- Add sharded `revdep2` workflow.
+
+## Documentation
+
+### extensions
+
+- Close the remaining gaps the extension issues map to (#2425, #2536).
+
+### handbook
+
+- Record the Windows extension-coverage boundaries the issues keep re-finding (#2530).
+
+## Testing
+
+### extensions
+
+- Drop the duplicate platform skip that made the canary unreachable (#2537).
+
+### extensions
+
+- Skip the install test where DuckDB publishes no binaries, and pin the gap (#2535).
+
+## Uncategorized
+
+- Ci: Harden `workflow_run` workflows against untrusted pull requests (#106).
+
+- Ci: Pin third-party actions to commits and let Renovate keep them pinned (#105).
+
+
+# duckdb 1.5.5.9009
+
+## Bug fixes
+
+### flavor
+
+- Name the flavor in the README blurb, and find GNU sed (#2510).
+
+## Continuous integration
+
+- Remove unused pr-commands workflow.
+
+## Documentation
+
+### plan
+
+- Record what the closed handbook wave verified, and file what it should not have written down (#2507).
+
+### handbook
+
+- Weigh documenting a limitation against removing it (#2509).
+
+### handbook
+
+- Complete the leaves the triage closes will link (#2523).
+
+## Uncategorized
+
+- Ci: Pass workflow context through the environment, not into script text (#102).
+
+- Ci: Add a Windows arm64 (`windows-11-arm`) check on R-release (#99).
+
+
+# duckdb 1.5.5.9008
+
+## Bug fixes
+
+### series-advance
+
+- Restamp the vendor counter across a replay (#2525).
+
+### series-port
+
+- Hold `main`'s version bumps back from a series (#2496, #2526).
+
+### windows
+
+- Export only the registration entry point from the DLL.
+
+### vendor-one
+
+- Refuse a clone HEAD off the buffer's upstream line.
+
+### series-advance
+
+- Drop an empty replay pick instead of aborting the extend.
+
+## Chore
+
+- Drop the CMake scaffolding, and the formatter branch that served it (#2511, #2520).
+
+- Auto-update from GitHub Actions (#2524).
+
+## Documentation
+
+### versioning
+
+- Record the declined max-across-prefixes merge rule (#2488, #2527).
+
+### versioning
+
+- Say when the version counter freezes, and why `build-base` lags.
+
+### series-loop
+
+- Send a fix to the handbook before it is written.
+
+### series-loop
+
+- Say where a stage-3 fix goes, and what counts as evidence.
+
+## Uncategorized
+
+- Feat(series-port): Detect a frozen series, and let it skip the port (#98).
+
+
+# duckdb 1.5.5.9007
+
+## Bug fixes
+
+### each
+
+- Fail the plan when green is off the branch's lineage.
+
+## Features
+
+### series-loop
+
+- Read r-universe builds, and fix the Windows unity-build break.
+
+## Documentation
+
+- Fix the clone layout, and the README links CRAN cannot follow (#2506).
+
+### handbook
+
+- Give the tree a way to grow into its blind spots (#2504).
+
+### handbook
+
+- Add `usage/relational/`, and give duckplyr its own section (#2495).
+
+### handbook
+
+- Land the MVP — every leaf written, at reference or core depth (#2493).
+
+## Testing
+
+### progress
+
+- Pin that a handle collected in a callback cannot re-enter.
+
+
+# duckdb 1.5.5.9006
+
+## Bug fixes
+
+### vendor
+
+- Drop the dead knobs, classify patch failures, restore the tree on a no-op run (#2491).
+
+## Documentation
+
+### vendoring
+
+- Fold by default, extend on pending, require a rising vendor counter.
+
+- Write every upward link from the repository root (#2458).
+
+
+# duckdb 1.5.5.9005
+
+## Bug fixes
+
+### rcc
+
+- Do not restore the persistent ccache under R-devel (#2455).
+
+### vendor
+
+- Bound the base scan and say when it comes up empty (#2434).
+
+### configure
+
+- Drop a stale `Makevars.system-lib` so a vendored build is one (#2446).
+
+### rconfigure
+
+- Drop bundled jemalloc from the generated source list.
+
+## Features
+
+### series-loop
+
+- Set the firing up, and make the tooling PR a stage (#2441).
+
+### each
+
+- Select work from the verdict store, not from statuses (#2440).
+
+### series
+
+- Make cutover a manual operation the loop only suggests (#2449).
+
+### series-loop
+
+- Vendor with `main`'s script, into the buffer worktree (#2436).
+
+## Documentation
+
+- Propose the handbook — a strict topic hierarchy with full cover, first two levels (#2454).
+
+### scripts
+
+- Give every script an extractable one-line header (#2453).
+
+### readme
+
+- Fix the `duckdb.1.4.dev` badge ranges (#2452).
+
+### plan
+
+- Mirror the release branches from the fork, not from `sync.yaml` (#2450).
+
+### readme
+
+- Point the `duckdb.dev` badges at the cut-over `main` series (#2451).
+
+- Quarantine the superseded loop design and the `main-dev` review (#2438).
+
+### each
+
+- State that there is no running marker, and why (#2439).
+
+## Refactoring
+
+### series-port
+
+- Let the subject decide what a vendor commit is (#2435).
+
+### ci
+
+- Retire the legacy per-commit dispatch path (#2442).
+
+## Uncategorized
+
+- Feat(rcc-one): Bound each stage with its own timeout (#97).
+
+
+# duckdb 1.5.5.9004
+
+## Continuous integration
+
+### each
+
+- Queue the shards oldest first (#2445).
+
+
+# duckdb 1.5.5.9003
+
+## Bug fixes
+
+### series-advance
+
+- Register the version merge driver before the replay.
+
+### series
+
+- Compute the buffer anchor safely, in both scripts.
+
+### series
+
+- Anchor the buffer replay on `-dev`'s newest vendor commit.
+
+## Features
+
+### series
+
+- Bring `-dev` level with `main` as a loop stage — identity over curation.
+
+## Documentation
+
+- Add the vendoring simplification plan, doc routing, and lag badges.
+
+- Document cutover.
+
+- Fix badge.
+
+### readme
+
+- Flesh out the `Flavors` table, document it in `series-open` (#2432).
+
+### readme
+
+- Add a `Flavors` section with lag badges and a `Documentation` root.
+
+## Refactoring
+
+### series
+
+- Read the vendored SHA one way, in one helper — and say what decides.
+
+## Uncategorized
+
+- Test(rcc): Stop `git gc` racing the harness's own clones, and say why a commit checks itself (#93).
+
+
+# duckdb 1.5.5.9002
+
+## Bug fixes
+
+### rcc
+
+- Make a verdict's newest writer win, not its slowest.
+
+- Let `series-cutover.sh` create a base series that does not exist yet (#2428).
+
+### rcc
+
+- Make writes to the `rcc` branch survive a lost race.
+
+### rcc-one
+
+- Restore the check action's CRAN-incoming default.
+
+### vendor-one
+
+- Make the glue gate work again.
+
+## Features
+
+### vendoring
+
+- Raise the vendoring limit from 25 to 100 commits.
+
+### rcc
+
+- Publish each commit's result as its own file, and consolidate the branch by hand.
+
+### each
+
+- Number shards along the history, and quote failing stages into the run summary (#2427).
+
+### each
+
+- Rerun one commit with a retry pair, not an amend.
+
+### each
+
+- Build every commit as a sharded matrix instead of one run per commit.
+
+## Continuous integration
+
+- Replace workflow vendoring with the routine-driven series loop.
+
+- Harvest rcc logs every 30 minutes.
+
+## Documentation
+
+- Space.
+
+### skills
+
+- Reset `-fwd-green` to the seed on every rebase.
+
+### skills
+
+- Split rebasing a forward series out of forwarding one.
+
+- A WIP forward series can always be rebased onto current mainline.
+
+- Agentic-loop plan refinements + main-dev review.
+
+- Describe the forbidden forms in `AGENTS.md` instead of spelling them.
+
+### vendoring
+
+- Dev-branch invariants, the fork-point rule, and a corrected `VENDORING.md`.
+
+## Refactoring
+
+### each
+
+- Anchor a retry on the series' green, not a ref of its own.
+
+### series-forward
+
+- Replay by cherry-pick instead of rebuilding trees.
+
+- Rename the flavor rename from "lts" to "flavor".
+
+## Performance
+
+### each
+
+- Rebalance shards across waves instead of capping at `max-parallel`.
+
+### each
+
+- Split large shards to trade compute for wall clock.
+
+## Testing
+
+- Derive the expected storage home from the package name.
+
+- Make storage and extension snapshots stable across flavors.
+
+- Skip the httpfs e2e test on development versions.
+
+
+# duckdb 1.5.5.9001
+
+## Features
+
+- New `tbl_file()` and `tbl_query()` to explicitly access tables and queries as dbplyr lazy tables (#96).
+
+## Continuous integration
+
+- Sync R-CMD-check workflow; drop matrix-env plumbing from custom action (#2422).
+
+## Testing
+
+- Guard the flavor rename against hard-coded package names (#2423).
+
+## Uncategorized
+
+- Ci: Run all smoke-test checks even when one fails (#97).
+
+
+# duckdb 1.5.5.9000
+
+## Continuous integration
+
+- Lock down `format-suggest` egress (audit → block).
+
+## fledge
+
+- CRAN release v1.5.5 (#2420).
+
+
+# duckdb 1.5.5
+
+## Features
+
+- Update to DuckDB v1.5.5, see <https://github.com/duckdb/duckdb/releases/tag/v1.5.5> for details.
+
+- Disable extensions on libc++ Linux builds, with startup message and load error (#1107, #2414).
+
+- Rework how extensions and secrets choose their on-disk location, replacing the
+  package-library extension cache attempted across 1.5.4.1 through 1.5.4.3.
+  Both now share a single "home" root, resolved fresh for every `duckdb()` driver.
+  An interactive prompt in `duckdb()` and messages in non-interactive sessions guide the process.
+  See `?duckdb_storage` for details. (#2396, #2398).
+
+## Bug fixes
+
+- Support `OR` and `IN` predicates pushed down to registered Arrow tables (#2410).
+
+- Error instead of crashing when calling `duckdb_fetch_arrow()` on an Arrow result that has been consumed with `duckdb_fetch_record_batch()` (#2406).
+
+- Fix edge case in computation of `r_base::min`/`r_base::max`/`r_base::sum` aggregates (#2404, #2405).
+
+- Honor the `na.rm` argument of `r_base` aggregates in SQL queries (#2407).
+
+## Documentation
+
+- Document database-instance caching and driver reuse (#2399).
+
+
+# duckdb 1.5.4.3
+
+## Bug fixes
+
+- Remove the package-library extension storage option. The `duckdb_extension_storage()` function no longer accepts `"library"` (#2390).
+
+
+# duckdb 1.5.4.2
+
+## Bug fixes
+
+- Fix shared on-disk storage path on Windows (#2385).
+
+
+# duckdb 1.5.4.1
+
+## Features
+
+- DuckDB's on-disk storage locations now follow a unified policy. By
+  default nothing is written outside the R session's temporary directory, with
+  one exception: the extension cache is placed in the package library when it
+  is writable and falls back to the temporary directory otherwise. Each location can be redirected through the `config` argument of
+  `duckdb()`, an R option, or an environment variable. Configure the location for extensions and
+  secrets with the new `duckdb_extension_storage()` and `duckdb_secret_storage()`,
+  inspect the resolved locations with `duckdb_storage_status()`, and see
+  `?duckdb_storage` for the full resolution policy (#2370, #2372, #2377).
+
+  These functions replace the experimental `duckdb_consolidate_secrets()`
+  introduced in 1.5.4.
+
+## Continuous integration
+
+- Create `~/.duckdb` so CI exercises the shared storage path (#2417).
+
+- Install `tzdata-legacy` for legacy time zones like `PST8PDT` (#2409).
+
+## Documentation
+
+- Document all S4 class slots; deprecate the legacy connection slots (#2416).
+
+- Document database-instance caching and driver reuse (#2399).
+
+## Testing
+
+- Cover extensions env-var semantics and lock message wording (#2418).
+
+- Skip DBItest timestamp roundtrip tests when `PST8PDT` is unresolvable (#2408).
+
+## Uncategorized
+
+- Ci: Harden `format-suggest` against `pull_request_target` pwn requests (#93).
+
+
+# duckdb 1.5.4
+
+## Features
+
+- Update to DuckDB v1.5.4, see <https://github.com/duckdb/duckdb/releases/tag/v1.5.4> for details.
+
+- Support writing `MAP` columns via `dbAppendTable()` and `dbWriteTable()` (#2354).
+
+- Add native `VARIANT` (@thohan88, #2313) and `TIME WITH TIME ZONE` (#1807, #2336) data type support.
+
+- Implement DBI Arrow API with `dbSendQueryArrow()` and streaming (#2347, #2355).
+
+- Store downloaded extensions inside the duckdb package install directory (#2327).
+
+- Add secret directory configuration, package startup message, and consolidation support via new experimental `duckdb_consolidate_secrets()` (#2305, #2340).
+
+## Compatibility
+
+- Add `is_distinct_from()` / `is_not_distinct_from()` dbplyr translations for compatibility with upcoming dbplyr 2.6.0 (#2326, #2332).
+
+- Bump minimum R version requirement to 4.2.0 (#2233, #2334).
+
+## Testing
+
+- Add CRAN guards to prevent heavy C++ engine tests on CRAN (#2353, #2358).
+
+- Add comprehensive test coverage for `MAP` type reading (#2342).
+
+
+# duckdb 1.5.3
+
+## Features
+
+- Update to DuckDB v1.5.3, see <https://github.com/duckdb/duckdb/releases/tag/v1.5.3> for details.
+
+- Add secret directory configuration, package startup message, and consolidation support via new experimental `duckdb_consolidate_secrets()` (#2305, #2340).
+
+- Add native `VARIANT` (@thohan88, #2313) and `TIME WITH TIME ZONE` (#1807, #2336) data type support.
+
+- Add `is_distinct_from()` / `is_not_distinct_from()` dbplyr translations for compatibility with upcoming dbplyr 2.6.0 (#2326, #2332).
+
+## Bug fixes
+
+- Avoid rchk error in `RownamesDuplicate()` (#2290, #2291).
+
+## Chore
+
+- Bump minimum R version requirement to 4.2.0 (#2233, #2334).
+
+- Store downloaded extensions inside the duckdb package install directory (#2327).
+
+## Testing
+
+- Add comprehensive test coverage for `MAP` type reading (#2342).
+
+
+# duckdb 1.5.2
+
+## Bug fixes
+
+- Update to DuckDB v1.5.2, see <https://github.com/duckdb/duckdb/releases/tag/v1.5.2> for details.
+
+- Fix compiler warning on recent clang on macOS.
+
+## Features
+
+- Use `TRY_CAST()` instead of `CAST()` in dplyr SQL translation for type conversion functions (#2230, #2231).
+
+## Chore
+
+- Use `R_getRegisteredNamespace()` in R 4.6.
+
+## Documentation
+
+- Describe branching strategy (#2280, #2281).
+
+## Testing
+
+- Use explicit default duckdb connection for arrow tests (#2301).
+
+- Rework arrow tests, prepare for compatibility with dbplyr 2.6.0 (#2300).
+
+
+# duckdb 1.5.1
+
+## Bug fixes
+
+- Update to DuckDB v1.5.1, see <https://github.com/duckdb/duckdb/releases/tag/v1.5.1> for details.
+
+## Features
+
+- `GEOMETRY` columns can be returned, either as BLOBs (default) or as wk objects (via the wk package) using `dbConnect(geometry = "wk")` (#2278, #2279).
+
+## Chore
+
+- Fix `-Wdeprecated` compiler warnings (#2295, #2296) and protection buglet (#2294).
+
+- Use `gtar` when available to suppress Apple extended attribute warnings on Linux (#2227, #2228).
+
+
+# duckdb 1.5.0
+
+## Features
+
+- Update to DuckDB v1.5.0, see <https://github.com/duckdb/duckdb/releases/tag/v1.5.0> for details.
+
+- Support `descending` and `nulls_first` in `expr_window()` and `rel_order()` (#2074, #2075).
+
+## Bug fixes
+
+- The dbplyr translation of `as.numeric()` and `as.double()` uses `DOUBLE` instead of `NUMERIC` (#2023, #2031).
+
+## Testing
+
+- Update to testthat edition 3.
+
+## Internal
+
+- Avoid `ATTRIB()` for compatibility with R 4.6, materialize ALTREP row names to integer sequence with full ALTREP methods (#2034).
+
+
+# duckdb 1.4.4
+
+## Features
+
+- Update to DuckDB v1.4.4, see <https://github.com/duckdb/duckdb/releases/tag/v1.4.4> for details.
+
+- Add operator expressions (@toppyy, #1828).
+
+## Chore
+
+- Bump vendored cpp11 to v0.5.3.
+
+## Documentation
+
+- Add alternative installation method to README (@szarnyasg, #1819).
+
+
+# duckdb 1.4.3
+
+## Features
+
+- Update to DuckDB v1.4.3, see <https://github.com/duckdb/duckdb/releases/tag/v1.4.3> for details.
+
+- Add `str_ilike()` support (@edward-burn, #1810, #1811).
+
+## Bug fixes
+
+- Fail with non-UTF8-encoded strings during data frame scan instead of attempting to reencode (#1795).
+
+- Avoid inclusion of raw error message in the output.
+
+- Fix translation of `quantile()` to use DuckDB's native `QUANTILE_CONT()` syntax (#1734, #1735).
+
+## Testing
+
+- Remove redundant R version checks from tests (#1815, #1816).
+
+
+# duckdb 1.4.2
+
+- Update to DuckDB v1.4.2, see <https://github.com/duckdb/duckdb/releases/tag/v1.4.2> for details.
+
+
+# duckdb 1.4.1
+
+- Update to DuckDB v1.4.1, see <https://github.com/duckdb/duckdb/releases/tag/v1.4.1> for details.
+
+## Features
+
+- Add support for wildcards in `tbl_file()` paths (#1614, @rplsmn).
+
+- Add `n_distinct(..., na.rm = TRUE)` support for multiple passed columns (@lschneiderbauer, #1588).
+
+## Bug fixes
+
+- Fix Valgrind error.
+
+## Testing
+
+- Ensure be able to install duckdb extensions on release version (@eitsupi, #1586).
+
+
+# duckdb 1.4.0
+
+- Update to DuckDB v1.4.0, see <https://github.com/duckdb/duckdb/releases/tag/v1.4.0> for details.
+
+## Features
+
+- New experimental `sql_query()`, `sql_exec()`, and `default_conn()` to simplify the most important operations for interactive use (#1564).
+
+- `tbl_file()` allows omitting the `src` argument, falling back to the default connection.
+
+- Full support for deep structs generated by `struct_pack()` for ALTREP (#1545).
+
+## Bug fixes
+
+- Fix progress display for fractional progress values (#1499, #1505).
+
+- Extensions can be installed again.
+
+
+# duckdb 1.3.3
+
+- Update to the current v1.3-ossivalis branch, see <https://github.com/duckdb/duckdb/tree/v1.3-ossivalis> for details.
+
+## Bug fixes
+
+- Fix timezone conversion for invalid timestamps with `tz_out_convert = "force"` (#1474).
+
+- Substitute invalid UTF-8 characters in error messages to avoid a failure when reporting the error.
+
+- Fix index calculation for retrieval of arrays (#1473).
+
+- Fix conversion for retrieval of large enums.
+
+- Fix compiler error in debug build (@joakimlinde, #1368).
+
+## Features
+
+- Add rich ErrorData-based error handling with structured error information (#1479).
+
+- Safeguard against deadlocks when accidentally issuing queries from the progress bar handler or other callbacks (#1475).
+
+- `dbGetInfo()` gets the version from a hard-coded value and not from a DuckDB query (#1481).
+
+- Package uses two cores by default for compilation (#1478).
+
+## Documentation
+
+- Document vendoring process and main/next branch relationship (#1488).
+
+## Testing
+
+- Add `local_con()` test fixture for cleaner DuckDB connection management (#1476).
+
+
+# duckdb 1.3.2
+
+## Features
+
+- Update to duckdb v1.3.2, see <https://github.com/duckdb/duckdb/releases/tag/v1.3.2> for details.
+
+
+# duckdb 1.3.1
+
+## Features
+
+- Update to duckdb v1.3.1, see <https://github.com/duckdb/duckdb/releases/tag/v1.3.1> for details.
+
+## Bug fixes
+
+- Correct dbplyr translations for `str_starts()` and `str_ends()` (#1182, #1247).
+
+- Fix multiarch build on R 4.1 for Windows.
+
+
+# duckdb 1.3.0
+
+## Features
+
+- Update to duckdb v1.3.0, see <https://github.com/duckdb/duckdb/releases/tag/v1.3.0> for details.
+
+- Add ingestion of matrices (@joakimlinde, #1150).
+
+## Chore
+
+- Fix rchk (#1173).
+
+- Fix compiler warning (@joakimlinde, #1172).
+
+## Testing
+
+- Skip timing tests on CRAN.
+
+
+# duckdb 1.2.2
+
+## Features
+
+- Update to duckdb v1.2.2, see <https://github.com/duckdb/duckdb/releases/tag/v1.2.2> for details.
+
+- Add support for duckdb arrays in R (@joakimlinde, #102, #1090). To enable, connect with `dbConnect(duckdb(), array = "matrix")` (@joakimlinde, #1125).
+
+- Support fractional seconds in `TIME` and `INTERVAL` data (#1109).
+
+- The `autoload_known_extensions` configuration option is now enabled by default (#582, #1084, #1134).
+
+- Mention column name for conversion errors (#1108).
+
+## Chore
+
+- Require R \>= 4.1 (#1087, #1133).
+
+- Types exposed through ALTREP are the same as through DBI (#1111), including `STRUCT`. This enables support more types in upcoming duckplyr versions.
+
+- Perform optional checks for ALTREP compatibility in `rel_from_df()` and `expr_constant()` (#1117).
+
+- Perform time zone conversion in the C++ layer where possible, to support ALTREP (#1130).
+
+- Improve developer experience: `pkgload::load_all()` now works, source files are rebuilt if header files change, configure clangd (#1128).
+
+- Add dots with checks to unexported functions (#1115).
+
+- Clean up edge case for fetching zero rows (#1104).
+
+- Avoid test for timings on CRAN (#1101).
+
+## Documentation
+
+- Tweak README.
+
+
+# duckdb 1.2.1
+
+## Features
+
+- Update to duckdb v1.2.1, see <https://github.com/duckdb/duckdb/releases/tag/v1.2.1> for details.
+
+## Bug fixes
+
+- `dbExecute(con, "CALL ...")` no longer attempts to access the resulting data frame. Use `dbGetQuery(con, "CALL ...")` to access the data (#1062, #1080).
+
+- Fix support for the connections pane in RStudio and Positron (@dfalbel, #1063).
+
+## Internal
+
+- New `rel_to_view()` (\#1075).
+
+- New internal `AltrepDataframeRelation`, used with `rel_from_altrep_df(wrap = TRUE)` (#949, #1072).
+
+- Try relational materialization only once (#1066).
+
+## Chore
+
+- Update vendored cpp11 to 0.5.2 (#1068).
+
+- Avoid calls to non-API R functions.
+
+
+# duckdb 1.2.0
+
+## Breaking changes
+
+- Breaking change: Remove substrait API: `duckdb_get_substrait()`, `duckdb_get_substrait_json()`, `duckdb_prepare_substrait()`, `duckdb_prepare_substrait_json()` (@pdet, #1021).
+
+## Features
+
+- Update to duckdb v1.2.0, see <https://github.com/duckdb/duckdb/releases/tag/v1.2.0> for details.
+
+- Progress is shown for slow operation. This is on by default in interactive mode and can be controlled by setting the `"duckdb.progress_display"` option to a logical scalar (#199, #951, @meztez).
+
+- Add translation for `median()` (@toppyy, #993, #1011).
+
+- Floor sub-day precision date before casting to int (@toppyy, #517, #981).
+
+- Set value returned by `PRAGMA user_agent` to r-dbi (#707, @elefeint).
+
+## Bug fixes
+
+- Remove unconditional use of `CPPHTTPLIB_USE_POLL` to support compilation with R 4.0 and R 4.1 again (@Antonov548, #1043).
+
+- Support reading from multiple Parquet files again (#1015, #1024).
+
+- Fix translation for `add_days()` and `add_years()` clock functions (#976, @IoannaNika).
+
+
+# duckdb 1.1.3-2
+
+## Bug fixes
+
+- Make `cleanup` truly idempotent (#612, #940).
+
+## Chore
+
+- Sync vendoring script with igraph (#936).
+
+## Features
+
+- Limit automatic materialization by number of rows or number of cells (#1017).
+
+- New internal `rapi_rel_to_csv()`,`rapi_rel_to_table()`, and `rapi_rel_insert()`; `rapi_rel_to_parquet()` gains `options` argument (#867).
+
+## Testing
+
+- Skip tests that are about to fail.
+
+- Sync tests.
+
+
+# duckdb 1.1.3-1
+
+## Features
+
+- With `duckdb(environment_scan = TRUE)`, data frame objects are available as views in duckdb SQL queries (#140, #164).
+
+- Update vendored cpp11 to 0.5.1 (#636).
+
+## Bug fixes
+
+- Make `./cleanup` script reentrant (@Antonov548, #612, #634).
+
+- Fix installation of extensions (#623).
+
+- Fix rchk and UB errors (#635).
+
+- Avoid loading rlang during startup (#601).
+
+## Documentation
+
+- Mention `xz` requirement in `DESCRIPTION`.
+
+
+# duckdb 1.1.3
+
+## Features
+
+- Update to duckdb v1.1.3, see <https://github.com/duckdb/duckdb/releases/tag/v1.1.3> for details.
+
+- New `duckdb.materialize_callback` option, supersedes `get_last_rel()` (#589).
+
+- New `rel_explain_df()` and `rel_tostring()` (#587).
+
+- Handle empty child values for list constants (#186, @romainfrancois).
+
+## Chore
+
+- Undef `TRUE` and `FALSE` (#595).
+
+- Remove `enable_materialization` argument to `rel_from_altrep_df()` in favor of creating a new data frame when needed (#588).
+
+- Flip argument order for `expr_comparison()` (#585).
+
+- Keep `cleanup` files to accommodate different build scenarios (#536).
+
+
+# duckdb 1.1.2
+
+## Features
+
+- Update to duckdb v1.1.2, see <https://github.com/duckdb/duckdb/releases/tag/v1.1.2> for details.
+
+## Features
+
+- Long-running queries can now be canceled immediately with Ctrl + C (terminal) or Escape (RStudio IDE and Workbench) (#514, #515).
+
+- Add `col.types` argument to `duckdb_read_csv()` (#445, @eli-daniels).
+
+- Rethrow errors with rlang if installed (#522).
+
+- Improve error message for parsing erros during statement extraction (tidyverse/duckplyr#219, #521).
+
+## Bug fixes
+
+- Avoid RStudio IDE crashes when ending session with open objects (#520).
+
+- `rfuns` extension: `%in%` works correctly as part of a `&` conjunction (#528).
+
+## Internal
+
+- New interal APIs: `rapi_get_last_rel_mat()`, `rapi_rel_to_altrep(allow_materialization = TRUE)`, `rapi_rel_from_altrep_df(enable_materialization)` (#526).
+
+- xz-compress duckdb sources in the tarball (#530).
+
+- `rfuns` extension: Fix signedness.
+
+
+# duckdb 1.1.1
+
+## Features
+
+- Update to duckdb v1.1.1, see <https://github.com/duckdb/duckdb/releases/tag/v1.1.1> for details.
+
+- Add comparison expression to relational API (@toppyy, #457).
+
+- Temporarily change `max_expression_depth` during ALTREP evaluation (#101, #460).
+
+- Add `temporary` argument to `duckdb_read_csv()` (@ThomasSoeiro, #223).
+
+## Chore
+
+- Update vendored extension sources to hannes/duckdb-rfuns@20cde009b51b9355e6041b72b87105c6b45793fe.
+
+- Remove warnings for uninitialized variables.
+
+
+# duckdb 1.1.0
+
+## Features
+
+- Update to duckdb v1.1.0, see <https://github.com/duckdb/duckdb/releases/tag/v1.1.0> for details.
+
+- Upgrade vendored cpp11 to 0.5.0.
+
+
+# duckdb 1.0.0-2
+
+## Features
+
+- Reduce the package installation size on macOS (#185).
+
+
+# duckdb 1.0.0-1
+
+## Bug fixes
+
+- Upgrade vendored cpp11 to 0.4.7 to fix compilation with R-devel.
+
+- Support `dplyr::tbl(conn, I(...))`.
+
+
+# duckdb 1.0.0
+
+## Bug fixes
+
+- Update to duckdb v1.0.0, see <https://github.com/duckdb/duckdb/releases/tag/v1.0.0> for details.
+
+
+# duckdb 0.10.3
+
+## Features
+
+- Update to duckdb v0.10.3, see <https://github.com/duckdb/duckdb/releases/tag/v0.10.3> for details.
+- Support fetching `MAP` type (#61, #165).
+- Add dbplyr translations for `clock::date_count_between()` (@edward-burn, #163, #166).
+- `round()` duckdb translation uses `ROUND_EVEN()` instead of `ROUND()` (@lschneiderbauer, #146, #157).
+- New `sort` argument to `rel_order()` (@toppyy, #168).
+- Add dbplyr translations for `clock::add_days()`, `clock::add_years()`, `clock::get_day()`, `clock::get_month()`, and `clock::get_year()` (@edward-burn, #153).
+
+## Bug fixes
+
+- Correct usage of `win_current_group()` instead of `win_current_order()` in SQL translation (@lschneiderbauer, #173, #175).
+
+
+# duckdb 0.10.2
+
+## Features
+
+- Update to duckdb v0.10.2, see <https://github.com/duckdb/duckdb/releases/tag/v0.10.2> for details.
+- The `"difftime"` class is now mapped to the `INTERVAL` data type (#151).
+- Use latest tests from DBItest (#148).
+- Implement `n_distinct()` for multiple arguments using duckdb structs (@lschneiderbauer, #110, #122).
+- Include rfuns extension (hannes/duckdb-rfuns#78, #144).
+- Map `NA` to `SQLNULL` (#143).
+
+## Bug fixes
+
+- `rel_sql(rel, "{{sql}}")` works even on a read-only database (@Tmonster, #138).
+- Avoid `R CMD check` warning regarding `SETLENGTH()` and `SET_TRUELENGTH()` (#145).
+
+
+# duckdb 0.10.1
+
+## Features
+
+- Update to duckdb v0.10.1, see <https://github.com/duckdb/duckdb/releases/tag/v0.10.1> for details.
+- Fix shutdown semantics for the driver object created by `duckdb()`. A database file is closed (and available to be opened from another session) after the last connection that uses this file calls `dbDisconnect()` . The `shutdown` argument to `dbDisconnect()` or the `duckdb_shutdown()` functions are no longer necessary. Two database connections from the same R session can access the same file concurrently in read-write mode (#124).
+
+## Bug fixes
+
+- Don't run tests that invoke re2 by default (#121, #127).
+
+- Fix compilation for R 4.0 and R 4.1, regression introduced in v0.10.0. Using `librstrtmgr.a` from UCRT build of rtools40 (#130).
+
+## Internal
+
+- The C++ core is now vendored commit by commit, once every five minutes. Vendoring stops if `R CMD check` fails or if a previously unreleased tag is reached.
+
+- New maintainer: Kirill Müller.
+
+## Continuous integration
+
+- Add rhub2 workflow.
+
+
+# duckdb 0.10.0
+
+## Bug fixes
+
+- `dplyr::tbl()` works again when a Parquet or CSV file is passed instead of a table name (#38, #91).
+
+- `DBI::dbQuoteIdentifier()` correctly quotes identifiers that start with a digit (#67, #92).
+
+- Align the argument order of `dbWriteTable()` with the DBI specs (@eitsupi, #43, #49).
+
+## Features
+
+- New `tbl_file()` and `tbl_query()` to explicitly access tables and queries as dbplyr lazy tables (#96). The `cache` argument to `tbl()` and to the new functions must be named.
+
+- Initial ALTREP support for `LIST` logical type (@romainfrancois, #77).
+
+- Update core to duckdb v0.10.0 (#90).
+
+- New private `rel_to_parquet()` to write a relation to parquet (@Tmonster, #46).
+
+## Chore
+
+- Change directory location for extensions and secrets for v.0.10.0 release (@Tmonster, #73).
+
+- Remove last instance of `default_connection()` (#50).
+
+## Documentation
+
+- Add list of contributors (#2, #94).
+
+- Use pkgdown BS5 (@maelle, #31, #70) with DuckDB logo (#76, @romainfrancois).
+
+- Link to R documentation page.
+
+- Include `NEWS.md` on CRAN (#48, @olivroy).
+
+## Testing
+
+- Add csv reading test for `duckdb_read_csv(na.strings = )` (@Tmonster, #10).
+
+- Fix snapshot tests.
+
+- Tweak tests for compatibility with v0.10.0 (#84).
+
+# duckdb 0.9.2-1
+
+- Fix compiler warning on R-devel (#45).
+
+
+# duckdb 0.9.2
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.9.2>.
+
+- Add dbplyr translation for `prod()` (#40, @m-muecke).
+
+
+# duckdb 0.9.1-1
+
+- Fix LTO checks on CRAN.
+
+
+# duckdb 0.9.1
+
+- See blog post at <https://duckdb.org/2023/09/26/announcing-duckdb-090.html>.
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.9.1>.
+
+- Move sources to <https://github.com/duckdb/duckdb-r> (@krlmlr).
+
+- Add ADBC integration with the adbcdrivermanager package (duckdb/duckdb#8172, @paleolimbot).
+
+- Full support of lists and structs in R (duckdb/duckdb#8503, @krlmlr).
+
+# duckdb 0.8.1-3
+
+- Internal changes to support the duckplyr package.
+
+# duckdb 0.8.1-2
+
+- Compatibility with dbplyr.
+
+- Internal changes to support the duckplyr package.
+
+# duckdb 0.8.1-1
+
+- Fix CRAN checks.
+
+# duckdb 0.8.1
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.8.1>.
+
+# duckdb 0.8.0
+
+- See blog post at <https://duckdb.org/2023/05/17/announcing-duckdb-080.html>.
+
+# duckdb 0.7.1-1
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.7.1>.
+
+# duckdb 0.7.0
+
+- See blog post at <https://duckdb.org/2023/02/13/announcing-duckdb-070.html>.
+
+# duckdb 0.6.2
+
+- New `duckdb_prepare_substrait_json()`.
+
+# duckdb 0.6.1
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.6.1>.
+
+# duckdb 0.6.0
+
+- See blog post at <https://duckdb.org/2022/11/14/announcing-duckdb-060.html>.
+
+# duckdb 0.5.1
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.5.1>.
+
+# duckdb 0.5.0
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.5.0>.
+
+# duckdb 0.4.0
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.4.0>.
+
+# duckdb 0.3.4-1
+
+- Minor changes for CRAN compatibility.
+
+# duckdb 0.3.4
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.3.4>.
+
+# duckdb 0.3.3
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.3.3>.
+
+# duckdb 0.3.2
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.3.2>.
+
+# duckdb 0.3.1
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.3.1>.
+
+# duckdb 0.3.0
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.3.0>.
+
+- See release notes at <https://github.com/duckdb/duckdb/releases/tag/v0.2.9>.
+
+# duckdb 0.2.8
+
+This preview release of DuckDB is named "Ceruttii" after a [long-extinct relative of the present-day Harleqin Duck](https://en.wikipedia.org/wiki/Harlequin_duck#Taxonomy) (Histrionicus Ceruttii).
+Binary builds are listed below. Feedback is very welcome.
+
+Note: Again, this release introduces a backwards-incompatible change to the on-disk storage format. We suggest you use the EXPORT DATABASE command with the old version followed by IMPORT DATABASE with the new version to migrate your data. See the [documentation](https://duckdb.org/docs/sql/statements/export) for details.
+
+### SQL
+
+ - #2064: `RANGE`/`GENERATE_SERIES` for timestamp + interval
+ - #1905: Add `PARQUET_METADATA` and `PARQUET_SCHEMA` functions
+ - #2059, #1995, #2020 & #1960: Window `RANGE` framing, `NTH_VALUE` and other improvements
+
+### APIs
+
+ - Many Arrow integration improvements
+ - Many ODBC driver improvements
+ - #1815: Initial version: SQLite UDF API
+ - #2001: Support DBConfig in C API
+
+### Engine
+
+ - #1975, #1876 & #2009: Unified row layout for sorting, aggregate & joins
+ - #1930 & #1904: List Storage
+ - #2050: CSV Reader/Casting Framework Refactor & add support for `TRY_CAST`
+ - #1950: Add Constant Segment Compression to Storage
+ - #1957: Add pipe/stream file system
+
+
+
+
+
+# duckdb 0.2.7
+
+This preview release of DuckDB is named "Mollissima" after the Common Eider (Somateria mollissima).
+ Binary builds are listed below. Feedback is very welcome.
+
+Note: This release introduces a backwards-incompatible change to the on-disk storage format. We suggest you use the EXPORT DATABASE command with the old version followed by IMPORT DATABASE with the new version to migrate your data. See the documentation for details.
+
+Major changes:
+
+SQL
+ - #1847: Unify catalog access functions, and provide views for common PostgreSQL catalog functions
+ - #1822: Python/JSON-Style Struct & List Syntax
+ - #1862: #1584 Implementing `NEXTAFTER` for float and double
+ - #1860: `FIRST` implementation for nested types
+ - #1858: `UNNEST` table function & array syntax in parser
+ - #1761: Issue #1746: Moving `QUANTILE`
+
+APIs
+
+ - #1852, #1840, #1831, #1819 and #1779: Improvements to Arrow Integration
+ - #1843: First iteration of ODBC driver
+ - #1832: Add visualizer extension
+ - #1803: Converting Nested Types to native python
+ - #1773: Add support for key/value style configuration, and expose this in the Python API
+
+Engine
+ - #1808: Row-Group Based Storage
+ - #1842: Add (Persistent) Struct Storage Support
+ - #1859: Read and write atomically with offsets
+ - #1851: Internal Type Rework
+ - #1845: Nested join payloads
+ - #1813: Aggregate Row Layout
+ - #1836: Join Row Layout
+ - #1804: Use Allocator class in buffer manager and add a test for a custom allocator usage
+
+
+
+
+
+# duckdb 0.2.6
+
+This preview release of DuckDB is named "Jamaicensis" after the [blue-billed Ruddy Duck (Oxyura jamaicensis)](https://en.wikipedia.org/wiki/Ruddy_duck). Binary builds are listed below. Feedback is very welcome.
+
+Note: This release introduces a backwards-incompatible change to the on-disk storage format. We suggest you use the EXPORT DATABASE command with the old version followed by IMPORT DATABASE with the new version to migrate your data. See the documentation for details.
+
+Also note: Due to changes in the internal storage (#1530), databases created with this release wil require somewhat more disk space. This is transient as we are working hard to finalise the on-disk storage format.
+
+Major changes:
+
+Engine
+ - #1666: External merge sort, #1580: Parallel scan of ordered result and #1561: Rework physical ORDER BY
+ - #1520 & #1574: Window function computation parallelism
+ - #1540: Add table functions that take a subquery parameter
+ - #1533: Using vectors, instead of column chunks as lists
+ - #1530: Store null values separate from main data in a Validity Segment
+
+SQL
+ - #1568: Positional Reference Operator `#1` etc.
+ - #1671: `QUANTILE` variants and #1685: Temporal quantiles
+ - #1695: New Timestamp Types `TIMESTAMP_NS`, `TIMESTAMP_MS` and `TIMESTAMP_NS`
+ - #1647: Add support for UTC offset timestamp parsing to regular timestamp conversion
+ - #1659: Add support for `USING` keyword in `DELETE` statement
+ - #1638, #1663, #1621 & #1484: Many changes arount `ARRAY` syntax
+ - #1610: Add support for `CURRVAL`
+ - #1544: Add `SKIP` as an option to `READ_CSV` and `COPY`
+
+APIs
+ - #1525: Add loadable extensions support
+ - #1711: Parallel Arrow Scans
+ - #1569: Map-style UDFs for Python API
+ - #1534: Extensible Replacement Scans & Automatic Pandas Scans and #1487: Automatically use parquet or CSV scan when using a table name that ends in `.parquet` or `.csv`
+ - #1649: Add a QueryRelation object that can be used to convert a query directly into a relation object, #1665: Adding from_query to python api
+ - #1550: Shell: Add support for Ctrl + arrow keys to linenoise, and make Ctrl+C terminate the current query instead of the process
+ - #1514: Using `ALTREP` to speed up string column transfer to R
+ - #1502: R: implementation of Rstudio connection-contract tab
+
+
+
+
+
+# duckdb 0.2.5
+
+This preview release of DuckDB is named "Falcata" after the Falcated Duck (Mareca falcata). Binary builds are listed below. Feedback is very welcome.
+
+Note: This release introduces a backwards-incompatible change to the on-disk storage format. We suggest you use the EXPORT DATABASE command with the old version followed by IMPORT DATABASE with the new version to migrate your data. See the documentation for details.
+
+Major Changes:
+
+Engine
+ - #1356: **Incremental Checkpointing**
+ - #1422: Optimize Top N Implementation
+
+SQL
+ - #1406, #1372, #1387: Many, many new aggregate functions
+ - #1460: `QUANTILE` aggregate variant that takes a list of quantiles &  #1346: Approximate Quantiles
+ - #1461: `JACCARD`, #1441 `LEVENSHTEIN` & `HAMMING` distance  scalar function
+ - #1370: `FACTORIAL` scalar function and ! postfix operator
+ - #1363: `IS (NOT) DISTINCT FROM`
+ - #1385: `LIST_EXTRACT` to get a single element from a list
+ - #1361: Aliases in the `HAVING` clause (fixes issue #1358)
+ - #1355: Limit clause with non constant values
+
+APIs:
+ - #1430 & #1424: **DuckDB WASM builds**
+ - #1419: Exporting the appender api to C
+ - #1408: Add blob support to C API
+ - #1432,  #1459 & #1456: Progress Bar
+ - #1440: Detailed profiler.
+
+
+
+
+
+
+# duckdb 0.2.4
+
+This preview release of DuckDB is named "Jubata" after the [Australian Wood Duck](https://en.wikipedia.org/wiki/Australian_wood_duck) (Chenonetta jubata). Binary builds are listed below. Feedback is very welcome.
+
+Note: This release introduces a backwards-incompatible change to the on-disk storage format. We suggest you use the EXPORT DATABASE command with the old version followed by IMPORT DATABASE with the new version to migrate your data. See the documentation for details.
+
+Major changes:
+SQL
+ - #1231: Full Text Search extension
+ - #1309: Filter Clause for Aggregates
+ - #1195: `SAMPLE` Operator
+ - #1244: `SHOW` select queries
+ - #1301: `CHR` and `ASCII` functions & #1252: Add `GAMMA` and `LGAMMA` functions
+
+Engine
+ - #1211: (Mostly) Lock-Free Buffer Manager
+ - #1325: Unsigned Integer Types Support
+ - #1229: Filter Pull Up Optimizer
+ - #1296: Optimizer that removes redundant `DELIM_GET` and `DELIM_JOIN` operators
+ - #1219: `DATE`, `TIME` and `TIMESTAMP` rework: move to epoch format & microsecond support
+
+Clients
+ - #1287 and #1275: Improving JDBC compatibility
+ - #1260: Rework client API and prepared statements, and improve DuckDB -> Pandas conversion
+ - #1230: Add support for parallel scanning of pandas data frames
+ - #1256: JNI appender
+ - #1209: Write shell history to file when added to allow crash recovery, and fix crash when .importing file with invalid
+ - #1204: Add support for blobs to the R API and #1202: Add blob support to the python api
+
+Parquet
+ - #1314: Refactor and nested types support for Parquet Reader
+
+
+
+# duckdb 0.2.3
+
+This preview release of DuckDB is named "Serrator" after the Red-breasted merganser (Mergus serrator). Binary builds are listed below. Feedback is very welcome.
+
+Note: This release introduces a backwards-incompatible change to the on-disk storage format. We suggest you use the EXPORT DATABASE command with the old version followed by IMPORT DATABASE with the new version to migrate your data. See the documentation for details.
+
+Major changes:
+
+SQL:
+ - #1179: Interval Cleanup & Extended `INTERVAL` Syntax
+ - #1147: Add exact `MEDIAN` and `QUANTILE` functions
+ - #1129: Support scalar functions with `CREATE FUNCTION`
+ - #1137: Add support for (`NOT`) `ILIKE`, and optimize certain types of `LIKE` expressions
+
+Engine
+ - #1160: Perfect Aggregate Hash Tables
+ - #1133: Statistics Rework & Statistics Propagation
+ - #1144: Common Aggregate Optimizer, #1143: CSE Optimizer and #1135: Optimizing expressions in grouping keys
+ - #1138: Use predication in filters
+ - #1071: Removing string null termination requirement
+
+Clients
+ - #1112: Add DuckDB node.js API
+ - #1168: Add support for Pandas category types
+ - #1181: Extend DuckDB::LibraryVersion() to output dev version in format `0.2.3-devXXX` & #1176: Python binding: Add module attributes for introspecting DuckDB version
+
+Parquet Reader:
+ - #1183: Filter pushdown for Parquet reader
+ - #1167: Exporting Parquet statistics to DuckDB
+ - #1162: Add support for compression codec in Parquet writer &  #1163: Add ZSTD Compression Code and add ZSTD codec as option for Parquet export
+ - #1103: Add object cache and Parquet metadata cache
+
+
+
+
+
+
+
+
+
+
+
+# duckdb 0.2.2
+
+This is a preview release of DuckDB.
+Starting from this release, releases get named as well. Names are chosen from species of ducks (of course). We start with "Clypeata".
+
+*Note*: This release introduces a backwards-incompatible change to the on-disk storage format. We suggest you use the `EXPORT DATABASE` command with the old version followed by `IMPORT DATABASE` with the new version to migrate your data. See the [documentation](https://duckdb.org/docs/sql/statements/export) for details.
+
+Binary builds are listed below. Feedback is very welcome. Major changes:
+
+SQL
+ - #1057: Add PRAGMA for enabling/disabling optimizer & extend output for query graph
+ - #1048: Allow CTEs in subqueries (including CTEs themselves) and #987: Allow CTEs in CREATE VIEW statements
+ - #1046: Prettify Explain/Query Profiler output
+ - #1037: Support FROM clauses in UPDATE statements
+ - #1006: STRING_SPLIT and STRING_SPLIT_REGEX SQL functions
+ - #1000: Implement MD5 function
+ - #936: Add GLOB support to Parquet & CSV readers
+ - #899: Table functions information_schema_schemata() and information_schema_tables() and #903: Add table function information_schema_columns()
+
+Engine
+ - #984: Parallel grouped aggregations and #1045: Some performance fixes for aggregate hash table
+ - #1008: Index Join
+ - #991: Local Storage Rework: Per-morsel version info and flush intermediate chunks to the base tables
+ - #906: Parallel scanning of single Parquet files and #982: ZSTD Support in Parquet library
+ - #883: Unify Table Scans with Table Functions
+ - #873: TPC-H Extension
+ - #884: Remove NFC-normalization requirement for all data and add COLLATE NFC
+
+Client
+ - #1001: Dynamic Syntax Highlighting in Shell
+ - #933: Upgrade shell.c to 3330000
+ - #918: Add in support for Python datetime types in bindings
+ - #950: Support dates and times output into arrow
+ - #893: Support for Arrow NULL columns
+
+
+# duckdb 0.2.1
+
+This is a preview release of DuckDB. Binary builds are listed below. Feedback is very welcome. Major changes:
+
+Engine
+ - #770: Enable Inter-Pipeline Parallelism
+ - #835: Type system updates with #779: `INTERVAL` Type,  #858: Fixed-precision `DECIMAL` types & #819: `HUGEINT` type
+ - #790: Parquet write support
+
+API
+ - #866: Initial Arrow support
+ - #809: Aggregate UDF support with #843: Generic `CreateAggregateFunction()` & #752: `CreateVectorizedFunction()` using only template parameters
+
+SQL
+ - #824: `strftime` and `strptime`
+ - #858: `EXPORT DATABASE` and `IMPORT DATABASE`
+ - #832: read_csv(_auto) improvements: optional parameters, configurable sample size, line number info
+
+
+
+# duckdb 0.2.0
+
+This is a preview release of DuckDB. Binary builds are listed below. Feedback is very welcome.
+
+SQL:
+ - #730: `FULL OUTER JOIN` Support
+ - #732: Support for `NULLS FIRST`/`NULLS LAST`
+ - #698: Add implementation of the `LEAST`/`GREATEST` functions
+ - #772: Implement `TRIM` function and add optional second parameter to `RTRIM`/`LTRIM`/`TRIM`
+ - #771: Extended Regex Options
+
+Clients:
+ - Python: #720: Making Pandas optional and add support for PyPy
+ - C++: #712: C++ UDF API
+
+
+
+
+
+# duckdb 0.1.9
+
+This is a preview release of DuckDB. Binary are listed below. Feedback is very welcome. Major changes:
+New [website](https://duckdb.org/) [woo-ho](https://www.youtube.com/watch?v=H9cmPE88a_0)!
+
+Engine
+ - #653: Parquet reader integration
+
+SQL
+ - #685: Case insensitive binding of column names
+ - #662: add `EPOCH_MS` function and test cases
+
+Clients
+ - #681: JDBC Read-only mode for and #677 duplicate()` method to allow multiple connections to same database
+
+
+
+# duckdb 0.1.8
+
+This is a preview release of DuckDB. Feedback is very welcome.
+
+SQL
+ - SQL functions `IF` and `IFNULL` #644
+ - SQL string functions `LEFT` #620 and `RIGHT` #631
+ - #641: `BLOB` type support
+ - #640: `LIKE` escape support
+
+Clients
+ - #627: Insertion support for Python relation API
+
+
+
+# duckdb 0.1.7
+
+This is the sixth preview release of DuckDB. Feedback is very welcome.
+Binary builds are available as well.
+
+SQL
+- [Add / remove columns, change default values & column type](https://duckdb.org/docs/sql/statements/alter_table) #612
+- [Collation support](https://duckdb.org/docs/sql/expressions/collations)
+- CSV sniffer `READ_CSV_AUTO` for dialect, data type and header detection #582
+- `SHOW` & `DESCRIBE` Tables #501
+- String function `CONTAINS`  #488
+- String functions `LPAD` / `RPAD`, `LTRIM` / `RTRIM`, `REPEAT`, `REPLACE` & `UNICODE` #597
+- Bit functions `BIT_LENGTH`, `BIT_COUNT`, `BIT_AND`, `BIT_OR`, `BIT_XOR` & `BIT_AGG` #608
+
+Engine
+- `LIKE` optimization rules #559
+- Adaptive filters in table scans #574
+- ICU Extension for extended Collations & Extension Support #594
+- Extended zone map support in scans #551
+- Disallow NaN/INF in the system #541
+- Use UTF Grapheme Cluster Breakers in Reverse and Shell #570
+
+Clients
+- Relation API for C++ #509 and Python #598
+ - Java (TM) JDBC (R) Client for DuckDB #492 #520 #550
+
+
+
+# duckdb 0.1.6
+
+This is the fifth preview release of DuckDB. Feedback is very welcome.
+Binary builds can be found here: http://download.duckdb.org/alias/v0.1.6/
+
+SQL
+- #455 Table renames `ALTER TABLE tbl RENAME TO tbl2`
+- #457 Nested list type can be created using `LIST` aggregation and unpacked with the new `UNNEST` operator
+- #463 `INSTR` string function, #477 `PREFIX` string function, #480 `SUFFIX` string function
+
+Engine
+- #442 Optimized casting performance to strings
+- #444 Variable return types for table-producing functions
+- #453 Rework aggregate function interface
+- #474 Selection vector rework
+- #478 UTF8 NFC normalization of all incoming strings
+- #482 Skipping table segments during scan based on min/max indices
+
+Python client
+- #451 `date` / `datetime` support
+- #467 `description` field for cursor
+- #473 Adding `read_only` flag to `connect`
+- #481 Rewrite of Python API using `pybind11`
+
+R client
+- #468 Support for prepared statements in R client
+- #479 Adding automatic CSV to table function `read_csv_duckdb`
+- #483 Direct scan operator for R `data.frame` objects
+
+
+
+# duckdb 0.1.5
+
+This is the fourth preview release of DuckDB. Feedback is very welcome. Note: The v0.1.4 version was skipped because of a Python packaging issue.
+
+Binary builds can be found here:
+http://download.duckdb.org/rev/59f8907b5d89268c158ae1774d77d6314a5c075f/
+
+Major changes:
+ - #409 Vector Overhaul
+ - #423 Remove individual vector cardinalities
+ - #418 `DATE_TRUNC` SQL function
+ - #424 `REVERSE` SQL function
+ - #416 Support for `SELECT table.* FROM table`
+ - #414 STRUCT types in query execution
+ - #431 Changed internal string representation
+ - #433 Rename internal type `index_t` to `idx_t`
+ - #439 Support for temporary structures in read-only mode
+ - #440 Builds on Solaris & OpenBSD
+
+
+*Note*: This release contains a bug in the Python API that leads to crashes when fetching strings to NumPy/Pandas #447
+
+
+# duckdb 0.1.3
+
+This is the third preview release of DuckDB. Feedback is very welcome.
+Binary builds can be found here:
+http://download.duckdb.org/rev/59f8907b5d89268c158ae1774d77d6314a5c075f/
+
+Major changes:
+  * #388 Major updates to shell
+  * #390 Unused Column & Column Lifetime Optimizers
+  * #402 String and compound keys in indices/primary keys
+  * #406 Adaptive reordering of filter expressions
+
+
+
+# duckdb 0.1.2
+
+This is the third preview release of DuckDB. Feedback is very welcome.
+Binary builds can be found here:
+http://download.duckdb.org/rev/6fcb5ef8e91dcb3c9b2c4ca86dab3b1037446b24/
+
+
+# duckdb 0.1.1
+
+This is the second preview release of DuckDB. Feedback is very welcome.
+Binary builds can be found here:
+http://download.duckdb.org/rev/2e51e9bae7699853420851d3d2237f232fc2a9a8/
+
+
+# duckdb 0.1.0
+
+This is the first preview release of DuckDB. Feedback is very welcome.
+
+Binary builds can be found here: http://download.duckdb.org/rev/c1cbc9d0b5f98a425bfb7edb5e6c59b5d10550e4/

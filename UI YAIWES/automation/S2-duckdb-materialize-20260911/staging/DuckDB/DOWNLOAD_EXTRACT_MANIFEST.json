@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 9108495,
+  "bundle_sha256": "bd1ecad4f55b16380b5561685daa7dfa7ce7ebba7aeef8ff86e098af0e337fe6",
+  "extracted_tree": {
+    "bytes": 37127481,
+    "files": 4122,
+    "sha256": "203b13970343ee05276d6992dc42fd81c7b09b4fc3b3b27c3689edf27286f52b"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 9108495,
+      "name": "DuckDB.bundle.zip.part-0001",
+      "sha256": "bd1ecad4f55b16380b5561685daa7dfa7ce7ebba7aeef8ff86e098af0e337fe6"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "DuckDB",
+  "source_bytes": 37127481,
+  "source_commit": "fdef8b2325d49774c990e59f127b90e4d54d3065",
+  "source_files": 4122,
+  "source_ref": "fdef8b2325d49774c990e59f127b90e4d54d3065",
+  "source_repo": "https://github.com/duckdb/duckdb-r",
+  "source_tree": {
+    "bytes": 37127481,
+    "files": 4122,
+    "sha256": "203b13970343ee05276d6992dc42fd81c7b09b4fc3b3b27c3689edf27286f52b"
+  }
+}

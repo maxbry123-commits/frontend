@@ -1,0 +1,116 @@
+# The series loop
+
+The scheduled routine that vendors every series.
+The procedures are machine-loaded playbooks under
+[`.claude/skills/`](/.claude/skills) —
+[`series-loop.md`](/.claude/skills/series-loop.md) with its
+siblings `series-forward`, `series-rebase`, `series-open` —
+linked from here, never restated:
+a reader who wants to *run* the loop follows the link;
+what runs is this page's topic.
+
+The loop is a scheduled **agent routine**, not a workflow —
+nothing under `.github/workflows/` starts it,
+and its schedule lives with the routine, outside this tree.
+A firing serves every series discovered from the refs
+([`branches/model/`](/handbook/branches/model/README.md)).
+Setup always runs; every stage after it is skipped when it has nothing
+to do, and they run in this order:
+
+* **Vendor onto `<S>-build`** — extend the buffer with `vendor-one.sh`,
+  fixing glue where the gate stops;
+  red never blocks the buffer.
+* **Repair the oldest `<S>-dev` failure** — read each commit's verdict
+  and log from the `each-rcc` run that decided it, falling back to the
+  `rcc2` store when a run cannot be reached
+  ([`ci/per-commit/contract/`](/handbook/operations/ci/per-commit/contract/README.md)),
+  and classify by what a log positively contains:
+  the tree's fault is folded into the
+  offending commit and the tail replayed;
+  the infrastructure's fault is retried once via a `retry-` ref
+  that also serves as the ledger.
+* **Advance the frontier, and read what r-universe made of the last one**
+  — fast-forward `-green` over commits with recorded *successful* runs,
+  move `-build-base` to match, and read back what the previous green
+  became on the platforms the per-commit gate never covers
+  ([`scripts/r-universe-check.sh`](/scripts/r-universe-check.sh)).
+  A red there never rewinds green; it is recorded in the commit
+  message of the `-dev` commit that answers it, which is where the
+  next forward reads it.
+* **Forward-port** — bring `main`'s R-side work onto the series
+  ([`scripts/series-port.sh`](/scripts/series-port.sh)).
+  A series seeded from a release branch rather than from `main` takes
+  no wholesale port: its R side belongs to that line, so only the
+  tooling sync and fixes named by hand apply.
+  That is read from the lineage under the seed rather than configured,
+  so opening or retiring a release line changes no script.
+* **Extend `<S>-dev`** — consume the buffer in bounded chunks,
+  at most 100 commits per firing
+  ([`scripts/series-advance.sh`](/scripts/series-advance.sh)).
+  On a forward series this is also where the base series' fixes are
+  folded back in, matched by vendored SHA
+  ([#2594](https://github.com/duckdb/duckdb-r/pull/2594)):
+  `-build` holds what the code needs to *compile*, that being what the
+  vendor gate checks, and `-dev` holds everything CI demanded after
+  that — glue included, where a test rather than the compiler asked for
+  it. A forward inherits only the first from the replay. What carries is
+  the difference against the twin's own `-build` commit, less the
+  buffer's strand (`src/duckdb/`, `patch/`) and what vendoring
+  regenerates — more commits fall to those exclusions than are carried,
+  which is why it is a filtered difference and not the twin's diff
+  replayed. Rare per commit and expensive where it happens: 10 of the
+  802 commits `main-fwd` still has buffered carry one, three of them
+  glue, each otherwise a red costing a repair plus a replay of
+  everything above it
+  ([`experiments/2026-08-09-series-carry-scope/`](/experiments/2026-08-09-series-carry-scope/README.md)).
+  This stage is **attended**: a carry the series has moved out from
+  under stops the run with the conflict in a worktree it keeps, writes
+  no ref, and resumes with `--continue` or is discarded with `--abort`.
+  A live forward counterpart does **not** hold the base series back: it
+  consumes, ports and verifies at full speed until a human swaps the
+  refs, which costs CI on a lineage about to be retired and buys the
+  only thing that makes retiring it checkable rather than hopeful
+  (below).
+* **Read the forwarding, and suggest a cutover** — for every series
+  with a forward counterpart,
+  [`scripts/series-converge.sh`](/scripts/series-converge.sh) diffs
+  `<S>-dev` against `<S>-fwd-dev` and sorts each differing path into
+  what the forwarding explains and what it does not; the findings go
+  into the report and to the stage that should have moved them. A
+  caught-up counterpart is *reported* with the cutover command, never
+  executed; that move is a human's, and the script prints the same
+  comparison before it asks for confirmation.
+* **Report what the tooling got wrong** — a firing that had to work
+  around a script opens a pull request against it,
+  so the next firing does not have to.
+
+**A forwarding ends where the two lineages agree.**
+A forward series is the same series rebuilt on a newer `main`, so its
+history differs by construction and its content must not: at the end of
+a forwarding `<S>-dev` and `<S>-fwd-dev` are identical, or every
+difference between them is explicable
+([`branches/invariants/`](/handbook/branches/invariants/README.md)).
+That is why the base keeps consuming. A base frozen where the forward
+went live can be compared only at the commit it stopped on — the one
+point the two are already known to agree — so every commit the forward
+vendored afterwards had nothing to check against; and past that frontier
+stage 5 finds no twin to match by vendored SHA, so each fix the base had
+already proved came back as a red on the forward, at a repair plus a
+replay of everything above it.
+
+**A forward carries the vendor strand, and the rest is placed by hand.**
+`<S>-fwd-build` is replayed from the buffer's `vendor:` commits alone, so
+the buffer's own `patch/` entries do not travel with it, and a series
+seeded from a release branch regenerates its seed on that branch, with
+the tooling that branch carries rather than `main`'s.
+The replay refuses to start rather than leave a `patch/` entry behind,
+naming what it cannot place —
+it has to, because dropping one raises no conflict:
+a vendor diff taken after the entry landed is neutral in the region it
+touched, so it applies to a tree that lacks it.
+The tooling delta nothing reports, and nothing needs to:
+the port stage brings it back on the next firing.
+
+[`scripts/series-check.sh`](/scripts/series-check.sh) prints each
+series' verdict read-only and is always safe to run
+([`troubleshooting/`](/handbook/operations/vendoring/troubleshooting/README.md)).

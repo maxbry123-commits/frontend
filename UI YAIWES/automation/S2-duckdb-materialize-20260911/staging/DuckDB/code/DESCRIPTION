@@ -1,0 +1,82 @@
+Package: duckdb
+Title: DBI Package for the DuckDB Database Management System
+Version: 1.5.5.9020
+Authors@R: c(
+    person("Hannes", "Mühleisen", , "hannes@cwi.nl", role = "aut",
+           comment = c(ORCID = "0000-0001-8552-0029")),
+    person("Mark", "Raasveldt", , "mark.raasveldt@cwi.nl", role = "aut",
+           comment = c(ORCID = "0000-0001-5005-6844")),
+    person("Kirill", "Müller", , "kirill@cynkra.com", role = "cre",
+           comment = c(ORCID = "0000-0002-1416-3412")),
+    person("Stichting DuckDB Foundation", role = "cph"),
+    person("Apache Software Foundation", role = "cph"),
+    person("PostgreSQL Global Development Group", role = "cph"),
+    person("The Regents of the University of California", role = "cph"),
+    person("Cameron Desrochers", role = "cph"),
+    person("Victor Zverovich", role = "cph"),
+    person("RAD Game Tools", role = "cph"),
+    person("Valve Software", role = "cph"),
+    person("Rich Geldreich", role = "cph"),
+    person("Tenacious Software LLC", role = "cph"),
+    person("The RE2 Authors", role = "cph"),
+    person("Google Inc.", role = "cph"),
+    person("Facebook Inc.", role = "cph"),
+    person("Steven G. Johnson", role = "cph"),
+    person("Jiahao Chen", role = "cph"),
+    person("Tony Kelman", role = "cph"),
+    person("Jonas Fonseca", role = "cph"),
+    person("Lukas Fittl", role = "cph"),
+    person("Salvatore Sanfilippo", role = "cph"),
+    person("Art.sy, Inc.", role = "cph"),
+    person("Oran Agra", role = "cph"),
+    person("Redis Labs, Inc.", role = "cph"),
+    person("Melissa O'Neill", role = "cph"),
+    person("PCG Project contributors", role = "cph")
+  )
+Description: The DuckDB project is an embedded analytical data management
+    system with support for the Structured Query Language (SQL). This
+    package includes all of DuckDB and an R Database Interface (DBI)
+    connector.
+License: MIT + file LICENSE
+URL: https://r.duckdb.org/, https://github.com/duckdb/duckdb-r
+BugReports: https://github.com/duckdb/duckdb-r/issues
+Depends:
+    DBI,
+    R (>= 4.2.0)
+Imports:
+    methods,
+    utils
+Suggests: 
+    adbcdrivermanager,
+    arrow (>= 13.0.0),
+    bit64,
+    callr,
+    clock,
+    DBItest,
+    dbplyr (>= 2.6.0),
+    dplyr,
+    nanoarrow,
+    rlang,
+    sf,
+    testthat (>= 3.0.0),
+    tibble,
+    vctrs,
+    wk,
+    withr
+Biarch: true
+Config/build/compilation-database: false
+Config/build/never-clean: true
+Config/comment/compilation-database: Generate manually with
+    pkgload:::generate_db() for faster pkgload::load_all()
+Config/gha/extra-packages: 
+    adbcdrivermanager=?ignore-build-errors,
+    arrow=?ignore-build-errors
+Config/comment/gha/extra-packages: adbcdrivermanager and arrow do not compile
+    against Rtools45, and the aarch64 Windows runner has no binary to
+    install instead. Explained in
+    handbook/operations/ci/matrix/README.md.
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+SystemRequirements: xz (for building from source)
+Config/roxygen2/version: 8.1.0.9000
