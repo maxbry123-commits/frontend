@@ -1,0 +1,11 @@
+{
+  "role": "SOL_GPT1_BACKEND",
+  "mode": "ACTIVE_LOOP",
+  "directive": "Continue S1 loop; do not stop on first GAP; re-read main + Crazy Wall + STATE before each node; execute only S1-safe deltas; preserve fail-closed boundaries.",
+  "created_at": "2026-09-11",
+  "notes": [
+    "This file records continuation intent only; it is not a substitute for node evidence.",
+    "Vite/Supabase acquisition still requires explicit authorized destination under the canonical motor contract.",
+    "Fables wiring remains blocked until exact path+SHA+usable contract exists."
+  ]
+}
