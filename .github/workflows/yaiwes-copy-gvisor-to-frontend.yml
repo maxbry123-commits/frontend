@@ -17,8 +17,12 @@ jobs:
           ref: main
           fetch-depth: 1
           lfs: false
+          sparse-checkout: |
+            .github/workflows/yaiwes-copy-gvisor-to-frontend.yml
+            📂componentes open soure fromtend/gVisor
+          sparse-checkout-cone-mode: false
           path: dest
-      - name: Checkout agentes source
+      - name: Checkout canonical gVisor from agentes
         uses: actions/checkout@v4
         with:
           repository: maxbry123-commits/agentes
@@ -26,15 +30,16 @@ jobs:
           fetch-depth: 1
           lfs: false
           sparse-checkout: |
-            Core kernel Yaiwes/gVisor
+            Agente Yaiwes principal/execution-orchestration/container-pod-isolation/gvisor
           sparse-checkout-cone-mode: false
           path: src
       - name: Copy gVisor exactly
         run: |
           set -euo pipefail
-          SRC='src/Core kernel Yaiwes/gVisor'
+          SRC='src/Agente Yaiwes principal/execution-orchestration/container-pod-isolation/gvisor'
           DST='dest/📂componentes open soure fromtend/gVisor'
           test -d "$SRC"
+          test -n "$(find "$SRC" -type f -print -quit)"
           rm -rf "$DST"
           mkdir -p "$(dirname "$DST")"
           cp -a "$SRC" "$DST"
@@ -51,8 +56,8 @@ jobs:
             echo 'NO_CHANGE_ALREADY_COPIED'
             exit 0
           fi
-          git commit -m 'copy(frontend): gVisor from Core kernel Yaiwes'
-          for i in 1 2 3 4; do
+          git commit -m 'copy(frontend): gVisor from YAIWES canonical component'
+          for i in 1 2 3 4 5; do
             git push origin HEAD:main && exit 0
             git fetch origin main
             git rebase origin/main
