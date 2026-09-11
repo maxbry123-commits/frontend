@@ -25,15 +25,19 @@
     "owner_identity": "➡️ Astra plan fábrica UI YAIWES",
     "role": "persistent_frontend_factory_and_interface_integrator",
     "objective": "Frontend persistente de UI YAIWES + fábrica UI como herramienta principal de construcción, prueba, corrección y mejora; comprender contratos backend y preparar adapters/artefactos compatibles sin apropiarse de rutas backend de Sol.",
-    "status": "T1_FACTORY_FRONTEND_VERIFIED_CLOSED_IN_ASTRA_STAGING",
+    "status": "T1_FACTORY_FRONTEND_CLOSED_UNVERIFIED_ACTIVE_LOOP",
     "integration_allowlist": ["GitHub", "Hugging Face"],
     "task_gate": "TAREA_1_FACTORY_VERIFIED_CLOSED_BEFORE_TAREA_2_INTERFACE",
     "persistent_goal": "YAIWES UI es un Work multiplataforma con chat/orquestador tipo Jarvis que controla paneles y sistemas; frontend parcialmente local, seguro y cifrado; agentes/LLMs servidos desde web; componentes alojados en web; almacenamiento local por defecto con conectores opcionales del usuario; producto SaaS propietario; fábrica UI es el instrumento permanente para construir y mejorar la interfaz.",
     "backend_boundary": "READ_AND_DESIGN_AGAINST_BACKEND_CONTRACTS; donor backend code must remain separated and non-conflicting until explicit integration/handoff",
-    "verified_factory_path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/",
-    "verified_source_commit": "fe544a5f94ab41c25847f4745d326a4aff72e09e",
-    "verification_result": "LOGIC_PASS_6_OF_6 + E2E_RESPONSIVE_PASS_14_OF_14 + INDEPENDENT_VERIFIER_PASS",
-    "final_evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/FINAL-VERIFICATION-2026-09-10.md",
+    "tested_factory_path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/",
+    "tested_source_commit": "fe544a5f94ab41c25847f4745d326a4aff72e09e",
+    "verification_result": "LOGIC_PASS_6_OF_6 + E2E_RESPONSIVE_PASS_14_OF_14 + INDEPENDENT_VERIFIER_PASS; PERSISTENT_WEB_PREVIEW_PENDING",
+    "persistent_preview_status": "NOT_PUBLISHED",
+    "persistent_preview_url": null,
+    "hf_space_write_scope": "UNAVAILABLE_IN_CURRENT_CONNECTOR",
+    "deploy_bundle_smoke_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa398225527934177ec4c49",
+    "forensic_reopen_audit": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/AUDITORIA-FORENSE-XRAY-CIERRE-WEB-2026-09-11.md",
     "product_path_gate": "EXPLICIT_HANDOFF_REQUIRED_BEFORE_PRODUCTIVE_T2"
   },
   "canonical_architecture": [
@@ -51,7 +55,8 @@
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/PLAN-ASTRA-FABRICA-UI-YAIWES.md",
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/HANDOFF-ASTRA-FABRICA-UI-YAIWES.md",
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/RECOVERY-PATCH-ASTRA-FABRICA-UI-YAIWES.md",
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/CHECKPOINT-ASTRA-FABRICA-UI-YAIWES-2026-09-10.md"
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/CHECKPOINT-ASTRA-FABRICA-UI-YAIWES-2026-09-10.md",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/AUDITORIA-FORENSE-XRAY-CIERRE-WEB-2026-09-11.md"
   ],
   "source_truth_attachments": [
     {"title":"MAX-SYSTEM-100X-FINAL-1.md","status":"LOCATED_FILE_LIBRARY","role":"functional architecture / durable execution / state / recovery"},
@@ -77,18 +82,19 @@
     "T1_FACTORY_FRONTEND": {
       "owner": "➡️ Astra plan fábrica UI YAIWES",
       "reviewer": "SHERIFF",
-      "status": "VERIFIED_CLOSED",
+      "status": "CLOSED_UNVERIFIED",
       "write_paths": ["UI YAIWES/watchdog UI YAIWES/","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/"],
-      "rule": "INPUT literal -> architecture -> component map -> factory modules -> deterministic tests -> evidence -> VERIFIED_CLOSED",
+      "rule": "INPUT literal -> architecture -> component map -> factory modules -> deterministic tests -> persistent deploy -> visible URL -> HTTP/readback -> deployed E2E -> evidence -> independent review -> VERIFIED_CLOSED",
+      "current_node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY",
+      "open_gaps": ["PERSISTENT_WEB_PREVIEW_NOT_PUBLISHED","HF_SPACE_WRITE_SCOPE_UNAVAILABLE_IN_CURRENT_CONNECTOR","DEPLOYED_URL_HTTP_READBACK_PENDING","DEPLOYED_URL_E2E_SMOKE_PENDING"],
       "blocked_paths_until_handoff": ["UI YAIWES/Interface YAIWES ui/","UI YAIWES/Fabrica UI YAIWES/"],
-      "verified_source_commit": "fe544a5f94ab41c25847f4745d326a4aff72e09e",
-      "closure_evidence_commit": "618440e428778e0f70cf4364602460b3b514609e",
-      "state_close_commit": "62ccd140c2612567905ca99b2dad14744fd522d0",
-      "checkpoint_close_commit": "e8b8bb389e997be2d55a1deba8c0e83bbf37fc44",
+      "tested_source_commit": "fe544a5f94ab41c25847f4745d326a4aff72e09e",
+      "previous_closure_evidence_commit": "618440e428778e0f70cf4364602460b3b514609e",
       "hf_jobs": {
         "e2e_12_of_12": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35ce55527934177ec3f9e",
         "e2e_responsive_14_of_14": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d1521047bf1b037477c",
-        "independent_verifier": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d4e5527934177ec3fba"
+        "independent_verifier": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d4e5527934177ec3fba",
+        "deploy_bundle_http_smoke": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa398225527934177ec4c49"
       }
     },
     "T2_BACKEND_INTEGRATION": {
@@ -108,8 +114,8 @@
     "T2_INTERFACE_YAIWES": {
       "owner": "➡️ Astra plan fábrica UI YAIWES",
       "reviewer": "SHERIFF",
-      "status": "BLOCKED_PENDING_EXPLICIT_PRODUCT_PATH_HANDOFF",
-      "rule": "T1 factory is VERIFIED_CLOSED; productive T2 may start only after explicit frontend product-path handoff"
+      "status": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED_AND_PRODUCT_PATH_HANDOFF",
+      "rule": "productive T2 may start only after T1 persistent visible preview is VERIFIED_CLOSED and explicit frontend product-path handoff exists"
     },
     "T3_INDEPENDENT_AUDIT": {
       "owner": "ASTRA",
@@ -136,10 +142,11 @@
     "astra_handoff_commit": "26a2b44e8f5c44cc6edf4542985b77fb23ecf075",
     "previous_astra_checkpoint_commit": "68e12c2f0f47456155bcfe5af597cd5afbbc7792",
     "factory_final_evidence_commit": "618440e428778e0f70cf4364602460b3b514609e",
-    "factory_state_close_commit": "62ccd140c2612567905ca99b2dad14744fd522d0",
-    "factory_checkpoint_close_commit": "e8b8bb389e997be2d55a1deba8c0e83bbf37fc44",
+    "factory_state_reopen_commit": "d900ed4dc2959c7473ee029639eb567cefcc6138",
+    "factory_checkpoint_reopen_commit": "82eec87e3ce40492f0ac3dbdc4686dfa62dd1228",
     "factory_independent_verifier": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d4e5527934177ec3fba",
-    "state_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+    "factory_deploy_bundle_smoke": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa398225527934177ec4c49",
+    "state_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != DEPLOYED_VISIBLE != VERIFIED_CLOSED"
   },
   "debate_loop": {
     "status": "WAITING_SOL_PLAN_RESPONSE",
@@ -161,6 +168,6 @@
       "next_action": "string"
     }
   },
-  "next_node": "WAIT_PRODUCT_PATH_HANDOFF_BEFORE_T2_INTERFACE_YAIWES",
-  "closure": "T1_FACTORY_FRONTEND VERIFIED_CLOSED in Astra staging; T2_INTERFACE_YAIWES remains blocked until explicit product-path handoff"
+  "next_node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY",
+  "closure": "T1_FACTORY_FRONTEND remains CLOSED_UNVERIFIED until persistent web preview has visible URL + HTTP readback + deployed E2E + independent review; T2_INTERFACE_YAIWES remains blocked"
 }
