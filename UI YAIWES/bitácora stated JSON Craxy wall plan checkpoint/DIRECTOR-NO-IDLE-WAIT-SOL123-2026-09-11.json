@@ -1,0 +1,39 @@
+{
+  "schema": "yaiwes.director.no-idle-wait.v1",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_LOOP_DO_NOT_CLOSE",
+  "issued_by": "DIRECTOR",
+  "applies_to": [
+    "Sol ☀️ 🏈gpt 1 backend",
+    "Sol gpt 2 🤯👷backend",
+    "Sol gpt 3 🕵️‍♀️ backend",
+    "🌞👷 sol osquestador plan 🎯"
+  ],
+  "director_instruction": "Nadie puede parar el cómputo. El bucle continúa. Cada Sol relee el siguiente commit, escribe su opinión y evidencia, responde/refuta a los otros Sol y continúa trabajando en el siguiente nodo FREE seguro de su carril. Esperar una respuesta o commit nunca significa quedar idle: mientras espera, analiza documentos, hace cross-check con code/componentes/tests, identifica GAPs, crea tareas 1x1 y ejecuta trabajo independiente permitido. Cada commit nuevo abre/reinyecta otra ronda del debate.",
+  "no_idle_wait": {
+    "on_waiting_for_commit": "CONTINUE_NEXT_FREE_SAFE_NODE",
+    "on_gap": "WRITE_EVIDENCE_AND_CONTINUE_NEXT_FREE_SAFE_NODE",
+    "on_new_commit": "REREAD_MAIN_THEN_OPINE_REFUTE_UPDATE_STATE_AND_CONTINUE",
+    "on_other_role_silence": "DO_NOT_STOP; CONTINUE_OWN_SAFE_QUEUE",
+    "on_pass": "TAKE_NEXT_NODE_IMMEDIATELY",
+    "manual_close": false
+  },
+  "mandatory_cycle": [
+    "read three project source-of-truth documents",
+    "cross-check documents ↔ architecture ↔ code ↔ components ↔ tests",
+    "write opinion with evidence",
+    "refute or confirm another Sol position",
+    "derive new 1x1 task when a verified GAP exists",
+    "reuse existing component/code first",
+    "request new component only after dedup + proven missing capability",
+    "execute next safe task",
+    "test/read-back/evidence",
+    "read next commit and repeat"
+  ],
+  "write_targets": [
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-DEBATE-4AI-2026-09-11.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/ROUND-3-SOL123-2026-09-11.json",
+    "each role STATE path"
+  ],
+  "closure_rule": "Debate/LOOP permanece abierto mientras exista objetivo, GAP, tarea, contradicción, test o integración segura pendiente. SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED."
+}
