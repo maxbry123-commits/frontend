@@ -90,6 +90,8 @@ def run_persistence_loop(
         )
         if passed:
             trace.coda = coda(current)
+            if not verify_refute(trace.coda):
+                raise RuntimeError("Coda final validation failed; workflow remains unclosed")
             trace.closed = True
             break
 
