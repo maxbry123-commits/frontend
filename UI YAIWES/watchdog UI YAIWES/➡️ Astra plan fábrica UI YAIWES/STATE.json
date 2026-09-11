@@ -5,7 +5,7 @@
   "status": "CLOSED_UNVERIFIED",
   "gate": "T1_FACTORY_FRONTEND",
   "t2_interface": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED",
-  "base_audited_sha": "b520791191b0d07fcbf8478fcebb757306993cfb",
+  "base_audited_sha": "155488f0f274547c114a69bc0f00962939382e4b",
   "completed_nodes": [
     "P0_INPUT_LITERAL_READBACK",
     "P1_CAPABILITY_MATRIX",
@@ -29,9 +29,14 @@
     "P4C_HF_SPACE_DEPLOY_BUNDLE_CREATED",
     "P4C_DEPLOY_BUNDLE_LOCAL_HTTP_SMOKE_PASS",
     "P4D_GITHUB_PREVIEW_BRANCH_CREATED",
-    "P4D_GITHUB_PREVIEW_PAYLOAD_MATERIALIZED"
+    "P4D_GITHUB_PREVIEW_PAYLOAD_MATERIALIZED",
+    "P4D_GITHUB_PAGES_DEPLOY_WORKFLOW_EXECUTED",
+    "P4D_GITHUB_PAGES_ENABLEMENT_BLOCKER_VERIFIED",
+    "P4D_HF_SPACE_CREATE_ATTEMPT_EXECUTED",
+    "P4D_HF_SPACE_CREATE_403_BLOCKER_VERIFIED"
   ],
   "current_node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY",
+  "publish_blocker": "EXTERNAL_PERMISSION_REQUIRED",
   "factory_v0": {
     "path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/",
     "source_present": true,
@@ -50,14 +55,21 @@
     "deployed_url_smoke_e2e_pass": false,
     "github_preview_branch": "astra-factory-preview",
     "github_preview_branch_head": "bb470f7fd51e5d2c1f7fd3ddd5d3c888156365b3",
-    "github_pages_endpoint_access": "UNAVAILABLE_VIA_CURRENT_CONNECTOR",
+    "github_pages_workflow": ".github/workflows/astra-factory-pages.yml",
+    "github_pages_run": "https://github.com/maxbry123-commits/frontend/actions/runs/34579642079",
+    "github_pages_result": "FAIL_CONFIGURE_PAGES_SITE_NOT_ENABLED",
+    "github_pages_enablement_requirement": "NON_GITHUB_TOKEN_WITH_REPO_OR_PAGES_WRITE_OR_GITHUB_APP_ADMINISTRATION_WRITE_AND_PAGES_WRITE",
+    "hf_space_repo_target": "COMAND-CENTER-1/yaiwes-factory-v0",
+    "hf_space_create_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa3bcbb21047bf1b03752e2",
+    "hf_space_create_result": "403_NO_RIGHTS_TO_CREATE_SPACE",
     "verified_closed": false
   },
   "verification_jobs": {
     "e2e_12_of_12": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35ce55527934177ec3f9e",
     "e2e_responsive_14_of_14": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d1521047bf1b037477c",
     "independent_verifier": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d4e5527934177ec3fba",
-    "deploy_bundle_http_smoke": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa398225527934177ec4c49"
+    "deploy_bundle_http_smoke": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa398225527934177ec4c49",
+    "hf_space_create_attempt": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa3bcbb21047bf1b03752e2"
   },
   "verified_donors": {
     "playwright_test_harness": {
@@ -86,13 +98,13 @@
   },
   "open_gaps": [
     "PERSISTENT_WEB_PREVIEW_NOT_PUBLISHED",
-    "HF_SPACE_WRITE_SCOPE_UNAVAILABLE_IN_CURRENT_CONNECTOR",
-    "GITHUB_PAGES_CONFIGURATION_ENDPOINT_UNAVAILABLE_IN_CURRENT_CONNECTOR",
+    "GITHUB_PAGES_SITE_ENABLEMENT_PERMISSION_REQUIRED",
+    "HF_SPACE_CREATE_PERMISSION_REQUIRED",
     "DEPLOYED_URL_HTTP_READBACK_PENDING",
     "DEPLOYED_URL_E2E_SMOKE_PENDING",
     "PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT"
   ],
   "closure_rule": "source SHA+build+deployment persistent+visible URL+HTTP/readback+smoke E2E against deployed URL+evidence+independent reviewer",
-  "closure_result": "REOPENED_AFTER_FORENSIC_CROSSCHECK",
-  "next_node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY"
+  "closure_result": "BLOCKED_BY_VERIFIED_EXTERNAL_PUBLISH_PERMISSIONS",
+  "next_node": "P4D_WAIT_FOR_AUTHORIZED_PUBLISH_PERMISSION_THEN_DEPLOY_VERIFY"
 }
