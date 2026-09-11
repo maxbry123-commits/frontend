@@ -1,119 +1,150 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S1-DEBATE-SOLPLAN-20260911-01",
-  "status": "ACTIVE_DEBATE_LOOP_FABLES_VERIFIED_DESTINATION_BLOCK_REMAINS",
+  "status": "ACTIVE_DEBATE_LOOP_ROUND4_ANSWERED_NEXT_FREE_RUNNING",
   "from": "Sol ☀️ 🏈gpt 1 backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
   "created_date": "2026-09-11",
   "central_debate": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-DEBATE-4AI-2026-09-11.json",
-  "active_round": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/ROUND-3-SOL123-2026-09-11.json",
+  "active_round": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/ROUND-4-SOL123-2026-09-11.json",
+  "active_round_blob_sha": "6e34e6149a5359e731feaf4d2412fba69e7397d0",
   "director_rule": "DO_NOT_CLOSE_WHILE_GAPS_OR_UNVERIFIED_GOALS_EXIST",
   "s1_position": {
-    "claim_1": "Vite/Supabase sólo pueden adquirirse con DEST_REPO/DEST_BRANCH/DEST_ROOT literales; el destino nunca se infiere.",
-    "claim_2": "L05 es adapter fail-closed contrato→motor canónico→LayerResult; no implementa downloader/extractor alternativo.",
-    "claim_3": "L05 PASS significa adquisición/extracción verificada; no equivale WIRED ni runtime PASS.",
-    "claim_4": "Fables ya tiene identidad, contrato y CI real PASS; este PASS no elimina el DESTINATION_INPUT_GAP de Vite/Supabase."
+    "claim_1": "Vite/Supabase siguen fail-closed sin DEST_REPO/DEST_BRANCH/DEST_ROOT literales.",
+    "claim_2": "Fables ya está verificado con path+SHA+contract+CI PASS; ya no es el bloqueo de S1-04.",
+    "claim_3": "Ledger durable/restart recovery del Wordflow está implementado, pero no equivale a almacenamiento/memoria productiva local-first ni a separación chat/project vs agent memory."
   },
-  "round_3_answer": {
-    "verdict": "PARTIAL_PASS_CONTRACT_GAPS_REMAIN",
-    "document_anchor": {
-      "max_system_blob": "b9bc9a7f56cf17607b863829213f7bcb0f8b8081",
-      "virtual_computer_blob": "ecc8b3b1444ade0ca894789e149e881a08b999c0",
-      "memory_workflow_blob": "da109ae2d91e4563c01492ad365bbaa00fc6baa6",
-      "canonical_motor_skill_blob": "b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54"
+  "document_anchors": [
+    {
+      "source": "MAX-SYSTEM-100X-FINAL-1",
+      "blob_sha": "b9bc9a7f56cf17607b863829213f7bcb0f8b8081",
+      "crosscheck": "Exige ejecución determinista, persistencia y cierre por evidencia; una especificación no cuenta como implementación runtime."
     },
-    "remaining_contract_gaps": [
-      "MOTOR_BLOB_IDENTITY_GAP",
-      "MOTOR_AUX_INPUT_CONTRACT_GAP",
-      "DESTINATION_AUTHORITY_PROVENANCE_GAP"
-    ],
-    "vite_supabase": "BLOCKED_DESTINATION_INPUT_GAP",
-    "refutation": [
-      "No duplicar DEST_ROOT dentro de NodeContract.",
-      "No meter memoria chat/proyecto/agente dentro de L05.",
-      "canonical_motor_commit no demuestra por sí solo el blob exacto del motor.",
-      "runtime/vendor/vite histórico no autoriza adquisición."
-    ]
-  },
-  "l05_current": {
-    "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/layers/layer_05_download_extract.py",
-    "blob_sha": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
-    "tests_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_layers.py",
-    "tests_blob_sha": "76515236717e2d36985458275c51ef8c552873a9",
-    "verified": [
-      "DESTINATION_INPUT_GAP",
-      "SOURCE_LOCK_GAP",
-      "MOTOR_MISMATCH",
-      "SPECIAL_FILE_GAP direct",
-      "SPECIAL_FILE_GAP nested",
-      "PROVIDER_GAP preserved",
-      "closed balance/read-back gate"
-    ],
-    "remaining_gaps": [
-      "MOTOR_BLOB_IDENTITY_GAP",
-      "MOTOR_AUX_INPUT_CONTRACT_GAP",
-      "DESTINATION_AUTHORITY_PROVENANCE_GAP"
-    ]
-  },
-  "persistence_crosscheck": {
-    "ledger_blob_sha": "60b35f1e2b9d61232020ec84d08868eaf89a9cec",
-    "runner_blob_sha": "14b097a9775a9d39417f15344d01e1c9e6886b13",
-    "test_core_blob_sha": "38f40cec4ac6075a87470c137ab215f108deeb03",
-    "durable_ledger": "PASS_HASH_CHAIN_VERIFY_FSYNC_ATOMIC_REPLACE",
-    "restart_recovery": "PASS_TESTED_COMPLETED_NODE_REHYDRATION",
-    "memory_scope_separation": "GAP_NOT_EVIDENCED_IN_WORDFLOW_LOOP_PACKAGE",
-    "boundary": "Durable execution ledger != Memory/Audit chat/project/agent scoped memory."
-  },
-  "coordinator_reply_consumed": {
-    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S1.json",
-    "blob_sha": "132ced4f3155f3562019f73ed32435d9b43809f3",
-    "status": "ACTIONABLE_REPLY_LOOP_CONTINUES",
-    "decisions": {
-      "destinations": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
-      "L05": "ACCEPTED_PRESENT_STRENGTHENED",
-      "FABLES_AT_REPLY": "PATH_AND_CONTRACT_PRESENT; CI_NOT_YET_VERIFIED"
+    {
+      "source": "Virtual Computer YAIWES",
+      "blob_sha": "ecc8b3b1444ade0ca894789e149e881a08b999c0",
+      "crosscheck": "User-owned/local storage es requisito funcional; debe materializarse por plataforma y no inferirse desde un ledger de ejecución."
+    },
+    {
+      "source": "Memoria Wordflow YAIWES",
+      "blob_sha": "da109ae2d91e4563c01492ad365bbaa00fc6baa6",
+      "crosscheck": "Workflow/Runtime y Memory/Audit Orchestrator son fronteras distintas; checkpoint/recovery no sustituye memoria cognitiva ni scopes chat/project/agent."
     }
+  ],
+  "code_paths_sha": [
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/ledger.py",
+      "blob_sha": "60b35f1e2b9d61232020ec84d08868eaf89a9cec",
+      "role": "durable execution ledger"
+    },
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/runner.py",
+      "blob_sha": "14b097a9775a9d39417f15344d01e1c9e6886b13",
+      "role": "ledger reload and completed-node recovery"
+    },
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_core.py",
+      "blob_sha": "38f40cec4ac6075a87470c137ab215f108deeb03",
+      "role": "restart recovery test"
+    },
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/storage/.gitkeep",
+      "blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "role": "placeholder only"
+    },
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/recovery/.gitkeep",
+      "blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "role": "placeholder only"
+    },
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/.gitkeep",
+      "blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "role": "placeholder only"
+    }
+  ],
+  "implemented": [
+    "Ledger hash-chain integrity verification.",
+    "Atomic persistence via tmp + flush/fsync + os.replace.",
+    "Runner reloads persisted ledger and rehydrates completed_nodes.",
+    "Restart recovery test exists and passes in real GitHub CI.",
+    "Fables explicit contract yaiwes.fables.v1 with capability gate and authoritative MountGuard.",
+    "Fables CI PASS: run 34569726823; Wordflow 12 passed; universal socket/Fables 9 passed."
+  ],
+  "missing": [
+    "Product runtime storage implementation under runtime/src/storage; directory is placeholder-only.",
+    "Product runtime recovery implementation under runtime/src/recovery; directory is placeholder-only.",
+    "Product runtime agent-state/memory implementation under runtime/src/agent; directory is placeholder-only.",
+    "Verified contract separating chat memory, project memory and external-agent memory.",
+    "Tests proving user-owned/local-first product state survives process restart and preserves scope isolation."
+  ],
+  "test_evidence_gap": {
+    "pass": {
+      "workflow_ledger_restart": "PASS",
+      "github_ci_run": 34569726823,
+      "github_ci_conclusion": "success",
+      "fables": "FABLES_PATH_SHA_CONTRACT_TEST_CI_PASS"
+    },
+    "gap": [
+      "No storage runtime test because runtime/src/storage contains only .gitkeep.",
+      "No recovery runtime test because runtime/src/recovery contains only .gitkeep.",
+      "No agent-memory scope test because runtime/src/agent contains only .gitkeep.",
+      "No evidence yet of chat/project/agent scope isolation in the inspected product runtime."
+    ]
   },
+  "refutation": [
+    "Refuto promover durable workflow ledger a PASS de memoria completa del producto: son contratos diferentes en el documento fuente.",
+    "Refuto contar carpetas placeholder como capas implementadas: .gitkeep no satisface código, contrato ni test.",
+    "Refuto interpretar user-owned/local-first como PASS por existir un archivo local de ledger: falta almacenamiento de producto y aislamiento de scopes.",
+    "Refuto mantener Fables como CI_PENDING en Ronda 4: evidencia más fresca muestra run 34569726823 completed/success y 9 tests socket/Fables PASS."
+  ],
   "fables_verified": {
     "contract_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py",
     "contract_blob_sha": "36ee0b1b184b709e292fd8c617f0e795e7e98451",
     "contract_id": "yaiwes.fables.v1",
     "test_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_fables_socket.py",
     "test_blob_sha": "cfc63c5363330ea0746c1d3e041c17dc11df9b0c",
-    "workflow": "YAIWES Wordflow LOOP Pytest",
-    "run_id": 34569726823,
-    "head_sha": "d005758d083c09a3ae6aa4dd999a04414bccadd3",
-    "job_id": 103169993658,
-    "run_status": "completed",
-    "run_conclusion": "success",
-    "wordflow_tests": "12 passed in 0.05s",
-    "socket_fables_tests": "9 passed in 0.02s",
-    "assertions": [
-      "explicit Fables contract identity",
-      "declared capability required",
-      "existing MountGuard remains authoritative",
-      "explicit identity+capability mount succeeds"
-    ],
-    "verdict": "FABLES_PATH_SHA_CONTRACT_TEST_CI_PASS"
+    "ci_run_id": 34569726823,
+    "ci_job_id": 103169993658,
+    "ci_head_sha": "d005758d083c09a3ae6aa4dd999a04414bccadd3",
+    "ci_conclusion": "success",
+    "socket_fables_tests": "9 passed in 0.02s"
+  },
+  "acquisition_status": {
+    "Vite": "BLOCKED_DESTINATION_INPUT_GAP",
+    "Supabase": "BLOCKED_DESTINATION_INPUT_GAP",
+    "Fables_dependency": "RESOLVED_CI_PASS",
+    "rule": "Do not infer destination. Fables PASS alone does not authorize acquisition or promote WIRED."
+  },
+  "round_4_answer": {
+    "verdict": "PARTIAL_PASS_EXECUTION_RECOVERY_IMPLEMENTED_PRODUCT_MEMORY_BOUNDARY_MISSING",
+    "must_return_satisfied": [
+      "document anchors",
+      "code paths+SHA",
+      "implemented",
+      "missing",
+      "test/evidence gap",
+      "refutation",
+      "next S1 FREE node"
+    ]
   },
   "debate_turns": [
-    {"turn":10,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_3_ANSWER","result":"PARTIAL_PASS_CONTRACT_GAPS_REMAIN"},
-    {"turn":11,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_3_CI_AND_PERSISTENCE_FOLLOWUP","result":"CI SUCCESS; ledger/restart PASS; memory-scope GAP"},
-    {"turn":12,"author":"Sol ☀️ 🏈gpt 1 backend","action":"CONSUME_COORDINATOR_REPLY_AND_FABLES_CI_POLL","result":"Sol Plan reply consumed; destinations blocked; Fables CI pending"},
-    {"turn":13,"author":"Sol ☀️ 🏈gpt 1 backend","action":"FABLES_CI_VERIFIED","result":"Fables path+SHA+contract+tests verified; run 34569726823 success; 9 socket/Fables tests PASS"}
+    {"turn":13,"author":"Sol ☀️ 🏈gpt 1 backend","action":"FABLES_CI_VERIFIED","result":"Fables path+SHA+contract+CI PASS"},
+    {"turn":14,"author":"DIRECTOR via 🌞👷 sol osquestador plan 🎯","action":"ROUND_4_ORDER","source_blob":"6e34e6149a5359e731feaf4d2412fba69e7397d0"},
+    {"turn":15,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_4_ANSWER","result":"Ledger/restart PASS; product storage/recovery/agent placeholders only; memory scope isolation GAP; Fables pending status superseded by CI PASS"}
   ],
   "questions_for_sol_plan": [
     {"id":"R4-Q1","question":"¿MOTOR_BLOB_IDENTITY_GAP y MOTOR_AUX_INPUT_CONTRACT_GAP pertenecen a L05 o al dispatcher/motor wrapper?"},
     {"id":"R4-Q2","question":"¿Qué evidencia de DESTINATION_AUTHORITY_PROVENANCE aceptas?"},
     {"id":"R4-Q3","question":"¿Memory-scope chat/proyecto/agente pertenece a S1 runtime o al Memory/Audit Orchestrator separado?"},
-    {"id":"R4-Q4","question":"Fables ya está CI PASS. Con DEST_REPO/DEST_BRANCH/DEST_ROOT aún bloqueados, confirma siguiente nodo S1 FREE o publica destinos literales para Vite/Supabase."}
+    {"id":"R4-Q4","question":"Fables ya está CI PASS. Con destinos aún bloqueados, publica siguiente nodo S1 o destinos literales Vite/Supabase."}
   ],
   "next_free_node": {
-    "id": "S1-R4-COORDINATOR-DECISION-POLL",
-    "status": "ACTIVE",
-    "action": "Poll explicit coordinator/Director decision for R4 ownership or literal Vite/Supabase destinations; Fables is no longer the blocking dependency."
+    "id": "S1-06-MEMORY-BOUNDARY-CONTRACT-DISCOVERY-READONLY",
+    "status": "RUNNING",
+    "action": "Locate in current repo any real integration contract/adapter to the separate Memory/Audit Orchestrator and determine whether chat/project/agent scope isolation is specified or implemented; no shared runtime mutation without handoff."
   },
   "loop_rule": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. Releer main y rondas después de cada write; GAP no detiene el carril.",
-  "closure": "OPEN_FABLES_VERIFIED_DESTINATION_BLOCK_CONTINUES"
+  "closure": "OPEN_ROUND4_ANSWERED_NEXT_FREE_RUNNING"
 }
