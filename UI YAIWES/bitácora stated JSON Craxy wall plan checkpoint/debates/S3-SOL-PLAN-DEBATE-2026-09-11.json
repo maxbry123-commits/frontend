@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S3-DEBATE-SOLPLAN-20260911-01",
-  "status": "ROUND10_Q1_Q4_ACTIONABLE_ACTIVE_LOOP",
+  "status": "ROUND11_Q1_Q4_ACTIONABLE_OSS11_S3_TEST_IN_PROGRESS",
   "from": "Sol gpt 3 🕵️‍♀️ backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
@@ -170,6 +170,50 @@
     "fables_promotion": false,
     "foreign_state_modified": false
   },
+  "round11_oss11_testcontainers": {
+    "response_to": "S3-DEBATE-SOLPLAN-20260911-01",
+    "handoff_node": "OSS11-S3-01-TESTCONTAINERS",
+    "authorization_source": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/DISPATCH-OSS11-SOL123-2026-09-11.json",
+    "allowed_paths": ["runtime/src/integration/**", "runtime/tests/**"],
+    "claim": {
+      "state": "OWNER_CLAIMED",
+      "commit": "052b45306f4b70c4db8f21ab43abbb390b474d2a",
+      "readback_blob": "47db27d7b4b268fdf8a8fd46469d565b4d6a0979",
+      "foreign_assignments_modified": false
+    },
+    "source": {
+      "route": "UI YAIWES/componentes open soure UI YAIWES/Testcontainers Python/code",
+      "source_run": 34646657007,
+      "publish_commit": "f84e202a0c595ba08a4fbac5e83efb8620c5e182",
+      "tree_sha256": "ebc82b8782a0e2ef5417afc432079df34260e81a648f6a7a48663e13f70eab70",
+      "pyproject_blob": "4ba4209edfc2c0da988457750c1157abfb37a2bb"
+    },
+    "ci_gap_verified": {
+      "workflow": ".github/workflows/yaiwes-wordflow-loop-pytest.yml",
+      "workflow_blob": "79ce833dc6da1537dc96e4df516f7c154c641bbf",
+      "finding": "Canonical runtime pytest triggers on runtime/tests/** but sparse checkout omits Testcontainers source and deterministic install step omits Testcontainers dependencies. Harness therefore self-materializes the already-published source from the current Git commit inside runner temp and installs that local source for the disposable test; no repository workflow path was modified."
+    },
+    "harness": {
+      "route": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_testcontainers_httpx_real_adapter.py",
+      "commit": "8958c3a584d1e60ea0adfeee0c4f6e6e1dc546b4",
+      "readback_blob": "bfc9d1db7e6af6a4dbc0fbb84895fc46754f55a5",
+      "adapter": "plugins.httpx_adapter",
+      "lifecycle": "Testcontainers DockerContainer nginx:1.27-alpine -> mapped HTTP -> YAIWES HttpxRuntime request -> response assertion -> disposable container removal assertion",
+      "lfs": false,
+      "force": false
+    },
+    "test": {
+      "workflow_run": 34648576199,
+      "job": 103425149331,
+      "head_sha": "8958c3a584d1e60ea0adfeee0c4f6e6e1dc546b4",
+      "status_at_round_write": "in_progress",
+      "completed_pre_steps": ["checkout:PASS", "setup-python:PASS", "deterministic dependencies:PASS", "Wordflow LOOP tests:PASS"],
+      "runtime_test_step": "IN_PROGRESS",
+      "result": "NOT_PROMOTED_PENDING_FINAL_LOG"
+    },
+    "fables_a2": "NOT_VERIFIED_UNCHANGED",
+    "generic_socket_promoted": false
+  },
   "debate_turns": [
     {"turn":1,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"OPEN_DEBATE","result":"Q1-Q4 published."},
     {"turn":2,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"LOOP_FOLLOWUP","result":"Independent queue continued without treating silence as authorization."},
@@ -184,13 +228,14 @@
     {"turn":11,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"TAILWIND_SHIKI_RUNTIME_PASS","result":"#25/#27 RUNTIME_PASS_NOT_WIRED; #22 failed upstream tests."},
     {"turn":12,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_CURRENT_SOURCE_GAP","result":"#28 CURRENT_SOURCE_READBACK_GAP_NOT_PASS."},
     {"turn":13,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"DECOMPOSE_REACT_VIRTUOSO_FAILURES","result":"#22 failure separated into browser-import and functional failures; no blind patch."},
-    {"turn":14,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"AUDIT_BATCH31_35_ROUTE_SHA_READBACK_TEST","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34573966326 audited at immutable head b4a47773c95d719e5b42ea9089df03772944365f. #32 Rete and #34 GSAP PASS_NOT_WIRED; #31 XYFlow and #35 Lucide TEST_FAIL_NOT_PASS; #33 Sigma is a real coverage gap because no job exists in the fresh workflow/run. Package readback SHAs recorded. A2 remains NOT_VERIFIED and no socket/Fables promotion occurred."}
+    {"turn":14,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"AUDIT_BATCH31_35_ROUTE_SHA_READBACK_TEST","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34573966326 audited at immutable head b4a47773c95d719e5b42ea9089df03772944365f. #32 Rete and #34 GSAP PASS_NOT_WIRED; #31 XYFlow and #35 Lucide TEST_FAIL_NOT_PASS; #33 Sigma is a real coverage gap because no job exists in the fresh workflow/run. Package readback SHAs recorded. A2 remains NOT_VERIFIED and no socket/Fables promotion occurred."},
+    {"turn":15,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CLAIM_AND_EXECUTE_OSS11_S3_TESTCONTAINERS","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Fresh coordinator dispatch OSS11-S3-01-TESTCONTAINERS was claimed without touching S1/S2. Docker-capable CI gap was verified, a scoped disposable Testcontainers->HTTPX real-adapter lifecycle harness was added under runtime/tests, readback SHA recorded, and canonical runtime pytest run 34648576199 started. Fail-closed: no PASS until final runtime log; Fables A2 unchanged."}
   ],
   "next_action": {
     "owner": "S3",
-    "action": "Continue safe independent 21-40 work. For #31 and #35, obtain exact failure evidence before any surgical patch; for #33, require a current canonical test route/workflow before execution. Audit 36-40 if current canonical workflows/routes exist. Do not wire any vendor PASS until explicit handoff prerequisites are satisfied. Keep Fables A2 fail-closed.",
+    "action": "Consume final run 34648576199/job 103425149331. If PASS, record lifecycle log and close only OSS11-S3-01 as TESTED/PASS; if FAIL, extract exact log and patch only within S3 allowed_paths. Continue safe independent work; keep Fables A2 fail-closed and do not promote generic socket.",
     "status": "EXECUTING_FAIL_CLOSED"
   },
-  "last_poll_result": "COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_BATCH31_35_AUDITED",
+  "last_poll_result": "COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_OSS11_S3_CLAIMED_HARNESS_COMMITTED_TEST_RUNNING",
   "closure": "DO_NOT_CLOSE_ACTIVE_DEBATE_LOOP"
 }
