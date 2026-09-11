@@ -26,16 +26,7 @@ def _strong_sha256(value: str) -> bool:
 
 def _typed_motor_gaps(result: dict) -> list[str]:
     """Preserve acquisition-boundary failure class without repairing it here."""
-    explicit = str(result.get("gap_code", "")).upper()
-    diagnostic = " ".join(
-        [
-            explicit,
-            str(result.get("error", "")),
-            str(result.get("reason", "")),
-            json.dumps(result.get("errors", []), sort_keys=True, default=str),
-        ]
-    ).upper()
-
+    diagnostic = json.dumps(result, sort_keys=True, default=str).upper()
     gaps: list[str] = []
     if "SOURCE_SPECIAL_FILE_GAP" in diagnostic or "SPECIAL_FILE_GAP" in diagnostic:
         gaps.append("SPECIAL_FILE_GAP")
