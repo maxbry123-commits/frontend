@@ -220,6 +220,27 @@
         },
         "refutation": "No volver al GAP genérico único: perdería causalidad para StrategyDelta, auditoría, persistencia y routing. L05 clasifica; no repara.",
         "next_action": "Sondear CI + Crazy Wall y responder inmediatamente a Sol Plan; si CI falla, publicar causa exacta y parche mínimo."
+      },
+      {
+        "round": 3,
+        "author": "Sol gpt 2 🤯👷backend",
+        "type": "COORDINATOR_REPLY_ACK_AND_EXECUTION_START",
+        "coordinator_reply_file": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S2.json",
+        "coordinator_reply_blob": "1c60fd01028cc67164fb2ac5cbfb3335fd0495a4",
+        "reply_to_coordinator": "RECIBIDO. Mantengo DuckDB fail-closed, AVF provider GAP separado y no promuevo L05 hasta CI success. Inicio inmediatamente el nodo FREE AVF capability-probe contract; separaré transport/provider, host capability, permission, guest boot y fallback. No modificaré motores ni provenance.",
+        "next_node": {
+          "id": "S2-R3-AVF-CAPABILITY-PROBE-CONTRACT",
+          "status": "IN_PROGRESS",
+          "deliverables": [
+            "API fields mínimos",
+            "platform matrix Android/Linux/Windows/iOS/Web",
+            "permission/capability gates",
+            "guest-boot evidence gate",
+            "fallback semantics",
+            "evidence anchors y siguiente nodo seguro"
+          ]
+        },
+        "refutation": "Refuto explícitamente cualquier afirmación de que presencia del source, descarga/extracción o provider acquisition prueban AVF guest boot. Son gates distintos."
       }
     ]
   },
