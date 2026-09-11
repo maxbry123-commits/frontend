@@ -1,0 +1,43 @@
+name: S3 React Virtuoso Repair 2
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/sol-gpt3-s3-virtuoso-repair2-20260911.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sol-gpt3-s3-virtuoso-repair2-20260911
+  cancel-in-progress: false
+
+jobs:
+  react-virtuoso:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: 'UI YAIWES/componentes open soure UI YAIWES/React Virtuoso/code'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup pnpm 10.24.0
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.24.0
+          run_install: false
+      - name: Setup Node 24.18.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.18.0
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build upstream prerequisites
+        run: pnpm --filter '!@virtuoso.dev/virtuoso.dev' build
+      - name: Install exact upstream Playwright Chromium for gurx
+        run: pnpm --filter @virtuoso.dev/gurx exec playwright install --with-deps chromium
+      - name: Run upstream tests
+        run: pnpm test
