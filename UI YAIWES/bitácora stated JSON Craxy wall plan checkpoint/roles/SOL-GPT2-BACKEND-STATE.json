@@ -6,12 +6,13 @@
   "name": "Sol gpt 2 🤯👷backend",
   "node_prefix": "S2",
   "status": "ACTIVE_LOOP_WITH_BLOCKING_GAPS",
-  "base_main_sha": "4dbade9a16f09670daaf928eda82281d15a0ebd4",
+  "base_main_sha": "f10204204664b4756f2612a42ea0a7b9ce41937c",
   "crazy_wall_blob_sha": "f5d7ade7966a1a0fc20bf6f0b11a805b91b1b3be",
   "state_blob_sha_observed": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
   "canonical_motors_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
   "canonical_policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
   "director_delta_seen": "2026-09-11T05:06:57.471Z",
+  "loop_cycle": 3,
   "nodes": {
     "S2-01": {
       "component": "DuckDB",
@@ -61,15 +62,32 @@
     },
     "S2-02": {
       "component": "AVF",
-      "status": "MOTOR_PROVIDER_GAP_AND_RUNTIME_CAPABILITY_GAP",
+      "status": "MOTOR_PROVIDER_GAP_RUNTIME_CAPABILITY_PROBE_GAP_AND_HARDWARE_TEST_GAP",
       "canonical_source": "https://android.googlesource.com/platform/packages/modules/Virtualization/",
       "evidence_file": "UI YAIWES/automation/S2-avf-capabilities-20260911/AVF-CAPABILITIES.json",
-      "evidence_commit": "4dbade9a16f09670daaf928eda82281d15a0ebd4",
+      "evidence_commit": "f10204204664b4756f2612a42ea0a7b9ce41937c",
+      "evidence_blob_sha": "1abe3f95c9ee1d1b43207890ad2efeb94d983ce0",
+      "functional_source_blob": "ecc8b3b1444ade0ca894789e149e881a08b999c0",
       "transport": {
         "canonical_motor_compatible": false,
         "reason": "immutable engine normalizes non-GitHub SOURCE_REPO by prefixing https://github.com/",
         "motor_modified": false,
         "alternate_provider_used": false
+      },
+      "runtime_implementation_audit": {
+        "runtime_src_tree_sha": "be46fd0fdb7694d3af0c6a76814fe139a0dbaf7e",
+        "identifiers_checked": [
+          "VirtualMachineManager",
+          "MANAGE_VIRTUAL_MACHINE",
+          "AndroidVMProvider",
+          "HypervisorCapabilityManager",
+          "CapabilityDetector",
+          "pKVM",
+          "AVF"
+        ],
+        "code_search_matches": 0,
+        "avf_or_android_backend_found": false,
+        "gap": "AVF_CAPABILITY_PROBE_IMPLEMENTATION_GAP"
       },
       "runtime_capability_summary": {
         "Android_ARM64_physical": "CONDITIONAL_SUPPORTED; requires device AVF capability plus restricted VM permission; guest boot not tested",
@@ -93,7 +111,7 @@
         ],
         "reason": "alternate provider/provenance is not the canonical android.googlesource source and no handoff authorizes substitution"
       },
-      "verdict": "FAIL_CLOSED_PROVIDER_AND_HARDWARE_CAPABILITY_GAP"
+      "verdict": "FAIL_CLOSED_PROVIDER_RUNTIME_AND_HARDWARE_CAPABILITY_GAP"
     },
     "S2-03": {
       "status": "READBACK_COMPLETED_FRESH_MAIN",
@@ -114,6 +132,7 @@
       "duckdb_latest_failed": 1,
       "duckdb_latest_pending": 0,
       "avf_provider_gap": true,
+      "avf_runtime_capability_probe_implemented": false,
       "avf_physical_android_guest_boot_verified": false,
       "four_residual_readback_present": 0,
       "four_residual_readback_expected": 4,
@@ -128,5 +147,5 @@
     "title": "SOL2 Backend YAIWES",
     "scope_aligned_to_s2_queue": true
   },
-  "next_action": "Continue S2 loop by rereading Crazy Wall+STATE. Recheck final-root readback and any new coordinator handoff. DuckDB requires an explicitly authorized symlink-aware canonical acquisition strategy or authorized equivalent source; do not patch motor or sanitize source. AVF requires an explicitly authorized provider-compatible canonical path plus actual supported Android ARM64 device/Cuttlefish capability tests before any guest-boot claim."
+  "next_action": "Continue S2 loop by rereading Crazy Wall+STATE and fresh final-root readback. DuckDB requires an explicitly authorized symlink-aware canonical acquisition strategy or authorized equivalent source; do not patch motor or sanitize source. AVF requires an explicitly authorized provider-compatible canonical path, implementation of the capability probe/backend by an assigned code node, and actual supported Android ARM64/Cuttlefish capability tests before any guest-boot claim."
 }
