@@ -1,0 +1,35 @@
+{
+  "schema": "yaiwes.role-state.v2",
+  "contract": "tel.workflow/v3",
+  "role": "ASTRA_GPT2",
+  "display_name": "🤯 Astra 2 gpt backend UI YAIWES 🕹️🛂🏗️👷",
+  "status": "READY_TO_CLAIM",
+  "watchdog_required": true,
+  "watchdog_cadence": "1 hour",
+  "coordination_source": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-STATE-HANDOFF-XRAY-2026-09-11.json",
+  "claimed_node": null,
+  "offered_node": "XRA2-COMPONENT-RESEARCH-DEDUP",
+  "write_scope": [
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA2-GPT-BACKEND-STATE.json"
+  ],
+  "node_contract": {
+    "one_task_one_node": true,
+    "max_steps": 3,
+    "steps": ["1_RESEARCH_OR_VERIFY", "2_EXECUTE_AUTHORIZED_DELTA", "3_VERIFY_AND_REPORT"],
+    "claim_requires": ["node_id", "base_main_sha", "claimed_at"],
+    "report_requires": ["result", "official_urls", "dedup_evidence", "path_or_sha", "next_node"]
+  },
+  "current_mission": {
+    "assertion_to_validate": "Los candidatos 20X marcados CANDIDATE_NEW aportan una capacidad no cubierta por el inventario y pueden entrar a planificación de adquisición sin duplicar componentes existentes.",
+    "constraints": [
+      "official repository/docs first",
+      "community only secondary",
+      "no invented URLs",
+      "no download or repo mutation outside this state path without a separately claimed node",
+      "license and provenance must be recorded",
+      "GAP on one candidate does not stop research on the next candidate"
+    ]
+  },
+  "anti_collision": "Do not write SOL1/SOL2/SOL3/Astra1 state files or shared architecture/Crazy Wall. Report here; SOL_ORQUESTADOR consolidates shared truth after fresh readback.",
+  "last_report": null
+}
