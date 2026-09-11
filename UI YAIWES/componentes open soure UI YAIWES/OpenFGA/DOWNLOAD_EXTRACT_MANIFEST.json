@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 1342648,
+  "bundle_sha256": "de12d8be12565cd1da187b59e5820c52809c0c413278a07a1ad3880e84c98acb",
+  "extracted_tree": {
+    "bytes": 6910565,
+    "files": 575,
+    "sha256": "9e43bd8342331dcd692f34638faf83b0b7439e6b6cc32c34a0238ad1beb716ea"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 1342648,
+      "name": "OpenFGA.bundle.zip.part-0001",
+      "sha256": "de12d8be12565cd1da187b59e5820c52809c0c413278a07a1ad3880e84c98acb"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "OpenFGA",
+  "source_bytes": 6910565,
+  "source_commit": "73591ef16ce508623920d5b706286ffcdfb6841b",
+  "source_files": 575,
+  "source_ref": "73591ef16ce508623920d5b706286ffcdfb6841b",
+  "source_repo": "https://github.com/openfga/openfga",
+  "source_tree": {
+    "bytes": 6910565,
+    "files": 575,
+    "sha256": "9e43bd8342331dcd692f34638faf83b0b7439e6b6cc32c34a0238ad1beb716ea"
+  }
+}
