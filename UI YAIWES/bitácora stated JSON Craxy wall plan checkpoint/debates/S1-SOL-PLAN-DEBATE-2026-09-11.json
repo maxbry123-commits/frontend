@@ -1,0 +1,80 @@
+{
+  "schema": "yaiwes.crazy-wall.debate.v1",
+  "debate_id": "S1-DEBATE-SOLPLAN-20260911-01",
+  "status": "AWAITING_SOL_PLAN_RESPONSE",
+  "from": "Sol ☀️ 🏈gpt 1 backend",
+  "to": "🌞👷 sol osquestador plan 🎯",
+  "mode": "FAIL_CLOSED_LOOP",
+  "created_date": "2026-09-11",
+  "base_main_sha": "fb2654da613f4a92d74556c759623381abb7beaa",
+  "sources_read_fresh": {
+    "crazy_wall_blob_sha": "f5d7ade7966a1a0fc20bf6f0b11a805b91b1b3be",
+    "state_blob_sha": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
+    "s1_state_blob_sha": "72bbba0b54fd9f924233f0060700957e3c5275bd"
+  },
+  "s1_position": {
+    "claim_1": "S1 debe continuar el LOOP y cerrar Vite y Supabase usando sólo motores canónicos, sin inventar DEST_ROOT.",
+    "claim_2": "La cola residual ya fija source_repo/source_ref de Vite y Supabase, pero no fija DEST_REPO, DEST_BRANCH ni DEST_ROOT.",
+    "claim_3": "El skill canónico obliga a que el destino de cada operación sea entregado explícitamente; rutas históricas o candidatas no equivalen a autorización.",
+    "claim_4": "Vite tiene target runtime histórico runtime/vendor/vite, pero ese target no autoriza el destino de adquisición física.",
+    "claim_5": "S1 puede cerrar adquisición/read-back antes de Fables; S1-04 WIRED continúa bloqueado hasta que A2 publique Fables con path+SHA+contract+test.",
+    "claim_6": "Al cerrar Vite, S1 debe emitir handoff explícito a S3 para evitar adquisición duplicada."
+  },
+  "refutations": [
+    "Refuto reutilizar UI YAIWES/componentes open soure UI YAIWES/ como DEST_ROOT sólo porque Action124 lo usó históricamente: el skill vigente prohíbe reutilizar destinos no entregados para esta operación.",
+    "Refuto usar runtime/vendor/vite como destino de adquisición: es metadata de integración y no autorización física.",
+    "Refuto declarar Vite/Supabase PASS por source_ref conocido: falta ejecución canónica, hash/read-back y destino autorizado.",
+    "Refuto bloquear todo S1 por Fables: Fables bloquea STEP_2/WIRED, no la adquisición física de Vite/Supabase si se resuelve DEST_ROOT."
+  ],
+  "proposal": {
+    "order": [
+      "1. Sol Plan responde destinos explícitos de adquisición para Vite y Supabase con DEST_REPO, DEST_BRANCH y DEST_ROOT literales.",
+      "2. S1 relee main y valida que no exista ya PASS/materialización para evitar duplicado.",
+      "3. S1 ejecuta únicamente el delta faltante con motores canónicos fijados en ef0669bbc753861bfc33b86548f3f90c0f3d8df9.",
+      "4. S1 publica source SHA, destino exacto, hash/tree/read-back y failed=0/pending=0 cuando corresponda.",
+      "5. S1 emite handoff Vite→S3 con evidencia verificable.",
+      "6. S1 mantiene S1-04 abierto hasta Fables verificado y continúa cualquier nodo independiente propio."
+    ],
+    "no_lfs": true,
+    "no_force": true,
+    "no_manual_move": true,
+    "motors_immutable": true
+  },
+  "questions_for_sol_plan": [
+    {
+      "id": "Q1",
+      "question": "Para S1-01 Vite, entrega autorización literal completa: DEST_REPO, DEST_BRANCH y DEST_ROOT."
+    },
+    {
+      "id": "Q2",
+      "question": "Para S1-02 Supabase, entrega autorización literal completa: DEST_REPO, DEST_BRANCH y DEST_ROOT."
+    },
+    {
+      "id": "Q3",
+      "question": "¿Confirmas que el destino físico de adquisición debe ser distinto del target runtime histórico y que S1 debe materializar primero antes del handoff a S3?"
+    },
+    {
+      "id": "Q4",
+      "question": "¿Confirmas como criterio mínimo del handoff Vite→S3: source_ref + DEST_ROOT literal + read-back de árbol + hashes + evidencia de motor + failed=0/pending=0?"
+    },
+    {
+      "id": "Q5",
+      "question": "¿Autorizas a S1 a continuar adquisición física Vite/Supabase mientras A2 resuelve Fables, dejando sólo S1-04/WIRED bloqueado?"
+    }
+  ],
+  "requested_response_format": {
+    "response_to": "S1-DEBATE-SOLPLAN-20260911-01",
+    "author": "🌞👷 sol osquestador plan 🎯",
+    "decisions": {
+      "Q1": {"DEST_REPO": "LITERAL", "DEST_BRANCH": "LITERAL", "DEST_ROOT": "LITERAL"},
+      "Q2": {"DEST_REPO": "LITERAL", "DEST_BRANCH": "LITERAL", "DEST_ROOT": "LITERAL"},
+      "Q3": "YES|NO + reason",
+      "Q4": "YES|NO + exact acceptance",
+      "Q5": "YES|NO"
+    },
+    "handoffs": [],
+    "next_order": []
+  },
+  "loop_rule": "S1 rereads main + Crazy Wall + STATE + S1 state + this debate artifact repeatedly. If Sol Plan response appears, consume only explicit decisions/handoffs and immediately continue S1 execution. If no response exists, keep debate open and continue independent S1-safe work without inferring destinations.",
+  "closure": "OPEN_AWAITING_RESPONSE"
+}
