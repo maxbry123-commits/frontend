@@ -3,8 +3,8 @@
   "contract": "tel.workflow/v3",
   "role": "ASTRA_GPT1_BACKEND",
   "name": "🧑‍💻Astra gpt 1 backend UI YAIWES 🌀🌀🌀 👷👷🕵️‍♀️",
-  "updated_at": "2026-09-11T23:37:34.623Z",
-  "base_sha": "168b12de4c574a165d32601968ee7dd864614d8a",
+  "updated_at": "2026-09-11T23:38:07.310Z",
+  "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
   "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
   "status": "ACTIVE_LOOP_GAPS_OPEN",
   "scope": "A1 audit only; sole write path is this role_state_path",
@@ -65,14 +65,14 @@
     },
     {
       "path": "conectividad con Router inteligente universal/PUENTE-RIU-frontend.yaml",
-      "blob_sha": "be4255b537c4a2a292273a8595df4a6d5e158ffd"
+      "blob_sha": "9c78844fa2f83bcbf0b5606ae3fecfc9d73d7503"
     }
   ],
   "nodes": [
     {
       "id": "A1-01",
       "status": "AUDITED_STALE_SUMMARIES_WITH_NEW_SEPARATE_DELTAS",
-      "base_sha": "168b12de4c574a165d32601968ee7dd864614d8a",
+      "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "wall_reads_before_nodes": [
         "2404928bd332e2abb1466c9a4095bd52bd24acea",
@@ -87,13 +87,25 @@
       },
       "findings": [
         "STATE, CHECKPOINT and canonical HANDOFF remain byte-identical and do not reconcile current runtime, policy, auxiliary OSS or router-bridge deltas.",
-        "The frontend RIU bridge is newly declared at blob be4255b537c4a2a292273a8595df4a6d5e158ffd, but its own status is PENDING_E2E_ROUTER; declaration is not connectivity proof."
-      ]
+        "The frontend RIU bridge is newly declared at blob 9c78844fa2f83bcbf0b5606ae3fecfc9d73d7503, but its own status is PENDING_E2E_ROUTER; declaration is not connectivity proof."
+      ],
+      "riu_bridge": {
+        "blob_sha": "9c78844fa2f83bcbf0b5606ae3fecfc9d73d7503",
+        "schema": "riu.connectivity.bridge/v2",
+        "status": "FRONTEND_BRIDGE_V2_DECLARED",
+        "verification": "PENDING_E2E_ROUTER_CREDENTIALS",
+        "health_gates": [
+          "github:PENDING_RUNTIME_CREDENTIAL_TEST",
+          "huggingface:PENDING_RUNTIME_CREDENTIAL_TEST",
+          "huggingface_space:PENDING_RUNTIME_CREDENTIAL_TEST",
+          "claude_github_mcp:PENDING_RUNTIME_CREDENTIAL_TEST"
+        ]
+      }
     },
     {
       "id": "A1-02",
       "status": "EVIDENCE_AUDITED_CLOSURE_BLOCKED",
-      "base_sha": "168b12de4c574a165d32601968ee7dd864614d8a",
+      "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "residuals": [
         {
@@ -134,7 +146,7 @@
     {
       "id": "A1-03",
       "status": "AUDITED_NEW_CI_CANCELLATION_STALE_01_20",
-      "base_sha": "168b12de4c574a165d32601968ee7dd864614d8a",
+      "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1",
       "reported_pass": 17,
@@ -163,7 +175,7 @@
     {
       "id": "A1-04",
       "status": "INSTRUCTIONS_PUBLISHED_IN_OWN_STATE",
-      "base_sha": "168b12de4c574a165d32601968ee7dd864614d8a",
+      "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "refutations": [
         "A declared RIU YAML bridge with PENDING_E2E_ROUTER cannot be counted as connected.",
@@ -1030,13 +1042,14 @@
   ],
   "current_delta": {
     "observed_at": "2026-09-11T23:37:34.623Z",
-    "base_sha": "168b12de4c574a165d32601968ee7dd864614d8a",
+    "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
     "previous_role_blob_sha": "215803c03b7db56f53ab0dc274a946272b1ef097",
     "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
     "result": "DELTA_AUDITED_GAPS_OPEN",
     "runtime_tests_executed_this_cycle": false,
     "ci_logs_independently_read": true,
     "mutation_performed": "OWN_STATE_ONLY",
-    "new_evidence": "S3 Testcontainers retry run 34656458039/job 103449840014 independently confirmed CANCELLED_NOT_PASS; frontend RIU bridge is DECLARED/PENDING_E2E. Four residual exact paths remain absent and canonical 01-20 stays 17/20."
+    "new_evidence": "S3 Testcontainers retry run 34656458039/job 103449840014 independently confirmed CANCELLED_NOT_PASS; frontend RIU bridge is DECLARED/PENDING_E2E. Four residual exact paths remain absent and canonical 01-20 stays 17/20.",
+    "corrected_current_bridge_blob": "9c78844fa2f83bcbf0b5606ae3fecfc9d73d7503"
   }
 }
