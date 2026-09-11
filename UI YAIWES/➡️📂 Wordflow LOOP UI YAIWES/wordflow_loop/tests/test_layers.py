@@ -87,6 +87,26 @@ def test_download_extract_preserves_special_file_gap():
     assert result.output["motor_result"]["error"] == motor_result["error"]
 
 
+def test_download_extract_preserves_nested_special_file_gap():
+    request = valid_request()
+    motor_result = {
+        "verdict": "GAPS_PENDING",
+        "items": {
+            "DuckDB": {
+                "status": "FAILED",
+                "error": "SOURCE_SPECIAL_FILE_GAP:data/link_to_file,data/link_to_upper_dir",
+            }
+        },
+        "balance": {"total": 1, "failed": 1, "pending": 0},
+    }
+    result = layer_05_download_extract.run(
+        acquisition_node(), {"request": request, "motor_result": motor_result}
+    )
+    assert result.status == Status.BLOCKED
+    assert result.gaps == ["SPECIAL_FILE_GAP"]
+    assert "SOURCE_SPECIAL_FILE_GAP" in result.output["motor_result"]["items"]["DuckDB"]["error"]
+
+
 def test_download_extract_preserves_provider_gap():
     request = valid_request()
     motor_result = {
