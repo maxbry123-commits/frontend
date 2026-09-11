@@ -1,0 +1,54 @@
+{
+  "schema": "yaiwes.g12.policy-lane-evidence-delta.v1",
+  "contract": "tel.workflow/v3",
+  "status": "SUBLANE_PASS_GLOBAL_ACTIVE_LOOP",
+  "base_main_sha": "b76dcff39c77523e5cdff563642abe38412d0903",
+  "owner": "SOL_ORQUESTADOR",
+  "node_id": "G12-POLICY-OPA-OPENFGA",
+  "requirement": "Policy/authority must authorize deterministic runtime actions; LLM output alone cannot grant authority.",
+  "layer": "Workflow/Runtime -> Governance/Policy -> Fables boundary",
+  "files": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/governance/external_policy.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py"
+  ],
+  "source_components": [
+    "UI YAIWES/componentes open soure UI YAIWES/OPA",
+    "UI YAIWES/componentes open soure UI YAIWES/OpenFGA"
+  ],
+  "source_state": "SOURCE_PRESENT_READBACK_VERIFIED",
+  "wiring": {
+    "adapter_commit": "6a768e36927f5eebe387cd488a9ef990fbf87002",
+    "fables": true,
+    "workflow_owner_preserved": true,
+    "stabilize_owner_preserved": true
+  },
+  "tests": {
+    "unit_regression_run": 34646998280,
+    "unit_regression_result": "SUCCESS: Wordflow 15 passed; runtime 47 passed + 6 subtests",
+    "live_e2e_run": 34647825462,
+    "live_e2e_job": 103422713669,
+    "live_e2e_result": "SUCCESS",
+    "assertions": {
+      "OPA": {"alice_allow": true, "bob_allow": false},
+      "OpenFGA": {"alice_viewer_document1": true, "bob_viewer_document1": false}
+    }
+  },
+  "evidence": [
+    "CRAZY-WALL-OPA-OPENFGA-LIVE-DELTA-2026-09-11.json",
+    "run:34646998280",
+    "run:34647825462/job:103422713669"
+  ],
+  "verdict": "REQUIREMENT_LAYER_FILE_TEST_EVIDENCE_CHAIN_PASS",
+  "scope_limit": "Closes only the policy/authority lane mapping inside G12; does not close G12 global or the project.",
+  "role_reconciliation": {
+    "SOL_GPT1": "OSS11-S1-01-RQLITE remains unclaimed in current role state",
+    "SOL_GPT2": "OSS11-S2-01-OTEL remains unclaimed in current dispatch",
+    "SOL_GPT3": "OSS11-S3-01-TESTCONTAINERS is OWNER_CLAIMED in dispatch"
+  },
+  "next": [
+    "Sol1 consume rqlite dispatch or explicitly REUSE_REJECT with evidence",
+    "Sol2 consume OpenTelemetry Collector dispatch and test OTLP boundary",
+    "Sol3 complete Testcontainers node and report SHA/run",
+    "Continue G12 mapping for memory, platform/sandbox, integration/consolidation and recovery lanes"
+  ]
+}
