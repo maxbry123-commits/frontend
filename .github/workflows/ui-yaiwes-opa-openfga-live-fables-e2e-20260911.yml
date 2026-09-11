@@ -1,0 +1,119 @@
+name: UI YAIWES OPA OpenFGA Live Fables E2E
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ui-yaiwes-opa-openfga-live-fables-e2e-20260911.yml'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/governance/external_policy.py'
+      - 'UI YAIWES/componentes open soure UI YAIWES/OPA/**'
+      - 'UI YAIWES/componentes open soure UI YAIWES/OpenFGA/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ui-yaiwes-opa-openfga-live-fables-e2e-20260911
+  cancel-in-progress: false
+
+jobs:
+  live-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/componentes open soure UI YAIWES/OPA/code
+            UI YAIWES/componentes open soure UI YAIWES/OpenFGA/code
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/governance/external_policy.py
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+          cache: false
+      - name: Build acquired OPA and OpenFGA sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          OPA='UI YAIWES/componentes open soure UI YAIWES/OPA/code'
+          FGA='UI YAIWES/componentes open soure UI YAIWES/OpenFGA/code'
+          (cd "$OPA" && go build -o "$RUNNER_TEMP/opa" .)
+          (cd "$FGA" && go build -o "$RUNNER_TEMP/openfga" ./cmd/openfga)
+          "$RUNNER_TEMP/opa" version
+          "$RUNNER_TEMP/openfga" version
+      - name: Start local policy services
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/opa" run --server --addr=127.0.0.1:8181 >"$RUNNER_TEMP/opa.log" 2>&1 & echo $! >"$RUNNER_TEMP/opa.pid"
+          "$RUNNER_TEMP/openfga" run >"$RUNNER_TEMP/openfga.log" 2>&1 & echo $! >"$RUNNER_TEMP/openfga.pid"
+          python - <<'PY'
+          import time, urllib.request
+          for url in ('http://127.0.0.1:8181/health','http://127.0.0.1:8080/healthz'):
+              last=None
+              for _ in range(60):
+                  try:
+                      with urllib.request.urlopen(url, timeout=2) as r:
+                          if r.status < 500: break
+                  except Exception as e: last=e; time.sleep(.5)
+              else: raise SystemExit(f'health failed {url}: {last!r}')
+          PY
+      - name: Exercise Fables adapters against live services
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib, sys, urllib.error, urllib.request
+          src=pathlib.Path('UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src').resolve()
+          sys.path.insert(0,str(src))
+          from governance.external_policy import OPA_CAPABILITY, OPENFGA_CAPABILITY, build_external_policy_socket
+
+          def request(method,url,payload,raw=False):
+              if raw:
+                  data=payload.encode()
+                  headers={'Content-Type':'text/plain'}
+              else:
+                  data=json.dumps(payload).encode()
+                  headers={'Content-Type':'application/json'}
+              req=urllib.request.Request(url,data=data,headers=headers,method=method)
+              with urllib.request.urlopen(req,timeout=10) as r:
+                  body=r.read()
+                  return json.loads(body) if body else {}
+
+          policy='''package yaiwes\nimport rego.v1\ndefault allow := false\nallow if input.subject == "alice"\n'''
+          request('PUT','http://127.0.0.1:8181/v1/policies/yaiwes',policy,raw=True)
+
+          store=request('POST','http://127.0.0.1:8080/stores',{'name':'yaiwes-e2e'})
+          store_id=store['id']
+          model=request('POST',f'http://127.0.0.1:8080/stores/{store_id}/authorization-models',{
+              'schema_version':'1.1',
+              'type_definitions':[
+                  {'type':'user'},
+                  {'type':'document','relations':{'viewer':{'this':{}}},'metadata':{'relations':{'viewer':{'directly_related_user_types':[{'type':'user'}]}}}}
+              ]
+          })
+          model_id=model['authorization_model_id']
+          request('POST',f'http://127.0.0.1:8080/stores/{store_id}/write',{
+              'writes':{'tuple_keys':[{'user':'user:alice','relation':'viewer','object':'document:1'}]},
+              'authorization_model_id':model_id
+          })
+
+          def transport(method,url,payload):
+              return request(method,url,payload)
+          socket=build_external_policy_socket(transport)
+          opa=socket.mount('opa',OPA_CAPABILITY)
+          fga=socket.mount('openfga',OPENFGA_CAPABILITY)
+          assert opa.decide({'subject':'alice'}).allowed is True
+          assert opa.decide({'subject':'bob'}).allowed is False
+          assert fga.check(store_id,{'user':'user:alice','relation':'viewer','object':'document:1'},authorization_model_id=model_id).allowed is True
+          assert fga.check(store_id,{'user':'user:bob','relation':'viewer','object':'document:1'},authorization_model_id=model_id).allowed is False
+          print(json.dumps({'verdict':'LIVE_RUNTIME_PASS','opa':[True,False],'openfga':[True,False],'store_id':store_id,'authorization_model_id':model_id},sort_keys=True))
+          PY
+      - name: Service logs on failure
+        if: failure()
+        shell: bash
+        run: |
+          echo '--- OPA ---'; cat "$RUNNER_TEMP/opa.log" || true
+          echo '--- OPENFGA ---'; cat "$RUNNER_TEMP/openfga.log" || true
