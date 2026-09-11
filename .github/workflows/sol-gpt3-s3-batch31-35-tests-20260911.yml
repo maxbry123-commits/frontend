@@ -1,0 +1,160 @@
+name: S3 Batch 31-35 Vendor Tests
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/sol-gpt3-s3-batch31-35-tests-20260911.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sol-gpt3-s3-batch31-35-tests-20260911
+  cancel-in-progress: false
+
+jobs:
+  xyflow-31:
+    name: '31 XYFlow React Flow'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            UI YAIWES/componentes open soure UI YAIWES/XYFlow React Flow/code
+          sparse-checkout-cone-mode: false
+      - name: Copy snapshot to path without spaces
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/xyflow"
+          cp -a "UI YAIWES/componentes open soure UI YAIWES/XYFlow React Flow/code/." "$RUNNER_TEMP/xyflow/"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.4
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.16.0
+      - name: Install locked dependencies
+        working-directory: ${{ runner.temp }}/xyflow
+        run: pnpm install --frozen-lockfile
+      - name: Build packages
+        working-directory: ${{ runner.temp }}/xyflow
+        run: pnpm build
+      - name: Typecheck packages
+        working-directory: ${{ runner.temp }}/xyflow
+        run: pnpm typecheck
+      - name: Install Playwright Chromium
+        working-directory: ${{ runner.temp }}/xyflow
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Run upstream React Playwright tests
+        working-directory: ${{ runner.temp }}/xyflow
+        env:
+          CI: 'true'
+        run: pnpm test:react
+
+  rete-32:
+    name: '32 Rete.js'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            UI YAIWES/componentes open soure UI YAIWES/Rete.js
+          sparse-checkout-cone-mode: false
+      - name: Copy snapshot to path without spaces
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/rete"
+          cp -a "UI YAIWES/componentes open soure UI YAIWES/Rete.js/." "$RUNNER_TEMP/rete/"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install locked dependencies
+        working-directory: ${{ runner.temp }}/rete
+        run: npm ci
+      - name: Test
+        working-directory: ${{ runner.temp }}/rete
+        run: npm run test --if-present
+      - name: Performance tests
+        working-directory: ${{ runner.temp }}/rete
+        run: npm run perf --if-present
+      - name: Lint
+        working-directory: ${{ runner.temp }}/rete
+        run: npm run lint --if-present -- --output sonar stdout
+      - name: Build
+        working-directory: ${{ runner.temp }}/rete
+        run: npm run build
+
+  gsap-34:
+    name: '34 GSAP distribution runtime'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            UI YAIWES/componentes open soure UI YAIWES/GSAP
+          sparse-checkout-cone-mode: false
+      - name: Copy distribution to path without spaces
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/gsap"
+          cp -a "UI YAIWES/componentes open soure UI YAIWES/GSAP/." "$RUNNER_TEMP/gsap/"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Pack exact snapshot
+        working-directory: ${{ runner.temp }}/gsap
+        run: npm pack --ignore-scripts
+      - name: Install packed distribution in clean consumer
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/gsap-consumer"
+          cd "$RUNNER_TEMP/gsap-consumer"
+          npm init -y >/dev/null
+          npm install "$RUNNER_TEMP/gsap/gsap-3.15.0.tgz"
+      - name: CommonJS exports smoke
+        working-directory: ${{ runner.temp }}/gsap-consumer
+        run: node -e "const m=require('gsap'); if(!m.gsap || typeof m.gsap.to!=='function') throw new Error('gsap.to missing'); console.log('CJS gsap.to OK')"
+      - name: ESM exports smoke
+        working-directory: ${{ runner.temp }}/gsap-consumer
+        run: node --input-type=module -e "const m=await import('gsap'); if(!m.gsap || typeof m.gsap.to!=='function') throw new Error('gsap.to missing'); console.log('ESM gsap.to OK')"
+
+  lucide-35:
+    name: '35 Lucide'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            UI YAIWES/componentes open soure UI YAIWES/Lucide/code
+          sparse-checkout-cone-mode: false
+      - name: Copy snapshot to path without spaces
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/lucide"
+          cp -a "UI YAIWES/componentes open soure UI YAIWES/Lucide/code/." "$RUNNER_TEMP/lucide/"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.22.0
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.11.1
+      - name: Install locked dependencies
+        working-directory: ${{ runner.temp }}/lucide
+        run: pnpm install --frozen-lockfile
+      - name: Run workspace tests
+        working-directory: ${{ runner.temp }}/lucide
+        run: pnpm test
+      - name: Build workspace packages
+        working-directory: ${{ runner.temp }}/lucide
+        run: pnpm build
