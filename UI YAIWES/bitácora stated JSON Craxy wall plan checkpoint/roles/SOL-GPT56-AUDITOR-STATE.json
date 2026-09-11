@@ -13,32 +13,61 @@
     ],
     "rule": "Do not overwrite other role-state paths; use fresh blob SHA before every write."
   },
-  "current_task": "G11 recovery subgate: durable latest event/output read-back after restart",
-  "current_node": "S56-G11-01",
-  "blockers": {
-    "G18_ASTRA_PREVIEW_PUBLISH": "Repository Pages is not enabled/configured; configure-pages fails with Not Found. Auto-enablement requires a non-GITHUB_TOKEN credential with Pages/admin permission.",
-    "G19_HF_STATIC_SPACE_CREDENTIAL": "All five configured HF secret aliases resolve empty; workflow exits HF_SECRET_NOT_FOUND before packaging."
+  "completed_nodes": [
+    {
+      "id": "S56-G11-01",
+      "gap": "G11_MULTI_SANDBOX_RECOVERY subgate",
+      "status": "TESTED_SUBGATE_PASS",
+      "finding_before": "LayerRunner recovered only completion status; durable ledger omitted NodeContract literal/literal_sha256 and LayerResult.output.",
+      "delta": {
+        "runner_commit": "10259b83e0b7354a44f86566307cbd44fe5cf0b3",
+        "runner_blob": "c1467be7aa2e39ba336f07f9f38137dcfdf4f357",
+        "test_commit": "d5d7c6c22386263122758ef06349ca121fc918a7",
+        "test_blob": "2a935e3671a62a96febb215487706b0fb80a1258",
+        "features": [
+          "persist literal and literal_sha256 in hash-chained ledger event",
+          "persist LayerResult.output in hash-chained ledger event",
+          "rebuild latest_events from durable ledger at startup",
+          "recover_event(node_id) returns defensive deep copy",
+          "restart regression verifies literal/hash/output read-back and mutation isolation"
+        ]
+      },
+      "ci": {
+        "workflow": "YAIWES Wordflow LOOP Pytest",
+        "run_id": 34640223144,
+        "job_id": 103397859184,
+        "head_sha": "d5d7c6c22386263122758ef06349ca121fc918a7",
+        "conclusion": "success",
+        "wordflow": "13 passed in 0.06s",
+        "plugins_fables_stabilize": "17 passed in 0.04s"
+      },
+      "scope_limit": "This proves durable latest node result/literal read-back on restart. It does NOT prove full workspace recovery, multi-host failover, payload persistence, or global VERIFIED_CLOSED."
+    }
+  ],
+  "external_blockers": {
+    "G18_ASTRA_PREVIEW_PUBLISH": {
+      "status": "BLOCKED_REPO_SETTING_OR_ADMIN_CREDENTIAL",
+      "run_id": 34579642079,
+      "job_id": 103199980538,
+      "evidence": "Payload verification passes. actions/configure-pages@v5 receives enablement=false and GET Pages site returns Not Found because Pages is not enabled/configured. Existing workflow already grants pages:write and id-token:write.",
+      "safe_next": "Enable/configure Pages for GitHub Actions or provide an authorized non-GITHUB_TOKEN credential for configure-pages enablement. Do not mark publish PASS before a fresh deployment run."
+    },
+    "G19_HF_STATIC_SPACE_CREDENTIAL": {
+      "status": "BLOCKED_MISSING_SECRET",
+      "run_id": 34591171118,
+      "job_id": 103236571091,
+      "evidence": "HF_TOKEN, HUGGINGFACE_TOKEN, HUGGING_FACE_TOKEN, HUGGINGFACEHUB_API_TOKEN and HUGGING_FACE_HUB_TOKEN all resolve empty; job exits HF_SECRET_NOT_FOUND before package/upload/read-back.",
+      "safe_next": "Provide one authorized HF write token under an accepted secret name, then execute fresh publish/read-back."
+    }
   },
+  "current_task": "G12/G11 evidence integrity cross-check: determine whether strong evidence verifies bytes or only hash syntax.",
+  "current_node": "S56-G12-01",
   "audit_evidence": {
     "crazy_wall_blob": "2404928bd332e2abb1466c9a4095bd52bd24acea",
-    "gap_ledger_blob": "f61ab0c9ddd43ebf8919d14462939d30cc8ff090",
-    "runner_blob": "074bbb0a8c6074bcc3b0e16482b93bbc9b9d7a2f",
+    "gap_ledger_blob_at_claim": "f61ab0c9ddd43ebf8919d14462939d30cc8ff090",
     "ledger_blob": "60b35f1e2b9d61232020ec84d08868eaf89a9cec",
-    "contracts_blob": "59596986623cc1cc99b206d82c41d4053716a286",
-    "test_core_blob": "38f40cec4ac6075a87470c137ab215f108deeb03",
-    "g18_run": 34579642079,
-    "g18_job": 103199980538,
-    "g19_run": 34591171118,
-    "g19_job": 103236571091
+    "contracts_blob_at_claim": "59596986623cc1cc99b206d82c41d4053716a286"
   },
-  "finding": "LayerRunner persists status/evidence/actions/touched_paths but omits NodeContract literal/literal_sha256 and LayerResult.output. Existing restart test proves completed-node replay only, not durable result read-back.",
-  "planned_delta": [
-    "persist literal, literal_sha256 and output in each ledger event",
-    "maintain latest_events map rebuilt from ledger on startup",
-    "expose recover_event(node_id) read-back API",
-    "add restart regression test for literal/output read-back and latest-event semantics",
-    "verify through existing yaiwes-wordflow-loop-pytest workflow"
-  ],
-  "heartbeat_at": "2026-09-11T19:37:00Z",
-  "next_free_node": "After CI, register commit/run evidence; then continue G11/G12 or another independent executable gap."
+  "heartbeat_at": "2026-09-11T19:43:00Z",
+  "next_free_node": "Audit verifier/evidence reference semantics; patch only if a concrete fail-closed integrity gap is reproducible."
 }
