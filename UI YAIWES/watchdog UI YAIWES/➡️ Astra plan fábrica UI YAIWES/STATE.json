@@ -5,30 +5,34 @@
   "status": "ACTIVE_LOOP",
   "gate": "T1_FACTORY_FRONTEND",
   "t2_interface": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED",
-  "base_audited_sha": "0130520585cc7f54f3fcfddbb2a523dd062e5e2d",
+  "base_audited_sha": "b7bfd8511535545ecd30cf8b292d914f584b517b",
   "completed_nodes": [
     "P0_INPUT_LITERAL_READBACK",
     "P1_CAPABILITY_MATRIX",
     "P2_FACTORY_CONTRACTS",
     "P2_STAGING_ROOTS",
-    "P3_FACTORY_V0_STATIC_IMPLEMENTATION"
+    "P3_FACTORY_V0_STATIC_IMPLEMENTATION",
+    "P4A_FACTORY_V0_RUNTIME_LOGIC_TEST_6_OF_6"
   ],
-  "current_node": "P4_FACTORY_V0_EXECUTABLE_TEST_AND_PREVIEW",
+  "current_node": "P4B_FACTORY_V0_VISUAL_PREVIEW_E2E",
   "factory_v0": {
     "path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/",
     "source_present": true,
     "readback": true,
-    "runtime_test_pass": false,
+    "runtime_logic_test_pass": true,
+    "runtime_logic_test_result": "PASS_6_OF_6",
+    "runtime_test_evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/TEST-EVIDENCE-2026-09-10.md",
+    "visual_preview_e2e_pass": false,
     "verified_closed": false
   },
   "frontend_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/",
   "backend_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/backend/",
   "backend_policy": "DONOR_STAGING_ONLY",
   "open_gaps": [
-    "EXECUTABLE_PREVIEW_TEST_NOT_YET_RUN",
+    "VISUAL_PREVIEW_E2E_NOT_YET_RUN",
     "PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT",
     "OSS_SOURCE_COMMIT_LICENSE_VERIFICATION_PENDING_PER_COMPONENT",
     "INDEPENDENT_REVIEW_REQUIRED_FOR_VERIFIED_CLOSED"
   ],
-  "closure_rule": "path+SHA/diff+runtime test/log+readback+independent verifier"
+  "closure_rule": "path+SHA/diff+runtime test/log+visual preview/readback+independent verifier"
 }
