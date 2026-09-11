@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.audit.gap-ledger.v1",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_AUDIT",
+  "rule": "Cada GAP exige owner, requisito fuente, evidencia, estado, delta y verify_final. No borrar historial: sólo promover con evidencia.",
+  "seed_gaps": [
+    {"id":"G01_FABLES","status":"OPEN","owner":"SOL_GPT3","gap":"Fables sin identidad+path+SHA+contrato+test verificables","blocks":["STEP2 wiring","integration real"],"next":"localizar/cross-check y test; socket genérico no equivale a Fables"},
+    {"id":"G02_VITE_DEST","status":"OPEN","owner":"SOL_GPT1","gap":"Vite sin destination literal/autorizado para adquisición física","next":"releer handoff/director input; no inferir"},
+    {"id":"G03_SUPABASE_DEST","status":"OPEN","owner":"SOL_GPT1","gap":"Supabase sin destination literal/autorizado para adquisición física","next":"releer handoff/director input; no inferir"},
+    {"id":"G04_DUCKDB_SPECIAL","status":"OPEN_FAIL_CLOSED","owner":"SOL_GPT2","gap":"DuckDB official source contiene symlinks/special files rechazados por motor canónico inmutable","next":"StrategyDelta sólo con provenance oficial/autorización; no sanitizar ni modificar motor"},
+    {"id":"G05_AVF_PROVIDER","status":"OPEN_FAIL_CLOSED","owner":"SOL_GPT2","gap":"AVF canonical source android.googlesource incompatible con transporte GitHub-only del motor actual","next":"separar provider acquisition de runtime capability; no mirror sin autorización"},
+    {"id":"G06_AVF_CAPABILITY","status":"OPEN","owner":"SOL_GPT2","gap":"capability probe/backend/hardware guest boot no verificados","next":"mapear Android ARM64/Cuttlefish y permisos; no prometer AVF en Windows/Linux/iOS/Web"},
+    {"id":"G07_INTEGRATION_01_20","status":"OPEN","owner":"SOL_GPT3","gap":"SOURCE_PRESENT/vendor PASS no demuestra WIRED; big-AGI/Vercel/Vite requieren integración real según Fables/destino","next":"consumir Fables + handoffs; ejecutar runtime integration tests"},
+    {"id":"G08_BATCH_21_40","status":"OPEN","owner":"SOL_GPT3","gap":"21-40 parcialmente probados; 22/25/27/28/30 StrategyDelta y 31-40 pendientes","next":"resolver fallos por componente sin declarar WIRED"},
+    {"id":"G09_MEMORY_BOUNDARY","status":"AUDIT_REQUIRED","owner":"SOL_GPT1","gap":"documento exige Workflow/Runtime separado de Memory/Audit + Checkpoint/Recovery; cobertura completa en code no verificada","next":"4-pass document↔code mapping"},
+    {"id":"G10_PLATFORM_MATRIX","status":"AUDIT_REQUIRED","owner":"SOL_GPT2","gap":"documento exige Windows/Linux/Android/iOS/Web con backends distintos; implementación real por plataforma no verificada","next":"4-pass capability/code matrix"},
+    {"id":"G11_MULTI_SANDBOX_RECOVERY","status":"AUDIT_REQUIRED","owner":"SOL_ORQUESTADOR","gap":"multi-sandbox, durable checkpoint, failover y recovery del proyecto completo aún no tienen verify_final global","next":"mapear requisitos→code→tests→evidence"},
+    {"id":"G12_GLOBAL_GOALS_COVERAGE","status":"AUDIT_REQUIRED","owner":"SOL_ORQUESTADOR","gap":"no existe aún matriz final requisito/objetivo→capa→archivo→test→estado para los documentos fuente","next":"consolidar tras 4 pasadas de los cuatro roles"}
+  ],
+  "role_output_slots": {
+    "SOL_GPT1":{"pass1":"PENDING","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
+    "SOL_GPT2":{"pass1":"PENDING","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
+    "SOL_GPT3":{"pass1":"PENDING","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
+    "SOL_ORQUESTADOR":{"pass1":"IN_PROGRESS","pass2":"IN_PROGRESS","pass3":"PENDING","pass4":"PENDING","last_heartbeat":"2026-09-11"}
+  },
+  "promotion_rule": "OPEN→TESTED→WIRED→RUNTIME_PASS→VERIFIED_CLOSED; saltos prohibidos."
+}
