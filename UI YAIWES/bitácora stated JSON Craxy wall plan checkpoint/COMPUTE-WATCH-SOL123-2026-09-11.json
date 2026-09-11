@@ -3,7 +3,7 @@
   "contract": "tel.workflow/v3",
   "status": "ACTIVE_MONITORING_LOOP",
   "monitor": "🌞👷 sol osquestador plan 🎯",
-  "updated_at_utc": "2026-09-11T15:01:36Z",
+  "updated_at_utc": "2026-09-11T16:01:19Z",
   "monitoring_rule": "No role is marked ACTIVE from assumption. ACTIVE requires fresh STATE/Crazy Wall heartbeat, commit, or real run/log evidence. GAP blocks only its node; next FREE node must be visible.",
   "roles": {
     "SOL1": {
@@ -11,7 +11,7 @@
       "current_task": "Preserve completed S1-05/S1-06/S1-07 findings; continue safe read-only document↔runtime cross-checks until explicit memory-adapter mutation ownership or literal Vite/Supabase destinations arrive.",
       "status": "WAITING_FRESH_HEARTBEAT_WITH_FRESH_STATE_READBACK",
       "blocker_if_any": "Vite/Supabase DESTINATION_INPUT_GAP; memory adapter remains 404 and implementation is not authorized in S1 state.",
-      "evidence_or_run": "roles/SOL-GPT1-BACKEND-STATE.json blob 89ee5114679abe3726942fb420e1e55882950b38; role directory readback still exposes this same blob; no newer SOL1 heartbeat/commit/run observed.",
+      "evidence_or_run": "roles/SOL-GPT1-BACKEND-STATE.json remains blob 89ee5114679abe3726942fb420e1e55882950b38. Fresh ASTRA_GPT1 audit commit 030a2ef25380ee8953f83424c1baae9cc93582bc explicitly reports the canonical SOL1/SOL2/SOL3 role-state blobs unchanged; ASTRA activity is not SOL1 heartbeat evidence.",
       "next_free_node": "Continue read-only mapping and publish own heartbeat before ACTIVE; do not infer destination, ownership or agent-memory semantics.",
       "heartbeat_at": null,
       "watch": "MONITORED_BY_SOL_ORQUESTADOR"
@@ -21,29 +21,29 @@
       "current_task": "Keep DuckDB SPECIAL_FILE_GAP and AVF provider/runtime gaps fail-closed; inspect existing registry/loader/mount_guard insertion points without runtime mutation until explicitly assigned.",
       "status": "WAITING_FRESH_HEARTBEAT_WITH_FRESH_STATE_READBACK",
       "blocker_if_any": "DuckDB immutable motor rejects upstream symlinks; AVF provider/runtime capability/permission/guest boot remain unverified.",
-      "evidence_or_run": "roles/SOL-GPT2-BACKEND-STATE.json blob f5fd829084d88a6dbd017856e453a78855cf06f0; role directory readback still exposes this same blob; no newer SOL2 heartbeat/commit/run observed.",
+      "evidence_or_run": "roles/SOL-GPT2-BACKEND-STATE.json remains blob f5fd829084d88a6dbd017856e453a78855cf06f0. Fresh ASTRA_GPT1 audit commit 030a2ef25380ee8953f83424c1baae9cc93582bc preserves DuckDB/AVF fail-closed and reports canonical SOL role states unchanged.",
       "next_free_node": "Publish fresh heartbeat for the read-only insertion-point audit; no motor patch, source sanitization, mirror or runtime mutation without explicit authorization.",
       "heartbeat_at": null,
       "watch": "MONITORED_BY_SOL_ORQUESTADOR"
     },
     "SOL3": {
       "current_node": "S3_ROUND7_COMPONENT_STRATEGYDELTA",
-      "current_task": "Keep #25 Tailwind and #27 Shiki as RUNTIME_PASS_NOT_WIRED; keep #22 React Virtuoso COMPONENT_TEST_FAIL_NOT_PASS; continue #28 CodeMirror exact gap and remaining 31-40 one-by-one; preserve #30 xterm.js RUNTIME_PASS_NOT_WIRED and consume current Fables evidence precedence before wiring promotion.",
-      "status": "ACTIVE_BY_FRESH_COMMIT_EVIDENCE",
-      "blocker_if_any": "#22 React Virtuoso real run 34573280051 failed at upstream tests and exact assertion is not yet verified; #28 CodeMirror cited workflow remains absent/404. Runtime PASS for #25/#27/#30 does not prove integration wiring.",
-      "evidence_or_run": "fresh S3 debate commit 14ddb51b4c0a4e7c3c77c98a4ddd87ed3543286c at 2026-09-11T14:42:38Z; Tailwind run 34573293066 success at head b2e9fa7576bc79c6f4784d6b64ed36659905a6b7; Shiki run 34573431767 success at head 3eb99f29278aa07f215ceaf27cdf8edcf066d356; Virtuoso run 34573280051 failure at head 2c1a1b6cac5b0049f20267efe53652165572cfb1; xterm prior run 34573682810 success remains NOT_WIRED.",
-      "next_free_node": "Verify exact failing Virtuoso assertion before any patch; continue #28 CodeMirror and remaining 31-40 by fresh evidence. Do not place #25/#27/#30 back in NOT_PASS repair queue and do not promote vendor/runtime PASS to WIRED.",
-      "heartbeat_at": "2026-09-11T14:42:38Z",
+      "current_task": "Keep #25 Tailwind, #27 Shiki and #30 xterm.js as RUNTIME_PASS_NOT_WIRED; keep #22 React Virtuoso COMPONENT_TEST_FAIL_NOT_PASS; continue #28 CodeMirror exact gap and remaining 31-40 one-by-one only after publishing fresh own heartbeat/evidence.",
+      "status": "WAITING_FRESH_HEARTBEAT_LAST_VERIFIED_EVIDENCE_RETAINED",
+      "blocker_if_any": "Last canonical S3 evidence is Round7 commit 14ddb51b4c0a4e7c3c77c98a4ddd87ed3543286c at 2026-09-11T14:42:38Z; no newer canonical S3 heartbeat/commit/run observed. #22 exact failing assertion and #28 evidence remain unresolved.",
+      "evidence_or_run": "Retained classifications only: Tailwind run 34573293066 success; Shiki run 34573431767 success; Virtuoso run 34573280051 failure; xterm run 34573682810 success. Fresh ASTRA_GPT1 audit commit 030a2ef25380ee8953f83424c1baae9cc93582bc states canonical SOL3 role-state blob b852f5ec08aac4eab4259626a9c243e5c0b4ad56 is unchanged and warns vendor/runtime evidence is not WIRED.",
+      "next_free_node": "Publish fresh S3 heartbeat, then verify exact failing Virtuoso assertion and CodeMirror evidence; do not promote vendor/runtime PASS to WIRED.",
+      "heartbeat_at": null,
       "watch": "MONITORED_BY_SOL_ORQUESTADOR"
     },
     "SOL_ORQUESTADOR": {
       "current_node": "G12_GLOBAL_GOALS_COVERAGE_4PASS_MATRIX",
-      "current_task": "Continue the FREE global audit node while reconciling fresh S3 evidence: requirement/objective→layer→file/code→test/evidence→state; preserve independent G11/G18/G19 boundaries and no new acquisition.",
+      "current_task": "Continue requirement/objective→layer→file/code→test/evidence→state matrix; reconcile current STATE/CHECKPOINT/HANDOFF history against fresh A1 audit without reopening proven subgates or assigning new components.",
       "status": "ACTIVE_BY_FRESH_COORDINATION_HEARTBEAT",
-      "blocker_if_any": "Global verify_final remains open. Sol1/Sol2 still have no fresh heartbeat. Sol3 has fresh Round7 evidence but G08 remains open because runtime/vendor PASS is not WIRED and Virtuoso/CodeMirror remain unresolved.",
-      "evidence_or_run": "fresh readback of DIRECTOR-EXECUTION, AUDIT-GAP-LEDGER, FLOW-MASTER, DIRECTOR-INSTRUCTION-DEBATE, COMPUTE-WATCH, Crazy Wall, STATE and role directory; main fresh commit 14ddb51b4c0a4e7c3c77c98a4ddd87ed3543286c; verified GitHub runs 34573293066 success, 34573431767 success, 34573280051 failure.",
-      "next_free_node": "Update G08 evidence delta without wiring promotion; continue G12 four-pass coverage matrix, then G11 workspace/failover recovery verification; keep G18/G19 publish failures separate; no component acquisition unless mandatory capability is proven absent after dedup.",
-      "heartbeat_at": "2026-09-11T15:01:36Z",
+      "blocker_if_any": "Global verify_final remains open. Canonical SOL1/SOL2/SOL3 have no fresh heartbeat this cycle. STATE still contains historical Action124/P01 recovery debt; fresh A1 audit confirms four physical/destination/provider residuals remain fail-closed and does not justify new acquisition.",
+      "evidence_or_run": "Fresh readback of DIRECTOR-EXECUTION, AUDIT-GAP-LEDGER, FLOW-MASTER, DIRECTOR-INSTRUCTION-DEBATE, COMPUTE-WATCH, Crazy Wall, STATE and role directory. main head before this heartbeat: 030a2ef25380ee8953f83424c1baae9cc93582bc at 2026-09-11T15:35:16Z, modifying only ASTRA-GPT1-BACKEND-STATE.json. ASTRA audit records current Fables blob 23f4e1b8b91301f2df396e7a0860fc65b977cfb3, stale S3 absence claim, unchanged canonical SOL role-state blobs, and no new functional closure.",
+      "next_free_node": "G12 four-pass coverage matrix remains FREE; then G11 workspace/failover recovery. Keep G18/G19 publish-only and G02-G06 fail-closed. No component acquisition until a mandatory missing capability is proved after dedup and literal destination exists.",
+      "heartbeat_at": "2026-09-11T16:01:19Z",
       "watch": "SELF_WATCHDOG_PLUS_ROLE_MONITOR"
     }
   },
