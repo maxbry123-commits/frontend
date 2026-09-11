@@ -12,7 +12,13 @@
     "P2_FACTORY_CONTRACTS",
     "P2_STAGING_ROOTS",
     "P3_FACTORY_V0_STATIC_IMPLEMENTATION",
-    "P4A_FACTORY_V0_RUNTIME_LOGIC_TEST_6_OF_6"
+    "P4A_FACTORY_V0_RUNTIME_LOGIC_TEST_6_OF_6",
+    "DOC_INPUT_LITERAL_CREATED",
+    "DOC_NOTAS_1A1_CREATED",
+    "DOC_PLAN_COMPLETE_CREATED",
+    "DOC_HANDOFF_CREATED",
+    "DOC_RECOVERY_CREATED",
+    "DOC_AUDIT_5_PASSES_CROSSCHECK_CREATED"
   ],
   "current_node": "P4B_FACTORY_V0_VISUAL_PREVIEW_E2E",
   "factory_v0": {
@@ -28,11 +34,29 @@
   "frontend_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/",
   "backend_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/backend/",
   "backend_policy": "DONOR_STAGING_ONLY",
+  "documentation": {
+    "input_literal": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/INPUT-BLOCK-LITERAL-2026-09-10.md",
+    "instruction_ledger": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/NOTAS-INSTRUCCIONES-1A1-ASTRA-2026-09-10.md",
+    "architecture": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/ARQUITECTURA-PERFIL-TRABAJO-ASTRA-FABRICA-UI-YAIWES.md",
+    "plan": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/PLAN-ASTRA-FABRICA-UI-YAIWES.md",
+    "handoff": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/HANDOFF-ASTRA-FABRICA-UI-YAIWES.md",
+    "recovery": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/RECOVERY-PATCH-ASTRA-FABRICA-UI-YAIWES.md",
+    "audit": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/AUDITORIA-5-PASADAS-CROSSCHECK-2026-09-10.md"
+  },
+  "documentation_commits": {
+    "input_literal": "f1a3d0d3a3be312e203d83417342623f14271a11",
+    "plan": "2d5a633f4253cbfeaacbb0eccd711de90fb2f61b",
+    "instruction_ledger": "fedfc79536ef026f7d73f4ae7dbce4c43da52f61",
+    "handoff": "559b25a4387540703987cb33589275310f6be03d",
+    "recovery": "44c29d2b0cacc2b6eef2159372ab6d181e7d7f3a",
+    "audit_5_passes": "768860c868779d1c4283cf8c173c2d398bf14e59"
+  },
   "open_gaps": [
     "VISUAL_PREVIEW_E2E_NOT_YET_RUN",
     "PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT",
     "OSS_SOURCE_COMMIT_LICENSE_VERIFICATION_PENDING_PER_COMPONENT",
     "INDEPENDENT_REVIEW_REQUIRED_FOR_VERIFIED_CLOSED"
   ],
-  "closure_rule": "path+SHA/diff+runtime test/log+visual preview/readback+independent verifier"
+  "closure_rule": "path+SHA/diff+runtime test/log+visual preview/readback+independent verifier",
+  "next_node": "T1_FACTORY_FRONTEND_VERIFY_CURRENT_MAIN_AND_CLOSE_RUNTIME_GAPS"
 }
