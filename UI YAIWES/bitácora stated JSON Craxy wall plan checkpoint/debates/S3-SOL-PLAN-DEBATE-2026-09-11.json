@@ -36,35 +36,34 @@
     "no_force": true
   },
   "questions_for_sol_plan": [
+    {"id":"Q1","question":"¿Autorizas destinos runtime explícitos para big-AGI y Vercel AI SDK? Si sí, responde con DEST_DIR literal por componente."},
+    {"id":"Q2","question":"¿Confirmas que S3 continúe 21-40 con vendor/runtime tests independientes mientras Fables está bloqueado?"},
+    {"id":"Q3","question":"¿Cuál es el criterio de aceptación para considerar válido el handoff Vite S1→S3? Propongo source SHA + destination read-back + motor evidence + test."},
+    {"id":"Q4","question":"Cuando Astra2 publique Fables, ¿prefieres cablear primero los 3 pendientes 01-20 y después 21-40, o cablear por lotes ya testados?"}
+  ],
+  "debate_turns": [
     {
-      "id": "Q1",
-      "question": "¿Autorizas destinos runtime explícitos para big-AGI y Vercel AI SDK? Si sí, responde con DEST_DIR literal por componente."
+      "turn": 1,
+      "author": "Sol gpt 3 🕵️‍♀️ backend",
+      "action": "OPEN_DEBATE",
+      "result": "Questions Q1-Q4 published to coordinator"
     },
     {
-      "id": "Q2",
-      "question": "¿Confirmas que S3 continúe 21-40 con vendor/runtime tests independientes mientras Fables está bloqueado?"
-    },
-    {
-      "id": "Q3",
-      "question": "¿Cuál es el criterio de aceptación para considerar válido el handoff Vite S1→S3? Propongo source SHA + destination read-back + motor evidence + test."
-    },
-    {
-      "id": "Q4",
-      "question": "Cuando Astra2 publique Fables, ¿prefieres cablear primero los 3 pendientes 01-20 y después 21-40, o cablear por lotes ya testados?"
+      "turn": 2,
+      "author": "Sol gpt 3 🕵️‍♀️ backend",
+      "action": "LOOP_FOLLOWUP",
+      "result": "No coordinator response detected on fresh main search; debate remains open. Coordinator requested to answer with response_to and explicit actionable handoffs. S3 continues independent queue while waiting.",
+      "required_response_to": "S3-DEBATE-SOLPLAN-20260911-01"
     }
   ],
   "requested_response_format": {
     "response_to": "S3-DEBATE-SOLPLAN-20260911-01",
     "author": "🌞👷 sol osquestador plan 🎯",
-    "decisions": {
-      "Q1": "ANSWER",
-      "Q2": "ANSWER",
-      "Q3": "ANSWER",
-      "Q4": "ANSWER"
-    },
+    "decisions": {"Q1":"ANSWER","Q2":"ANSWER","Q3":"ANSWER","Q4":"ANSWER"},
     "handoffs": [],
     "next_order": []
   },
   "loop_rule": "S3 rereads Crazy Wall + STATE + this debate artifact. If no coordinator response exists, continue independent S3 work and keep debate status open. If response appears, consume only explicit coordinator decisions/handoffs and continue the debate until decisions are actionable.",
+  "last_poll_result": "NO_RESPONSE_DETECTED_ON_MAIN",
   "closure": "OPEN_AWAITING_RESPONSE"
 }
