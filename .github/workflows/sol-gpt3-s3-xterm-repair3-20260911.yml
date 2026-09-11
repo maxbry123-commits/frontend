@@ -1,0 +1,51 @@
+name: S3 xterm.js Repair 3
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/sol-gpt3-s3-xterm-repair3-20260911.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sol-gpt3-s3-xterm-repair3-20260911
+  cancel-in-progress: false
+
+jobs:
+  xterm-js:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            UI YAIWES/componentes open soure UI YAIWES/xterm.js
+          sparse-checkout-cone-mode: false
+      - name: Copy snapshot to path without spaces
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/xterm-js"
+          cp -a "UI YAIWES/componentes open soure UI YAIWES/xterm.js/." "$RUNNER_TEMP/xterm-js/"
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install locked dependencies
+        working-directory: ${{ runner.temp }}/xterm-js
+        run: npm ci
+      - name: Setup TypeScript output exactly as upstream CI
+        working-directory: ${{ runner.temp }}/xterm-js
+        run: npm run setup
+      - name: Build esbuild unit-test output exactly as upstream CI
+        working-directory: ${{ runner.temp }}/xterm-js
+        run: npm run esbuild
+      - name: Assert unit-test artifacts exist
+        working-directory: ${{ runner.temp }}/xterm-js
+        shell: bash
+        run: test -n "$(find out-esbuild -type f -name '*.test.js' -print -quit)"
+      - name: Run upstream unit tests
+        working-directory: ${{ runner.temp }}/xterm-js
+        run: npm run test-unit -- --forbid-only
