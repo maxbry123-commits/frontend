@@ -1,0 +1,87 @@
+name: SOL GPT2 S2-01 DuckDB Diagnostic
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sol-gpt2-s2-01-duckdb-diagnostic-20260910.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sol-gpt2-s2-01-duckdb-diagnostic
+  cancel-in-progress: false
+
+jobs:
+  duckdb-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Sparse bootstrap canonical motors and S2 queue
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git init -q
+          git remote add origin 'https://github.com/maxbry123-commits/frontend.git'
+          git sparse-checkout init --no-cone
+          cat > .git/info/sparse-checkout <<'EOF'
+          /➡️📂motores de descarga extracción copiado movimiento archivos fromtend/
+          /UI YAIWES/automation/S2-duckdb-diagnostic-20260910/QUEUE.json
+          EOF
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
+          git checkout -q -B main FETCH_HEAD
+
+      - name: Verify immutable canonical motor blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend'
+          test "$(git hash-object "$ROOT/➡️📂 Motor de extracción zip/motor_1_extract_only.py")" = 'a52d5dc0e6ff26f75d753b848dcc1a40c5dd4500'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py")" = '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py")" = '91e6e4486692eab314be5c7130d8310d3c855397'
+          test "$(git hash-object "$ROOT/➡️📂motor de copiar archivos/motor_3_copy_batches.py")" = '3689924361ce4a1a9fde4ae2b6f6009c37a6042d'
+          test "$(git hash-object "$ROOT/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py")" = '8281211da76db3080fe1f1ea38b3eb0c45d655cb'
+          test "$(git hash-object "$ROOT/➡️📂motor de moves archivos/motor_4_move_batches.py")" = '9a21facfe11327cf60a2afca8f415ad52f0ecbe5'
+
+      - name: Copy canonical motor root exactly
+        shell: bash
+        env:
+          SOURCE_ROOT: ${{ github.workspace }}/➡️📂motores de descarga extracción copiado movimiento archivos fromtend
+          DEST_ROOT: ${{ runner.temp }}/➡️📂motores de descarga extracción copiado movimiento archivos frontend
+          DEST_REPO_NAME: frontend
+          BATCH_SIZE: '2'
+        run: |
+          set -euo pipefail
+          python "$SOURCE_ROOT/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py" | tee "$RUNNER_TEMP/copy-root.json"
+          grep -Eq '"verdict": "VERIFIED_(CLOSED|EXISTING)"' "$RUNNER_TEMP/copy-root.json"
+
+      - name: Run exact Motor 2 for DuckDB only without publish
+        shell: bash
+        env:
+          QUEUE_FILE: ${{ github.workspace }}/UI YAIWES/automation/S2-duckdb-diagnostic-20260910/QUEUE.json
+          STATE_FILE: ${{ runner.temp }}/s2-duckdb-motor2-state.json
+          INDEX_PATH: ${{ runner.temp }}/s2-duckdb-motor2-index.md
+          ENGINE_PATH: ${{ runner.temp }}/➡️📂motores de descarga extracción copiado movimiento archivos frontend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py
+          MAX_RETRIES: '1'
+          LOOP_SLEEP_SECONDS: '0'
+        run: |
+          set -euo pipefail
+          MOTOR_ROOT="$RUNNER_TEMP/➡️📂motores de descarga extracción copiado movimiento archivos frontend"
+          python "$MOTOR_ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py" | tee "$RUNNER_TEMP/s2-duckdb-final.json"
+          echo '--- S2 DUCKDB MOTOR2 STATE ---'
+          cat "$STATE_FILE"
+          echo '--- S2 DUCKDB FINAL ---'
+          cat "$RUNNER_TEMP/s2-duckdb-final.json"
+          python - <<'PY'
+          import json, os, pathlib
+          state=json.loads(pathlib.Path(os.environ['STATE_FILE']).read_text())
+          final=json.loads([x for x in (pathlib.Path(os.environ['RUNNER_TEMP'])/'s2-duckdb-final.json').read_text().splitlines() if x.strip()][-1])
+          row=next(iter(state['items'].values()))
+          print(json.dumps({'duckdb_status':row.get('status'),'duckdb_error':row.get('error'),'balance':final.get('balance'),'verdict':final.get('verdict')}, ensure_ascii=False, sort_keys=True))
+          assert final.get('verdict') == 'VERIFIED_CLOSED', final
+          assert final.get('balance') == {'total':1,'download_verified':1,'extraction_verified':1,'published_readback_verified':0,'failed':0,'pending':0}, final.get('balance')
+          PY
