@@ -7,60 +7,24 @@
   "registered_at": "2026-09-11T19:37:00Z",
   "authorization": "Direct user instruction in current chat: audit Crazy Wall, investigate gaps, repair executable code gaps, and register every step.",
   "anti_collision": {
-    "write_scope": [
-      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT56-AUDITOR-STATE.json",
-      "explicitly claimed repair files after fresh SHA read"
-    ],
+    "write_scope": ["UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT56-AUDITOR-STATE.json","explicitly claimed repair files after fresh SHA read"],
     "rule": "Do not overwrite other role-state paths; use fresh blob SHA before every write."
   },
   "completed_nodes": [
-    {
-      "id": "S56-G11-01",
-      "gap": "G11_MULTI_SANDBOX_RECOVERY subgate",
-      "status": "TESTED_SUBGATE_PASS",
-      "evidence": {"runner_commit":"10259b83e0b7354a44f86566307cbd44fe5cf0b3","test_commit":"d5d7c6c22386263122758ef06349ca121fc918a7","ci_run":34640223144,"ci_job":103397859184,"wordflow":"13 passed","plugins":"17 passed"},
-      "scope_limit": "Durable latest node result/literal read-back only; not global workspace/multi-host recovery."
-    },
-    {
-      "id": "S56-G12-01",
-      "gap": "Evidence ref/hash read-back semantics",
-      "status": "AUDITED_GAP_CONFIRMED_NO_UNSAFE_GENERIC_PATCH",
-      "finding": "Evidence refs are heterogeneous logical names and motor destinations; universal filesystem read-back would reinterpret contracts.",
-      "safe_next": "Typed evidence verifiers per evidence kind after explicit ref contract."
-    },
-    {
-      "id": "S56-G11-02",
-      "gap": "G11 shared-ledger lost-update race",
-      "status": "TESTED_SUBGATE_PASS",
-      "evidence": {"ledger_commit":"194f54d5d175dd7078943994d14bc0e3fccaf466","runner_commit":"52e18f9420268c4b899e51bd663fe46a2a3725da","test_commit":"89bdb34f8d87273ea79ab203f99cedb374e6db21","ci_run":34640598781,"ci_job":103399057173,"wordflow":"14 passed","plugins":"17 passed"},
-      "scope_limit": "Shared-filesystem durability only; not distributed consensus/storage."
-    },
-    {
-      "id": "S56-G18-G19-01",
-      "gap": "Publish connector/credential closure check",
-      "status": "AUDITED_EXTERNAL_GATES_CONFIRMED",
-      "findings": {
-        "G18": "GitHub Pages workflow reaches configure-pages after verified payload, but Pages is not enabled/configured. Available GitHub connector has no administration/Pages settings mutation and does not expose secrets APIs.",
-        "G19": "HF workflow has no accepted token secret. Connected HF identity is COMAND-CENTER-1 with read-repos/jobs but no write-repos; target Space is not found or not readable through current credential."
-      },
-      "scope_limit": "No false PASS: both require authorized configuration/credential outside the mutation capabilities available to this worker."
-    }
+    {"id":"S56-G11-01","gap":"G11_MULTI_SANDBOX_RECOVERY subgate","status":"TESTED_SUBGATE_PASS","evidence":{"runner_commit":"10259b83e0b7354a44f86566307cbd44fe5cf0b3","test_commit":"d5d7c6c22386263122758ef06349ca121fc918a7","ci_run":34640223144,"ci_job":103397859184,"wordflow":"13 passed","plugins":"17 passed"},"scope_limit":"Durable latest node result/literal read-back only; not global workspace/multi-host recovery."},
+    {"id":"S56-G12-01","gap":"Evidence ref/hash read-back semantics","status":"AUDITED_GAP_CONFIRMED_NO_UNSAFE_GENERIC_PATCH","finding":"Evidence refs are heterogeneous logical names and motor destinations; universal filesystem read-back would reinterpret contracts.","safe_next":"Typed evidence verifiers per evidence kind after explicit ref contract."},
+    {"id":"S56-G11-02","gap":"G11 shared-ledger lost-update race","status":"TESTED_SUBGATE_PASS","evidence":{"ledger_commit":"194f54d5d175dd7078943994d14bc0e3fccaf466","runner_commit":"52e18f9420268c4b899e51bd663fe46a2a3725da","test_commit":"89bdb34f8d87273ea79ab203f99cedb374e6db21","ci_run":34640598781,"ci_job":103399057173,"wordflow":"14 passed","plugins":"17 passed"},"scope_limit":"Shared-filesystem durability only; not distributed consensus/storage."},
+    {"id":"S56-G18-G19-01","gap":"Publish connector/credential closure check","status":"AUDITED_EXTERNAL_GATES_CONFIRMED","findings":{"G18":"Pages not enabled/configured; available GitHub connector exposes no admin/Pages mutation or secrets API.","G19":"No accepted HF Actions secret; connected COMAND-CENTER-1 identity has read-repos/jobs but no write-repos and target Space is absent/not readable."},"scope_limit":"Both require authorized configuration/credential outside current worker mutation capabilities."},
+    {"id":"S56-G14-01","gap":"G14_RUNTIME_CORE_SCAFFOLD workflow_definition/bootstrap decision","status":"TESTED_SUBGATE_PASS","finding_before":"Architecture and core README explicitly require workflow_definition.py while forbidding a second DAG/queue/recovery runtime. Stabilize adapter already implements fail-closed bootstrap, so only the declarative workflow definition was missing.","delta":{"workflow_definition_commit":"79657b58c6dc4aa3c99d4bfe3b64b7d9ce95b6cb","workflow_definition_blob":"ee7d708cd4dbcedee7ca65e9aa7f5db8e3cccde1","ci_definition_commit":"8bf73c17be36229a11aaf856c802c83bda66908b","ci_workflow_blob":"6c4dc5a6e1333f6cff25ad16a0617bf3b650411d","test_commit":"99af36eaa47fc9cbc8c62d7683824522462e4b60","test_blob":"3abcbb522a5a98fae93bf5c72d42b5d3a3837102","features":["immutable 19-step Architecture §12 definition","owner locked to stabilize_core","tel.workflow/v3 versioned manifest","contiguous order/unique ID/prior dependency validation","conditional GAP/PASS branches represented declaratively","deterministic SHA-256 fingerprint","CI now triggers on and sparse-checks runtime/src/core"]},"ci":{"run_id":34641004656,"job_id":103400349433,"head_sha":"99af36eaa47fc9cbc8c62d7683824522462e4b60","conclusion":"success","wordflow":"14 passed in 0.08s","runtime_fables_stabilize":"19 passed in 0.04s"},"scope_limit":"Closes the missing workflow_definition/bootstrap decision subgate. It does not claim all planned YAIWES task/adapters/API glue files are implemented or E2E wired."}
   ],
   "external_blockers": {
-    "G18_ASTRA_PREVIEW_PUBLISH": {"status":"BLOCKED_REPO_SETTING_OR_ADMIN_CREDENTIAL","run_id":34579642079,"job_id":103199980538,"safe_next":"Enable/configure Pages or supply authorized non-GITHUB_TOKEN Pages/admin credential, then rerun."},
-    "G19_HF_STATIC_SPACE_CREDENTIAL": {"status":"BLOCKED_MISSING_WRITE_CREDENTIAL","run_id":34591171118,"job_id":103236571091,"safe_next":"Supply an authorized HF write token under an accepted GitHub Actions secret name, then rerun."}
+    "G18_ASTRA_PREVIEW_PUBLISH":{"status":"BLOCKED_REPO_SETTING_OR_ADMIN_CREDENTIAL","run_id":34579642079,"job_id":103199980538,"safe_next":"Enable/configure Pages or supply authorized non-GITHUB_TOKEN Pages/admin credential, then rerun."},
+    "G19_HF_STATIC_SPACE_CREDENTIAL":{"status":"BLOCKED_MISSING_WRITE_CREDENTIAL","run_id":34591171118,"job_id":103236571091,"safe_next":"Supply authorized HF write token under an accepted GitHub Actions secret name, then rerun."}
   },
-  "current_task": "G14_RUNTIME_CORE_SCAFFOLD: materialize the explicitly required small workflow_definition.py while preserving Stabilize as the single workflow owner.",
-  "current_node": "S56-G14-01",
-  "finding": "Architecture section 15 explicitly plans workflow_definition.py. runtime/src/core/README also requires it and forbids reimplementing DAG/queue/durable state/recovery/HITL. Bootstrap is already implemented by plugins/stabilize_adapter/factory.py with fail-closed queue/store identity checks; no second bootstrap is needed.",
-  "planned_delta": [
-    "add declarative/versioned YAIWES chat workflow definition only",
-    "encode the architecture 1→19 flow as immutable steps/dependencies",
-    "validate order/uniqueness/dependency references and expose deterministic fingerprint",
-    "bind owner metadata to stabilize_core without implementing scheduling",
-    "add integration tests proving 19-step definition and single-owner invariant",
-    "run existing Wordflow/runtime CI"
-  ],
-  "heartbeat_at": "2026-09-11T19:52:00Z",
-  "next_free_node": "Implement minimal core definition, then verify fresh CI and register exact commit/run evidence."
+  "current_task": "G12_GLOBAL_GOALS_COVERAGE: exact source-of-truth file coverage matrix for the small YAIWES-owned code planned by Architecture §15, using fresh recursive runtime/src tree.",
+  "current_node": "S56-G12-02",
+  "finding": "Fresh runtime/src recursive tree now proves core/workflow_definition.py exists, while many top-level runtime capability folders remain README-only or .gitkeep. Presence is not wiring; planned filenames must be mapped to exact implementations/equivalents before any global closure claim.",
+  "planned_delta": ["map all 13 Architecture §15 planned YAIWES glue files to exact path/equivalent/ABSENT","separate implemented plugins from missing YAIWES glue","assign existing owner gaps instead of duplicating another runtime","register quantified remaining matrix in Crazy Wall"],
+  "heartbeat_at": "2026-09-11T19:55:00Z",
+  "next_free_node": "Complete exact filename/equivalent matrix from fresh runtime tree and architecture; mutate code only for an unowned, independently testable gap."
 }
