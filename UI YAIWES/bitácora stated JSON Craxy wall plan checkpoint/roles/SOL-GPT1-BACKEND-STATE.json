@@ -5,8 +5,8 @@
   "name": "Sol ☀️ 🏈gpt 1 backend",
   "node_prefix": "S1",
   "status": "ACTIVE_LOOP_FAIL_CLOSED_WAITING_AUTHORIZED_DESTINATION_AND_FABLES",
-  "observed_at": "2026-09-10T23:38:00-05:00",
-  "base_main_sha": "dffa858bbaa93a404ac334051ca1442d1420066d",
+  "observed_at": "2026-09-11T00:13:25-05:00",
+  "base_main_sha": "db4d4bea6115d5d7ae8da832143ec745d541be4b",
   "watchdog": {
     "enabled": true,
     "automation_id": "6aa3065afd048191a6a4c720d4ba97e7",
@@ -15,7 +15,11 @@
   },
   "crazy_wall": {
     "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json",
-    "blob_sha": "a4253dbb786ad89358afbacccd43dc47b5d57ebb"
+    "blob_sha": "f5d7ade7966a1a0fc20bf6f0b11a805b91b1b3be",
+    "status": "ACTIVE_LOOP",
+    "director_delta_astra1_seen": true,
+    "s1_assignment": "Continue Vite/Supabase own queue; reconcile destination with coordinator and existing handoff. Record source SHA, exact acquisition versus runtime target, final readback. Do not duplicate S3 writes.",
+    "coordinator_dependency": "SOL_PLAN_ORQUESTADOR is explicitly assigned to resolve S1 operation destinations."
   },
   "state_source": {
     "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
@@ -26,7 +30,14 @@
   "canonical_motor": {
     "commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
     "policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
-    "skill_blob_sha": "b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54"
+    "skill_blob_sha": "b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54",
+    "destination_rule": "User delivers destination for each operation; inference, remembering or reusing prior destination is forbidden; missing destination = DESTINATION_INPUT_GAP."
+  },
+  "handoff_evidence": {
+    "path": "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-WATCHDOG-MOTORES-CANONICOS-2026-09-10.md",
+    "blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
+    "authorized_flow": "canonical motors -> exact queue URL/ref -> unique temporary root -> hash/read-back/EXTRACTED_TREE -> motor_4_move_batches -> final read-back",
+    "explicit_dest_root_present": false
   },
   "fresh_queue_evidence": {
     "path": "UI YAIWES/automation/residual-03-motores-canonicos-20260910/QUEUE.json",
@@ -41,12 +52,14 @@
     "vite_exact_path_result": "404_NOT_FOUND",
     "supabase_exact_path": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
     "supabase_exact_path_result": "404_NOT_FOUND",
-    "interpretation": "This proves those exact paths are absent at observation time; it does not authorize this candidate root as DEST_ROOT because the canonical skill forbids inferred destinations."
+    "interpretation": "Exact candidate paths are absent, but this does not authorize the candidate root as DEST_ROOT."
   },
-  "astra_a1_handoff": {
-    "state_blob_sha": "1cfc1ceb249d603d41599fff015ac217e992bb48",
-    "instruction": "Verify current Vite/Supabase destinations first; acquire only missing delta through pinned canonical motors; publish source SHA, destination, hashes and final read-back; hand off Vite to S3.",
-    "research_delta": "A1 reports a Vite runtime/vendor destination exists in a catalog, but acquisition/staging scope still requires coordinator reconciliation; repository code search did not return a concrete authorized DEST_ROOT during this cycle."
+  "fables_probe": {
+    "crazy_wall_status": "GAP_NOT_LOCATED_IN_MAIN_CODE_SEARCH_2026-09-10",
+    "repo_code_search_result": "NO_MATCH",
+    "astra2_role_state_path_result": "404_NOT_FOUND",
+    "generic_plugin_paths_from_director_delta": "runtime/src/plugins/{contract,loader,registry,activation}",
+    "interpretation": "Generic plugin code is not sufficient evidence that Fables identity+contract is verified; S1-04 remains dependency-blocked."
   },
   "nodes": {
     "S1-01": {
@@ -55,7 +68,7 @@
       "source_ref": "134ce6817984bad0f5fb043481502531fee9b1db",
       "status": "BLOCKED_FAIL_CLOSED",
       "gap": "DESTINATION_INPUT_GAP",
-      "fresh_delta": "Exact candidate destination path probe returned 404; no explicit authorized DEST_ROOT exists in Crazy Wall, STATE or the fresh residual queue. Acquisition was not executed to avoid inventing destination."
+      "fresh_delta": "Director delta explicitly assigns destination reconciliation to coordinator. No explicit authorized DEST_ROOT exists yet in current chat, Crazy Wall, STATE, queue or handoff. No acquisition executed."
     },
     "S1-02": {
       "component": "Supabase",
@@ -63,19 +76,19 @@
       "source_ref": "0500c21b37cc11b6b6140dde9827f89fb7d3097d",
       "status": "BLOCKED_FAIL_CLOSED",
       "gap": "DESTINATION_INPUT_GAP",
-      "fresh_delta": "Exact candidate destination path probe returned 404; no explicit authorized DEST_ROOT exists in Crazy Wall, STATE or the fresh residual queue. Acquisition was not executed to avoid inventing destination."
+      "fresh_delta": "Same coordinator destination dependency and canonical destination rule. No acquisition executed."
     },
     "S1-03": {
       "task": "read-back destino",
       "status": "PARTIAL_READBACK_ONLY",
       "gap": "AUTHORIZED_DESTINATION_NOT_DEFINED",
-      "evidence": "Read-back was performed only against the exact candidate paths above and both are absent. Final destination read-back cannot be claimed without an authorized destination."
+      "evidence": "Candidate Vite/Supabase component paths were read and both returned 404; final read-back cannot be claimed until explicit destination is authorized and operation runs."
     },
     "S1-04": {
       "task": "preparar siguiente componente WIRED cuando Fables esté verificado",
       "status": "BLOCKED_DEPENDENCY",
       "gap": "FABLES_NOT_VERIFIED",
-      "evidence": "Fresh Crazy Wall still declares GAP_NOT_LOCATED_IN_MAIN_CODE_SEARCH_2026-09-10. ASTRA2 role-state file is not yet present under the roles directory at observation time."
+      "evidence": "Crazy Wall still marks Fables gap; repository code search found no Fables match; Astra2 role-state path remains absent. Generic plugin code is only a lead for A2 and is not promoted by S1."
     }
   },
   "loop_history": [
@@ -89,8 +102,13 @@
       "cycle": 2,
       "result": "DESTINATION_PROBE_404_BOTH; FABLES_STILL_UNVERIFIED; WATCHDOG_REFRESHED",
       "base_main_sha": "dffa858bbaa93a404ac334051ca1442d1420066d"
+    },
+    {
+      "cycle": 3,
+      "result": "CANONICAL_SKILL_DESTINATION_RULE_RECONFIRMED; HANDOFF_HAS_FLOW_BUT_NO_DEST_ROOT; DIRECTOR_DELTA_ASSIGNS_DESTINATION_RESOLUTION_TO_COORDINATOR; FABLES_STILL_UNVERIFIED",
+      "base_main_sha": "db4d4bea6115d5d7ae8da832143ec745d541be4b"
     }
   ],
-  "next_allowed_delta": "On every hourly cycle reread main/Crazy Wall/STATE. If an explicit authorized Vite or Supabase DEST_ROOT/handoff appears, execute only the missing delta through pinned canonical motors and publish hash/read-back. If Fables becomes verified with route+SHA+contract, prepare S1-04. Do not escalate or invade A2/S2/S3.",
+  "next_allowed_delta": "Continue LOOP. Reread main/Crazy Wall/STATE. If coordinator publishes an explicit authorized destination for Vite or Supabase, execute only missing delta through pinned canonical motors and publish source SHA, exact acquisition target, hashes/read-back, then hand off Vite to S3. If A2 verifies Fables with exact route+SHA+usable contract+test, prepare S1-04. Do not invade A2/S2/S3 or infer destination.",
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
 }
