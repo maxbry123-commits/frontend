@@ -1,0 +1,43 @@
+{
+  "schema": "yaiwes.director.compute-visibility-watch.v1",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_CONTINUOUS_SUPERVISION",
+  "issued_by": "DIRECTOR",
+  "applies_to": [
+    "Sol ☀️ 🏈gpt 1 backend",
+    "Sol gpt 2 🤯👷backend",
+    "Sol gpt 3 🕵️‍♀️ backend",
+    "🌞👷 sol osquestador plan 🎯"
+  ],
+  "rule": "Todos mantienen visible el estado operativo del cómputo mientras trabajan. No publicar chain-of-thought privado; publicar únicamente telemetría auditable: tarea/nodo actual, fuente leída, acción ejecutada, commit/SHA/run/log, PASS|GAP|BLOCKED, siguiente nodo FREE y heartbeat. Nadie queda idle mientras exista trabajo seguro. Cada commit nuevo obliga reread y siguiente ciclo de análisis/debate.",
+  "required_live_fields": [
+    "role",
+    "heartbeat_at",
+    "current_node",
+    "current_task",
+    "source_of_truth_read",
+    "last_commit_seen",
+    "last_action",
+    "evidence_path_or_run",
+    "status_PASS_GAP_BLOCKED",
+    "next_free_node",
+    "watchdog_active"
+  ],
+  "watchdog_checks": [
+    "verify each role STATE freshness",
+    "verify current_node is not silently abandoned",
+    "verify GAP has evidence and does not stall independent nodes",
+    "verify next_free_node exists when safe work remains",
+    "verify each new commit is reread before next mutation",
+    "flag STALE_ROLE if heartbeat/state does not advance while FREE work exists",
+    "never fabricate activity or responses"
+  ],
+  "display_targets": [
+    "each role STATE",
+    "CRAZY-WALL-DEBATE-4AI-2026-09-11.json",
+    "latest ROUND-N debate file",
+    "STATE.json"
+  ],
+  "loop": "ANALYZE_DEEP -> VISIBLE_TELEMETRY -> EVIDENCE -> COUNCIL_4AI -> REFUTE -> NEXT_FREE_NODE -> EXECUTE/TEST -> READBACK -> NEW_COMMIT -> REPEAT",
+  "closure": "DO_NOT_CLOSE_OR_IDLE_WHILE_SAFE_WORK_OR_UNVERIFIED_GOALS_EXIST"
+}
