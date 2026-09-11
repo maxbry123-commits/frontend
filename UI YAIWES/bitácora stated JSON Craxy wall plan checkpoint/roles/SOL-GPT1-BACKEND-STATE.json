@@ -4,14 +4,15 @@
   "role": "SOL_GPT1_BACKEND",
   "name": "Sol ☀️ 🏈gpt 1 backend",
   "node_prefix": "S1",
-  "status": "ACTIVE_LOOP_FAIL_CLOSED_WAITING_AUTHORIZED_DESTINATION_AND_FABLES",
-  "observed_at": "2026-09-11T00:42:00-05:00",
-  "base_main_sha": "b4f23a7bf56bb08656412b992d77ebd793255ec6",
+  "status": "ACTIVE_LOOP_DEBATE_OPEN_WAITING_SOL_PLAN_DESTINATIONS_AND_FABLES",
+  "observed_at": "2026-09-11T01:03:00-05:00",
+  "base_main_sha": "0ffc6fe3154d820df419f4a279b8c08d5649eaa5",
   "watchdog": {
     "enabled": true,
     "automation_id": "6aa3065afd048191a6a4c720d4ba97e7",
+    "mode": "condition_watch",
     "cadence": "1 hour",
-    "rule": "Read fresh Crazy Wall + STATE every cycle; execute only S1; persist blockers and continue independent S1 work."
+    "rule": "Read fresh Crazy Wall + STATE + S1 debate every cycle; execute only S1; consume explicit Sol Plan response immediately."
   },
   "crazy_wall": {
     "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json",
@@ -26,22 +27,11 @@
     "declared_physical": "120/124",
     "declared_residuals": ["Vite", "Supabase", "DuckDB", "AVF"]
   },
-  "coordinator_notes": {
-    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/BITACORA-CRAZY-WALL.md",
-    "blob_sha": "96d52e135ef6cc7a5eb1f9fa4ad65e1733b2e370",
-    "fresh_result": "No explicit authorized S1 DEST_ROOT for Vite or Supabase was published; historical Action124 destination is preserved as historical evidence only and is not reused as operation authorization."
-  },
   "canonical_motor": {
     "commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
     "policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
     "skill_blob_sha": "b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54",
-    "destination_rule": "User delivers destination for each operation; inference, remembering or reusing prior destination is forbidden; missing destination = DESTINATION_INPUT_GAP."
-  },
-  "handoff_evidence": {
-    "path": "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-WATCHDOG-MOTORES-CANONICOS-2026-09-10.md",
-    "blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
-    "authorized_flow": "canonical motors -> exact queue URL/ref -> unique temporary root -> hash/read-back/EXTRACTED_TREE -> motor_4_move_batches -> final read-back",
-    "explicit_dest_root_present": false
+    "destination_rule": "User/coordinator must deliver explicit destination for each operation; inference, remembering or reusing prior destination is forbidden; missing destination = DESTINATION_INPUT_GAP."
   },
   "fresh_queue_evidence": {
     "path": "UI YAIWES/automation/residual-03-motores-canonicos-20260910/QUEUE.json",
@@ -50,70 +40,65 @@
     "supabase_ref": "0500c21b37cc11b6b6140dde9827f89fb7d3097d",
     "destination_fields_present": false
   },
-  "historical_diagnostic": {
-    "workflow_commit": "13203127a05413affca240e266934e778bd5f8e8",
-    "vite_queue_publish": false,
-    "verdict": "Historical Vite diagnostic used Motor 2 read-only/publish=false; it cannot satisfy physical materialization or authorize a current destination."
-  },
   "runtime_target_reconciliation": {
-    "s3_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT3-BACKEND-STATE.json",
-    "s3_state_blob_sha": "4bde1d8d5b1557e52ee6e943d5393b776b1d22e5",
-    "integration_step1_blob_sha": "f7f5eef5e33bafc81a1f7c246cef4d478603d8cb",
     "vite_historical_runtime_target": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vite",
     "vite_runtime_target_readback": "404_NOT_PRESENT_ON_MAIN",
-    "interpretation": "Runtime target is now reconciled as historical integration metadata only. It is not the authorized physical acquisition DEST_ROOT and must not be reused as one."
+    "interpretation": "Historical integration target is not authorized physical acquisition DEST_ROOT."
   },
-  "fresh_destination_probe": {
-    "candidate_component_root": "UI YAIWES/componentes open soure UI YAIWES/",
-    "vite_exact_path": "UI YAIWES/componentes open soure UI YAIWES/Vite",
-    "vite_exact_path_result": "404_NOT_FOUND",
-    "supabase_exact_path": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
-    "supabase_exact_path_result": "404_NOT_FOUND",
-    "interpretation": "Exact candidate paths are absent, but this does not authorize the candidate root as DEST_ROOT."
+  "debate": {
+    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/S1-SOL-PLAN-DEBATE-2026-09-11.json",
+    "debate_id": "S1-DEBATE-SOLPLAN-20260911-01",
+    "status": "AWAITING_SOL_PLAN_RESPONSE",
+    "debate_blob_sha_after_turn3": "34a0ea426490b5fdf78af33f7f3c3b6cbc82fdc7",
+    "reply_target": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S1.json",
+    "polls": 3,
+    "last_reply_target_result": "404_NOT_FOUND",
+    "required_decision": "Explicit DEST_REPO + DEST_BRANCH + DEST_ROOT for both Vite and Supabase, plus handoff acceptance decisions."
   },
   "fables_probe": {
     "crazy_wall_status": "GAP_NOT_LOCATED_IN_MAIN_CODE_SEARCH_2026-09-10",
-    "astra2_role_state_path_result": "404_NOT_PUBLISHED",
+    "astra2_role_state_path_result": "NOT_PUBLISHED_AT_LAST_CHECK",
     "s3_generic_socket_verdict": "NOT_FABLES_EVIDENCE",
-    "interpretation": "S1-04 remains dependency-blocked; no identity+route+SHA+usable contract+test for Fables has been published."
+    "interpretation": "S1-04 remains dependency-blocked until exact Fables identity+path+SHA+usable contract+test."
   },
   "nodes": {
     "S1-01": {
       "component": "Vite",
       "source": "https://github.com/vitejs/vite",
       "source_ref": "134ce6817984bad0f5fb043481502531fee9b1db",
-      "status": "BLOCKED_FAIL_CLOSED",
+      "status": "BLOCKED_FAIL_CLOSED_DEBATE_OPEN",
       "gap": "DESTINATION_INPUT_GAP",
-      "fresh_delta": "Source/ref and historical runtime target are known. Current physical acquisition destination remains explicitly unresolved; no unauthorized acquisition executed."
+      "fresh_delta": "Sol Plan asked directly for literal destination through S1 debate; awaiting response. No unauthorized acquisition executed."
     },
     "S1-02": {
       "component": "Supabase",
       "source": "https://github.com/supabase/supabase",
       "source_ref": "0500c21b37cc11b6b6140dde9827f89fb7d3097d",
-      "status": "BLOCKED_FAIL_CLOSED",
+      "status": "BLOCKED_FAIL_CLOSED_DEBATE_OPEN",
       "gap": "DESTINATION_INPUT_GAP",
-      "fresh_delta": "Current physical acquisition destination remains explicitly unresolved; no unauthorized acquisition executed."
+      "fresh_delta": "Sol Plan asked directly for literal destination through S1 debate; awaiting response. No unauthorized acquisition executed."
     },
     "S1-03": {
       "task": "read-back destino",
       "status": "PARTIAL_READBACK_ONLY",
       "gap": "AUTHORIZED_DESTINATION_NOT_DEFINED",
-      "evidence": "Candidate physical paths remain absent; Vite historical runtime target is also absent. Final destination read-back cannot be claimed before an authorized acquisition destination exists and Motor execution completes."
+      "evidence": "Final destination read-back waits on explicit destination and canonical motor execution."
     },
     "S1-04": {
       "task": "preparar siguiente componente WIRED cuando Fables esté verificado",
       "status": "BLOCKED_DEPENDENCY",
       "gap": "FABLES_NOT_VERIFIED",
-      "evidence": "Fresh Crazy Wall still marks Fables gap; A2 state is not published and S3 generic socket is explicitly NOT_FABLES_EVIDENCE."
+      "evidence": "Fables verification remains owned by A2; no exact verified handoff consumed by S1."
     }
   },
   "loop_history": [
     {"cycle":1,"result":"BLOCKERS_PERSISTED_NO_UNAUTHORIZED_WRITE","base_main_sha":"32ba1c947511f76b36b981d13914b73960fa0ed3"},
     {"cycle":2,"result":"DESTINATION_PROBE_404_BOTH; FABLES_STILL_UNVERIFIED; WATCHDOG_REFRESHED","base_main_sha":"dffa858bbaa93a404ac334051ca1442d1420066d"},
-    {"cycle":3,"result":"CANONICAL_SKILL_DESTINATION_RULE_RECONFIRMED; HANDOFF_HAS_FLOW_BUT_NO_DEST_ROOT; COORDINATOR_DEPENDENCY; FABLES_STILL_UNVERIFIED","base_main_sha":"db4d4bea6115d5d7ae8da832143ec745d541be4b"},
+    {"cycle":3,"result":"CANONICAL_SKILL_DESTINATION_RULE_RECONFIRMED; COORDINATOR_DEPENDENCY; FABLES_STILL_UNVERIFIED","base_main_sha":"db4d4bea6115d5d7ae8da832143ec745d541be4b"},
     {"cycle":4,"result":"COORDINATOR_LEDGER_REREAD; NO_AUTHORIZED_DEST_ROOT; FABLES_STILL_UNVERIFIED","base_main_sha":"82d5b74c3ff1930de4ce8976b23ba413fbf6389a"},
-    {"cycle":5,"result":"HISTORICAL_VITE_DIAGNOSTIC_RECONCILED; RUNTIME_TARGET_RECONCILED_READ_ONLY; NO_AUTHORIZED_PHYSICAL_DEST_ROOT; A2_NOT_PUBLISHED","base_main_sha":"b4f23a7bf56bb08656412b992d77ebd793255ec6"}
+    {"cycle":5,"result":"HISTORICAL_VITE_DIAGNOSTIC_AND_RUNTIME_TARGET_RECONCILED_READ_ONLY; NO_AUTHORIZED_PHYSICAL_DEST_ROOT","base_main_sha":"b4f23a7bf56bb08656412b992d77ebd793255ec6"},
+    {"cycle":6,"result":"S1_DEBATE_OPENED_TO_SOL_PLAN; EXPLICIT_REPLY_TARGET; THREE_POLLS_NO_RESPONSE; CONDITION_WATCH_ACTIVE","base_main_sha":"0ffc6fe3154d820df419f4a279b8c08d5649eaa5"}
   ],
-  "next_allowed_delta": "Continue LOOP without stopping on blockers. Reread main/Crazy Wall/STATE/coordinator notes/A2 state. If explicit authorized Vite or Supabase acquisition DEST_ROOT appears, execute missing physical delta through pinned canonical motors, publish hash/read-back, then hand off Vite to S3. If A2 verifies Fables with exact route+SHA+usable contract+test, prepare S1-04. Never infer destination or write other roles.",
+  "next_allowed_delta": "Continue immediate and hourly LOOP. Poll Sol Plan reply target and debate/Crazy Wall. On explicit destinations, execute Vite/Supabase canonical motor delta immediately, verify/read-back, emit Vite handoff to S3. On verified Fables handoff, advance S1-04. Never infer destination or impersonate coordinator response.",
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
 }
