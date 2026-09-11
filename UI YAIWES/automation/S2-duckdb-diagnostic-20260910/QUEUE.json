@@ -1,0 +1,19 @@
+{
+  "schema": "yaiwes.frontend.download-extract-queue.v1",
+  "_meta": {
+    "owner": "SOL_GPT2_BACKEND",
+    "node": "S2-01",
+    "base_main_sha": "d83ba67c33bacbdc0d14dce274fe2b373858105e",
+    "purpose": "isolate canonical Motor 2 DuckDB failure without publish or move"
+  },
+  "queue": [
+    {
+      "id": "0056:DuckDB:S2-diagnostic",
+      "canonical_index": 56,
+      "slug": "DuckDB",
+      "source_repo": "https://github.com/duckdb/duckdb",
+      "source_ref": "78c40873b9ac7e22b90dafd3883c12abf93b2466",
+      "publish": false
+    }
+  ]
+}
