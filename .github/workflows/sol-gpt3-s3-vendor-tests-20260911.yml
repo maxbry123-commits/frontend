@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  big-agi-typecheck:
+  big-agi-build:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -26,10 +26,10 @@ jobs:
           sparse-checkout-cone-mode: false
           fetch-depth: 1
 
-      - name: Setup Node 22
+      - name: Setup Node 24
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
           cache: npm
           cache-dependency-path: 'UI YAIWES/componentes open soure UI YAIWES/big-AGI/code/package-lock.json'
 
@@ -37,9 +37,13 @@ jobs:
         working-directory: 'UI YAIWES/componentes open soure UI YAIWES/big-AGI/code'
         run: npm ci
 
-      - name: Run upstream TypeScript check
+      - name: Run upstream production build
         working-directory: 'UI YAIWES/componentes open soure UI YAIWES/big-AGI/code'
-        run: npm run tsclint
+        env:
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: '1'
+          NEXT_PUBLIC_DEPLOYMENT_TYPE: docker
+        run: npm run build
 
   vercel-ai-sdk-tests:
     runs-on: ubuntu-latest
