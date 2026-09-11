@@ -42,6 +42,21 @@
         "plugins_fables_stabilize": "17 passed in 0.04s"
       },
       "scope_limit": "This proves durable latest node result/literal read-back on restart. It does NOT prove full workspace recovery, multi-host failover, payload persistence, or global VERIFIED_CLOSED."
+    },
+    {
+      "id": "S56-G12-01",
+      "gap": "Evidence ref/hash read-back semantics",
+      "status": "AUDITED_GAP_CONFIRMED_NO_UNSAFE_GENERIC_PATCH",
+      "finding": "Evidence.strong()/verifier currently validate presence/hash syntax but not arbitrary referenced bytes. However evidence refs are heterogeneous: L01/L06 logical snapshots, L02/L03 user-provided logical names, L04/L05 motor destinations. Treating every ref as a local path would break valid contracts and create false failures.",
+      "evidence": {
+        "verifier_blob": "0ceefd6c10459627c6410fdcfec9dcbe5f9194ce",
+        "layer_02_blob": "efd5c90b64ea6039ca33c3b3feb0367f3ab3aee6",
+        "layer_03_blob": "9ec2c98a70894e3a094bbafb97ddb02f12d8beee",
+        "layer_04_blob": "e6c2ca048a311b080823a95310d00ebbbbeb7167",
+        "layer_05_blob": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
+        "layer_06_blob": "411f30ed8db487b0ad5f22443bb1de26e0f2a006"
+      },
+      "safe_next": "Introduce typed evidence verifiers/read-back adapters per evidence kind only after defining the reference contract. Do not reinterpret logical refs as filesystem paths."
     }
   ],
   "external_blockers": {
@@ -60,14 +75,16 @@
       "safe_next": "Provide one authorized HF write token under an accepted secret name, then execute fresh publish/read-back."
     }
   },
-  "current_task": "G12/G11 evidence integrity cross-check: determine whether strong evidence verifies bytes or only hash syntax.",
-  "current_node": "S56-G12-01",
-  "audit_evidence": {
-    "crazy_wall_blob": "2404928bd332e2abb1466c9a4095bd52bd24acea",
-    "gap_ledger_blob_at_claim": "f61ab0c9ddd43ebf8919d14462939d30cc8ff090",
-    "ledger_blob": "60b35f1e2b9d61232020ec84d08868eaf89a9cec",
-    "contracts_blob_at_claim": "59596986623cc1cc99b206d82c41d4053716a286"
-  },
-  "heartbeat_at": "2026-09-11T19:43:00Z",
-  "next_free_node": "Audit verifier/evidence reference semantics; patch only if a concrete fail-closed integrity gap is reproducible."
+  "current_task": "G11 high-parallel durability: prevent stale LayerRunner instances from overwriting shared ledger events and refresh dependency state before execution.",
+  "current_node": "S56-G11-02",
+  "finding": "save_ledger atomically replaces the whole file, but each LayerRunner holds its own in-memory ledger snapshot. Two runners created from the same starting state can each append seq=1 and the later os.replace silently erases the first event. No inter-process lock or locked reload/merge exists.",
+  "planned_delta": [
+    "serialize persistent ledger update with a short cross-platform lock file",
+    "reload and verify current disk ledger inside the critical section before append",
+    "refresh replay state before node dependency validation",
+    "regression test two stale runner instances preserve both events and fresh dependency state",
+    "CI through existing wordflow workflow"
+  ],
+  "heartbeat_at": "2026-09-11T19:46:00Z",
+  "next_free_node": "Implement minimal stdlib-only lock/reload path; no new dependency/component."
 }
