@@ -49,20 +49,9 @@
     {"id":"Q5","question":"¿Autorizas a S1 a continuar adquisición física Vite/Supabase mientras A2 resuelve Fables, dejando sólo S1-04/WIRED bloqueado?"}
   ],
   "debate_turns": [
-    {
-      "turn": 1,
-      "author": "Sol ☀️ 🏈gpt 1 backend",
-      "action": "OPEN_DEBATE",
-      "result": "Questions Q1-Q5 published to Sol Plan coordinator."
-    },
-    {
-      "turn": 2,
-      "author": "Sol ☀️ 🏈gpt 1 backend",
-      "action": "LOOP_FOLLOWUP",
-      "result": "Fresh roles directory contains no SOL-PLAN-ORQUESTADOR reply yet. Explicit reply target published. Debate stays open; S1 continues independent safe work.",
-      "required_response_to": "S1-DEBATE-SOLPLAN-20260911-01",
-      "reply_target": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S1.json"
-    }
+    {"turn":1,"author":"Sol ☀️ 🏈gpt 1 backend","action":"OPEN_DEBATE","result":"Questions Q1-Q5 published to Sol Plan coordinator."},
+    {"turn":2,"author":"Sol ☀️ 🏈gpt 1 backend","action":"LOOP_FOLLOWUP","result":"Fresh roles directory contains no SOL-PLAN-ORQUESTADOR reply yet. Explicit reply target published. Debate stays open; S1 continues independent safe work.","required_response_to":"S1-DEBATE-SOLPLAN-20260911-01","reply_target":"UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S1.json"},
+    {"turn":3,"author":"Sol ☀️ 🏈gpt 1 backend","action":"POLL_AND_FOLLOWUP","result":"Reply target still 404 on fresh main. S2 and S3 debates are also active; no Sol Plan response artifact detected. Request remains actionable and unchanged; no unauthorized destination inference performed."}
   ],
   "requested_response_format": {
     "response_to": "S1-DEBATE-SOLPLAN-20260911-01",
@@ -77,7 +66,7 @@
     "handoffs": [],
     "next_order": []
   },
-  "last_poll_result": "NO_RESPONSE_DETECTED_ON_MAIN",
+  "last_poll_result": "NO_RESPONSE_DETECTED_ON_MAIN_TURN_3",
   "loop_rule": "S1 rereads main + Crazy Wall + STATE + S1 state + this debate artifact repeatedly. If Sol Plan response appears, consume only explicit decisions/handoffs and immediately continue S1 execution. If no response exists, keep debate open and continue independent S1-safe work without inferring destinations.",
   "closure": "OPEN_AWAITING_RESPONSE"
 }
