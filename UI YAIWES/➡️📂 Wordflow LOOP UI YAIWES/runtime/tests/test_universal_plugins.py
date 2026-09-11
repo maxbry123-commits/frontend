@@ -6,6 +6,7 @@ SRC = Path(__file__).resolve().parents[1] / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
+from plugins.activation import ActivationRejectedError, build_runtime_registry
 from plugins.catalog import COMPONENTS, build_registry
 from plugins.contract import PluginKind, PluginSpec
 from plugins.loader import PluginLoader
@@ -41,6 +42,18 @@ class UniversalPluginTests(unittest.TestCase):
         )
         with self.assertRaises(MountRejectedError):
             MountGuard().validate(spec)
+
+    def test_catalog_only_adapters_remain_fail_closed(self):
+        for name in ("pycasbin", "opentelemetry_python"):
+            with self.subTest(name=name):
+                with self.assertRaises(ActivationRejectedError):
+                    build_runtime_registry([name])
+
+    def test_donor_ui_and_tool_entries_remain_fail_closed(self):
+        for name in ("dagu", "redun", "pytest", "librechat"):
+            with self.subTest(name=name):
+                with self.assertRaises(ActivationRejectedError):
+                    build_runtime_registry([name])
 
     def test_explicit_factory_mounts(self):
         spec = PluginSpec(
