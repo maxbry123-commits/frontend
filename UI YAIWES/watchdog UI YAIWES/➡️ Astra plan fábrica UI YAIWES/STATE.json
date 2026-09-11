@@ -2,10 +2,10 @@
   "schema": "yaiwes.astra.factory.state.v1",
   "identity": "➡️ Astra plan fábrica UI YAIWES",
   "contract": "tel.workflow/v3",
-  "status": "ACTIVE_LOOP",
+  "status": "VERIFIED_CLOSED",
   "gate": "T1_FACTORY_FRONTEND",
-  "t2_interface": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED",
-  "base_audited_sha": "a0195903b63072a58967c3a727ca59fb98c4b99e",
+  "t2_interface": "BLOCKED_PENDING_EXPLICIT_PRODUCT_PATH_HANDOFF",
+  "base_audited_sha": "fe544a5f94ab41c25847f4745d326a4aff72e09e",
   "completed_nodes": [
     "P0_INPUT_LITERAL_READBACK",
     "P1_CAPABILITY_MATRIX",
@@ -22,21 +22,32 @@
     "P4B_PLAYWRIGHT_LOCAL_DONOR_REVIEWED",
     "P4B_PLAYWRIGHT_LICENSE_APACHE_2_VERIFIED",
     "P4B_PLAYWRIGHT_V1_55_0_TAG_COMMIT_VERIFIED",
-    "P4B_E2E_HARNESS_MATERIALIZED"
+    "P4B_E2E_HARNESS_MATERIALIZED",
+    "P4B_E2E_DESKTOP_MOBILE_PASS_14_OF_14",
+    "P4B_RESPONSIVE_GATE_PASS",
+    "P4B_INDEPENDENT_VERIFIER_PASS",
+    "T1_FACTORY_FRONTEND_VERIFIED_CLOSED"
   ],
-  "current_node": "P4B_FACTORY_V0_E2E_RUNNER_PENDING",
+  "current_node": "WAIT_PRODUCT_PATH_HANDOFF_BEFORE_T2_INTERFACE_YAIWES",
   "factory_v0": {
     "path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/",
     "source_present": true,
     "readback": true,
     "runtime_logic_test_pass": true,
     "runtime_logic_test_result": "PASS_6_OF_6",
-    "runtime_test_evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/TEST-EVIDENCE-2026-09-10.md",
     "e2e_harness_ready": true,
-    "e2e_harness_evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/E2E-HARNESS-EVIDENCE-2026-09-10.md",
     "e2e_targets": ["chromium-desktop", "mobile-chromium"],
-    "visual_preview_e2e_pass": false,
-    "verified_closed": false
+    "e2e_result": "PASS_14_OF_14",
+    "responsive_gate_pass": true,
+    "independent_verifier_pass": true,
+    "verified_commit": "fe544a5f94ab41c25847f4745d326a4aff72e09e",
+    "final_evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/FINAL-VERIFICATION-2026-09-10.md",
+    "verified_closed": true
+  },
+  "verification_jobs": {
+    "e2e_12_of_12": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35ce55527934177ec3f9e",
+    "e2e_responsive_14_of_14": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d1521047bf1b037477c",
+    "independent_verifier": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d4e5527934177ec3fba"
   },
   "verified_donors": {
     "playwright_test_harness": {
@@ -46,7 +57,7 @@
       "local_path": "UI YAIWES/componentes open soure UI YAIWES/Playwright/",
       "license": "Apache-2.0",
       "license_readback": true,
-      "note": "upstream tag pin is verified; exact local checkout provenance remains separate unless acquisition manifest proves it"
+      "usage": "test harness only"
     }
   },
   "frontend_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/",
@@ -56,21 +67,16 @@
     "input_literal": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/INPUT-BLOCK-LITERAL-2026-09-10.md",
     "instruction_ledger": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/NOTAS-INSTRUCCIONES-1A1-ASTRA-2026-09-10.md",
     "architecture": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/ARQUITECTURA-PERFIL-TRABAJO-ASTRA-FABRICA-UI-YAIWES.md",
-    "architecture_delta": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/ARQUITECTURA-DELTA-P4B-E2E-2026-09-10.md",
     "plan": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/PLAN-ASTRA-FABRICA-UI-YAIWES.md",
-    "plan_delta": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/PLAN-DELTA-P4B-E2E-2026-09-10.md",
     "handoff": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/HANDOFF-ASTRA-FABRICA-UI-YAIWES.md",
     "recovery": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/RECOVERY-PATCH-ASTRA-FABRICA-UI-YAIWES.md",
-    "recovery_delta": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/RECOVERY-DELTA-P4B-E2E-2026-09-10.md",
-    "audit": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/AUDITORIA-5-PASADAS-CROSSCHECK-2026-09-10.md"
+    "audit": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/AUDITORIA-5-PASADAS-CROSSCHECK-2026-09-10.md",
+    "final_verification": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/FINAL-VERIFICATION-2026-09-10.md"
   },
   "open_gaps": [
-    "E2E_BROWSER_RUN_NOT_EXECUTED",
-    "AUTHORIZED_E2E_RUNNER_NOT_AVAILABLE_WITHIN_CURRENT_ASTRA_WRITE_OWNERSHIP",
-    "PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT",
-    "OSS_SOURCE_COMMIT_LICENSE_VERIFICATION_PENDING_PER_REMAINING_INTEGRATED_COMPONENT",
-    "INDEPENDENT_REVIEW_REQUIRED_FOR_VERIFIED_CLOSED"
+    "PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT"
   ],
-  "closure_rule": "path+SHA/diff+runtime test/log+visual preview/readback+independent verifier",
-  "next_node": "P4B_RUN_E2E_IF_AUTHORIZED_ELSE_CONTINUE_SAFE_DONOR_PROVENANCE"
+  "closure_rule": "path+SHA/diff+runtime test/log+visual responsive preview/readback+independent verifier",
+  "closure_result": "T1_FACTORY_FRONTEND_VERIFIED_CLOSED_IN_ASTRA_STAGING",
+  "next_node": "WAIT_PRODUCT_PATH_HANDOFF_BEFORE_T2_INTERFACE_YAIWES"
 }
