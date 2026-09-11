@@ -1,0 +1,12 @@
+{
+  "schema":"yaiwes.frontend.download-extract-queue.v1",
+  "contract":"tel.workflow/v3",
+  "purpose":"CANONICAL_MOTOR2_RELEASE_REF_SPECIAL_FILE_PROBE",
+  "queue":[
+    {"id":"P01:Litestream-release","slug":"Litestream-release-probe","source_repo":"https://github.com/benbjohnson/litestream","source_ref":"ccd326c175b583b5e82893a6078f06dcef5fba3f","publish":false},
+    {"id":"P02:Tempo-release","slug":"Tempo-release-probe","source_repo":"https://github.com/grafana/tempo","source_ref":"1900ed7bb5cad1a3edc285783d7d4ac4278337dc","publish":false},
+    {"id":"P03:Schemathesis-release","slug":"Schemathesis-release-probe","source_repo":"https://github.com/schemathesis/schemathesis","source_ref":"66b5c3ed71f429151aba46c68da856e6ec43f447","publish":false},
+    {"id":"P04:Kata-release","slug":"Kata-release-probe","source_repo":"https://github.com/kata-containers/kata-containers","source_ref":"ddcb1ad8d23cbb4323f86c209f132b89592902df","publish":false},
+    {"id":"P05:Grype-release","slug":"Grype-release-probe","source_repo":"https://github.com/anchore/grype","source_ref":"756eb9a24f7beeafb6871a24e943e8a3ae210695","publish":false}
+  ]
+}
