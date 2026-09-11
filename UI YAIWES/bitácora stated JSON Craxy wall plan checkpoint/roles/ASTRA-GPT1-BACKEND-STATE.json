@@ -3,8 +3,8 @@
   "contract": "tel.workflow/v3",
   "role": "ASTRA_GPT1_BACKEND",
   "name": "🧑‍💻Astra gpt 1 backend UI YAIWES 🌀🌀🌀 👷👷🕵️‍♀️",
-  "updated_at": "2026-09-11T20:36:59Z",
-  "base_sha": "83a730cbdc61f6aa81fb80fd0ae59bc55f6b2b71",
+  "updated_at": "2026-09-11T21:34:19Z",
+  "base_sha": "8dbea87adcf3746decc6a674c0edceb5bf98f6d7",
   "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
   "status": "ACTIVE_LOOP_GAPS_OPEN",
   "scope": "A1 audit only; sole write path is this role_state_path",
@@ -24,8 +24,8 @@
       "blob_sha": "99f09dca8cb5bd3415506a9cadfc5152606eee41"
     },
     {
-      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-MULTIAI-CABLEADO-2026-09-10.json",
-      "blob_sha": "7428e5091b0fd65ab8e46f8dca844fbd220b48c5"
+      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json",
+      "blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea"
     },
     {
       "path": "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-WATCHDOG-MOTORES-CANONICOS-2026-09-10.md",
@@ -46,57 +46,72 @@
     {
       "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT3-BACKEND-STATE.json",
       "blob_sha": "b852f5ec08aac4eab4259626a9c243e5c0b4ad56"
+    },
+    {
+      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA2-GPT-BACKEND-STATE.json",
+      "blob_sha": "0f6dcf0b804e7c35298645d65a318c0d782a01ad"
+    },
+    {
+      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-OPA-OPENFGA-LIVE-DELTA-2026-09-11.json",
+      "blob_sha": "e4b7bdedf8305cd1c59475dbf67503ccacdfeacf"
     }
   ],
   "nodes": [
     {
       "id": "A1-01",
       "status": "AUDITED_STALE_SUMMARIES",
-      "base_sha": "83a730cbdc61f6aa81fb80fd0ae59bc55f6b2b71",
+      "base_sha": "8dbea87adcf3746decc6a674c0edceb5bf98f6d7",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+      "evidence": {
+        "STATE": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
+        "CHECKPOINT": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
+        "HANDOFF": "8302687aaebdd48b9364f5febec8e90dfcffbd49"
+      },
       "findings": [
-        "STATE/CHECKPOINT/HANDOFF blobs unchanged; historical counts remain unreconciled.",
-        "New S56 runtime durability and plugin repairs exist in code and successful CI; historical missing-output/no-current-Fables-CI claims are superseded within tested scope."
+        "STATE, CHECKPOINT and HANDOFF blobs remain unchanged; they do not yet reconcile current runtime/Fables/policy-lane evidence.",
+        "The roles wall blob is unchanged; newer coordination delta files do not mutate the canonical wall."
       ]
     },
     {
       "id": "A1-02",
       "status": "EVIDENCE_AUDITED_CLOSURE_BLOCKED",
-      "base_sha": "83a730cbdc61f6aa81fb80fd0ae59bc55f6b2b71",
+      "base_sha": "8dbea87adcf3746decc6a674c0edceb5bf98f6d7",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "residuals": [
         {
           "name": "Vite",
           "path": "UI YAIWES/componentes open soure UI YAIWES/Vite",
-          "readback": "ABSENT_FROM_PARENT_LISTING_AT_BASE_SHA",
-          "scope_limit": "Exact final path only; not repository-wide absence"
+          "readback": "404_NOT_FOUND_AT_BASE_SHA",
+          "scope_limit": "Exact final path only; repository-wide absence not inferred"
         },
         {
           "name": "Supabase",
           "path": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
-          "readback": "ABSENT_FROM_PARENT_LISTING_AT_BASE_SHA",
-          "scope_limit": "Exact final path only; not repository-wide absence"
+          "readback": "404_NOT_FOUND_AT_BASE_SHA",
+          "scope_limit": "Exact final path only; repository-wide absence not inferred"
         },
         {
           "name": "DuckDB",
           "path": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
-          "readback": "ABSENT_FROM_PARENT_LISTING_AT_BASE_SHA",
-          "scope_limit": "Exact final path only; not repository-wide absence"
+          "readback": "404_NOT_FOUND_AT_BASE_SHA",
+          "scope_limit": "Exact final path only; repository-wide absence not inferred"
         },
         {
           "name": "AVF",
           "path": "UI YAIWES/componentes open soure UI YAIWES/AVF",
-          "readback": "ABSENT_FROM_PARENT_LISTING_AT_BASE_SHA",
-          "scope_limit": "Exact final path only; not repository-wide absence"
+          "readback": "404_NOT_FOUND_AT_BASE_SHA",
+          "scope_limit": "Exact final path only; repository-wide absence not inferred"
         }
       ],
-      "owner_states": "S1/S2/S3 canonical state blobs unchanged",
-      "parent_listing_count": 130
+      "findings": [
+        "No final destination tree, source/tree hash, or read-back closure appeared for any of the four residuals.",
+        "SOL1, SOL2 and SOL3 canonical state blobs remain unchanged."
+      ]
     },
     {
       "id": "A1-03",
-      "status": "AUDITED_NEW_RUNTIME_CI_STALE_01_20",
-      "base_sha": "83a730cbdc61f6aa81fb80fd0ae59bc55f6b2b71",
+      "status": "AUDITED_POLICY_SUBLANE_PASS_STALE_01_20",
+      "base_sha": "8dbea87adcf3746decc6a674c0edceb5bf98f6d7",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1",
       "reported_pass": 17,
@@ -106,51 +121,45 @@
         "Vite",
         "Vercel AI SDK"
       ],
-      "ci": {
-        "run_id": 34641893033,
-        "job_id": 103403425908,
-        "head_sha": "36beaed55989b03313c92ee819b63280259e57e4",
-        "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34641893033",
-        "conclusion": "success",
-        "log_verified": true,
-        "wordflow": "15 passed",
-        "runtime": "41 passed, 6 subtests passed",
-        "applicability": "Comparison from tested commit to audit base changes only four coordination/state files; tested code unchanged.",
-        "fables_blob": "23f4e1b8b91301f2df396e7a0860fc65b977cfb3",
-        "fables_test_path": "runtime/tests/test_fables_socket.py",
-        "fables_test_blob": "cfc63c5363330ea0746c1d3e041c17dc11df9b0c"
+      "new_independent_evidence": {
+        "lane": "OPA/OpenFGA policy authorization",
+        "run_id": 34647825462,
+        "job_id": 103422713669,
+        "result": "LIVE_RUNTIME_PASS",
+        "log_read_back": true,
+        "assertions": "OPA and OpenFGA each allowed alice and denied bob",
+        "scope": "Separate policy sublane; does not modify integration 01-20 or close project."
       },
       "findings": [
-        "Runner now persists literal/output and refreshes replay; ledger serializes appends and fsyncs POSIX parent directory.",
-        "Declarative 19-step workflow and implemented HTTPX/Starlette/Pydantic/rule-engine mounts have new tests.",
-        "Successful local-filesystem/unit/runtime suite does not prove full workspace restoration, multi-host concurrency, vendor integration or all platforms.",
-        "Static risk to test: ledger lock expiration uses age only; a writer stalled beyond 30 seconds may lose exclusivity. Existing stale-runner regression is sequential, not a simultaneous process/crash test. No failure reproduced by A1."
+        "The canonical 01-20 report is byte-identical and still generated 2026-09-09 with 17 PASS and three PENDING_SOURCE.",
+        "OPA/OpenFGA live E2E evidence is genuine progress but belongs to a separate policy lane."
       ]
     },
     {
       "id": "A1-04",
       "status": "INSTRUCTIONS_PUBLISHED_IN_OWN_STATE",
+      "base_sha": "8dbea87adcf3746decc6a674c0edceb5bf98f6d7",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "refutations": [
-        "No current Fables CI is superseded by matching code and full-suite success.",
-        "15+41 tests are not the 01-20 component denominator.",
-        "Node result recovery is not chat/workspace recovery.",
-        "Catalog-only plugin rejection is fail-closed behavior, not integrated functionality."
+        "A successful OPA/OpenFGA policy sublane cannot be counted as Vite, Supabase, DuckDB, AVF, or any pending 01-20 component.",
+        "A coordination delta does not reconcile unchanged STATE/CHECKPOINT/HANDOFF.",
+        "ASTRA2 state publication at READY_TO_CLAIM is not completion of its Fables-consuming integration.",
+        "Physical source presence and live adapter evidence are distinct gates; neither alone is global VERIFIED_CLOSED."
       ]
     }
   ],
   "instructions_for_owners": {
-    "SOL_GPT1_BACKEND": "Publish fresh own-state heartbeat; reconcile authorized Vite/Supabase destinations with coordinator, use canonical motors only, publish source/tree hash and exact final read-back; hand Vite to S3. Keep workspace/chat isolation distinct from node ledger recovery.",
-    "SOL_GPT2_BACKEND": "Keep DuckDB symlink and AVF provider/capability gates fail-closed; publish approved strategy and destination read-back in own state without changing motors.",
-    "SOL_GPT3_BACKEND": "Reconcile stale 01-20 report with current exact-code runtime evidence. Separate catalog presence, mount rejection and vendor execution; pycasbin/opentelemetry catalog entries still lack concrete mounts. Do not promote 17 historical PASS to WIRED. Publish actual UI-to-runtime restart/resume test after prerequisites.",
-    "ASTRA2_GPT_BACKEND": "Current Fables blob now has applicable successful full-runtime CI 34641893033; stop repeating no-current-code-CI as current fact. Validate consuming integration separately from socket tests and publish own canonical state.",
-    "COORDINATOR": "Reconcile STATE/CHECKPOINT/HANDOFF and roles wall with G11/G12/G14 runtime subgate evidence; retain residuals and full workspace/platform gates open. Define typed evidence/ref and business contracts before glue implementation; no new downloads justified."
+    "SOL_GPT1_BACKEND": "Canonical state is unchanged. Obtain literal Vite/Supabase destinations, use only pinned canonical motors, and publish source commit, final tree hash, failed=0, pending=0 and exact destination read-back; hand verified Vite to S3.",
+    "SOL_GPT2_BACKEND": "Canonical state is unchanged. Keep DuckDB symlink handling and AVF provider/permission/host-capability/guest-boot gates fail-closed; publish coordinator-approved strategy and exact final read-back without changing immutable motors.",
+    "SOL_GPT3_BACKEND": "Do not alter 01-20 from the OPA/OpenFGA sublane. Rebuild the canonical 01-20 report only from per-component source, Fables wiring and runtime evidence for big-AGI, Vite and Vercel AI SDK; retain PENDING until each gate passes.",
+    "ASTRA2_GPT_BACKEND": "Canonical state now exists but is READY_TO_CLAIM. Claim the assigned A2 node, validate actual Fables consumption beyond socket tests, and publish path+blob+run/job/log evidence in the canonical Astra2 state.",
+    "COORDINATOR": "Reconcile unchanged STATE/CHECKPOINT/HANDOFF and canonical roles wall. Map verified OPA/OpenFGA live evidence into the G12 policy sublane only; do not change the four residual or 01-20 denominators. No new component download is justified by this A1 audit."
   },
   "next_iteration": [
-    "Read fresh wall and own state before each A1 node.",
-    "Detect destination authorization or residual tree/read-back deltas.",
-    "Check exact current Fables CI and refreshed 01-20 report.",
-    "Audit only published evidence; retain fail-closed boundaries."
+    "Read fresh roles wall and own state before every A1 node.",
+    "Detect literal destination authorization and final tree/read-back for four residuals.",
+    "Require refreshed canonical 01-20 report tied to component wiring evidence.",
+    "Audit Astra2 claimed-node evidence and keep policy sublane separate from global closure."
   ],
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
   "research_delta": {
@@ -747,17 +756,29 @@
         "ASTRA2_GPT_BACKEND": "Current Fables blob now has applicable successful full-runtime CI 34641893033; stop repeating no-current-code-CI as current fact. Validate consuming integration separately from socket tests and publish own canonical state.",
         "COORDINATOR": "Reconcile STATE/CHECKPOINT/HANDOFF and roles wall with G11/G12/G14 runtime subgate evidence; retain residuals and full workspace/platform gates open. Define typed evidence/ref and business contracts before glue implementation; no new downloads justified."
       }
+    },
+    {
+      "snapshot_reason": "Preserve previous current_delta before 2026-09-11T21:34:19Z audit",
+      "observed_at": "2026-09-11T20:36:59Z",
+      "base_sha": "83a730cbdc61f6aa81fb80fd0ae59bc55f6b2b71",
+      "previous_role_blob_sha": "af18da9e17667f73587626e8937632a86cf0e837",
+      "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+      "result": "DELTA_AUDITED_GAPS_OPEN",
+      "runtime_tests_executed_this_cycle": false,
+      "ci_logs_independently_read": true,
+      "mutation_performed": "OWN_STATE_ONLY",
+      "new_evidence": "Matching current-code CI: 15 wordflow tests and 41 runtime tests + 6 subtests pass; four residual final paths absent; 01-20 report unchanged."
     }
   ],
   "current_delta": {
-    "observed_at": "2026-09-11T20:36:59Z",
-    "base_sha": "83a730cbdc61f6aa81fb80fd0ae59bc55f6b2b71",
-    "previous_role_blob_sha": "af18da9e17667f73587626e8937632a86cf0e837",
+    "observed_at": "2026-09-11T21:34:19Z",
+    "base_sha": "8dbea87adcf3746decc6a674c0edceb5bf98f6d7",
+    "previous_role_blob_sha": "c7bb1d3e08588ae4c593fa3342190a0b9664de4f",
     "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
     "result": "DELTA_AUDITED_GAPS_OPEN",
     "runtime_tests_executed_this_cycle": false,
     "ci_logs_independently_read": true,
     "mutation_performed": "OWN_STATE_ONLY",
-    "new_evidence": "Matching current-code CI: 15 wordflow tests and 41 runtime tests + 6 subtests pass; four residual final paths absent; 01-20 report unchanged."
+    "new_evidence": "OPA/OpenFGA live E2E run 34647825462 independently confirms policy-lane PASS; four residual exact paths remain absent and canonical 01-20 stays 17/20."
   }
 }
