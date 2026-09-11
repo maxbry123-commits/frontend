@@ -1,0 +1,102 @@
+name: UI YAIWES - S3 integration 01-20 STEP_1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ui-yaiwes-s3-integration-01-20-step1-20260910.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sol-gpt3-backend-ui-yaiwes-s3-step1-01-20
+  cancel-in-progress: false
+
+jobs:
+  s3_step1_move_sources:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            .github/workflows/ui-yaiwes-s3-integration-01-20-step1-20260910.yml
+            UI YAIWES/componentes open soure UI YAIWES/big-AGI
+            UI YAIWES/componentes open soure UI YAIWES/Vercel AI SDK
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor
+            UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles
+            ➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂motor de moves archivos/motor_4_move_batches.py
+
+      - name: Verify canonical motor pin
+        shell: bash
+        run: |
+          set -euo pipefail
+          PIN='ef0669bbc753861bfc33b86548f3f90c0f3d8df9'
+          MOTOR='➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂motor de moves archivos/motor_4_move_batches.py'
+          EXPECTED='9a21facfe11327cf60a2afca8f415ad52f0ecbe5'
+          ACTUAL="$(git rev-parse "${PIN}:${MOTOR}")"
+          test "$ACTUAL" = "$EXPECTED"
+          git show "${PIN}:${MOTOR}" > /tmp/motor_4_move_batches.py
+          test "$(git hash-object /tmp/motor_4_move_batches.py)" = "$EXPECTED"
+
+      - name: S3-02 move big-AGI and Vercel AI SDK with motor_4
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='UI YAIWES'
+          SRCROOT="$ROOT/componentes open soure UI YAIWES"
+          VENDOR="$ROOT/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor"
+          EVID="$ROOT/bitácora stated JSON Craxy wall plan checkpoint/roles"
+          mkdir -p "$EVID" "$VENDOR"
+
+          run_move() {
+            local src="$1" dst="$2" state="$3"
+            if [ -d "$src" ]; then
+              SOURCE_DIR="$src" DEST_DIR="$dst" STATE_FILE="$state" BATCH_SIZE=100 COLLISION_POLICY=fail MAX_BATCHES=0 \
+                python3 /tmp/motor_4_move_batches.py | tee /tmp/motor4-result.json
+              python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/motor4-result.json').read_text(encoding='utf-8').splitlines()[-1])
+          assert r['verdict']=='VERIFIED_CLOSED', r
+          assert r['failed']==0 and r['pending']==0, r
+          PY
+            elif [ -d "$dst" ] && [ -n "$(find "$dst" -type f -print -quit)" ]; then
+              echo "ALREADY_MOVED_VERIFIED_PATH=$dst"
+            else
+              echo "SOURCE_AND_DESTINATION_GAP:$src:$dst" >&2
+              exit 21
+            fi
+          }
+
+          run_move "$SRCROOT/big-AGI" "$VENDOR/big_agi" "$EVID/S3-02-big-AGI-motor4-state.json"
+          run_move "$SRCROOT/Vercel AI SDK" "$VENDOR/vercel_ai_sdk" "$EVID/S3-02-vercel-ai-sdk-motor4-state.json"
+
+          test -d "$VENDOR/big_agi" && test -n "$(find "$VENDOR/big_agi" -type f -print -quit)"
+          test -d "$VENDOR/vercel_ai_sdk" && test -n "$(find "$VENDOR/vercel_ai_sdk" -type f -print -quit)"
+
+      - name: Commit S3 STEP_1 evidence and destinations
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A -- \
+            'UI YAIWES/componentes open soure UI YAIWES/big-AGI' \
+            'UI YAIWES/componentes open soure UI YAIWES/Vercel AI SDK' \
+            'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/big_agi' \
+            'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vercel_ai_sdk' \
+            'UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/S3-02-big-AGI-motor4-state.json' \
+            'UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/S3-02-vercel-ai-sdk-motor4-state.json'
+          if git diff --cached --quiet; then
+            echo 'S3_STEP1_NO_CHANGES'
+            exit 0
+          fi
+          git commit -m 'feat(yaiwes): S3 STEP_1 move big-AGI and Vercel AI SDK'
+          git pull --rebase origin main
+          git push origin HEAD:main
