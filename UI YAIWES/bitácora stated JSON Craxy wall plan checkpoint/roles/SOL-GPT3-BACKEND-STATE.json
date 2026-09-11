@@ -3,8 +3,8 @@
   "role": "Sol gpt 3 🕵️‍♀️ backend",
   "node_prefix": "S3",
   "mode": "FAIL_CLOSED_LOOP",
-  "updated_at": "2026-09-10T23:39:00-05:00",
-  "base_sha": "e41343e603b3a104ac767e55e5d16c853569f2ab",
+  "updated_at": "2026-09-10T23:40:00-05:00",
+  "base_sha": "29a22de6bde81824811b96428d35a5e503ac62f7",
   "crazy_wall": {
     "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json",
     "blob_sha": "a4253dbb786ad89358afbacccd43dc47b5d57ebb"
@@ -15,7 +15,7 @@
   },
   "watchdog": {
     "active": true,
-    "cadence": "1 hour",
+    "cadence": "1 hour condition loop",
     "automation_id": "6aa306a02bf881918785148b832acc6d"
   },
   "queue": {
@@ -39,9 +39,14 @@
         "policy": "READ_ONLY_CANDIDATES_NOT_DESTINATION_AUTHORIZATION"
       },
       "big-AGI": {
-        "source_status": "SOURCE_PRESENT",
+        "source_status": "SOURCE_PRESENT_EXTRACTION_VERIFIED",
         "source_path": "UI YAIWES/componentes open soure UI YAIWES/big-AGI/code",
-        "source_tree_sha": "39ee2280e85c95db1b20309f1bc440222b71f798",
+        "source_tree_git_sha": "39ee2280e85c95db1b20309f1bc440222b71f798",
+        "source_repo": "https://github.com/enricoros/big-AGI",
+        "source_commit": "7413983159ddb7056bde035d98446d33573bfa0a",
+        "source_files": 1070,
+        "source_tree_sha256": "003b3433d38e621957d39288cbd4da77d718fa13f536f1934957bd92fb01e246",
+        "manifest_blob_sha": "c32ad07130ca7c042f1354ca53488bce3eaa21a6",
         "historical_runtime_destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/big_agi",
         "destination_readback": "404_NOT_PRESENT_ON_MAIN",
         "blocker": "DESTINATION_INPUT_GAP",
@@ -55,9 +60,14 @@
         "reason": "S1 owns Vite acquisition and is itself blocked by DESTINATION_INPUT_GAP"
       },
       "Vercel AI SDK": {
-        "source_status": "SOURCE_PRESENT",
+        "source_status": "SOURCE_PRESENT_EXTRACTION_VERIFIED",
         "source_path": "UI YAIWES/componentes open soure UI YAIWES/Vercel AI SDK/code",
-        "source_tree_sha": "bd0a3b843b4ec41a935e5b43adfb894a70567c4e",
+        "source_tree_git_sha": "bd0a3b843b4ec41a935e5b43adfb894a70567c4e",
+        "source_repo": "https://github.com/vercel/ai",
+        "source_commit": "916da300b87610a84c58dc5bb2da15f9f9dbae98",
+        "source_files": 144,
+        "source_tree_sha256": "c448dee5358d9e4fc8605b9ec63262b51f473ffe8f19b217004e05fd1ee0eab6",
+        "manifest_blob_sha": "a74e1c6a82f8e142e1abd6e6b340cd5201f8fe0f",
         "historical_runtime_destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vercel_ai_sdk",
         "destination_readback": "404_NOT_PRESENT_ON_MAIN",
         "blocker": "DESTINATION_INPUT_GAP",
