@@ -1,0 +1,19 @@
+{
+  "schema": "yaiwes.frontend.download-extract-queue.v1",
+  "contract": "tel.workflow/v3",
+  "destination": "UI YAIWES/componentes open soure UI YAIWES",
+  "policy": "CANONICAL_MOTOR2_DIRECT_PUBLISH_FAIL_CLOSED",
+  "queue": [
+    {"id":"0201:OPA","slug":"OPA","source_repo":"https://github.com/open-policy-agent/opa","source_ref":"961849b565d2457b80c168f254325b7d5b91461e","publish":true},
+    {"id":"0202:OpenFGA","slug":"OpenFGA","source_repo":"https://github.com/openfga/openfga","source_ref":"73591ef16ce508623920d5b706286ffcdfb6841b","publish":true},
+    {"id":"0203:Litestream","slug":"Litestream","source_repo":"https://github.com/benbjohnson/litestream","source_ref":"1be2782b642111afbb9fb06d6ea10a211e6a0b84","publish":true},
+    {"id":"0204:rqlite","slug":"rqlite","source_repo":"https://github.com/rqlite/rqlite","source_ref":"4e92305e647b2c93a895b5b5a6c7eab55e9267b1","publish":true},
+    {"id":"0205:OpenTelemetry Collector","slug":"OpenTelemetry Collector","source_repo":"https://github.com/open-telemetry/opentelemetry-collector","source_ref":"65bcb4855bc033cd327cb8b4569296578fc4750d","publish":true},
+    {"id":"0206:Grafana Tempo","slug":"Grafana Tempo","source_repo":"https://github.com/grafana/tempo","source_ref":"6ddb03696108d00f9e0fd57919f4608a6239977e","publish":true},
+    {"id":"0207:Testcontainers Python","slug":"Testcontainers Python","source_repo":"https://github.com/testcontainers/testcontainers-python","source_ref":"5c70d540e0df919e2de77ce8cc75b5c50cd772e7","publish":true},
+    {"id":"0208:Schemathesis","slug":"Schemathesis","source_repo":"https://github.com/schemathesis/schemathesis","source_ref":"59ba446b8e643b127e01d93d10549cb699aaf09a","publish":true},
+    {"id":"0209:Kata Containers","slug":"Kata Containers","source_repo":"https://github.com/kata-containers/kata-containers","source_ref":"0e9bff34d71dbaa14e3f57eef49ebc61c920b8ae","publish":true},
+    {"id":"0210:Grype","slug":"Grype","source_repo":"https://github.com/anchore/grype","source_ref":"bf5f48bf540eec352c1a804111d9d62d9f971280","publish":true},
+    {"id":"0211:ORAS","slug":"ORAS","source_repo":"https://github.com/oras-project/oras","source_ref":"d0da4a96a6893d2e7f44ea60a8f317a2fcce1cf9","publish":true}
+  ]
+}
