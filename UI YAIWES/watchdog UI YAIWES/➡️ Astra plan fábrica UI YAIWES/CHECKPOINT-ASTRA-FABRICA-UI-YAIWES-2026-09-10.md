@@ -1,11 +1,14 @@
 # CHECKPOINT — ➡️ Astra plan fábrica UI YAIWES
 
-Fecha: 2026-09-10
-Estado: ACTIVE_LOOP
+Fecha base: 2026-09-10
+Cierre técnico persistido: 2026-09-11 UTC
+Estado T1: VERIFIED_CLOSED
 Gate: T1_FACTORY_FRONTEND
-T2: BLOCKED_UNTIL_T1_VERIFIED_CLOSED
+T2: BLOCKED_PENDING_EXPLICIT_PRODUCT_PATH_HANDOFF
+Contrato: tel.workflow/v3
+Modo: FAIL_CLOSED_LOOP
 
-## Documentación regularizada
+## Documentación canónica
 
 - INPUT-BLOCK-LITERAL-2026-09-10.md
 - NOTAS-INSTRUCCIONES-1A1-ASTRA-2026-09-10.md
@@ -14,9 +17,10 @@ T2: BLOCKED_UNTIL_T1_VERIFIED_CLOSED
 - HANDOFF-ASTRA-FABRICA-UI-YAIWES.md
 - RECOVERY-PATCH-ASTRA-FABRICA-UI-YAIWES.md
 - AUDITORIA-5-PASADAS-CROSSCHECK-2026-09-10.md
-- STATE.json actualizado
+- STATE.json
+- Frontend/factory-v0/FINAL-VERIFICATION-2026-09-10.md
 
-## Commits de creación documental
+## Commits documentales base
 
 INPUT literal: f1a3d0d3a3be312e203d83417342623f14271a11
 PLAN: 2d5a633f4253cbfeaacbb0eccd711de90fb2f61b
@@ -25,57 +29,93 @@ HANDOFF: 559b25a4387540703987cb33589275310f6be03d
 RECOVERY: 44c29d2b0cacc2b6eef2159372ab6d181e7d7f3a
 AUDITORÍA 5 PASADAS: 768860c868779d1c4283cf8c173c2d398bf14e59
 
-## Factory actual
+## Factory V0 cerrada en staging Astra
 
-Factory V0 presente con runtime logic test previo PASS 6/6 según STATE.
+Ruta:
+`UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/`
 
-### Avance P4B — E2E
+Commit exacto verificado:
+`fe544a5f94ab41c25847f4745d326a4aff72e09e`
 
-Se inspeccionó el Factory V0 y el donor local Playwright antes de generar código.
+Cierre funcional:
+- runtime logic: PASS 6/6;
+- E2E desktop + mobile: PASS 14/14;
+- responsive gate: PASS;
+- independent verifier: PASS;
+- read-back: PASS;
+- Factory V0: VERIFIED_CLOSED en staging Astra.
 
-Trazabilidad verificada:
-- donor local: `UI YAIWES/componentes open soure UI YAIWES/Playwright/`;
-- licencia local: Apache-2.0, read-back verificado;
-- upstream: https://github.com/microsoft/playwright;
-- versión usada por harness: `v1.55.0`;
-- tag oficial resuelve a commit `f992162f04ae0b0b5a0f4b6114b894215be98995`.
+## StrategyDelta ejecutados
 
-Harness materializado:
-- `Frontend/factory-v0/package.json` — commit `12e9bf80f5ed90da306d1583422b811d48e67825`;
-- `Frontend/factory-v0/playwright.config.mjs` — commit `0e7522b173d472fb8ffd35bef54e2c1257bbb4b2`;
-- `Frontend/factory-v0/tests/e2e/factory.e2e.spec.mjs` — commit `711e8b1628861293950b7d4ab0b1463e3b308e5d`;
-- `Frontend/factory-v0/E2E-HARNESS-EVIDENCE-2026-09-10.md` — commit `da38673e3c088e5edae05dd52e5b27117d152fb8`.
+1. Full-clone HF job descartado por costo/latencia.
+2. Sparse checkout HF job descartado por costo/latencia.
+3. Direct-file runner usado para aislar Factory V0.
+4. Semver de Playwright corregido de `^1.55.0` a pin exacto `1.55.0`.
+5. Estado inicial corregido a canvas vacío + V0.
+6. Interacción multiplataforma: desktop drag/drop; móvil tap/click sobre la misma acción de biblioteca.
+7. Gate responsive añadido.
+8. Verificador independiente encontró test lógico obsoleto; se corrigió antes de cierre.
 
-Cobertura declarada: cinco pasos, edición visual, drag/drop, AI delta proposal/apply boundary, undo/redo, V+, export; desktop Chromium + mobile Chromium.
+## Evidencia Hugging Face
 
-## Evidence boundary
+E2E 12/12:
+https://huggingface.co/jobs/COMAND-CENTER-1/6aa35ce55527934177ec3f9e
 
-`E2E_HARNESS_READY != E2E_EXECUTED_PASS`.
+E2E + responsive 14/14:
+https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d1521047bf1b037477c
 
-No se creó/modificó workflow en `.github/workflows/` porque el Crazy Wall no asigna esa ruta a T1 Astra. No se fabrica un PASS violando `single_writer_per_path`.
+Independent verifier:
+https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d4e5527934177ec3fba
 
-## Persistencia del LOOP
+Resultado del verificador independiente:
+`14 passed (4.4s)` + `INDEPENDENT_VERIFIER=PASS` + job `COMPLETED`.
 
-- Bitácora event: `ASTRA-FACTORY-LOOP-EVENT-2026-09-10-1959.json` — commit `d4097e3c53bb8d5263e423d8ea5f375229dfcf90`.
-- Plan delta P4B — commit `a9a0c653e3060075a119c438c60a96306c021d8f`.
-- Recovery delta P4B — commit `84de8934d7586d917ba91c0145ae0d0a621adca0`.
-- Architecture delta P4B — commit `071e9582f2e06b2afee1d2edfe91317c488e776b`.
-- STATE E2E update — commit `e16438b2ab3c0d6142d772d3f6d66ed0003ab0b9`.
+## Donor verificado usado en T1
 
-## Pendiente real
+Playwright:
+- upstream: https://github.com/microsoft/playwright
+- versión: v1.55.0
+- source commit: f992162f04ae0b0b5a0f4b6114b894215be98995
+- licencia: Apache-2.0
+- uso: harness de prueba únicamente.
 
-- ejecutar suite E2E en runner browser autorizado y retener log/report;
-- product factory path handoff explícito;
-- provenance/licencia de cada donor que pase a integración real;
-- independent reviewer para VERIFIED_CLOSED.
+No se promueve como integrado ningún otro componente OSS sólo por presencia física.
 
-## Punto de reanudación
+## Evidencia final
 
-`P4B_RUN_E2E_IF_AUTHORIZED_ELSE_CONTINUE_SAFE_DONOR_PROVENANCE`
+Archivo:
+`Frontend/factory-v0/FINAL-VERIFICATION-2026-09-10.md`
 
-Secuencia:
-`read main -> Crazy Wall -> INPUT -> architecture/PLAN -> STATE/CHECKPOINT -> run E2E if authorized -> else safe donor traceability -> evidence -> persist -> repeat`.
+Commit de evidencia final:
+`618440e428778e0f70cf4364602460b3b514609e`
 
-## Regla
+Commit de STATE que marca T1 cerrado:
+`62ccd140c2612567905ca99b2dad14744fd522d0`
 
-No declarar PASS por presencia. No iniciar T2 productiva antes de T1 VERIFIED_CLOSED.
+## Único GAP abierto después de T1
+
+`PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT`
+
+El Crazy Wall sigue reservando las rutas productivas de frontend y exige handoff explícito. Este cierre NO autoriza escribir en:
+- `UI YAIWES/Fabrica UI YAIWES/`
+- `UI YAIWES/Interface YAIWES ui/`
+- rutas backend propiedad de Sol.
+
+## Punto exacto de reanudación
+
+`WAIT_PRODUCT_PATH_HANDOFF_BEFORE_T2_INTERFACE_YAIWES`
+
+Mientras el handoff no exista:
+- mantener Watchdog LOOP activo;
+- releer main/Crazy Wall/INPUT/STATE/CHECKPOINT cada ciclo;
+- investigar/mejorar propuestas V+ seguras en staging Astra;
+- no iniciar T2 productiva;
+- no crear actividad vacía.
+
+Cuando exista handoff explícito:
+`read main -> verify ownership -> T2_INTERFACE_YAIWES -> usar Factory VERIFIED_CLOSED -> construir UI por ventanas modulares V+ -> tests -> evidence -> persist`.
+
+## Regla final
+
+`SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED`.
+T1 sólo se marca VERIFIED_CLOSED por la cadena de evidencia anterior, no por presencia.
