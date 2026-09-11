@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: yaiwes-wordflow-runtime-recovery-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   runtime-tests:
@@ -20,6 +20,10 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
