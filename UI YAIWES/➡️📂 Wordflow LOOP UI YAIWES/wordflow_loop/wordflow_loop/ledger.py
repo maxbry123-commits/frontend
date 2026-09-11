@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import json
+import os
+from pathlib import Path
 from typing import Any
 
 from .contracts import sha256
@@ -25,3 +28,34 @@ def verify_ledger(ledger: list[dict[str, Any]]) -> bool:
             return False
         prev_hash = row["hash"]
     return True
+
+
+def load_ledger(path: str | Path) -> list[dict[str, Any]]:
+    target = Path(path)
+    if not target.exists():
+        return []
+    rows = [
+        json.loads(line)
+        for line in target.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    if not verify_ledger(rows):
+        raise ValueError("ledger_integrity_failure")
+    return rows
+
+
+def save_ledger(path: str | Path, ledger: list[dict[str, Any]]) -> None:
+    if not verify_ledger(ledger):
+        raise ValueError("ledger_integrity_failure")
+    target = Path(path)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    temporary = target.with_suffix(target.suffix + ".tmp")
+    with temporary.open("w", encoding="utf-8") as handle:
+        for row in ledger:
+            handle.write(
+                json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+                + "\n"
+            )
+        handle.flush()
+        os.fsync(handle.fileno())
+    os.replace(temporary, target)
