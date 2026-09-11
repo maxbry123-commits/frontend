@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S1-DEBATE-SOLPLAN-20260911-01",
-  "status": "ACTIVE_DEBATE_LOOP_ROUND4_MEMORY_BOUNDARY_GAP_NEXT_FREE_RUNNING",
+  "status": "ACTIVE_DEBATE_LOOP_S1_07_PREFLIGHT_COMPLETE_HANDOFF_PENDING",
   "from": "Sol ☀️ 🏈gpt 1 backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
@@ -13,7 +13,9 @@
   "document_anchors": {
     "max_system_blob": "b9bc9a7f56cf17607b863829213f7bcb0f8b8081",
     "virtual_computer_blob": "ecc8b3b1444ade0ca894789e149e881a08b999c0",
-    "memory_workflow_blob": "da109ae2d91e4563c01492ad365bbaa00fc6baa6"
+    "memory_workflow_blob": "da109ae2d91e4563c01492ad365bbaa00fc6baa6",
+    "adapters_readme_blob": "d20358aa2e725de11e46190c8b7b3997d8f7e890",
+    "integration_readme_blob": "0aefd2511eeb0378a9204fafba54a49b9c8c3255"
   },
   "round_4_answer": {
     "verdict": "PARTIAL_PASS_EXECUTION_RECOVERY_IMPLEMENTED_PRODUCT_MEMORY_BOUNDARY_MISSING",
@@ -30,11 +32,7 @@
       "runtime/src/agent product implementation",
       "chat/project/agent memory scope isolation contract+implementation+tests"
     ],
-    "placeholder_evidence": {
-      "storage_gitkeep": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
-      "recovery_gitkeep": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
-      "agent_gitkeep": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
-    }
+    "placeholder_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
   },
   "fables_verified": {
     "contract_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py",
@@ -46,35 +44,136 @@
     "ci_job_id": 103169993658,
     "ci_conclusion": "success",
     "wordflow_tests": "12 passed in 0.05s",
-    "socket_fables_tests": "9 passed in 0.02s",
-    "verdict": "FABLES_PATH_SHA_CONTRACT_TEST_CI_PASS"
+    "socket_fables_tests": "9 passed in 0.02s"
   },
   "s1_06_memory_boundary_discovery": {
     "status": "GAP_VERIFIED_READONLY",
-    "search_results": {
-      "memory_scope": "NO_CODE_MATCH",
-      "chat_id_project_id_agent_id": "NO_CODE_MATCH",
-      "Mem0": "NO_CODE_MATCH"
-    },
-    "adapter_spec": {
-      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/README.md",
-      "blob_sha": "d20358aa2e725de11e46190c8b7b3997d8f7e890",
-      "planned": ["memory_adapter.py","router_adapter.py","agent_adapter.py"],
-      "rules": ["do not duplicate Memory","do not duplicate Router","preserve typed contracts","record source/version/route/evidence refs","adapter is not a second orchestrator"]
-    },
+    "adapter_spec_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/README.md",
+    "adapter_spec_blob_sha": "d20358aa2e725de11e46190c8b7b3997d8f7e890",
     "memory_adapter_exact_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/memory_adapter.py",
     "memory_adapter_readback": "404_NOT_FOUND",
-    "integration_spec": {
-      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/README.md",
-      "blob_sha": "0aefd2511eeb0378a9204fafba54a49b9c8c3255",
-      "status": "SPEC_ONLY_PLANNED_FILES_NOT_IMPLEMENTED"
+    "integration_spec_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/README.md",
+    "integration_spec_blob_sha": "0aefd2511eeb0378a9204fafba54a49b9c8c3255",
+    "verdict": "MEMORY_BOUNDARY_SPECIFIED_BUT_ADAPTER_NOT_IMPLEMENTED"
+  },
+  "s1_07_memory_adapter_contract_preflight": {
+    "status": "PREFLIGHT_COMPLETE_NO_CODE_WRITE",
+    "boundary": "Workflow/Runtime controls execution. Memory/Audit retrieves, stores, audits and consolidates external cognitive memory. Adapter only transports typed requests/results and must not become a second orchestrator.",
+    "documented_read_operations": [
+      "GET_CONTEXT",
+      "GET_MEMORY",
+      "GET_EVIDENCE",
+      "GET_STATE",
+      "GET_HISTORY",
+      "GET_ARTIFACT",
+      "GET_RELATIONS",
+      "AUDIT_MEMORY"
+    ],
+    "documented_write_operations": [
+      "SAVE_STATE_DELTA",
+      "SAVE_ARTIFACT",
+      "SAVE_CLAIM",
+      "SAVE_EVIDENCE",
+      "SAVE_CONSOLIDATION",
+      "CREATE_CHECKPOINT"
+    ],
+    "documented_memory_layers": [
+      "L0_RAW_SOURCE",
+      "L1_WORKING_MEMORY",
+      "L2_TASK_MEMORY",
+      "L3_PROJECT_MEMORY",
+      "L4_LONG_TERM_KNOWLEDGE"
+    ],
+    "minimal_request_contract": {
+      "operation": "required; must be one documented Memory/Audit operation",
+      "memory_layer": "required when operation targets memory; one documented L0-L4 layer",
+      "project_ref": "required when project-scoped retrieval/storage is used; source docs define PROJECT tag and L3 project memory",
+      "task_ref": "required when task-scoped retrieval/storage is used; source docs define TASK tag and L2 task memory",
+      "checkpoint_ref": "required when creating/referencing recovery checkpoints",
+      "source_identity": {
+        "source": "required for raw-source/provenance-bearing operations",
+        "version": "required when source is versioned",
+        "hash": "required when immutable evidence is available",
+        "location": "required for recoverable raw source",
+        "provenance": "required for canonical evidence/claims"
+      },
+      "transport_identity": {
+        "route": "required by adapters boundary for external/remote Memory service",
+        "source_version": "required by adapters boundary",
+        "evidence_refs": "required when request/result depends on evidence"
+      },
+      "authorization": "must be supplied by Runtime/Policy; Memory Orchestrator must not decide authorization",
+      "context_budget": "required for GET_CONTEXT when a bounded Context Pack is requested",
+      "payload": "typed operation-specific body; writes carry candidate StateDelta/artifact/claim/evidence/consolidation/checkpoint request, never raw free-form canonical mutation"
     },
-    "verdict": "MEMORY_BOUNDARY_SPECIFIED_BUT_ADAPTER_NOT_IMPLEMENTED",
+    "canonical_write_gate": [
+      "LLM_OUTPUT",
+      "NORMALIZER",
+      "SCHEMA_VALIDATION",
+      "AUDIT",
+      "STATE_DELTA",
+      "MEMORY_UPDATE"
+    ],
+    "write_rule": "LLM must never write directly to canonical memory. Adapter must reject or refuse any write lacking normalized/schema-validated/audited provenance required by its operation contract.",
+    "minimal_read_response": {
+      "type": "CONTEXT_PACK_OR_TYPED_MEMORY_RESULT",
+      "context_pack_fields": [
+        "relevant_memory",
+        "evidence",
+        "relations",
+        "current_state",
+        "consolidation",
+        "open_questions",
+        "provenance",
+        "confidence",
+        "context_budget"
+      ],
+      "rule": "Memory response is structured data, not a conversational answer"
+    },
+    "minimal_write_response": {
+      "status": "PASS | BLOCKED | FAIL | INCONCLUSIVE",
+      "new_version": "new memory/state version or null when no mutation occurred",
+      "checkpoint_ref": "when checkpoint created",
+      "evidence_refs": "evidence produced/linked by validated write",
+      "provenance": "producer/source/task/checkpoint validation trace",
+      "readback": "strong read-back/receipt required before promoting mutation to PASS"
+    },
+    "versioning_traceability": [
+      "no silent overwrite",
+      "retain source/version/hash/location/provenance",
+      "record who produced it",
+      "record task",
+      "record evidence",
+      "record checkpoint",
+      "record validation status"
+    ],
+    "fail_closed_gaps": [
+      "MEMORY_ADAPTER_NOT_IMPLEMENTED",
+      "MEMORY_ROUTE_GAP",
+      "MEMORY_SCOPE_GAP",
+      "MEMORY_PROVENANCE_GAP",
+      "MEMORY_AUTHORIZATION_GAP",
+      "MEMORY_SCHEMA_VALIDATION_GAP",
+      "MEMORY_AUDIT_GAP",
+      "MEMORY_READBACK_GAP"
+    ],
+    "agent_memory_boundary": {
+      "status": "NOT_DEFINED_AS_CANONICAL_MEMORY_LAYER_IN_INSPECTED_MEMORY_CONTRACT",
+      "evidence": "Source defines L0 raw, L1 working, L2 task, L3 project, L4 long-term. Virtual Computer defines Agent Window/Agent Engine and capability authorization, but inspected runtime has no implemented agent-memory contract.",
+      "rule": "Do not invent agent_id as a mandatory canonical-memory field until Director/Memory contract explicitly defines ownership and isolation semantics. The requested separation of product chat/project state from external-agent own memory remains a real contract GAP."
+    },
+    "local_first_boundary": {
+      "virtual_computer_requirement": "storage is 100 percent local by default",
+      "product_runtime_status": "runtime/src/storage is placeholder-only",
+      "adapter_rule": "HTTPX transport only when Memory service is remote; local implementation must not be forced through cloud transport"
+    },
     "refutation": [
-      "README 'previsto' no equivale a código implementado.",
-      "No se debe implementar memoria cognitiva dentro del adapter ni duplicar el Memory/Audit Orchestrator.",
-      "No se puede declarar scope isolation PASS sin campos, ruta, código y tests reales."
-    ]
+      "Refuto usar workflow ledger como backend de Memory/Audit: execution ledger and cognitive memory have different responsibilities.",
+      "Refuto permitir direct LLM canonical-memory writes: source contract explicitly requires normalize→schema validate→audit→StateDelta before memory update.",
+      "Refuto convertir memory_adapter into a second orchestrator: adapters README forbids duplicating Memory/Router and requires typed routes/evidence.",
+      "Refuto inventar agent memory fields from UI/Agent Window existence: runtime capability control is not proof of a canonical agent-memory scope."
+    ],
+    "verdict": "MINIMAL_CONTRACT_DERIVED_FROM_SOURCES_IMPLEMENTATION_NOT_AUTHORIZED"
   },
   "acquisition_status": {
     "Vite": "BLOCKED_DESTINATION_INPUT_GAP",
@@ -85,21 +184,22 @@
     {"turn":13,"author":"Sol ☀️ 🏈gpt 1 backend","action":"FABLES_CI_VERIFIED","result":"Fables path+SHA+contract+CI PASS"},
     {"turn":14,"author":"DIRECTOR via 🌞👷 sol osquestador plan 🎯","action":"ROUND_4_ORDER","source_blob":"6e34e6149a5359e731feaf4d2412fba69e7397d0"},
     {"turn":15,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_4_ANSWER","result":"Ledger/restart PASS; product storage/recovery/agent placeholders; memory scope isolation GAP"},
-    {"turn":16,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_06_MEMORY_BOUNDARY_DISCOVERY","result":"memory_adapter specified in README but exact file 404; integration is spec-only; next FREE node started"}
+    {"turn":16,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_06_MEMORY_BOUNDARY_DISCOVERY","result":"memory_adapter specified in README but exact file 404; integration spec-only"},
+    {"turn":17,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_07_MEMORY_ADAPTER_CONTRACT_PREFLIGHT","result":"Minimal typed adapter contract derived; direct LLM canonical writes prohibited; agent-memory ownership remains GAP; no code mutation without handoff"}
   ],
   "questions_for_sol_plan": [
     {"id":"R4-Q1","question":"¿MOTOR_BLOB_IDENTITY_GAP y MOTOR_AUX_INPUT_CONTRACT_GAP pertenecen a L05 o al dispatcher/motor wrapper?"},
     {"id":"R4-Q2","question":"¿Qué evidencia de DESTINATION_AUTHORITY_PROVENANCE aceptas?"},
     {"id":"R4-Q3","question":"¿Memory-scope chat/proyecto/agente pertenece a S1 runtime o al Memory/Audit Orchestrator separado?"},
     {"id":"R4-Q4","question":"Fables ya está CI PASS. Con destinos bloqueados, publica siguiente nodo S1 o destinos literales Vite/Supabase."},
-    {"id":"R4-Q5","question":"¿Autorizas a S1 a implementar runtime/src/adapters/memory_adapter.py? Si sí, publica EXACT_WRITE_PATHS, contrato de transporte y criterio de aceptación; si no, mantengo sólo preflight/read-only."
-    }
+    {"id":"R4-Q5","question":"¿Autorizas a S1 a implementar runtime/src/adapters/memory_adapter.py? Si sí, publica EXACT_WRITE_PATHS, transport contract and acceptance criteria."},
+    {"id":"R4-Q6","question":"¿Defines explícitamente external-agent memory as a separate scope/owner, or should the adapter expose only documented L0-L4 memory layers and keep agent-owned memory outside canonical Memory/Audit?"}
   ],
   "next_free_node": {
-    "id": "S1-07-MEMORY-ADAPTER-CONTRACT-PREFLIGHT-READONLY",
-    "status": "RUNNING",
-    "action": "Derive the minimal typed memory-adapter boundary from the three truth docs plus adapters README: scope identity, operation, route/source/version/evidence, deterministic fail-closed semantics and explicit prohibition on direct LLM canonical-memory writes; no code write until coordinator handoff."
+    "id": "S1-08-R4-COORDINATOR-HANDOFF-POLL-READONLY",
+    "status": "ACTIVE",
+    "action": "Poll Director/coordinator for R4-Q1..Q6 decisions, exact write paths for memory_adapter if assigned, literal Vite/Supabase destinations, or next S1 node. If none, continue read-only evidence crosscheck without inventing ownership."
   },
-  "loop_rule": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. Releer main y rondas después de cada write; GAP no detiene el carril.",
-  "closure": "OPEN_MEMORY_ADAPTER_GAP_NEXT_FREE_RUNNING"
+  "loop_rule": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. Releer main y rounds after every write; GAP does not stop the lane.",
+  "closure": "OPEN_S1_07_COMPLETE_WAITING_ACTIONABLE_HANDOFF"
 }
