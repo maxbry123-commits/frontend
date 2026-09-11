@@ -1,4 +1,7 @@
+import json
 from pathlib import Path
+
+import pytest
 
 from wordflow_loop.contracts import Evidence, LayerResult, NodeContract, Status, sha256
 from wordflow_loop.layers import layer_01_research
@@ -67,6 +70,32 @@ def test_stale_runners_refresh_and_preserve_shared_ledger(tmp_path: Path):
     assert len(recovered.ledger) == 2
     assert recovered.recover_event("parent")["output"] == {"seen": "parent"}
     assert recovered.recover_event("child")["output"] == {"seen": "child"}
+
+
+def test_tampered_ledger_fails_closed_on_recovery(tmp_path: Path):
+    ledger_path = tmp_path / "tamper" / "ledger.jsonl"
+    runner = LayerRunner({"L01_RESEARCH": layer_01_research.run}, ledger_path=ledger_path)
+    node = NodeContract.build(node_id="N1", layer="L01_RESEARCH", literal="research")
+    result = runner.run(
+        node,
+        {
+            "candidates": [
+                {
+                    "url": "https://github.com/example/project",
+                    "snippet": "official code",
+                    "source_class": "code_official",
+                }
+            ]
+        },
+    )
+    assert result.status == Status.PASS
+
+    row = json.loads(ledger_path.read_text(encoding="utf-8").strip())
+    row["event"]["output"]["results"][0]["snippet"] = "tampered"
+    ledger_path.write_text(json.dumps(row) + "\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="ledger_integrity_failure"):
+        LayerRunner({"L01_RESEARCH": layer_01_research.run}, ledger_path=ledger_path)
 
 
 def test_pass_with_unhashed_evidence_fails_closed():
