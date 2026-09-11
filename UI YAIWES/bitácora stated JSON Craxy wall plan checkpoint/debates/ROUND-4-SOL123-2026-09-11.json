@@ -1,0 +1,35 @@
+{
+  "schema": "yaiwes.crazy-wall.debate-round.v1",
+  "contract": "tel.workflow/v3",
+  "round": 4,
+  "status": "ACTIVE_LOOP_NO_STOP",
+  "issued_by": "DIRECTOR via 🌞👷 sol osquestador plan 🎯",
+  "fresh_evidence": {
+    "L06_runtime_ci": {"run":34568696244,"job":103165989964,"result":"SUCCESS_4_PASSED"},
+    "L05_typed_gap_code": ["64407568e5a45e219113af20a1b85d1f4dffac85","52a26e7ed83f7eb8ad14dca60ce5702765b2be19","d005758d083c09a3ae6aa4dd999a04414bccadd3"],
+    "duckdb_real_gap": "SOURCE_SPECIAL_FILE_GAP confirmed in run 34565130195",
+    "avf_provider_gap": "canonical engine ef0669... is GitHub transport only; android.googlesource canonical source unsupported",
+    "fables": {"path":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py","blob":"36ee0b1b184b709e292fd8c617f0e795e7e98451","contract":"yaiwes.fables.v1","ci_run":34569726823,"ci_status":"PENDING"}
+  },
+  "SOL_GPT1": {
+    "order": "Respond R3, then execute S1-05 read-only. Cross-check user-owned/local-first storage, restart recovery and separation chat/project memory vs agent memory against the three truth docs and current runtime.",
+    "must_return": ["document anchors","code paths+SHA","implemented","missing","test/evidence gap","refutation","next S1 FREE node"],
+    "no_stop": true
+  },
+  "SOL_GPT2": {
+    "order": "L05 typed-gap delta is code-complete but CI still pending. Continue FREE node: define AVF capability-probe contract, separating provider transport, host capability, permission, guest boot and fallback per platform; no shared runtime write unless handed off.",
+    "must_return": ["API fields","platform matrix","permissions","hardware evidence requirement","fallback boundary","refutation","next S2 FREE node"],
+    "no_stop": true
+  },
+  "SOL_GPT3": {
+    "order": "Continue StrategyDelta for #22 React Virtuoso, #25 Tailwind CSS, #27 Shiki, #28 CodeMirror 6, #30 xterm.js; then 31-40. Fables path now exists but remains NOT_VERIFIED until CI SUCCESS. Do not promote WIRED before exact Fables test evidence and actual per-component integration.",
+    "must_return": ["component","command","run/log","PASS|FAIL","StrategyDelta","refutation","next S3 FREE node"],
+    "no_stop": true
+  },
+  "SOL_ORQUESTADOR": {
+    "order": "Poll latest gate without fake PASS; consolidate only evidence; when Fables+L05 latest CI passes, publish handoff and move debate to real 01-20 wiring while roles keep independent work active.",
+    "no_new_component_default": true
+  },
+  "loop": "docs -> crosscheck -> goals/council/refute -> code/component gaps -> execute/test -> evidence -> tasks -> next round",
+  "closure": "DO_NOT_CLOSE_PROJECT_OR_DEBATE_WHILE_GAPS_OR_UNVERIFIED_GOALS_EXIST"
+}
