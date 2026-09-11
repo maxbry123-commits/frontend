@@ -1,0 +1,182 @@
+name: SOL GPT2 S2-01 DuckDB Materialize Canonical
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sol-gpt2-s2-01-duckdb-materialize-20260911.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sol-gpt2-s2-01-duckdb-materialize
+  cancel-in-progress: false
+
+jobs:
+  duckdb-materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Sparse bootstrap canonical motors and queue
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git init -q
+          git remote add origin 'https://github.com/maxbry123-commits/frontend.git'
+          git sparse-checkout init --no-cone
+          cat > .git/info/sparse-checkout <<'EOF'
+          /➡️📂motores de descarga extracción copiado movimiento archivos fromtend/
+          /UI YAIWES/automation/S2-duckdb-materialize-20260911/QUEUE.json
+          EOF
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
+          git checkout -q -B main FETCH_HEAD
+
+      - name: Verify immutable canonical motor blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend'
+          test "$(git hash-object "$ROOT/➡️📂 Motor de extracción zip/motor_1_extract_only.py")" = 'a52d5dc0e6ff26f75d753b848dcc1a40c5dd4500'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py")" = '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py")" = '91e6e4486692eab314be5c7130d8310d3c855397'
+          test "$(git hash-object "$ROOT/➡️📂motor de copiar archivos/motor_3_copy_batches.py")" = '3689924361ce4a1a9fde4ae2b6f6009c37a6042d'
+          test "$(git hash-object "$ROOT/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py")" = '8281211da76db3080fe1f1ea38b3eb0c45d655cb'
+          test "$(git hash-object "$ROOT/➡️📂motor de moves archivos/motor_4_move_batches.py")" = '9a21facfe11327cf60a2afca8f415ad52f0ecbe5'
+
+      - name: Copy canonical motor root exactly
+        shell: bash
+        env:
+          SOURCE_ROOT: ${{ github.workspace }}/➡️📂motores de descarga extracción copiado movimiento archivos fromtend
+          DEST_ROOT: ${{ runner.temp }}/➡️📂motores de descarga extracción copiado movimiento archivos frontend
+          DEST_REPO_NAME: frontend
+          BATCH_SIZE: '2'
+        run: |
+          set -euo pipefail
+          python "$SOURCE_ROOT/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py" | tee "$RUNNER_TEMP/copy-root.json"
+          grep -Eq '"verdict": "VERIFIED_(CLOSED|EXISTING)"' "$RUNNER_TEMP/copy-root.json"
+
+      - name: Motor 2 publish verified DuckDB source to S2 staging
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          QUEUE_FILE: ${{ github.workspace }}/UI YAIWES/automation/S2-duckdb-materialize-20260911/QUEUE.json
+          STATE_FILE: ${{ runner.temp }}/s2-duckdb-materialize-state.json
+          INDEX_PATH: ${{ runner.temp }}/s2-duckdb-materialize-index.md
+          ENGINE_PATH: ${{ runner.temp }}/➡️📂motores de descarga extracción copiado movimiento archivos frontend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py
+          MAX_RETRIES: '1'
+          LOOP_SLEEP_SECONDS: '0'
+        run: |
+          set -euo pipefail
+          MOTOR_ROOT="$RUNNER_TEMP/➡️📂motores de descarga extracción copiado movimiento archivos frontend"
+          python "$MOTOR_ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py" | tee "$RUNNER_TEMP/s2-duckdb-materialize-final.json"
+          python - <<'PY'
+          import json, os, pathlib
+          state=json.loads(pathlib.Path(os.environ['STATE_FILE']).read_text())
+          final=json.loads([x for x in (pathlib.Path(os.environ['RUNNER_TEMP'])/'s2-duckdb-materialize-final.json').read_text().splitlines() if x.strip()][-1])
+          row=next(iter(state['items'].values())); result=row['result']
+          assert final['verdict']=='VERIFIED_CLOSED', final
+          assert final['balance']=={'total':1,'download_verified':1,'extraction_verified':1,'published_readback_verified':1,'failed':0,'pending':0}, final['balance']
+          assert result['publish']['verdict']=='PUBLISHED_AND_EXTRACTED_READBACK_VERIFIED', result
+          pathlib.Path(os.environ['RUNNER_TEMP'],'duckdb-expected.json').write_text(json.dumps(result['extracted_tree'],sort_keys=True)+'\n')
+          print(json.dumps({'motor2':'PASS','source_commit':result['source_commit'],'tree':result['extracted_tree'],'publish':result['publish']},sort_keys=True))
+          PY
+
+      - name: Refresh latest main and expose S2 staging plus final root
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          MOVE="$RUNNER_TEMP/move-work"
+          mkdir -p "$MOVE"
+          cd "$MOVE"
+          git init -q
+          git remote add origin 'https://github.com/maxbry123-commits/frontend.git'
+          git config filter.lfs.clean cat
+          git config filter.lfs.smudge cat
+          git config --unset-all filter.lfs.process || true
+          git config filter.lfs.required false
+          git sparse-checkout init --no-cone
+          cat > .git/info/sparse-checkout <<'EOF'
+          /UI YAIWES/automation/S2-duckdb-materialize-20260911/staging/DuckDB/
+          /UI YAIWES/componentes open soure UI YAIWES/DuckDB/
+          EOF
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
+          git checkout -q -B main FETCH_HEAD
+          test -d 'UI YAIWES/automation/S2-duckdb-materialize-20260911/staging/DuckDB/code'
+          test ! -e 'UI YAIWES/componentes open soure UI YAIWES/DuckDB'
+
+      - name: Motor 4 move extracted DuckDB code to canonical final root
+        shell: bash
+        env:
+          SOURCE_DIR: ${{ runner.temp }}/move-work/UI YAIWES/automation/S2-duckdb-materialize-20260911/staging/DuckDB/code
+          DEST_DIR: ${{ runner.temp }}/move-work/UI YAIWES/componentes open soure UI YAIWES/DuckDB
+          STATE_FILE: ${{ runner.temp }}/s2-duckdb-motor4-state.json
+          BATCH_SIZE: '100'
+          COLLISION_POLICY: fail
+        run: |
+          set -euo pipefail
+          MOTOR_ROOT="$RUNNER_TEMP/➡️📂motores de descarga extracción copiado movimiento archivos frontend"
+          python "$MOTOR_ROOT/➡️📂motor de moves archivos/motor_4_move_batches.py" | tee "$RUNNER_TEMP/s2-duckdb-motor4-final.json"
+          python - <<'PY'
+          import json, os, pathlib
+          obj=json.loads(pathlib.Path(os.environ['RUNNER_TEMP'],'s2-duckdb-motor4-final.json').read_text().splitlines()[-1])
+          assert obj['verdict']=='VERIFIED_CLOSED', obj
+          assert obj['failed']==0 and obj['pending']==0 and obj['source_files_remaining']==0, obj
+          print(json.dumps({'motor4':'PASS','moved_or_verified':obj['moved_or_verified'],'failed':0,'pending':0},sort_keys=True))
+          PY
+
+      - name: Publish Motor 4 move without force
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/move-work"
+          git config user.name 'sol-gpt2-yaiwes'
+          git config user.email 'sol-gpt2-yaiwes@users.noreply.github.com'
+          git add -A -- 'UI YAIWES/automation/S2-duckdb-materialize-20260911/staging/DuckDB/code' 'UI YAIWES/componentes open soure UI YAIWES/DuckDB'
+          git commit -m 'build(yaiwes): materialize DuckDB via canonical motors'
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch origin main
+          git rebase origin/main
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" push origin HEAD:main
+          git rev-parse HEAD | tee "$RUNNER_TEMP/duckdb-final-commit.txt"
+
+      - name: Independent final read-back and tree hash
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          RB="$RUNNER_TEMP/readback"
+          mkdir -p "$RB" && cd "$RB"
+          git init -q
+          git remote add origin 'https://github.com/maxbry123-commits/frontend.git'
+          git sparse-checkout init --no-cone
+          cat > .git/info/sparse-checkout <<'EOF'
+          /UI YAIWES/componentes open soure UI YAIWES/DuckDB/
+          EOF
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
+          git checkout -q -B main FETCH_HEAD
+          python - <<'PY'
+          import hashlib,json,os,pathlib
+          root=pathlib.Path('UI YAIWES/componentes open soure UI YAIWES/DuckDB')
+          assert root.is_dir(), 'DUCKDB_FINAL_ROOT_MISSING'
+          h=hashlib.sha256(); count=0; total=0
+          for p in sorted((x for x in root.rglob('*') if x.is_file() and '.git' not in x.parts),key=lambda x:x.as_posix()):
+              rel=p.relative_to(root).as_posix(); q=hashlib.sha256()
+              with p.open('rb') as f:
+                  for b in iter(lambda:f.read(1024*1024),b''): q.update(b)
+              h.update(rel.encode()+b'\0'); h.update(q.hexdigest().encode()+b'\n'); count+=1; total+=p.stat().st_size
+          actual={'files':count,'bytes':total,'sha256':h.hexdigest()}
+          expected=json.loads(pathlib.Path(os.environ['RUNNER_TEMP'],'duckdb-expected.json').read_text())
+          assert actual==expected,(actual,expected)
+          print(json.dumps({'component':'DuckDB','final_root':str(root),'readback':'VERIFIED','tree':actual,'failed':0,'pending':0},sort_keys=True))
+          PY
