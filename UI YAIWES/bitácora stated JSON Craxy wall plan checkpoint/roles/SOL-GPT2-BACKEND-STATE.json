@@ -7,12 +7,12 @@
   "node_prefix": "S2",
   "status": "ACTIVE_DEBATE_LOOP_WITH_BLOCKING_GAPS",
   "base_main_sha": "5df552c3e7e50187390811a0d3edc167c62db5b5",
-  "crazy_wall_blob_sha": "a80cb5de08bb9c5000b65f5bd7104873f067f94b",
-  "state_blob_sha_observed": "4663adfd3110274271d1099b7800b24cce5538b7",
+  "crazy_wall_blob_sha": "4c7b9164246857278d416def6766a2b9bb5b6030",
+  "state_blob_sha_observed": "20323fd9be69fb7bec86d8edc5e6c19a74782ecc",
   "canonical_motors_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
   "canonical_policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
   "director_delta_seen": "2026-09-11T06:31:47Z",
-  "loop_cycle": 6,
+  "loop_cycle": 7,
   "nodes": {
     "S2-01": {
       "component": "DuckDB",
@@ -116,6 +116,16 @@
       "four_residual_readback_expected": 4,
       "verdict": "VERIFIED_CLOSED prohibited"
     },
+    "S2-DEBATE-R2-L05-GAP-TYPING": {
+      "status": "TESTED_PASS_SCOPE_L05_ONLY",
+      "l05_commit": "52a26e7ed83f7eb8ad14dca60ce5702765b2be19",
+      "tests_commit": "d005758d083c09a3ae6aa4dd999a04414bccadd3",
+      "ci_run_id": 34569726823,
+      "ci_job_id": 103169993658,
+      "ci_conclusion": "success",
+      "ci_steps": "checkout/setup/install/Wordflow tests/Universal Socket+Fables tests all success",
+      "scope_boundary": "PASS proves typed L05 gap behavior/tests only; it does not close DuckDB acquisition, AVF provider/runtime or global WIRED status"
+    },
     "S2-R3-AVF-CAPABILITY-PROBE-CONTRACT": {
       "status": "READ_ONLY_CONTRACT_DEFINED_AND_READBACK_VERIFIED",
       "coordinator_reply_file": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S2.json",
@@ -140,34 +150,42 @@
         "iOS_iPadOS": "QEMU/UTM-style subject to Apple restrictions; AVF N/A",
         "Web_PWA": "no native AVF claim; explicit runtime backend required"
       },
-      "refutation": "Source presence/provider success/manager availability cannot be promoted to guest-boot PASS; each gate is independent.",
-      "next_safe_node": "S2 read-only CI consumption + debate. Runtime implementation mutation requires coordinator/explicit code-owner handoff."
+      "refutation": "Source presence/provider success/manager availability cannot be promoted to guest-boot PASS; each gate is independent."
+    },
+    "S2-R3-AVF-PROBE-IMPLEMENTATION-HANDOFF": {
+      "status": "READ_ONLY_HANDOFF_READY_AND_READBACK_VERIFIED",
+      "artifact": "UI YAIWES/automation/S2-avf-capabilities-20260911/AVF-RUNTIME-INTEGRATION-HANDOFF.json",
+      "artifact_commit": "153bb5260669c2f81cefeacc545601a07eec2f8a",
+      "artifact_blob_sha": "0e7dd4d9076c80cadd3048c9a5f5f527b23406a9",
+      "decision": "Use existing Universal Plugin Socket; do not implement probe in Stabilize core and do not create second orchestrator",
+      "integration_points": {
+        "plugin_adapter": "runtime/src/plugins/android_avf_adapter/ if explicitly authorized",
+        "plugin_contract_blob": "41465001ec9fc2bcd93d9ad9ea36b78830fd0367",
+        "plugins_readme_blob": "8732a9de56263f30b7f2809772dd850ed29f37b1",
+        "integration_validator": "runtime/src/integration/ consumes normalized result and blocks COMPLETE without required evidence",
+        "core_boundary": "runtime/src/core/ consumes validated backend state only; no Android API probing"
+      },
+      "mutation_performed": false,
+      "runtime_mutation_owner": "coordinator or explicitly assigned code owner",
+      "next_safe_node": "Continue read-only inspection of registry/loader/mount_guard insertion points and debate unless mutation authorization arrives"
     }
   },
   "debate": {
     "status": "ACTIVE_DEBATE_LOOP_DO_NOT_CLOSE",
     "round_2": {
-      "question": "Revisa si L05 debe representar provider/special-file gaps como DuckDB symlink y AVF non-GitHub sin intentar corregirlos dentro de la capa. Devuelve esquema mínimo fail-closed.",
-      "answer": {
-        "decision": "YES. L05 preserves typed acquisition GAPs and never repairs/sanitizes/substitutes provider inside the layer.",
-        "gap_code": "PROVIDER_GAP | SPECIAL_FILE_GAP | DESTINATION_INPUT_GAP | SOURCE_LOCK_GAP | AUTHORIZATION_GAP | MOTOR_MISMATCH | READBACK_GAP",
-        "pass_gate": "canonical motor + literal authorized destination + VERIFIED_CLOSED + failed=0 + pending=0 + strong read-back/hash"
-      },
+      "question": "Revisa si L05 debe representar provider/special-file gaps como DuckDB symlink y AVF non-GitHub sin intentar corregirlos dentro de la capa.",
+      "answer": {"decision":"YES. L05 preserves typed acquisition GAPs and never repairs/sanitizes/substitutes provider inside the layer.","gap_code":"PROVIDER_GAP | SPECIAL_FILE_GAP | DESTINATION_INPUT_GAP | SOURCE_LOCK_GAP | AUTHORIZATION_GAP | MOTOR_MISMATCH | READBACK_GAP","pass_gate":"canonical motor + literal authorized destination + VERIFIED_CLOSED + failed=0 + pending=0 + strong read-back/hash"},
       "refutation": "Generic post-motor GAP alone is operationally lossy."
     },
     "round_3": {
       "coordinator_reply_status": "ACTIONABLE_REPLY_LOOP_CONTINUES",
       "coordinator_reply_blob": "1c60fd01028cc67164fb2ac5cbfb3335fd0495a4",
       "order_consumed": "Define minimal AVF capability-probe contract; separate transport, host capability, permission, guest boot and fallback; do not stop while CI pending.",
-      "execution_status": "COMPLETED_READ_ONLY_NODE",
-      "artifact_blob_sha": "97619b9970377ab85a4409203ea5136ea3f95acd",
-      "l05_typed_gap_ci": {
-        "run_id": 34569726823,
-        "head_sha": "d005758d083c09a3ae6aa4dd999a04414bccadd3",
-        "observed_status": "IN_PROGRESS",
-        "conclusion": null
-      },
-      "reply_to_coordinator": "AVF probe contract published/read-back verified. No runtime mutation performed. Continue debate; consume CI when complete and request/consume explicit runtime implementation handoff if coordinator wants S2 to mutate shared runtime."
+      "execution_status": "CONTRACT_AND_HANDOFF_COMPLETED_READ_ONLY",
+      "capability_contract_blob": "97619b9970377ab85a4409203ea5136ea3f95acd",
+      "runtime_handoff_blob": "0e7dd4d9076c80cadd3048c9a5f5f527b23406a9",
+      "l05_typed_gap_ci": {"run_id":34569726823,"job_id":103169993658,"head_sha":"d005758d083c09a3ae6aa4dd999a04414bccadd3","observed_status":"COMPLETED","conclusion":"SUCCESS"},
+      "reply_to_coordinator": "L05 typed-gap CI is SUCCESS. AVF probe contract and runtime integration handoff are published/read-back verified. No shared runtime mutation performed. Please accept/refute handoff and assign runtime mutation owner; S2 continues next read-only node meanwhile."
     }
   },
   "watchdog": {
@@ -178,5 +196,5 @@
     "title": "SOL2 Backend YAIWES",
     "scope_aligned_to_s2_queue": true
   },
-  "next_action": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. Re-read Crazy Wall and Sol Plan reply after this STATE write; consume CI 34569726823 when complete. DuckDB and AVF acquisition remain fail-closed; do not patch canonical motors, sanitize source, substitute AVF provenance or claim guest boot without real evidence."
+  "next_action": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. Re-read Crazy Wall and coordinator reply after this STATE write. L05 typed-gap tests are SUCCESS; DuckDB and AVF acquisition remain fail-closed. Continue read-only registry/loader/mount_guard inspection unless explicit runtime mutation authorization arrives."
 }
