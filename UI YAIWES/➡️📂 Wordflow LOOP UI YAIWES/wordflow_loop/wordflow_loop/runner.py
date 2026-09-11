@@ -23,12 +23,18 @@ class LayerRunner:
         self.handlers = dict(handlers)
         self.ledger_path = Path(ledger_path) if ledger_path else None
         self.ledger = load_ledger(self.ledger_path) if self.ledger_path else []
-        self.completed_nodes = {
-            row["event"]["node_id"]
-            for row in self.ledger
-            if row.get("event", {}).get("status") == Status.PASS.value
-            and row.get("event", {}).get("node_id")
-        }
+        self.completed_nodes: set[str] = set()
+        for row in self.ledger:
+            event = row.get("event", {})
+            if event.get("node_id"):
+                self._update_completion(event["node_id"], event.get("status"))
+
+    def _update_completion(self, node_id: str, status: str) -> None:
+        # Replay the latest outcome, not any historical PASS.
+        if status == Status.PASS.value:
+            self.completed_nodes.add(node_id)
+        else:
+            self.completed_nodes.discard(node_id)
 
     def _record(self, node: NodeContract, result: LayerResult) -> None:
         append_event(
@@ -53,6 +59,7 @@ class LayerRunner:
         )
         if self.ledger_path:
             save_ledger(self.ledger_path, self.ledger)
+        self._update_completion(node.node_id, result.status.value)
 
     def run(
         self,
@@ -107,6 +114,4 @@ class LayerRunner:
                     result.gaps.append(gap)
 
         self._record(node, result)
-        if result.status == Status.PASS:
-            self.completed_nodes.add(node.node_id)
         return result
