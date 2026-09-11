@@ -6,6 +6,8 @@
   "gate": "T1_FACTORY_FRONTEND",
   "t2_interface": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED",
   "base_audited_sha": "f4117830f2141ce8363aff694b3fb513b20b02ca",
+  "current_node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY",
+  "publish_blocker": "HF_WRITE_CREDENTIAL_NOT_INJECTED_IN_AVAILABLE_GITHUB_ACTIONS_CONTEXT",
   "completed_nodes": [
     "P0_INPUT_LITERAL_READBACK",
     "P1_CAPABILITY_MATRIX",
@@ -13,37 +15,30 @@
     "P2_STAGING_ROOTS",
     "P3_FACTORY_V0_STATIC_IMPLEMENTATION",
     "P4A_FACTORY_V0_RUNTIME_LOGIC_TEST_6_OF_6",
-    "P4B_PLAYWRIGHT_LOCAL_DONOR_REVIEWED",
-    "P4B_PLAYWRIGHT_LICENSE_APACHE_2_VERIFIED",
-    "P4B_PLAYWRIGHT_V1_55_0_TAG_COMMIT_VERIFIED",
-    "P4B_E2E_HARNESS_MATERIALIZED",
+    "P4B_PLAYWRIGHT_LICENSE_AND_PROVENANCE_VERIFIED",
     "P4B_E2E_DESKTOP_MOBILE_PASS_14_OF_14",
     "P4B_RESPONSIVE_GATE_PASS",
     "P4B_INDEPENDENT_VERIFIER_PASS",
     "P4C_HF_SPACE_DEPLOY_BUNDLE_CREATED",
     "P4C_DEPLOY_BUNDLE_LOCAL_HTTP_SMOKE_PASS",
-    "P4D_GITHUB_PREVIEW_BRANCH_CREATED",
-    "P4D_GITHUB_PREVIEW_PAYLOAD_MATERIALIZED",
-    "P4D_GITHUB_PAGES_DEPLOY_WORKFLOW_EXECUTED",
-    "P4D_GITHUB_PAGES_ENABLEMENT_BLOCKER_VERIFIED",
-    "P4D_HF_SPACE_CREATE_ATTEMPT_EXECUTED",
+    "P4D_GITHUB_PAGES_BLOCKER_VERIFIED",
     "P4D_HF_SPACE_CREATE_403_BLOCKER_VERIFIED",
-    "P4E_S3_SOL_CONTRACT_ADAPTER_BOUNDARY_MATERIALIZED",
     "P4E_S3_SOL_CONTRACT_ADAPTER_SWAP_PASS_3_OF_3",
     "P4E_CURRENT_FACTORY_COMBINED_VERIFY_PASS",
     "P4F_HF_STATIC_SPACE_PUBLISH_WORKFLOWS_MATERIALIZED",
-    "P4F_HF_CREDENTIAL_INJECTION_GAP_VERIFIED"
+    "P4F_HF_CREDENTIAL_INJECTION_GAP_VERIFIED",
+    "P4G_DIRECTOR_INPUT_2026_09_11_LITERAL_PERSISTED",
+    "P4G_FACTORY_PROJECT_MEMORY_ROOT_CREATED",
+    "P4G_SOL_FACTORY_NODE_A_CREATED",
+    "P4G_SOL_FACTORY_NODE_B_CREATED",
+    "P4G_OSS_COMPONENT_INTEGRATION_AUDIT_CREATED",
+    "P4G_HANDOFF_UPDATE_CREATED"
   ],
-  "current_node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY",
-  "publish_blocker": "HF_WRITE_CREDENTIAL_NOT_INJECTED_IN_AVAILABLE_GITHUB_ACTIONS_CONTEXT",
   "factory_v0": {
     "path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/",
     "source_present": true,
     "readback": true,
-    "runtime_logic_test_pass": true,
     "runtime_logic_test_result": "PASS_6_OF_6",
-    "e2e_harness_ready": true,
-    "e2e_targets": ["chromium-desktop", "mobile-chromium"],
     "e2e_result": "PASS_14_OF_14",
     "responsive_gate_pass": true,
     "independent_verifier_pass": true,
@@ -58,32 +53,31 @@
     "hf_static_space_expected_url": "https://comand-center-1-yaiwes-ui-factory.hf.space/",
     "hf_static_space_publish_method": "sdk: static + create_repo(repo_type=space, space_sdk=static) + upload_folder",
     "hf_static_space_source_sha": "f4117830f2141ce8363aff694b3fb513b20b02ca",
-    "github_frontend_publish_run": "https://github.com/maxbry123-commits/frontend/actions/runs/34591171118",
-    "github_tarea1_publish_run": "https://github.com/maxbry123-commits/TAREA-1/actions/runs/34591269073",
-    "github_agentes_hf_token_run": "https://github.com/maxbry123-commits/agentes/actions/runs/34591385359",
-    "github_agentes_hf_alias_run": "https://github.com/maxbry123-commits/agentes/actions/runs/34591500713",
-    "github_agentes_secret_or_var_run": "https://github.com/maxbry123-commits/agentes/actions/runs/34591635480",
     "credential_probe_result": "HF_TOKEN/HF_API_TOKEN absent as repo secrets and repo variables in tested Actions contexts; values never printed",
     "verified_closed": false
   },
-  "verification_jobs": {
-    "e2e_responsive_14_of_14": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d1521047bf1b037477c",
-    "independent_verifier": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa35d4e5527934177ec3fba",
-    "deploy_bundle_http_smoke": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa398225527934177ec4c49",
-    "hf_space_create_attempt": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa3bcbb21047bf1b03752e2",
-    "s3_adapter_swap": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa3d99c21047bf1b0375826",
-    "current_factory_combined_verify": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa3d9e05527934177ec5c7a"
+  "project_memory": {
+    "root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/",
+    "rule": "each module/work unit gets its own destination with owner,node,SHA,evidence,status; no raw secrets",
+    "component_audit": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/COMPONENT-AUDIT-2026-09-11.md",
+    "sol_node_a": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-A.json",
+    "sol_node_b": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-B.json"
   },
-  "verified_donors": {
-    "playwright_test_harness": {
-      "upstream": "https://github.com/microsoft/playwright",
-      "version": "v1.55.0",
-      "source_commit": "f992162f04ae0b0b5a0f4b6114b894215be98995",
-      "license": "Apache-2.0",
-      "usage": "test harness only"
-    }
+  "input_literal": {
+    "base": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/INPUT-BLOCK-LITERAL-2026-09-10.md",
+    "addendum_2026_09_11": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/INPUT-BLOCK-LITERAL-2026-09-11-ADDENDUM.md"
   },
-  "frontend_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/",
+  "oss_audit": {
+    "inventory_root": "UI YAIWES/componentes open soure UI YAIWES/",
+    "known_families": 46,
+    "runtime_integration_truth": "Factory package.json currently proves only Playwright dependency; other OSS donors are inventory/candidates until adapter/import/runtime evidence exists",
+    "next_node": "F-OSS-01_MINIMAL_TRACEABLE_FRONTEND_DONOR_INTEGRATION"
+  },
+  "future_interface_target": {
+    "root": "UI YAIWES interface/",
+    "required_roots_after_t1_gate": ["Fromtend/", "Backend/"],
+    "status": "DO_NOT_PROMOTE_PRODUCTIVE_T2_UNTIL_T1_VERIFIED_CLOSED_AND_HANDOFF"
+  },
   "backend_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/backend/",
   "backend_policy": "DONOR_STAGING_ONLY",
   "open_gaps": [
@@ -91,9 +85,19 @@
     "HF_WRITE_CREDENTIAL_NOT_INJECTED_IN_AVAILABLE_GITHUB_ACTIONS_CONTEXT",
     "DEPLOYED_URL_HTTP_READBACK_PENDING",
     "DEPLOYED_URL_E2E_SMOKE_PENDING",
-    "PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT"
+    "PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT",
+    "OSS_40_PLUS_PRESENT_BUT_NOT_FACTORY_INTEGRATED",
+    "FACTORY_TRANSFORMER_NEEDS_REAL_OSS_RUNTIME_DONOR",
+    "INTERFACE_FROMTEND_BACKEND_ROOTS_PENDING_T1_GATE",
+    "CRAZY_WALL_T1_FIELDS_NEED_SYNC_WITH_CURRENT_STATE"
+  ],
+  "watchdog_order": [
+    "1_review_files_and_handoff_recover_context",
+    "2_analyze_crazy_wall_state_checkpoint_pending_tasks",
+    "3_search_10x_improvements_reuse_existing_components_and_apis",
+    "4_execute_tasks_and_resolve_gaps_fail_closed"
   ],
   "closure_rule": "source SHA+build+deployment persistent+visible URL+HTTP/readback+smoke E2E against deployed URL+evidence+independent reviewer",
-  "closure_result": "BLOCKED_ONLY_AT_PERSISTENT_PUBLISH_CREDENTIAL_INJECTION",
-  "next_node": "P4D_INJECT_AUTHORIZED_HF_WRITE_CREDENTIAL_THEN_STATIC_SPACE_DEPLOY_VERIFY"
+  "closure_result": "ACTIVE_LOOP_CLOSED_UNVERIFIED",
+  "next_node": "P4D_PUBLISH_AND_VERIFY_PLUS_F_OSS_01_SAFE_INDEPENDENT_TASK"
 }
