@@ -7,13 +7,11 @@ export const STEPS = [
 ];
 
 export const initialState = {
-  version: 1,
+  version: 0,
   step: 1,
   mode: 'MANUAL',
   selectedId: null,
-  components: [
-    { id: 'welcome-panel', kind: 'panel', label: 'Panel', x: 60, y: 60, w: 320, h: 180, props: { title: 'YAIWES' } }
-  ],
+  components: [],
   history: [],
   future: [],
   proposedDelta: null,
