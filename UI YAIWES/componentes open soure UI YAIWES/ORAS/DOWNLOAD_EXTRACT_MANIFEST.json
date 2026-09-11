@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 648825,
+  "bundle_sha256": "9236a97ae91d9c6c4149c2eaae615657375323ff7d4a1cf62c0a32e4a2ced8ec",
+  "extracted_tree": {
+    "bytes": 1879525,
+    "files": 412,
+    "sha256": "3029816c97f2481e7210b2651bebc2e68870c111ba3e9ad15938ff425dc66f7e"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 648825,
+      "name": "ORAS.bundle.zip.part-0001",
+      "sha256": "9236a97ae91d9c6c4149c2eaae615657375323ff7d4a1cf62c0a32e4a2ced8ec"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "ORAS",
+  "source_bytes": 1879525,
+  "source_commit": "d0da4a96a6893d2e7f44ea60a8f317a2fcce1cf9",
+  "source_files": 412,
+  "source_ref": "d0da4a96a6893d2e7f44ea60a8f317a2fcce1cf9",
+  "source_repo": "https://github.com/oras-project/oras",
+  "source_tree": {
+    "bytes": 1879525,
+    "files": 412,
+    "sha256": "3029816c97f2481e7210b2651bebc2e68870c111ba3e9ad15938ff425dc66f7e"
+  }
+}
