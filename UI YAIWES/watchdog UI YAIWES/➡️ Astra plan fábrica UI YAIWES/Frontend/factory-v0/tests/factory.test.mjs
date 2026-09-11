@@ -53,17 +53,17 @@ test('stale delta is rejected when baseVersion differs', () => {
   assert.equal(after.components.length, state.components.length);
 });
 
-test('SAVE_VERSION increments version, records evidence and clears delta', () => {
+test('SAVE_VERSION increments V0 to V1, records evidence and clears delta', () => {
   let state = reduce(copy(initialState), {
     type: 'PROPOSE_DELTA',
     reason: 'version-check',
     operations: []
   });
   state = reduce(state, { type: 'SAVE_VERSION' });
-  assert.equal(state.version, 2);
+  assert.equal(state.version, 1);
   assert.equal(state.proposedDelta, null);
   assert.equal(state.evidence.at(-1).type, 'version');
-  assert.equal(state.evidence.at(-1).version, 2);
+  assert.equal(state.evidence.at(-1).version, 1);
 });
 
 console.log(`RESULT PASS ${passed}/6`);
