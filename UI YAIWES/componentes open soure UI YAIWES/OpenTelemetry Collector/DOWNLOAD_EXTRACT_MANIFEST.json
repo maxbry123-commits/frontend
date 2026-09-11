@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 3433036,
+  "bundle_sha256": "35370b52bf4de1aef1e1d7d5bfe1ead33b669b7cf1dbcb85602e0a84a3d6ac45",
+  "extracted_tree": {
+    "bytes": 11314457,
+    "files": 2833,
+    "sha256": "2cf654b9b6ec315fa97679c36e607e018120f091b10966254c4cc2de10f1d659"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 3433036,
+      "name": "OpenTelemetry Collector.bundle.zip.part-0001",
+      "sha256": "35370b52bf4de1aef1e1d7d5bfe1ead33b669b7cf1dbcb85602e0a84a3d6ac45"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "OpenTelemetry Collector",
+  "source_bytes": 11314457,
+  "source_commit": "65bcb4855bc033cd327cb8b4569296578fc4750d",
+  "source_files": 2833,
+  "source_ref": "65bcb4855bc033cd327cb8b4569296578fc4750d",
+  "source_repo": "https://github.com/open-telemetry/opentelemetry-collector",
+  "source_tree": {
+    "bytes": 11314457,
+    "files": 2833,
+    "sha256": "2cf654b9b6ec315fa97679c36e607e018120f091b10966254c4cc2de10f1d659"
+  }
+}
