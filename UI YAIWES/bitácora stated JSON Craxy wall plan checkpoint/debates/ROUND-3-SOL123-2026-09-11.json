@@ -1,0 +1,44 @@
+{
+  "schema": "yaiwes.crazy-wall.debate-round.v1",
+  "contract": "tel.workflow/v3",
+  "round": 3,
+  "status": "ACTIVE_LOOP_NO_STOP",
+  "issued_by": "DIRECTOR via 🌞👷 sol osquestador plan 🎯",
+  "rule": "Cada Sol responde con evidencia en su STATE/Crazy Wall y continúa inmediatamente al siguiente nodo FREE; GAP no detiene el carril ni a los otros roles.",
+  "sources_first": [
+    "📌MAX-SYSTEM-100X-FINAL-1.md",
+    "📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR...14 objetivos...md",
+    "🤯🗃️memoria del Wordflow...YAIWES.md"
+  ],
+  "fresh_code_evidence": {
+    "runner": "PRESENT",
+    "ledger_persistence": "PRESENT_ATOMIC_FSYNC_REPLACE_HASH_CHAIN",
+    "L01_L04": "PRESENT",
+    "L05": "PRESENT_AND_STRENGTHENED_SOURCE_REF_DESTINATION_MOTOR_COMMIT_FAIL_CLOSED",
+    "L06": "PRESENT_REUSE_PATCH_ADAPTER_GENERATE_DELTA",
+    "tests": "PUBLISHED; REAL_GITHUB_EXECUTION_PENDING",
+    "pytest_workflow_commit": "f9e8a190cbec48f92473163de6d98152ad98f1dc"
+  },
+  "SOL_GPT1": {
+    "question": "Cruza los 3 documentos con L05 reforzado y determina si falta algún campo/contrato para adquisición real Vite/Supabase sin inferir destino. Refuta cualquier requisito redundante y deja siguiente nodo S1 FREE.",
+    "must_answer": ["document_anchor", "code_anchor", "gap_or_pass", "refutation", "next_free_node"]
+  },
+  "SOL_GPT2": {
+    "question": "Cruza los 3 documentos con DuckDB/AVF y L05. Define el esquema mínimo para que provider/symlink/capability GAP quede representado sin modificar motores. Separa transporte, runtime capability y hardware verification. Refuta una propuesta y continúa a nodo S2 FREE.",
+    "must_answer": ["document_anchor", "code_anchor", "typed_gaps", "refutation", "next_free_node"]
+  },
+  "SOL_GPT3": {
+    "question": "Cruza los 3 documentos con L06, Fables y lote 21-40. Define qué salida de Source Evolution puede entrar a integración sin declarar WIRED y qué tests independientes pueden ejecutarse ya. Refuta una propuesta y continúa a nodo S3 FREE.",
+    "must_answer": ["document_anchor", "code_anchor", "integration_boundary", "independent_tests", "refutation", "next_free_node"]
+  },
+  "SOL_ORQUESTADOR": {
+    "action": "Mientras llegan respuestas reales, verificar pytest real, validar Fables exacto y consolidar sólo evidencia publicada. No descargar componentes nuevos hasta que un GAP funcional deduplicado lo justifique.",
+    "refutations": [
+      "Presencia de L05/L06 no equivale a ejecución verificada.",
+      "Vendor test PASS no equivale a WIRED.",
+      "Provider GAP no autoriza sustituir provenance ni modificar motor."
+    ]
+  },
+  "loop": "documentos -> cross-check code/componentes/tests -> goals/council/refutación -> tareas -> integración -> test -> evidencia -> nueva ronda",
+  "closure": "DO_NOT_CLOSE_WHILE_GAPS_OR_UNVERIFIED_GOALS_EXIST"
+}
