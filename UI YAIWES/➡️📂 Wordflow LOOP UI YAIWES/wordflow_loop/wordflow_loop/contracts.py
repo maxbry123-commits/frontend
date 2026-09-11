@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
@@ -33,7 +34,14 @@ class Evidence:
     detail: str = ""
 
     def valid(self) -> bool:
-        return bool(self.kind and self.ref)
+        if not (self.kind and self.ref):
+            return False
+        if self.sha256 and not re.fullmatch(r"[0-9a-fA-F]{64}", self.sha256):
+            return False
+        return True
+
+    def strong(self) -> bool:
+        return self.valid() and bool(self.sha256)
 
 
 @dataclass(frozen=True)
@@ -92,4 +100,4 @@ class LayerResult:
     actions: list[str] = field(default_factory=list)
 
     def has_real_evidence(self) -> bool:
-        return bool(self.evidence) and all(e.valid() for e in self.evidence)
+        return bool(self.evidence) and all(e.strong() for e in self.evidence)
