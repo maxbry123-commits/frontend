@@ -4,6 +4,9 @@ on:
   push:
     paths:
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/**'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/**'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_universal_plugins.py'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_fables_socket.py'
       - '.github/workflows/yaiwes-wordflow-loop-pytest.yml'
   workflow_dispatch:
 
@@ -20,7 +23,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install package and pytest
+      - name: Install Wordflow package and pytest
         working-directory: 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop'
         run: |
           python -m pip install --upgrade pip
@@ -28,3 +31,6 @@ jobs:
       - name: Run Wordflow LOOP tests
         working-directory: 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop'
         run: python -m pytest -q
+      - name: Run universal socket and Fables tests
+        working-directory: 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
+        run: python -m pytest -q tests/test_universal_plugins.py tests/test_fables_socket.py
