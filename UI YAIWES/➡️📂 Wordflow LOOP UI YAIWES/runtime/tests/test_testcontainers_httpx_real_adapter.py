@@ -11,6 +11,8 @@ import unittest
 
 TESTCONTAINERS_REPO_PATH = "UI YAIWES/componentes open soure UI YAIWES/Testcontainers Python/code"
 EXPECTED_SOURCE_TREE_SHA256 = "ebc82b8782a0e2ef5417afc432079df34260e81a648f6a7a48663e13f70eab70"
+PIP_INSTALL_TIMEOUT_SECONDS = 120
+LIFECYCLE_TIMEOUT_SECONDS = 180
 
 
 class TestcontainersHttpxRealAdapterLifecycle(unittest.TestCase):
@@ -29,19 +31,26 @@ class TestcontainersHttpxRealAdapterLifecycle(unittest.TestCase):
 
             source_root = tmp_path / TESTCONTAINERS_REPO_PATH
             self.assertTrue((source_root / "pyproject.toml").is_file())
-            subprocess.run(
-                [
-                    sys.executable,
-                    "-m",
-                    "pip",
-                    "install",
-                    "--disable-pip-version-check",
-                    "--quiet",
-                    str(source_root),
-                    "httpx==0.28.1",
-                ],
-                check=True,
-            )
+            try:
+                subprocess.run(
+                    [
+                        sys.executable,
+                        "-m",
+                        "pip",
+                        "install",
+                        "--disable-pip-version-check",
+                        "--quiet",
+                        str(source_root),
+                        "httpx==0.28.1",
+                    ],
+                    check=True,
+                    timeout=PIP_INSTALL_TIMEOUT_SECONDS,
+                )
+            except subprocess.TimeoutExpired as exc:
+                self.fail(
+                    f"Testcontainers local-source dependency install exceeded "
+                    f"{PIP_INSTALL_TIMEOUT_SECONDS}s: {exc}"
+                )
 
             runtime_src = repo_root / "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src"
             script = textwrap.dedent(
@@ -95,14 +104,26 @@ class TestcontainersHttpxRealAdapterLifecycle(unittest.TestCase):
             )
             env = os.environ.copy()
             env["PYTHONPATH"] = str(runtime_src)
-            result = subprocess.run(
-                [sys.executable, "-c", script],
-                cwd=repo_root,
-                env=env,
-                text=True,
-                capture_output=True,
-                check=False,
-            )
+            try:
+                result = subprocess.run(
+                    [sys.executable, "-c", script],
+                    cwd=repo_root,
+                    env=env,
+                    text=True,
+                    capture_output=True,
+                    check=False,
+                    timeout=LIFECYCLE_TIMEOUT_SECONDS,
+                )
+            except subprocess.TimeoutExpired as exc:
+                stdout = exc.stdout or ""
+                stderr = exc.stderr or ""
+                self.fail(
+                    "real adapter lifecycle timed out deterministically\n"
+                    f"timeout_seconds={LIFECYCLE_TIMEOUT_SECONDS}\n"
+                    f"stdout:\n{stdout}\n"
+                    f"stderr:\n{stderr}"
+                )
+
             if result.returncode != 0:
                 self.fail(
                     "real adapter lifecycle failed\n"
