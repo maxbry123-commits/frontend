@@ -1,0 +1,59 @@
+{
+  "schema": "yaiwes.director.execution.v1",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_LOOP_DO_NOT_CLOSE",
+  "issued_by": "DIRECTOR",
+  "objective": "Resolver GAPs, auditar 4x documentos y código ejecutable, investigar sólo capacidades realmente faltantes, montar motores canónicos cuando corresponda, cablear/corregir código y repetir hasta verify_final.",
+  "sources_priority": {
+    "A1": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌MAX-SYSTEM-100X-FINAL-1.md",
+    "A2": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR Q grock tiene ventanas agente  linux iOS Android phyton 🤯🤯🤯🎯 14 objetivos💡💡💡✅✅✅🎯🎯🎯.md",
+    "A3": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md"
+  },
+  "code_audit_roots": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/",
+    "UI YAIWES/Interface YAIWES ui/"
+  ],
+  "steps": {
+    "STEP1_GAPS": {
+      "rule": "Cada rol toma GAPs 1x1; GAP bloquea sólo el nodo; inmediatamente toma siguiente FREE seguro.",
+      "owners": {
+        "SOL_GPT1": ["Vite/Supabase destination + acquisition boundary", "persistencia local-first y recovery", "L05 contract regressions"],
+        "SOL_GPT2": ["DuckDB SPECIAL_FILE_GAP", "AVF PROVIDER_GAP + capability probe/platform matrix", "provider/runtime boundaries"],
+        "SOL_GPT3": ["Fables integration dependency", "StrategyDelta 22/25/27/28/30", "vendor/runtime tests 31-40"],
+        "SOL_ORQUESTADOR": ["CI/readback", "cross-role consolidation", "code quality", "assign components only after functional GAP proof"]
+      }
+    },
+    "STEP2_AUDIT_4X": {
+      "passes_per_document_per_role": 4,
+      "passes_per_executable_code_root_per_role": 4,
+      "pass_meanings": [
+        "P1_LITERAL_REQUIREMENTS: extraer objetivos, restricciones y acceptance sin reinterpretar",
+        "P2_ARCHITECTURE_CROSSCHECK: mapear requisito→capa/fase→archivo/código/componente",
+        "P3_EXECUTION_EVIDENCE: comprobar tests/runs/readback/hashes y distinguir PRESENT/WIRED/RUNTIME_PASS",
+        "P4_REFUTE_GAPS: buscar contradicciones, cobertura faltante y siguiente delta mínimo"
+      ],
+      "required_output_per_role": ["document_findings", "code_findings", "gap_list", "flow_revision", "refutation_of_other_role", "next_free_node", "evidence_refs"]
+    },
+    "STEP3_COMPONENTS": {
+      "owner": "SOL_ORQUESTADOR",
+      "rule": "REUSE > existing component > PATCH > ADAPTER > new component. Nuevo componente sólo si un requisito obligatorio carece de capacidad real y no existe ya en las raíces.",
+      "research_funnel": "chat/history → official code/docs → community secondary → filter → dedup → rank+URL",
+      "motor_policy": "Acquisition/extract/copy/move exclusivamente motores canónicos @ ef0669bbc753861bfc33b86548f3f90c0f3d8df9; destination literal; no LFS; no force; no motor alternativo."
+    },
+    "STEP4_WIRE_CODE": {
+      "rule": "Por fase/capa: contract→adapter/plugin→Fables obligatorio donde aplique→microtest→integration test→readback→refutation→next node.",
+      "writers": ["SOL_GPT1","SOL_GPT2","SOL_GPT3"],
+      "quality_owner": "SOL_ORQUESTADOR",
+      "quality_gate": ["scope literal", "no duplicated architecture", "tests real", "evidence strong", "platform boundary explicit", "rollback/recovery preserved"]
+    }
+  },
+  "watchdog_policy": {
+    "required_all_roles": true,
+    "no_idle_wait": true,
+    "heartbeat_required": true,
+    "heartbeat_fields": ["current_task","current_node","status","evidence_or_run","gap","next_free_node","last_commit_seen"],
+    "truth_rule": "No marcar ACTIVE sin heartbeat/commit/run fresco. Sol Orquestador es el watchdog verificable de coordinación; watchdog individual sólo se declara activo con evidencia propia."
+  },
+  "closure": "No cerrar por tiempo. Cierre sólo con objetivos del proyecto mapeados a evidencia real y verify_final sin GAP bloqueante interno."
+}
