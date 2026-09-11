@@ -2,6 +2,7 @@
   "schema": "yaiwes.audit.gap-ledger.v1",
   "contract": "tel.workflow/v3",
   "status": "ACTIVE_AUDIT",
+  "updated_at_utc": "2026-09-11T08:58:39Z",
   "rule": "Cada GAP exige owner, requisito fuente, evidencia, estado, delta y verify_final. No borrar historial: sólo promover con evidencia.",
   "seed_gaps": [
     {"id":"G01_FABLES","status":"TESTED","owner":"SOL_GPT3","gap":"Fables ya materializado y probado como socket contractual; falta consumo en integración real para WIRED/RUNTIME_PASS","blocks":["integration real hasta cableado"],"evidence":{"implementation_commit":"671d9bb545b958c75b0c040806f096bf76f55175","fables_blob":"23f4e1b8b91301f2df396e7a0860fc65b977cfb3","contract":"yaiwes.fables.v1","ci_run":34573746304,"ci_job":103181425302,"runtime_suite":"17 passed in 0.02s","wordflow_suite":"12 passed in 0.03s"},"next":"G07 debe consumir Fables en integración real; no promover a WIRED por test unitario/socket solamente"},
@@ -20,13 +21,14 @@
     {"id":"G14_RUNTIME_CORE_SCAFFOLD","status":"TESTED","owner":"SOL_ORQUESTADOR","gap":"No se reimplementó core: se materializó bridge fail-closed Fables/Stabilize usando workflow owner existente; falta decidir si algún workflow_definition/bootstrap adicional es requisito real","evidence":{"implementation_commit":"671d9bb545b958c75b0c040806f096bf76f55175","stabilize_adapter_blob":"386a0c0496cb8f6ab38afb19bbb659edfcc267a3","ci_run":34573746304,"ci_job":103181425302,"runtime_suite":"17 passed in 0.02s"},"next":"mapear documentos contra bootstrap/workflow definition; reutilizar Stabilize y prohibir DAG/queue/recovery paralelo"},
     {"id":"G15_RUNTIME_INTEGRATION_SCAFFOLD","status":"OPEN_CONFIRMED","owner":"SOL_GPT3","gap":"runtime/src/integration contiene README pero no implementation source; manifests/tests existen separados","evidence":"runtime/src/integration/README.md blob 0aefd2511eeb0378a9204fafba54a49b9c8c3255","next":"usar Fables TESTED para definir mínimo integration adapter y runtime test"},
     {"id":"G16_RUNTIME_ADAPTERS_SCAFFOLD","status":"OPEN_CONFIRMED","owner":"SOL_GPT2","gap":"runtime/src/adapters contiene README pero no implementation source, aunque existen tests de adapters","evidence":"runtime/src/adapters/README.md blob d20358aa2e725de11e46190c8b7b3997d8f7e890","next":"comparar tests con implementaciones reales/ausentes y reutilizar antes de escribir"},
-    {"id":"G17_VM_MANAGER_SYMBOL","status":"OPEN_CONFIRMED_CODE_SEARCH_EMPTY","owner":"SOL_GPT2","gap":"No se localizó VirtualMachineManager en búsqueda de código del repo pese a requisito de VM Manager multiplataforma","next":"buscar equivalentes existentes antes de generar; mapear Android/Windows/Linux/iOS/Web capability adapters"}
+    {"id":"G17_VM_MANAGER_SYMBOL","status":"OPEN_CONFIRMED_CODE_SEARCH_EMPTY","owner":"SOL_GPT2","gap":"No se localizó VirtualMachineManager en búsqueda de código del repo pese a requisito de VM Manager multiplataforma","next":"buscar equivalentes existentes antes de generar; mapear Android/Windows/Linux/iOS/Web capability adapters"},
+    {"id":"G18_ASTRA_PREVIEW_PUBLISH","status":"OPEN_PUBLISH_WORKFLOW_FAIL","owner":"SOL_ORQUESTADOR","gap":"Astra Factory UI Preview obtiene el payload verificado pero falla en Configure Pages; upload/deploy quedan skipped. No es COMPONENT_FAIL ni prueba de WIRED.","evidence":{"run":34579642079,"job":103199980538,"head_sha":"49f1f8cdd849c610cd916b2548c078cb3bd2e09a","payload_fetch":"SUCCESS","configure_pages":"FAILURE","upload":"SKIPPED","deploy":"SKIPPED","persistence_commit":"63331ae1a64f9c4f34bf8634a78f683b42a28533"},"next":"Resolver sólo configuración/permisos de publicación Pages; mantener separado de wiring/runtime y no adquirir componentes."}
   ],
   "role_output_slots": {
     "SOL_GPT1":{"pass1":"PENDING_OR_ROLE_STATE_RECONCILIATION","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
     "SOL_GPT2":{"pass1":"PENDING_OR_ROLE_STATE_RECONCILIATION","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
     "SOL_GPT3":{"pass1":"PENDING_OR_ROLE_STATE_RECONCILIATION","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
-    "SOL_ORQUESTADOR":{"pass1":"IN_PROGRESS_PRIORITY_DOCS_AND_RUNTIME_TREE","pass2":"IN_PROGRESS_DOCUMENT_CODE_MAPPING","pass3":"IN_PROGRESS_EXECUTION_EVIDENCE","pass4":"PENDING","last_evidence_commit":"63e9830bd71c20ca10f9543b97e5b8e5b2843c8d"}
+    "SOL_ORQUESTADOR":{"pass1":"IN_PROGRESS_PRIORITY_DOCS_AND_RUNTIME_TREE","pass2":"IN_PROGRESS_DOCUMENT_CODE_MAPPING","pass3":"IN_PROGRESS_EXECUTION_EVIDENCE","pass4":"IN_PROGRESS_REBUTTAL_AND_GAP_DELTA","last_heartbeat":"2026-09-11T08:58:39Z","last_evidence_commit":"a2843a75661ebbe49047b0cc15bf1d45fac65955"}
   },
   "promotion_rule": "OPEN→TESTED→WIRED→RUNTIME_PASS→VERIFIED_CLOSED; saltos prohibidos."
 }
