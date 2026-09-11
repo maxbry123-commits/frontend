@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 1313244,
+  "bundle_sha256": "b579bc1b5a1cebb19161696f3122f74a773f34a8759bdda51aac7ae72dd007fd",
+  "extracted_tree": {
+    "bytes": 6405804,
+    "files": 474,
+    "sha256": "5cb137d63452364d62b7d705921caf9c1fa33e84d1545d68a6a4d4d622dfbb03"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 1313244,
+      "name": "rqlite.bundle.zip.part-0001",
+      "sha256": "b579bc1b5a1cebb19161696f3122f74a773f34a8759bdda51aac7ae72dd007fd"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "rqlite",
+  "source_bytes": 6405804,
+  "source_commit": "4e92305e647b2c93a895b5b5a6c7eab55e9267b1",
+  "source_files": 474,
+  "source_ref": "4e92305e647b2c93a895b5b5a6c7eab55e9267b1",
+  "source_repo": "https://github.com/rqlite/rqlite",
+  "source_tree": {
+    "bytes": 6405804,
+    "files": 474,
+    "sha256": "5cb137d63452364d62b7d705921caf9c1fa33e84d1545d68a6a4d4d622dfbb03"
+  }
+}
