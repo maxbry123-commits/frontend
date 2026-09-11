@@ -1,0 +1,9 @@
+[
+  {
+    "id": "0066:AVF-exact-aosp-mirror",
+    "slug": "AVF",
+    "source_repo": "https://github.com/GrapheneOS/platform_packages_modules_Virtualization",
+    "source_ref": "175a51b30123fa6b02b541f1969665708f7ec2c3",
+    "publish": false
+  }
+]
