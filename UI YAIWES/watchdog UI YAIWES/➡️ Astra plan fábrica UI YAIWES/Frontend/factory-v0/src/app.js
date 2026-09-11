@@ -1,5 +1,6 @@
 import { STEPS, initialState } from './state.js';
 import { reduce } from './actions.js';
+import { renderLucideIcon } from './donors/lucide-icons.js';
 
 let state = structuredClone(initialState);
 const $ = (id) => document.getElementById(id);
@@ -19,6 +20,7 @@ function renderLibrary() {
     ['window', 'Ventana'], ['button', 'Botón'], ['selector', 'Selector'], ['segment', 'Segmento'], ['panel', 'Panel']
   ];
   $('component-library').innerHTML = items.map(([kind, label]) => `<button class="library-item" data-kind="${kind}" draggable="true">${label}</button>`).join('');
+  $('new-component').innerHTML = `${renderLucideIcon('plus', { size: 16 })}<span>Crear componente</span>`;
   document.querySelectorAll('[data-kind]').forEach(btn => {
     btn.onclick = () => dispatch({ type: 'ADD_COMPONENT', kind: btn.dataset.kind, label: btn.textContent });
     btn.ondragstart = e => e.dataTransfer.setData('text/yaiwes-kind', btn.dataset.kind);
