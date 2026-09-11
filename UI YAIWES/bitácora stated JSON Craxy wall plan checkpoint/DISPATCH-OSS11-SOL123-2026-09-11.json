@@ -1,0 +1,15 @@
+{
+  "schema":"yaiwes.dispatch.oss11.sol123.v1",
+  "contract":"tel.workflow/v3",
+  "status":"ACTIVE_LOOP",
+  "source_of_truth":"UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-OSS11-RESULT-DELTA-2026-09-11.json",
+  "rule":"Cada rol reclama exactamente un nodo FREE_READY_SOURCE antes de escribir; max 3 pasos; no escribir rutas de otro rol; releer HEAD antes del claim; GAP local -> siguiente FREE independiente.",
+  "assignments":[
+    {"role":"SOL_GPT1","node_id":"OSS11-S1-01-RQLITE","state":"FREE_READY_SOURCE","source":"UI YAIWES/componentes open soure UI YAIWES/rqlite","source_evidence":{"run":34647400113,"publish_commit":"2dd6e2b27","tree_sha256":"5cb137d63452364d62b7d705921caf9c1fa33e84d1545d68a6a4d4d622dfbb03"},"steps":["VERIFY distinct distributed-state gap vs existing storage/recovery","WIRE minimal delta only if nonduplicate","TEST + SHA/log/report; else REUSE_REJECT"]},
+    {"role":"SOL_GPT2","node_id":"OSS11-S2-01-OTEL","state":"FREE_READY_SOURCE","source":"UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Collector","source_evidence":{"run":34647400113,"publish_commit":"2dd6e2b27","tree_sha256":"2cf654b9b6ec315fa97679c36e607e018120f091b10966254c4cc2de10f1d659"},"steps":["VERIFY distinct collector boundary vs OpenTelemetry Python","WIRE OTLP adapter without new orchestrator","TEST receive/process/export + SHA/log/report"]},
+    {"role":"SOL_GPT3","node_id":"OSS11-S3-01-TESTCONTAINERS","state":"FREE_READY_SOURCE","source":"UI YAIWES/componentes open soure UI YAIWES/Testcontainers Python","source_evidence":{"run":34646657007,"publish_commit":"f84e202a0c595ba08a4fbac5e83efb8620c5e182","tree_sha256":"ebc82b8782a0e2ef5417afc432079df34260e81a648f6a7a48663e13f70eab70"},"steps":["VERIFY Docker-capable CI integration gap","WIRE disposable real-adapter harness","TEST one real adapter lifecycle + SHA/log/report"]}
+  ],
+  "blocked_not_assignable":["Litestream:PROVIDER_SPECIAL_FILE_GAP","Grafana Tempo:PROVIDER_SPECIAL_FILE_GAP","Schemathesis:PROVIDER_SPECIAL_FILE_GAP","Kata Containers:PROVIDER_SPECIAL_FILE_GAP","Grype:PROVIDER_SPECIAL_FILE_GAP"],
+  "watchdog_note":"Central watchdog 6a9dd6b174548191840938a63cb45675 is updated. Private Sol1/Sol2/Sol3 watchdog mutation from this environment was denied by platform authorization; each role must consume this dispatch from repo on its next cycle.",
+  "closure":"ACTIVE_LOOP"
+}
