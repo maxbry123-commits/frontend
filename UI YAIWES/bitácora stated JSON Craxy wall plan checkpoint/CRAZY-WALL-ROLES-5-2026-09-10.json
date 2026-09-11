@@ -30,8 +30,9 @@
   },
   "fables_plugin": {
     "required": true,
-    "status": "GAP_NOT_LOCATED_IN_MAIN_CODE_SEARCH_2026-09-10",
-    "rule": "Antes de STEP_2 cableado debe existir ruta y evidencia real de Fables. Si no aparece, el rol asignado investiga ese GAP y los demás continúan nodos independientes."
+    "status": "LOCATED_CURRENT_BLOB_LOCAL_UNIT_TEST_PASS_CI_NOT_REVERIFIED",
+    "rule": "Antes de STEP_2 cableado debe existir ruta y evidencia real de Fables. Si no aparece, el rol asignado investiga ese GAP y los demás continúan nodos independientes.",
+    "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py"
   },
   "task_method_only": {
     "STEP_1": "📌 mover con el motor canónico el code fuente del componente o escribir el code necesario si no existe componente",
@@ -219,5 +220,121 @@
       "Browser/mobile suspension and AVF permissions require capability-driven acceptance; same UI does not mean same VM acceleration"
     ],
     "closure": "ACTIVE_LOOP; source review and narrow regression tests do not close whole product"
+  },
+  "director_review_astra1_recovery": {
+    "timestamp": "2026-09-11T10:59:11.939Z",
+    "authorization": "Latest user request: review priority documents, publish tasks for Sol1/2/3 and coordinator; correct code.",
+    "source_blobs": [
+      "b9bc9a7f56cf17607b863829213f7bcb0f8b8081",
+      "ecc8b3b1444ade0ca894789e149e881a08b999c0",
+      "da109ae2d91e4563c01492ad365bbaa00fc6baa6"
+    ],
+    "review_scope": "Retrieved three complete source blobs; reviewed requirements and selected sections. Not a line-by-line validation of all historical proposals or quoted performance claims.",
+    "product": "Centro de trabajo local/web, estado del usuario y del workspace separado de memoria privada de agentes; proveedores externos y cómputo local por capacidades.",
+    "ask_council_method": "Three analytical passes by Astra1 (requirements, code cross-check, refutation). No claim of independent LLM consensus.",
+    "goals12_input_output_council12": [
+      {
+        "step": 1,
+        "input_goal": "Original e instrucciones",
+        "output_goal": "Original versionado y recuperable",
+        "question": "¿Se conserva el original?",
+        "verdict": "Exigir hash y referencia; el ledger actual no conserva input/output completos."
+      },
+      {
+        "step": 2,
+        "input_goal": "Identidad proyecto/chat/ventana",
+        "output_goal": "Estado aislado por ámbito",
+        "question": "¿Se mezclan memorias?",
+        "verdict": "Memoria del workspace separada de la del agente; falta integración demostrada."
+      },
+      {
+        "step": 3,
+        "input_goal": "Contrato y dependencias",
+        "output_goal": "Solo ejecutar nodos habilitados",
+        "question": "¿Un PASS antiguo habilita un nodo fallido?",
+        "verdict": "Corregido en runner; regresión de fallo, reinicio y reparación pasa."
+      },
+      {
+        "step": 4,
+        "input_goal": "Eventos de ejecución",
+        "output_goal": "Replay del último estado",
+        "question": "¿Qué recupera el ledger?",
+        "verdict": "Recupera estados de nodo; no demuestra recuperación del workspace."
+      },
+      {
+        "step": 5,
+        "input_goal": "Artefactos y referencias",
+        "output_goal": "Hash comprobado contra bytes reales",
+        "question": "¿Un hash bien formado prueba evidencia?",
+        "verdict": "No; Evidence.strong verifica formato/presencia, no read-back de ref."
+      },
+      {
+        "step": 6,
+        "input_goal": "Solicitud de contexto",
+        "output_goal": "Context pack dentro del presupuesto",
+        "question": "¿Una LLM pequeña recibe todo el corpus?",
+        "verdict": "No: recuperar unidades con procedencia, reservar salida y mantener instrucciones."
+      },
+      {
+        "step": 7,
+        "input_goal": "Varias LLM/agentes",
+        "output_goal": "Salida consolidada y validada",
+        "question": "¿Existe integración real?",
+        "verdict": "Llmgate requiere caller; probar proveedor real y consolidación."
+      },
+      {
+        "step": 8,
+        "input_goal": "Plugins/Fables",
+        "output_goal": "Montaje autorizado por capacidades",
+        "question": "¿Existe Fables actual?",
+        "verdict": "Sí; blob 23f4e1b8... y cuatro tests unittest locales PASS; no prueba todos los vendors."
+      },
+      {
+        "step": 9,
+        "input_goal": "Cómputo local/web",
+        "output_goal": "Selección según capacidades reales",
+        "question": "¿Misma UI significa mismo backend?",
+        "verdict": "No; contrato común y adaptadores por plataforma; no declarar VM universal."
+      },
+      {
+        "step": 10,
+        "input_goal": "Suspensión/desconexión",
+        "output_goal": "Reanudación sin duplicar efectos",
+        "question": "¿Persistir mantiene CPU activa?",
+        "verdict": "No; checkpoint durable y reconciliación; ejecución remota si el host suspende."
+      },
+      {
+        "step": 11,
+        "input_goal": "Código temporal y datos del usuario",
+        "output_goal": "Retirar ejecutable conservando datos",
+        "question": "¿La caché equivale a memoria durable?",
+        "verdict": "No; separar paquetes regenerables, datos, checkpoints y exportación."
+      },
+      {
+        "step": 12,
+        "input_goal": "Objetivos y pruebas por plataforma",
+        "output_goal": "Cierre con cobertura y evidencia",
+        "question": "¿17/20 o 100x prueban el producto?",
+        "verdict": "No; pruebas extremo a extremo por plataforma y benchmark comparativo."
+      }
+    ],
+    "verified_delta": {
+      "runner_layers": "Runner and six layers exist in complete package tree 65ce656d2164e4864bdd48a103c7773edd767f53. Historical absence is superseded.",
+      "coda": "Current code already validates final Coda; not rewritten.",
+      "repair": "A1-RECOVERY-LATEST-STATUS: historical PASS previously survived later FAIL and restart; latest event now determines completion.",
+      "code_commit": "a6df3e0925c5735890e79fe1fc5d3407927d5bd3",
+      "test_commit": "307d15215336c257d58d0297f9fa86cc740a7462",
+      "validation": "Regression failed on original assertion; passed after patch. All 13 package test functions passed via direct Python harness (pytest unavailable).",
+      "fables": "Current fables blob 23f4e1b8b91301f2df396e7a0860fc65b977cfb3 + test cfc63c5363330ea0746c1d3e041c17dc11df9b0c: four unittest tests PASS locally. CI not asserted."
+    },
+    "assignments": {
+      "SOL_GPT1_BACKEND": "Reconcile memory handoff with coordinator: implementation/acceptance for workspace/chat/agent scope isolation and durable restart. Keep Vite/Supabase acquisition in own queue using explicit destinations and canonical motors.",
+      "SOL_GPT2_BACKEND": "Continue DuckDB/AVF existing queue. Publish transport, host capability, permission, guest boot separately; source availability cannot prove guest runtime. Reconcile new workflow evidence with stale role state.",
+      "SOL_GPT3_BACKEND": "Test actual UI→adapter→runtime→persist→restart→resume path; include cancellation/disconnect and no duplicated side effects. Refresh 01–20 report only with current exact-code execution evidence.",
+      "SOL_PLAN_ORQUESTADOR": "Consolidate recovered runner/layers and tested Fables into central status; reconcile canonical destinations and memory adapter ownership. Prioritize product state persistence, reference verification, context budgeting, platform capability adapters, then end-to-end tests. No new download required by this review.",
+      "ASTRA_GPT1_BACKEND": "Runner correction and regression published. Remaining evidence: hash format alone not read-back, result.output/literal not persisted, ledger path optional and shared writers lack conflict handling. Do not call whole product closed."
+    },
+    "download_requests": [],
+    "closure": "ACTIVE_LOOP_GAPS_OPEN; 17 local test functions passed, not global integration or device certification."
   }
 }
