@@ -3,8 +3,8 @@
   "contract": "tel.workflow/v3",
   "role": "ASTRA_GPT1_BACKEND",
   "name": "🧑‍💻Astra gpt 1 backend UI YAIWES 🌀🌀🌀 👷👷🕵️‍♀️",
-  "updated_at": "2026-09-11T22:41:30Z",
-  "base_sha": "97477eeeb994fa2b28568150442dc0909f82b664",
+  "updated_at": "2026-09-11T23:37:34.623Z",
+  "base_sha": "168b12de4c574a165d32601968ee7dd864614d8a",
   "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
   "status": "ACTIVE_LOOP_GAPS_OPEN",
   "scope": "A1 audit only; sole write path is this role_state_path",
@@ -15,6 +15,10 @@
     "frequency": "HOURLY"
   },
   "evidence": [
+    {
+      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-OPA-OPENFGA-LIVE-DELTA-2026-09-11.json",
+      "blob_sha": "e4b7bdedf8305cd1c59475dbf67503ccacdfeacf"
+    },
     {
       "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
       "blob_sha": "6e9ba8cd30279fab0fca79381af31e2d55f64f54"
@@ -52,70 +56,85 @@
       "blob_sha": "0f6dcf0b804e7c35298645d65a318c0d782a01ad"
     },
     {
-      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-OPA-OPENFGA-LIVE-DELTA-2026-09-11.json",
-      "blob_sha": "e4b7bdedf8305cd1c59475dbf67503ccacdfeacf"
+      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/S3-SOL-PLAN-DEBATE-2026-09-11.json",
+      "blob_sha": "3acca9a9ba62757705fa90a04785a9fa522e5c8b"
+    },
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_testcontainers_httpx_real_adapter.py",
+      "blob_sha": "1848ed7b8856de0cfbebe055ce3475a03dddb768"
+    },
+    {
+      "path": "conectividad con Router inteligente universal/PUENTE-RIU-frontend.yaml",
+      "blob_sha": "be4255b537c4a2a292273a8595df4a6d5e158ffd"
     }
   ],
   "nodes": [
     {
       "id": "A1-01",
-      "status": "AUDITED_STALE_SUMMARIES_NEW_CROSSCHECK",
-      "base_sha": "97477eeeb994fa2b28568150442dc0909f82b664",
+      "status": "AUDITED_STALE_SUMMARIES_WITH_NEW_SEPARATE_DELTAS",
+      "base_sha": "168b12de4c574a165d32601968ee7dd864614d8a",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+      "wall_reads_before_nodes": [
+        "2404928bd332e2abb1466c9a4095bd52bd24acea",
+        "2404928bd332e2abb1466c9a4095bd52bd24acea",
+        "2404928bd332e2abb1466c9a4095bd52bd24acea",
+        "2404928bd332e2abb1466c9a4095bd52bd24acea"
+      ],
       "evidence": {
         "STATE": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
         "CHECKPOINT": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
-        "HANDOFF": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
-        "SOURCE_CROSSCHECK": "a408601c467abd9548df57834fb4e93de1edd233",
-        "G12_POLICY_DELTA": "343cfae334b5296fddf6518519c2af62bcd515fc"
+        "HANDOFF": "8302687aaebdd48b9364f5febec8e90dfcffbd49"
       },
       "findings": [
-        "STATE, CHECKPOINT and HANDOFF blobs remain unchanged and do not reconcile current runtime, Fables, policy-lane or source-crosscheck evidence.",
-        "CROSSCHECK-3-FUENTES-WORDFLOW is new and explicitly reports partial compliance; it is not a replacement for canonical STATE/CHECKPOINT/HANDOFF.",
-        "G12 policy-lane evidence closes only OPA/OpenFGA requirement→layer→file→test→evidence mapping, not G12 global."
+        "STATE, CHECKPOINT and canonical HANDOFF remain byte-identical and do not reconcile current runtime, policy, auxiliary OSS or router-bridge deltas.",
+        "The frontend RIU bridge is newly declared at blob be4255b537c4a2a292273a8595df4a6d5e158ffd, but its own status is PENDING_E2E_ROUTER; declaration is not connectivity proof."
       ]
     },
     {
       "id": "A1-02",
       "status": "EVIDENCE_AUDITED_CLOSURE_BLOCKED",
-      "base_sha": "97477eeeb994fa2b28568150442dc0909f82b664",
+      "base_sha": "168b12de4c574a165d32601968ee7dd864614d8a",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "residuals": [
         {
           "name": "Vite",
           "path": "UI YAIWES/componentes open soure UI YAIWES/Vite",
-          "readback": "404_NOT_FOUND_AT_BASE_SHA",
+          "readback": "ABSENT_AT_BASE_SHA",
           "scope_limit": "Exact final path only; repository-wide absence not inferred"
         },
         {
           "name": "Supabase",
           "path": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
-          "readback": "404_NOT_FOUND_AT_BASE_SHA",
+          "readback": "ABSENT_AT_BASE_SHA",
           "scope_limit": "Exact final path only; repository-wide absence not inferred"
         },
         {
           "name": "DuckDB",
           "path": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
-          "readback": "404_NOT_FOUND_AT_BASE_SHA",
+          "readback": "ABSENT_AT_BASE_SHA",
           "scope_limit": "Exact final path only; repository-wide absence not inferred"
         },
         {
           "name": "AVF",
           "path": "UI YAIWES/componentes open soure UI YAIWES/AVF",
-          "readback": "404_NOT_FOUND_AT_BASE_SHA",
+          "readback": "ABSENT_AT_BASE_SHA",
           "scope_limit": "Exact final path only; repository-wide absence not inferred"
         }
       ],
+      "owner_state_blobs": {
+        "SOL_GPT1_BACKEND": "89ee5114679abe3726942fb420e1e55882950b38",
+        "SOL_GPT2_BACKEND": "f5fd829084d88a6dbd017856e453a78855cf06f0",
+        "SOL_GPT3_BACKEND": "b852f5ec08aac4eab4259626a9c243e5c0b4ad56"
+      },
       "findings": [
-        "No exact final-path tree, source/tree hash or destination read-back exists for the four residuals at the audited base.",
-        "The new 11-component source crosscheck uses a separate denominator (6 verified, 5 blocked) and does not change 120/124.",
-        "SOL1/SOL2/SOL3 role blobs remain unchanged; Astra2 is now published but READY_TO_CLAIM."
+        "No source/tree hash plus exact final read-back appeared for any residual.",
+        "No residual can be promoted from the separate Testcontainers or router-bridge work."
       ]
     },
     {
       "id": "A1-03",
-      "status": "AUDITED_G12_SUBLANE_PASS_STALE_01_20",
-      "base_sha": "97477eeeb994fa2b28568150442dc0909f82b664",
+      "status": "AUDITED_NEW_CI_CANCELLATION_STALE_01_20",
+      "base_sha": "168b12de4c574a165d32601968ee7dd864614d8a",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1",
       "reported_pass": 17,
@@ -126,43 +145,46 @@
         "Vercel AI SDK"
       ],
       "new_independent_evidence": {
-        "policy_lane": "G12-POLICY-OPA-OPENFGA PASS",
-        "evidence_blob": "343cfae334b5296fddf6518519c2af62bcd515fc",
-        "unit_run": 34646998280,
-        "live_e2e_run": 34647825462,
-        "scope": "Policy/authority sublane only; no effect on 01-20 denominator."
+        "lane": "Auxiliary OSS Testcontainers real-adapter lifecycle",
+        "workflow_run": 34656458039,
+        "job_id": 103449840014,
+        "head_sha": "e75cd3f5089845b45d87cad2ed595f0c07405039",
+        "result": "TEST_CANCELLED_NOT_PASS",
+        "log_read_back": true,
+        "assertions": "15 Wordflow LOOP tests passed; complete runtime suite was cancelled after approximately 9m58s and produced no Testcontainers lifecycle verdict.",
+        "scope": "Separate auxiliary OSS lane; does not modify integration 01-20."
       },
       "findings": [
-        "The canonical 01-20 report remains byte-identical at 17/20 and was not regenerated from current wiring.",
-        "The latest general Wordflow run 34648576199 was cancelled; prior successful matching runtime evidence remains scoped evidence, not 01-20 closure.",
-        "Source crosscheck identifies incomplete Agent, Memory/Audit, Integration, Recovery, UEK/platform and G12 lanes; those are architecture gaps, not additional 01-20 PASS entries."
+        "Canonical 01-20 report remains byte-identical, generated 2026-09-09, with 17 PASS and three PENDING_SOURCE.",
+        "Two bounded Testcontainers attempts ended cancelled; adding subprocess timeouts did not yield a completed lifecycle result under the job ceiling.",
+        "The cancellation is infrastructure/runtime-suite evidence, not a functional PASS or functional FAIL for Testcontainers."
       ]
     },
     {
       "id": "A1-04",
       "status": "INSTRUCTIONS_PUBLISHED_IN_OWN_STATE",
-      "base_sha": "97477eeeb994fa2b28568150442dc0909f82b664",
+      "base_sha": "168b12de4c574a165d32601968ee7dd864614d8a",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "refutations": [
-        "Six of eleven auxiliary OSS components verified does not mean the four Action124 residuals are closed.",
-        "A G12 policy sublane PASS does not close G12 global, integration 01-20 or the product.",
-        "A cancelled aggregate workflow is neither a functional FAIL nor a PASS; use the last completed applicable run and compare code revisions.",
-        "Astra2 READY_TO_CLAIM is a published heartbeat, not completed work."
+        "A declared RIU YAML bridge with PENDING_E2E_ROUTER cannot be counted as connected.",
+        "A cancelled aggregate runtime suite cannot promote Testcontainers to TESTED or WIRED.",
+        "Auxiliary OSS work cannot change the Action124 120/124 or integration 17/20 denominators.",
+        "Unchanged STATE/CHECKPOINT/HANDOFF cannot be treated as reconciled merely because newer delta files exist."
       ]
     }
   ],
   "instructions_for_owners": {
-    "SOL_GPT1_BACKEND": "Publish fresh own-state heartbeat. Close literal Vite/Supabase destination authorization, canonical-motor source/tree hash and exact read-back; hand Vite to S3. Separately consume the rqlite dispatch or record REUSE_REJECT with evidence—do not merge that denominator with 120/124.",
-    "SOL_GPT2_BACKEND": "Keep DuckDB symlink and AVF provider/capability gates fail-closed. Publish approved acquisition strategy and exact read-back. Separately claim OpenTelemetry Collector dispatch and test its OTLP boundary.",
-    "SOL_GPT3_BACKEND": "Keep 01-20 at 17/20 until big-AGI, Vite and Vercel AI SDK have current destination+wiring+runtime evidence. Reconcile the Testcontainers dispatch claim in canonical own state and publish SHA/run; do not use it to alter 01-20.",
-    "ASTRA2_GPT_BACKEND": "Move from READY_TO_CLAIM only after recording node_id, base SHA and claimed_at. Validate proposed component candidates for dedup/license/provenance; do not count candidate research as acquisition or Fables consumption.",
-    "COORDINATOR": "Reconcile unchanged STATE/CHECKPOINT/HANDOFF with CROSSCHECK-3-FUENTES and G12 policy delta. Keep separate denominators: Action124 120/124, integration 17/20, auxiliary OSS 6/11. Assign the five special-file/provider gaps without modifying Motor2 and continue G12 memory/platform/integration/recovery mapping."
+    "SOL_GPT1_BACKEND": "Publish fresh canonical own-state heartbeat. Obtain literal Vite/Supabase destination authorization, run only pinned canonical motors, and record source commit, final tree hash, failed=0, pending=0 and exact destination read-back; hand verified Vite to S3.",
+    "SOL_GPT2_BACKEND": "Publish fresh canonical own-state heartbeat. Keep DuckDB symlink handling and AVF provider/permission/host-capability/guest-boot gates fail-closed; record coordinator-approved strategy and exact destination read-back without changing immutable motors.",
+    "SOL_GPT3_BACKEND": "Keep Testcontainers TEST_CANCELLED_NOT_PASS after two attempts. Split the specific real-adapter lifecycle test into a separately bounded CI job or exclude unrelated long-running tests from that verification; capture its exact log and only then classify. Keep 01-20 at 17/20 until big-AGI, Vite and Vercel AI SDK have current destination+wiring+runtime evidence.",
+    "ASTRA2_GPT_BACKEND": "Canonical state remains READY_TO_CLAIM. Claim a concrete A2 node with base SHA and validate actual Fables consumption beyond socket tests; candidate research and generic socket presence are not Fables integration.",
+    "COORDINATOR": "Reconcile STATE/CHECKPOINT/HANDOFF with current deltas. Keep separate denominators: Action124 120/124, integration 17/20, auxiliary OSS 6/11. Treat the RIU bridge as DECLARED/PENDING_E2E and assign a request-response-healthcheck E2E before promotion. No new component download is justified by this A1 cycle."
   },
   "next_iteration": [
     "Re-read roles wall and canonical summaries.",
-    "Check exact four residual paths and owner heartbeats.",
-    "Check regeneration of integration-01-20 report and applicable CI.",
-    "Audit G12 and source-crosscheck deltas without conflating denominators."
+    "Check exact four residual paths and canonical owner states.",
+    "Check regeneration of integration-01-20 report.",
+    "Check a completed, isolated Testcontainers lifecycle job and RIU E2E evidence."
   ],
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
   "research_delta": {
@@ -886,17 +908,135 @@
         "mutation_performed": "OWN_STATE_ONLY",
         "new_evidence": "OPA/OpenFGA live E2E run 34647825462 independently confirms policy-lane PASS; four residual exact paths remain absent and canonical 01-20 stays 17/20."
       }
+    },
+    {
+      "snapshot_reason": "Preserve previous A1 state before 2026-09-11T23:37:34.623Z audit",
+      "updated_at": "2026-09-11T22:41:30Z",
+      "base_sha": "97477eeeb994fa2b28568150442dc0909f82b664",
+      "nodes": [
+        {
+          "id": "A1-01",
+          "status": "AUDITED_STALE_SUMMARIES_NEW_CROSSCHECK",
+          "base_sha": "97477eeeb994fa2b28568150442dc0909f82b664",
+          "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "evidence": {
+            "STATE": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
+            "CHECKPOINT": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
+            "HANDOFF": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
+            "SOURCE_CROSSCHECK": "a408601c467abd9548df57834fb4e93de1edd233",
+            "G12_POLICY_DELTA": "343cfae334b5296fddf6518519c2af62bcd515fc"
+          },
+          "findings": [
+            "STATE, CHECKPOINT and HANDOFF blobs remain unchanged and do not reconcile current runtime, Fables, policy-lane or source-crosscheck evidence.",
+            "CROSSCHECK-3-FUENTES-WORDFLOW is new and explicitly reports partial compliance; it is not a replacement for canonical STATE/CHECKPOINT/HANDOFF.",
+            "G12 policy-lane evidence closes only OPA/OpenFGA requirement→layer→file→test→evidence mapping, not G12 global."
+          ]
+        },
+        {
+          "id": "A1-02",
+          "status": "EVIDENCE_AUDITED_CLOSURE_BLOCKED",
+          "base_sha": "97477eeeb994fa2b28568150442dc0909f82b664",
+          "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "residuals": [
+            {
+              "name": "Vite",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Vite",
+              "readback": "404_NOT_FOUND_AT_BASE_SHA",
+              "scope_limit": "Exact final path only; repository-wide absence not inferred"
+            },
+            {
+              "name": "Supabase",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
+              "readback": "404_NOT_FOUND_AT_BASE_SHA",
+              "scope_limit": "Exact final path only; repository-wide absence not inferred"
+            },
+            {
+              "name": "DuckDB",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
+              "readback": "404_NOT_FOUND_AT_BASE_SHA",
+              "scope_limit": "Exact final path only; repository-wide absence not inferred"
+            },
+            {
+              "name": "AVF",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/AVF",
+              "readback": "404_NOT_FOUND_AT_BASE_SHA",
+              "scope_limit": "Exact final path only; repository-wide absence not inferred"
+            }
+          ],
+          "findings": [
+            "No exact final-path tree, source/tree hash or destination read-back exists for the four residuals at the audited base.",
+            "The new 11-component source crosscheck uses a separate denominator (6 verified, 5 blocked) and does not change 120/124.",
+            "SOL1/SOL2/SOL3 role blobs remain unchanged; Astra2 is now published but READY_TO_CLAIM."
+          ]
+        },
+        {
+          "id": "A1-03",
+          "status": "AUDITED_G12_SUBLANE_PASS_STALE_01_20",
+          "base_sha": "97477eeeb994fa2b28568150442dc0909f82b664",
+          "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1",
+          "reported_pass": 17,
+          "total": 20,
+          "pending": [
+            "big-AGI",
+            "Vite",
+            "Vercel AI SDK"
+          ],
+          "new_independent_evidence": {
+            "policy_lane": "G12-POLICY-OPA-OPENFGA PASS",
+            "evidence_blob": "343cfae334b5296fddf6518519c2af62bcd515fc",
+            "unit_run": 34646998280,
+            "live_e2e_run": 34647825462,
+            "scope": "Policy/authority sublane only; no effect on 01-20 denominator."
+          },
+          "findings": [
+            "The canonical 01-20 report remains byte-identical at 17/20 and was not regenerated from current wiring.",
+            "The latest general Wordflow run 34648576199 was cancelled; prior successful matching runtime evidence remains scoped evidence, not 01-20 closure.",
+            "Source crosscheck identifies incomplete Agent, Memory/Audit, Integration, Recovery, UEK/platform and G12 lanes; those are architecture gaps, not additional 01-20 PASS entries."
+          ]
+        },
+        {
+          "id": "A1-04",
+          "status": "INSTRUCTIONS_PUBLISHED_IN_OWN_STATE",
+          "base_sha": "97477eeeb994fa2b28568150442dc0909f82b664",
+          "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "refutations": [
+            "Six of eleven auxiliary OSS components verified does not mean the four Action124 residuals are closed.",
+            "A G12 policy sublane PASS does not close G12 global, integration 01-20 or the product.",
+            "A cancelled aggregate workflow is neither a functional FAIL nor a PASS; use the last completed applicable run and compare code revisions.",
+            "Astra2 READY_TO_CLAIM is a published heartbeat, not completed work."
+          ]
+        }
+      ],
+      "instructions_for_owners": {
+        "SOL_GPT1_BACKEND": "Publish fresh own-state heartbeat. Close literal Vite/Supabase destination authorization, canonical-motor source/tree hash and exact read-back; hand Vite to S3. Separately consume the rqlite dispatch or record REUSE_REJECT with evidence—do not merge that denominator with 120/124.",
+        "SOL_GPT2_BACKEND": "Keep DuckDB symlink and AVF provider/capability gates fail-closed. Publish approved acquisition strategy and exact read-back. Separately claim OpenTelemetry Collector dispatch and test its OTLP boundary.",
+        "SOL_GPT3_BACKEND": "Keep 01-20 at 17/20 until big-AGI, Vite and Vercel AI SDK have current destination+wiring+runtime evidence. Reconcile the Testcontainers dispatch claim in canonical own state and publish SHA/run; do not use it to alter 01-20.",
+        "ASTRA2_GPT_BACKEND": "Move from READY_TO_CLAIM only after recording node_id, base SHA and claimed_at. Validate proposed component candidates for dedup/license/provenance; do not count candidate research as acquisition or Fables consumption.",
+        "COORDINATOR": "Reconcile unchanged STATE/CHECKPOINT/HANDOFF with CROSSCHECK-3-FUENTES and G12 policy delta. Keep separate denominators: Action124 120/124, integration 17/20, auxiliary OSS 6/11. Assign the five special-file/provider gaps without modifying Motor2 and continue G12 memory/platform/integration/recovery mapping."
+      },
+      "current_delta": {
+        "observed_at": "2026-09-11T22:41:30Z",
+        "base_sha": "97477eeeb994fa2b28568150442dc0909f82b664",
+        "previous_role_blob_sha": "65a32b290162cbd6f6511a2d53b7d967a431e105",
+        "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+        "result": "DELTA_AUDITED_GAPS_OPEN",
+        "runtime_tests_executed_this_cycle": false,
+        "ci_logs_independently_read": false,
+        "mutation_performed": "OWN_STATE_ONLY",
+        "new_evidence": "New source crosscheck reports 6/11 auxiliary OSS verified and 5 blocked; G12 policy lane is mapped PASS. Four Action124 residual paths remain absent and canonical integration stays 17/20."
+      }
     }
   ],
   "current_delta": {
-    "observed_at": "2026-09-11T22:41:30Z",
-    "base_sha": "97477eeeb994fa2b28568150442dc0909f82b664",
-    "previous_role_blob_sha": "65a32b290162cbd6f6511a2d53b7d967a431e105",
+    "observed_at": "2026-09-11T23:37:34.623Z",
+    "base_sha": "168b12de4c574a165d32601968ee7dd864614d8a",
+    "previous_role_blob_sha": "215803c03b7db56f53ab0dc274a946272b1ef097",
     "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
     "result": "DELTA_AUDITED_GAPS_OPEN",
     "runtime_tests_executed_this_cycle": false,
-    "ci_logs_independently_read": false,
+    "ci_logs_independently_read": true,
     "mutation_performed": "OWN_STATE_ONLY",
-    "new_evidence": "New source crosscheck reports 6/11 auxiliary OSS verified and 5 blocked; G12 policy lane is mapped PASS. Four Action124 residual paths remain absent and canonical integration stays 17/20."
+    "new_evidence": "S3 Testcontainers retry run 34656458039/job 103449840014 independently confirmed CANCELLED_NOT_PASS; frontend RIU bridge is DECLARED/PENDING_E2E. Four residual exact paths remain absent and canonical 01-20 stays 17/20."
   }
 }
