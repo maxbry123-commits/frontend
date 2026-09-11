@@ -1,0 +1,18 @@
+{
+  "schema":"yaiwes.crazy-wall.execution.oss11.v1",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "status":"ACTIVE_LOOP",
+  "base_crazy_wall":{"path":"UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-STATE-HANDOFF-XRAY-2026-09-11.json","blob":"a2683070871975a95ea4d16ac125125dcfb11649"},
+  "watchdog":{"automation_id":"6a9dd6b174548191840938a63cb45675","cadence":"1 hour","active":true},
+  "acquisition":{"state":"EXECUTING","queue_path":"UI YAIWES/automation/oss-11-canonical-motor2-20260911/QUEUE.json","queue_commit":"ba344a4754cebbb7e0dca394e3929a7aa15bc173","workflow_path":".github/workflows/ui-yaiwes-oss-11-canonical-motor2-direct-20260911.yml","workflow_commit":"be68f103227c345c029fac4898c82c9dbf0999ef","run_id":34646657007,"destination":"UI YAIWES/componentes open soure UI YAIWES/<slug>","engine":"canonical Motor 2 + hf_download_extract_engine","motor2_blob":"84d566e2ee4e98e42eb3a864026d067d48caabd9","engine_blob":"91e6e4486692eab314be5c7130d8310d3c855397","rules":["pinned refs","direct destination","no LFS","no force","special files fail closed","manifest+code+readback required"],"components":["OPA","OpenFGA","Litestream","rqlite","OpenTelemetry Collector","Grafana Tempo","Testcontainers Python","Schemathesis","Kata Containers","Grype","ORAS"]},
+  "node_contract":{"one_task_one_node":true,"max_steps":3,"steps":["1_VERIFY_SOURCE_AND_CAPABILITY","2_WIRE_AUTHORIZED_DELTA","3_TEST_EVIDENCE_REPORT"],"collision_rule":"one component/write-scope = one owner"},
+  "sol_queues":{
+    "SOL_GPT1":[{"node":"OSS11-S1-01-LITESTREAM","component":"Litestream","state":"FREE","after":"SOURCE_PRESENT","scope":["runtime/src/memory/**","runtime/src/recovery/**"]},{"node":"OSS11-S1-02-RQLITE","component":"rqlite","state":"FREE","after":"SOURCE_PRESENT","scope":["runtime/src/memory/**","runtime/src/recovery/**"]}],
+    "SOL_GPT2":[{"node":"OSS11-S2-01-OTEL","component":"OpenTelemetry Collector","state":"FREE","after":"SOURCE_PRESENT","scope":["runtime/src/adapters/**","runtime/src/telemetry/**"]},{"node":"OSS11-S2-02-TEMPO","component":"Grafana Tempo","state":"FREE","after":"SOURCE_PRESENT","scope":["runtime/src/adapters/**","runtime/src/telemetry/**"]},{"node":"OSS11-S2-03-KATA","component":"Kata Containers","state":"FREE","after":"SOURCE_PRESENT","scope":["runtime/src/adapters/**","runtime/src/uek/**"]}],
+    "SOL_GPT3":[{"node":"OSS11-S3-01-TESTCONTAINERS","component":"Testcontainers Python","state":"FREE","after":"SOURCE_PRESENT","scope":["runtime/src/integration/**","runtime/tests/**"]},{"node":"OSS11-S3-02-SCHEMATHESIS","component":"Schemathesis","state":"FREE","after":"SOURCE_PRESENT","scope":["runtime/src/integration/**","runtime/tests/**"]}]
+  },
+  "orchestrator_queue":[{"node":"OSS11-O-01-OPA","component":"OPA","state":"FREE"},{"node":"OSS11-O-02-OPENFGA","component":"OpenFGA","state":"FREE"},{"node":"OSS11-O-03-GRYPE","component":"Grype","state":"FREE"},{"node":"OSS11-O-04-ORAS","component":"ORAS","state":"FREE"}],
+  "pending_tasks":["supervise run 34646657007","classify Motor2 failures from logs/state","verify code+manifest+readback per success","claim wiring nodes only after SOURCE_PRESENT","run runtime tests and record WIRED/RUNTIME_PASS independently","update G01-G19 ledger and G12 global matrix","keep Pages/HF publish blockers separate"],
+  "closure":"ACTIVE_LOOP; no OSS11 component is declared WIRED until acquisition+integration tests provide evidence."
+}
