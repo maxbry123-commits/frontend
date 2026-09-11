@@ -1,0 +1,44 @@
+{
+  "schema": "yaiwes.role-state.v1",
+  "contract": "tel.workflow/v3",
+  "role": "SOL_GPT56_AUDITOR",
+  "name": "GPT-5.6 Sol auditor/repair",
+  "status": "ACTIVE_LOOP",
+  "registered_at": "2026-09-11T19:37:00Z",
+  "authorization": "Direct user instruction in current chat: audit Crazy Wall, investigate gaps, repair executable code gaps, and register every step.",
+  "anti_collision": {
+    "write_scope": [
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT56-AUDITOR-STATE.json",
+      "explicitly claimed repair files after fresh SHA read"
+    ],
+    "rule": "Do not overwrite other role-state paths; use fresh blob SHA before every write."
+  },
+  "current_task": "G11 recovery subgate: durable latest event/output read-back after restart",
+  "current_node": "S56-G11-01",
+  "blockers": {
+    "G18_ASTRA_PREVIEW_PUBLISH": "Repository Pages is not enabled/configured; configure-pages fails with Not Found. Auto-enablement requires a non-GITHUB_TOKEN credential with Pages/admin permission.",
+    "G19_HF_STATIC_SPACE_CREDENTIAL": "All five configured HF secret aliases resolve empty; workflow exits HF_SECRET_NOT_FOUND before packaging."
+  },
+  "audit_evidence": {
+    "crazy_wall_blob": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+    "gap_ledger_blob": "f61ab0c9ddd43ebf8919d14462939d30cc8ff090",
+    "runner_blob": "074bbb0a8c6074bcc3b0e16482b93bbc9b9d7a2f",
+    "ledger_blob": "60b35f1e2b9d61232020ec84d08868eaf89a9cec",
+    "contracts_blob": "59596986623cc1cc99b206d82c41d4053716a286",
+    "test_core_blob": "38f40cec4ac6075a87470c137ab215f108deeb03",
+    "g18_run": 34579642079,
+    "g18_job": 103199980538,
+    "g19_run": 34591171118,
+    "g19_job": 103236571091
+  },
+  "finding": "LayerRunner persists status/evidence/actions/touched_paths but omits NodeContract literal/literal_sha256 and LayerResult.output. Existing restart test proves completed-node replay only, not durable result read-back.",
+  "planned_delta": [
+    "persist literal, literal_sha256 and output in each ledger event",
+    "maintain latest_events map rebuilt from ledger on startup",
+    "expose recover_event(node_id) read-back API",
+    "add restart regression test for literal/output read-back and latest-event semantics",
+    "verify through existing yaiwes-wordflow-loop-pytest workflow"
+  ],
+  "heartbeat_at": "2026-09-11T19:37:00Z",
+  "next_free_node": "After CI, register commit/run evidence; then continue G11/G12 or another independent executable gap."
+}
