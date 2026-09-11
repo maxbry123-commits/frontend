@@ -11,7 +11,7 @@
     "🌞👷 sol osquestador plan 🎯"
   ],
   "director_literal_instruction": "Empiezan por los archivos fuente del proyecto, los estudian y debaten entre Sol1, Sol2, Sol3 y Sol Orquestador. Hacen verificación cruzada documentos ↔ código ↔ componentes incorporados. Debaten qué código falta y qué componentes adicionales hacen falta. Ningún Sol puede parar el procesamiento mientras existan tareas, preguntas, GAPs o verificaciones seguras pendientes: al bloquearse un nodo, registra el GAP y continúa inmediatamente con el siguiente nodo FREE de su propio carril. Todo hallazgo se escribe en Crazy Wall con evidencia. Estas son instrucciones del Director.",
-  "active_debate_round": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/ROUND-3-SOL123-2026-09-11.json",
+  "active_debate_round": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/ROUND-4-SOL123-2026-09-11.json",
   "sources_of_truth_first": [
     "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌MAX-SYSTEM-100X-FINAL-1.md",
     "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR Q grock tiene ventanas agente  linux iOS Android phyton 🤯🤯🤯🎯 14 objetivos💡💡💡✅✅✅🎯🎯🎯.md",
@@ -45,13 +45,12 @@
     "runner": "PRESENT_ON_MAIN",
     "ledger_persistence": "PRESENT_ON_MAIN_ATOMIC_FSYNC_REPLACE_HASH_CHAIN",
     "L01_L04": "PRESENT_ON_MAIN",
-    "L05_DOWNLOAD_EXTRACT": "PRESENT_AND_STRENGTHENED_FAIL_CLOSED",
-    "L06_SOURCE_EVOLUTION": "PRESENT_REUSE_PATCH_ADAPTER_GENERATE_DELTA",
-    "tests": "PUBLISHED; REAL_GITHUB_EXECUTION_PENDING",
-    "pytest_workflow_commit": "f9e8a190cbec48f92473163de6d98152ad98f1dc",
-    "SOL1_round2": "ANSWERED: L05 adapter contrato→motor canónico→LayerResult; no downloader alternativo",
-    "SOL2_round2": "WAITING_FRESH_RESPONSE",
-    "SOL3_round2": "WAITING_FRESH_RESPONSE"
+    "L05_DOWNLOAD_EXTRACT": "PRESENT_AND_STRENGTHENED_WITH_TYPED_SPECIAL_FILE_AND_PROVIDER_GAPS; latest CI pending",
+    "L06_SOURCE_EVOLUTION": "PRESENT_AND_CI_PASS; run 34568696244 job 103165989964 = 4 passed",
+    "FABLES": "PATH+CONTRACT+TEST_PRESENT; main path runtime/src/plugins/fables.py; blob 36ee0b1b184b709e292fd8c617f0e795e7e98451; latest joint CI run 34569726823 pending",
+    "SOL1": "R2 answered; R4 order published for persistence/memory cross-check while destination remains blocked",
+    "SOL2": "R2 answered and typed L05 gap patch/tests published; R4 AVF capability-probe analysis assigned",
+    "SOL3": "R3 answered; L06 boundary accepted; continue independent repair/tests 21-40"
   },
   "component_rule": "NO_NEW_COMPONENT_BY_DEFAULT. Primero dedup contra catálogo/raíces. Sólo proponer descarga si el cross-check demuestra una capacidad obligatoria ausente; entonces Sol Orquestador prepara cola con motores canónicos inmutables y destino literal.",
   "closure_rule": "NO_STOP_NO_FALSE_PASS: SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED. Debate/LOOP continúa mientras queden objetivos, GAPs, tareas o verificaciones seguras pendientes."
