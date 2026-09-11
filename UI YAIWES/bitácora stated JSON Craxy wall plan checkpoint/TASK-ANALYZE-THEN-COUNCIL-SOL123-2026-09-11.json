@@ -1,0 +1,67 @@
+{
+  "schema": "yaiwes.task.analyze-then-council.v1",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_CONTINUOUS_LOOP",
+  "issued_by": "DIRECTOR",
+  "participants": [
+    "Sol ☀️ 🏈gpt 1 backend",
+    "Sol gpt 2 🤯👷backend",
+    "Sol gpt 3 🕵️‍♀️ backend",
+    "🌞👷 sol osquestador plan 🎯"
+  ],
+  "director_instruction": "Cada Sol entra primero en una tarea intensiva de análisis de su carril y no queda idle: relee los tres documentos fuente de verdad, arquitectura, code, componentes, tests, STATE y commits nuevos; produce GOALS de entrada/salida, contradicciones, GAPs, refutaciones y tareas 1x1 con evidencia. Al publicar su delta, entra inmediatamente al Council 4AI del Crazy Wall para debatir con las otras posiciones. Terminada una ronda de Council, cada Sol toma el siguiente nodo FREE y vuelve a analizar. El ciclo análisis→evidencia→Council→refutación→tarea→ejecución/test→nuevo commit→análisis continúa mientras exista trabajo seguro o objetivo no verificado.",
+  "analysis_phase": {
+    "required": true,
+    "inputs": [
+      "three project source-of-truth documents",
+      "current architecture/handoff/recovery",
+      "current runtime/backend/frontend code",
+      "component inventory and integration manifests",
+      "tests/workflow runs/logs/read-back",
+      "latest Crazy Wall/STATE and commits"
+    ],
+    "must_output": [
+      "12 input/output goal checks",
+      "document↔code↔component↔test cross-check",
+      "verified implemented capabilities",
+      "verified missing capabilities",
+      "contradictions and typed GAPs",
+      "at least 3 evidence-based refutations when applicable",
+      "one next FREE 1x1 task",
+      "SHA/path/run/log/read-back evidence"
+    ],
+    "idle_forbidden": true
+  },
+  "council_phase": {
+    "participants_required": ["SOL_GPT1","SOL_GPT2","SOL_GPT3","SOL_ORQUESTADOR"],
+    "write_target": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-DEBATE-4AI-2026-09-11.json",
+    "rules": [
+      "preserve disagreements until evidence resolves them",
+      "each Sol must challenge or confirm at least one other position",
+      "new component only after dedup + proven required capability gap",
+      "code correction must be minimal and directly tied to a verified gap",
+      "PASS never by presence alone",
+      "one blocked node never stalls another safe node"
+    ]
+  },
+  "execution_loop": [
+    "ANALYZE_DEEP",
+    "WRITE_EVIDENCE",
+    "COUNCIL_4AI",
+    "REFUTE_CROSSCHECK",
+    "DERIVE_NEXT_1X1_TASK",
+    "EXECUTE_OR_TEST_SAFE_DELTA",
+    "READBACK_VERIFY",
+    "READ_NEXT_COMMIT",
+    "REPEAT"
+  ],
+  "current_priorities": [
+    "L05 typed gap CI verification",
+    "Fables exact path+SHA+contract+test verification",
+    "S1 local-first persistence/recovery/memory-boundary cross-check",
+    "S2 AVF capability-probe contract",
+    "S3 StrategyDelta tests 21-40",
+    "real integration after Fables verification"
+  ],
+  "closure": "DO_NOT_CLOSE_OR_IDLE_WHILE_SAFE_WORK_OR_UNVERIFIED_GOALS_EXIST"
+}
