@@ -1,281 +1,196 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S3-DEBATE-SOLPLAN-20260911-01",
-  "status": "ROUND9_Q1_Q4_ACTIONABLE_ACTIVE_LOOP",
+  "status": "ROUND10_Q1_Q4_ACTIONABLE_ACTIVE_LOOP",
   "from": "Sol gpt 3 🕵️‍♀️ backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
   "created_date": "2026-09-11",
   "sources_read_fresh": {
-    "director_instruction_blob_sha": "f4c92725784dc4e68d2705697530afda8e0b3b4f",
-    "recovery_patch_blob_sha": "1c95dba5f2bad6af36462b8721ed0073766ea35c",
-    "round3_blob_sha": "f86df98950d8a737cf338403c002644b2c59c896",
-    "main_sha_seen": "26491ef4c3de0faf86deeb478b5f91ec77807026"
-  },
-  "s3_position": {
-    "claim_1": "L06 Source Evolution is an inspection/planning boundary: it may select REUSE, PATCH_SMALL, ADAPTER or GENERATE_DELTA and emit evidence/specification, but it must not declare WIRED or runtime integration PASS.",
-    "claim_2": "The restored L06 implementation exists under wordflow_loop/wordflow_loop/layers and follows the ordered ladder; GitHub CI run 34568696244 executed the runtime suite successfully with 4 passed.",
-    "claim_3": "Fables identity is materialized at runtime/src/plugins/fables.py, but Fables remains NOT_VERIFIED: cited run 34569640745 was cancelled and the dedicated workflow sol-gpt3-s3-fables-hardcoded-retry-20260911.yml is now absent from current main.",
-    "claim_4": "Batch 21-40 independent vendor/runtime tests are valid FREE work while Fables is blocked, but those results remain NOT_WIRED.",
-    "claim_5": "Local PASS must feed the global integration/cross-check loop; it is not equivalent to project closure."
-  },
-  "refutations": [
-    "Refuto que restaurar L06 por sí solo cierre recovery: CI prueba la capa, no Fables ni wiring real.",
-    "Refuto bloquear todo S3 por Fables: los tests de proveedor/runtime que no requieren wiring siguen siendo nodos FREE autorizados.",
-    "Refuto promover vendor-test PASS a WIRED: la frontera documental exige integración, evidencia, validación y cobertura global posteriores.",
-    "Refuto promover el socket genérico a Fables: run 34569640745 terminó cancelled y el workflow A2 citado ya no existe en main, por lo que no hay A2 PASS actual verificable."
-  ],
-  "proposal": {
-    "order": [
-      "1. Consolidar L06 como PRESENT+CI_PASS, manteniendo integration_state=NOT_WIRED.",
-      "2. Mantener Fables fail-closed hasta path+SHA+contract+test PASS verificables mediante una ruta explícitamente autorizada y existente.",
-      "3. Continuar StrategyDelta por cada fallo independiente de 21-40.",
-      "4. Cuando Fables sea VERIFIED, resolver primero los pendientes 01-20 y luego cablear 21-40 por lotes ya testados.",
-      "5. Ejecutar integración real + assertions + logs antes de cualquier VERIFIED_CLOSED."
-    ],
-    "no_new_component_by_default": true,
-    "no_lfs": true,
-    "no_force": true
+    "main_sha_seen": "33a71b29bdd85c12afb6de1c507da513676d16e3",
+    "crazy_wall": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/BITACORA-CRAZY-WALL.md",
+    "state": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
+    "s3_state": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT3-BACKEND-STATE.json",
+    "coordinator_reply": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S3.json",
+    "coordinator_reply_blob_sha": "0af27aee4424670e3795153627ee483991a33bbd"
   },
   "coordinator_response": {
-    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S3.json",
-    "blob_sha": "c85b3bf0c6e170ffd84a140cf03273379bdb9818",
+    "response_from": "🌞👷 sol osquestador plan 🎯",
     "response_to": "S3-DEBATE-SOLPLAN-20260911-01",
+    "decision_state": "PARTIAL_DECISIONS_ISSUED_PENDING_GATES",
     "status": "ACTIONABLE_REPLY_CONSUMED"
   },
   "q1_q4_actionable": {
     "Q1": {
-      "decision": "BLOCK_DESTINATION_AUTHORIZATION",
-      "action": "Do not acquire/move big-AGI or Vercel AI SDK until a literal DEST_DIR is supplied through the active contract.",
+      "decision": "FABLES_CANONICAL_GENERIC_SOCKET_MODULAR_UNTIL_A2",
+      "action": "Keep MODEL_NAME_FABLES as canonical identity; generic socket adapter remains modular/non-canonical until A2 contrast passes.",
       "historical_destinations_authoritative": false
     },
     "Q2": {
-      "decision": "AUTHORIZED_INDEPENDENT_S3_QUEUE",
-      "queue": [22, 25, 27, 28, 30],
-      "action": "Run source/vendor/runtime StrategyDelta tests one component at a time; record command/assertions/run-log; never promote WIRED from vendor PASS."
+      "decision": "AUTHORIZED_INDEPENDENT_S3_TESTS_21_40_NO_WIRING",
+      "priority_queue": [22, 25, 27, 28, 30],
+      "action": "Independent source/vendor/runtime StrategyDelta tests are allowed while Fables is blocked; wiring requires prerequisites plus explicit handoff. Never promote WIRED from vendor/runtime PASS."
     },
     "Q3": {
-      "decision": "VITE_HANDOFF_ACCEPTANCE_FIXED",
-      "requirements": [
-        "immutable source ref/tree SHA",
-        "canonical motor identity/commit",
-        "failed=0",
-        "pending=0",
-        "exact destination read-back/hash",
-        "touched paths within authorized destination",
-        "handoff file SHA"
-      ],
-      "vendor_test_alone_sufficient": false
+      "decision": "RTK_QUERY_AND_TANSTACK_QUERY_SPLIT_PENDING_READY_VALIDATION",
+      "action": "Preserve split responsibilities; no canonical merge until ready_validation and contract merge evidence exist."
     },
     "Q4": {
-      "decision": "ORDER_FIXED_AFTER_FABLES_VERIFIED",
-      "action": "Resolve unresolved 01-20 dependency blockers first, then wire already-tested 21-40 one component/node at a time."
+      "decision": "NEUTRAL_DOMAIN_EVENTS_BIDIRECTIONAL_SDK_ADAPTERS",
+      "action": "Use neutral domain events and bidirectional SDK adapters only; handoffs must carry allowed_paths and no_cross_violation lists."
     }
   },
-  "round3_answer": {
-    "response_to": "ROUND-3-SOL123-2026-09-11.SOL_GPT3",
-    "document_anchor": [
-      "📌MAX-SYSTEM-100X-FINAL-1.md: durable state/checkpoint, fan-out/fan-in, idempotency and evidence-oriented orchestration are system-level concerns; component presence alone is insufficient.",
-      "📌👨‍💻 ULTIMA VERSIÓN...14 objetivos...md: UI is only the access layer; core/runtime/platform capabilities remain separate and explicitly bounded.",
-      "🤯🗃️memoria del Wordflow...YAIWES.md: local results must flow through STATE DELTA→AUDIT→CONSOLIDATION→CHECKPOINT→COVERAGE CHECK; partial/local solution is not global completion."
-    ],
-    "code_anchor": {
-      "l06_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/layers/layer_06_source_evolution.py",
-      "l06_restore_commit": "b3651fcf3008016199afd84dcc9cf09f76e31d40",
-      "l06_behavior": "ordered REUSE→PATCH_SMALL→ADAPTER→GENERATE_DELTA; INCONCLUSIVE when no strategy input is supported; no vendor execution in the layer",
-      "runtime_recovery_commit": "e4fc68c732d04cb341f2e5eb1266cf98ce35e625",
-      "ci_run": 34568696244,
-      "ci_job": 103165989964,
-      "ci_command": "pytest -q",
-      "ci_result": "4 passed in 0.06s",
-      "fables_identity_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py",
-      "fables_create_commit": "a15198011047d30fd4d463dbaadccb16c62ff1db",
-      "fables_export_commit": "7c419a5f67ac323d3f3bb3a187a3403372460341",
-      "fables_test_commit": "b6dd5baf84202a7631bb8af504a8b92735f845bb",
-      "fables_ci_run": 34569640745,
-      "fables_ci_head_sha": "82ce8bd58a1d165cc627ff229d10217dbd17c580",
-      "fables_ci_status": "completed",
-      "fables_ci_conclusion": "cancelled",
-      "fables_a2": "NOT_VERIFIED"
-    },
-    "integration_boundary": {
-      "allowed_from_l06": [
-        "strategy: REUSE|PATCH_SMALL|ADAPTER|GENERATE_DELTA",
-        "selection evidence and source anchors",
-        "target contract",
-        "minimal delta_spec or adapter_spec when applicable",
-        "typed gaps",
-        "next verification actions"
-      ],
-      "mandatory_flags": {
-        "integration_state": "NOT_WIRED",
-        "vendor_execution": false,
-        "mutation_performed_by_l06": false,
-        "runtime_integration_test": "NOT_RUN_BY_L06"
-      },
-      "forbidden_promotions": ["WIRED", "RUNTIME_TEST_PASS", "VERIFIED_CLOSED"]
-    },
-    "independent_tests": {
-      "21": "TanStack Query PASS in repair run 34566453237",
-      "22": "React Virtuoso run 34573280051 / job 103179929841: 489 tests pass; 4 browser suites fail to import dynamically under Vitest; 2 real assertions fail: custom-scroll-parent-rebind expects listener count >0 but gets 0 at line 100, and model-state-persistence expects reset first row to contain Beta but sees 2Alpha. Classified COMPONENT_TEST_FAIL_DECOMPOSED_NOT_PASS; no blind patch.",
-      "23": "Radix UI PASS",
-      "24": "shadcn/ui PASS",
-      "25": "Tailwind CSS repair2 vendor/runtime PASS: workflow blob 6d079505c4ac2cbd1c2db821f6604b0316552ac2, head b2e9fa7576bc79c6f4784d6b64ed36659905a6b7, run 34573293066, job 103179970091, build PASS and Vitest 5496 passed / 1 skipped; package.json read-back blob 7d41a93ef3eed13ab91a023e9f6f48b73bea7b58; integration_state remains NOT_WIRED.",
-      "26": "react-markdown PASS in run 34566576430",
-      "27": "Shiki repair2 vendor/runtime PASS: workflow blob 896497c37aa483d19a11934550d26e8ad98cdc9a, head 3eb99f29278aa07f215ceaf27cdf8edcf066d356, run 34573431767, job 103180405189, build 23/23 tasks PASS and Vitest 78 files / 616 tests PASS; package.json read-back blob 055e8dbced04e9eb9b187361a9278e144002e0a4; integration_state remains NOT_WIRED.",
-      "28": "CodeMirror 6 current-main recursive tree SHA 26491ef4c3de0faf86deeb478b5f91ec77807026 contains no path matching CodeMirror/codemirror; cited runtime workflow sol-gpt3-s3-codemirror-runtime-20260911.yml is also absent. No historical destination or replacement is inferred; classified CURRENT_SOURCE_READBACK_GAP_NOT_PASS.",
-      "29": "Sandpack PASS in run 34566576430",
-      "30": "xterm.js vendor/runtime PASS in repair3 run 34573682810 at head a4c1b66a63d5ab01bb178031bb0dda700b21a892; workflow blob 9fac40fbe48c265c64a90d8571861d68520ff1ce; package.json read-back blob cb7d146f08d880294712ee562a50992e204da22b; upstream unit suite 2407 passing; integration_state remains NOT_WIRED.",
-      "31_40": "SOURCE_PRESENT; inspect package scripts/lockfiles/upstream CI one-by-one before executing tests"
-    },
-    "refutation": "Fables blocks STEP_2 wiring, not independent source/vendor/runtime tests. Cancelled Fables CI plus absence of its dedicated workflow on current main means no A2 evidence and therefore no generic socket promotion."
-  },
-  "s3_handoff_execution": {
-    "node": 22,
-    "component": "React Virtuoso",
-    "authorization": "Q2 explicit coordinator authorization",
-    "route": ".github/workflows/sol-gpt3-s3-virtuoso-repair2-20260911.yml -> checkout(read-only) -> pnpm install --frozen-lockfile -> upstream prerequisite build -> Playwright Chromium -> pnpm test",
-    "workflow_blob_sha": "de63583f93c88952f95ba8ee56e7da4da72211da",
-    "constraints_verified": ["contents: read", "persist-credentials: false", "no LFS", "no force", "no S1/S2 path write"],
-    "execution_attempt": "Real GitHub Actions run discovered and audited.",
-    "run_log_evidence": "run 34573280051 / job 103179929841: 489 tests PASS; Failed Suites=4 due dynamic-import/browser runner failures; Failed Tests=2 with exact assertions isolated.",
-    "readback": "workflow definition verified on main; custom-scroll-parent-rebind test blob 9bd8178dc2e6b048118b04f5c8bbc0c4f5843cab; model-state-persistence test blob 1e9188eea67e9223340c884e904be1fe6db883c5",
-    "result": "COMPONENT_TEST_FAIL_DECOMPOSED_NOT_PASS",
-    "next_safe_action": "Separate Vitest dynamic-import infrastructure failures from the two functional regressions. Do not mutate component code until a minimal causal delta is proven by source read-back; rerun the same assertions after any surgical patch."
-  },
-  "round5_revalidation": {
-    "response_to": "S3-DEBATE-SOLPLAN-20260911-01",
-    "coordinator_author": "🌞👷 sol osquestador plan 🎯",
-    "q1_q4": "ACTIONABLE_UNCHANGED",
-    "fables_a2": {
-      "expected_workflow": ".github/workflows/sol-gpt3-s3-fables-hardcoded-retry-20260911.yml",
-      "current_main_readback": "404_NOT_FOUND",
-      "prior_run": 34569640745,
-      "prior_conclusion": "cancelled",
-      "decision": "NOT_VERIFIED_KEEP_GENERIC_SOCKET_MODULAR"
-    },
-    "authorized_queue_readback": {
-      "22": {"workflow":"sol-gpt3-s3-virtuoso-repair2-20260911.yml","blob":"de63583f93c88952f95ba8ee56e7da4da72211da","status":"COMPONENT_TEST_FAIL_DECOMPOSED_NOT_PASS","run":34573280051,"job":103179929841},
-      "25": {"workflow":"sol-gpt3-s3-tailwind-repair2-20260911.yml","blob":"6d079505c4ac2cbd1c2db821f6604b0316552ac2","status":"RUNTIME_PASS_NOT_WIRED","run":34573293066,"job":103179970091,"head_sha":"b2e9fa7576bc79c6f4784d6b64ed36659905a6b7","package_readback_blob":"7d41a93ef3eed13ab91a023e9f6f48b73bea7b58"},
-      "27": {"workflow":"sol-gpt3-s3-shiki-repair2-20260911.yml","blob":"896497c37aa483d19a11934550d26e8ad98cdc9a","status":"RUNTIME_PASS_NOT_WIRED","run":34573431767,"job":103180405189,"head_sha":"3eb99f29278aa07f215ceaf27cdf8edcf066d356","package_readback_blob":"055e8dbced04e9eb9b187361a9278e144002e0a4"},
-      "28": {"workflow":"sol-gpt3-s3-codemirror-runtime-20260911.yml","status":"CURRENT_SOURCE_READBACK_GAP_NOT_PASS","main_tree_sha":"26491ef4c3de0faf86deeb478b5f91ec77807026","source_match":"NONE_CodeMirror_or_codemirror"},
-      "30": {"workflow":"sol-gpt3-s3-xterm-repair3-20260911.yml","blob":"9fac40fbe48c265c64a90d8571861d68520ff1ce","status":"RUNTIME_PASS_NOT_WIRED","run":34573682810,"head_sha":"a4c1b66a63d5ab01bb178031bb0dda700b21a892","package_readback_blob":"cb7d146f08d880294712ee562a50992e204da22b"}
-    },
-    "state_files_modified": false,
-    "foreign_state_modified": false,
+  "hard_gates": {
     "no_lfs": true,
-    "no_force": true
+    "no_force": true,
+    "no_foreign_state_edits": true,
+    "no_historical_destination_as_authorization": true,
+    "fables_a2_required_for_socket_promotion": true,
+    "fables_a2": {
+      "run": 34569640745,
+      "conclusion": "cancelled",
+      "decision": "NOT_VERIFIED_KEEP_GENERIC_SOCKET_MODULAR"
+    }
   },
-  "round6_xterm_runtime": {
-    "response_to": "S3-DEBATE-SOLPLAN-20260911-01",
-    "node": 30,
-    "component": "xterm.js",
-    "authorization": "Q2 independent source/vendor/runtime StrategyDelta",
-    "route": ".github/workflows/sol-gpt3-s3-xterm-repair3-20260911.yml -> read-only sparse checkout xterm.js -> copy snapshot to no-space runner temp -> Node 22 -> npm ci -> npm run setup -> npm run esbuild -> assert *.test.js -> npm run test-unit -- --forbid-only",
-    "workflow_blob_sha": "9fac40fbe48c265c64a90d8571861d68520ff1ce",
-    "workflow_commit": "a4c1b66a63d5ab01bb178031bb0dda700b21a892",
-    "run": 34573682810,
-    "job": 103181214320,
-    "run_status": "completed",
-    "run_conclusion": "success",
-    "test_log": "2407 passing (4s)",
-    "readback": "UI YAIWES/componentes open soure UI YAIWES/xterm.js/package.json blob cb7d146f08d880294712ee562a50992e204da22b; workflow main blob 9fac40fbe48c265c64a90d8571861d68520ff1ce",
-    "constraints_verified": ["contents: read", "persist-credentials: false", "lfs: false", "no force", "no repository mutation by test workflow"],
-    "result": "RUNTIME_PASS_NOT_WIRED",
-    "wiring_promotion": "FORBIDDEN_UNTIL_FABLES_A2_AND_REAL_INTEGRATION_ROUTE_EVIDENCE"
-  },
-  "round7_vendor_runtime_revalidation": {
-    "response_to": "S3-DEBATE-SOLPLAN-20260911-01",
-    "authorization": "Q2 independent source/vendor/runtime StrategyDelta",
-    "react_virtuoso_22": {
+  "verified_prior_s3_evidence": {
+    "l06": {
+      "state": "PRESENT_CI_PASS_NOT_WIRED",
+      "run": 34568696244,
+      "job": 103165989964,
+      "test": "pytest -q => 4 passed in 0.06s"
+    },
+    "22_react_virtuoso": {
+      "workflow": ".github/workflows/sol-gpt3-s3-virtuoso-repair2-20260911.yml",
+      "workflow_blob_sha": "de63583f93c88952f95ba8ee56e7da4da72211da",
       "run": 34573280051,
       "job": 103179929841,
-      "workflow_blob_sha": "de63583f93c88952f95ba8ee56e7da4da72211da",
-      "evidence": "setup/prerequisite steps PASS; upstream test step FAILURE",
-      "result": "COMPONENT_TEST_FAIL_NOT_PASS",
-      "strategy_delta": "NO_PATCH_UNTIL_EXACT_FAILING_ASSERTION_IS_VERIFIED"
+      "result": "COMPONENT_TEST_FAIL_DECOMPOSED_NOT_PASS",
+      "passing_tests": 489,
+      "browser_import_failed_suites": 4,
+      "functional_failures": [
+        "custom-scroll-parent-rebind: expected listener count > 0 but got 0",
+        "model-state-persistence: expected reset row Beta but observed 2Alpha"
+      ],
+      "strategy_delta": "NO_BLIND_PATCH"
     },
-    "tailwind_25": {
-      "route": ".github/workflows/sol-gpt3-s3-tailwind-repair2-20260911.yml -> read-only checkout -> pinned Rust/WASM toolchain -> build/test",
+    "25_tailwind": {
+      "workflow": ".github/workflows/sol-gpt3-s3-tailwind-repair2-20260911.yml",
       "workflow_blob_sha": "6d079505c4ac2cbd1c2db821f6604b0316552ac2",
-      "workflow_commit": "b2e9fa7576bc79c6f4784d6b64ed36659905a6b7",
+      "head_sha": "b2e9fa7576bc79c6f4784d6b64ed36659905a6b7",
       "run": 34573293066,
       "job": 103179970091,
       "test_log": "5496 passed, 1 skipped",
-      "readback": "UI YAIWES/componentes open soure UI YAIWES/Tailwind CSS/package.json blob 7d41a93ef3eed13ab91a023e9f6f48b73bea7b58",
+      "package_readback_blob": "7d41a93ef3eed13ab91a023e9f6f48b73bea7b58",
       "result": "RUNTIME_PASS_NOT_WIRED"
     },
-    "shiki_27": {
-      "route": ".github/workflows/sol-gpt3-s3-shiki-repair2-20260911.yml -> read-only sparse checkout Shiki -> no-space runner temp -> pnpm 11.20.0 -> Node 24 -> nci -> nr build -> nr test --coverage",
+    "27_shiki": {
+      "workflow": ".github/workflows/sol-gpt3-s3-shiki-repair2-20260911.yml",
       "workflow_blob_sha": "896497c37aa483d19a11934550d26e8ad98cdc9a",
-      "workflow_commit": "3eb99f29278aa07f215ceaf27cdf8edcf066d356",
+      "head_sha": "3eb99f29278aa07f215ceaf27cdf8edcf066d356",
       "run": 34573431767,
       "job": 103180405189,
-      "build_log": "23 successful, 23 total",
-      "test_log": "78 test files passed; 616 tests passed",
-      "coverage": "89.75% statements / 82.11% branches / 89.05% functions / 89.5% lines",
-      "readback": "UI YAIWES/componentes open soure UI YAIWES/Shiki/package.json blob 055e8dbced04e9eb9b187361a9278e144002e0a4",
-      "constraints_verified": ["contents: read", "persist-credentials: false", "lfs: false", "no force", "no repository mutation by test workflow"],
+      "build_log": "23/23 successful",
+      "test_log": "78 files / 616 tests passed",
+      "package_readback_blob": "055e8dbced04e9eb9b187361a9278e144002e0a4",
       "result": "RUNTIME_PASS_NOT_WIRED"
     },
-    "fables_a2": "NOT_VERIFIED_KEEP_GENERIC_SOCKET_MODULAR"
+    "28_codemirror": {
+      "result": "CURRENT_SOURCE_READBACK_GAP_NOT_PASS",
+      "source_match_current_main": "NONE",
+      "historical_replacement_inferred": false
+    },
+    "30_xterm": {
+      "workflow": ".github/workflows/sol-gpt3-s3-xterm-repair3-20260911.yml",
+      "workflow_blob_sha": "9fac40fbe48c265c64a90d8571861d68520ff1ce",
+      "head_sha": "a4c1b66a63d5ab01bb178031bb0dda700b21a892",
+      "run": 34573682810,
+      "job": 103181214320,
+      "test_log": "2407 passing",
+      "package_readback_blob": "cb7d146f08d880294712ee562a50992e204da22b",
+      "result": "RUNTIME_PASS_NOT_WIRED"
+    }
   },
-  "round8_codemirror_current_main_gap": {
+  "round10_batch31_35_audit": {
     "response_to": "S3-DEBATE-SOLPLAN-20260911-01",
-    "node": 28,
-    "component": "CodeMirror 6",
-    "authorization": "Q2 independent source/vendor/runtime StrategyDelta",
-    "fresh_main_tree_sha": "26491ef4c3de0faf86deeb478b5f91ec77807026",
-    "source_readback": "NO_PATH_MATCHING_CodeMirror_OR_codemirror_IN_CURRENT_MAIN_TREE",
-    "workflow_readback": ".github/workflows/sol-gpt3-s3-codemirror-runtime-20260911.yml ABSENT",
-    "historical_destination_used_as_authorization": false,
-    "replacement_inferred": false,
-    "result": "CURRENT_SOURCE_READBACK_GAP_NOT_PASS",
-    "next_safe_action": "Wait for an explicit current-main source/handoff route from the coordinator; do not fabricate a source path, restore from historical destination, or create a replacement component implicitly."
-  },
-  "round9_react_virtuoso_failure_decomposition": {
-    "response_to": "S3-DEBATE-SOLPLAN-20260911-01",
-    "node": 22,
-    "component": "React Virtuoso",
-    "authorization": "Q2 independent source/vendor/runtime StrategyDelta",
-    "route": ".github/workflows/sol-gpt3-s3-virtuoso-repair2-20260911.yml -> checkout(read-only) -> pnpm install --frozen-lockfile -> build prerequisites -> Playwright Chromium -> pnpm test",
-    "workflow_blob_sha": "de63583f93c88952f95ba8ee56e7da4da72211da",
-    "run": 34573280051,
-    "job": 103179929841,
-    "passing_tests": 489,
-    "failed_suites": 4,
-    "failed_suite_class": "VITEST_BROWSER_DYNAMIC_IMPORT_FAILURE",
-    "failed_tests": 2,
-    "functional_failures": [
-      {"test":"custom-scroll-parent-rebind.test.tsx","blob":"9bd8178dc2e6b048118b04f5c8bbc0c4f5843cab","assertion":"expected 0 to be greater than 0","line":100},
-      {"test":"model-state-persistence.test.tsx","blob":"1e9188eea67e9223340c884e904be1fe6db883c5","assertion":"expected '2Alpha' to contain 'Beta'"}
+    "authorization": "Coordinator permits independent source/vendor/runtime tests for 21-40 while wiring remains gate-locked.",
+    "workflow": ".github/workflows/sol-gpt3-s3-batch31-35-tests-20260911.yml",
+    "workflow_blob_sha_at_tested_head": "180f8766bc5947b77ec685d8fb8fd5dcf08f0fc0",
+    "tested_head_sha": "b4a47773c95d719e5b42ea9089df03772944365f",
+    "run": 34573966326,
+    "run_conclusion": "failure",
+    "constraints_verified": [
+      "contents: read",
+      "persist-credentials: false",
+      "no LFS instruction",
+      "no force instruction",
+      "test workflow does not mutate repository"
     ],
-    "strategy_delta": "DIAGNOSE_SEPARATELY_RUNNER_IMPORT_FAILURES_AND_FUNCTIONAL_REGRESSIONS; NO_SOURCE_PATCH_UNTIL_CAUSAL_DELTA_PROVEN",
-    "result": "COMPONENT_TEST_FAIL_DECOMPOSED_NOT_PASS",
+    "31_xyflow": {
+      "route": "UI YAIWES/componentes open soure UI YAIWES/XYFlow React Flow/code -> runner temp -> pnpm install --frozen-lockfile -> build -> typecheck -> Playwright Chromium -> pnpm test:react",
+      "job": 103182143881,
+      "steps_before_test": "PASS",
+      "test_step": "Run upstream React Playwright tests",
+      "test_step_result": "FAILURE",
+      "package_readback_blob": "7dd02bcaf610a74ce528864f179453a37f71b797",
+      "result": "TEST_FAIL_NOT_PASS",
+      "log_detail": "GitHub downloadable job-log endpoint returned 404 during this audit; no assertion text inferred."
+    },
+    "32_rete": {
+      "route": "UI YAIWES/componentes open soure UI YAIWES/Rete.js -> runner temp -> npm ci -> test -> perf -> lint -> build",
+      "job": 103182143843,
+      "test_perf_lint_build": "PASS",
+      "package_readback_blob": "e552de643150795dd8a11abb49955d60af96fb87",
+      "result": "RUNTIME_PASS_NOT_WIRED"
+    },
+    "33_sigma": {
+      "workflow_job_present": false,
+      "result": "COVERAGE_GAP_NOT_PASS",
+      "correction": "Fresh workflow and run contain four jobs only: #31, #32, #34 and #35. Do not claim a Sigma run from this workflow."
+    },
+    "34_gsap": {
+      "route": "UI YAIWES/componentes open soure UI YAIWES/GSAP -> npm pack exact snapshot -> clean consumer -> CommonJS smoke -> ESM smoke",
+      "job": 103182143968,
+      "cjs_smoke": "PASS",
+      "esm_smoke": "PASS",
+      "package_readback_blob": "6d9c0c424b35d554b930f5efc1e2f43e006809cd",
+      "result": "RUNTIME_PASS_NOT_WIRED"
+    },
+    "35_lucide": {
+      "route": "UI YAIWES/componentes open soure UI YAIWES/Lucide/code -> runner temp -> pnpm install --frozen-lockfile -> pnpm test -> pnpm build",
+      "job": 103182143627,
+      "install": "PASS",
+      "test_step": "Run workspace tests",
+      "test_step_result": "FAILURE",
+      "build": "SKIPPED_AFTER_TEST_FAILURE",
+      "package_readback_blob": "5c9ddb24620c206652dea4218999fd3f53a0920a",
+      "result": "TEST_FAIL_NOT_PASS",
+      "log_detail": "No assertion text inferred without a retrievable decoded job log."
+    },
+    "wiring_promotion": false,
     "fables_promotion": false,
     "foreign_state_modified": false
   },
   "debate_turns": [
-    {"turn":1,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"OPEN_DEBATE","result":"Questions Q1-Q4 published to coordinator"},
-    {"turn":2,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"LOOP_FOLLOWUP","result":"No coordinator response detected; continued independent queue."},
-    {"turn":3,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"LOOP_DEBATE_CHALLENGE","result":"Maintained fail-closed boundaries for destination, Vite handoff and Fables."},
-    {"turn":4,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"COORDINATOR_RESPONSE_POLL","result":"No explicit reply detected at that poll."},
+    {"turn":1,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"OPEN_DEBATE","result":"Q1-Q4 published."},
+    {"turn":2,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"LOOP_FOLLOWUP","result":"Independent queue continued without treating silence as authorization."},
+    {"turn":3,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"LOOP_DEBATE_CHALLENGE","result":"Fail-closed boundaries maintained."},
+    {"turn":4,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"COORDINATOR_RESPONSE_POLL","result":"No reply at that poll."},
     {"turn":5,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"LOOP_NO_SILENT_AUTHORIZATION","result":"Silence not treated as authorization."},
-    {"turn":6,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"ANSWER_COORDINATOR_REPLY_AND_EXECUTE","result":"Consumed Sol plan reply and continued batch 21-40."},
-    {"turn":7,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"ROUND3_CROSSCHECK_L06_FABLES_BATCH21_40","result":"Cross-checked L06/Fables/batch 21-40 and selected next FREE S3 repair nodes.","response_to":"ROUND-3-SOL123-2026-09-11.SOL_GPT3"},
-    {"turn":8,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CONSUME_EXPLICIT_COORDINATOR_REPLY_Q1_Q4_AND_EXECUTE_HANDOFF","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Q1-Q4 converted to executable gates. #22 route/SHA/readback verified but execution remains blocked without dispatch/run-log, so no false PASS. Fables run 34569640745 independently read back as cancelled; A2 remains NOT_VERIFIED and socket promotion remains forbidden."},
-    {"turn":9,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"REVALIDATE_A2_AND_AUTHORIZED_QUEUE","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"A2 dedicated workflow is absent from current main and stays NOT_VERIFIED. #22/#25/#27/#30 workflows remain present but lack fresh verifiable run/log PASS evidence; #28 cited CodeMirror workflow is absent. No foreign state edited and no historical destination treated as authorization."},
-    {"turn":10,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"EXECUTE_Q2_XTERM_RUNTIME_AND_KEEP_WIRING_FAIL_CLOSED","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"#30 xterm.js repair3 produced run 34573682810 SUCCESS, job 103181214320 and 2407 passing tests from head a4c1b66a63d5ab01bb178031bb0dda700b21a892. Recorded RUNTIME_PASS_NOT_WIRED only; Fables A2 remains NOT_VERIFIED, so no generic socket/Fables promotion and no project closure."},
-    {"turn":11,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"REVALIDATE_Q2_QUEUE_AND_RECORD_TAILWIND_SHIKI_RUNTIME","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"#22 React Virtuoso has a real run but upstream tests fail after setup/prerequisites PASS, so it remains COMPONENT_TEST_FAIL_NOT_PASS without blind patching. #25 Tailwind and #27 Shiki produced successful vendor/runtime runs with read-back evidence and are recorded RUNTIME_PASS_NOT_WIRED. Fables A2 remains NOT_VERIFIED and the generic socket remains unpromoted."},
-    {"turn":12,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"REVALIDATE_CODEMIRROR_CURRENT_MAIN_SOURCE_AND_KEEP_FAIL_CLOSED","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Fresh frontend/main recursive tree 26491ef4c3de0faf86deeb478b5f91ec77807026 contains no CodeMirror/codemirror path and the cited runtime workflow is absent. #28 is now CURRENT_SOURCE_READBACK_GAP_NOT_PASS; no historical destination or inferred replacement was used."},
-    {"turn":13,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"DECOMPOSE_REACT_VIRTUOSO_FAILURES_BEFORE_PATCH","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34573280051/job 103179929841 decomposed into 489 passing tests, 4 Vitest browser dynamic-import suite failures, and 2 real functional assertion failures. Exact test blobs/read-back recorded; no blind source patch, no foreign state edit, and no Fables promotion."}
+    {"turn":6,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"ANSWER_COORDINATOR_REPLY_AND_EXECUTE","result":"Coordinator reply consumed; 21-40 independent work continued."},
+    {"turn":7,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"ROUND3_CROSSCHECK_L06_FABLES_BATCH21_40","result":"L06/Fables/batch cross-check completed."},
+    {"turn":8,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CONSUME_EXPLICIT_COORDINATOR_REPLY_Q1_Q4","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Q1-Q4 made actionable; A2 remained NOT_VERIFIED."},
+    {"turn":9,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"REVALIDATE_A2_AND_QUEUE","result":"No false PASS or historical destination authorization."},
+    {"turn":10,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"XTERM_RUNTIME_PASS","result":"#30 RUNTIME_PASS_NOT_WIRED."},
+    {"turn":11,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"TAILWIND_SHIKI_RUNTIME_PASS","result":"#25/#27 RUNTIME_PASS_NOT_WIRED; #22 failed upstream tests."},
+    {"turn":12,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_CURRENT_SOURCE_GAP","result":"#28 CURRENT_SOURCE_READBACK_GAP_NOT_PASS."},
+    {"turn":13,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"DECOMPOSE_REACT_VIRTUOSO_FAILURES","result":"#22 failure separated into browser-import and functional failures; no blind patch."},
+    {"turn":14,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"AUDIT_BATCH31_35_ROUTE_SHA_READBACK_TEST","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34573966326 audited at immutable head b4a47773c95d719e5b42ea9089df03772944365f. #32 Rete and #34 GSAP PASS_NOT_WIRED; #31 XYFlow and #35 Lucide TEST_FAIL_NOT_PASS; #33 Sigma is a real coverage gap because no job exists in the fresh workflow/run. Package readback SHAs recorded. A2 remains NOT_VERIFIED and no socket/Fables promotion occurred."}
   ],
   "next_action": {
     "owner": "S3",
-    "action": "#22 remains the only executable repair node: identify the causal source delta for custom-scroll-parent rebind and model-state reset independently from the 4 Vitest dynamic-import failures, then apply only a proven surgical S3-authorized patch and rerun the same assertions. #28 remains blocked on explicit current-main source/handoff. Keep #25/#27/#30 RUNTIME_PASS_NOT_WIRED and Fables A2 fail-closed.",
+    "action": "Continue safe independent 21-40 work. For #31 and #35, obtain exact failure evidence before any surgical patch; for #33, require a current canonical test route/workflow before execution. Audit 36-40 if current canonical workflows/routes exist. Do not wire any vendor PASS until explicit handoff prerequisites are satisfied. Keep Fables A2 fail-closed.",
     "status": "EXECUTING_FAIL_CLOSED"
   },
-  "loop_rule": "documents→cross-check→debate→tasks→integration→tests→repeat. A GAP blocks only its node. Do not close while safe FREE work remains.",
-  "last_poll_result": "COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_VIRTUOSO22_FAILURES_DECOMPOSED_CODEMIRROR28_SOURCE_GAP",
+  "last_poll_result": "COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_BATCH31_35_AUDITED",
   "closure": "DO_NOT_CLOSE_ACTIVE_DEBATE_LOOP"
 }
