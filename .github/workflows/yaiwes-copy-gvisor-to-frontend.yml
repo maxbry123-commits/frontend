@@ -1,0 +1,60 @@
+name: YAIWES copy gVisor to frontend
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/yaiwes-copy-gvisor-to-frontend.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  copy-gvisor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout frontend destination
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: false
+          path: dest
+      - name: Checkout agentes source
+        uses: actions/checkout@v4
+        with:
+          repository: maxbry123-commits/agentes
+          ref: main
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout: |
+            Core kernel Yaiwes/gVisor
+          sparse-checkout-cone-mode: false
+          path: src
+      - name: Copy gVisor exactly
+        run: |
+          set -euo pipefail
+          SRC='src/Core kernel Yaiwes/gVisor'
+          DST='dest/📂componentes open soure fromtend/gVisor'
+          test -d "$SRC"
+          rm -rf "$DST"
+          mkdir -p "$(dirname "$DST")"
+          cp -a "$SRC" "$DST"
+          test -d "$DST"
+          test -n "$(find "$DST" -type f -print -quit)"
+      - name: Commit and push
+        working-directory: dest
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- '📂componentes open soure fromtend/gVisor'
+          if git diff --cached --quiet; then
+            echo 'NO_CHANGE_ALREADY_COPIED'
+            exit 0
+          fi
+          git commit -m 'copy(frontend): gVisor from Core kernel Yaiwes'
+          for i in 1 2 3 4; do
+            git push origin HEAD:main && exit 0
+            git fetch origin main
+            git rebase origin/main
+          done
+          exit 1
