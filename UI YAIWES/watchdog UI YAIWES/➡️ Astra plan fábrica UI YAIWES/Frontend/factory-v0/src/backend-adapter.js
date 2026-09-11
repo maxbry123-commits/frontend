@@ -38,3 +38,25 @@ export function createMockAdapter(id = 'mock-sol-compatible') {
     }
   };
 }
+
+export function createSolContractAdapter({ transport, id = 'sol-contract-adapter' } = {}) {
+  if (typeof transport !== 'function') throw new TypeError('transport function required');
+  return {
+    id,
+    async invoke(action) {
+      const request = {
+        contract: 'tel.workflow/v3',
+        action: structuredClone(action)
+      };
+      const response = await transport(request);
+      if (!response || typeof response !== 'object') throw new TypeError('transport response object required');
+      return {
+        type: response.type || 'TASK_EVENT',
+        task_id: response.task_id || action.task_id || 'factory-sim',
+        action_type: response.action_type || action.type,
+        status: response.status || 'accepted',
+        payload: response.payload ?? action.payload ?? null
+      };
+    }
+  };
+}
