@@ -3,8 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node tests/factory.test.mjs",
+    "test": "node tests/factory.test.mjs && node tests/lucide-donor.test.mjs",
     "test:logic": "node tests/factory.test.mjs",
+    "test:donor": "node tests/lucide-donor.test.mjs",
     "test:e2e": "playwright test"
   },
   "devDependencies": {
