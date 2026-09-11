@@ -6,6 +6,11 @@ SRC = Path(__file__).resolve().parents[1] / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
+from core.workflow_definition import (
+    WORKFLOW_CONTRACT,
+    WORKFLOW_OWNER,
+    YAIWES_CHAT_WORKFLOW,
+)
 from plugins.activation import ActivationRejectedError, build_runtime_registry
 from plugins.loader import PluginLoader
 from plugins.stabilize_adapter import (
@@ -70,6 +75,28 @@ class StabilizeIntegrationTests(unittest.TestCase):
         self.assertTrue(runtime.healthy)
         self.assertIs(runtime.queue, queue)
         self.assertIs(runtime.store, store)
+
+    def test_yaiwes_workflow_definition_is_19_step_declarative_contract(self):
+        definition = YAIWES_CHAT_WORKFLOW
+        definition.validate()
+        self.assertEqual(definition.owner, WORKFLOW_OWNER)
+        self.assertEqual(definition.owner, "stabilize_core")
+        self.assertEqual(definition.contract, WORKFLOW_CONTRACT)
+        self.assertEqual(definition.contract, "tel.workflow/v3")
+        self.assertEqual(len(definition.steps), 19)
+        self.assertEqual(tuple(step.order for step in definition.steps), tuple(range(1, 20)))
+        self.assertEqual(definition.steps[0].step_id, "master_input")
+        self.assertEqual(definition.steps[-1].step_id, "final_judge")
+        self.assertEqual(definition.steps[12].condition, "GAP")
+        self.assertEqual(definition.steps[13].condition, "PASS")
+        self.assertEqual(len(definition.fingerprint()), 64)
+        self.assertEqual(definition.fingerprint(), definition.fingerprint())
+
+    def test_workflow_definition_matches_runtime_single_owner(self):
+        registry = build_runtime_registry([WORKFLOW_OWNER])
+        self.assertEqual(registry.workflow_owner.name, YAIWES_CHAT_WORKFLOW.owner)
+        self.assertNotIn("dagu", YAIWES_CHAT_WORKFLOW.manifest()["owner"])
+        self.assertNotIn("redun", YAIWES_CHAT_WORKFLOW.manifest()["owner"])
 
 
 if __name__ == "__main__":
