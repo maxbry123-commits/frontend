@@ -133,5 +133,95 @@
     "pruned_after_fail": 0,
     "evidence": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/integration-01-20-step3-tests.json",
     "tests_run": true
+  },
+  "recovery_delta_2026_09_10_2203": {
+    "as_of": "2026-09-10T22:03:00-05:00",
+    "ledger_policy": "SUPERSEDES_CURRENT_COUNT_ONLY; historical Action124 evidence is preserved",
+    "inventory": {
+      "canonical_total": 124,
+      "present_physical": 120,
+      "missing_physical": 4,
+      "basis": "verified 110 baseline plus fresh read-back of the original 14-gap delta on main",
+      "global_wiring_verified": false
+    },
+    "resolved_from_previous_14": [
+      "big-AGI",
+      "Vercel AI SDK",
+      "TanStack Query",
+      "React Virtuoso",
+      "shadcn-ui",
+      "XYFlow React Flow",
+      "Lucide",
+      "Uppy",
+      "workerd",
+      "Flutter"
+    ],
+    "pending_download_extract": [
+      {
+        "director_index": 18,
+        "name": "Vite",
+        "source_url": "https://github.com/vitejs/vite",
+        "status": "MISSING_PHYSICAL"
+      },
+      {
+        "director_index": 46,
+        "name": "Supabase",
+        "source_url": "https://github.com/supabase/supabase",
+        "status": "MISSING_PHYSICAL"
+      },
+      {
+        "director_index": 56,
+        "name": "DuckDB",
+        "source_url": "https://github.com/duckdb/duckdb",
+        "status": "MISSING_PHYSICAL"
+      },
+      {
+        "director_index": 66,
+        "name": "AVF",
+        "source_url": "https://android.googlesource.com/platform/packages/modules/Virtualization/",
+        "status": "MOTOR_PROVIDER_GAP"
+      }
+    ],
+    "canonical_motors": {
+      "pinned_root_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
+      "root": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/",
+      "policy": "COPY_ONLY_IMMUTABLE; no alternate downloader/extractor/copier/mover; no LFS; no force"
+    },
+    "github_actions": {
+      "failed_runs": [
+        {
+          "run_id": 34445055183,
+          "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34445055183",
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "run_id": 34445142005,
+          "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34445142005",
+          "status": "completed",
+          "conclusion": "failure"
+        }
+      ],
+      "in_progress": 0,
+      "queued": 0,
+      "failure_root_cause": "NOT_YET_CLASSIFIED_FROM_LOGS"
+    },
+    "task_1": {
+      "status": "ACTIVE_LOOP",
+      "goal": "close the 4 residual physical gaps using canonical motors only",
+      "acceptance": "124/124 physical read-back with no unresolved download/extract/move gap"
+    },
+    "task_2": {
+      "status": "BLOCKED_BY_TASK_1",
+      "goal": "move if staging was used, then wire/connect/integrate and independently verify",
+      "rule": "presence != WIRED"
+    },
+    "watchdog": {
+      "id": "6aa237226ad48191b4dc2b1eb07c0400",
+      "requested_scope": "4 residual gaps plus Task 2 integration",
+      "canonical_motors_only": true,
+      "enablement_note": "automation activation/update is currently constrained by active-task limit; repository recovery state remains authoritative"
+    },
+    "verdict": "ACTIVE_LOOP"
   }
 }
