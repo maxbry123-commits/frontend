@@ -72,6 +72,53 @@ def test_download_extract_rejects_wrong_motor_commit():
     assert "MOTOR_MISMATCH" in result.gaps
 
 
+def test_download_extract_preserves_special_file_gap():
+    request = valid_request()
+    motor_result = {
+        "verdict": "GAPS_PENDING",
+        "error": "SOURCE_SPECIAL_FILE_GAP:path/to/link_a,path/to/link_b",
+        "balance": {"total": 1, "failed": 1, "pending": 0},
+    }
+    result = layer_05_download_extract.run(
+        acquisition_node(), {"request": request, "motor_result": motor_result}
+    )
+    assert result.status == Status.BLOCKED
+    assert result.gaps == ["SPECIAL_FILE_GAP"]
+    assert result.output["motor_result"]["error"] == motor_result["error"]
+
+
+def test_download_extract_preserves_provider_gap():
+    request = valid_request()
+    motor_result = {
+        "verdict": "GAPS_PENDING",
+        "gap_code": "MOTOR_PROVIDER_GAP",
+        "reason": "canonical provider is not supported by immutable transport",
+        "balance": {"total": 1, "failed": 1, "pending": 0},
+    }
+    result = layer_05_download_extract.run(
+        acquisition_node(), {"request": request, "motor_result": motor_result}
+    )
+    assert result.status == Status.BLOCKED
+    assert result.gaps == ["PROVIDER_GAP"]
+    assert result.output["motor_result"]["gap_code"] == "MOTOR_PROVIDER_GAP"
+
+
+def test_download_extract_keeps_generic_gap_when_motor_has_no_typed_reason():
+    request = valid_request()
+    result = layer_05_download_extract.run(
+        acquisition_node(),
+        {
+            "request": request,
+            "motor_result": {
+                "verdict": "GAPS_PENDING",
+                "balance": {"total": 1, "failed": 1, "pending": 0},
+            },
+        },
+    )
+    assert result.status == Status.BLOCKED
+    assert result.gaps == ["canonical_motor_download_extract_not_verified"]
+
+
 def test_download_extract_accepts_only_closed_balance():
     request = valid_request()
     result = layer_05_download_extract.run(
