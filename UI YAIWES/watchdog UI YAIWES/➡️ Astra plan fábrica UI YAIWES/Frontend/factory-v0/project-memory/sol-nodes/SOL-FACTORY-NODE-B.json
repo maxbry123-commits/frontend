@@ -1,0 +1,26 @@
+{
+  "schema": "yaiwes.factory.sol.loop-node.v1",
+  "node_id": "SOL_FACTORY_B_T1_OSS_BACKEND_DONOR_REVIEW",
+  "owner": "SOL_GPT_ENV_B",
+  "reviewer": "ASTRA",
+  "status": "READY_TO_CLAIM",
+  "gate": "T1_FACTORY_FRONTEND",
+  "task": "Review one existing OSS component as a backend donor candidate for the factory/interface boundary, without starting T2 or writing Sol production backend.",
+  "max_steps": 3,
+  "steps": [
+    "1_READ: read Crazy Wall, INPUT addendum, PLAN donor policy and local OSS component inventory; claim exactly one component/capability.",
+    "2_EXECUTE: classify the minimum reusable backend capability, source/ref/license and adapter boundary; stage only evidence/spec under project-memory.",
+    "3_REPORT: record frontend/backend destination recommendation, test needed, GAPs and provenance; no presence-only PASS and no production backend write."
+  ],
+  "allowed_write_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/",
+  "backend_destination_after_handoff": "UI YAIWES interface/Backend/",
+  "frontend_destination_after_handoff": "UI YAIWES interface/Fromtend/",
+  "forbidden_write_roots": [
+    "UI YAIWES/Interface YAIWES ui/",
+    "UI YAIWES/Fabrica UI YAIWES/",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/"
+  ],
+  "loop": "INPUT literal -> claim node -> execute <=3 steps -> verify/refute -> GAP/StrategyDelta -> report",
+  "claim_rule": "single_writer_per_path=true; one component = one node; record environment identity before work",
+  "close_when": "candidate has URL/ref/license/capability/destination/test-plan/read-back and ASTRA review"
+}
