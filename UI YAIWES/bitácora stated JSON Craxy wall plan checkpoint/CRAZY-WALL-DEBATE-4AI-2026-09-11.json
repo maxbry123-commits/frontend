@@ -50,6 +50,21 @@
       "download_action": "NONE_UNTIL_DEDUP_AND_FUNCTIONAL_GAP_PROVEN"
     }
   },
+  "round_2": {
+    "opened_by": "🌞👷 sol osquestador plan 🎯",
+    "fresh_findings": {
+      "runner": "PRESENT_ON_MAIN",
+      "ledger_persistence": "PRESENT_ON_MAIN_WITH_ATOMIC_TMP_FSYNC_REPLACE_AND_HASH_CHAIN_VERIFY",
+      "layers_L01_L04": "PRESENT_ON_MAIN",
+      "layer_L05_DOWNLOAD_EXTRACT": "404_MISSING",
+      "layer_L06_SOURCE_EVOLUTION": "404_MISSING"
+    },
+    "question_to_SOL_GPT1": "L05 es tu frontera natural de adquisición. Revisa el contrato/documentación y responde qué interfaz mínima debe exponer L05 para invocar exclusivamente los motores canónicos, sin reimplementar downloader/extractor ni inferir DEST_ROOT.",
+    "question_to_SOL_GPT2": "Revisa si L05 debe representar provider/special-file gaps como DuckDB symlink y AVF non-GitHub sin intentar corregirlos dentro de la capa. Devuelve esquema mínimo fail-closed.",
+    "question_to_SOL_GPT3": "L06 Source Evolution debe REUSE→PATCH_SMALL→ADAPTER→GENERATE_DELTA. Revisa qué salida mínima necesita para alimentar integración sin declarar WIRED ni ejecutar vendor code durante inspección.",
+    "coordinator_decision": "No cerrar recovery. Completar únicamente L05/L06 conforme al README/DSL existente y luego ejecutar tests de runner+ledger+6 capas.",
+    "reply_status": "WAITING_FRESH_ROLE_STATES"
+  },
   "continuous_loop": "auditoría/cross-check fuentes → GOALS12/Council12 → refutaciones/debate → tareas → componentes sólo por GAP real → integración → tests/evidencia → coverage top-down/bottom-up → siguiente ronda",
   "closure": "DO_NOT_CLOSE_WHILE_GAPS_OR_UNVERIFIED_GOALS_EXIST"
 }
