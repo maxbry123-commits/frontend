@@ -5,14 +5,14 @@
   "role": "SOL_GPT2_BACKEND",
   "name": "Sol gpt 2 🤯👷backend",
   "node_prefix": "S2",
-  "status": "ACTIVE_LOOP_WITH_BLOCKING_GAPS",
-  "base_main_sha": "868d3fcc0fb8f9f7d092da4c0251eb733c0e7d81",
-  "crazy_wall_blob_sha": "f5d7ade7966a1a0fc20bf6f0b11a805b91b1b3be",
+  "status": "ACTIVE_DEBATE_LOOP_WITH_BLOCKING_GAPS",
+  "base_main_sha": "f9e8a190cbec48f92473163de6d98152ad98f1dc",
+  "crazy_wall_blob_sha": "69e65c730afebcf2a765713c408071e8a0109e93",
   "state_blob_sha_observed": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
   "canonical_motors_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
   "canonical_policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
-  "director_delta_seen": "2026-09-11T05:06:57.471Z",
-  "loop_cycle": 4,
+  "director_delta_seen": "2026-09-11T05:24:00-05:00",
+  "loop_cycle": 5,
   "nodes": {
     "S2-01": {
       "component": "DuckDB",
@@ -139,6 +139,47 @@
       "verdict": "VERIFIED_CLOSED prohibited"
     }
   },
+  "debate": {
+    "status": "ACTIVE_DEBATE_LOOP_DO_NOT_CLOSE",
+    "round_2": {
+      "question": "Revisa si L05 debe representar provider/special-file gaps como DuckDB symlink y AVF non-GitHub sin intentar corregirlos dentro de la capa. Devuelve esquema mínimo fail-closed.",
+      "answer": {
+        "decision": "YES. L05 must preserve typed acquisition GAPs and must never repair, sanitize, substitute provider, or select strategy inside the layer.",
+        "reason": "DuckDB and AVF prove two different acquisition-boundary failures. Collapsing both into canonical_motor_download_extract_not_verified loses causality needed by persistence, recovery, strategy selection, audit and cross-platform routing.",
+        "minimal_fail_closed_schema": {
+          "status": "BLOCKED for any provider/special-file acquisition incompatibility",
+          "gap_code": "PROVIDER_GAP | SPECIAL_FILE_GAP | DESTINATION_INPUT_GAP | SOURCE_LOCK_GAP | AUTHORIZATION_GAP | MOTOR_MISMATCH | READBACK_GAP",
+          "source": ["source_repo", "source_ref", "source_tree_sha_if_evidenced"],
+          "destination": ["dest_repo", "dest_branch", "dest_root"],
+          "motor": ["motor_commit", "motor_verdict", "failed_count", "pending_count"],
+          "typed_detail": ["provider", "provider_reason", "special_paths"],
+          "evidence": ["queue/input hash", "motor result/log ref", "manifest/tree hash when available", "destination read-back when mutation occurred"],
+          "mutation_on_blocked": "NONE beyond already-authorized motor attempt; L05 itself must not rewrite source or destination",
+          "actions_on_blocked": "only actual motor action/run identifiers; never synthetic PASS action"
+        },
+        "mapping": {
+          "DuckDB": "Motor reports SOURCE_SPECIAL_FILE_GAP with symlink paths -> L05 returns BLOCKED + SPECIAL_FILE_GAP + preserved special_paths; no symlink removal, dereference, tar rewrite or source filtering.",
+          "AVF": "Canonical source is android.googlesource and immutable motor transport is GitHub-only -> L05 returns BLOCKED + PROVIDER_GAP + canonical provider/provenance; no mirror substitution and no URL rewriting.",
+          "AVF_runtime": "AVF hardware/capability/permission probing is not an L05 acquisition concern. It remains a downstream platform/runtime capability GAP and must not be falsely merged into provider acquisition success."
+        },
+        "pass_gate": "PASS only when canonical motor commit matches, destination is literal and allowed, motor verdict VERIFIED_CLOSED, failed=0, pending=0, extraction_verified=total, published_readback_verified=total, strong tree hash exists and destination read-back matches. PASS means acquisition only, not WIRED/runtime/VERIFIED_CLOSED global."
+      },
+      "refutation": "I refute keeping the current single generic GAP canonical_motor_download_extract_not_verified as the only failure output. It is fail-closed but operationally too lossy: DuckDB SPECIAL_FILE_GAP and AVF PROVIDER_GAP require different StrategyDelta owners and recovery paths. The layer should classify and preserve motor evidence, not solve it.",
+      "crosscheck": {
+        "source_docs": "Workflow runtime controls execution; memory/audit must retain evidence and provenance; cross-platform architecture requires platform-specific virtualization backends rather than pretending one provider works everywhere.",
+        "current_l05_blob": "a25afeab2379a6f69b404228cc230f79a51177fc",
+        "current_l05_gap_behavior": "preflight gaps are typed, but post-motor failure collapses to canonical_motor_download_extract_not_verified",
+        "tests_commit": "4a8f45c77e12ba7440ec19ed8556614e79207b48",
+        "runtime_recovery_ci": "34568696244 PASS for restored L05/L06; this validates existing gates but does not prove typed provider/special-file preservation"
+      },
+      "next_s2_free_node": {
+        "id": "S2-DEBATE-R2-L05-GAP-TYPING",
+        "owner": "SOL_GPT2_BACKEND",
+        "task": "Patch only L05 result normalization/tests so canonical motor failure evidence preserves PROVIDER_GAP vs SPECIAL_FILE_GAP without changing canonical motors or acquisition strategy; then run independent tests and publish SHA/log/read-back.",
+        "status": "FREE_SAFE"
+      }
+    }
+  },
   "watchdog": {
     "required": true,
     "cadence": "1 hour",
@@ -147,5 +188,5 @@
     "title": "SOL2 Backend YAIWES",
     "scope_aligned_to_s2_queue": true
   },
-  "next_action": "LOOP remains active. Re-read Crazy Wall+STATE on the next cycle and repeat fresh final-root readback. DuckDB requires an explicitly authorized symlink-aware canonical acquisition strategy or authorized equivalent source; do not patch motor or sanitize source. AVF requires an explicitly authorized provider-compatible canonical path, implementation of the capability probe/backend by an assigned code node, and actual supported Android ARM64/Cuttlefish capability tests before any guest-boot claim."
+  "next_action": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. Execute S2-DEBATE-R2-L05-GAP-TYPING as the next safe S2 node, then publish tests/evidence and continue cross-check/debate. DuckDB and AVF remain fail-closed; do not patch canonical motors, sanitize DuckDB source, or substitute AVF provenance."
 }
