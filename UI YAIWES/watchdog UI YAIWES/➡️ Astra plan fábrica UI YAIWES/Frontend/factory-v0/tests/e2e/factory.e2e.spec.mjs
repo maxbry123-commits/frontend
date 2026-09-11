@@ -24,10 +24,14 @@ test.describe('YAIWES Factory V0', () => {
     await expect(node).toContainText('Ventana principal');
   });
 
-  test('drag and drop añade un componente al canvas', async ({ page }) => {
+  test('biblioteca añade un componente al canvas con gesto apropiado por plataforma', async ({ page }, testInfo) => {
     const source = page.locator('[data-kind="button"]');
     const canvas = page.locator('#canvas');
-    await source.dragTo(canvas);
+    if (testInfo.project.name === 'mobile-chromium') {
+      await source.click();
+    } else {
+      await source.dragTo(canvas);
+    }
     await expect(page.locator('.node')).toHaveCount(1);
   });
 
