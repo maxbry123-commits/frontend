@@ -6,6 +6,7 @@ on:
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/core/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/**'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/governance/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/orchestrator.py'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/rule_engine/**'
@@ -27,6 +28,7 @@ jobs:
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/core
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/governance
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/orchestrator.py
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/rule_engine
