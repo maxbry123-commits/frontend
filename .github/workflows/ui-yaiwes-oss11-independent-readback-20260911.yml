@@ -1,0 +1,94 @@
+name: UI YAIWES OSS11 Independent Readback
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ui-yaiwes-oss11-independent-readback-20260911.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ui-yaiwes-oss11-independent-readback-20260911
+  cancel-in-progress: false
+
+jobs:
+  verify-readback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/componentes open soure UI YAIWES/OPA
+            UI YAIWES/componentes open soure UI YAIWES/OpenFGA
+            UI YAIWES/componentes open soure UI YAIWES/rqlite
+            UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Collector
+            UI YAIWES/componentes open soure UI YAIWES/Testcontainers Python
+            UI YAIWES/componentes open soure UI YAIWES/ORAS
+          sparse-checkout-cone-mode: false
+      - name: Verify manifests against physical code trees
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib, json, pathlib, sys
+
+          root = pathlib.Path('UI YAIWES/componentes open soure UI YAIWES')
+          expected = {
+              'OPA': '961849b565d2457b80c168f254325b7d5b91461e',
+              'OpenFGA': '73591ef16ce508623920d5b706286ffcdfb6841b',
+              'rqlite': '4e92305e647b2c93a895b5b5a6c7eab55e9267b1',
+              'OpenTelemetry Collector': '65bcb4855bc033cd327cb8b4569296578fc4750d',
+              'Testcontainers Python': '5c70d540e0df919e2de77ce8cc75b5c50cd772e7',
+              'ORAS': 'd0da4a96a6893d2e7f44ea60a8f317a2fcce1cf9',
+          }
+
+          def sha256(path):
+              h = hashlib.sha256()
+              with path.open('rb') as f:
+                  for chunk in iter(lambda: f.read(1024 * 1024), b''):
+                      h.update(chunk)
+              return h.hexdigest()
+
+          def tree_hash(path):
+              h = hashlib.sha256(); count = 0; total = 0
+              files = sorted((p for p in path.rglob('*') if p.is_file()), key=lambda p: p.as_posix())
+              for p in files:
+                  rel = p.relative_to(path).as_posix()
+                  h.update(rel.encode() + b'\0')
+                  h.update(sha256(p).encode() + b'\n')
+                  count += 1; total += p.stat().st_size
+              return {'files': count, 'bytes': total, 'sha256': h.hexdigest()}
+
+          results = {}
+          failed = False
+          for name, ref in expected.items():
+              base = root / name
+              manifest_path = base / 'DOWNLOAD_EXTRACT_MANIFEST.json'
+              code = base / 'code'
+              row = {'name': name, 'expected_source_commit': ref}
+              try:
+                  manifest = json.loads(manifest_path.read_text())
+                  actual = tree_hash(code)
+                  row['manifest_source_commit'] = manifest.get('source_commit')
+                  row['manifest_tree'] = manifest.get('extracted_tree')
+                  row['actual_tree'] = actual
+                  row['manifest_exists'] = manifest_path.is_file()
+                  row['code_exists'] = code.is_dir()
+                  ok = (
+                      row['manifest_exists'] and row['code_exists']
+                      and manifest.get('source_commit') == ref
+                      and manifest.get('extraction_verified') is True
+                      and actual == manifest.get('extracted_tree')
+                  )
+                  row['verdict'] = 'SOURCE_PRESENT_READBACK_VERIFIED' if ok else 'READBACK_GAP'
+              except Exception as exc:
+                  row['verdict'] = 'READBACK_GAP'; row['error'] = repr(exc); ok = False
+              results[name] = row
+              failed = failed or not ok
+              print(json.dumps(row, ensure_ascii=False, sort_keys=True))
+          print('SUMMARY=' + json.dumps(results, ensure_ascii=False, sort_keys=True))
+          if failed:
+              sys.exit(1)
+          PY
