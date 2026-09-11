@@ -1,0 +1,154 @@
+{
+  "schema": "yaiwes.role.audit.v1",
+  "contract": "tel.workflow/v3",
+  "role": "ASTRA_GPT1_BACKEND",
+  "name": "🧑‍💻Astra gpt 1 backend UI YAIWES 🌀🌀🌀 👷👷🕵️‍♀️",
+  "updated_at": "2026-09-11T04:34:47.987Z",
+  "base_sha": "51445eb95626ce9d6b15c90a3bddcc5793e68fd2",
+  "wall_blob_sha": "66896f497e61626c851506046109005f28e18ee8",
+  "status": "ACTIVE_LOOP_GAPS_OPEN",
+  "scope": "A1 audit only; sole write path is this role_state_path",
+  "role_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-GPT1-BACKEND-STATE.json",
+  "watchdog": {
+    "enabled": true,
+    "automation_id": "6aa384a1262881918458c81d6907524c",
+    "frequency": "HOURLY"
+  },
+  "evidence": [
+    {
+      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
+      "blob_sha": "6e9ba8cd30279fab0fca79381af31e2d55f64f54"
+    },
+    {
+      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CHECKPOINT.json",
+      "blob_sha": "99f09dca8cb5bd3415506a9cadfc5152606eee41"
+    },
+    {
+      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-MULTIAI-CABLEADO-2026-09-10.json",
+      "blob_sha": "7428e5091b0fd65ab8e46f8dca844fbd220b48c5"
+    },
+    {
+      "path": "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-WATCHDOG-MOTORES-CANONICOS-2026-09-10.md",
+      "blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49"
+    },
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/integration-01-20-step3-tests.json",
+      "blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "A1-01",
+      "status": "AUDITED_WITH_GAPS",
+      "findings": [
+        "STATE recovery_delta declares 120/124 and four residuals. CHECKPOINT retains historical recovery queue and lacks this delta; HANDOFF retains historical 14 missing. These are different snapshots, not evidence of 14 currently missing.",
+        "CROSSCHECK source document blob 0cb8e88003f35c252d087da8da333a35da69b6c4 claims universal plugin socket ready, while current roles wall says Fables not located. Generic socket does not prove Fables identity or usable contract.",
+        "Original functional attachments were not independently re-audited in this pass; crosscheck source is a repository summary."
+      ]
+    },
+    {
+      "id": "A1-02",
+      "status": "EVIDENCE_AUDITED_CLOSURE_BLOCKED",
+      "residuals": [
+        {
+          "name": "Vite",
+          "status": "UNVERIFIED_CURRENT_PHYSICAL",
+          "basis": "Declared residual in STATE and wall; no fresh component hash/read-back acquired in this pass. Search returning zero is not absence proof."
+        },
+        {
+          "name": "Supabase",
+          "status": "UNVERIFIED_CURRENT_PHYSICAL",
+          "basis": "Declared residual in STATE and wall; no fresh component hash/read-back acquired in this pass. Search returning zero is not absence proof."
+        },
+        {
+          "name": "DuckDB",
+          "status": "UNVERIFIED_CURRENT_PHYSICAL",
+          "basis": "Declared residual in STATE and wall; no fresh component hash/read-back acquired in this pass. Search returning zero is not absence proof."
+        },
+        {
+          "name": "AVF",
+          "status": "UNVERIFIED_CURRENT_PHYSICAL",
+          "basis": "Declared residual in STATE and wall; no fresh component hash/read-back acquired in this pass. Search returning zero is not absence proof."
+        }
+      ],
+      "runs": [
+        {
+          "run_id": 34445055183,
+          "job_id": 102767958909,
+          "status": "failure",
+          "cause": "Git rejected quarantine paths outside sparse-checkout definition during Motor 4 quarantine; subsequent acquisition and final read-back skipped.",
+          "evidence_url": "https://github.com/maxbry123-commits/frontend/actions/runs/34445055183"
+        },
+        {
+          "run_id": 34445142005,
+          "job_id": 102768209085,
+          "status": "failure",
+          "balance": {
+            "total": 2,
+            "failed": 1,
+            "pending": 0,
+            "published_readback_verified": 1
+          },
+          "verdict": "GAPS_PENDING",
+          "cause": "Final gate exits 2 because motor verdict is not VERIFIED_CLOSED. Per-component cause remains in artifact; not inferred from aggregate.",
+          "artifact_id": 10139374113,
+          "artifact_digest": "71800af121e9f5fefa283a1b46c30354319a8f8831ed15e3e8950e489e56fa1b",
+          "evidence_url": "https://github.com/maxbry123-commits/frontend/actions/runs/34445142005"
+        }
+      ]
+    },
+    {
+      "id": "A1-03",
+      "status": "AUDITED_WITH_GAPS",
+      "reported_pass": 17,
+      "total": 20,
+      "pending": [
+        {
+          "id": 13,
+          "name": "big-AGI"
+        },
+        {
+          "id": 18,
+          "name": "Vite"
+        },
+        {
+          "id": 19,
+          "name": "Vercel AI SDK"
+        }
+      ],
+      "tests_generated_at": "2026-09-09T04:36:54.663622+00:00",
+      "runtime_tests_rerun_by_A1": false,
+      "findings": [
+        "JSON records result/path but does not itself include command, source SHA, assertions or log references for each PASS; 17 reported PASS is not independent runtime verification.",
+        "STATE later reports big-AGI and Vercel AI SDK physical recovery. Their PENDING_SOURCE entries require fresh reconciliation, not automatic promotion to WIRED.",
+        "Vite acquisition belongs to S1; S3 must consume its verified handoff without concurrent acquisition writes.",
+        "All four other role-state paths returned 404 at observation time; this does not establish inactivity outside those paths."
+      ]
+    },
+    {
+      "id": "A1-04",
+      "status": "INSTRUCTIONS_PREPARED_FOR_PUBLICATION",
+      "refutations": [
+        "120/124 physical declared is not 96.8% global integration.",
+        "pending=0 does not mean success when failed=1.",
+        "Historical 17 PASS does not close Fables wiring or current runtime execution.",
+        "A failed historical run does not prove its components are currently absent."
+      ]
+    }
+  ],
+  "instructions_for_owners": {
+    "SOL_GPT1_BACKEND": "Within S1 scope, verify current Vite/Supabase destinations first; acquire only missing delta through pinned canonical motors. Publish source SHA, destination, hashes and final read-back to own state; hand off Vite to S3.",
+    "SOL_GPT2_BACKEND": "Within S2 scope, verify DuckDB current destination and AVF provider evidence. Keep AVF blocked until supported canonical provider path is evidenced. Publish per-component failed/pending and read-back; do not equate pending=0 with closure.",
+    "SOL_GPT3_BACKEND": "Reconcile big-AGI and Vercel AI SDK recovered sources with runtime destinations through canonical STEP_1. Await S1 Vite evidence. STEP_2 requires Astra2 Fables path+SHA+contract; then publish actual test command, result and logs for all three.",
+    "ASTRA2_GPT_BACKEND": "Resolve documented generic-socket-ready versus Fables-not-located discrepancy with exact path, blob/source SHA and executable contract evidence; absence from code search alone is insufficient.",
+    "COORDINATOR": "Consolidate current recovery delta into central summaries preserving history; explicitly delimit S1 Vite acquisition versus S3 integration. Keep global verified percentage unset until denominator and runtime evidence exist.",
+    "HISTORICAL_RUN_OWNER": "For run 34445055183, include source and quarantine/destination paths in sparse-checkout in authorized wrapper configuration before invoking immutable Motor 4. Do not modify motor. For run 34445142005 inspect artifact 10139374113 motor2-state.json to identify failing component and exact cause before any retry."
+  },
+  "next_iteration": [
+    "Read fresh roles wall and own state.",
+    "Fetch owners' published destination/hash/run evidence; independently read back four residuals.",
+    "Reconcile refreshed integration report and Fables contract.",
+    "Record deltas only; preserve previous audit history."
+  ],
+  "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+}
