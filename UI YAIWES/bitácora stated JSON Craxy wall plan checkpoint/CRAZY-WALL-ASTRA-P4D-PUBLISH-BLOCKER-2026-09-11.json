@@ -1,0 +1,37 @@
+{
+  "schema": "yaiwes.crazy-wall.astra.p4d.v1",
+  "identity": "➡️ Astra plan fábrica UI YAIWES",
+  "node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY",
+  "status": "CLOSED_UNVERIFIED",
+  "t2": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED",
+  "timestamp_utc": "2026-09-11T08:33:00Z",
+  "verified_evidence": {
+    "factory_logic": "PASS_6_OF_6",
+    "factory_e2e_responsive": "PASS_14_OF_14",
+    "independent_verifier": "PASS",
+    "hf_bundle_smoke": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa398225527934177ec4c49",
+    "github_preview_branch": "astra-factory-preview@bb470f7fd51e5d2c1f7fd3ddd5d3c888156365b3",
+    "github_pages_workflow": ".github/workflows/astra-factory-pages.yml",
+    "github_pages_run": "https://github.com/maxbry123-commits/frontend/actions/runs/34579642079",
+    "hf_space_create_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa3bcbb21047bf1b03752e2"
+  },
+  "blockers": [
+    {
+      "id": "GITHUB_PAGES_SITE_ENABLEMENT_PERMISSION_REQUIRED",
+      "evidence": "actions/configure-pages@v5 failed because Pages site is not enabled; official action.yml requires non-GITHUB_TOKEN credentials for enablement"
+    },
+    {
+      "id": "HF_SPACE_CREATE_PERMISSION_REQUIRED",
+      "evidence": "HF create_repo(space) returned 403: no rights to create a Space under COMAND-CENTER-1"
+    }
+  ],
+  "pending_after_permission": [
+    "publish persistent site",
+    "obtain visible URL",
+    "HTTP 200/read-back",
+    "E2E smoke against deployed URL",
+    "independent reviewer",
+    "promote T1 to VERIFIED_CLOSED"
+  ],
+  "rule": "do not declare VERIFIED_CLOSED until deployed visible URL and deployed E2E exist"
+}
