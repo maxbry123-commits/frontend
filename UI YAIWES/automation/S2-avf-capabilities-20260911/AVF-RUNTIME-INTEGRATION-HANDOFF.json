@@ -1,0 +1,65 @@
+{
+  "schema": "yaiwes.s2.avf.runtime-handoff.v1",
+  "role": "SOL_GPT2_BACKEND",
+  "node": "S2-R3-AVF-PROBE-IMPLEMENTATION-HANDOFF",
+  "status": "READ_ONLY_HANDOFF_READY",
+  "mutation_performed": false,
+  "decision": "Use the existing Universal Plugin Socket for AVF capability probing; do not put native probing logic in Stabilize core and do not create a second orchestrator.",
+  "evidence": {
+    "adapters_readme_blob": "d20358aa2e725de11e46190c8b7b3997d8f7e890",
+    "core_readme_blob": "a604b3a54fbd54f63af8025bc9f17d8d495a6775",
+    "integration_readme_blob": "0aefd2511eeb0378a9204fafba54a49b9c8c3255",
+    "plugins_readme_blob": "8732a9de56263f30b7f2809772dd850ed29f37b1",
+    "plugin_contract_blob": "41465001ec9fc2bcd93d9ad9ea36b78830fd0367",
+    "capability_contract_blob": "97619b9970377ab85a4409203ea5136ea3f95acd"
+  },
+  "proposed_runtime_delta_if_authorized": {
+    "plugin_adapter": {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/android_avf_adapter/",
+      "kind": "adapter",
+      "responsibility": "Read Android host feature/API/capability/permission state and normalize it to the AVF capability-probe contract. No workflow ownership, no acquisition, no provider rewriting."
+    },
+    "plugin_spec": {
+      "name": "android_avf_adapter",
+      "kind": "PluginKind.ADAPTER",
+      "capabilities": ["vm.avf.capability_probe","vm.avf.guest_boot_probe"],
+      "enabled_initially": false,
+      "workflow_owner": false,
+      "activation_rule": "Remain disabled until explicit factory + target-host test + evidence pass MountGuard."
+    },
+    "integration_validation": {
+      "path_family": "runtime/src/integration/",
+      "responsibility": "Validate normalized probe result and map Requirement → Task → Artifact → Evidence → Validation; prevent COMPLETE when guest_boot_gate is not PASS for an AVF acceptance claim."
+    },
+    "core_boundary": {
+      "path_family": "runtime/src/core/",
+      "rule": "Core consumes validated capability state for backend selection/lifecycle only. It must not implement Android API probing or duplicate plugin orchestration."
+    }
+  },
+  "required_adapter_output": {
+    "transport_gate": "PASS | BLOCKED | NOT_RUN",
+    "host_capability_gate": "PASS | BLOCKED | NOT_APPLICABLE | UNKNOWN",
+    "permission_gate": "PASS | BLOCKED | NOT_APPLICABLE | UNKNOWN",
+    "guest_boot_gate": "PASS | FAIL | NOT_RUN",
+    "selected_backend": "AVF_PROTECTED | AVF_NON_PROTECTED | QEMU_FALLBACK | NONE",
+    "fallback_reason": "typed reason|null",
+    "evidence": "source/API/run/log/hash anchors"
+  },
+  "tests_required_before_enable": [
+    "API<34 or feature absent -> fail-closed capability result",
+    "VirtualMachineManager absent -> AVF unavailable",
+    "protected/non-protected capability flags normalized correctly",
+    "MANAGE_VIRTUAL_MACHINE denied -> permission gate blocked",
+    "guest boot NOT_RUN never becomes PASS",
+    "fallback selection never becomes AVF PASS",
+    "plugin remains enabled=False until factory and real test evidence exist",
+    "integration finalization rejects AVF COMPLETE without guest boot evidence"
+  ],
+  "ownership": {
+    "S2": "contract/evidence/provider/platform matrix and read-only verification",
+    "runtime_mutation": "coordinator or explicitly assigned code owner",
+    "workflow_owner": "Stabilize CORE remains the only workflow owner"
+  },
+  "next_action": "Coordinator may authorize runtime mutation using this exact handoff. Until then S2 continues CI/debate/read-only validation.",
+  "closure": "OPEN"
+}
