@@ -1,0 +1,47 @@
+name: S3 Tailwind CSS Repair 2
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/sol-gpt3-s3-tailwind-repair2-20260911.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sol-gpt3-s3-tailwind-repair2-20260911
+  cancel-in-progress: false
+
+jobs:
+  tailwind-css:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: 'UI YAIWES/componentes open soure UI YAIWES/Tailwind CSS'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup pnpm 11.9.0
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.9.0
+          run_install: false
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.95.0 --profile default
+      - name: Install WASM target on pinned Rust 1.95.0
+        run: rustup target add wasm32-wasip1-threads --toolchain 1.95.0
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm run build
+        env:
+          CARGO_PROFILE_RELEASE_LTO: 'off'
+      - name: Test
+        run: pnpm run test
