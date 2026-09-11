@@ -7,24 +7,165 @@
   "registered_at": "2026-09-11T19:37:00Z",
   "authorization": "Direct user instruction in current chat: audit Crazy Wall, investigate gaps, repair executable code gaps, and register every step.",
   "anti_collision": {
-    "write_scope": ["UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT56-AUDITOR-STATE.json","explicitly claimed repair files after fresh SHA read"],
+    "write_scope": [
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT56-AUDITOR-STATE.json",
+      "explicitly claimed repair files after fresh SHA read"
+    ],
     "rule": "Do not overwrite other role-state paths; use fresh blob SHA before every write."
   },
   "completed_nodes": [
-    {"id":"S56-G11-01","gap":"G11_MULTI_SANDBOX_RECOVERY subgate","status":"TESTED_SUBGATE_PASS","evidence":{"runner_commit":"10259b83e0b7354a44f86566307cbd44fe5cf0b3","test_commit":"d5d7c6c22386263122758ef06349ca121fc918a7","ci_run":34640223144,"ci_job":103397859184,"wordflow":"13 passed","plugins":"17 passed"},"scope_limit":"Durable latest node result/literal read-back only; not global workspace/multi-host recovery."},
-    {"id":"S56-G12-01","gap":"Evidence ref/hash read-back semantics","status":"AUDITED_GAP_CONFIRMED_NO_UNSAFE_GENERIC_PATCH","finding":"Evidence refs are heterogeneous logical names and motor destinations; universal filesystem read-back would reinterpret contracts.","safe_next":"Typed evidence verifiers per evidence kind after explicit ref contract."},
-    {"id":"S56-G11-02","gap":"G11 shared-ledger lost-update race","status":"TESTED_SUBGATE_PASS","evidence":{"ledger_commit":"194f54d5d175dd7078943994d14bc0e3fccaf466","runner_commit":"52e18f9420268c4b899e51bd663fe46a2a3725da","test_commit":"89bdb34f8d87273ea79ab203f99cedb374e6db21","ci_run":34640598781,"ci_job":103399057173,"wordflow":"14 passed","plugins":"17 passed"},"scope_limit":"Shared-filesystem durability only; not distributed consensus/storage."},
-    {"id":"S56-G18-G19-01","gap":"Publish connector/credential closure check","status":"AUDITED_EXTERNAL_GATES_CONFIRMED","findings":{"G18":"Pages not enabled/configured; available GitHub connector exposes no admin/Pages mutation or secrets API.","G19":"No accepted HF Actions secret; connected COMAND-CENTER-1 identity has read-repos/jobs but no write-repos and target Space is absent/not readable."},"scope_limit":"Both require authorized configuration/credential outside current worker mutation capabilities."},
-    {"id":"S56-G14-01","gap":"G14_RUNTIME_CORE_SCAFFOLD workflow_definition/bootstrap decision","status":"TESTED_SUBGATE_PASS","finding_before":"Architecture and core README explicitly require workflow_definition.py while forbidding a second DAG/queue/recovery runtime. Stabilize adapter already implements fail-closed bootstrap, so only the declarative workflow definition was missing.","delta":{"workflow_definition_commit":"79657b58c6dc4aa3c99d4bfe3b64b7d9ce95b6cb","workflow_definition_blob":"ee7d708cd4dbcedee7ca65e9aa7f5db8e3cccde1","ci_definition_commit":"8bf73c17be36229a11aaf856c802c83bda66908b","ci_workflow_blob":"6c4dc5a6e1333f6cff25ad16a0617bf3b650411d","test_commit":"99af36eaa47fc9cbc8c62d7683824522462e4b60","test_blob":"3abcbb522a5a98fae93bf5c72d42b5d3a3837102","features":["immutable 19-step Architecture §12 definition","owner locked to stabilize_core","tel.workflow/v3 versioned manifest","contiguous order/unique ID/prior dependency validation","conditional GAP/PASS branches represented declaratively","deterministic SHA-256 fingerprint","CI now triggers on and sparse-checks runtime/src/core"]},"ci":{"run_id":34641004656,"job_id":103400349433,"head_sha":"99af36eaa47fc9cbc8c62d7683824522462e4b60","conclusion":"success","wordflow":"14 passed in 0.08s","runtime_fables_stabilize":"19 passed in 0.04s"},"scope_limit":"Closes the missing workflow_definition/bootstrap decision subgate. It does not claim all planned YAIWES task/adapters/API glue files are implemented or E2E wired."}
+    {
+      "id": "S56-G11-01",
+      "gap": "G11_MULTI_SANDBOX_RECOVERY subgate",
+      "status": "TESTED_SUBGATE_PASS",
+      "evidence": {
+        "runner_commit": "10259b83e0b7354a44f86566307cbd44fe5cf0b3",
+        "test_commit": "d5d7c6c22386263122758ef06349ca121fc918a7",
+        "ci_run": 34640223144,
+        "ci_job": 103397859184,
+        "wordflow": "13 passed",
+        "runtime": "17 passed"
+      },
+      "scope_limit": "Durable latest node result/literal read-back only; not global workspace/multi-host recovery."
+    },
+    {
+      "id": "S56-G12-01",
+      "gap": "Evidence ref/hash read-back semantics",
+      "status": "AUDITED_GAP_CONFIRMED_NO_UNSAFE_GENERIC_PATCH",
+      "finding": "Evidence refs are heterogeneous logical names and motor destinations; universal filesystem read-back would reinterpret contracts.",
+      "safe_next": "Typed evidence verifiers per evidence kind after explicit ref contract."
+    },
+    {
+      "id": "S56-G11-02",
+      "gap": "G11 shared-ledger lost-update race",
+      "status": "TESTED_SUBGATE_PASS",
+      "evidence": {
+        "ledger_commit": "194f54d5d175dd7078943994d14bc0e3fccaf466",
+        "runner_commit": "52e18f9420268c4b899e51bd663fe46a2a3725da",
+        "test_commit": "89bdb34f8d87273ea79ab203f99cedb374e6db21",
+        "ci_run": 34640598781,
+        "ci_job": 103399057173,
+        "wordflow": "14 passed",
+        "runtime": "17 passed"
+      },
+      "scope_limit": "Shared-filesystem durability only; not distributed consensus/storage."
+    },
+    {
+      "id": "S56-G18-G19-01",
+      "gap": "Publish connector/credential closure check",
+      "status": "AUDITED_EXTERNAL_GATES_CONFIRMED",
+      "findings": {
+        "G18": "Pages not enabled/configured; available GitHub connector exposes no admin/Pages mutation or secrets API.",
+        "G19": "No accepted HF Actions secret; connected COMAND-CENTER-1 identity has read-repos/jobs but no write-repos and target Space is absent/not readable."
+      },
+      "scope_limit": "Both require authorized configuration/credential outside current worker mutation capabilities."
+    },
+    {
+      "id": "S56-G14-01",
+      "gap": "G14_RUNTIME_CORE_SCAFFOLD workflow_definition/bootstrap decision",
+      "status": "TESTED_SUBGATE_PASS",
+      "finding_before": "Architecture and core README require workflow_definition.py while forbidding a second DAG/queue/recovery runtime. Stabilize adapter already implements fail-closed bootstrap.",
+      "delta": {
+        "workflow_definition_commit": "79657b58c6dc4aa3c99d4bfe3b64b7d9ce95b6cb",
+        "ci_definition_commit": "8bf73c17be36229a11aaf856c802c83bda66908b",
+        "test_commit": "99af36eaa47fc9cbc8c62d7683824522462e4b60"
+      },
+      "ci": {
+        "run_id": 34641004656,
+        "job_id": 103400349433,
+        "conclusion": "success",
+        "wordflow": "14 passed",
+        "runtime": "19 passed"
+      },
+      "scope_limit": "Workflow definition/bootstrap decision only; not all YAIWES glue/E2E."
+    },
+    {
+      "id": "S56-G12-02",
+      "gap": "G12 runtime verification blind spot + plugin catalog/factory mismatch",
+      "status": "TESTED_SUBGATE_PASS",
+      "forensic_findings": [
+        "Architecture §15 names 13 small YAIWES-owned glue files; exact fresh runtime/src scan had 1/13 present after G14 (workflow_definition.py) and 12/13 absent by literal filename.",
+        "Runtime had 9 test files but CI executed only 4 named files, omitting Pydantic, HTTPX/Starlette, resilience and rule-engine suites.",
+        "Expanded full runtime suite exposed two hidden activation failures, then two factory-key failures after activation was corrected.",
+        "Catalog factory keys were stale for four implemented adapters: pydantic, rule_engine, starlette and httpx.",
+        "Catalog-only pycasbin/opentelemetry adapters had no concrete plugin adapter under runtime/src/plugins and therefore must remain fail-closed."
+      ],
+      "failed_evidence": [
+        {
+          "run_id": 34641287305,
+          "job_id": 103401293237,
+          "result": "FAIL: 35 passed, 2 failed",
+          "root_cause": "activation policy rejected pydantic and rule_engine"
+        },
+        {
+          "run_id": 34641368244,
+          "job_id": 103401595670,
+          "result": "FAIL: 35 passed, 2 failed",
+          "root_cause": "catalog factory_key did not match pydantic.contracts and rule_engine.policy"
+        }
+      ],
+      "delta": {
+        "pydantic_test_commit": "e7ade1c2c76d8c42253074ebdb1f01b1e8af3c8f",
+        "full_runtime_ci_commit": "d52f94b8fe1fb21422207f56076787a9522adb84",
+        "activation_first_fix_commit": "33a71b29bdd85c12afb6de1c507da513676d16e3",
+        "catalog_key_fix_commit": "09bfcd99153894a0373f79793ddd078146cec62f",
+        "activation_fail_closed_fix_commit": "231be655ce44a8e942d3e2e7b0c87e8b1d56b101",
+        "transport_mount_test_commit": "bf0ebcfa123a4230b162b0ada7c5ee13e18e10da",
+        "catalog_only_fail_closed_test_commit": "95edbc5919d484579e525626089598b9f463b908",
+        "features": [
+          "CI now executes the complete runtime/tests tree",
+          "CI pins pydantic==2.14.0b1 and therefore pydantic-core==2.48.0 deterministically",
+          "Pydantic environment test now verifies the canonical real version instead of expecting mismatch",
+          "factory keys aligned to pydantic.contracts, rule_engine.policy, starlette.asgi, httpx.transport",
+          "runtime activation limited to concrete mounts: stabilize_core, pydantic, starlette, httpx, rule_engine",
+          "catalog-only adapters, donors, UI and tools remain fail-closed",
+          "HTTPX and Starlette loader mount paths now have regression tests"
+        ]
+      },
+      "ci": {
+        "run_id": 34641631572,
+        "job_id": 103402532699,
+        "head_sha": "95edbc5919d484579e525626089598b9f463b908",
+        "conclusion": "success",
+        "wordflow": "14 passed in 0.08s",
+        "runtime": "41 passed, 6 subtests passed in 0.20s"
+      },
+      "scope_limit": "Closes the CI blind spot and implemented plugin-mount mismatches. It does not make the 12 absent Architecture §15 glue files implemented."
+    }
   ],
   "external_blockers": {
-    "G18_ASTRA_PREVIEW_PUBLISH":{"status":"BLOCKED_REPO_SETTING_OR_ADMIN_CREDENTIAL","run_id":34579642079,"job_id":103199980538,"safe_next":"Enable/configure Pages or supply authorized non-GITHUB_TOKEN Pages/admin credential, then rerun."},
-    "G19_HF_STATIC_SPACE_CREDENTIAL":{"status":"BLOCKED_MISSING_WRITE_CREDENTIAL","run_id":34591171118,"job_id":103236571091,"safe_next":"Supply authorized HF write token under an accepted GitHub Actions secret name, then rerun."}
+    "G18_ASTRA_PREVIEW_PUBLISH": {
+      "status": "BLOCKED_REPO_SETTING_OR_ADMIN_CREDENTIAL",
+      "run_id": 34579642079,
+      "job_id": 103199980538,
+      "safe_next": "Enable/configure Pages or supply authorized non-GITHUB_TOKEN Pages/admin credential, then rerun."
+    },
+    "G19_HF_STATIC_SPACE_CREDENTIAL": {
+      "status": "BLOCKED_MISSING_WRITE_CREDENTIAL",
+      "run_id": 34591171118,
+      "job_id": 103236571091,
+      "safe_next": "Supply authorized HF write token under an accepted GitHub Actions secret name, then rerun."
+    }
   },
-  "current_task": "G12_GLOBAL_GOALS_COVERAGE: exact source-of-truth file coverage matrix for the small YAIWES-owned code planned by Architecture §15, using fresh recursive runtime/src tree.",
-  "current_node": "S56-G12-02",
-  "finding": "Fresh runtime/src recursive tree now proves core/workflow_definition.py exists, while many top-level runtime capability folders remain README-only or .gitkeep. Presence is not wiring; planned filenames must be mapped to exact implementations/equivalents before any global closure claim.",
-  "planned_delta": ["map all 13 Architecture §15 planned YAIWES glue files to exact path/equivalent/ABSENT","separate implemented plugins from missing YAIWES glue","assign existing owner gaps instead of duplicating another runtime","register quantified remaining matrix in Crazy Wall"],
-  "heartbeat_at": "2026-09-11T19:55:00Z",
-  "next_free_node": "Complete exact filename/equivalent matrix from fresh runtime tree and architecture; mutate code only for an unowned, independently testable gap."
+  "current_task": "G12 source-of-truth equivalence/ownership matrix for the 12 Architecture §15 YAIWES glue files still absent by exact filename; avoid colliding with G09/G13/G15/G16 owners.",
+  "current_node": "S56-G12-03",
+  "matrix_literal": {
+    "present": ["workflow_definition.py"],
+    "absent": [
+      "contracts_yaiwes.py",
+      "memory_adapter.py",
+      "router_adapter.py",
+      "agent_task.py",
+      "validator_rules.py",
+      "audit_task.py",
+      "strategy_delta.py",
+      "consolidator_task.py",
+      "coverage_task.py",
+      "integration_state.py",
+      "final_judge_task.py",
+      "chat_api.py"
+    ]
+  },
+  "heartbeat_at": "2026-09-11T19:58:30Z",
+  "next_free_node": "Classify each absent glue file as owner-assigned, equivalent-already-implemented, or genuinely unowned; implement only unowned independently testable gaps."
 }
