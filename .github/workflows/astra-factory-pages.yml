@@ -23,22 +23,22 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout verified preview payload
-        uses: actions/checkout@v4
-        with:
-          ref: astra-factory-preview
-
-      - name: Materialize minimal site artifact
+      - name: Fetch verified preview payload only
         shell: bash
         run: |
           set -euo pipefail
+          BASE='https://raw.githubusercontent.com/maxbry123-commits/frontend/astra-factory-preview'
           rm -rf _site
           mkdir -p _site/src
-          cp index.html styles.css _site/
-          cp src/app.js src/actions.js src/state.js _site/src/
+          curl -fsSL "$BASE/index.html" -o _site/index.html
+          curl -fsSL "$BASE/styles.css" -o _site/styles.css
+          curl -fsSL "$BASE/src/app.js" -o _site/src/app.js
+          curl -fsSL "$BASE/src/actions.js" -o _site/src/actions.js
+          curl -fsSL "$BASE/src/state.js" -o _site/src/state.js
           test -s _site/index.html
           test -s _site/styles.css
           test -s _site/src/app.js
+          grep -q 'YAIWES' _site/index.html
           echo 'SITE_PAYLOAD=VERIFIED'
 
       - name: Configure Pages
