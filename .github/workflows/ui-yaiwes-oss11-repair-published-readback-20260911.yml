@@ -1,0 +1,134 @@
+name: UI YAIWES OSS11 Repair Published Readback
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ui-yaiwes-oss11-repair-published-readback-20260911.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ui-yaiwes-oss11-repair-published-readback-20260911
+  cancel-in-progress: false
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            ➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂 Motor de extracción zip/motor_1_extract_only.py
+            ➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂motor de copiar archivos/motor_3_copy_batches.py
+            UI YAIWES/componentes open soure UI YAIWES/OPA
+            UI YAIWES/componentes open soure UI YAIWES/OpenFGA
+            UI YAIWES/componentes open soure UI YAIWES/rqlite
+            UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Collector
+            UI YAIWES/componentes open soure UI YAIWES/ORAS
+          sparse-checkout-cone-mode: false
+          fetch-depth: 0
+
+      - name: Verify canonical repair motor blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend'
+          test "$(git hash-object "$ROOT/➡️📂 Motor de extracción zip/motor_1_extract_only.py")" = 'a52d5dc0e6ff26f75d753b848dcc1a40c5dd4500'
+          test "$(git hash-object "$ROOT/➡️📂motor de copiar archivos/motor_3_copy_batches.py")" = '3689924361ce4a1a9fde4ae2b6f6009c37a6042d'
+
+      - name: Reconstruct and repair five published trees
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend'
+          BASE='UI YAIWES/componentes open soure UI YAIWES'
+          WORK="$RUNNER_TEMP/oss11-repair"
+          mkdir -p "$WORK"
+          while IFS= read -r name; do
+            safe="$(printf '%s' "$name" | tr ' /' '__')"
+            extract="$WORK/$safe/extracted"
+            mkdir -p "$extract"
+            ARCHIVE_INPUT="$GITHUB_WORKSPACE/$BASE/$name/_archives" \
+            DEST_DIR="$extract" \
+            STATE_FILE="$WORK/$safe/motor1-state.json" \
+            BATCH_SIZE=100 \
+            python "$ROOT/➡️📂 Motor de extracción zip/motor_1_extract_only.py" | tee "$WORK/$safe/motor1.json"
+            SOURCE_DIR="$extract" \
+            DEST_DIR="$GITHUB_WORKSPACE/$BASE/$name/code" \
+            STATE_FILE="$WORK/$safe/motor3-state.json" \
+            BATCH_SIZE=100 \
+            COLLISION_POLICY=replace \
+            python "$ROOT/➡️📂motor de copiar archivos/motor_3_copy_batches.py" | tee "$WORK/$safe/motor3.json"
+            python - "$BASE/$name" <<'PY'
+          import hashlib, json, pathlib, sys
+          base=pathlib.Path(sys.argv[1]); code=base/'code'; manifest=json.loads((base/'DOWNLOAD_EXTRACT_MANIFEST.json').read_text())
+          def fh(p):
+              h=hashlib.sha256()
+              with p.open('rb') as f:
+                  for b in iter(lambda:f.read(1024*1024),b''): h.update(b)
+              return h.hexdigest()
+          h=hashlib.sha256(); files=0; total=0
+          for p in sorted((x for x in code.rglob('*') if x.is_file()), key=lambda x:x.relative_to(code).as_posix()):
+              rel=p.relative_to(code).as_posix(); h.update(rel.encode()+b'\0'); h.update(fh(p).encode()+b'\n'); files+=1; total+=p.stat().st_size
+          actual={'files':files,'bytes':total,'sha256':h.hexdigest()}
+          assert actual == manifest['extracted_tree'], (base.name, actual, manifest['extracted_tree'])
+          print(json.dumps({'component':base.name,'verdict':'LOCAL_TREE_MATCHES_MANIFEST','tree':actual},sort_keys=True))
+          PY
+            git add -f -- "$BASE/$name/code"
+          done <<'EOF'
+          OPA
+          OpenFGA
+          rqlite
+          OpenTelemetry Collector
+          ORAS
+          EOF
+
+      - name: Publish repaired trees without force
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name 'yaiwes-oss11-repair'
+          git config user.email 'yaiwes-oss11-repair@users.noreply.github.com'
+          if git diff --cached --quiet; then echo 'NO_DELTA'; exit 0; fi
+          git commit -m 'repair(oss11): restore canonical extracted files omitted by gitignore'
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          for n in 1 2 3 4 5; do
+            git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch origin main
+            git rebase origin/main
+            if git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+
+      - name: Fresh independent readback
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch origin main
+          git reset --hard origin/main
+          python - <<'PY'
+          import hashlib, json, pathlib
+          root=pathlib.Path('UI YAIWES/componentes open soure UI YAIWES')
+          names=['OPA','OpenFGA','rqlite','OpenTelemetry Collector','ORAS']
+          def fh(p):
+              h=hashlib.sha256()
+              with p.open('rb') as f:
+                  for b in iter(lambda:f.read(1024*1024),b''): h.update(b)
+              return h.hexdigest()
+          for name in names:
+              base=root/name; code=base/'code'; manifest=json.loads((base/'DOWNLOAD_EXTRACT_MANIFEST.json').read_text())
+              h=hashlib.sha256(); files=0; total=0
+              for p in sorted((x for x in code.rglob('*') if x.is_file()), key=lambda x:x.relative_to(code).as_posix()):
+                  rel=p.relative_to(code).as_posix(); h.update(rel.encode()+b'\0'); h.update(fh(p).encode()+b'\n'); files+=1; total+=p.stat().st_size
+              actual={'files':files,'bytes':total,'sha256':h.hexdigest()}
+              assert actual == manifest['extracted_tree'], (name,actual,manifest['extracted_tree'])
+              print(json.dumps({'component':name,'verdict':'SOURCE_PRESENT_READBACK_VERIFIED','tree':actual},sort_keys=True))
+          PY
