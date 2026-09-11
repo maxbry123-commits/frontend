@@ -1,0 +1,45 @@
+{
+  "schema": "yaiwes.audit.g11.v1",
+  "contract": "tel.workflow/v3",
+  "node": "G11_MULTI_SANDBOX_RECOVERY",
+  "pass": 1,
+  "status": "GAP_MAPPED_REUSE_FIRST",
+  "source_requirements": [
+    "multi-sandbox isolation",
+    "persistent workflow/checkpoint state",
+    "crash/restart recovery",
+    "failover without losing objective/evidence/history",
+    "platform-specific execution backends"
+  ],
+  "fresh_code_evidence": {
+    "yaiwes_recovery_root": {"path":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/recovery/.gitkeep","blob":"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","verdict":"EMPTY_YAIWES_GLUE"},
+    "yaiwes_uek_root": {"path":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/.gitkeep","blob":"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","verdict":"EMPTY_CONTROL_PLANE"},
+    "stabilize_recovery": {"path":"UI YAIWES/componentes open soure UI YAIWES/Stabilize CORE/src/stabilize/recovery.py","blob":"2a77bfc1e2a9473977db9ecd06f8adc8f7ebcfa8","capability":"idempotent startup recovery of RUNNING/NOT_STARTED workflows by persistent store + queue"},
+    "stabilize_persistence_tree": "8574c27e34801110fc6f74e8f6fbfb5b54d8b0c3",
+    "stabilize_queue_tree": "273b9cd9f87b5d607832e2629fabb09f0dd9d624"
+  },
+  "sandbox_components_present": {
+    "Firecracker": "PRESENT_PHYSICAL",
+    "gVisor": "PRESENT_PHYSICAL",
+    "nsjail": "PRESENT_PHYSICAL",
+    "bubblewrap": "PRESENT_PHYSICAL"
+  },
+  "decision": {
+    "download_new_component": false,
+    "reason": "Required isolation/recovery building blocks already exist physically; current deficit is YAIWES selection/lifecycle/checkpoint glue, not acquisition.",
+    "reuse": ["Stabilize WorkflowRecovery/persistence/queue", "Firecracker", "gVisor", "nsjail", "bubblewrap"],
+    "do_not_duplicate": ["workflow recovery engine", "queue", "durable store", "sandbox engines"]
+  },
+  "remaining_gaps": [
+    "SANDBOX_BACKEND_SELECTION_CONTRACT",
+    "PLATFORM_CAPABILITY_MATRIX_TO_BACKEND",
+    "SANDBOX_LIFECYCLE_STATE_MODEL",
+    "SANDBOX_ID_TO_WORKFLOW_ID_BINDING",
+    "CHECKPOINT_TO_SANDBOX_STATE_BINDING",
+    "PROJECT_LEVEL_RECOVERY_BOOTSTRAP",
+    "FAILOVER_TEST_WITH_STATE_RESUME",
+    "MULTI_SANDBOX_CONCURRENCY_TEST"
+  ],
+  "next": "Pass2: map documents and platform requirements to concrete backend selection contract; then implement only YAIWES glue and tests, using Fables for mount/wiring and Stabilize for durable workflow recovery.",
+  "closure": "ACTIVE_LOOP"
+}
