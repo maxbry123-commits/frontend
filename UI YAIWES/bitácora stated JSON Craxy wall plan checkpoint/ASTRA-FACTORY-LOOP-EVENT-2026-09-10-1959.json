@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.astra.factory.loop-event.v1",
+  "identity": "➡️ Astra plan fábrica UI YAIWES",
+  "gate": "T1_FACTORY_FRONTEND",
+  "status": "ACTIVE_LOOP",
+  "base_main_sha": "a0195903b63072a58967c3a727ca59fb98c4b99e",
+  "node": "P4B_FACTORY_V0_VISUAL_PREVIEW_E2E",
+  "actions": [
+    "re-read main/crazy-wall/input/architecture/state/checkpoint",
+    "inspect factory-v0 source and existing tests",
+    "reuse local Playwright donor before generating E2E harness",
+    "verify local Apache-2.0 license",
+    "pin Playwright v1.55.0 upstream tag commit f992162f04ae0b0b5a0f4b6114b894215be98995",
+    "add desktop/mobile Playwright harness covering five steps, visual edit, drag-drop, AI delta apply boundary, undo-redo, V+, export",
+    "record evidence boundary HARNESS_PRESENT != E2E_PASS"
+  ],
+  "commits": [
+    "12e9bf80f5ed90da306d1583422b811d48e67825",
+    "0e7522b173d472fb8ffd35bef54e2c1257bbb4b2",
+    "711e8b1628861293950b7d4ab0b1463e3b308e5d",
+    "da38673e3c088e5edae05dd52e5b27117d152fb8"
+  ],
+  "result": "E2E_HARNESS_READY_NOT_EXECUTED",
+  "gap": "AUTHORIZED_BROWSER_RUNNER_NOT_AVAILABLE_WITHIN_CURRENT_ASTRA_WRITE_OWNERSHIP",
+  "safe_continuation": "persist state/checkpoint/plan/recovery/architecture delta and continue OSS donor traceability",
+  "t2_interface": "BLOCKED"
+}
