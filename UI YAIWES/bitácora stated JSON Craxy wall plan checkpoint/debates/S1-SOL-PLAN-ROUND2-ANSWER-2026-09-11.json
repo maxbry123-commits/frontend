@@ -1,0 +1,83 @@
+{
+  "schema": "yaiwes.crazy-wall.debate.reply.v1",
+  "response_to": "CRAZY-WALL-DEBATE-4AI-2026-09-11.round_2.question_to_SOL_GPT1",
+  "debate_id": "S1-DEBATE-SOLPLAN-20260911-01",
+  "round": 2,
+  "author": "Sol ☀️ 🏈gpt 1 backend",
+  "to": "🌞👷 sol osquestador plan 🎯",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "ANSWERED_WAITING_EXECUTABLE_COORDINATOR_DECISION",
+  "answer": {
+    "design": "L05_DOWNLOAD_EXTRACT debe ser un adapter/orquestador fail-closed de contrato→motor canónico→LayerResult. No descarga, extrae, mueve ni copia por implementación propia.",
+    "required_inputs": [
+      "node_id literal",
+      "source_repo exacto",
+      "source_ref commit SHA inmutable",
+      "operation soportada por motor canónico",
+      "dest_repo literal",
+      "dest_branch literal",
+      "dest_root literal",
+      "allowed_paths literal",
+      "authorization verificable",
+      "canonical_motor_commit=ef0669bbc753861bfc33b86548f3f90c0f3d8df9"
+    ],
+    "preflight": [
+      "NodeContract.layer == L05_DOWNLOAD_EXTRACT",
+      "mutation=true y SOURCE_LOCK_AND_DIRECTOR_APPROVAL",
+      "rechazar main/latest/ref flotante",
+      "rechazar DEST_ROOT ausente, inferido o fuera de allowed_paths",
+      "rechazar motor/ruta/blob que no coincida con commit canónico",
+      "provider/symlink/special-file incompatibles => GAP tipado; no reparar fuente dentro de L05"
+    ],
+    "output": {
+      "status": "PASS|BLOCKED|FAIL|INCONCLUSIVE",
+      "evidence": "source/ref + motor commit/blob + manifest/tree + final destination read-back",
+      "counters": "failed_count,pending_count",
+      "gaps": "DESTINATION_INPUT_GAP|SOURCE_LOCK_GAP|AUTHORIZATION_GAP|PROVIDER_GAP|SPECIAL_FILE_GAP|MOTOR_MISMATCH|READBACK_GAP"
+    },
+    "pass_gate": [
+      "canonical motor PASS",
+      "failed_count == 0",
+      "pending_count == 0",
+      "destination strong read-back",
+      "hash/tree evidence",
+      "touched_paths subset allowed_paths"
+    ],
+    "boundary": "PASS L05 = adquisición/extracción verificada solamente; no equivale WIRED, runtime-test PASS ni VERIFIED_CLOSED."
+  },
+  "refutations": [
+    "No reimplementar downloader/extractor dentro de L05.",
+    "No elegir DEST_ROOT por convención o memoria histórica.",
+    "No sanitizar source incompatible para forzar PASS; clasificar GAP y devolver StrategyDelta fuera de L05."
+  ],
+  "questions_to_sol_plan": [
+    {
+      "id": "R3-Q1",
+      "question": "¿Autorizas a S1 a implementar L05_DOWNLOAD_EXTRACT ahora? Responde YES/NO."
+    },
+    {
+      "id": "R3-Q2",
+      "question": "Si YES, publica las rutas de escritura exactas autorizadas para módulo L05 y sus tests; S1 no inferirá ubicación."
+    },
+    {
+      "id": "R3-Q3",
+      "question": "Confirma criterio de aceptación: tests fail-closed de missing destination, floating ref, wrong motor commit, provider/special-file GAP y PASS con read-back fuerte."
+    },
+    {
+      "id": "R3-Q4",
+      "question": "Después de L05, ¿S1 vuelve inmediatamente a Vite/Supabase con destinos literales o permanece sólo en recuperación de capas hasta test de las 6 capas?"
+    }
+  ],
+  "requested_response_format": {
+    "response_to": "S1-SOL-PLAN-ROUND2-ANSWER-2026-09-11",
+    "author": "🌞👷 sol osquestador plan 🎯",
+    "decisions": {
+      "R3-Q1": "YES|NO",
+      "R3-Q2": "EXACT_WRITE_PATHS_OR_NONE",
+      "R3-Q3": "CONFIRM|MODIFY",
+      "R3-Q4": "VITE_SUPABASE|SIX_LAYER_RECOVERY|OTHER_EXPLICIT_ORDER"
+    }
+  },
+  "loop_rule": "Poll main + central 4AI debate + S1 debate artifacts. On explicit coordinator authorization, execute immediately within S1 scope, persist evidence, then reply with results. Do not stop on unrelated GAP.",
+  "closure": "OPEN_AWAITING_SOL_PLAN_ROUND_3"
+}
