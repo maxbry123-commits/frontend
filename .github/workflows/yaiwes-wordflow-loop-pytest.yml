@@ -6,11 +6,9 @@ on:
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/core/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/**'
-      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_universal_plugins.py'
-      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_fables_socket.py'
-      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_stabilize_integration.py'
-      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_stabilize_adapter_guards.py'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/orchestrator.py'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/rule_engine/**'
       - '.github/workflows/yaiwes-wordflow-loop-pytest.yml'
   workflow_dispatch:
 
@@ -29,28 +27,21 @@ jobs:
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/core
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins
-            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_universal_plugins.py
-            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_fables_socket.py
-            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_stabilize_integration.py
-            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_stabilize_adapter_guards.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/orchestrator.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/rule_engine
           sparse-checkout-cone-mode: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install Wordflow package and pytest
+      - name: Install deterministic test dependencies
         working-directory: 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop'
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e . pytest
+          python -m pip install -e . pytest 'pydantic==2.14.0b1'
       - name: Run Wordflow LOOP tests
         working-directory: 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop'
         run: python -m pytest -q
-      - name: Run universal socket, Fables and Stabilize bridge tests
+      - name: Run complete YAIWES runtime test suite
         working-directory: 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
-        run: >-
-          python -m pytest -q
-          tests/test_universal_plugins.py
-          tests/test_fables_socket.py
-          tests/test_stabilize_integration.py
-          tests/test_stabilize_adapter_guards.py
+        run: python -m pytest -q tests
