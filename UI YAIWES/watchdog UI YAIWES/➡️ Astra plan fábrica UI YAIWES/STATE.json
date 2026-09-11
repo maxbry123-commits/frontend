@@ -5,7 +5,7 @@
   "status": "ACTIVE_LOOP",
   "gate": "T1_FACTORY_FRONTEND",
   "t2_interface": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED",
-  "base_audited_sha": "b7bfd8511535545ecd30cf8b292d914f584b517b",
+  "base_audited_sha": "a0195903b63072a58967c3a727ca59fb98c4b99e",
   "completed_nodes": [
     "P0_INPUT_LITERAL_READBACK",
     "P1_CAPABILITY_MATRIX",
@@ -18,9 +18,13 @@
     "DOC_PLAN_COMPLETE_CREATED",
     "DOC_HANDOFF_CREATED",
     "DOC_RECOVERY_CREATED",
-    "DOC_AUDIT_5_PASSES_CROSSCHECK_CREATED"
+    "DOC_AUDIT_5_PASSES_CROSSCHECK_CREATED",
+    "P4B_PLAYWRIGHT_LOCAL_DONOR_REVIEWED",
+    "P4B_PLAYWRIGHT_LICENSE_APACHE_2_VERIFIED",
+    "P4B_PLAYWRIGHT_V1_55_0_TAG_COMMIT_VERIFIED",
+    "P4B_E2E_HARNESS_MATERIALIZED"
   ],
-  "current_node": "P4B_FACTORY_V0_VISUAL_PREVIEW_E2E",
+  "current_node": "P4B_FACTORY_V0_E2E_RUNNER_PENDING",
   "factory_v0": {
     "path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/",
     "source_present": true,
@@ -28,8 +32,22 @@
     "runtime_logic_test_pass": true,
     "runtime_logic_test_result": "PASS_6_OF_6",
     "runtime_test_evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/TEST-EVIDENCE-2026-09-10.md",
+    "e2e_harness_ready": true,
+    "e2e_harness_evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/E2E-HARNESS-EVIDENCE-2026-09-10.md",
+    "e2e_targets": ["chromium-desktop", "mobile-chromium"],
     "visual_preview_e2e_pass": false,
     "verified_closed": false
+  },
+  "verified_donors": {
+    "playwright_test_harness": {
+      "upstream": "https://github.com/microsoft/playwright",
+      "version": "v1.55.0",
+      "source_commit": "f992162f04ae0b0b5a0f4b6114b894215be98995",
+      "local_path": "UI YAIWES/componentes open soure UI YAIWES/Playwright/",
+      "license": "Apache-2.0",
+      "license_readback": true,
+      "note": "upstream tag pin is verified; exact local checkout provenance remains separate unless acquisition manifest proves it"
+    }
   },
   "frontend_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/",
   "backend_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/backend/",
@@ -38,25 +56,21 @@
     "input_literal": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/INPUT-BLOCK-LITERAL-2026-09-10.md",
     "instruction_ledger": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/NOTAS-INSTRUCCIONES-1A1-ASTRA-2026-09-10.md",
     "architecture": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/ARQUITECTURA-PERFIL-TRABAJO-ASTRA-FABRICA-UI-YAIWES.md",
+    "architecture_delta": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/ARQUITECTURA-DELTA-P4B-E2E-2026-09-10.md",
     "plan": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/PLAN-ASTRA-FABRICA-UI-YAIWES.md",
+    "plan_delta": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/PLAN-DELTA-P4B-E2E-2026-09-10.md",
     "handoff": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/HANDOFF-ASTRA-FABRICA-UI-YAIWES.md",
     "recovery": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/RECOVERY-PATCH-ASTRA-FABRICA-UI-YAIWES.md",
+    "recovery_delta": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/RECOVERY-DELTA-P4B-E2E-2026-09-10.md",
     "audit": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/AUDITORIA-5-PASADAS-CROSSCHECK-2026-09-10.md"
   },
-  "documentation_commits": {
-    "input_literal": "f1a3d0d3a3be312e203d83417342623f14271a11",
-    "plan": "2d5a633f4253cbfeaacbb0eccd711de90fb2f61b",
-    "instruction_ledger": "fedfc79536ef026f7d73f4ae7dbce4c43da52f61",
-    "handoff": "559b25a4387540703987cb33589275310f6be03d",
-    "recovery": "44c29d2b0cacc2b6eef2159372ab6d181e7d7f3a",
-    "audit_5_passes": "768860c868779d1c4283cf8c173c2d398bf14e59"
-  },
   "open_gaps": [
-    "VISUAL_PREVIEW_E2E_NOT_YET_RUN",
+    "E2E_BROWSER_RUN_NOT_EXECUTED",
+    "AUTHORIZED_E2E_RUNNER_NOT_AVAILABLE_WITHIN_CURRENT_ASTRA_WRITE_OWNERSHIP",
     "PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT",
-    "OSS_SOURCE_COMMIT_LICENSE_VERIFICATION_PENDING_PER_COMPONENT",
+    "OSS_SOURCE_COMMIT_LICENSE_VERIFICATION_PENDING_PER_REMAINING_INTEGRATED_COMPONENT",
     "INDEPENDENT_REVIEW_REQUIRED_FOR_VERIFIED_CLOSED"
   ],
   "closure_rule": "path+SHA/diff+runtime test/log+visual preview/readback+independent verifier",
-  "next_node": "T1_FACTORY_FRONTEND_VERIFY_CURRENT_MAIN_AND_CLOSE_RUNTIME_GAPS"
+  "next_node": "P4B_RUN_E2E_IF_AUTHORIZED_ELSE_CONTINUE_SAFE_DONOR_PROVENANCE"
 }
