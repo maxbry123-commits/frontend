@@ -1,0 +1,9 @@
+[
+  {
+    "id": "0066:AVF-lineage-transport",
+    "slug": "AVF",
+    "source_repo": "https://github.com/LineageOS/android_packages_modules_Virtualization",
+    "source_ref": "b00eb1080e007ac84f695edaca6a02ac8dc92040",
+    "publish": false
+  }
+]
