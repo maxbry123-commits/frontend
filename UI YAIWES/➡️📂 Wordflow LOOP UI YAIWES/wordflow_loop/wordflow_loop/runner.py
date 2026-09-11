@@ -7,7 +7,7 @@ from typing import Any, Callable, Mapping
 
 from .contracts import LayerResult, NodeContract, Status
 from .governance import guardian, judge, sentinel, sheriff, supervisor, validator, verifier
-from .ledger import append_event, load_ledger, save_ledger
+from .ledger import append_event, append_event_persistent, load_ledger
 
 LayerHandler = Callable[[NodeContract, dict[str, Any]], LayerResult]
 
@@ -26,12 +26,22 @@ class LayerRunner:
         self.ledger = load_ledger(self.ledger_path) if self.ledger_path else []
         self.completed_nodes: set[str] = set()
         self.latest_events: dict[str, dict[str, Any]] = {}
+        self._rebuild_replay_state()
+
+    def _rebuild_replay_state(self) -> None:
+        self.completed_nodes.clear()
+        self.latest_events.clear()
         for row in self.ledger:
             event = row.get("event", {})
             node_id = event.get("node_id")
             if node_id:
                 self.latest_events[node_id] = deepcopy(event)
                 self._update_completion(node_id, event.get("status"))
+
+    def _refresh_from_disk(self) -> None:
+        if self.ledger_path:
+            self.ledger = load_ledger(self.ledger_path)
+            self._rebuild_replay_state()
 
     def _update_completion(self, node_id: str, status: str) -> None:
         # Replay the latest outcome, not any historical PASS.
@@ -42,6 +52,7 @@ class LayerRunner:
 
     def recover_event(self, node_id: str) -> dict[str, Any] | None:
         """Return a defensive copy of the latest durable event for one node."""
+        self._refresh_from_disk()
         event = self.latest_events.get(node_id)
         return deepcopy(event) if event is not None else None
 
@@ -66,11 +77,13 @@ class LayerRunner:
             "actions": list(result.actions),
             "touched_paths": list(result.touched_paths),
         }
-        append_event(self.ledger, event)
         if self.ledger_path:
-            save_ledger(self.ledger_path, self.ledger)
-        self.latest_events[node.node_id] = deepcopy(event)
-        self._update_completion(node.node_id, result.status.value)
+            self.ledger = append_event_persistent(self.ledger_path, event)
+            self._rebuild_replay_state()
+        else:
+            append_event(self.ledger, event)
+            self.latest_events[node.node_id] = deepcopy(event)
+            self._update_completion(node.node_id, result.status.value)
 
     def run(
         self,
@@ -78,6 +91,7 @@ class LayerRunner:
         payload: dict[str, Any] | None = None,
     ) -> LayerResult:
         payload = payload or {}
+        self._refresh_from_disk()
         pre_errors = sheriff.check(node) + validator.check(node, self.completed_nodes)
         if pre_errors:
             result = LayerResult(
