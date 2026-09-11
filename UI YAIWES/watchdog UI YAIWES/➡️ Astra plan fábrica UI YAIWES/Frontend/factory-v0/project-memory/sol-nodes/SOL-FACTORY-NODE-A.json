@@ -1,0 +1,24 @@
+{
+  "schema": "yaiwes.factory.sol.loop-node.v1",
+  "node_id": "SOL_FACTORY_A_T1_CONTRACT_CONSUMER",
+  "owner": "SOL_GPT_ENV_A",
+  "reviewer": "ASTRA",
+  "status": "READY_TO_CLAIM",
+  "gate": "T1_FACTORY_FRONTEND",
+  "task": "Use the existing Factory V0 as a consumer to validate one backend-facing UI contract without starting T2 product integration.",
+  "max_steps": 3,
+  "steps": [
+    "1_READ: read current INPUT addendum, STATE, Crazy Wall and factory backend-adapter contract; claim this node only if owner is free.",
+    "2_EXECUTE: run one mock-to-SolContractAdapter consumer simulation using existing factory interfaces; produce only contract/evidence deltas, no product-path writes.",
+    "3_REPORT: write result/evidence into this project-memory node and report PASS/GAP with SHA/log/read-back; never self-certify VERIFIED_CLOSED."
+  ],
+  "allowed_write_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/",
+  "forbidden_write_roots": [
+    "UI YAIWES/Interface YAIWES ui/",
+    "UI YAIWES/Fabrica UI YAIWES/",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/"
+  ],
+  "loop": "INPUT literal -> claim node -> execute <=3 steps -> verify/refute -> GAP/StrategyDelta -> report",
+  "claim_rule": "single_writer_per_path=true; set status CLAIMED and record model/environment identity before mutation",
+  "close_when": "simulation has source SHA + command/test/log + read-back + ASTRA review"
+}
