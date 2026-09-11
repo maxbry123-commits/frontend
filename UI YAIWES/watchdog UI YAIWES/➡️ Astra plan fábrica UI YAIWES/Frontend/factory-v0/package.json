@@ -3,6 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node tests/factory.test.mjs"
+    "test": "node tests/factory.test.mjs",
+    "test:logic": "node tests/factory.test.mjs",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
   }
 }
