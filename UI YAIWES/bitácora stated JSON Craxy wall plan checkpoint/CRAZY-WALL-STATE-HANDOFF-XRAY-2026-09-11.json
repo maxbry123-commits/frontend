@@ -1,0 +1,74 @@
+{
+  "schema": "yaiwes.crazy-wall.state-handoff.xray.v2",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_LOOP",
+  "generated_at": "2026-09-11T15:30:00-05:00",
+  "base_main_sha": "83a730cbdc61f6aa81fb80fd0ae59bc55f6b2b71",
+  "sources": {
+    "crazy_wall_previous": {"path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json", "blob": "2404928bd332e2abb1466c9a4095bd52bd24acea", "finding": "coordination/progress fields stale versus current ledger"},
+    "state_previous": {"path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json", "blob": "6e9ba8cd30279fab0fca79381af31e2d55f64f54", "finding": "still records 120/124 and 2026-09-10 recovery snapshot; historical until physical inventory is reverified"},
+    "gap_ledger": {"path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/AUDIT-GAP-LEDGER-4AI-2026-09-11.json", "blob": "d710eba168a55ef489236833c6429c1100ee6079", "updated_at_utc": "2026-09-11T20:01:08Z", "finding": "current operational gap source: G01-G19; no seed gap globally VERIFIED_CLOSED"},
+    "handoff_v5": "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md",
+    "xray_v5": "UI YAIWES/readme arquitectura UI YAIWES/CROSSCHECK-FUENTES-VERDAD-XRAY-UI-YAIWES.md"
+  },
+  "xray_state": {
+    "ledger_nodes": 19,
+    "verified_closed_seed_gaps": 0,
+    "tested_or_tested_subgates": ["G01_FABLES", "G14_RUNTIME_CORE_SCAFFOLD"],
+    "durability_subgates_tested_but_global_open": ["G11_MULTI_SANDBOX_RECOVERY"],
+    "global_matrix_in_progress": ["G12_GLOBAL_GOALS_COVERAGE"],
+    "publish_blockers": ["G18_ASTRA_PREVIEW_PUBLISH", "G19_HF_STATIC_SPACE_CREDENTIAL"],
+    "critical_rule": "Presence/source/vendor/test subgates never imply WIRED, RUNTIME_PASS or VERIFIED_CLOSED."
+  },
+  "coordination_contract": {
+    "one_task_one_node": true,
+    "max_steps_per_task": 3,
+    "node_states": ["FREE", "CLAIMED", "EXECUTING", "GAP", "PASS", "REPORT"],
+    "claim_requires": ["role", "node_id", "base_main_sha", "write_scope", "claimed_at"],
+    "report_requires": ["result", "path_or_url", "commit_sha_or_blob", "test_or_log", "next_node"],
+    "three_step_dag": ["1_RESEARCH_OR_VERIFY", "2_EXECUTE_AUTHORIZED_DELTA", "3_VERIFY_AND_REPORT"],
+    "collision_rule": "A role may write only inside its declared write_scope; shared source-of-truth files are consolidated additively by SOL_ORQUESTADOR after fresh readback. No role claims another role's node.",
+    "gap_rule": "A GAP blocks only its literal node unless an evidenced hard dependency exists; role immediately claims another FREE independent node.",
+    "truth_rule": "REQUEST/PENDING is not an AI response. Never fabricate inter-model replies; only role state files, commits, runs and logs count as actual reports.",
+    "closure_rule": "Overall LOOP remains ACTIVE until objective matrix is 100% evidenced and every required gate reaches VERIFIED_CLOSED."
+  },
+  "role_alignment": {
+    "SOL_ORQUESTADOR": {"node": "XRO-20X-CONSOLIDATION", "claim": "CLAIMED", "write_scope": ["readme arquitectura UI YAIWES/*XRAY-MULTIAI*", "bitácora stated JSON Craxy wall plan checkpoint/*XRAY*"], "next": "consolidate 20x plan and reverify source drift"},
+    "ASTRA_GPT1": {"node": "XRA1-SOURCE-TRUTH-DRIFT", "claim": "FREE", "state_path": "roles/ASTRA-GPT1-BACKEND-STATE.json", "write_scope": ["roles/ASTRA-GPT1-BACKEND-STATE.json"], "next": "4-pass source-truth contradiction audit; report only fresh evidence"},
+    "ASTRA_GPT2": {"node": "XRA2-COMPONENT-RESEARCH-DEDUP", "claim": "FREE", "state_path": "roles/ASTRA2-GPT-BACKEND-STATE.json", "write_scope": ["roles/ASTRA2-GPT-BACKEND-STATE.json"], "next": "rank candidate components official URL > docs > community; no download"},
+    "SOL_GPT1": {"node": "XRS1-MEMORY-AGENT-BOUNDARY", "claim": "FREE", "state_path": "roles/SOL-GPT1-BACKEND-STATE.json", "write_scope": ["roles/SOL-GPT1-BACKEND-STATE.json", "runtime/src/agent/**"], "next": "fresh claim before adapter delta; preserve G13 reuse finding"},
+    "SOL_GPT2": {"node": "XRS2-PLATFORM-SANDBOX-MATRIX", "claim": "FREE", "state_path": "roles/SOL-GPT2-BACKEND-STATE.json", "write_scope": ["roles/SOL-GPT2-BACKEND-STATE.json", "runtime/src/adapters/**", "runtime/src/uek/**"], "next": "fresh claim; map platform capability without claiming unsupported iOS/Web"},
+    "SOL_GPT3": {"node": "XRS3-FABLES-INTEGRATION", "claim": "FREE", "state_path": "roles/SOL-GPT3-BACKEND-STATE.json", "write_scope": ["roles/SOL-GPT3-BACKEND-STATE.json", "runtime/src/integration/**"], "next": "consume TESTED Fables; promote only with runtime wiring evidence"}
+  },
+  "component_acquisition_policy": {
+    "execute_now": false,
+    "canonical_motor_only": true,
+    "motor_policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
+    "gates_before_queue": ["official provenance URL", "license review", "inventory dedup", "capability gap mapping", "literal planned destination", "pinned ref", "canonical motor compatibility"],
+    "planned_destination_template": "UI YAIWES/componentes open soure UI YAIWES/<ComponentName>"
+  },
+  "improvements_20": [
+    {"id":"IMP01","goal":"Executable/versioned SourceAuthoritySet","decision":"REUSE_EXISTING","component":"in-toto + Python-TUF + Cosign","owner":"SOL_ORQUESTADOR","steps":["map source-authority contract","bind existing provenance components","verify tamper/refutation evidence"]},
+    {"id":"IMP02","goal":"Decoupled global policy decision point","decision":"CANDIDATE_NEW","component":"Open Policy Agent","official_url":"https://github.com/open-policy-agent/opa","owner":"ASTRA_GPT2","steps":["dedup policy capabilities","pin official ref and license","queue canonical acquisition only if gap remains"]},
+    {"id":"IMP03","goal":"Fine-grained ReBAC/ABAC authorization","decision":"CANDIDATE_NEW","component":"OpenFGA","official_url":"https://github.com/openfga/openfga","owner":"ASTRA_GPT2","steps":["compare with PyCasbin/OPA","prove unique capability","queue only if non-duplicate"]},
+    {"id":"IMP04","goal":"SQLite checkpoint disaster recovery","decision":"CANDIDATE_NEW","component":"Litestream","official_url":"https://github.com/benbjohnson/litestream","owner":"SOL_GPT1","steps":["map durable checkpoint storage","prove SQLite fit","plan pinned canonical acquisition"]},
+    {"id":"IMP05","goal":"Distributed SQLite state when multi-host requires it","decision":"CANDIDATE_NEW_CONDITIONAL","component":"rqlite","official_url":"https://github.com/rqlite/rqlite","owner":"SOL_GPT1","steps":["prove multi-host requirement","compare with Litestream/existing store","queue only if consensus semantics required"]},
+    {"id":"IMP06","goal":"Unified OTLP telemetry pipeline","decision":"CANDIDATE_NEW","component":"OpenTelemetry Collector","official_url":"https://github.com/open-telemetry/opentelemetry-collector","owner":"SOL_GPT2","steps":["map telemetry blind spots","compare with existing OTel Python","plan collector only if exporter fanout needed"]},
+    {"id":"IMP07","goal":"Distributed trace backend","decision":"CANDIDATE_NEW_CONDITIONAL","component":"Grafana Tempo","official_url":"https://github.com/grafana/tempo","owner":"SOL_GPT2","steps":["map trace retention/query need","review AGPL licensing impact","queue only after license/need PASS"]},
+    {"id":"IMP08","goal":"Disposable integration environments","decision":"CANDIDATE_NEW","component":"Testcontainers Python","official_url":"https://github.com/testcontainers/testcontainers-python","owner":"SOL_GPT3","steps":["map E2E dependency matrix","prove Docker-compatible CI lane","plan pinned acquisition"]},
+    {"id":"IMP09","goal":"Stateful OpenAPI/GraphQL fuzzing","decision":"CANDIDATE_NEW","component":"Schemathesis","official_url":"https://github.com/schemathesis/schemathesis","owner":"SOL_GPT3","steps":["map chat/API schemas","compare with Hypothesis coverage","queue only for API-specific gap"]},
+    {"id":"IMP10","goal":"OCI workload VM isolation","decision":"CANDIDATE_NEW_CONDITIONAL","component":"Kata Containers","official_url":"https://github.com/kata-containers/kata-containers","owner":"SOL_GPT2","steps":["compare Firecracker/gVisor/nsjail","map supported host architectures","queue only if isolation gap is unique"]},
+    {"id":"IMP11","goal":"Independent vulnerability scanner cross-check","decision":"CANDIDATE_NEW_CONDITIONAL","component":"Grype","official_url":"https://github.com/anchore/grype","owner":"ASTRA_GPT2","steps":["compare with existing Trivy","define disagreement/refutation value","queue only if second-scanner gate justified"]},
+    {"id":"IMP12","goal":"OCI artifact transport","decision":"CANDIDATE_NEW","component":"ORAS","official_url":"https://github.com/oras-project/oras","owner":"ASTRA_GPT2","steps":["map artifact transport gap","compare GitHub/HF current lanes","plan canonical acquisition if OCI lane approved"]},
+    {"id":"IMP13","goal":"Replay-checkable event execution","decision":"REUSE_EXISTING","component":"Stabilize + Debezium + current event schema","owner":"SOL_ORQUESTADOR","steps":["map latest event schema","attach replay tests","promote only on deterministic replay PASS"]},
+    {"id":"IMP14","goal":"Executable Evidence Graph","decision":"REUSE_EXISTING","component":"Oxigraph","owner":"ASTRA_GPT1","steps":["define evidence edge schema","bind existing graph engine","verify bidirectional requirement↔evidence queries"]},
+    {"id":"IMP15","goal":"DLQ/outbox durable semantics","decision":"REUSE_EXISTING","component":"NATS + PGMQ + Debezium","owner":"SOL_ORQUESTADOR","steps":["map queue/outbox ownership","select one owner path","fault-test duplicate/lost delivery"]},
+    {"id":"IMP16","goal":"Context Fabric and multi-stage retrieval","decision":"REUSE_EXISTING","component":"Qdrant + FastEmbed + Meilisearch + Tantivy","owner":"SOL_GPT1","steps":["define retrieval stages","bind memory boundary","test relevance plus isolation"]},
+    {"id":"IMP17","goal":"Capability/resource-aware router","decision":"REUSE_EXISTING","component":"LiteLLM + sysinfo","owner":"SOL_GPT2","steps":["define capability manifest","bind resource probes","test fail-closed routing"]},
+    {"id":"IMP18","goal":"Reconstruction test without chat","decision":"REUSE_EXISTING","component":"Playwright + pytest + Hypothesis","owner":"SOL_GPT3","steps":["build from persisted sources only","run reconstruction E2E","compare output/evidence hashes"]},
+    {"id":"IMP19","goal":"Supply-chain provenance and admission","decision":"REUSE_EXISTING","component":"Syft + Cosign + Python-TUF + in-toto + Trivy","owner":"ASTRA_GPT1","steps":["generate provenance/SBOM","verify signatures/policies","reject unproven artifact"]},
+    {"id":"IMP20","goal":"Recovery/failover fault injection","decision":"REUSE_EXISTING","component":"Stabilize + Toxiproxy + k6","owner":"SOL_ORQUESTADOR","steps":["define crash/network fault scenarios","execute deterministic recovery tests","report recovery/checkpoint invariants"]}
+  ],
+  "counts": {"improvements":20,"reuse_existing":9,"candidate_new_or_conditional":11,"downloads_executed":0},
+  "next_loop": ["roles claim FREE node with fresh base SHA", "candidate components pass acquisition gates", "wire/test/report without global closure"]
+}
