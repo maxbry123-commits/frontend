@@ -1,0 +1,44 @@
+{
+  "schema": "yaiwes.crazy-wall.event.v1",
+  "contract": "tel.workflow/v3",
+  "timestamp_local": "2026-09-11T16:42:00-05:00",
+  "actor": "➡️ Astra plan fábrica UI YAIWES",
+  "node": "F-OSS-01_MINIMAL_TRACEABLE_FRONTEND_DONOR_INTEGRATION",
+  "owner": "➡️ Astra plan fábrica UI YAIWES",
+  "reviewer": "SHERIFF",
+  "status": "RUNTIME_PASS",
+  "paths_owned": [
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/STATE.json"
+  ],
+  "tested_factory_sha": "8d5a7ed86f9af517b0d42f5aad9e2f7359edd7f0",
+  "donor": {
+    "name": "Lucide",
+    "upstream": "https://github.com/lucide-icons/lucide",
+    "source_commit": "a53bd66a03dfd5609c3638379869e83dc207b051",
+    "license": "ISC + MIT for Feather-derived icons",
+    "capability": "minimal plus SVG icon rendering",
+    "runtime_adapter": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/donors/lucide-icons.js"
+  },
+  "evidence": {
+    "logic_and_donor_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa475635527934177eca1cd",
+    "current_head_e2e_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa475935527934177eca1e4",
+    "result": "LOGIC_6_OF_6 + LUCIDE_DONOR_PASS + E2E_14_OF_14"
+  },
+  "publish_gap": {
+    "status": "ACTIVE_GAP",
+    "exact": "HF_WRITE_CREDENTIAL_NOT_INJECTED_IN_AVAILABLE_GITHUB_ACTIONS_OR_HF_JOB_CONTEXT",
+    "hf_job_probe": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa475bd21047bf1b0378dfd",
+    "persistent_url": null,
+    "http_readback": false,
+    "deployed_e2e": false
+  },
+  "anti_collision": {
+    "t2_interface": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED",
+    "single_writer_per_path": true,
+    "sol_nodes": "prepared separately under factory-v0/project-memory/sol-nodes/; Sol must claim before write",
+    "backend_sol_paths": "NOT_TOUCHED"
+  },
+  "next_node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY",
+  "rule": "do not promote T1 to VERIFIED_CLOSED until persistent URL + HTTP readback + deployed E2E + independent reviewer"
+}
