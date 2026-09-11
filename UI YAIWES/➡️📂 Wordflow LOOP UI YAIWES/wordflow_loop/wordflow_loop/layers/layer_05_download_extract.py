@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import re
 
 from ..contracts import Evidence, LayerResult, NodeContract, Status
@@ -21,6 +22,30 @@ def _immutable_git_ref(value: str) -> bool:
 
 def _strong_sha256(value: str) -> bool:
     return bool(re.fullmatch(r"[0-9a-fA-F]{64}", value))
+
+
+def _typed_motor_gaps(result: dict) -> list[str]:
+    """Preserve acquisition-boundary failure class without repairing it here."""
+    explicit = str(result.get("gap_code", "")).upper()
+    diagnostic = " ".join(
+        [
+            explicit,
+            str(result.get("error", "")),
+            str(result.get("reason", "")),
+            json.dumps(result.get("errors", []), sort_keys=True, default=str),
+        ]
+    ).upper()
+
+    gaps: list[str] = []
+    if "SOURCE_SPECIAL_FILE_GAP" in diagnostic or "SPECIAL_FILE_GAP" in diagnostic:
+        gaps.append("SPECIAL_FILE_GAP")
+    if (
+        "MOTOR_PROVIDER_GAP" in diagnostic
+        or "PROVIDER_GAP" in diagnostic
+        or "PROVIDER_UNSUPPORTED" in diagnostic
+    ):
+        gaps.append("PROVIDER_GAP")
+    return gaps
 
 
 def run(node: NodeContract, payload: dict) -> LayerResult:
@@ -77,12 +102,13 @@ def run(node: NodeContract, payload: dict) -> LayerResult:
         and _strong_sha256(tree_hash)
     )
     if not verified:
+        typed_gaps = _typed_motor_gaps(result)
         return LayerResult(
             node_id=node.node_id,
             layer=node.layer,
             status=Status.BLOCKED,
             output={"request": request, "motor_result": result},
-            gaps=["canonical_motor_download_extract_not_verified"],
+            gaps=typed_gaps or ["canonical_motor_download_extract_not_verified"],
         )
 
     return LayerResult(
