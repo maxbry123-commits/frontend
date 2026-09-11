@@ -6,77 +6,98 @@
   "name": "Sol gpt 2 🤯👷backend",
   "node_prefix": "S2",
   "status": "ACTIVE_LOOP_WITH_BLOCKING_GAPS",
-  "base_main_sha": "a1e278b7439ee24cf20633752dc63e4042d419e0",
-  "crazy_wall_blob_sha": "a4253dbb786ad89358afbacccd43dc47b5d57ebb",
+  "base_main_sha": "4dbade9a16f09670daaf928eda82281d15a0ebd4",
+  "crazy_wall_blob_sha": "f5d7ade7966a1a0fc20bf6f0b11a805b91b1b3be",
   "state_blob_sha_observed": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
-  "last_watchdog_at": "2026-09-11T04:41:43Z",
   "canonical_motors_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
   "canonical_policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
+  "director_delta_seen": "2026-09-11T05:06:57.471Z",
   "nodes": {
     "S2-01": {
       "component": "DuckDB",
-      "status": "BLOCKED_SOURCE_SPECIAL_FILE_GAP",
+      "status": "BLOCKED_SOURCE_SPECIAL_FILE_GAP_CONFIRMED_ACROSS_REFS",
       "source": "https://github.com/duckdb/duckdb",
-      "source_ref": "78c40873b9ac7e22b90dafd3883c12abf93b2466",
-      "source_ref_verified": true,
-      "aggregate_workflow": ".github/workflows/ui-yaiwes-canonical-motors-residual-03-20260910.yml",
-      "aggregate_run_id": 34562705800,
-      "aggregate_result": {
-        "verdict": "GAPS_PENDING",
-        "total": 3,
-        "download_verified": 0,
-        "extraction_verified": 0,
-        "published_readback_verified": 0,
-        "failed": 3,
-        "pending": 0
-      },
-      "diagnostic_queue": "UI YAIWES/automation/S2-duckdb-diagnostic-20260910/QUEUE.json",
-      "diagnostic_workflow": ".github/workflows/sol-gpt2-s2-01-duckdb-diagnostic-20260910.yml",
-      "diagnostic_run_id": 34562878473,
-      "diagnostic_job_id": 103149035048,
-      "diagnostic_steps": {
-        "verify_motor_blobs": "PASS",
-        "copy_motor_root_exactly": "PASS",
-        "motor2_duckdb_only": "FAIL"
-      },
-      "diagnostic_result": {
-        "verdict": "GAPS_PENDING",
-        "total": 1,
-        "download_verified": 0,
-        "extraction_verified": 0,
-        "published_readback_verified": 0,
+      "original_ref": "78c40873b9ac7e22b90dafd3883c12abf93b2466",
+      "original_ref_date": "2023-03-13",
+      "original_diagnostic_run_id": 34562878473,
+      "original_result": {
         "failed": 1,
-        "pending": 0
+        "pending": 0,
+        "verdict": "GAPS_PENDING",
+        "special_paths": [
+          "test/sql/copy/csv/data/glob/crawl/symbolic_link/link_to_file",
+          "test/sql/copy/csv/data/glob/crawl/symbolic_link/mydir/link_to_upper_dir"
+        ]
       },
-      "root_cause": "SOURCE_SPECIAL_FILE_GAP",
-      "special_paths": [
-        "test/sql/copy/csv/data/glob/crawl/symbolic_link/link_to_file",
-        "test/sql/copy/csv/data/glob/crawl/symbolic_link/mydir/link_to_upper_dir"
+      "current_official_branch": "v2.0-cyanoptera",
+      "current_official_ref": "f60316b6abfd9074f553e9e880b85171c747f867",
+      "current_official_ref_date": "2026-09-10",
+      "current_retry_queue": "UI YAIWES/automation/S2-duckdb-retry-current-20260911/QUEUE.json",
+      "current_retry_workflow": ".github/workflows/sol-gpt2-s2-01-duckdb-current-retry-20260911.yml",
+      "current_retry_run_id": 34565130195,
+      "current_retry_job_id": 103155580176,
+      "current_retry_result": {
+        "failed": 1,
+        "pending": 0,
+        "verdict": "GAPS_PENDING",
+        "special_paths": [
+          "data/csv/glob/crawl/.symbolic_link/link_to_file",
+          "data/csv/glob/crawl/.symbolic_link/mydir/link_to_upper_dir"
+        ]
+      },
+      "root_cause": "SOURCE_SPECIAL_FILE_GAP: official DuckDB git tree contains symlinks and immutable Motor 2 rejects any symlink/special source entry before bundling",
+      "strategies_checked": [
+        "retry original pinned ref: rejected by same symlink gate",
+        "retry current official DuckDB ref: rejected by same symlink gate",
+        "alternate GitHub amalgamation search: no official DuckDB-owned equivalent located",
+        "source filtering/sanitization: not authorized and would violate fail-closed source-integrity rule",
+        "motor patch to permit symlinks: prohibited by immutable motor policy"
       ],
-      "canonical_engine_blob_sha": "91e6e4486692eab314be5c7130d8310d3c855397",
       "motor_modified": false,
-      "publication_attempted_by_s2_diagnostic": false,
-      "move_attempted_by_s2_diagnostic": false,
-      "last_verified_at": "2026-09-11T04:41:43Z",
-      "verdict": "FAIL_CLOSED; canonical engine rejects source symlinks; no PASS and no source sanitization/motor patch authorized"
+      "source_sanitized": false,
+      "publication_attempted": false,
+      "move_attempted": false,
+      "verdict": "FAIL_CLOSED; no safe S2 mutation remains without explicit coordinator/user authorization for a symlink-aware canonical strategy or an authorized equivalent source"
     },
     "S2-02": {
       "component": "AVF",
-      "status": "MOTOR_PROVIDER_GAP_CONFIRMED",
-      "source": "https://android.googlesource.com/platform/packages/modules/Virtualization/",
-      "evidence": {
-        "canonical_engine_blob_sha": "91e6e4486692eab314be5c7130d8310d3c855397",
-        "canonical_engine_ref": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
-        "canonical_engine_behavior": "repo_url only accepts https://github.com/ directly; every other SOURCE_REPO is prefixed with https://github.com/, therefore android.googlesource.com is unsupported by the immutable engine"
+      "status": "MOTOR_PROVIDER_GAP_AND_RUNTIME_CAPABILITY_GAP",
+      "canonical_source": "https://android.googlesource.com/platform/packages/modules/Virtualization/",
+      "evidence_file": "UI YAIWES/automation/S2-avf-capabilities-20260911/AVF-CAPABILITIES.json",
+      "evidence_commit": "4dbade9a16f09670daaf928eda82281d15a0ebd4",
+      "transport": {
+        "canonical_motor_compatible": false,
+        "reason": "immutable engine normalizes non-GitHub SOURCE_REPO by prefixing https://github.com/",
+        "motor_modified": false,
+        "alternate_provider_used": false
       },
-      "motor_modified": false,
-      "alternate_provider_used": false,
-      "last_verified_at": "2026-09-11T04:41:43Z",
-      "verdict": "FAIL_CLOSED_PROVIDER_GAP"
+      "runtime_capability_summary": {
+        "Android_ARM64_physical": "CONDITIONAL_SUPPORTED; requires device AVF capability plus restricted VM permission; guest boot not tested",
+        "Android_x86_64_Cuttlefish": "TEST_ONLY_NON_PROTECTED_DOCUMENTED; not tested in S2",
+        "Linux_desktop": "NOT_NATIVE_AVF_HOST",
+        "Windows_desktop": "NOT_NATIVE_AVF_HOST",
+        "iOS_iPadOS": "NOT_NATIVE_AVF_HOST",
+        "Web_browser_PWA": "NOT_NATIVE_AVF_HOST"
+      },
+      "permissions": {
+        "MANAGE_VIRTUAL_MACHINE": "restricted platform/preinstalled/development SystemApi permission",
+        "USE_CUSTOM_VIRTUAL_MACHINE": "signature/development; not ordinary third-party app permission"
+      },
+      "guest_constraints": "Microdroid/pVM is reference model; protected/non-protected support is device capability dependent; source availability alone does not demonstrate pVM/guest boot",
+      "github_mirror_search": {
+        "status": "CANDIDATES_REJECTED_WITHOUT_AUTHORIZATION",
+        "examples": [
+          "msft-mirror-aosp/platform.packages.modules.Virtualization",
+          "GrapheneOS/platform_packages_modules_Virtualization",
+          "aosp-mirror-neo/platform_packages_modules_Virtualization"
+        ],
+        "reason": "alternate provider/provenance is not the canonical android.googlesource source and no handoff authorizes substitution"
+      },
+      "verdict": "FAIL_CLOSED_PROVIDER_AND_HARDWARE_CAPABILITY_GAP"
     },
     "S2-03": {
-      "status": "READBACK_COMPLETED_CURRENT_MAIN",
-      "readback_main_sha": "a1e278b7439ee24cf20633752dc63e4042d419e0",
+      "status": "READBACK_COMPLETED_FRESH_MAIN",
+      "readback_main_sha": "4dbade9a16f09670daaf928eda82281d15a0ebd4",
       "final_root": "UI YAIWES/componentes open soure UI YAIWES",
       "readback": {
         "Vite": "404_ABSENT",
@@ -84,19 +105,18 @@
         "DuckDB": "404_ABSENT",
         "AVF": "404_ABSENT"
       },
-      "last_verified_at": "2026-09-11T04:41:43Z",
       "verdict": "0/4 residuals present at canonical final root at this observation"
     },
     "S2-04": {
       "status": "FAIL_CLOSED_NOT_VERIFIED",
       "failed_zero": false,
       "pending_zero": false,
-      "duckdb_diagnostic_failed": 1,
-      "duckdb_diagnostic_pending": 0,
+      "duckdb_latest_failed": 1,
+      "duckdb_latest_pending": 0,
       "avf_provider_gap": true,
+      "avf_physical_android_guest_boot_verified": false,
       "four_residual_readback_present": 0,
       "four_residual_readback_expected": 4,
-      "last_verified_at": "2026-09-11T04:41:43Z",
       "verdict": "VERIFIED_CLOSED prohibited"
     }
   },
@@ -108,5 +128,5 @@
     "title": "SOL2 Backend YAIWES",
     "scope_aligned_to_s2_queue": true
   },
-  "next_action": "Keep S2 fail-closed. Re-read Crazy Wall + STATE on next cycle. DuckDB may retry only after an authorized canonical strategy resolves SOURCE_SPECIAL_FILE_GAP without motor modification/source sanitization; AVF remains provider GAP until an authorized provider-compatible canonical path exists. Continue independent S2 read-back/balance verification only."
+  "next_action": "Continue S2 loop by rereading Crazy Wall+STATE. Recheck final-root readback and any new coordinator handoff. DuckDB requires an explicitly authorized symlink-aware canonical acquisition strategy or authorized equivalent source; do not patch motor or sanitize source. AVF requires an explicitly authorized provider-compatible canonical path plus actual supported Android ARM64 device/Cuttlefish capability tests before any guest-boot claim."
 }
