@@ -1,0 +1,56 @@
+{
+  "schema": "yaiwes.role-state.v1",
+  "contract": "tel.workflow/v3",
+  "role": "SOL_GPT1_BACKEND",
+  "name": "Sol ☀️ 🏈gpt 1 backend",
+  "node_prefix": "S1",
+  "status": "ACTIVE_LOOP_BLOCKED_FAIL_CLOSED",
+  "observed_at": "2026-09-10T23:32:00-05:00",
+  "base_main_sha": "32ba1c947511f76b36b981d13914b73960fa0ed3",
+  "crazy_wall": {
+    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json",
+    "blob_sha": "66896f497e61626c851506046109005f28e18ee8"
+  },
+  "canonical_motor": {
+    "commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
+    "policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
+    "skill_blob_sha": "b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54"
+  },
+  "fresh_queue_evidence": {
+    "path": "UI YAIWES/automation/residual-03-motores-canonicos-20260910/QUEUE.json",
+    "blob_sha": "ea92b3004175fe7f9f6adcce8a49d0a843060879",
+    "note": "La cola fresca fija source_repo/source_ref para Vite, Supabase y DuckDB, pero no entrega DEST_ROOT/destino explícito."
+  },
+  "nodes": {
+    "S1-01": {
+      "component": "Vite",
+      "source": "https://github.com/vitejs/vite",
+      "source_ref": "134ce6817984bad0f5fb043481502531fee9b1db",
+      "status": "BLOCKED",
+      "gap": "DESTINATION_INPUT_GAP",
+      "reason": "El skill canónico exige destino explícito entregado por el usuario para la operación y prohíbe inferir, recordar o reutilizar destinos. El Crazy Wall y la cola fresca no entregan DEST_ROOT. No se ejecutó descarga, extracción, copia ni movimiento."
+    },
+    "S1-02": {
+      "component": "Supabase",
+      "source": "https://github.com/supabase/supabase",
+      "source_ref": "0500c21b37cc11b6b6140dde9827f89fb7d3097d",
+      "status": "BLOCKED",
+      "gap": "DESTINATION_INPUT_GAP",
+      "reason": "Mismo bloqueo determinista: no existe destino explícito autorizado para esta operación. No se ejecutó descarga, extracción, copia ni movimiento."
+    },
+    "S1-03": {
+      "task": "read-back destino",
+      "status": "BLOCKED",
+      "gap": "DESTINATION_INPUT_GAP",
+      "reason": "No existe destino autorizado que pueda releerse sin inferirlo."
+    },
+    "S1-04": {
+      "task": "preparar siguiente componente WIRED cuando Fables esté verificado",
+      "status": "BLOCKED_DEPENDENCY",
+      "gap": "FABLES_NOT_VERIFIED",
+      "reason": "Crazy Wall vigente declara Fables GAP_NOT_LOCATED_IN_MAIN_CODE_SEARCH_2026-09-10. Este rol no invade la cola A2 asignada a localizar/validar Fables."
+    }
+  },
+  "next_allowed_delta": "Recibir handoff/entrada explícita con destino de Vite y Supabase; antes de cualquier write releer Crazy Wall y main. No modificar motores. No apropiarse de nodos A2/S2/S3.",
+  "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+}
