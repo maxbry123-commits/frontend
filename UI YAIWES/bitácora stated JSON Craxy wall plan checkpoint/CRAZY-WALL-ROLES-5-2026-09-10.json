@@ -1,0 +1,91 @@
+{
+  "schema": "yaiwes.crazy-wall.roles5.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "project": "UI YAIWES",
+  "status": "ACTIVE_LOOP",
+  "coordinator": "🌞👷 sol osquestador plan 🎯",
+  "canonical_parent": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-MULTIAI-CABLEADO-2026-09-10.json",
+  "state_source": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
+  "handoff_source": "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-WATCHDOG-MOTORES-CANONICOS-2026-09-10.md",
+  "project_progress": {
+    "physical_components": "120/124",
+    "physical_percent": 96.8,
+    "residual_physical_gaps": ["Vite", "Supabase", "DuckDB", "AVF"],
+    "integration_batch_01_20": "17/20 PASS",
+    "integration_batch_01_20_percent": 85.0,
+    "global_verified_percent": null,
+    "global_reason": "No existe todavía un denominador verificado de WIRED para 124/124; presencia física no equivale a integración."
+  },
+  "fables_plugin": {
+    "required": true,
+    "status": "GAP_NOT_LOCATED_IN_MAIN_CODE_SEARCH_2026-09-10",
+    "rule": "Antes de STEP_2 cableado debe existir ruta y evidencia real de Fables. Si no aparece, el rol asignado investiga ese GAP y los demás continúan nodos independientes."
+  },
+  "task_method_only": {
+    "STEP_1": "📌 mover con el motor canónico el code fuente del componente o escribir el code necesario si no existe componente",
+    "STEP_2": "📌 cablear usando el enchufe universal Fables; podar sólo si es necesario por GAP bloqueante o test fallido",
+    "STEP_3": "📌 test ✅ + evidencia + pasar al siguiente nodo; LOOP hasta terminar"
+  },
+  "canonical_motors": {
+    "commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
+    "policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
+    "root": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/"
+  },
+  "anti_collision": {
+    "central_wall_writer": "🌞👷 sol osquestador plan 🎯",
+    "all_roles_read_central_wall_before_each_node": true,
+    "one_node_one_owner": true,
+    "one_writer_per_role_state_path": true,
+    "read_main_before_write": true,
+    "base_sha_required": true,
+    "force_push": false,
+    "shared_path_rule": "Ningún rol edita la ruta de otro rol. El coordinador consolida el resumen central.",
+    "blocked_node_rule": "Si un nodo queda bloqueado, registrar GAP y continuar con el siguiente nodo independiente de la cola propia; no apropiarse de la cola de otro rol.",
+    "github_actions_concurrency": "usar grupo único por rol/ruta y queue:max cuando se cree o edite un workflow de ese rol; no compartir grupos entre roles"
+  },
+  "roles": {
+    "ASTRA_GPT1_BACKEND": {
+      "name": "🧑‍💻Astra gpt 1 backend UI YAIWES 🌀🌀🌀 👷👷🕵️‍♀️",
+      "node_prefix": "A1",
+      "role_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-GPT1-BACKEND-STATE.json",
+      "mission": "Watchdog horario; detectar GAPs grandes; revisar evidencia y trabajo realizado; cruzar contra documentos de verdad; refutar; dejar instrucciones concretas para los equipos Sol; completar code faltante sólo dentro de un nodo asignado.",
+      "queue": ["A1-01 cross-check STATE/CHECKPOINT/HANDOFF", "A1-02 auditar evidencia de 4 residuales", "A1-03 revisar integración 01-20 y próximos gaps", "A1-04 publicar refutación/instrucción siguiente"],
+      "do_not_write": ["rutas de estado de Astra2", "rutas de estado de Sol1", "rutas de estado de Sol2", "rutas de estado de Sol3"]
+    },
+    "ASTRA2_GPT_BACKEND": {
+      "name": "🤯 Astra 2 gpt backend UI YAIWES 🕹️🛂🏗️👷",
+      "node_prefix": "A2",
+      "role_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA2-GPT-BACKEND-STATE.json",
+      "mission": "Resolver GAPs independientes, refutar propuestas y buscar mejoras simples; prioridad actual: localizar con evidencia el enchufe universal Fables/plugins y validar que sea utilizable antes del cableado.",
+      "queue": ["A2-01 localizar Fables/plugins con ruta+SHA", "A2-02 validar contrato de conexión Fables", "A2-03 investigar GAP AVF sin modificar motores", "A2-04 refutar y proponer delta simple"],
+      "do_not_write": ["rutas productivas ya asignadas a Sol1/Sol2/Sol3 salvo handoff explícito"]
+    },
+    "SOL_GPT1_BACKEND": {
+      "name": "Sol ☀️ 🏈gpt 1 backend",
+      "node_prefix": "S1",
+      "role_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT1-BACKEND-STATE.json",
+      "mission": "Ejecutar tareas pendientes sin detenerse; prioridad: cerrar Vite y Supabase con motores canónicos, hash/read-back y luego continuar su siguiente nodo independiente.",
+      "queue": ["S1-01 Vite", "S1-02 Supabase", "S1-03 read-back destino", "S1-04 preparar siguiente componente WIRED cuando Fables esté verificado"],
+      "write_scope": ["nodos S1", "artefactos/evidencia creados por S1"]
+    },
+    "SOL_GPT3_BACKEND": {
+      "name": "Sol gpt 3 🕵️‍♀️ backend",
+      "node_prefix": "S3",
+      "role_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT3-BACKEND-STATE.json",
+      "mission": "Continuar integración/test sin colisionar; prioridad: cerrar los 3 pendientes del lote 01-20, preparar el lote siguiente y ejecutar STEP_1 mientras Fables se resuelve si STEP_2 está bloqueado.",
+      "queue": ["S3-01 identificar 3 pending_source del lote 01-20", "S3-02 STEP_1 de esos nodos", "S3-03 cablear con Fables cuando exista evidencia", "S3-04 tests y siguiente lote"],
+      "write_scope": ["nodos S3", "artefactos/evidencia creados por S3"]
+    },
+    "SOL_GPT2_BACKEND": {
+      "name": "Sol gpt 2 🤯👷backend",
+      "node_prefix": "S2",
+      "role_state_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT2-BACKEND-STATE.json",
+      "mission": "Ejecutar tareas pendientes sin detenerse; prioridad: cerrar DuckDB y tratar AVF bajo fail-closed sin modificar motores; si AVF sigue provider GAP, registrar evidencia y avanzar a verificación independiente de los otros residuales.",
+      "queue": ["S2-01 DuckDB", "S2-02 AVF provider check", "S2-03 read-back 4 residuales", "S2-04 verificar failed=0/pending=0 cuando corresponda"],
+      "write_scope": ["nodos S2", "artefactos/evidencia creados por S2"]
+    }
+  },
+  "handoff_rule": "Cada rol lee este Crazy Wall antes de cada nodo, trabaja sólo su prefijo/ruta, deja evidencia en su role_state_path y continúa su propia cola. El coordinador consolida cambios y reasigna sólo mediante handoff explícito.",
+  "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+}
