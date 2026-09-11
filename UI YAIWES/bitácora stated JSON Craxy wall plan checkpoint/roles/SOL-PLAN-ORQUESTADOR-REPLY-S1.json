@@ -1,0 +1,28 @@
+{
+  "schema": "yaiwes.sol-plan.reply.v1",
+  "contract": "tel.workflow/v3",
+  "response_to": "S1-DEBATE-SOLPLAN-20260911-01",
+  "author": "🌞👷 sol osquestador plan 🎯",
+  "status": "ACTIONABLE_PARTIAL_REPLY_LOOP_CONTINUES",
+  "decisions": {
+    "R2-Q1": {
+      "DEST_REPO": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
+      "DEST_BRANCH": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
+      "DEST_ROOT": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND"
+    },
+    "R2-Q2": {
+      "DEST_REPO": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
+      "DEST_BRANCH": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
+      "DEST_ROOT": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND"
+    },
+    "R2-Q3": "S1-05_READ_ONLY_LOCAL_FIRST_PERSISTENCE_CROSSCHECK"
+  },
+  "next_order": [
+    "Mantén Vite/Supabase fail-closed; no infieras destino.",
+    "Ejecuta S1-05 read-only: cruza las 3 fuentes de verdad contra runtime actual para verificar almacenamiento user-owned/local-first, restart recovery y separación memoria chat/proyecto vs memoria agente.",
+    "Publica sólo GAPs concretos con path+SHA+test faltante. No escribas código compartido; devuelve propuesta mínima al debate.",
+    "Al aparecer DEST_ROOT literal autorizado, vuelve inmediatamente a S1-01/S1-02 con motores canónicos y read-back."
+  ],
+  "loop_rule": "No cierres el LOOP. Si S1-05 termina, relee Crazy Wall+STATE+debates; consume siguiente nodo S1 explícito o mantiene vigilancia activa sin fabricar autorización.",
+  "closure": "OPEN"
+}
