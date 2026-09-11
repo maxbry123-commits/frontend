@@ -6,16 +6,20 @@ SRC = Path(__file__).resolve().parents[1] / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
+from plugins.activation import build_runtime_registry
+from plugins.loader import PluginLoader
 from plugins.httpx_adapter import (
     EXPECTED_HTTPX_VERSION,
     HttpxDependencies,
     HttpxVersionError,
+    build_httpx_factories,
     create_httpx_runtime,
 )
 from plugins.starlette_adapter import (
     EXPECTED_STARLETTE_VERSION,
     StarletteDependencies,
     StarletteVersionError,
+    build_starlette_factories,
     create_starlette_runtime,
 )
 
@@ -56,6 +60,22 @@ class TransportAdapterTests(unittest.TestCase):
     def test_starlette_wrong_version_fails_closed(self):
         with self.assertRaises(StarletteVersionError):
             create_starlette_runtime(StarletteDependencies(FakeApp, "0.50.0"))
+
+    def test_httpx_catalog_factory_key_mounts(self):
+        dependencies = HttpxDependencies(FakeClient, FakeAsyncClient, EXPECTED_HTTPX_VERSION)
+        runtime = PluginLoader(
+            build_runtime_registry(["httpx"]),
+            build_httpx_factories(dependencies),
+        ).mount("httpx")
+        self.assertTrue(runtime.healthy)
+
+    def test_starlette_catalog_factory_key_mounts(self):
+        dependencies = StarletteDependencies(FakeApp, EXPECTED_STARLETTE_VERSION)
+        runtime = PluginLoader(
+            build_runtime_registry(["starlette"]),
+            build_starlette_factories(dependencies),
+        ).mount("starlette")
+        self.assertTrue(runtime.healthy)
 
 
 if __name__ == "__main__":
