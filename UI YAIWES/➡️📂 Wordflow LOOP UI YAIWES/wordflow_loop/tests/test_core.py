@@ -26,6 +26,15 @@ def test_runner_persists_and_recovers_completed_node(tmp_path: Path):
 
     recovered = LayerRunner({"L01_RESEARCH": layer_01_research.run}, ledger_path=ledger_path)
     assert "N1" in recovered.completed_nodes
+    recovered_event = recovered.recover_event("N1")
+    assert recovered_event is not None
+    assert recovered_event["literal"] == node.literal
+    assert recovered_event["literal_sha256"] == node.literal_sha256
+    assert recovered_event["output"] == result.output
+
+    # Recovery read-back is defensive: callers cannot mutate the runner's replay state.
+    recovered_event["output"]["results"].clear()
+    assert recovered.recover_event("N1")["output"] == result.output
 
 
 def test_pass_with_unhashed_evidence_fails_closed():
