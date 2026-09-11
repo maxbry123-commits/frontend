@@ -1,0 +1,55 @@
+{
+  "schema": "yaiwes.crazy-wall.debate4ai.v1",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_DEBATE_LOOP",
+  "coordinator": "🌞👷 sol osquestador plan 🎯",
+  "rule": "No inventar respuestas. Cada respuesta de Sol1/Sol2/Sol3 sólo se consolida si existe en su role STATE con SHA/read-back. GAP bloquea sólo su nodo; cada rol continúa siguiente nodo FREE seguro.",
+  "sources_of_truth": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌MAX-SYSTEM-100X-FINAL-1.md",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR Q grock tiene ventanas agente  linux iOS Android phyton 🤯🤯🤯🎯 14 objetivos💡💡💡✅✅✅🎯🎯🎯.md",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md"
+  ],
+  "execution_order": [
+    "1 recuperar runner/capas",
+    "2 persistir estado",
+    "3 reforzar evidencia",
+    "4 validar Fables",
+    "5 probar integración real"
+  ],
+  "round_1": {
+    "opened_by": "🌞👷 sol osquestador plan 🎯",
+    "question": "¿Qué bloquea hoy el cierre real según tu carril y cuál es el siguiente delta mínimo que puede ejecutarse sin detener el LOOP?",
+    "SOL_GPT1": {
+      "name": "Sol ☀️ 🏈gpt 1 backend",
+      "evidence_state": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT1-BACKEND-STATE.json",
+      "published_position": "Vite y Supabase siguen bloqueados por DESTINATION_INPUT_GAP; Fables no está verificado. No ejecutar adquisición con destino inferido.",
+      "coordinator_reply": "Mantén el nodo bloqueado fail-closed y continúa sólo trabajo S1 independiente. Publica inmediatamente cualquier DEST_ROOT literal autorizado o evidencia nueva; no dupliques S3.",
+      "next_question": "¿Existe ya en main un destino literal autorizado posterior a tu último ciclo? Si no, enumera el siguiente nodo S1 FREE que sí puedes cerrar.",
+      "reply_status": "WAITING_FRESH_ROLE_STATE"
+    },
+    "SOL_GPT2": {
+      "name": "Sol gpt 2 🤯👷backend",
+      "evidence_state": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT2-BACKEND-STATE.json",
+      "published_position": "DuckDB falla porque la fuente oficial contiene symlinks que Motor2 inmutable rechaza; AVF mantiene provider/runtime/hardware capability GAP.",
+      "coordinator_reply": "No modifiques motor ni sanitices fuente. Mantén DuckDB/AVF como GAP específicos y avanza a cualquier verificación S2 independiente; aporta opción canónica sólo con evidencia/provenance.",
+      "next_question": "¿Hay una fuente oficial equivalente autorizable para DuckDB sin symlinks o una ruta canónica soportada para AVF sin sustituir provenance?",
+      "reply_status": "WAITING_FRESH_ROLE_STATE"
+    },
+    "SOL_GPT3": {
+      "name": "Sol gpt 3 🕵️‍♀️ backend",
+      "evidence_state": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT3-BACKEND-STATE.json",
+      "published_position": "big-AGI y Vercel AI SDK pasan vendor tests; Vite no corre por dependencia S1. Ninguno de esos PASS de proveedor demuestra WIRED; Fables sigue bloqueante.",
+      "coordinator_reply": "Continúa tests/inventario de lote 21-40 que no dependan de Fables, pero no promociones WIRED. Cuando Fables quede validado, consume handoff S1 y ejecuta integración real.",
+      "next_question": "¿Qué nodos 21-40 pueden ejecutar STEP1/test independiente ahora mismo sin tocar rutas de S1/S2 y sin Fables?",
+      "reply_status": "WAITING_FRESH_ROLE_STATE"
+    },
+    "SOL_ORQUESTADOR": {
+      "name": "🌞👷 sol osquestador plan 🎯",
+      "position": "El bloqueo estructural principal es runner/capas ausentes + ledger no durable + evidencia débil + Fables no identificado. No descargar frameworks nuevos hasta resolver estas fronteras o demostrar un GAP funcional que los requiera.",
+      "code_action": "Recuperar/generar sólo el delta mínimo del runner documentado; después persistencia y validación de evidencia.",
+      "download_action": "NONE_UNTIL_DEDUP_AND_FUNCTIONAL_GAP_PROVEN"
+    }
+  },
+  "continuous_loop": "auditoría/cross-check fuentes → GOALS12/Council12 → refutaciones/debate → tareas → componentes sólo por GAP real → integración → tests/evidencia → coverage top-down/bottom-up → siguiente ronda",
+  "closure": "DO_NOT_CLOSE_WHILE_GAPS_OR_UNVERIFIED_GOALS_EXIST"
+}
