@@ -6,10 +6,10 @@ from .registry import PluginRegistry
 
 COMPONENTS = (
     PluginSpec("stabilize_core", PluginKind.CORE, ("workflow.owner", "workflow.durable", "workflow.recovery"), "runtime/vendor/stabilize", "35c7f5b60ee6cf8fd5ae3187d6e92fe15012499b", "runtime/vendor/stabilize", workflow_owner=True, factory_key="stabilize.orchestrator"),
-    PluginSpec("pydantic", PluginKind.ADAPTER, ("contracts.typed",), "runtime/vendor/pydantic", "c04b6070f1a19b5c7dfdecc10ce28ba1a4afee9b", "runtime/vendor/pydantic", factory_key="pydantic"),
-    PluginSpec("starlette", PluginKind.ADAPTER, ("transport.asgi",), "runtime/vendor/starlette", "820b2cdde800811062b2be43abd909e27b38854f", "runtime/vendor/starlette", factory_key="starlette"),
-    PluginSpec("httpx", PluginKind.ADAPTER, ("transport.http",), "runtime/vendor/httpx", "21eaf49210613909be2f7a864389a312a484d0eb", "runtime/vendor/httpx", factory_key="httpx"),
-    PluginSpec("rule_engine", PluginKind.ADAPTER, ("rules.deterministic",), "runtime/vendor/rule_engine", "3ca8717fb4ce3561b1e76053afc487061c76cfe3", "runtime/vendor/rule_engine", factory_key="rule_engine"),
+    PluginSpec("pydantic", PluginKind.ADAPTER, ("contracts.typed",), "runtime/vendor/pydantic", "c04b6070f1a19b5c7dfdecc10ce28ba1a4afee9b", "runtime/vendor/pydantic", factory_key="pydantic.contracts"),
+    PluginSpec("starlette", PluginKind.ADAPTER, ("transport.asgi",), "runtime/vendor/starlette", "820b2cdde800811062b2be43abd909e27b38854f", "runtime/vendor/starlette", factory_key="starlette.asgi"),
+    PluginSpec("httpx", PluginKind.ADAPTER, ("transport.http",), "runtime/vendor/httpx", "21eaf49210613909be2f7a864389a312a484d0eb", "runtime/vendor/httpx", factory_key="httpx.transport"),
+    PluginSpec("rule_engine", PluginKind.ADAPTER, ("rules.deterministic",), "runtime/vendor/rule_engine", "3ca8717fb4ce3561b1e76053afc487061c76cfe3", "runtime/vendor/rule_engine", factory_key="rule_engine.policy"),
     PluginSpec("pycasbin", PluginKind.ADAPTER, ("policy.authz",), "runtime/vendor/pycasbin", "0c9f126dd92deaa7bacc75db4da46ba4a49ce1a7", "runtime/vendor/pycasbin", factory_key="pycasbin"),
     PluginSpec("opentelemetry_python", PluginKind.ADAPTER, ("observability.telemetry",), "runtime/vendor/opentelemetry_python", "39196d42f612ff214bd2bf987e167028b5a0bb25", "runtime/vendor/opentelemetry_python", factory_key="opentelemetry_python"),
     PluginSpec("pytest", PluginKind.TOOL, ("test.runner",), "runtime/vendor/pytest", "ff7a4ded2d8fd81e70d8a567babd84e73e5084c9", "runtime/vendor/pytest", factory_key="pytest"),
