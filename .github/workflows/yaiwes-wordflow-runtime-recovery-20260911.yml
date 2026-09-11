@@ -27,8 +27,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install test dependency
-        run: python -m pip install pytest
+      - name: Install runtime and test dependency
+        working-directory: UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop
+        run: python -m pip install -e . pytest
       - name: Run Wordflow recovery tests
         working-directory: UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop
         run: pytest -q
