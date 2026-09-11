@@ -1,14 +1,78 @@
-schema: riu.connectivity.bridge/v1
+schema: riu.connectivity.bridge/v2
 project: frontend
 repo: maxbry123-commits/frontend
 branch: main
 role: frontend_ui
+owner: maxbry123-commits
+
 router:
   repo: maxbry123-commits/router-universal-router-inteligente-
+  branch: main
+  root: conectividad con Router inteligente universal
   registry: conectividad con Router inteligente universal/REGISTRY-CONECTIVIDAD-RIU.json
-transport: [api]
-capabilities: [frontend, ui, github_operations]
-auth: external_runtime_secret_store
-raw_credentials_in_git: false
-status: BRIDGE_DECLARED
-verification: PENDING_E2E_ROUTER
+  map: conectividad con Router inteligente universal/MAPA-MENTAL-CONECTIVIDAD-RIU.md
+  handoff: Handoff router inteligente universal.md
+  mode: FAIL_CLOSED_LOOP
+
+secret_store:
+  provider: github_codespaces_user_secrets
+  settings_url: https://github.com/settings/codespaces
+  repo_access_required: maxbry123-commits/frontend
+  raw_credentials_in_git: false
+  resolution:
+    huggingface:
+      accepted_env_refs: [HF_TOKEN, HUGGINGFACE_TOKEN, RIU_HF_TOKEN]
+    github:
+      accepted_env_refs: [RIU_GITHUB_PAT, GITHUB_TOKEN, GH_TOKEN]
+    claude_github_mcp:
+      accepted_env_refs: [RIU_GITHUB_PAT, GITHUB_TOKEN, GH_TOKEN]
+  rule: resolve_at_runtime_only
+
+connections:
+  github:
+    provider: github
+    scope: repo_runtime_operations
+    route_via: router_inteligente_universal
+    auth: runtime_env_ref
+    verification: [identity, repository_access, permission, write_or_read_probe, readback]
+
+  huggingface:
+    provider: huggingface
+    account: COMAND-CENTER-1
+    route_via: router_inteligente_universal
+    auth: runtime_env_ref
+    compute: [hf_jobs_cpu, hf_jobs_gpu]
+    capabilities: [models, datasets, spaces, jobs]
+    verification: [whoami, scope_check, api_probe, job_probe]
+
+  claude_github_mcp:
+    provider: anthropic_managed_agents
+    resource_type: github_repository
+    mcp_url: https://api.githubcopilot.com/mcp/
+    auth_boundary: vault_or_runtime
+    route_via: router_inteligente_universal
+    source_pattern: maxbry123-commits/TAREA-1/skills/claude-api/
+    verification: [repository_mount, mcp_connect, tool_list_or_repo_probe]
+
+  memory:
+    route_via: router_inteligente_universal
+    targets: [maxbry123-commits/MEMORIA, maxbry123-commits/BIBLIOTECA, maxbry123-commits/BITACORA-MAXBRY, maxbry123-commits/Cerebro]
+    mode: references_only_until_runtime_verified
+
+transport: [api, mcp]
+capabilities: [frontend, ui, github_operations, huggingface_compute, claude_github_mcp, memory_bridge]
+
+health_gates:
+  github: PENDING_RUNTIME_CREDENTIAL_TEST
+  huggingface: PENDING_RUNTIME_CREDENTIAL_TEST
+  claude_github_mcp: PENDING_RUNTIME_CREDENTIAL_TEST
+  router_bridge: DECLARED
+
+security:
+  fail_closed: true
+  evidence_required: true
+  raw_credentials_in_git: false
+  never_log_secret_values: true
+
+status: FRONTEND_BRIDGE_V2_DECLARED
+verification: PENDING_E2E_ROUTER_CREDENTIALS
