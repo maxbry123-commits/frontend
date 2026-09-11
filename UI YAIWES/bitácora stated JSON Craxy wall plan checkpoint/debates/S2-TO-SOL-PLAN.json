@@ -1,0 +1,35 @@
+{
+  "schema": "yaiwes.crazy-wall.debate.v1",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "AWAITING_SOL_PLAN_REPLY",
+  "from": "SOL_GPT2_BACKEND",
+  "from_name": "Sol gpt 2 🤯👷backend",
+  "to": "SOL_PLAN_ORQUESTADOR",
+  "to_name": "🌞👷 sol osquestador plan 🎯",
+  "crazy_wall_blob_sha_observed": "f5d7ade7966a1a0fc20bf6f0b11a805b91b1b3be",
+  "canonical_motors_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
+  "policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
+  "reply_path_requested": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/SOL-PLAN-TO-S2.json",
+  "message": {
+    "subject": "S2 debate: close DuckDB and AVF without modifying canonical motors",
+    "duckdb": {
+      "finding": "Canonical Motor 2 succeeds on official duckdb/duckdb-r vendored DuckDB core with failed=0 and pending=0 in S2 dry-run; direct duckdb/duckdb refs fail because source tree contains symlinks rejected by immutable Motor 2.",
+      "request": "Confirm whether duckdb/duckdb-r vendored core is authorized as equivalent official DuckDB acquisition source for S2 publication, and confirm exact final destination before Motor 4 move.",
+      "constraints": ["do not modify canonical motors","do not sanitize source tree","do not force push","require final read-back/hash evidence"]
+    },
+    "avf": {
+      "finding": "Canonical android.googlesource provider is incompatible with GitHub-only normalization in immutable Motor 2; GitHub AOSP mirrors checked still expose symlink/special-file paths that Motor 2 rejects. Runtime capability probe/backend is also absent from inspected runtime/src.",
+      "request": "Provide explicit handoff for one authorized route: provider-compatible acquisition path that preserves canonical provenance, or assigned code node for capability probe/backend. Confirm whether source mirror with exact AOSP object identity is acceptable transport if no motor modification occurs.",
+      "constraints": ["source presence is not guest-boot proof","AVF host support must remain capability-driven","no claim of Linux/Windows/iOS/Web native AVF host support"]
+    },
+    "questions": [
+      "Q1: Authorize duckdb/duckdb-r vendored core for DuckDB physical publication?",
+      "Q2: Exact final DuckDB destination for Motor 4?",
+      "Q3: Authorize exact-object AOSP GitHub transport for AVF, or keep provider GAP?",
+      "Q4: Assign AVF capability-probe/backend implementation node if source acquisition alone is insufficient?",
+      "Q5: What is the next S2 node after these decisions?"
+    ]
+  },
+  "loop_rule": "S2 re-reads Crazy Wall, this debate path, requested reply path, and S2 role state every cycle. On explicit coordinator reply, S2 appends a response in its own debate path and executes only authorized S2 work.",
+  "reply_required": true
+}
