@@ -21,42 +21,59 @@
       "finding_before": "LayerRunner recovered only completion status; durable ledger omitted NodeContract literal/literal_sha256 and LayerResult.output.",
       "delta": {
         "runner_commit": "10259b83e0b7354a44f86566307cbd44fe5cf0b3",
-        "runner_blob": "c1467be7aa2e39ba336f07f9f38137dcfdf4f357",
         "test_commit": "d5d7c6c22386263122758ef06349ca121fc918a7",
-        "test_blob": "2a935e3671a62a96febb215487706b0fb80a1258",
         "features": [
-          "persist literal and literal_sha256 in hash-chained ledger event",
-          "persist LayerResult.output in hash-chained ledger event",
-          "rebuild latest_events from durable ledger at startup",
-          "recover_event(node_id) returns defensive deep copy",
-          "restart regression verifies literal/hash/output read-back and mutation isolation"
+          "persist literal/literal_sha256/output in hash-chained ledger",
+          "rebuild latest_events after restart",
+          "recover_event(node_id) with defensive deep copy"
         ]
       },
       "ci": {
-        "workflow": "YAIWES Wordflow LOOP Pytest",
         "run_id": 34640223144,
         "job_id": 103397859184,
-        "head_sha": "d5d7c6c22386263122758ef06349ca121fc918a7",
         "conclusion": "success",
-        "wordflow": "13 passed in 0.06s",
-        "plugins_fables_stabilize": "17 passed in 0.04s"
+        "wordflow": "13 passed",
+        "plugins_fables_stabilize": "17 passed"
       },
-      "scope_limit": "This proves durable latest node result/literal read-back on restart. It does NOT prove full workspace recovery, multi-host failover, payload persistence, or global VERIFIED_CLOSED."
+      "scope_limit": "Durable latest node result/literal read-back only; not global workspace/multi-host recovery."
     },
     {
       "id": "S56-G12-01",
       "gap": "Evidence ref/hash read-back semantics",
       "status": "AUDITED_GAP_CONFIRMED_NO_UNSAFE_GENERIC_PATCH",
-      "finding": "Evidence.strong()/verifier currently validate presence/hash syntax but not arbitrary referenced bytes. However evidence refs are heterogeneous: L01/L06 logical snapshots, L02/L03 user-provided logical names, L04/L05 motor destinations. Treating every ref as a local path would break valid contracts and create false failures.",
-      "evidence": {
-        "verifier_blob": "0ceefd6c10459627c6410fdcfec9dcbe5f9194ce",
-        "layer_02_blob": "efd5c90b64ea6039ca33c3b3feb0367f3ab3aee6",
-        "layer_03_blob": "9ec2c98a70894e3a094bbafb97ddb02f12d8beee",
-        "layer_04_blob": "e6c2ca048a311b080823a95310d00ebbbbeb7167",
-        "layer_05_blob": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
-        "layer_06_blob": "411f30ed8db487b0ad5f22443bb1de26e0f2a006"
+      "finding": "Generic verifier checks hash syntax/presence, but evidence refs are heterogeneous logical names and motor destinations. A universal filesystem read-back would reinterpret contracts and cause false failures.",
+      "safe_next": "Typed evidence verifier adapters per evidence kind after explicit ref contract."
+    },
+    {
+      "id": "S56-G11-02",
+      "gap": "G11 high-parallel shared ledger lost-update race",
+      "status": "TESTED_SUBGATE_PASS",
+      "finding_before": "Two LayerRunner instances could load the same ledger snapshot, append independently, and the later atomic replace silently erase the earlier event.",
+      "delta": {
+        "ledger_commit": "194f54d5d175dd7078943994d14bc0e3fccaf466",
+        "ledger_blob": "9978435179a2b3efddfbf213a57490b84def36fc",
+        "runner_commit": "52e18f9420268c4b899e51bd663fe46a2a3725da",
+        "runner_blob": "4fd01eb441cf3c10638d1a6f80924fc3fc8533a5",
+        "test_commit": "89bdb34f8d87273ea79ab203f99cedb374e6db21",
+        "test_blob": "56abd2d8f2aac72b72935097a9e53bf24e938699",
+        "features": [
+          "short stdlib cross-process ledger lock",
+          "locked reload+verify+append+replace",
+          "stale lock recovery threshold",
+          "runner refreshes durable state before dependency validation",
+          "stale-runner regression preserves parent+child events"
+        ]
       },
-      "safe_next": "Introduce typed evidence verifiers/read-back adapters per evidence kind only after defining the reference contract. Do not reinterpret logical refs as filesystem paths."
+      "ci": {
+        "workflow": "YAIWES Wordflow LOOP Pytest",
+        "run_id": 34640598781,
+        "job_id": 103399057173,
+        "head_sha": "89bdb34f8d87273ea79ab203f99cedb374e6db21",
+        "conclusion": "success",
+        "wordflow": "14 passed in 0.07s",
+        "plugins_fables_stabilize": "17 passed in 0.03s"
+      },
+      "scope_limit": "Prevents shared-filesystem lost updates and stale dependency reads. It does not create distributed multi-host consensus/storage."
     }
   ],
   "external_blockers": {
@@ -64,27 +81,19 @@
       "status": "BLOCKED_REPO_SETTING_OR_ADMIN_CREDENTIAL",
       "run_id": 34579642079,
       "job_id": 103199980538,
-      "evidence": "Payload verification passes. actions/configure-pages@v5 receives enablement=false and GET Pages site returns Not Found because Pages is not enabled/configured. Existing workflow already grants pages:write and id-token:write.",
-      "safe_next": "Enable/configure Pages for GitHub Actions or provide an authorized non-GITHUB_TOKEN credential for configure-pages enablement. Do not mark publish PASS before a fresh deployment run."
+      "evidence": "Payload verification passes; configure-pages fails Get Pages site Not Found with enablement=false.",
+      "safe_next": "Enable/configure Pages for GitHub Actions or use an authorized non-GITHUB_TOKEN enablement credential, then rerun."
     },
     "G19_HF_STATIC_SPACE_CREDENTIAL": {
       "status": "BLOCKED_MISSING_SECRET",
       "run_id": 34591171118,
       "job_id": 103236571091,
-      "evidence": "HF_TOKEN, HUGGINGFACE_TOKEN, HUGGING_FACE_TOKEN, HUGGINGFACEHUB_API_TOKEN and HUGGING_FACE_HUB_TOKEN all resolve empty; job exits HF_SECRET_NOT_FOUND before package/upload/read-back.",
-      "safe_next": "Provide one authorized HF write token under an accepted secret name, then execute fresh publish/read-back."
+      "evidence": "All five accepted HF secret aliases are empty; workflow exits HF_SECRET_NOT_FOUND before package/upload/read-back.",
+      "safe_next": "Supply one authorized HF write token under an accepted secret name, then rerun."
     }
   },
-  "current_task": "G11 high-parallel durability: prevent stale LayerRunner instances from overwriting shared ledger events and refresh dependency state before execution.",
-  "current_node": "S56-G11-02",
-  "finding": "save_ledger atomically replaces the whole file, but each LayerRunner holds its own in-memory ledger snapshot. Two runners created from the same starting state can each append seq=1 and the later os.replace silently erases the first event. No inter-process lock or locked reload/merge exists.",
-  "planned_delta": [
-    "serialize persistent ledger update with a short cross-platform lock file",
-    "reload and verify current disk ledger inside the critical section before append",
-    "refresh replay state before node dependency validation",
-    "regression test two stale runner instances preserve both events and fresh dependency state",
-    "CI through existing wordflow workflow"
-  ],
-  "heartbeat_at": "2026-09-11T19:46:00Z",
-  "next_free_node": "Implement minimal stdlib-only lock/reload path; no new dependency/component."
+  "current_task": "Exhaust connector/action paths for G18/G19 and distinguish tool-access limitation from project configuration limitation.",
+  "current_node": "S56-G18-G19-01",
+  "heartbeat_at": "2026-09-11T19:48:00Z",
+  "next_free_node": "Discover GitHub Pages/admin and Hugging Face capabilities available through connected tools; execute only if permissions are explicit."
 }
