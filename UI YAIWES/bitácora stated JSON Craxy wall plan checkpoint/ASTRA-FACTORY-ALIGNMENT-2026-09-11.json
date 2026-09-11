@@ -1,0 +1,68 @@
+{
+  "schema": "yaiwes.crazy-wall.node-alignment.v1",
+  "contract": "tel.workflow/v3",
+  "timestamp_date": "2026-09-11",
+  "author": "➡️ Astra plan fábrica UI YAIWES",
+  "mode": "FAIL_CLOSED_LOOP",
+  "gate": "T1_FACTORY_FRONTEND",
+  "t1_status": "CLOSED_UNVERIFIED_ACTIVE_LOOP",
+  "t2_status": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED_AND_HANDOFF",
+  "factory_source_sha": "f4117830f2141ce8363aff694b3fb513b20b02ca",
+  "factory_evidence": {
+    "logic": "6/6 PASS",
+    "adapter": "3/3 PASS",
+    "e2e_responsive": "14/14 PASS",
+    "independent_reviewer": "PASS",
+    "persistent_web": "NOT_YET_VERIFIED"
+  },
+  "new_inputs": [
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/INPUT-BLOCK-LITERAL-2026-09-11-ADDENDUM.md"
+  ],
+  "project_memory_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/",
+  "node_claim_protocol": {
+    "one_task_one_node": true,
+    "max_steps_per_node": 3,
+    "single_writer_per_path": true,
+    "claim_before_write": true,
+    "producer_cannot_self_certify": true
+  },
+  "ready_nodes": [
+    {
+      "node_id": "SOL_FACTORY_A_T1_CONTRACT_CONSUMER",
+      "owner_target": "SOL_GPT_ENV_A",
+      "status": "READY_TO_CLAIM",
+      "schema_path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-A.json"
+    },
+    {
+      "node_id": "SOL_FACTORY_B_T1_OSS_BACKEND_DONOR_REVIEW",
+      "owner_target": "SOL_GPT_ENV_B",
+      "status": "READY_TO_CLAIM",
+      "schema_path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-B.json"
+    },
+    {
+      "node_id": "F-OSS-01_MINIMAL_TRACEABLE_FRONTEND_DONOR_INTEGRATION",
+      "owner_target": "➡️ Astra plan fábrica UI YAIWES",
+      "status": "QUEUED_SAFE_INDEPENDENT",
+      "evidence_path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/COMPONENT-AUDIT-2026-09-11.md"
+    }
+  ],
+  "open_gaps": [
+    "PERSISTENT_WEB_PREVIEW_NOT_PUBLISHED",
+    "HF_WRITE_CREDENTIAL_NOT_INJECTED_IN_AVAILABLE_GITHUB_ACTIONS_CONTEXT",
+    "DEPLOYED_URL_HTTP_READBACK_PENDING",
+    "DEPLOYED_URL_E2E_SMOKE_PENDING",
+    "PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT",
+    "OSS_40_PLUS_PRESENT_BUT_NOT_FACTORY_INTEGRATED",
+    "FACTORY_TRANSFORMER_NEEDS_REAL_OSS_RUNTIME_DONOR"
+  ],
+  "future_interface_roots_after_gate": [
+    "UI YAIWES interface/Fromtend/",
+    "UI YAIWES interface/Backend/"
+  ],
+  "watchdog_order": [
+    "review files + handoff",
+    "analyze Crazy Wall + state + pending tasks",
+    "search 10x improvement using existing components/APIs",
+    "execute tasks + resolve GAPs"
+  ]
+}
