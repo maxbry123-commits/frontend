@@ -2,10 +2,10 @@
   "schema": "yaiwes.audit.gap-ledger.v1",
   "contract": "tel.workflow/v3",
   "status": "ACTIVE_AUDIT",
-  "updated_at_utc": "2026-09-11T08:58:39Z",
+  "updated_at_utc": "2026-09-11T09:57:38Z",
   "rule": "Cada GAP exige owner, requisito fuente, evidencia, estado, delta y verify_final. No borrar historial: sólo promover con evidencia.",
   "seed_gaps": [
-    {"id":"G01_FABLES","status":"TESTED","owner":"SOL_GPT3","gap":"Fables ya materializado y probado como socket contractual; falta consumo en integración real para WIRED/RUNTIME_PASS","blocks":["integration real hasta cableado"],"evidence":{"implementation_commit":"671d9bb545b958c75b0c040806f096bf76f55175","fables_blob":"23f4e1b8b91301f2df396e7a0860fc65b977cfb3","contract":"yaiwes.fables.v1","ci_run":34573746304,"ci_job":103181425302,"runtime_suite":"17 passed in 0.02s","wordflow_suite":"12 passed in 0.03s"},"next":"G07 debe consumir Fables en integración real; no promover a WIRED por test unitario/socket solamente"},
+    {"id":"G01_FABLES","status":"TESTED","owner":"SOL_GPT3","gap":"Fables ya materializado y probado como socket contractual; falta consumo en integración real para WIRED/RUNTIME_PASS","blocks":["integration real hasta cableado"],"evidence":{"implementation_commit":"671d9bb545b958c75b0c040806f096bf76f55175","fables_blob":"23f4e1b8b91301f2df396e7a0860fc65b977cfb3","contract":"yaiwes.fables.v1","ci_run":34573746304,"ci_job":103181425302,"runtime_suite":"17 passed in 0.02s","wordflow_suite":"12 passed in 0.03s","evidence_precedence_note":"S3 debate commit fd12b61ef98ba2e5ecee2d1ccbf777ecdfdb911a cites older cancelled run 34569640745; later run 34573746304 completed success and remains authoritative for TESTED state"},"next":"G07 debe consumir Fables en integración real; no promover a WIRED por test unitario/socket solamente"},
     {"id":"G02_VITE_DEST","status":"OPEN","owner":"SOL_GPT1","gap":"Vite sin destination literal/autorizado para adquisición física","next":"releer handoff/director input; no inferir"},
     {"id":"G03_SUPABASE_DEST","status":"OPEN","owner":"SOL_GPT1","gap":"Supabase sin destination literal/autorizado para adquisición física","next":"releer handoff/director input; no inferir"},
     {"id":"G04_DUCKDB_SPECIAL","status":"OPEN_FAIL_CLOSED","owner":"SOL_GPT2","gap":"DuckDB official source contiene symlinks/special files rechazados por motor canónico inmutable","next":"StrategyDelta sólo con provenance oficial/autorización; no sanitizar ni modificar motor"},
@@ -27,8 +27,8 @@
   "role_output_slots": {
     "SOL_GPT1":{"pass1":"PENDING_OR_ROLE_STATE_RECONCILIATION","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
     "SOL_GPT2":{"pass1":"PENDING_OR_ROLE_STATE_RECONCILIATION","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
-    "SOL_GPT3":{"pass1":"PENDING_OR_ROLE_STATE_RECONCILIATION","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
-    "SOL_ORQUESTADOR":{"pass1":"IN_PROGRESS_PRIORITY_DOCS_AND_RUNTIME_TREE","pass2":"IN_PROGRESS_DOCUMENT_CODE_MAPPING","pass3":"IN_PROGRESS_EXECUTION_EVIDENCE","pass4":"IN_PROGRESS_REBUTTAL_AND_GAP_DELTA","last_heartbeat":"2026-09-11T08:58:39Z","last_evidence_commit":"a2843a75661ebbe49047b0cc15bf1d45fac65955"}
+    "SOL_GPT3":{"pass1":"PENDING_OR_ROLE_STATE_RECONCILIATION","pass2":"PENDING","pass3":"FRESH_DEBATE_COMMIT_EVIDENCE","pass4":"REFUTATION_REQUIRED_FABLES_EVIDENCE_PRECEDENCE","last_heartbeat":"2026-09-11T09:47:19Z","last_evidence_commit":"fd12b61ef98ba2e5ecee2d1ccbf777ecdfdb911a"},
+    "SOL_ORQUESTADOR":{"pass1":"IN_PROGRESS_PRIORITY_DOCS_AND_RUNTIME_TREE","pass2":"IN_PROGRESS_DOCUMENT_CODE_MAPPING","pass3":"IN_PROGRESS_EXECUTION_EVIDENCE","pass4":"IN_PROGRESS_REBUTTAL_AND_GAP_DELTA","last_heartbeat":"2026-09-11T09:57:38Z","last_evidence_commit":"ef1b26138009d7a4036e210720594da9d6190638"}
   },
   "promotion_rule": "OPEN→TESTED→WIRED→RUNTIME_PASS→VERIFIED_CLOSED; saltos prohibidos."
 }
