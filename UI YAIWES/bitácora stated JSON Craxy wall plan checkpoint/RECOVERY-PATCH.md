@@ -262,3 +262,78 @@ Si C1 queda bloqueado, continuar únicamente una tarea independiente segura docu
 - [ ] P01 fresh Judge
 
 Cualquier casilla crítica ausente → no `VERIFIED_CLOSED`.
+
+---
+
+# 15. RECOVERY PATCH DELTA — 2026-09-10 22:03 — 4 GAPS RESIDUALES
+
+**Estado:** `ACTIVE_LOOP`  
+**Regla de ledger:** `SUPERSEDES CURRENT COUNT ONLY`; toda evidencia histórica de Action124 permanece válida como evento pasado.
+
+## 15.1 Estado físico fresco
+
+La reconciliación operativa parte del baseline verificado de 110 componentes presentes y relee en `main` los 14 gaps físicos que quedaban en la medición posterior. Diez de esos 14 ya aparecen materializados; quedan exactamente cuatro gaps físicos:
+
+1. `#18 Vite` — `https://github.com/vitejs/vite` — `MISSING_PHYSICAL`.
+2. `#46 Supabase` — `https://github.com/supabase/supabase` — `MISSING_PHYSICAL`.
+3. `#56 DuckDB` — `https://github.com/duckdb/duckdb` — `MISSING_PHYSICAL`.
+4. `#66 AVF` — `https://android.googlesource.com/platform/packages/modules/Virtualization/` — `MOTOR_PROVIDER_GAP`.
+
+Conteo operativo actual: `120/124 PRESENT_PHYSICAL`, `4/124 MISSING_PHYSICAL`.
+
+Diez gaps anteriores materializados y que NO deben redescargarse ciegamente: `big-AGI`, `Vercel AI SDK`, `TanStack Query`, `React Virtuoso`, `shadcn-ui`, `XYFlow React Flow`, `Lucide`, `Uppy`, `workerd`, `Flutter`.
+
+Este conteo físico NO certifica wiring global. La última evidencia separada del lote 01–20 sigue siendo 17 PASS / 3 PENDING_SOURCE hasta que nueva evidencia la superseda.
+
+## 15.2 Restricción de motores
+
+Para `download/extract/copy/move` se autoriza exclusivamente la raíz canónica fijada:
+
+`maxbry123-commits/frontend@ef0669bbc753861bfc33b86548f3f90c0f3d8df9/➡️📂motores de descarga extracción copiado movimiento archivos fromtend/`
+
+Motores `COPY_ONLY / IMMUTABLE`; sin LFS, sin force, sin reimplementación de lógica en un workflow y sin motor alternativo.
+
+Vite/Supabase/DuckDB son fuentes GitHub y sólo pueden entrar a la cola después de fijar un `source_ref`/commit real y verificable compatible con Motor2+HF. AVF permanece fail-closed: el engine canónico observado convierte fuentes no GitHub como si fueran GitHub, por lo que `android.googlesource.com` no puede declararse soportado sin evidencia de una invocación válida que NO modifique el motor. Hasta entonces: `MOTOR_PROVIDER_GAP`.
+
+## 15.3 Actions observadas
+
+- `https://github.com/maxbry123-commits/frontend/actions/runs/34445055183` → `completed/failure`.
+- `https://github.com/maxbry123-commits/frontend/actions/runs/34445142005` → `completed/failure`.
+- Snapshot posterior consultado: `in_progress=0`, `queued=0`.
+- Causa raíz exacta de esos failures: `NOT_YET_CLASSIFIED_FROM_LOGS`; prohibido inferirla.
+
+No reactivar ciegamente los runs fallidos. El siguiente StrategyDelta debe salir del log real y mantener los motores intactos.
+
+## 15.4 TAREA 1 — adquisición/movimiento
+
+CURRENT=`T1_RESIDUAL_4_PHYSICAL_GAPS`.
+
+1. Refrescar `main` y omitir cualquier componente que ya aparezca con evidencia fresca equivalente.
+2. Fijar refs reales para Vite, Supabase y DuckDB.
+3. Crear únicamente cola/config/state soportados por Motor2; no crear downloader/extractor paralelo.
+4. Ejecutar Motor2+HF con destino explícito y exigir `VERIFIED_CLOSED`, extracción y read-back.
+5. Resolver AVF sólo mediante una capacidad de los motores canónicos demostrada sin modificar código; en ausencia de ella mantener GAP.
+6. Si se usa staging, mover al destino final exclusivamente con Motor4 y exigir hash/read-back/`failed=0`/`pending=0`.
+7. Final físico: `124/124` con read-back independiente antes de desbloquear Tarea 2.
+
+## 15.5 TAREA 2 — conexión/cableado/integración
+
+Estado=`BLOCKED_BY_TASK_1`.
+
+Después de `124/124` físico:
+1. reconstruir inventario de wiring real; nunca usar presencia como prueba de integración;
+2. cerrar primero gaps #13/#18/#19 del lote 01–20 si siguen pendientes en registry/evidence;
+3. avanzar 21–124 de forma 1×1 según arquitectura y owners ya existentes;
+4. reutilizar adapters/loaders/guards existentes antes de generar código;
+5. verificar cada integración con ruta + SHA/diff + operación representativa + failure path + read-back;
+6. actualizar arquitectura/Crazy Wall/STATE/CHECKPOINT/HANDOFF sólo con evidencia fresca.
+
+## 15.6 Watchdog
+
+Watchdog objetivo: `6aa237226ad48191b4dc2b1eb07c0400`, alcance exacto solicitado: 4 gaps físicos + Tarea 2 y motores canónicos únicamente. La automatización está actualmente desactivada y la cuenta tiene el máximo de 5 tareas activas; no se falsea como activa hasta disponer de un slot.
+
+## 15.7 Cierre
+
+TAREA 1 sólo puede pasar a `VERIFIED_CLOSED` con 124/124 físico y evidencia read-back. TAREA 2 sólo puede cerrar con integración real verificada. Hasta entonces:
+
+`ACTIVE_LOOP / NOT PROJECT CLOSED`.
