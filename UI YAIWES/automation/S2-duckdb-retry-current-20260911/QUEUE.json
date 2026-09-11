@@ -1,0 +1,13 @@
+{
+  "schema": "yaiwes.frontend.download-extract-queue.v1",
+  "queue": [
+    {
+      "id": "0056:DuckDB-current",
+      "canonical_index": 56,
+      "slug": "DuckDB",
+      "source_repo": "https://github.com/duckdb/duckdb",
+      "source_ref": "f60316b6abfd9074f553e9e880b85171c747f867",
+      "publish": false
+    }
+  ]
+}
