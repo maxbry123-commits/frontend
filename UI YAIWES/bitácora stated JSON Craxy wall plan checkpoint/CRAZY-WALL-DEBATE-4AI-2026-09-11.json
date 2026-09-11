@@ -1,0 +1,129 @@
+{
+  "schema": "yaiwes.crazy-wall.debate.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "ACTIVE_LOOP",
+  "coordinator": "🌞👷 sol osquestador plan 🎯",
+  "rule": "Ningún rol puede cerrar el LOOP global. Un GAP bloquea sólo su nodo; el rol toma el siguiente nodo independiente FREE y vuelve al bloqueado cuando exista StrategyDelta/evidencia nueva.",
+  "source_truth": [
+    {
+      "name": "MAX-SYSTEM-100X-FINAL-1",
+      "ref": "a1e278b7439ee24cf20633752dc63e4042d419e0",
+      "purpose": "orquestación, paralelismo, multi-sandbox, persistencia"
+    },
+    {
+      "name": "ULTIMA VERSION Virtual Computer 14 objetivos",
+      "ref": "3644108fa53344d5e697d6157f5cf7a09f98161a",
+      "purpose": "UI/ventanas/core/VM/multiplataforma/local-first"
+    },
+    {
+      "name": "Memoria Wordflow 20M",
+      "ref": "3644108fa53344d5e697d6157f5cf7a09f98161a",
+      "purpose": "Workflow vs Memory/Audit, checkpoint, consolidación y LOOP"
+    }
+  ],
+  "loop": [
+    "auditoria_y_crosscheck_fuentes",
+    "goals12_y_council12",
+    "refutaciones_y_debate",
+    "nuevas_tareas",
+    "componentes_solo_si_gap_real",
+    "integracion",
+    "test_y_evidencia",
+    "coverage_top_down_bottom_up",
+    "repeat_hasta_objetivos_100_percent_evidenciados"
+  ],
+  "debate_protocol": {
+    "round_fields": ["question", "positions", "refutations", "decision", "tasks", "evidence"],
+    "roles": ["SOL_GPT1_BACKEND", "SOL_GPT2_BACKEND", "SOL_GPT3_BACKEND", "SOL_PLAN_ORQUESTADOR"],
+    "anti_collision": "cada rol escribe sólo su role_state_path; coordinador consolida este tablero",
+    "reply_rule": "cada ciclo releer Crazy Wall+STATE+role states, responder al punto abierto y continuar cola propia; no esperar al siguiente prompt humano si existe tarea autorizada e independiente"
+  },
+  "round_001": {
+    "question": "¿Qué impide hoy pasar de componentes presentes a una UI YAIWES backend recuperable, persistente y realmente integrada?",
+    "positions": {
+      "SOL_GPT1_BACKEND": "Vite/Supabase siguen bloqueados por DESTINATION_INPUT_GAP y Fables; no reutilizar destinos históricos por inferencia.",
+      "SOL_GPT2_BACKEND": "DuckDB falla por symlinks rechazados por Motor2 inmutable; AVF tiene provider/capability GAP y no existe backend/capability probe verificado.",
+      "SOL_GPT3_BACKEND": "big-AGI y Vercel AI SDK tienen tests de proveedor PASS pero no WIRED; Vite espera handoff S1; lote 21-40 está presente pero no cableado/testeado.",
+      "SOL_PLAN_ORQUESTADOR": "Fallo estructural primario confirmado: __init__ importaba runner inexistente, seis layers faltaban; ledger era RAM-only y evidencia PASS aceptaba refs sin hash. Prioridad: reparar runtime antes de sumar componentes."
+    },
+    "refutations": [
+      "120/124 físicos no equivale a 96.8% del proyecto: SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED.",
+      "universal-plugin-socket no equivale a Fables sin identidad+SHA+contrato+test.",
+      "misma UI multiplataforma no implica misma virtualización: AVF/WHPX/KVM/QEMU/iOS/web requieren capability gates propios."
+    ],
+    "decision": "Orden único: recuperar runner/capas -> persistir estado -> reforzar evidencia -> validar Fables -> probar integración real. No descargar nuevos frameworks hasta medir un GAP después de esos gates.",
+    "tasks": {
+      "SOL_PLAN_ORQUESTADOR": [
+        "recuperar runner/layers y tests mínimos",
+        "persistencia hash-chain recuperable",
+        "evidence gate con SHA",
+        "CI del runtime y cross-check de objetivos",
+        "si aparece necesidad de componente, dedup/catalogar y delegar adquisición canónica"
+      ],
+      "SOL_GPT1_BACKEND": [
+        "continuar Vite/Supabase; publicar exacto source SHA + destino autorizado + readback cuando exista DEST_ROOT",
+        "si DEST_ROOT sigue bloqueado, continuar auditoría/readback y siguiente nodo S1 independiente; no stop"
+      ],
+      "SOL_GPT2_BACKEND": [
+        "mantener DuckDB fail-closed; investigar StrategyDelta canónica symlink-aware sin modificar motor",
+        "AVF: provider compatible + capability probe + permisos/hardware/guest test separados",
+        "continuar nodo independiente si alguno queda bloqueado"
+      ],
+      "SOL_GPT3_BACKEND": [
+        "no confundir vendor test con WIRED",
+        "preparar big-AGI/Vercel AI SDK/Vite para integración real tras Fables/handoff",
+        "lote 21-40: source readback puede continuar; STEP2 espera Fables; no stop"
+      ],
+      "ASTRA2_GPT_BACKEND": [
+        "resolver si runtime universal plugin socket ES o NO ES Fables mediante fuente de verdad, ruta, SHA, contrato y test",
+        "si no existe Fables, publicar GAP explícito y requisito mínimo; no renombrar por inferencia"
+      ]
+    }
+  },
+  "goals12": [
+    {"id":"G01","entry":"runner/layers documentados pero incompletos","exit":"import + seis layers + tests ejecutables"},
+    {"id":"G02","entry":"ledger RAM-only","exit":"estado durable reanudable tras restart + hash-chain íntegra"},
+    {"id":"G03","entry":"evidence kind/ref débil","exit":"PASS exige referencia+SHA/readback verificable"},
+    {"id":"G04","entry":"socket genérico; Fables no identificado","exit":"Fables exacto path+SHA+contract+test o GAP probado"},
+    {"id":"G05","entry":"source/vendor tests aislados","exit":"adapter/plugin realmente WIRED + runtime test"},
+    {"id":"G06","entry":"memorias mezclables","exit":"chat/project memory separada de memoria propia de cada agente con contratos explícitos"},
+    {"id":"G07","entry":"persistencia incompleta","exit":"user-owned local storage + restart/offline recovery sin cloud obligatorio"},
+    {"id":"G08","entry":"LLMGate sin provider adapter real","exit":"local small LLM + proveedores web mediante adapters desacoplados, evidencia E2E"},
+    {"id":"G09","entry":"ventanas/workspaces sin estado global probado","exit":"window/task IDs + checkpoint + recuperación + agente opera por API explícita"},
+    {"id":"G10","entry":"multiplataforma declarada","exit":"matriz real Web/Windows/Linux/Android/iOS con PASS/GAP por capability"},
+    {"id":"G11","entry":"virtual compute descrito","exit":"provider selection por host + capability probe + guest test donde aplique"},
+    {"id":"G12","entry":"cierres parciales","exit":"cross-check GOAL->requirement->task->artifact->evidence y reverso; LOOP continúa hasta cobertura 100% requerida"}
+  ],
+  "ask_council12": [
+    "C01 lock literal y hashes de las 3 fuentes de verdad",
+    "C02 extraer objetivos/constraints sin reinterpretar",
+    "C03 comparar runtime contra árbol/DSL documentado",
+    "C04 comparar state/event/checkpoint/memory contracts",
+    "C05 comparar plugin socket contra requisito Fables",
+    "C06 comparar adquisición/motores/destinos y evidencias",
+    "C07 cruzar role states/owners/locks para evitar colisiones",
+    "C08 construir capability matrix por plataforma",
+    "C09 verificar sandbox/authority/memory boundaries",
+    "C10 REUSE primero: dedup contra 124 componentes y código actual",
+    "C11 simular restart, bloqueo, colisión y degradación de plataforma",
+    "C12 rankear siguiente delta mínimo por impacto/evidencia y volver a C01"
+  ],
+  "simulations4": [
+    "SIM1 restart después de PASS: ledger debe reconstruir completed_nodes sin repetir mutación",
+    "SIM2 S1 bloqueado por DEST_ROOT: S2/S3 continúan nodos independientes; global LOOP no se detiene",
+    "SIM3 Fables ausente: STEP2 queda GAP pero research/source tests/otros nodos seguros siguen; nunca declarar WIRED",
+    "SIM4 Android/iOS/Windows/Linux/Web: UI común, backend de virtualización cambia por capability; unsupported degrada sin claim falso"
+  ],
+  "new_component_policy": {
+    "download_now": [],
+    "reason": "primero cerrar runtime/persistencia/evidence/Fables; el catálogo actual ya contiene Pydantic, HTTPX, LiteLLM, MCP SDK, Qdrant/FastEmbed/Oxigraph, PGMQ/Taskiq, Playwright/Hypothesis y otros reutilizables",
+    "research_only_after_gap": [
+      "eventsourcing: sólo si ledger+backend actual no cubren replay/checkpoints",
+      "pluggy: sólo si Fables contract requiere hooks y el socket actual no alcanza",
+      "Schemathesis: cuando exista OpenAPI real que probar",
+      "Dexie.js: sólo si PGlite/IndexedDB actual no cubre persistencia web local"
+    ]
+  },
+  "closure": "ACTIVE_LOOP_NOT_GLOBAL_CLOSED"
+}
