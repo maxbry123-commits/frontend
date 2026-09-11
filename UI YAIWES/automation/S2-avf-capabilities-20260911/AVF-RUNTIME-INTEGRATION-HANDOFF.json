@@ -2,7 +2,7 @@
   "schema": "yaiwes.s2.avf.runtime-handoff.v1",
   "role": "SOL_GPT2_BACKEND",
   "node": "S2-R3-AVF-PROBE-IMPLEMENTATION-HANDOFF",
-  "status": "READ_ONLY_HANDOFF_READY",
+  "status": "READ_ONLY_HANDOFF_READY_EXACT_INSERTION_POINTS_VERIFIED",
   "mutation_performed": false,
   "decision": "Use the existing Universal Plugin Socket for AVF capability probing; do not put native probing logic in Stabilize core and do not create a second orchestrator.",
   "evidence": {
@@ -11,31 +11,64 @@
     "integration_readme_blob": "0aefd2511eeb0378a9204fafba54a49b9c8c3255",
     "plugins_readme_blob": "8732a9de56263f30b7f2809772dd850ed29f37b1",
     "plugin_contract_blob": "41465001ec9fc2bcd93d9ad9ea36b78830fd0367",
+    "plugin_registry_blob": "671308679935dbaa5dc924ef8986aeba7da712ef",
+    "plugin_loader_blob": "7a39622914ea34a9ba7a23b8035a84169cf37049",
+    "mount_guard_blob": "9e90be3f5c44981005905b781c03cfd03aa24fba",
+    "activation_blob": "d876df935f98ceb6f36d06a62733411fc0397c3d",
+    "catalog_blob": "319f01f2bb527ff2b38f96bbd082b295089fd19e",
+    "universal_plugins_test_blob": "287e165220db3a4e246f0f934f36cbeccc25ec4d",
     "capability_contract_blob": "97619b9970377ab85a4409203ea5136ea3f95acd"
   },
-  "proposed_runtime_delta_if_authorized": {
-    "plugin_adapter": {
-      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/android_avf_adapter/",
-      "kind": "adapter",
-      "responsibility": "Read Android host feature/API/capability/permission state and normalize it to the AVF capability-probe contract. No workflow ownership, no acquisition, no provider rewriting."
-    },
-    "plugin_spec": {
-      "name": "android_avf_adapter",
-      "kind": "PluginKind.ADAPTER",
-      "capabilities": ["vm.avf.capability_probe","vm.avf.guest_boot_probe"],
-      "enabled_initially": false,
-      "workflow_owner": false,
-      "activation_rule": "Remain disabled until explicit factory + target-host test + evidence pass MountGuard."
-    },
-    "integration_validation": {
-      "path_family": "runtime/src/integration/",
-      "responsibility": "Validate normalized probe result and map Requirement → Task → Artifact → Evidence → Validation; prevent COMPLETE when guest_boot_gate is not PASS for an AVF acceptance claim."
-    },
-    "core_boundary": {
-      "path_family": "runtime/src/core/",
-      "rule": "Core consumes validated capability state for backend selection/lifecycle only. It must not implement Android API probing or duplicate plugin orchestration."
-    }
+  "existing_socket_behavior": {
+    "registry": "Indexes PluginSpec by name/capability and guarantees at most one workflow_owner.",
+    "loader": "Mounts only pre-registered explicit factories; arbitrary import strings are forbidden.",
+    "mount_guard": "Rejects disabled plugins, donor/test production mount, missing code_root/factory_key and any workflow owner other than stabilize_core.",
+    "activation": "Only names in _APPROVED_FACTORY_KEYS may become enabled and receive a factory_key.",
+    "catalog": "Canonical tuple of PluginSpec entries; all are disabled by default.",
+    "tests": "Already verify unique catalog, disabled-by-default, fail-closed mount, single workflow owner and explicit factory mount."
   },
+  "exact_minimal_runtime_delta_if_authorized": [
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/android_avf_adapter/",
+      "operation": "ADD adapter implementation and explicit factory only",
+      "responsibility": "Read Android API level, virtualization framework feature, VirtualMachineManager availability/capabilities, permissions and real guest-boot evidence; normalize to AVF-CAPABILITY-PROBE-CONTRACT. No workflow ownership and no provider acquisition."
+    },
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/catalog.py",
+      "operation": "ADD one PluginSpec",
+      "spec": {
+        "name": "android_avf_adapter",
+        "kind": "PluginKind.ADAPTER",
+        "capabilities": ["vm.avf.capability_probe", "vm.avf.guest_boot_probe"],
+        "source_root": "literal source/evidence root must be chosen by authorized owner",
+        "source_tree_sha": "exact 40-char immutable tree SHA required",
+        "code_root": "runtime-local adapter root or authorized relative code root",
+        "enabled": false,
+        "workflow_owner": false
+      }
+    },
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/activation.py",
+      "operation": "ADD android_avf_adapter -> explicit approved factory key only after implementation/test authorization",
+      "factory_key_candidate": "android_avf.capability_probe"
+    },
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_universal_plugins.py",
+      "operation": "ADD AVF adapter fail-closed/activation tests; update fixed catalog count assertion if catalog gains a component"
+    },
+    {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/",
+      "operation": "ADD/extend validation only where coordinator-owned integration contract requires it",
+      "responsibility": "Reject AVF COMPLETE unless guest_boot_gate PASS has strong evidence. Preserve provider/capability/permission/boot gaps separately."
+    }
+  ],
+  "files_not_to_change_without_proven_gap": [
+    "runtime/src/plugins/registry.py",
+    "runtime/src/plugins/loader.py",
+    "runtime/src/plugins/mount_guard.py",
+    "runtime/src/core/"
+  ],
+  "reason_not_to_change": "Current code already supplies capability indexing, explicit-factory loading, disabled-by-default fail-closed mount and single workflow-owner enforcement. Duplicating those mechanisms would be overengineering and collision risk.",
   "required_adapter_output": {
     "transport_gate": "PASS | BLOCKED | NOT_RUN",
     "host_capability_gate": "PASS | BLOCKED | NOT_APPLICABLE | UNKNOWN",
@@ -53,6 +86,7 @@
     "guest boot NOT_RUN never becomes PASS",
     "fallback selection never becomes AVF PASS",
     "plugin remains enabled=False until factory and real test evidence exist",
+    "unknown/unapproved activation name is rejected",
     "integration finalization rejects AVF COMPLETE without guest boot evidence"
   ],
   "ownership": {
@@ -60,6 +94,6 @@
     "runtime_mutation": "coordinator or explicitly assigned code owner",
     "workflow_owner": "Stabilize CORE remains the only workflow owner"
   },
-  "next_action": "Coordinator may authorize runtime mutation using this exact handoff. Until then S2 continues CI/debate/read-only validation.",
+  "next_action": "Coordinator may authorize runtime mutation using these exact insertion points. Until then S2 continues debate/read-only verification.",
   "closure": "OPEN"
 }
