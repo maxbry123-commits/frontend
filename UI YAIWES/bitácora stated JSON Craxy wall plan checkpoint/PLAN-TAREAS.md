@@ -222,6 +222,8 @@ protocolos separados + tests.
 ## A54 — Host boundary
 agent controla Virtual Computer autorizada; host arbitrary access denegado.
 
+iOS queda capability-driven.
+
 ---
 
 # H. COMMAND CENTER / CHAT 85
@@ -289,3 +291,24 @@ repetir R1/R2/R3 contra el estado final.
 # REGLA DE COLA
 
 Solo una tarea `CURRENT` por rama dependiente. Un `BLOCKED` puede dejar pasar una tarea independiente, nunca una dependiente. Cada tarea actualiza STATE/CHECKPOINT/BITÁCORA/RECOVERY y no se vuelve a ejecutar si ya existe evidencia fresca equivalente.
+
+---
+
+# J. DELTA OPERATIVO 2026-09-10 — 4 GAPS FÍSICOS + INTEGRACIÓN
+
+Este bloque `SUPERSEDES` únicamente el conteo operativo actual de gaps físicos; no reescribe las clases ni eventos históricos de Action124.
+
+- [x] `J00` Reconciliar los 14 gaps físicos anteriores contra `main`: 10 aparecen materializados; quedan 4.
+- [ ] `J01 CURRENT` #18 Vite — `https://github.com/vitejs/vite` — fijar commit/ref real, ejecutar únicamente Motor2+HF canónicos, exigir extracción y read-back `VERIFIED_CLOSED`.
+- [ ] `J02` #46 Supabase — `https://github.com/supabase/supabase` — mismo contrato canónico; no redescargar si aparece evidencia fresca antes de ejecutar.
+- [ ] `J03` #56 DuckDB — `https://github.com/duckdb/duckdb` — mismo contrato canónico; no redescargar si aparece evidencia fresca antes de ejecutar.
+- [ ] `J04` #66 AVF — `https://android.googlesource.com/platform/packages/modules/Virtualization/` — estado `MOTOR_PROVIDER_GAP`; resolver sólo si los motores canónicos pueden consumir la fuente sin modificar su código. No inventar downloader alternativo.
+- [ ] `J05` Read-back final físico 124/124: verificar rutas, árbol extraído/hash/manifiesto según motor y ausencia de gaps de movimiento; si hubo staging, mover exclusivamente con Motor4.
+- [ ] `J06` Desbloquear TAREA 2 sólo tras J05 PASS: inventariar wiring real; no asumir que los 120 presentes están cableados.
+- [ ] `J07` Cerrar primero integración #13/#18/#19 del lote 01–20 hasta `20/20` si la evidencia del registry lo permite; luego avanzar 21–124 1×1 según arquitectura y owners existentes.
+- [ ] `J08` Para cada componente integrado: ruta + SHA/diff + loader/guard/adapter o mecanismo existente + microtest/test real + read-back; `presence != WIRED`.
+- [ ] `J09` Sincronizar arquitectura, Crazy Wall, STATE, CHECKPOINT/HANDOFF y Recovery sólo con evidencia fresca; Judge final permanece fail-closed.
+
+Evidence de Actions más recientes: `34445055183` y `34445142005` terminaron `completed/failure`; snapshot posterior observado `in_progress=0`, `queued=0`. La causa raíz exacta debe salir del log real antes de un StrategyDelta; no inferirla.
+
+**Estado de cola:** `TAREA_1=ACTIVE_LOOP`, `TAREA_2=BLOCKED_BY_TASK_1`, `PROJECT=ACTIVE_LOOP`.
