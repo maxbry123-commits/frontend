@@ -2,7 +2,7 @@
   "schema": "yaiwes.s2.avf.capabilities.v1",
   "role": "SOL_GPT2_BACKEND",
   "node": "S2-02",
-  "status": "FAIL_CLOSED_CAPABILITY_MATRIX_RECORDED",
+  "status": "FAIL_CLOSED_CAPABILITY_MATRIX_AND_RUNTIME_GAP_VERIFIED",
   "canonical_source": "https://android.googlesource.com/platform/packages/modules/Virtualization/",
   "canonical_final_root": "UI YAIWES/componentes open soure UI YAIWES/AVF",
   "source_transport": {
@@ -19,6 +19,33 @@
     "hypervisor": "pKVM/KVM on supported Android hosts",
     "guest_model": "Microdroid pVM is the reference guest; custom guest/VM use has additional permission and image/signature constraints",
     "capability_detection": "VirtualMachineManager availability plus getCapabilities() determines protected/non-protected VM support on a device"
+  },
+  "functional_source_crosscheck": {
+    "source_blob": "ecc8b3b1444ade0ca894789e149e881a08b999c0",
+    "source_name": "Virtual Computer YAIWES",
+    "matches": [
+      "Android must use a capability-driven backend selection rather than assuming AVF on every device",
+      "AVF/crosvm is Android-specific; Linux and Windows use different virtualization backends",
+      "normal APK access to AVF must not be assumed",
+      "actual acceptance requires a real local VM boot and local CPU/RAM evidence, not source presence"
+    ],
+    "contradictions_found": false
+  },
+  "runtime_implementation_audit": {
+    "runtime_src_tree_sha": "be46fd0fdb7694d3af0c6a76814fe139a0dbaf7e",
+    "searched_identifiers": [
+      "VirtualMachineManager",
+      "MANAGE_VIRTUAL_MACHINE",
+      "AndroidVMProvider",
+      "HypervisorCapabilityManager",
+      "CapabilityDetector",
+      "pKVM",
+      "AVF"
+    ],
+    "code_search_matches": 0,
+    "runtime_tree_avf_or_android_backend_found": false,
+    "runtime_tree_observation": "runtime/src currently contains generic adapters/plugins/core scaffolding; several roots are .gitkeep-only and no AVF/Android virtualization backend is present",
+    "gap": "AVF_CAPABILITY_PROBE_IMPLEMENTATION_GAP"
   },
   "host_matrix": {
     "Android_ARM64_physical": {
@@ -69,8 +96,9 @@
     "source_identified": true,
     "source_downloaded_to_final_root": false,
     "final_readback_present": false,
+    "runtime_capability_probe_implemented": false,
     "runtime_guest_boot_verified_android_physical": false,
     "multiplatform_avf_claim": false
   },
-  "verdict": "AVF cannot be declared VERIFIED_CLOSED. Source-provider transport is blocked by immutable Motor 2 and runtime is device/capability/permission dependent; source presence would not prove guest boot."
+  "verdict": "AVF cannot be declared VERIFIED_CLOSED. Source-provider transport is blocked by immutable Motor 2, the runtime capability probe/backend is absent, and actual VM execution remains device/capability/permission dependent; source presence would not prove guest boot."
 }
