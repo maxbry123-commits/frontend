@@ -50,6 +50,20 @@ def load_ledger(path: str | Path) -> list[dict[str, Any]]:
     return rows
 
 
+def _fsync_parent_directory(path: Path) -> None:
+    """Persist the directory entry that makes an atomic replace crash-durable on POSIX."""
+    if os.name != "posix":
+        return
+    flags = os.O_RDONLY
+    if hasattr(os, "O_DIRECTORY"):
+        flags |= os.O_DIRECTORY
+    fd = os.open(path, flags)
+    try:
+        os.fsync(fd)
+    finally:
+        os.close(fd)
+
+
 def save_ledger(path: str | Path, ledger: list[dict[str, Any]]) -> None:
     if not verify_ledger(ledger):
         raise ValueError("ledger_integrity_failure")
@@ -65,6 +79,7 @@ def save_ledger(path: str | Path, ledger: list[dict[str, Any]]) -> None:
         handle.flush()
         os.fsync(handle.fileno())
     os.replace(temporary, target)
+    _fsync_parent_directory(target.parent)
 
 
 @contextmanager
