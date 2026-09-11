@@ -1,0 +1,47 @@
+{
+  "schema": "yaiwes.audit.g11.v1",
+  "contract": "tel.workflow/v3",
+  "node": "G11_MULTI_SANDBOX_RECOVERY",
+  "pass": 2,
+  "status": "CONTRACT_DEFINED_NOT_WIRED",
+  "selection_contract": {
+    "inputs": ["platform", "arch", "hardware_virtualization", "backend_capabilities", "isolation_level", "workflow_id", "checkpoint_id"],
+    "outputs": ["selected_backend", "sandbox_id", "reason", "capability_evidence", "status"],
+    "fail_closed": true,
+    "no_backend_without_capability_evidence": true,
+    "no_platform_claim_from_source_presence": true
+  },
+  "platform_routes_from_project_sources": {
+    "Android": {"preferred":["AVF","crosvm"],"fallback":["QEMU"],"status":"CAPABILITY_PROBE_REQUIRED"},
+    "Windows": {"preferred":["WHPX"],"fallback":["QEMU"],"status":"CAPABILITY_PROBE_REQUIRED"},
+    "Linux": {"preferred":["KVM"],"fallback":["QEMU"],"status":"CAPABILITY_PROBE_REQUIRED"},
+    "iOS_iPadOS": {"preferred":[],"reference":["UTM","QEMU"],"status":"CONDITIONAL_RESTRICTIONS_REQUIRE_REAL_DEVICE_EVIDENCE"},
+    "Web": {"preferred":[],"status":"NO_NATIVE_VM_CLAIM; requires separate web/remote execution contract if project needs VM semantics"}
+  },
+  "lifecycle_contract": [
+    "ALLOCATE sandbox_id bound to workflow_id",
+    "START only after backend capability PASS",
+    "CHECKPOINT bind workflow checkpoint_id + sandbox state reference",
+    "SUSPEND/RESUME without losing workflow objective/evidence/history",
+    "RECOVER via Stabilize WorkflowRecovery for durable workflow state plus backend-specific sandbox restoration when supported",
+    "DESTROY ephemeral code/runtime while retaining user-owned cache/state according to project policy"
+  ],
+  "reuse_evidence": {
+    "workflow_recovery":"Stabilize CORE/src/stabilize/recovery.py blob 2a77bfc1e2a9473977db9ecd06f8adc8f7ebcfa8",
+    "sandbox_components_present":["Firecracker","gVisor","nsjail","bubblewrap"],
+    "new_download_required":false
+  },
+  "cross_role_boundary": {
+    "SOL_GPT2_G10":"must verify the real platform capability matrix and backend implementation evidence; this pass does not claim platform runtime PASS",
+    "SOL_ORQUESTADOR_G11":"owns lifecycle/checkpoint/recovery composition and global tests"
+  },
+  "next_tests_required": [
+    "selector rejects backend without capability evidence",
+    "workflow_id↔sandbox_id binding persists",
+    "checkpoint_id survives process restart",
+    "idempotent workflow recovery does not duplicate work",
+    "two independent sandboxes do not share mutable state",
+    "failed sandbox does not stop independent workflow node"
+  ],
+  "closure":"ACTIVE_LOOP"
+}
