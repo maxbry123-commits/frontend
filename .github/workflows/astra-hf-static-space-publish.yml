@@ -11,12 +11,12 @@ permissions:
 
 concurrency:
   group: astra-hf-static-space-publish
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   publish-space:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     env:
       HF_TOKEN_A: ${{ secrets.HF_TOKEN }}
       HF_TOKEN_B: ${{ secrets.HUGGINGFACE_TOKEN }}
@@ -24,14 +24,9 @@ jobs:
       HF_TOKEN_D: ${{ secrets.HUGGINGFACEHUB_API_TOKEN }}
       HF_TOKEN_E: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
       SPACE_REPO: COMAND-CENTER-1/yaiwes-ui-factory
-      FACTORY_ROOT: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      SOURCE_REF: f4117830f2141ce8363aff694b3fb513b20b02ca
+      RAW_ROOT: https://raw.githubusercontent.com/maxbry123-commits/frontend/f4117830f2141ce8363aff694b3fb513b20b02ca/UI%20YAIWES/watchdog%20UI%20YAIWES/%E2%9E%A1%EF%B8%8F%20Astra%20plan%20f%C3%A1brica%20UI%20YAIWES/Frontend/factory-v0
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-          persist-credentials: false
-
       - name: Resolve Hugging Face token without exposing it
         shell: bash
         run: |
@@ -48,23 +43,17 @@ jobs:
           printf 'HF_PUBLISH_TOKEN=%s\n' "$token" >> "$GITHUB_ENV"
           echo 'HF_SECRET_RESOLVED=YES'
 
-      - name: Package verified Factory V0 as Static Space
+      - name: Package exact verified Factory V0 payload
         shell: bash
         run: |
           set -euo pipefail
-          test -f "$FACTORY_ROOT/index.html"
-          test -f "$FACTORY_ROOT/styles.css"
-          test -f "$FACTORY_ROOT/src/app.js"
-          test -f "$FACTORY_ROOT/src/actions.js"
-          test -f "$FACTORY_ROOT/src/state.js"
           rm -rf _hf_space_publish
           mkdir -p _hf_space_publish/src
-          cp "$FACTORY_ROOT/index.html" _hf_space_publish/index.html
-          cp "$FACTORY_ROOT/styles.css" _hf_space_publish/styles.css
-          cp "$FACTORY_ROOT/src/app.js" _hf_space_publish/src/app.js
-          cp "$FACTORY_ROOT/src/actions.js" _hf_space_publish/src/actions.js
-          cp "$FACTORY_ROOT/src/state.js" _hf_space_publish/src/state.js
-          cp "$FACTORY_ROOT/src/backend-adapter.js" _hf_space_publish/src/backend-adapter.js
+          curl -fsSL "$RAW_ROOT/index.html" -o _hf_space_publish/index.html
+          curl -fsSL "$RAW_ROOT/styles.css" -o _hf_space_publish/styles.css
+          for f in app.js actions.js state.js backend-adapter.js; do
+            curl -fsSL "$RAW_ROOT/src/$f" -o "_hf_space_publish/src/$f"
+          done
           cat > _hf_space_publish/README.md <<'EOF'
           ---
           title: YAIWES UI Factory
@@ -76,12 +65,14 @@ jobs:
           ---
 
           # YAIWES UI Factory
-          Static visual preview of the verified YAIWES UI Factory frontend.
-          Source of truth: maxbry123-commits/frontend.
+          Visual Static Space for the YAIWES UI Factory.
+          Verified source SHA: `f4117830f2141ce8363aff694b3fb513b20b02ca`.
           EOF
-          test "$(find _hf_space_publish -type f | wc -l)" -ge 7
+          echo "SOURCE_REF=$SOURCE_REF"
           echo "PACKAGE_FILES=$(find _hf_space_publish -type f | wc -l)"
+          grep -q 'YAIWES UI Factory' _hf_space_publish/index.html
           sha256sum _hf_space_publish/index.html _hf_space_publish/styles.css _hf_space_publish/src/*.js
+          echo 'PACKAGE_VERIFY=PASS'
 
       - name: Create/update public Static Space and upload package
         shell: bash
@@ -96,27 +87,14 @@ jobs:
           api = HfApi(token=token)
           me = api.whoami()
           print('HF_AUTH_ACCOUNT=' + str(me.get('name') or me.get('fullname') or 'UNKNOWN'))
-          url = create_repo(
-              repo_id=repo_id,
-              repo_type='space',
-              space_sdk='static',
-              private=False,
-              exist_ok=True,
-              token=token,
-          )
+          url = create_repo(repo_id=repo_id, repo_type='space', space_sdk='static', private=False, exist_ok=True, token=token)
           print('HF_SPACE_REPO_URL=' + str(url))
-          commit = api.upload_folder(
-              repo_id=repo_id,
-              repo_type='space',
-              folder_path='_hf_space_publish',
-              commit_message='Publish YAIWES UI Factory verified static preview',
-          )
+          commit = api.upload_folder(repo_id=repo_id, repo_type='space', folder_path='_hf_space_publish', commit_message='Publish YAIWES UI Factory verified static preview')
           print('HF_SPACE_UPLOAD_COMMIT=' + str(commit))
           info = api.space_info(repo_id=repo_id)
-          host = getattr(info, 'host', None)
-          if host:
-              print('HF_SPACE_HOST=' + str(host))
-          print('HF_SPACE_STAGE=' + str(getattr(getattr(info, 'runtime', None), 'stage', 'UNKNOWN')))
+          print('HF_SPACE_SUBDOMAIN=' + str(getattr(info, 'subdomain', None)))
+          runtime = getattr(info, 'runtime', None)
+          print('HF_SPACE_STAGE=' + str(getattr(runtime, 'stage', 'UNKNOWN')))
           PY
 
       - name: Verify persistent Space page and app URL
@@ -129,7 +107,7 @@ jobs:
           app='https://comand-center-1-yaiwes-ui-factory.hf.space/'
           for url, marker in [(page, 'YAIWES'), (app, 'YAIWES UI Factory')]:
               last=None
-              for attempt in range(24):
+              for attempt in range(36):
                   try:
                       req=urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0'})
                       with urllib.request.urlopen(req, timeout=15) as r:
