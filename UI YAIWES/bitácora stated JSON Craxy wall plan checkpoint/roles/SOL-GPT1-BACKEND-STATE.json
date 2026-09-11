@@ -4,121 +4,130 @@
   "role": "SOL_GPT1_BACKEND",
   "name": "Sol ☀️ 🏈gpt 1 backend",
   "node_prefix": "S1",
-  "status": "ACTIVE_LOOP_ROUND2_L05_ANSWERED_WAITING_COORDINATOR",
-  "observed_at": "2026-09-11T01:07:00-05:00",
-  "base_main_sha": "2ed0c4177149e2678a4e092b090b180414359414",
+  "status": "ACTIVE_LOOP_ROUND3_FOLLOWUP_R4_OPEN",
+  "observed_at": "2026-09-11T01:29:00-05:00",
   "watchdog": {
     "enabled": true,
     "automation_id": "6aa3065afd048191a6a4c720d4ba97e7",
     "mode": "condition_watch",
     "cadence": "1 hour",
-    "rule": "Read fresh Crazy Wall + STATE + S1 debate every cycle; execute only S1; consume explicit Sol Plan response immediately."
+    "rule": "Read fresh Director instruction + recovery patch + central debate + active round + S1 debate/state every cycle; consume explicit Sol Plan decisions immediately; never stop on unrelated GAP."
   },
-  "crazy_wall": {
-    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json",
-    "blob_sha": "f5d7ade7966a1a0fc20bf6f0b11a805b91b1b3be",
-    "status": "ACTIVE_LOOP",
-    "s1_assignment": "Continue Vite/Supabase own queue; reconcile destination with coordinator and existing handoff. Record source SHA, exact acquisition versus runtime target, final readback. Do not duplicate S3 writes.",
-    "coordinator_dependency": "SOL_PLAN_ORQUESTADOR is explicitly assigned to resolve S1 operation destinations."
+  "director": {
+    "instruction_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/DIRECTOR-INSTRUCTION-DEBATE-SOL123-2026-09-11.json",
+    "instruction_blob_sha": "25ee7de3c92cedc2134f61a13fc61bd13809ab88",
+    "active_round_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/ROUND-3-SOL123-2026-09-11.json",
+    "active_round_blob_sha": "f86df98950d8a737cf338403c002644b2c59c896",
+    "mode": "ACTIVE_LOOP_NO_STOP"
   },
-  "state_source": {
-    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
-    "blob_sha": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
-    "declared_physical": "120/124",
-    "declared_residuals": ["Vite", "Supabase", "DuckDB", "AVF"]
+  "recovery_patch": {
+    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/PARCHE-RECUPERACION-DEBATE-SOL123-2026-09-11.md",
+    "blob_sha": "1c95dba5f2bad6af36462b8721ed0073766ea35c",
+    "rule": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE"
+  },
+  "debate": {
+    "central_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-DEBATE-4AI-2026-09-11.json",
+    "s1_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/S1-SOL-PLAN-DEBATE-2026-09-11.json",
+    "s1_readback_blob_sha": "2b96bf675f59eca328a9e6b917fcbc6410cb04fa",
+    "s1_followup_commit": "bb00ef644740c36bfae3620596d30ff233b6c056",
+    "status": "ROUND3_FOLLOWUP_PUBLISHED_R4_OPEN",
+    "open_questions": ["R4-Q1","R4-Q2","R4-Q3"]
   },
   "canonical_motor": {
     "commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
     "policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
     "skill_blob_sha": "b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54",
-    "destination_rule": "User/coordinator must deliver explicit destination for each operation; inference, remembering or reusing prior destination is forbidden; missing destination = DESTINATION_INPUT_GAP."
+    "destination_rule": "DEST_REPO/DEST_BRANCH/DEST_ROOT must be literal per operation; never infer/reuse historical destination."
   },
-  "fresh_queue_evidence": {
-    "path": "UI YAIWES/automation/residual-03-motores-canonicos-20260910/QUEUE.json",
-    "blob_sha": "ea92b3004175fe7f9f6adcce8a49d0a843060879",
-    "vite_ref": "134ce6817984bad0f5fb043481502531fee9b1db",
-    "supabase_ref": "0500c21b37cc11b6b6140dde9827f89fb7d3097d",
-    "destination_fields_present": false
-  },
-  "runtime_target_reconciliation": {
-    "vite_historical_runtime_target": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vite",
-    "vite_runtime_target_readback": "404_NOT_PRESENT_ON_MAIN",
-    "interpretation": "Historical integration target is not authorized physical acquisition DEST_ROOT."
-  },
-  "debate": {
-    "s1_private_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/S1-SOL-PLAN-DEBATE-2026-09-11.json",
-    "debate_id": "S1-DEBATE-SOLPLAN-20260911-01",
-    "crazy_wall_4ai_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-DEBATE-4AI-2026-09-11.json",
-    "crazy_wall_4ai_blob_sha_after_s1_round2_write": "69e65c730afebcf2a765713c408071e8a0109e93",
-    "s1_round2_commit": "2ed0c4177149e2678a4e092b090b180414359414",
-    "status": "ROUND2_L05_ANSWERED_WAITING_COORDINATOR",
-    "reply_target": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S1.json"
-  },
-  "round_2_l05": {
-    "question": "Define minimal L05 interface to invoke only canonical motors without reimplementing download/extract or inferring DEST_ROOT.",
-    "evidence": {
-      "runtime_readme_blob": "94aa20958aeea475c569d343d06ea1e2ac2ab2f2",
-      "dsl_blob": "72e8f7b6ce2f652188628f1b9596bc78c9ddb4c4",
-      "contracts_py_blob": "59596986623cc1cc99b206d82c41d4053716a286",
-      "documented_gate": "SOURCE_LOCK_AND_DIRECTOR_APPROVAL"
+  "round_3": {
+    "answer_commit": "6f3ac50c08869efb81ebe17fef4220fab5bcd7f6",
+    "verdict": "PARTIAL_PASS_CONTRACT_GAPS_REMAIN",
+    "document_blobs": {
+      "max_system": "b9bc9a7f56cf17607b863829213f7bcb0f8b8081",
+      "virtual_computer": "ecc8b3b1444ade0ca894789e149e881a08b999c0",
+      "memory_workflow": "da109ae2d91e4563c01492ad365bbaa00fc6baa6"
     },
-    "answer_summary": "L05 is a fail-closed adapter/orchestrator: validate literal immutable source+destination+authorization, invoke canonical motors externally, normalize evidence to LayerResult; never implement downloader/extractor/mover/copier logic and never infer destination.",
-    "minimal_required_input": ["node_id","source_repo","source_ref immutable","operation","dest_repo","dest_branch","dest_root","allowed_paths","authorization","canonical_motor_commit"],
-    "typed_gaps": ["DESTINATION_INPUT_GAP","SOURCE_LOCK_GAP","AUTHORIZATION_GAP","PROVIDER_GAP","SPECIAL_FILE_GAP","MOTOR_MISMATCH","READBACK_GAP"],
-    "pass_gate": ["canonical motor PASS","failed_count==0","pending_count==0","strong destination read-back","strong hash/tree evidence","touched_paths subset allowed_paths"],
-    "boundary": "L05 PASS means verified acquisition/extraction only; it never means WIRED, runtime test PASS or global VERIFIED_CLOSED.",
-    "crazy_wall_readback": "CONFIRMED"
+    "remaining_contract_gaps": [
+      "MOTOR_BLOB_IDENTITY_GAP",
+      "MOTOR_AUX_INPUT_CONTRACT_GAP",
+      "DESTINATION_AUTHORITY_PROVENANCE_GAP"
+    ],
+    "refutations": [
+      "Do not duplicate DEST_ROOT in NodeContract; request.dest_root plus allowed_paths is sufficient only with verifiable authority provenance.",
+      "Do not place chat/project/agent memory inside L05; acquisition and Memory/Audit are separate boundaries.",
+      "canonical_motor_commit alone does not prove exact motor blob identity.",
+      "historical runtime/vendor/vite is not acquisition authorization."
+    ]
   },
-  "fables_probe": {
-    "crazy_wall_status": "GAP_NOT_LOCATED_IN_MAIN_CODE_SEARCH_2026-09-10",
-    "astra2_role_state_path_result": "NOT_PUBLISHED_AT_LAST_CHECK",
-    "s3_generic_socket_verdict": "NOT_FABLES_EVIDENCE",
-    "interpretation": "S1-04 remains dependency-blocked until exact Fables identity+path+SHA+usable contract+test."
+  "round_3_followup": {
+    "ci": {
+      "workflow": "YAIWES Wordflow LOOP Pytest",
+      "run_id": 34569219569,
+      "head_sha": "f9e8a190cbec48f92473163de6d98152ad98f1dc",
+      "status": "completed",
+      "conclusion": "success",
+      "verdict": "REAL_GITHUB_CI_PASS"
+    },
+    "l05": {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/layers/layer_05_download_extract.py",
+      "blob_sha": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
+      "tests_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_layers.py",
+      "tests_blob_sha": "76515236717e2d36985458275c51ef8c552873a9",
+      "newly_verified": ["SPECIAL_FILE_GAP direct","SPECIAL_FILE_GAP nested","PROVIDER_GAP preserved"],
+      "remaining_gaps": ["MOTOR_BLOB_IDENTITY_GAP","MOTOR_AUX_INPUT_CONTRACT_GAP","DESTINATION_AUTHORITY_PROVENANCE_GAP"]
+    },
+    "persistence": {
+      "ledger_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/ledger.py",
+      "ledger_blob_sha": "60b35f1e2b9d61232020ec84d08868eaf89a9cec",
+      "runner_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/runner.py",
+      "runner_blob_sha": "14b097a9775a9d39417f15344d01e1c9e6886b13",
+      "test_core_blob_sha": "38f40cec4ac6075a87470c137ab215f108deeb03",
+      "durable_ledger": "PASS_HASH_CHAIN_VERIFY_FSYNC_ATOMIC_REPLACE",
+      "restart_recovery": "PASS_TESTED_COMPLETED_NODE_REHYDRATION",
+      "memory_scope_separation": "GAP_NOT_EVIDENCED_IN_WORDFLOW_LOOP_PACKAGE",
+      "boundary": "Durable workflow ledger is not equivalent to Memory/Audit chat/project/agent scoped memory."
+    }
   },
   "nodes": {
     "S1-01": {
       "component": "Vite",
       "source": "https://github.com/vitejs/vite",
       "source_ref": "134ce6817984bad0f5fb043481502531fee9b1db",
-      "status": "BLOCKED_FAIL_CLOSED_DEBATE_OPEN",
-      "gap": "DESTINATION_INPUT_GAP",
-      "fresh_delta": "Still no literal authorized acquisition destination; no unauthorized acquisition executed."
+      "status": "BLOCKED_FAIL_CLOSED",
+      "gap": "DESTINATION_INPUT_GAP"
     },
     "S1-02": {
       "component": "Supabase",
       "source": "https://github.com/supabase/supabase",
       "source_ref": "0500c21b37cc11b6b6140dde9827f89fb7d3097d",
-      "status": "BLOCKED_FAIL_CLOSED_DEBATE_OPEN",
-      "gap": "DESTINATION_INPUT_GAP",
-      "fresh_delta": "Still no literal authorized acquisition destination; no unauthorized acquisition executed."
+      "status": "BLOCKED_FAIL_CLOSED",
+      "gap": "DESTINATION_INPUT_GAP"
     },
     "S1-03": {
-      "task": "read-back destino",
-      "status": "PARTIAL_READBACK_ONLY",
-      "gap": "AUTHORIZED_DESTINATION_NOT_DEFINED",
-      "evidence": "Final destination read-back waits on explicit destination and canonical motor execution."
+      "task": "final acquisition destination read-back",
+      "status": "BLOCKED_DEPENDENCY",
+      "gap": "AUTHORIZED_DESTINATION_NOT_DEFINED"
     },
     "S1-04": {
-      "task": "preparar siguiente componente WIRED cuando Fables esté verificado",
+      "task": "prepare WIRED after Fables verification",
       "status": "BLOCKED_DEPENDENCY",
-      "gap": "FABLES_NOT_VERIFIED",
-      "evidence": "Fables verification remains owned by A2; no exact verified handoff consumed by S1."
+      "gap": "FABLES_NOT_VERIFIED"
     },
-    "S1-R2-L05": {
-      "task": "Define L05 canonical motor adapter interface",
-      "status": "ANSWERED_WITH_EVIDENCE_WAITING_COORDINATOR",
-      "evidence_commit": "2ed0c4177149e2678a4e092b090b180414359414"
+    "S1-R3-TEST-AND-PERSISTENCE-CROSSCHECK": {
+      "status": "PARTIAL_PASS",
+      "pass": ["REAL_GITHUB_CI_PASS","DURABLE_LEDGER_PASS","RESTART_RECOVERY_PASS"],
+      "gap": ["MEMORY_SCOPE_SEPARATION_NOT_EVIDENCED"]
+    },
+    "S1-R4-AUTHORITY-MOTOR-MEMORY-BOUNDARY": {
+      "status": "ACTIVE_WAITING_COORDINATOR_DECISION",
+      "questions": ["R4-Q1","R4-Q2","R4-Q3"]
     }
   },
   "loop_history": [
-    {"cycle":1,"result":"BLOCKERS_PERSISTED_NO_UNAUTHORIZED_WRITE","base_main_sha":"32ba1c947511f76b36b981d13914b73960fa0ed3"},
-    {"cycle":2,"result":"DESTINATION_PROBE_404_BOTH; FABLES_STILL_UNVERIFIED; WATCHDOG_REFRESHED","base_main_sha":"dffa858bbaa93a404ac334051ca1442d1420066d"},
-    {"cycle":3,"result":"CANONICAL_SKILL_DESTINATION_RULE_RECONFIRMED; COORDINATOR_DEPENDENCY; FABLES_STILL_UNVERIFIED","base_main_sha":"db4d4bea6115d5d7ae8da832143ec745d541be4b"},
-    {"cycle":4,"result":"COORDINATOR_LEDGER_REREAD; NO_AUTHORIZED_DEST_ROOT; FABLES_STILL_UNVERIFIED","base_main_sha":"82d5b74c3ff1930de4ce8976b23ba413fbf6389a"},
-    {"cycle":5,"result":"HISTORICAL_VITE_DIAGNOSTIC_AND_RUNTIME_TARGET_RECONCILED_READ_ONLY; NO_AUTHORIZED_PHYSICAL_DEST_ROOT","base_main_sha":"b4f23a7bf56bb08656412b992d77ebd793255ec6"},
-    {"cycle":6,"result":"S1_DEBATE_OPENED_TO_SOL_PLAN; EXPLICIT_REPLY_TARGET; THREE_POLLS_NO_RESPONSE; CONDITION_WATCH_ACTIVE","base_main_sha":"0ffc6fe3154d820df419f4a279b8c08d5649eaa5"},
-    {"cycle":7,"result":"COORDINATOR_ROUND2_CONSUMED; L05_INTERFACE_DEFINED_FROM_README_DSL_CONTRACTS; WRITTEN_DIRECTLY_TO_CRAZY_WALL_4AI; READBACK_CONFIRMED","base_main_sha":"2ed0c4177149e2678a4e092b090b180414359414"}
+    {"cycle":7,"result":"ROUND2_L05_ANSWERED_AND_READBACK"},
+    {"cycle":8,"result":"ROUND3_CROSSCHECK_ANSWERED; THREE_CONTRACT_GAPS; FREE_NODE_STARTED"},
+    {"cycle":9,"result":"CI_SUCCESS; L05_TYPED_GAPS_REVALIDATED; LEDGER_RESTART_PASS; MEMORY_SCOPE_GAP; R4_OPEN"}
   ],
-  "next_allowed_delta": "Continue immediate LOOP. Reread main and CRAZY-WALL-DEBATE-4AI. If coordinator accepts/changes L05 design or assigns implementation, consume exact order and act only within S1. Continue polling literal destinations for Vite/Supabase and verified Fables handoff; never infer destination.",
+  "next_allowed_delta": "Continue LOOP. Poll central debate and S1 debate for explicit R4 decisions, literal Vite/Supabase destinations and verified Fables handoff. If coordinator assigns ownership/write paths for any R4 gap, execute only that exact S1 delta. Do not infer destination or invade S2/S3/A2.",
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
 }
