@@ -21,7 +21,7 @@ secret_store:
   raw_credentials_in_git: false
   resolution:
     huggingface:
-      accepted_env_refs: [HF_TOKEN, HUGGINGFACE_TOKEN, RIU_HF_TOKEN]
+      accepted_env_refs: [RIU_HF_TOKEN, HF_TOKEN, HUGGINGFACE_TOKEN]
     github:
       accepted_env_refs: [RIU_GITHUB_PAT, GITHUB_TOKEN, GH_TOKEN]
     claude_github_mcp:
@@ -43,7 +43,13 @@ connections:
     auth: runtime_env_ref
     compute: [hf_jobs_cpu, hf_jobs_gpu]
     capabilities: [models, datasets, spaces, jobs]
-    verification: [whoami, scope_check, api_probe, job_probe]
+    spaces:
+      - repo_id: COMAND-CENTER-1/yaiwes-ui-factory
+        url: https://huggingface.co/spaces/COMAND-CENTER-1/yaiwes-ui-factory
+        runtime_url: https://comand-center-1-yaiwes-ui-factory.hf.space/
+        purpose: frontend_factory_visual_runtime
+        source_evidence: maxbry123-commits/TAREA-1/.github/workflows/yaiwes-hf-static-publish.yml
+    verification: [whoami, scope_check, api_probe, job_probe, space_probe]
 
   claude_github_mcp:
     provider: anthropic_managed_agents
@@ -60,11 +66,12 @@ connections:
     mode: references_only_until_runtime_verified
 
 transport: [api, mcp]
-capabilities: [frontend, ui, github_operations, huggingface_compute, claude_github_mcp, memory_bridge]
+capabilities: [frontend, ui, github_operations, huggingface_compute, huggingface_space, claude_github_mcp, memory_bridge]
 
 health_gates:
   github: PENDING_RUNTIME_CREDENTIAL_TEST
   huggingface: PENDING_RUNTIME_CREDENTIAL_TEST
+  huggingface_space: PENDING_RUNTIME_CREDENTIAL_TEST
   claude_github_mcp: PENDING_RUNTIME_CREDENTIAL_TEST
   router_bridge: DECLARED
 
