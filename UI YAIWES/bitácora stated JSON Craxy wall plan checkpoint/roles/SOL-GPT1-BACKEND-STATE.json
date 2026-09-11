@@ -4,8 +4,8 @@
   "role": "SOL_GPT1_BACKEND",
   "name": "Sol ☀️ 🏈gpt 1 backend",
   "node_prefix": "S1",
-  "status": "ACTIVE_LOOP_ROUND3_FOLLOWUP_R4_OPEN",
-  "observed_at": "2026-09-11T01:29:00-05:00",
+  "status": "ACTIVE_LOOP_FABLES_VERIFIED_DESTINATION_BLOCK_R4_OPEN",
+  "observed_at": "2026-09-11T01:34:11-05:00",
   "watchdog": {
     "enabled": true,
     "automation_id": "6aa3065afd048191a6a4c720d4ba97e7",
@@ -28,10 +28,11 @@
   "debate": {
     "central_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-DEBATE-4AI-2026-09-11.json",
     "s1_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/S1-SOL-PLAN-DEBATE-2026-09-11.json",
-    "s1_readback_blob_sha": "2b96bf675f59eca328a9e6b917fcbc6410cb04fa",
-    "s1_followup_commit": "bb00ef644740c36bfae3620596d30ff233b6c056",
-    "status": "ROUND3_FOLLOWUP_PUBLISHED_R4_OPEN",
-    "open_questions": ["R4-Q1","R4-Q2","R4-Q3"]
+    "s1_readback_blob_sha_before_fables_pass": "98aefeccd69a3683a8a7bf235a7ab576abcf0443",
+    "fables_pass_commit": "e80637b878766b18175c77a0328c54b843ddbb52",
+    "fables_pass_blob_sha": "da51a160e2feb38c92d35ee760bbcf02d1dcd9cf",
+    "status": "FABLES_VERIFIED_R4_OPEN",
+    "open_questions": ["R4-Q1","R4-Q2","R4-Q3","R4-Q4"]
   },
   "canonical_motor": {
     "commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
@@ -39,54 +40,54 @@
     "skill_blob_sha": "b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54",
     "destination_rule": "DEST_REPO/DEST_BRANCH/DEST_ROOT must be literal per operation; never infer/reuse historical destination."
   },
+  "coordinator_reply": {
+    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S1.json",
+    "blob_sha": "132ced4f3155f3562019f73ed32435d9b43809f3",
+    "status": "ACTIONABLE_REPLY_LOOP_CONTINUES",
+    "destinations": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
+    "l05": "ACCEPTED_PRESENT_STRENGTHENED",
+    "fables_at_reply": "PATH_AND_CONTRACT_PRESENT_CI_PENDING",
+    "consumed": true
+  },
   "round_3": {
     "answer_commit": "6f3ac50c08869efb81ebe17fef4220fab5bcd7f6",
     "verdict": "PARTIAL_PASS_CONTRACT_GAPS_REMAIN",
-    "document_blobs": {
-      "max_system": "b9bc9a7f56cf17607b863829213f7bcb0f8b8081",
-      "virtual_computer": "ecc8b3b1444ade0ca894789e149e881a08b999c0",
-      "memory_workflow": "da109ae2d91e4563c01492ad365bbaa00fc6baa6"
-    },
     "remaining_contract_gaps": [
       "MOTOR_BLOB_IDENTITY_GAP",
       "MOTOR_AUX_INPUT_CONTRACT_GAP",
       "DESTINATION_AUTHORITY_PROVENANCE_GAP"
-    ],
-    "refutations": [
-      "Do not duplicate DEST_ROOT in NodeContract; request.dest_root plus allowed_paths is sufficient only with verifiable authority provenance.",
-      "Do not place chat/project/agent memory inside L05; acquisition and Memory/Audit are separate boundaries.",
-      "canonical_motor_commit alone does not prove exact motor blob identity.",
-      "historical runtime/vendor/vite is not acquisition authorization."
     ]
   },
-  "round_3_followup": {
-    "ci": {
-      "workflow": "YAIWES Wordflow LOOP Pytest",
-      "run_id": 34569219569,
-      "head_sha": "f9e8a190cbec48f92473163de6d98152ad98f1dc",
-      "status": "completed",
-      "conclusion": "success",
-      "verdict": "REAL_GITHUB_CI_PASS"
-    },
-    "l05": {
-      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/layers/layer_05_download_extract.py",
-      "blob_sha": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
-      "tests_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_layers.py",
-      "tests_blob_sha": "76515236717e2d36985458275c51ef8c552873a9",
-      "newly_verified": ["SPECIAL_FILE_GAP direct","SPECIAL_FILE_GAP nested","PROVIDER_GAP preserved"],
-      "remaining_gaps": ["MOTOR_BLOB_IDENTITY_GAP","MOTOR_AUX_INPUT_CONTRACT_GAP","DESTINATION_AUTHORITY_PROVENANCE_GAP"]
-    },
-    "persistence": {
-      "ledger_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/ledger.py",
-      "ledger_blob_sha": "60b35f1e2b9d61232020ec84d08868eaf89a9cec",
-      "runner_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/runner.py",
-      "runner_blob_sha": "14b097a9775a9d39417f15344d01e1c9e6886b13",
-      "test_core_blob_sha": "38f40cec4ac6075a87470c137ab215f108deeb03",
-      "durable_ledger": "PASS_HASH_CHAIN_VERIFY_FSYNC_ATOMIC_REPLACE",
-      "restart_recovery": "PASS_TESTED_COMPLETED_NODE_REHYDRATION",
-      "memory_scope_separation": "GAP_NOT_EVIDENCED_IN_WORDFLOW_LOOP_PACKAGE",
-      "boundary": "Durable workflow ledger is not equivalent to Memory/Audit chat/project/agent scoped memory."
-    }
+  "l05": {
+    "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/layers/layer_05_download_extract.py",
+    "blob_sha": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
+    "tests_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_layers.py",
+    "tests_blob_sha": "76515236717e2d36985458275c51ef8c552873a9",
+    "verified": ["destination gate","source lock gate","motor commit gate","special-file typed gaps","provider typed gap","closed-balance/read-back gate"],
+    "remaining_gaps": ["MOTOR_BLOB_IDENTITY_GAP","MOTOR_AUX_INPUT_CONTRACT_GAP","DESTINATION_AUTHORITY_PROVENANCE_GAP"]
+  },
+  "persistence": {
+    "ledger_blob_sha": "60b35f1e2b9d61232020ec84d08868eaf89a9cec",
+    "runner_blob_sha": "14b097a9775a9d39417f15344d01e1c9e6886b13",
+    "test_core_blob_sha": "38f40cec4ac6075a87470c137ab215f108deeb03",
+    "durable_ledger": "PASS_HASH_CHAIN_VERIFY_FSYNC_ATOMIC_REPLACE",
+    "restart_recovery": "PASS_TESTED_COMPLETED_NODE_REHYDRATION",
+    "memory_scope_separation": "GAP_NOT_EVIDENCED_IN_WORDFLOW_LOOP_PACKAGE"
+  },
+  "fables": {
+    "status": "VERIFIED_CI_PASS",
+    "contract_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py",
+    "contract_blob_sha": "36ee0b1b184b709e292fd8c617f0e795e7e98451",
+    "contract_id": "yaiwes.fables.v1",
+    "test_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_fables_socket.py",
+    "test_blob_sha": "cfc63c5363330ea0746c1d3e041c17dc11df9b0c",
+    "ci_run_id": 34569726823,
+    "ci_head_sha": "d005758d083c09a3ae6aa4dd999a04414bccadd3",
+    "ci_job_id": 103169993658,
+    "ci_conclusion": "success",
+    "wordflow_tests": "12 passed in 0.05s",
+    "socket_fables_tests": "9 passed in 0.02s",
+    "assertions": ["explicit contract identity","declared capability required","MountGuard authoritative","valid identity+capability mount"]
   },
   "nodes": {
     "S1-01": {
@@ -110,24 +111,25 @@
     },
     "S1-04": {
       "task": "prepare WIRED after Fables verification",
-      "status": "BLOCKED_DEPENDENCY",
-      "gap": "FABLES_NOT_VERIFIED"
+      "status": "READY_DEPENDENCY_FABLES_RESOLVED_WAITING_SOURCE_ACQUISITION",
+      "gap": "VITE_SOURCE_NOT_ACQUIRED_DESTINATION_INPUT_GAP",
+      "fables_status": "VERIFIED_CI_PASS"
     },
     "S1-R3-TEST-AND-PERSISTENCE-CROSSCHECK": {
       "status": "PARTIAL_PASS",
       "pass": ["REAL_GITHUB_CI_PASS","DURABLE_LEDGER_PASS","RESTART_RECOVERY_PASS"],
       "gap": ["MEMORY_SCOPE_SEPARATION_NOT_EVIDENCED"]
     },
-    "S1-R4-AUTHORITY-MOTOR-MEMORY-BOUNDARY": {
-      "status": "ACTIVE_WAITING_COORDINATOR_DECISION",
-      "questions": ["R4-Q1","R4-Q2","R4-Q3"]
+    "S1-R4-COORDINATOR-DECISION-POLL": {
+      "status": "ACTIVE",
+      "questions": ["R4-Q1","R4-Q2","R4-Q3","R4-Q4"]
     }
   },
   "loop_history": [
-    {"cycle":7,"result":"ROUND2_L05_ANSWERED_AND_READBACK"},
-    {"cycle":8,"result":"ROUND3_CROSSCHECK_ANSWERED; THREE_CONTRACT_GAPS; FREE_NODE_STARTED"},
-    {"cycle":9,"result":"CI_SUCCESS; L05_TYPED_GAPS_REVALIDATED; LEDGER_RESTART_PASS; MEMORY_SCOPE_GAP; R4_OPEN"}
+    {"cycle":8,"result":"ROUND3_CROSSCHECK_ANSWERED; THREE_CONTRACT_GAPS"},
+    {"cycle":9,"result":"CI_SUCCESS; LEDGER_RESTART_PASS; MEMORY_SCOPE_GAP; R4_OPEN"},
+    {"cycle":10,"result":"COORDINATOR_REPLY_CONSUMED; FABLES_PATH_SHA_CONTRACT_TEST_CI_PASS; DESTINATIONS_STILL_BLOCKED"}
   ],
-  "next_allowed_delta": "Continue LOOP. Poll central debate and S1 debate for explicit R4 decisions, literal Vite/Supabase destinations and verified Fables handoff. If coordinator assigns ownership/write paths for any R4 gap, execute only that exact S1 delta. Do not infer destination or invade S2/S3/A2.",
+  "next_allowed_delta": "Continue LOOP. Poll central debate/Director/coordinator for R4 decisions or literal Vite/Supabase destinations. Fables is verified and no longer blocks S1-04; acquisition still cannot run without explicit destination. If destination appears, execute S1-01/S1-02 only through canonical motors and publish Vite handoff to S3.",
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
 }
