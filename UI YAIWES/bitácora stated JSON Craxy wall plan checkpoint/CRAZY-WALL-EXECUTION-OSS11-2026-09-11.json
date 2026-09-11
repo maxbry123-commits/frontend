@@ -3,92 +3,45 @@
   "contract": "tel.workflow/v3",
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_LOOP",
-  "base_crazy_wall": {
-    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-STATE-HANDOFF-XRAY-2026-09-11.json",
-    "blob": "a2683070871975a95ea4d16ac125125dcfb11649"
-  },
-  "watchdog": {"automation_id": "6a9dd6b174548191840938a63cb45675", "cadence": "1 hour", "active": true},
+  "history": [
+    {"run_id":34646657007,"job_id":103418944902,"result":"failure","balance":{"total":11,"download_verified":1,"extraction_verified":1,"published_readback_verified":1,"failed":10,"pending":0},"classification":{"Testcontainers Python":"VERIFIED_CLOSED_ACQUISITION","OPA":"DESTINATION_EXISTS","OpenFGA":"DESTINATION_EXISTS","Litestream":"SOURCE_SPECIAL_FILE_GAP","rqlite":"READBACK_TREE_HASH_GAP","OpenTelemetry Collector":"DESTINATION_EXISTS","Grafana Tempo":"SOURCE_SPECIAL_FILE_GAP","Schemathesis":"SOURCE_SPECIAL_FILE_GAP","Kata Containers":"SOURCE_SPECIAL_FILE_GAP","Grype":"SOURCE_SPECIAL_FILE_GAP","ORAS":"DESTINATION_EXISTS"}},
+    {"run_id":34647400113,"job_id":103421363165,"result":"success","strategy":"canonical Motor1 reconstruction + canonical Motor3 copy from existing canonical archives; no Motor2/engine mutation; no LFS/force/alternate acquisition","publish_commit":"2dd6e2b27","readback":"OPA/OpenFGA/rqlite/OpenTelemetry Collector/ORAS all SOURCE_PRESENT_READBACK_VERIFIED against DOWNLOAD_EXTRACT_MANIFEST extracted_tree"}
+  ],
   "acquisition": {
-    "state": "GAPS_PENDING_WITH_ONE_VERIFIED_AND_REPAIR_IN_PROGRESS",
-    "queue_path": "UI YAIWES/automation/oss-11-canonical-motor2-20260911/QUEUE.json",
-    "queue_commit": "ba344a4754cebbb7e0dca394e3929a7aa15bc173",
-    "workflow_path": ".github/workflows/ui-yaiwes-oss-11-canonical-motor2-direct-20260911.yml",
-    "workflow_commit": "be68f103227c345c029fac4898c82c9dbf0999ef",
-    "run_id": 34646657007,
-    "job_id": 103418944902,
-    "run_conclusion": "failure",
-    "balance": {"total": 11, "download_verified": 1, "extraction_verified": 1, "published_readback_verified": 1, "failed": 10, "pending": 0},
-    "destination": "UI YAIWES/componentes open soure UI YAIWES/<slug>",
-    "engine": "canonical Motor 2 + hf_download_extract_engine",
-    "motor2_blob": "84d566e2ee4e98e42eb3a864026d067d48caabd9",
-    "engine_blob": "91e6e4486692eab314be5c7130d8310d3c855397",
-    "rules": ["pinned refs", "direct destination", "no LFS", "no force", "special files fail closed", "manifest+code+readback required"],
-    "components": ["OPA", "OpenFGA", "Litestream", "rqlite", "OpenTelemetry Collector", "Grafana Tempo", "Testcontainers Python", "Schemathesis", "Kata Containers", "Grype", "ORAS"]
+    "queue_path":"UI YAIWES/automation/oss-11-canonical-motor2-20260911/QUEUE.json",
+    "workflow_path":".github/workflows/ui-yaiwes-oss-11-canonical-motor2-direct-20260911.yml",
+    "destination":"UI YAIWES/componentes open soure UI YAIWES/<slug>",
+    "canonical_motor_commit":"ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
+    "motor2_blob":"84d566e2ee4e98e42eb3a864026d067d48caabd9",
+    "engine_blob":"91e6e4486692eab314be5c7130d8310d3c855397",
+    "source_present_verified":["OPA","OpenFGA","rqlite","OpenTelemetry Collector","Testcontainers Python","ORAS"],
+    "blocked_source_special_file":["Litestream","Grafana Tempo","Schemathesis","Kata Containers","Grype"],
+    "rules":["pinned refs","literal destination","no LFS","no force","no alternate acquisition","special files fail closed","manifest+code+readback before SOURCE_PRESENT"]
   },
-  "run_34646657007_classification": {
-    "VERIFIED_CLOSED_ACQUISITION": {
-      "Testcontainers Python": {"source_ref": "5c70d540e0df919e2de77ce8cc75b5c50cd772e7", "publish_commit": "f84e202a0c595ba08a4fbac5e83efb8620c5e182", "manifest_code_readback": true, "state_boundary": "SOURCE_PRESENT_ONLY_UNTIL_WIRED_TESTED"}
-    },
-    "DESTINATION_EXISTS_NEEDS_FRESH_TREE_READBACK": ["OPA", "OpenFGA", "OpenTelemetry Collector", "ORAS"],
-    "READBACK_TREE_HASH_GAP": ["rqlite"],
-    "SOURCE_SPECIAL_FILE_GAP": {
-      "Litestream": [".cursorrules", ".github/copilot-instructions.md"],
-      "Grafana Tempo": ["vendor/special entries in example and operations trees"],
-      "Schemathesis": ["docs/migration.md"],
-      "Kata Containers": ["docs/VERSION/LICENSE/THIRD-PARTY/config special entries"],
-      "Grype": ["test/quality/.yardstick/labels"]
-    },
-    "refutation": "A failed queue item is not automatically COMPONENT_FAIL. DESTINATION_EXISTS may represent a prior canonical publish and must be re-read; SOURCE_SPECIAL_FILE_GAP is an immutable-motor source-shape blocker; READBACK_TREE_HASH_GAP is an integrity blocker."
-  },
-  "strategy_delta": {
-    "motor_modified": false,
-    "lfs_used": false,
-    "force_used": false,
-    "alternate_acquisition_used": false,
-    "repair_workflow": ".github/workflows/ui-yaiwes-oss11-repair-published-readback-20260911.yml",
-    "repair_head_sha": "75c1f8c347b885228430e362f7fd717de3821a63",
-    "repair_run_id": 34647400113,
-    "repair_run_state_observed": "IN_PROGRESS",
-    "repair_scope": ["OPA", "OpenFGA", "rqlite", "OpenTelemetry Collector", "ORAS"],
-    "repair_method": "canonical Motor1 reconstruction + canonical Motor3 copy from already-published archives, then independent manifest tree-hash readback; no Motor2/engine mutation",
-    "blocked_special_file_policy": "keep fail-closed; no sanitization, no mirror, no alternate downloader and no motor patch"
-  },
-  "node_contract": {"one_task_one_node": true, "max_steps": 3, "steps": ["1_VERIFY_SOURCE_AND_CAPABILITY", "2_WIRE_AUTHORIZED_DELTA", "3_TEST_EVIDENCE_REPORT"], "collision_rule": "one component/write-scope = one owner"},
+  "node_contract":{"one_task_one_node":true,"max_steps":3,"steps":["1_VERIFY_SOURCE_AND_CAPABILITY","2_WIRE_AUTHORIZED_DELTA","3_TEST_EVIDENCE_REPORT"],"claim_requires":["role","node_id","fresh base_main_sha","write_scope","claimed_at"],"truth":"coordinator readiness is not role heartbeat"},
   "sol_queues": {
-    "SOL_GPT1": [
-      {"node": "OSS11-S1-01-LITESTREAM", "component": "Litestream", "state": "GAP_SOURCE_SPECIAL_FILE", "after": "SOURCE_PRESENT", "scope": ["runtime/src/memory/**", "runtime/src/recovery/**"]},
-      {"node": "OSS11-S1-02-RQLITE", "component": "rqlite", "state": "WAIT_REPAIR_READBACK", "after": "SOURCE_PRESENT", "scope": ["runtime/src/memory/**", "runtime/src/recovery/**"]}
+    "SOL_GPT1":[
+      {"node":"OSS11-S1-01-LITESTREAM","component":"Litestream","state":"GAP_SOURCE_SPECIAL_FILE","scope":["runtime/src/memory/**","runtime/src/recovery/**"]},
+      {"node":"OSS11-S1-02-RQLITE","component":"rqlite","state":"READY_FOR_ROLE_CLAIM_SOURCE_PRESENT","scope":["runtime/src/memory/**","runtime/src/recovery/**"]}
     ],
-    "SOL_GPT2": [
-      {"node": "OSS11-S2-01-OTEL", "component": "OpenTelemetry Collector", "state": "WAIT_REPAIR_READBACK", "after": "SOURCE_PRESENT", "scope": ["runtime/src/adapters/**", "runtime/src/telemetry/**"]},
-      {"node": "OSS11-S2-02-TEMPO", "component": "Grafana Tempo", "state": "GAP_SOURCE_SPECIAL_FILE", "after": "SOURCE_PRESENT", "scope": ["runtime/src/adapters/**", "runtime/src/telemetry/**"]},
-      {"node": "OSS11-S2-03-KATA", "component": "Kata Containers", "state": "GAP_SOURCE_SPECIAL_FILE", "after": "SOURCE_PRESENT", "scope": ["runtime/src/adapters/**", "runtime/src/uek/**"]}
+    "SOL_GPT2":[
+      {"node":"OSS11-S2-01-OTEL","component":"OpenTelemetry Collector","state":"READY_FOR_ROLE_CLAIM_SOURCE_PRESENT","scope":["runtime/src/adapters/**","runtime/src/telemetry/**"]},
+      {"node":"OSS11-S2-02-TEMPO","component":"Grafana Tempo","state":"GAP_SOURCE_SPECIAL_FILE","scope":["runtime/src/adapters/**","runtime/src/telemetry/**"]},
+      {"node":"OSS11-S2-03-KATA","component":"Kata Containers","state":"GAP_SOURCE_SPECIAL_FILE","scope":["runtime/src/adapters/**","runtime/src/uek/**"]}
     ],
-    "SOL_GPT3": [
-      {"node": "OSS11-S3-01-TESTCONTAINERS", "component": "Testcontainers Python", "state": "READY_FOR_ROLE_CLAIM_SOURCE_PRESENT", "after": "SOURCE_PRESENT", "scope": ["runtime/src/integration/**", "runtime/tests/**"]},
-      {"node": "OSS11-S3-02-SCHEMATHESIS", "component": "Schemathesis", "state": "GAP_SOURCE_SPECIAL_FILE", "after": "SOURCE_PRESENT", "scope": ["runtime/src/integration/**", "runtime/tests/**"]}
+    "SOL_GPT3":[
+      {"node":"OSS11-S3-01-TESTCONTAINERS","component":"Testcontainers Python","state":"READY_FOR_ROLE_CLAIM_SOURCE_PRESENT","scope":["runtime/src/integration/**","runtime/tests/**"]},
+      {"node":"OSS11-S3-02-SCHEMATHESIS","component":"Schemathesis","state":"GAP_SOURCE_SPECIAL_FILE","scope":["runtime/src/integration/**","runtime/tests/**"]}
     ]
   },
-  "orchestrator_queue": [
-    {"node": "OSS11-O-01-OPA", "component": "OPA", "state": "WAIT_REPAIR_READBACK"},
-    {"node": "OSS11-O-02-OPENFGA", "component": "OpenFGA", "state": "WAIT_REPAIR_READBACK"},
-    {"node": "OSS11-O-03-GRYPE", "component": "Grype", "state": "GAP_SOURCE_SPECIAL_FILE"},
-    {"node": "OSS11-O-04-ORAS", "component": "ORAS", "state": "WAIT_REPAIR_READBACK"}
+  "orchestrator_queue":[
+    {"node":"OSS11-O-01-OPA","component":"OPA","state":"FREE_SOURCE_PRESENT"},
+    {"node":"OSS11-O-02-OPENFGA","component":"OpenFGA","state":"FREE_SOURCE_PRESENT"},
+    {"node":"OSS11-O-03-GRYPE","component":"Grype","state":"GAP_SOURCE_SPECIAL_FILE"},
+    {"node":"OSS11-O-04-ORAS","component":"ORAS","state":"FREE_SOURCE_PRESENT"}
   ],
-  "role_freshness": {
-    "SOL_GPT1": "NO_OSS11_CLAIM_PUBLISHED_IN_ROLE_STATE",
-    "SOL_GPT2": "NO_OSS11_CLAIM_PUBLISHED_IN_ROLE_STATE",
-    "SOL_GPT3": "NO_OSS11_CLAIM_PUBLISHED_IN_ROLE_STATE",
-    "rule": "Do not mark role ACTIVE from coordinator intent; role must publish its own fresh base SHA/claim/evidence."
-  },
-  "pending_tasks": [
-    "read final result/logs for repair run 34647400113",
-    "promote OPA/OpenFGA/rqlite/OpenTelemetry Collector/ORAS to SOURCE_PRESENT only if independent manifest tree hash readback passes",
-    "allow SOL3 Testcontainers node claim with fresh base SHA and own write_scope",
-    "keep five SOURCE_SPECIAL_FILE_GAP components fail-closed unless a new authorized canonical-compatible provenance strategy exists",
-    "record WIRED/RUNTIME_TEST_PASS independently from SOURCE_PRESENT",
-    "update G01-G19 ledger and G12 global matrix only with fresh evidence",
-    "keep Pages/HF publish blockers separate"
-  ],
-  "closure": "ACTIVE_LOOP; SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED; global closure prohibited until objective matrix is 100% evidenced."
+  "role_freshness":{"SOL_GPT1":"NO_FRESH_OSS11_ROLE_CLAIM","SOL_GPT2":"NO_FRESH_OSS11_ROLE_CLAIM","SOL_GPT3":"NO_FRESH_OSS11_ROLE_CLAIM"},
+  "next_free":["OSS11-O-01-OPA","OSS11-O-02-OPENFGA","OSS11-O-04-ORAS","OSS11-S1-02-RQLITE","OSS11-S2-01-OTEL","OSS11-S3-01-TESTCONTAINERS"],
+  "pending_tasks":["Orchestrator claim exactly one FREE_SOURCE_PRESENT node with fresh base SHA and isolated write_scope","roles claim only their own READY node and publish own heartbeat","wire through existing contracts/Fables/adapters only","test and record WIRED then RUNTIME_TEST_PASS independently","keep five SOURCE_SPECIAL_FILE_GAP nodes fail-closed and move to independent FREE nodes","update G01-G19/G12 only from fresh evidence"],
+  "closure":"ACTIVE_LOOP; SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED; global close prohibited until objective matrix is 100% evidenced."
 }
