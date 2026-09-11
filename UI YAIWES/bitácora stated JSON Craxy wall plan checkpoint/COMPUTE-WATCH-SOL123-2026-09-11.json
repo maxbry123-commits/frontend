@@ -3,7 +3,7 @@
   "contract": "tel.workflow/v3",
   "status": "ACTIVE_MONITORING_LOOP",
   "monitor": "🌞👷 sol osquestador plan 🎯",
-  "updated_at_utc": "2026-09-11T17:03:01Z",
+  "updated_at_utc": "2026-09-11T18:02:59Z",
   "monitoring_rule": "No role is marked ACTIVE from assumption. ACTIVE requires fresh STATE/Crazy Wall heartbeat, commit, or real run/log evidence. GAP blocks only its node; next FREE node must be visible.",
   "roles": {
     "SOL1": {
@@ -11,7 +11,7 @@
       "current_task": "Preserve completed S1-05/S1-06/S1-07 findings; continue safe read-only document↔runtime cross-checks until explicit memory-adapter mutation ownership or literal Vite/Supabase destinations arrive.",
       "status": "WAITING_FRESH_HEARTBEAT_WITH_FRESH_STATE_READBACK",
       "blocker_if_any": "Vite/Supabase DESTINATION_INPUT_GAP; memory adapter remains 404 and implementation is not authorized in S1 state.",
-      "evidence_or_run": "roles/SOL-GPT1-BACKEND-STATE.json remains blob 89ee5114679abe3726942fb420e1e55882950b38 at fresh role-directory readback; no fresh SOL1-owned commit/run observed this cycle.",
+      "evidence_or_run": "Fresh A1 audit commit 6d7de9e79faa5955357ea8ecde81fdd8c611e84c confirms canonical SOL1 state blob remains 89ee5114679abe3726942fb420e1e55882950b38 and no new Vite/Supabase acquisition/readback closure evidence exists; ASTRA activity is not SOL1 heartbeat.",
       "next_free_node": "Continue read-only mapping and publish own heartbeat before ACTIVE; do not infer destination, ownership or agent-memory semantics.",
       "heartbeat_at": null,
       "watch": "MONITORED_BY_SOL_ORQUESTADOR"
@@ -21,29 +21,29 @@
       "current_task": "Keep DuckDB SPECIAL_FILE_GAP and AVF provider/runtime gaps fail-closed; inspect existing registry/loader/mount_guard insertion points without runtime mutation until explicitly assigned.",
       "status": "WAITING_FRESH_HEARTBEAT_WITH_FRESH_STATE_READBACK",
       "blocker_if_any": "DuckDB immutable motor rejects upstream symlinks; AVF provider/runtime capability/permission/guest boot remain unverified.",
-      "evidence_or_run": "roles/SOL-GPT2-BACKEND-STATE.json remains blob f5fd829084d88a6dbd017856e453a78855cf06f0 at fresh role-directory readback; no fresh SOL2-owned commit/run observed this cycle.",
+      "evidence_or_run": "Fresh A1 audit commit 6d7de9e79faa5955357ea8ecde81fdd8c611e84c confirms canonical SOL2 state blob remains f5fd829084d88a6dbd017856e453a78855cf06f0 and no new DuckDB/AVF closure evidence exists.",
       "next_free_node": "Publish fresh heartbeat for the read-only insertion-point audit; no motor patch, source sanitization, mirror or runtime mutation without explicit authorization.",
       "heartbeat_at": null,
       "watch": "MONITORED_BY_SOL_ORQUESTADOR"
     },
     "SOL3": {
-      "current_node": "S3_ROUND8_CODEMIRROR_SOURCE_READBACK_GAP",
-      "current_task": "Keep #25 Tailwind, #27 Shiki and #30 xterm.js as RUNTIME_PASS_NOT_WIRED; keep #22 React Virtuoso COMPONENT_TEST_FAIL_NOT_PASS; treat #28 CodeMirror as CURRENT_SOURCE_READBACK_GAP_NOT_PASS because current main has no CodeMirror/codemirror path or cited workflow; continue only safe 1x1 evidence work.",
+      "current_node": "S3_ROUND9_VIRTUOSO_FAILURE_DECOMPOSED",
+      "current_task": "Keep #25 Tailwind, #27 Shiki and #30 xterm.js as RUNTIME_PASS_NOT_WIRED; keep #28 CodeMirror as CURRENT_SOURCE_READBACK_GAP_NOT_PASS; for #22 React Virtuoso separate four Vitest browser dynamic-import suite failures from two functional assertion failures before any surgical patch.",
       "status": "ACTIVE_BY_FRESH_COMMIT_EVIDENCE",
-      "blocker_if_any": "#28 has no current-main source path/handoff route and no current workflow; #22 exact failing assertion remains unresolved. No historical destination or replacement may be inferred.",
-      "evidence_or_run": "Fresh S3 debate commit 3160fbaaa985fcfdb71126d4c91494d223f16899 at 2026-09-11T16:37:47Z records Round8 CodeMirror current-main tree readback against 26491ef4c3de0faf86deeb478b5f91ec77807026: no CodeMirror/codemirror path and workflow sol-gpt3-s3-codemirror-runtime-20260911.yml absent. Canonical SOL3 role-state blob remains b852f5ec08aac4eab4259626a9c243e5c0b4ad56, so ACTIVE is based only on the fresh S3-owned debate commit, not a state-file heartbeat.",
-      "next_free_node": "Do not fabricate CodeMirror source or replacement. Verify Virtuoso exact failing assertion or take the next independent FREE component in 31-40; keep Fables TESTED_NOT_WIRED until real integration consumption evidence exists.",
-      "heartbeat_at": "2026-09-11T16:37:47Z",
+      "blocker_if_any": "React Virtuoso is COMPONENT_TEST_FAIL_DECOMPOSED_NOT_PASS: custom-scroll-parent-rebind expects listener count >0 but gets 0; model-state-persistence expects reset first row Beta but sees 2Alpha. CodeMirror still lacks current-main source/handoff route. Neither condition authorizes blind patch or replacement acquisition.",
+      "evidence_or_run": "Fresh S3-owned debate commit 9af9d21f45b06129ab9c9119de26313e1930baf4 at 2026-09-11T17:19:25Z decomposes run 34573280051/job 103179929841 into 489 passing tests, 4 VITEST_BROWSER_DYNAMIC_IMPORT_FAILURE suites and 2 exact functional assertion failures. Canonical SOL3 role-state blob remains b852f5ec08aac4eab4259626a9c243e5c0b4ad56; ACTIVE is based only on fresh S3 debate evidence.",
+      "next_free_node": "Prove a minimal causal delta for the two Virtuoso functional regressions from source read-back before mutation; keep infrastructure import failures separate; if blocked, take next independent FREE 31-40. Do not fabricate CodeMirror source/replacement and keep Fables TESTED_NOT_WIRED.",
+      "heartbeat_at": "2026-09-11T17:19:25Z",
       "watch": "MONITORED_BY_SOL_ORQUESTADOR"
     },
     "SOL_ORQUESTADOR": {
       "current_node": "G12_GLOBAL_GOALS_COVERAGE_4PASS_MATRIX",
-      "current_task": "Continue requirement/objective→layer→file/code→test/evidence→state matrix; reconcile fresh S3 Round8 as a source/readback GAP without converting it to COMPONENT_FAIL or authorizing acquisition.",
+      "current_task": "Continue requirement/objective→layer→file/code→test/evidence→state matrix; reconcile S3 Round9 diagnostic progress without converting it to PASS/WIRED; preserve G02-G06/G11/G18/G19 boundaries.",
       "status": "ACTIVE_BY_FRESH_COORDINATION_HEARTBEAT",
-      "blocker_if_any": "Global verify_final remains open. SOL1/SOL2 have no fresh heartbeat. CodeMirror #28 lacks current source/handoff route; that absence alone does not prove a mandatory missing capability or authorize a new component.",
-      "evidence_or_run": "Fresh readback of DIRECTOR-EXECUTION, AUDIT-GAP-LEDGER, FLOW-MASTER, DIRECTOR-INSTRUCTION-DEBATE, COMPUTE-WATCH, Crazy Wall, STATE and role directory. Main head observed before this heartbeat: 3160fbaaa985fcfdb71126d4c91494d223f16899 at 2026-09-11T16:37:47Z, modifying only S3-SOL-PLAN-DEBATE-2026-09-11.json. Latest listed main workflow run remains 34591723668 completed success; no newer runtime CI was observed for CodeMirror.",
-      "next_free_node": "Update G08 classification for #28 to CURRENT_SOURCE_READBACK_GAP_NOT_PASS; continue G12 matrix and then G11 workspace/failover recovery. Keep G18/G19 publish-only and G02-G06 fail-closed. No acquisition until mandatory missing capability + dedup + literal destination are proven.",
-      "heartbeat_at": "2026-09-11T17:03:01Z",
+      "blocker_if_any": "Global verify_final remains open. SOL1/SOL2 have no own fresh heartbeat. Virtuoso has diagnosed component failures but no causal patch/rerun PASS; CodeMirror lacks current source/handoff. A1 fresh audit confirms no residual closure evidence for Vite/Supabase/DuckDB/AVF.",
+      "evidence_or_run": "Fresh readback of director/ledger/flow/watch plus recent commits: 9af9d21f45b06129ab9c9119de26313e1930baf4 (S3 Round9 Virtuoso failure decomposition) and 6d7de9e79faa5955357ea8ecde81fdd8c611e84c (A1 17Z audit). No new runtime PASS or WIRED evidence is inferred from either commit.",
+      "next_free_node": "Update G08 from exact-assertion-unknown to Virtuoso failure-decomposed; continue G12 matrix, then G11 workspace/failover recovery. Keep G18/G19 publish-only and G02-G06 fail-closed. No acquisition until mandatory missing capability + dedup + literal destination are proven.",
+      "heartbeat_at": "2026-09-11T18:02:59Z",
       "watch": "SELF_WATCHDOG_PLUS_ROLE_MONITOR"
     }
   },
