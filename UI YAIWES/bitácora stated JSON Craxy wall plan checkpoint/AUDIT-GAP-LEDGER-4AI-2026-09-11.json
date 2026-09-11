@@ -4,7 +4,7 @@
   "status": "ACTIVE_AUDIT",
   "rule": "Cada GAP exige owner, requisito fuente, evidencia, estado, delta y verify_final. No borrar historial: sólo promover con evidencia.",
   "seed_gaps": [
-    {"id":"G01_FABLES","status":"OPEN","owner":"SOL_GPT3","gap":"Fables sin identidad+path+SHA+contrato+test verificables","blocks":["STEP2 wiring","integration real"],"next":"localizar/cross-check y test; socket genérico no equivale a Fables"},
+    {"id":"G01_FABLES","status":"OPEN_CONFIRMED_CODE_SEARCH_EMPTY","owner":"SOL_GPT3","gap":"Fables sin identidad+path+SHA+contrato+test verificables; búsqueda de código actual sin match","blocks":["STEP2 wiring","integration real"],"next":"localizar/cross-check o implementar adapter contractual sólo si la fuente de verdad define interfaz; socket genérico no equivale a Fables"},
     {"id":"G02_VITE_DEST","status":"OPEN","owner":"SOL_GPT1","gap":"Vite sin destination literal/autorizado para adquisición física","next":"releer handoff/director input; no inferir"},
     {"id":"G03_SUPABASE_DEST","status":"OPEN","owner":"SOL_GPT1","gap":"Supabase sin destination literal/autorizado para adquisición física","next":"releer handoff/director input; no inferir"},
     {"id":"G04_DUCKDB_SPECIAL","status":"OPEN_FAIL_CLOSED","owner":"SOL_GPT2","gap":"DuckDB official source contiene symlinks/special files rechazados por motor canónico inmutable","next":"StrategyDelta sólo con provenance oficial/autorización; no sanitizar ni modificar motor"},
@@ -15,13 +15,18 @@
     {"id":"G09_MEMORY_BOUNDARY","status":"AUDIT_REQUIRED","owner":"SOL_GPT1","gap":"documento exige Workflow/Runtime separado de Memory/Audit + Checkpoint/Recovery; cobertura completa en code no verificada","next":"4-pass document↔code mapping"},
     {"id":"G10_PLATFORM_MATRIX","status":"AUDIT_REQUIRED","owner":"SOL_GPT2","gap":"documento exige Windows/Linux/Android/iOS/Web con backends distintos; implementación real por plataforma no verificada","next":"4-pass capability/code matrix"},
     {"id":"G11_MULTI_SANDBOX_RECOVERY","status":"AUDIT_REQUIRED","owner":"SOL_ORQUESTADOR","gap":"multi-sandbox, durable checkpoint, failover y recovery del proyecto completo aún no tienen verify_final global","next":"mapear requisitos→code→tests→evidence"},
-    {"id":"G12_GLOBAL_GOALS_COVERAGE","status":"AUDIT_REQUIRED","owner":"SOL_ORQUESTADOR","gap":"no existe aún matriz final requisito/objetivo→capa→archivo→test→estado para los documentos fuente","next":"consolidar tras 4 pasadas de los cuatro roles"}
+    {"id":"G12_GLOBAL_GOALS_COVERAGE","status":"AUDIT_REQUIRED","owner":"SOL_ORQUESTADOR","gap":"no existe aún matriz final requisito/objetivo→capa→archivo→test→estado para los documentos fuente","next":"consolidar tras 4 pasadas de los cuatro roles"},
+    {"id":"G13_RUNTIME_AGENT_EMPTY","status":"OPEN_CONFIRMED","owner":"SOL_GPT1","gap":"runtime/src/agent contiene sólo .gitkeep; Agent Engine ejecutable no está materializado en esa raíz","evidence":"runtime/src/agent/.gitkeep blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","next":"mapear primero interfaces existentes en wordflow_loop y documentos; implementar sólo contratos/adapters mínimos faltantes"},
+    {"id":"G14_RUNTIME_CORE_SCAFFOLD","status":"OPEN_CONFIRMED","owner":"SOL_ORQUESTADOR","gap":"runtime/src/core contiene README pero no implementación ejecutable en esa raíz","evidence":"runtime/src/core/README.md blob a604b3a54fbd54f63af8025bc9f17d8d495a6775","next":"cross-check core requirements contra wordflow_loop para evitar duplicar runtime existente"},
+    {"id":"G15_RUNTIME_INTEGRATION_SCAFFOLD","status":"OPEN_CONFIRMED","owner":"SOL_GPT3","gap":"runtime/src/integration contiene README pero no implementation source; manifests/tests existen separados","evidence":"runtime/src/integration/README.md blob 0aefd2511eeb0378a9204fafba54a49b9c8c3255","next":"definir mínimo integration adapter/Fables tras P2 cross-check"},
+    {"id":"G16_RUNTIME_ADAPTERS_SCAFFOLD","status":"OPEN_CONFIRMED","owner":"SOL_GPT2","gap":"runtime/src/adapters contiene README pero no implementation source, aunque existen tests de adapters","evidence":"runtime/src/adapters/README.md blob d20358aa2e725de11e46190c8b7b3997d8f7e890","next":"comparar tests con implementaciones reales/ausentes y reutilizar antes de escribir"},
+    {"id":"G17_VM_MANAGER_SYMBOL","status":"OPEN_CONFIRMED_CODE_SEARCH_EMPTY","owner":"SOL_GPT2","gap":"No se localizó VirtualMachineManager en búsqueda de código del repo pese a requisito de VM Manager multiplataforma","next":"buscar equivalentes existentes antes de generar; mapear Android/Windows/Linux/iOS/Web capability adapters"}
   ],
   "role_output_slots": {
-    "SOL_GPT1":{"pass1":"PENDING","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
-    "SOL_GPT2":{"pass1":"PENDING","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
-    "SOL_GPT3":{"pass1":"PENDING","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
-    "SOL_ORQUESTADOR":{"pass1":"IN_PROGRESS","pass2":"IN_PROGRESS","pass3":"PENDING","pass4":"PENDING","last_heartbeat":"2026-09-11"}
+    "SOL_GPT1":{"pass1":"PENDING_ACTIVATION","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
+    "SOL_GPT2":{"pass1":"PENDING_ACTIVATION","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
+    "SOL_GPT3":{"pass1":"PENDING_ACTIVATION","pass2":"PENDING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":null},
+    "SOL_ORQUESTADOR":{"pass1":"IN_PROGRESS_PRIORITY_DOCS_AND_RUNTIME_TREE","pass2":"IN_PROGRESS_DOCUMENT_CODE_MAPPING","pass3":"PENDING","pass4":"PENDING","last_heartbeat":"2026-09-11T01:49-05:00"}
   },
   "promotion_rule": "OPEN→TESTED→WIRED→RUNTIME_PASS→VERIFIED_CLOSED; saltos prohibidos."
 }
