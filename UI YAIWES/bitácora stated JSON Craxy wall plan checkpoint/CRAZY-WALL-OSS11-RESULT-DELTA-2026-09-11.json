@@ -1,0 +1,42 @@
+{
+  "schema":"yaiwes.crazy-wall.oss11-result-delta.v1",
+  "contract":"tel.workflow/v3",
+  "status":"ACTIVE_LOOP",
+  "base_main_sha":"a085c4daa6197f87196161f038fcd6db67473b9e",
+  "acquisition_summary":{"total":11,"source_present_readback_verified":6,"provider_special_file_gap":5,"wired_live_runtime":0},
+  "verified_sources":[
+    {"component":"OPA","state":"SOURCE_PRESENT_READBACK_VERIFIED","repair_run":34647400113,"publish_commit":"2dd6e2b27","tree_sha256":"391b043add2665b1def84aef7b05f280fc28ac1cedc9072928697237747cbe76"},
+    {"component":"OpenFGA","state":"SOURCE_PRESENT_READBACK_VERIFIED","repair_run":34647400113,"publish_commit":"2dd6e2b27","tree_sha256":"9e43bd8342331dcd692f34638faf83b0b7439e6b6cc32c34a0238ad1beb716ea"},
+    {"component":"rqlite","state":"SOURCE_PRESENT_READBACK_VERIFIED","repair_run":34647400113,"publish_commit":"2dd6e2b27","tree_sha256":"5cb137d63452364d62b7d705921caf9c1fa33e84d1545d68a6a4d4d622dfbb03"},
+    {"component":"OpenTelemetry Collector","state":"SOURCE_PRESENT_READBACK_VERIFIED","repair_run":34647400113,"publish_commit":"2dd6e2b27","tree_sha256":"2cf654b9b6ec315fa97679c36e607e018120f091b10966254c4cc2de10f1d659"},
+    {"component":"ORAS","state":"SOURCE_PRESENT_READBACK_VERIFIED","repair_run":34647400113,"publish_commit":"2dd6e2b27","tree_sha256":"3029816c97f2481e7210b2651bebc2e68870c111ba3e9ad15938ff425dc66f7e"},
+    {"component":"Testcontainers Python","state":"SOURCE_PRESENT_READBACK_VERIFIED","source_run":34646657007,"publish_commit":"f84e202a0c595ba08a4fbac5e83efb8620c5e182","tree_sha256":"ebc82b8782a0e2ef5417afc432079df34260e81a648f6a7a48663e13f70eab70"}
+  ],
+  "blocked_sources":[
+    {"component":"Litestream","state":"PROVIDER_SPECIAL_FILE_GAP","release_probe_ref":"ccd326c175b583b5e82893a6078f06dcef5fba3f","evidence":"SOURCE_SPECIAL_FILE_GAP:.cursorrules,.github/copilot-instructions.md"},
+    {"component":"Grafana Tempo","state":"PROVIDER_SPECIAL_FILE_GAP","release_probe_ref":"1900ed7bb5cad1a3edc285783d7d4ac4278337dc","evidence":"SOURCE_SPECIAL_FILE_GAP: vendor symlinks in example/tk and operations"},
+    {"component":"Schemathesis","state":"PROVIDER_SPECIAL_FILE_GAP","release_probe_ref":"66b5c3ed71f429151aba46c68da856e6ec43f447","evidence":"SOURCE_SPECIAL_FILE_GAP:docs/migration.md"},
+    {"component":"Kata Containers","state":"PROVIDER_SPECIAL_FILE_GAP","release_probe_ref":"ddcb1ad8d23cbb4323f86c209f132b89592902df","evidence":"SOURCE_SPECIAL_FILE_GAP: docs/VERSION/LICENSE/config symlinks"},
+    {"component":"Grype","state":"PROVIDER_SPECIAL_FILE_GAP","release_probe_ref":"756eb9a24f7beeafb6871a24e943e8a3ae210695","evidence":"SOURCE_SPECIAL_FILE_GAP:test/quality/.yardstick/labels"}
+  ],
+  "probe":{"run":34647609669,"job":103422026011,"result":"5/5 release refs reproduce SOURCE_SPECIAL_FILE_GAP; no motor modification authorized"},
+  "integration_evidence":{"OPA_OpenFGA":{"state":"SOURCE_PRESENT_PLUS_FABLES_ADAPTER_TESTED_NOT_LIVE_SERVICE_RUNTIME","adapter_commit":"6a768e36927f5eebe387cd488a9ef990fbf87002","test_commit":"05edd9cc62e02ee44bb9b5e999aa6f8d30126efc","ci_commit":"149052a6967f21218fc1956b5d0321204155bafc","ci_run":34646998280,"result":"Wordflow 15 passed; runtime 47 passed + 6 subtests"}},
+  "role_nodes":{
+    "SOL_GPT1":[{"node_id":"OSS11-S1-01-RQLITE","state":"FREE_READY_SOURCE","max_steps":3,"scope":["runtime/src/memory/**","runtime/src/recovery/**"],"assertion":"Validate whether rqlite fills a distinct distributed-state gap; wire only if non-duplicate, then test."},{"node_id":"OSS11-S1-02-LITESTREAM","state":"BLOCKED_PROVIDER_SPECIAL_FILE_GAP","next":"research canonical compatible provider/path; do not modify Motor2"}],
+    "SOL_GPT2":[{"node_id":"OSS11-S2-01-OTEL","state":"FREE_READY_SOURCE","max_steps":3,"scope":["runtime/src/adapters/**","runtime/src/telemetry/**"],"assertion":"Wire OTLP collector boundary without duplicating OpenTelemetry Python; run telemetry test."},{"node_id":"OSS11-S2-02-TEMPO","state":"BLOCKED_PROVIDER_SPECIAL_FILE_GAP"},{"node_id":"OSS11-S2-03-KATA","state":"BLOCKED_PROVIDER_SPECIAL_FILE_GAP"}],
+    "SOL_GPT3":[{"node_id":"OSS11-S3-01-TESTCONTAINERS","state":"FREE_READY_SOURCE","max_steps":3,"scope":["runtime/src/integration/**","runtime/tests/**"],"assertion":"Use Testcontainers as disposable real-adapter test harness and prove one integration path."},{"node_id":"OSS11-S3-02-SCHEMATHESIS","state":"BLOCKED_PROVIDER_SPECIAL_FILE_GAP"}],
+    "SOL_ORQUESTADOR":[{"node_id":"OSS11-O-OPA-OPENFGA","state":"TESTED_SUBGATE","next":"real service runtime test before WIRED/RUNTIME_PASS"},{"node_id":"OSS11-O-ORAS","state":"FREE_READY_SOURCE","assertion":"Validate distinct OCI artifact transport gap before wiring"},{"node_id":"OSS11-O-GRYPE","state":"BLOCKED_PROVIDER_SPECIAL_FILE_GAP"}]
+  },
+  "pending_order":[
+    "P01 Sol1 claim rqlite FREE_READY_SOURCE and report SHA/test",
+    "P02 Sol2 claim OpenTelemetry Collector FREE_READY_SOURCE and report SHA/test",
+    "P03 Sol3 claim Testcontainers Python FREE_READY_SOURCE and report SHA/test",
+    "P04 Orchestrator run real OPA/OpenFGA service boundary or keep adapter-only status",
+    "P05 Orchestrator decide ORAS distinct need then wire/test or REUSE_REJECT",
+    "P06 research provider-compatible acquisition for five special-file GAPs without changing motors",
+    "P07 update G01-G19/G12 requirement matrix with acquired/integration evidence",
+    "P08 keep G18 Pages and G19 HF credential separate"
+  ],
+  "watchdog":{"automation_id":"6a9dd6b174548191840938a63cb45675","enabled":true,"cadence":"1 hour"},
+  "closure":"ACTIVE_LOOP"
+}
