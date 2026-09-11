@@ -1,0 +1,135 @@
+{
+  "schema": "yaiwes.s2.avf.capability-probe.v1",
+  "contract": "tel.workflow/v3",
+  "role": "SOL_GPT2_BACKEND",
+  "node": "S2-R3-AVF-CAPABILITY-PROBE-CONTRACT",
+  "status": "CONTRACT_DEFINED_READ_ONLY",
+  "purpose": "Separate AVF acquisition/provider state from host capability, restricted permissions, real guest boot evidence and platform fallback. Source presence or successful acquisition MUST NOT imply guest boot.",
+  "gates_in_order": [
+    "G1_TRANSPORT_PROVIDER",
+    "G2_HOST_CAPABILITY",
+    "G3_PERMISSION",
+    "G4_GUEST_BOOT_EVIDENCE",
+    "G5_PLATFORM_FALLBACK"
+  ],
+  "probe_input_fields": {
+    "host_platform": "android | linux | windows | ios_ipados | web",
+    "host_arch": "arm64 | x86_64 | other",
+    "android_api_level": "integer|null",
+    "android_feature_virtualization_framework": "boolean|null; PackageManager.FEATURE_VIRTUALIZATION_FRAMEWORK equivalent",
+    "virtual_machine_manager_available": "boolean|null; context.getSystemService(VirtualMachineManager.class) != null",
+    "capability_flags_raw": "integer|null from VirtualMachineManager.getCapabilities()",
+    "supports_protected_vm": "boolean|null; capability_flags_raw & CAPABILITY_PROTECTED_VM",
+    "supports_non_protected_vm": "boolean|null; capability_flags_raw & CAPABILITY_NON_PROTECTED_VM",
+    "manage_virtual_machine_permission": "GRANTED | DENIED | UNKNOWN | NOT_APPLICABLE",
+    "use_custom_virtual_machine_permission": "GRANTED | DENIED | UNKNOWN | NOT_REQUIRED | NOT_APPLICABLE",
+    "canonical_source": "exact provider URL/ref",
+    "canonical_motor_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
+    "transport_state": "VERIFIED_CLOSED | PROVIDER_GAP | SPECIAL_FILE_GAP | DESTINATION_GAP | NOT_RUN",
+    "guest_boot_attempted": "boolean",
+    "guest_boot_result": "PASS | FAIL | NOT_RUN",
+    "guest_boot_evidence_ref": "run/log/artifact reference|null",
+    "guest_boot_evidence_sha256": "64-hex|null"
+  },
+  "official_android_constants": {
+    "api_package": "android.system.virtualmachine",
+    "minimum_documented_api_level": 34,
+    "system_feature": "android.software.virtualization_framework",
+    "capability_protected_vm": 1,
+    "capability_non_protected_vm": 2,
+    "manage_permission": "android.permission.MANAGE_VIRTUAL_MACHINE",
+    "custom_vm_permission": "android.permission.USE_CUSTOM_VIRTUAL_MACHINE"
+  },
+  "gate_rules": {
+    "G1_TRANSPORT_PROVIDER": {
+      "pass": "Canonical source acquired through an authorized compatible transport with immutable provenance and read-back.",
+      "blocked": "Provider/special-file/destination incompatibility remains typed and preserved; no mirror substitution or source sanitization inside probe."
+    },
+    "G2_HOST_CAPABILITY": {
+      "pass_android": "API >=34 AND VirtualMachineManager available (or virtualization framework system feature present) AND at least one protected/non-protected capability bit is set.",
+      "blocked_android": "Manager absent and feature absent, API below supported surface, or both capability bits false.",
+      "non_android": "NOT_APPLICABLE for AVF; select platform backend/fallback instead."
+    },
+    "G3_PERMISSION": {
+      "pass": "MANAGE_VIRTUAL_MACHINE is actually granted for AVF API use; USE_CUSTOM_VIRTUAL_MACHINE additionally required only for custom-VM path that needs it.",
+      "blocked": "Restricted permission not granted. Ordinary third-party APK must not be assumed to possess it."
+    },
+    "G4_GUEST_BOOT_EVIDENCE": {
+      "pass": "A real VM was created/started on the target host and evidence contains run/log/artifact reference plus strong hash/read-back.",
+      "blocked": "NOT_RUN or FAIL. Source presence, provider acquisition, API availability and capability bits alone never satisfy this gate."
+    },
+    "G5_PLATFORM_FALLBACK": {
+      "rule": "Fallback is selected only after preceding capability/permission result; fallback does not convert an AVF GAP into AVF PASS.",
+      "android": "AVF/crosvm first when gates pass; otherwise QEMU-compatible fallback if implemented/authorized.",
+      "linux": "KVM/QEMU path; AVF NOT_APPLICABLE.",
+      "windows": "WHPX/QEMU path; AVF NOT_APPLICABLE.",
+      "ios_ipados": "QEMU/UTM-style path subject to Apple/JIT restrictions; AVF NOT_APPLICABLE.",
+      "web": "No native AVF claim; browser/PWA layer cannot claim local AVF guest boot without a separate supported runtime backend."
+    }
+  },
+  "platform_matrix": {
+    "Android_ARM64_physical": {
+      "preferred_backend": "AVF/crosvm",
+      "avf_state": "CONDITIONAL",
+      "required_gates": ["G1_TRANSPORT_PROVIDER","G2_HOST_CAPABILITY","G3_PERMISSION","G4_GUEST_BOOT_EVIDENCE"],
+      "fallback": "QEMU-compatible backend only if separately implemented and verified"
+    },
+    "Android_x86_64_Cuttlefish": {
+      "preferred_backend": "AVF test path",
+      "avf_state": "TEST_ONLY_NON_PROTECTED_DOCUMENTED",
+      "required_gates": ["G1_TRANSPORT_PROVIDER","G2_HOST_CAPABILITY","G3_PERMISSION","G4_GUEST_BOOT_EVIDENCE"],
+      "fallback": "QEMU/test backend"
+    },
+    "Linux_desktop": {
+      "preferred_backend": "KVM/QEMU",
+      "avf_state": "NOT_APPLICABLE",
+      "required_gates": ["platform-specific capability test","real guest boot evidence"]
+    },
+    "Windows_desktop": {
+      "preferred_backend": "WHPX/QEMU",
+      "avf_state": "NOT_APPLICABLE",
+      "required_gates": ["platform-specific capability test","real guest boot evidence"]
+    },
+    "iOS_iPadOS": {
+      "preferred_backend": "QEMU/UTM-style",
+      "avf_state": "NOT_APPLICABLE",
+      "required_gates": ["Apple execution/JIT capability test","real guest boot evidence"]
+    },
+    "Web_browser_PWA": {
+      "preferred_backend": "UI/control surface only unless a separately supported runtime is provided",
+      "avf_state": "NOT_APPLICABLE",
+      "required_gates": ["runtime backend explicitly identified","real execution evidence"]
+    }
+  },
+  "normalized_probe_output": {
+    "transport_gate": "PASS | BLOCKED | NOT_RUN",
+    "host_capability_gate": "PASS | BLOCKED | NOT_APPLICABLE | UNKNOWN",
+    "permission_gate": "PASS | BLOCKED | NOT_APPLICABLE | UNKNOWN",
+    "guest_boot_gate": "PASS | FAIL | NOT_RUN",
+    "selected_backend": "AVF_PROTECTED | AVF_NON_PROTECTED | KVM_QEMU | WHPX_QEMU | QEMU_FALLBACK | IOS_QEMU_STYLE | NONE",
+    "fallback_reason": "typed reason|null",
+    "overall": "READY_FOR_RUNTIME_TEST | BLOCKED_PROVIDER | BLOCKED_CAPABILITY | BLOCKED_PERMISSION | BLOCKED_GUEST_BOOT | FALLBACK_SELECTED | UNSUPPORTED",
+    "evidence": "array of source/run/log/hash/read-back anchors"
+  },
+  "evidence_anchors": {
+    "existing_s2_capability_matrix": "UI YAIWES/automation/S2-avf-capabilities-20260911/AVF-CAPABILITIES.json@1abe3f95c9ee1d1b43207890ad2efeb94d983ce0",
+    "official_virtual_machine_manager": "android.googlesource.com platform/packages/modules/Virtualization javalib VirtualMachineManager.java: getCapabilities(), CAPABILITY_PROTECTED_VM=1, CAPABILITY_NON_PROTECTED_VM=2",
+    "official_avf_api_readme": "android.googlesource.com platform/packages/modules/Virtualization/javalib README: SystemApi, API 34+, restricted MANAGE_VIRTUAL_MACHINE, feature detection",
+    "functional_project_rule": "Virtual Computer source document: Android AVF/crosvm first, QEMU fallback; Linux/Windows use distinct backends; real local VM boot required",
+    "memory_audit_rule": "Workflow/Memory source document: evidence/state/checkpoint must be persisted; source presence is not equivalent to validated global completion"
+  },
+  "refutations": [
+    "REFUTE: AVF source exists therefore AVF works on the host.",
+    "REFUTE: successful provider acquisition therefore a VM can boot.",
+    "REFUTE: VirtualMachineManager presence therefore required permissions are granted.",
+    "REFUTE: Android AVF capability implies Linux/Windows/iOS/Web AVF support.",
+    "REFUTE: fallback success may be reported as AVF success."
+  ],
+  "next_safe_node": {
+    "id": "S2-R3-AVF-PROBE-IMPLEMENTATION-HANDOFF",
+    "owner": "COORDINATOR_OR_EXPLICIT_CODE_OWNER",
+    "status": "HANDOFF_REQUIRED_FOR_MUTATION",
+    "s2_continues_with": "read-only evidence validation, CI consumption and debate; S2 does not implement shared runtime backend without explicit handoff"
+  },
+  "closure": "OPEN_DO_NOT_CLOSE_UNTIL_REAL_GUEST_BOOT_EVIDENCE"
+}
