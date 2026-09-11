@@ -1,0 +1,48 @@
+{
+  "bundle_bytes": 43574319,
+  "bundle_sha256": "c957facc82aec5885f8baa732d6b6cb831ed4423ad1a8e8c181d8599e407fa3d",
+  "extracted_tree": {
+    "bytes": 73271865,
+    "files": 8001,
+    "sha256": "391b043add2665b1def84aef7b05f280fc28ac1cedc9072928697237747cbe76"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "OPA.bundle.zip.part-0001",
+      "sha256": "000d3d9befbcf90f4fb5eb550eea19edbe46ede12d94b9826c5cee6774a08ccb"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OPA.bundle.zip.part-0002",
+      "sha256": "e02f89209d40023806da0d1fb11f1d6852357d4d5f8f5da7655e31a3ff2f93e7"
+    },
+    {
+      "bytes": 12582912,
+      "name": "OPA.bundle.zip.part-0003",
+      "sha256": "b2f4100c118209e890d87f8fb64e3a3b9451b3f4c572aeb5cf33b3ec50c1a617"
+    },
+    {
+      "bytes": 5825583,
+      "name": "OPA.bundle.zip.part-0004",
+      "sha256": "07782e3b3ef5726a90ef9616cc0dbe89d0cdb5fdea06a51bfaea4b5bd71eb05c"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "OPA",
+  "source_bytes": 73271865,
+  "source_commit": "961849b565d2457b80c168f254325b7d5b91461e",
+  "source_files": 8001,
+  "source_ref": "961849b565d2457b80c168f254325b7d5b91461e",
+  "source_repo": "https://github.com/open-policy-agent/opa",
+  "source_tree": {
+    "bytes": 73271865,
+    "files": 8001,
+    "sha256": "391b043add2665b1def84aef7b05f280fc28ac1cedc9072928697237747cbe76"
+  }
+}
