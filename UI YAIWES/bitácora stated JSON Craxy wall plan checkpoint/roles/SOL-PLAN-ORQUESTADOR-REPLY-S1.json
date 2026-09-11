@@ -3,26 +3,26 @@
   "contract": "tel.workflow/v3",
   "response_to": "S1-DEBATE-SOLPLAN-20260911-01",
   "author": "🌞👷 sol osquestador plan 🎯",
-  "status": "ACTIONABLE_PARTIAL_REPLY_LOOP_CONTINUES",
+  "status": "ACTIONABLE_REPLY_LOOP_CONTINUES",
   "decisions": {
-    "R2-Q1": {
-      "DEST_REPO": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
-      "DEST_BRANCH": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
-      "DEST_ROOT": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND"
-    },
-    "R2-Q2": {
-      "DEST_REPO": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
-      "DEST_BRANCH": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
-      "DEST_ROOT": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND"
-    },
-    "R2-Q3": "S1-05_READ_ONLY_LOCAL_FIRST_PERSISTENCE_CROSSCHECK"
+    "DEST_REPO": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
+    "DEST_BRANCH": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
+    "DEST_ROOT": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
+    "L05": "ACCEPTED_PRESENT_STRENGTHENED; latest main also preserves SPECIAL_FILE_GAP/PROVIDER_GAP evidence",
+    "FABLES": "PATH_AND_CONTRACT_PRESENT; CI_NOT_YET_VERIFIED_AT_THIS_REPLY"
+  },
+  "round3_order": {
+    "question": "Cruza los 3 documentos con L05 reforzado y determina si falta algún campo/contrato para adquisición real Vite/Supabase sin inferir destino. Refuta requisitos redundantes y deja siguiente nodo S1 FREE.",
+    "must_publish": ["document_anchor","code_anchor","gap_or_pass","refutation","next_free_node"],
+    "free_node_if_destinations_remain_blocked": "S1-05_LOCAL_FIRST_PERSISTENCE_AND_MEMORY_BOUNDARY_CROSSCHECK"
   },
   "next_order": [
     "Mantén Vite/Supabase fail-closed; no infieras destino.",
-    "Ejecuta S1-05 read-only: cruza las 3 fuentes de verdad contra runtime actual para verificar almacenamiento user-owned/local-first, restart recovery y separación memoria chat/proyecto vs memoria agente.",
-    "Publica sólo GAPs concretos con path+SHA+test faltante. No escribas código compartido; devuelve propuesta mínima al debate.",
-    "Al aparecer DEST_ROOT literal autorizado, vuelve inmediatamente a S1-01/S1-02 con motores canónicos y read-back."
+    "Responde Ronda 3 usando las 3 fuentes de verdad y el L05 actual de main.",
+    "Si el destino sigue ausente, ejecuta S1-05 read-only: user-owned/local-first storage, restart recovery y separación memoria chat/proyecto vs memoria agente.",
+    "Publica path+SHA+test faltante por cada GAP y toma inmediatamente el siguiente S1 FREE.",
+    "Cuando aparezca DEST_ROOT literal autorizado y Fables tenga CI PASS, vuelve a S1-01/S1-02 y prepara handoff Vite→S3."
   ],
-  "loop_rule": "No cierres el LOOP. Si S1-05 termina, relee Crazy Wall+STATE+debates; consume siguiente nodo S1 explícito o mantiene vigilancia activa sin fabricar autorización.",
+  "loop_rule": "NO STOP. GAP de destino bloquea sólo adquisición; análisis/verificación S1 continúa. No fabricar autorización.",
   "closure": "OPEN"
 }
