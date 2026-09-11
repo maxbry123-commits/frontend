@@ -6,9 +6,10 @@
   "name": "Sol gpt 2 🤯👷backend",
   "node_prefix": "S2",
   "status": "ACTIVE_LOOP_WITH_BLOCKING_GAPS",
-  "base_main_sha": "dffa858bbaa93a404ac334051ca1442d1420066d",
+  "base_main_sha": "a1e278b7439ee24cf20633752dc63e4042d419e0",
   "crazy_wall_blob_sha": "a4253dbb786ad89358afbacccd43dc47b5d57ebb",
   "state_blob_sha_observed": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
+  "last_watchdog_at": "2026-09-11T04:41:43Z",
   "canonical_motors_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
   "canonical_policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
   "nodes": {
@@ -33,6 +34,11 @@
       "diagnostic_workflow": ".github/workflows/sol-gpt2-s2-01-duckdb-diagnostic-20260910.yml",
       "diagnostic_run_id": 34562878473,
       "diagnostic_job_id": 103149035048,
+      "diagnostic_steps": {
+        "verify_motor_blobs": "PASS",
+        "copy_motor_root_exactly": "PASS",
+        "motor2_duckdb_only": "FAIL"
+      },
       "diagnostic_result": {
         "verdict": "GAPS_PENDING",
         "total": 1,
@@ -51,6 +57,7 @@
       "motor_modified": false,
       "publication_attempted_by_s2_diagnostic": false,
       "move_attempted_by_s2_diagnostic": false,
+      "last_verified_at": "2026-09-11T04:41:43Z",
       "verdict": "FAIL_CLOSED; canonical engine rejects source symlinks; no PASS and no source sanitization/motor patch authorized"
     },
     "S2-02": {
@@ -59,15 +66,17 @@
       "source": "https://android.googlesource.com/platform/packages/modules/Virtualization/",
       "evidence": {
         "canonical_engine_blob_sha": "91e6e4486692eab314be5c7130d8310d3c855397",
+        "canonical_engine_ref": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
         "canonical_engine_behavior": "repo_url only accepts https://github.com/ directly; every other SOURCE_REPO is prefixed with https://github.com/, therefore android.googlesource.com is unsupported by the immutable engine"
       },
       "motor_modified": false,
       "alternate_provider_used": false,
+      "last_verified_at": "2026-09-11T04:41:43Z",
       "verdict": "FAIL_CLOSED_PROVIDER_GAP"
     },
     "S2-03": {
       "status": "READBACK_COMPLETED_CURRENT_MAIN",
-      "readback_main_sha": "dffa858bbaa93a404ac334051ca1442d1420066d",
+      "readback_main_sha": "a1e278b7439ee24cf20633752dc63e4042d419e0",
       "final_root": "UI YAIWES/componentes open soure UI YAIWES",
       "readback": {
         "Vite": "404_ABSENT",
@@ -75,6 +84,7 @@
         "DuckDB": "404_ABSENT",
         "AVF": "404_ABSENT"
       },
+      "last_verified_at": "2026-09-11T04:41:43Z",
       "verdict": "0/4 residuals present at canonical final root at this observation"
     },
     "S2-04": {
@@ -86,6 +96,7 @@
       "avf_provider_gap": true,
       "four_residual_readback_present": 0,
       "four_residual_readback_expected": 4,
+      "last_verified_at": "2026-09-11T04:41:43Z",
       "verdict": "VERIFIED_CLOSED prohibited"
     }
   },
@@ -97,5 +108,5 @@
     "title": "SOL2 Backend YAIWES",
     "scope_aligned_to_s2_queue": true
   },
-  "next_action": "Wait for explicit coordinator handoff or an authorized canonical strategy for DuckDB SOURCE_SPECIAL_FILE_GAP and AVF provider support; hourly watchdog rereads Crazy Wall + STATE and may continue only independent S2 work. Do not modify motors, sanitize source, substitute AVF provider, or declare PASS without authorization/evidence."
+  "next_action": "Keep S2 fail-closed. Re-read Crazy Wall + STATE on next cycle. DuckDB may retry only after an authorized canonical strategy resolves SOURCE_SPECIAL_FILE_GAP without motor modification/source sanitization; AVF remains provider GAP until an authorized provider-compatible canonical path exists. Continue independent S2 read-back/balance verification only."
 }
