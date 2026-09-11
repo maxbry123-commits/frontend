@@ -1,0 +1,70 @@
+name: UI YAIWES OSS05 Release Ref Motor2 Probe
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ui-yaiwes-oss05-release-ref-motor2-probe-20260911.yml'
+      - 'UI YAIWES/automation/oss-05-release-ref-probe-20260911/QUEUE.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ui-yaiwes-oss05-release-ref-motor2-probe-20260911
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            ➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py
+            ➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py
+            UI YAIWES/automation/oss-05-release-ref-probe-20260911/QUEUE.json
+          sparse-checkout-cone-mode: false
+
+      - name: Verify canonical Motor2 and engine blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip'
+          test "$(git hash-object "$ROOT/motor_2_queue_download_extract.py")" = '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          test "$(git hash-object "$ROOT/hf_download_extract_engine.py")" = '91e6e4486692eab314be5c7130d8310d3c855397'
+
+      - name: Execute release refs with publish=false
+        shell: bash
+        env:
+          QUEUE_FILE: ${{ github.workspace }}/UI YAIWES/automation/oss-05-release-ref-probe-20260911/QUEUE.json
+          STATE_FILE: ${{ runner.temp }}/motor2-release-probe-state.json
+          INDEX_PATH: ${{ runner.temp }}/motor2-release-probe-index.md
+          ENGINE_PATH: ${{ github.workspace }}/➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: UI YAIWES/_probe_not_published
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_RETRIES: '1'
+          LOOP_SLEEP_SECONDS: '0'
+        run: |
+          set -uo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip'
+          set +e
+          python "$ROOT/motor_2_queue_download_extract.py" | tee "$RUNNER_TEMP/motor2-release-probe-final.json"
+          rc=${PIPESTATUS[0]}
+          set -e
+          echo '--- PROBE STATE ---'
+          cat "$STATE_FILE" || true
+          echo '--- PROBE INDEX ---'
+          cat "$INDEX_PATH" || true
+          echo "MOTOR2_RC=$rc"
+          python - <<'PY'
+          import json, os, pathlib
+          state=pathlib.Path(os.environ['STATE_FILE'])
+          obj=json.loads(state.read_text())
+          rows=obj.get('items',{}) if isinstance(obj.get('items'),dict) else {}
+          print('PROBE_SUMMARY=' + json.dumps({k:{'status':v.get('status'),'last_error':v.get('last_error'),'verdict':(v.get('last_result') or {}).get('verdict')} for k,v in rows.items()}, sort_keys=True))
+          PY
+          exit 0
