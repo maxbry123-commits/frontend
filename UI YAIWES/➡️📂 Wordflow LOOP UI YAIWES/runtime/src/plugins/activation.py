@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import replace
 
 from .catalog import COMPONENTS
-from .contract import PluginKind
 from .registry import PluginRegistry
 
 
@@ -11,13 +10,15 @@ class ActivationRejectedError(RuntimeError):
     pass
 
 
-# Runtime may activate the single CORE owner plus auxiliary adapters.
-# Donor schedulers, UI bundles and test tools stay inert unless a separate
-# explicit policy authorizes them. This preserves Stabilize as the only
-# workflow owner while allowing typed contracts/rules/transports to mount.
-_ALLOWED_RUNTIME_KINDS = {PluginKind.CORE, PluginKind.ADAPTER}
+# Only mounts with concrete adapters/factories under runtime/src/plugins are
+# approved here. Catalog-only/donor/UI/tool entries remain fail-closed until
+# their own wiring is implemented and explicitly tested.
 _ALLOWED_RUNTIME_ACTIVATIONS = {
-    spec.name for spec in COMPONENTS if spec.kind in _ALLOWED_RUNTIME_KINDS
+    "stabilize_core",
+    "pydantic",
+    "starlette",
+    "httpx",
+    "rule_engine",
 }
 
 
