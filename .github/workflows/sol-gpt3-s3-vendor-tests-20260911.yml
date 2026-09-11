@@ -77,3 +77,40 @@ jobs:
       - name: Run upstream AI package tests
         working-directory: 'UI YAIWES/componentes open soure UI YAIWES/Vercel AI SDK/code'
         run: pnpm test --filter=ai...
+
+  vercel-stream-lifecycle-no-force-exit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout Vercel AI SDK source only
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/componentes open soure UI YAIWES/Vercel AI SDK/code
+          sparse-checkout-cone-mode: false
+          fetch-depth: 1
+
+      - name: Setup Node 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Activate pinned pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@8.6.2 --activate
+          pnpm --version
+
+      - name: Install locked workspace dependencies
+        working-directory: 'UI YAIWES/componentes open soure UI YAIWES/Vercel AI SDK/code'
+        env:
+          HUSKY: '0'
+        run: pnpm install --frozen-lockfile
+
+      - name: Node stream cancel clean-exit test
+        working-directory: 'UI YAIWES/componentes open soure UI YAIWES/Vercel AI SDK/code/packages/core'
+        run: pnpm exec jest streams/index.test.ts --env node --detectOpenHandles --runInBand
+
+      - name: Edge stream cancel clean-exit test
+        working-directory: 'UI YAIWES/componentes open soure UI YAIWES/Vercel AI SDK/code/packages/core'
+        run: pnpm exec jest streams/index.test.ts --env @edge-runtime/jest-environment --detectOpenHandles --runInBand
