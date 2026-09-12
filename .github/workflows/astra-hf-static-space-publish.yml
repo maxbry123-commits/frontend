@@ -26,21 +26,22 @@ jobs:
       HF_TOKEN_E: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
       SPACE_REPO: COMAND-CENTER-1/yaiwes-ui-factory
       HF_OIDC_RESOURCE: spaces/COMAND-CENTER-1/yaiwes-ui-factory
-      SOURCE_REF: c3bda2cdc827503d0de686387a25c43badc7e936
-      RAW_ROOT: https://raw.githubusercontent.com/maxbry123-commits/frontend/c3bda2cdc827503d0de686387a25c43badc7e936/UI%20YAIWES/watchdog%20UI%20YAIWES/%E2%9E%A1%EF%B8%8F%20Astra%20plan%20f%C3%A1brica%20UI%20YAIWES/Frontend/factory-v0
+      SOURCE_REF: 644dc3f5ea2c0e05936e8c2e5c7d333527e2c3b0
+      RAW_ROOT: https://raw.githubusercontent.com/maxbry123-commits/frontend/644dc3f5ea2c0e05936e8c2e5c7d333527e2c3b0/UI%20YAIWES/watchdog%20UI%20YAIWES/%E2%9E%A1%EF%B8%8F%20Astra%20plan%20f%C3%A1brica%20UI%20YAIWES/Frontend/factory-v0
     steps:
-      - name: Package exact verified Factory V1.3 payload
+      - name: Package exact verified Factory V1.6 payload
         shell: bash
         run: |
           set -euo pipefail
           rm -rf _hf_space_publish
           mkdir -p _hf_space_publish/src/donors
-          curl -fsSL "$RAW_ROOT/index.html" -o _hf_space_publish/index.html
-          curl -fsSL "$RAW_ROOT/styles.css" -o _hf_space_publish/styles.css
-          for f in app.js actions.js state.js backend-adapter.js; do
+          for f in index.html styles.css interaction-fix.css frappe-context-menu.css resize-snap.css; do
+            curl -fsSL "$RAW_ROOT/$f" -o "_hf_space_publish/$f"
+          done
+          for f in app.js actions.js state.js backend-adapter.js interaction-fix.js scroll-preserver.js resize-snap.js; do
             curl -fsSL "$RAW_ROOT/src/$f" -o "_hf_space_publish/src/$f"
           done
-          for f in lucide-icons.js oss-registry.js; do
+          for f in lucide-icons.js oss-registry.js frappe-builder-patterns.js frappe-context-menu-adapter.js craftjs-patterns.js; do
             curl -fsSL "$RAW_ROOT/src/donors/$f" -o "_hf_space_publish/src/donors/$f"
           done
           cat > _hf_space_publish/README.md <<'EOF'
@@ -54,20 +55,31 @@ jobs:
           pinned: false
           ---
 
-          # YAIWES UI Factory V1.3
-          Zero-friction editor: persistent canvas, draggable library, layers, responsive breakpoints, zoom, one contextual panel per step, audited 46-family OSS catalog.
-          Verified source SHA: `c3bda2cdc827503d0de686387a25c43badc7e936`.
+          # YAIWES UI Factory V1.6
+          Zero-friction editor with persistent canvas, draggable library, layers, responsive breakpoints, zoom, Frappe-derived context actions, Craft-derived resize semantics with 8 px snap, and audited 66-family OSS capability catalog.
+          Verified source SHA: `644dc3f5ea2c0e05936e8c2e5c7d333527e2c3b0`.
           EOF
-          grep -q 'canvas-pane' _hf_space_publish/index.html
-          grep -q 'layer-list' _hf_space_publish/index.html
-          grep -q 'data-breakpoint' _hf_space_publish/index.html
-          grep -q 'zoom-in' _hf_space_publish/index.html
-          grep -q 'MOVE_COMPONENT' _hf_space_publish/src/actions.js
-          grep -q 'OSS_COMPONENTS' _hf_space_publish/src/donors/oss-registry.js
-          grep -q 'Excalidraw' _hf_space_publish/src/donors/oss-registry.js
-          grep -q 'Lucide' _hf_space_publish/src/donors/oss-registry.js
-          grep -q 'Playwright' _hf_space_publish/src/donors/oss-registry.js
-          sha256sum _hf_space_publish/index.html _hf_space_publish/styles.css _hf_space_publish/src/*.js _hf_space_publish/src/donors/*.js
+
+          node --check _hf_space_publish/src/app.js
+          node --check _hf_space_publish/src/actions.js
+          node --check _hf_space_publish/src/state.js
+          node --check _hf_space_publish/src/backend-adapter.js
+          node --check _hf_space_publish/src/interaction-fix.js
+          node --check _hf_space_publish/src/scroll-preserver.js
+          node --check _hf_space_publish/src/resize-snap.js
+          for f in _hf_space_publish/src/donors/*.js; do node --check "$f"; done
+
+          grep -q 'frappe-context-menu.css' _hf_space_publish/index.html
+          grep -q 'resize-snap.css' _hf_space_publish/index.html
+          grep -q 'frappe-context-menu-adapter.js' _hf_space_publish/index.html
+          grep -q 'resize-snap.js' _hf_space_publish/index.html
+          grep -q 'scroll-preserver.js' _hf_space_publish/index.html
+          grep -q 'DONOR_ACTIVE' _hf_space_publish/src/donors/oss-registry.js
+          grep -q 'Craft.js' _hf_space_publish/src/donors/oss-registry.js
+          grep -q 'Frappe Builder' _hf_space_publish/src/donors/oss-registry.js
+          grep -q 'sourceBlob' _hf_space_publish/src/donors/frappe-context-menu-adapter.js
+          grep -q 'sourceBlob' _hf_space_publish/src/resize-snap.js
+          sha256sum _hf_space_publish/index.html _hf_space_publish/*.css _hf_space_publish/src/*.js _hf_space_publish/src/donors/*.js
           echo 'PACKAGE_VERIFY=PASS'
 
       - name: Install current Hugging Face CLI with OIDC support
@@ -105,10 +117,10 @@ jobs:
           from huggingface_hub import HfApi, create_repo
           token=os.environ['HF_PUBLISH_TOKEN']; repo_id=os.environ['SPACE_REPO']; api=HfApi(token=token)
           create_repo(repo_id=repo_id,repo_type='space',space_sdk='static',private=False,exist_ok=True,token=token)
-          print(api.upload_folder(repo_id=repo_id,repo_type='space',folder_path='_hf_space_publish',commit_message='Publish YAIWES UI Factory V1.3'))
+          print(api.upload_folder(repo_id=repo_id,repo_type='space',folder_path='_hf_space_publish',commit_message='Publish YAIWES UI Factory V1.6'))
           PY
           else
-            hf upload "$SPACE_REPO" _hf_space_publish . --repo-type space --commit-message "Publish YAIWES UI Factory V1.3 via GitHub OIDC ${GITHUB_SHA::7}"
+            hf upload "$SPACE_REPO" _hf_space_publish . --repo-type space --commit-message "Publish YAIWES UI Factory V1.6 via GitHub OIDC ${GITHUB_SHA::7}"
           fi
           echo 'HF_SPACE_UPLOAD=PASS'
 
@@ -128,7 +140,7 @@ jobs:
           for attempt in range(36):
               try:
                   s,body=read(app.rstrip('/')+'/')
-                  if s==200 and all(x in body for x in ['YAIWES UI Factory','Canvas listo','Elementos','Capas','HERRAMIENTAS DEL PASO','Desktop','Tablet','Móvil']):
+                  if s==200 and all(x in body for x in ['YAIWES UI Factory','Canvas listo','Elementos','Capas','HERRAMIENTAS DEL PASO','Desktop','Tablet','Móvil','resize-snap.js','frappe-context-menu-adapter.js']):
                       print('HTTP_READBACK_PASS='+app);break
               except Exception: pass
               time.sleep(5)
