@@ -26,10 +26,10 @@ jobs:
       HF_TOKEN_E: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
       SPACE_REPO: COMAND-CENTER-1/yaiwes-ui-factory
       HF_OIDC_RESOURCE: spaces/COMAND-CENTER-1/yaiwes-ui-factory
-      SOURCE_REF: 245efadec5f01513c8ee4203224fba739ad0d2f2
-      RAW_ROOT: https://raw.githubusercontent.com/maxbry123-commits/frontend/245efadec5f01513c8ee4203224fba739ad0d2f2/UI%20YAIWES/watchdog%20UI%20YAIWES/%E2%9E%A1%EF%B8%8F%20Astra%20plan%20f%C3%A1brica%20UI%20YAIWES/Frontend/factory-v0
+      SOURCE_REF: 14b84ea521d1fa111a41fce0d5b3f8cb61b0c652
+      RAW_ROOT: https://raw.githubusercontent.com/maxbry123-commits/frontend/14b84ea521d1fa111a41fce0d5b3f8cb61b0c652/UI%20YAIWES/watchdog%20UI%20YAIWES/%E2%9E%A1%EF%B8%8F%20Astra%20plan%20f%C3%A1brica%20UI%20YAIWES/Frontend/factory-v0
     steps:
-      - name: Package exact verified Factory V1.1 payload
+      - name: Package exact verified Factory V1.2 payload
         shell: bash
         run: |
           set -euo pipefail
@@ -52,24 +52,16 @@ jobs:
           pinned: false
           ---
 
-          # YAIWES UI Factory V1.1
-          Visual Static Space for the YAIWES UI Factory.
-          Verified source SHA: `245efadec5f01513c8ee4203224fba739ad0d2f2`.
-          Director 10-requirement rebuild + visible configuration panels + media status repair.
+          # YAIWES UI Factory V1.2
+          Zero-friction UI factory with persistent canvas, draggable element library and one contextual tool panel per step.
+          Verified source SHA: `14b84ea521d1fa111a41fce0d5b3f8cb61b0c652`.
           EOF
-          echo "SOURCE_REF=$SOURCE_REF"
-          echo "PACKAGE_FILES=$(find _hf_space_publish -type f | wc -l)"
-          grep -q 'YAIWES UI Factory' _hf_space_publish/index.html
-          grep -q 'ai-router-panel' _hf_space_publish/index.html
-          grep -q 'remote-ai-panel' _hf_space_publish/index.html
-          grep -q 'skills-panel' _hf_space_publish/index.html
-          grep -q 'inputs-panel' _hf_space_publish/index.html
-          grep -q 'destinations-panel' _hf_space_publish/index.html
-          grep -q 'references-panel' _hf_space_publish/index.html
-          grep -q 'web-page-panel' _hf_space_publish/index.html
-          grep -q 'media-panel' _hf_space_publish/index.html
-          grep -q 'theme-panel' _hf_space_publish/index.html
-          grep -q 'microkernel-panel' _hf_space_publish/index.html
+          grep -q 'canvas-pane' _hf_space_publish/index.html
+          grep -q 'context-pane' _hf_space_publish/index.html
+          grep -q 'component-library' _hf_space_publish/index.html
+          grep -q 'MOVE_COMPONENT' _hf_space_publish/src/actions.js
+          grep -q 'ondrop' _hf_space_publish/src/app.js
+          grep -q 'step4' _hf_space_publish/src/app.js
           grep -q 'BLOCKED_NO_MODEL' _hf_space_publish/src/app.js
           grep -q 'LUCIDE_PROVENANCE' _hf_space_publish/src/donors/lucide-icons.js
           sha256sum _hf_space_publish/index.html _hf_space_publish/styles.css _hf_space_publish/src/*.js _hf_space_publish/src/donors/*.js
@@ -81,7 +73,6 @@ jobs:
           set -euo pipefail
           python -m pip install --quiet --disable-pip-version-check 'huggingface_hub>=1.19.0,<2'
           hf --version
-          echo 'HF_CLI_READY=YES'
 
       - name: Resolve Hugging Face authentication without exposing credentials
         shell: bash
@@ -109,50 +100,35 @@ jobs:
             python - <<'PY'
           import os
           from huggingface_hub import HfApi, create_repo
-          token = os.environ['HF_PUBLISH_TOKEN']
-          repo_id = os.environ['SPACE_REPO']
-          api = HfApi(token=token)
-          create_repo(repo_id=repo_id, repo_type='space', space_sdk='static', private=False, exist_ok=True, token=token)
-          commit = api.upload_folder(repo_id=repo_id, repo_type='space', folder_path='_hf_space_publish', commit_message='Publish YAIWES UI Factory V1.1 verified preview')
-          print('HF_SPACE_UPLOAD_COMMIT=' + str(commit))
+          token=os.environ['HF_PUBLISH_TOKEN']; repo_id=os.environ['SPACE_REPO']; api=HfApi(token=token)
+          create_repo(repo_id=repo_id,repo_type='space',space_sdk='static',private=False,exist_ok=True,token=token)
+          print(api.upload_folder(repo_id=repo_id,repo_type='space',folder_path='_hf_space_publish',commit_message='Publish YAIWES UI Factory V1.2'))
           PY
           else
-            echo "HF_OIDC_RESOURCE=$HF_OIDC_RESOURCE"
-            hf upload "$SPACE_REPO" _hf_space_publish . --repo-type space --commit-message "Publish YAIWES UI Factory V1.1 via GitHub OIDC ${GITHUB_SHA::7}"
+            hf upload "$SPACE_REPO" _hf_space_publish . --repo-type space --commit-message "Publish YAIWES UI Factory V1.2 via GitHub OIDC ${GITHUB_SHA::7}"
           fi
           echo 'HF_SPACE_UPLOAD=PASS'
 
-      - name: Verify persistent Space page and discovered static app host
+      - name: Verify persistent Space page and app host
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import json, time, urllib.request
+          import json,time,urllib.request
           api='https://huggingface.co/api/spaces/COMAND-CENTER-1/yaiwes-ui-factory'
-          page='https://huggingface.co/spaces/COMAND-CENTER-1/yaiwes-ui-factory'
           def read(url):
-              req=urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0'})
-              with urllib.request.urlopen(req, timeout=15) as r:
-                  return r.status, r.read().decode('utf-8','ignore')
-          status, meta_body = read(api)
-          meta=json.loads(meta_body)
-          app=meta.get('host')
-          print(f'HF_SPACE_META status={status} sdk={meta.get("sdk")} private={meta.get("private")} stage={meta.get("runtime",{}).get("stage")} host={app} sha={meta.get("sha")}')
-          if status != 200 or meta.get('sdk') != 'static' or not app:
-              raise SystemExit('HF_SPACE_METADATA_INVALID')
-          for url, markers in [(page, ['YAIWES']), (app.rstrip('/')+'/', ['YAIWES UI Factory','Configuración','Router IA','Micro-kernel'])]:
-              last=None
-              for attempt in range(36):
-                  try:
-                      s, body=read(url)
-                      print(f'HTTP_CHECK url={url} status={s} bytes={len(body)} attempt={attempt+1}')
-                      if s == 200 and all(m in body for m in markers):
-                          print(f'HTTP_READBACK_PASS={url}')
-                          break
-                  except Exception as e:
-                      last=repr(e)
-                  time.sleep(5)
-              else:
-                  raise SystemExit(f'PERSISTENT_URL_VERIFY_FAILED url={url} last={last}')
+              req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
+              with urllib.request.urlopen(req,timeout=15) as r:return r.status,r.read().decode('utf-8','ignore')
+          s,b=read(api); meta=json.loads(b); app=meta.get('host')
+          print('HF_META',s,meta.get('sdk'),meta.get('runtime',{}).get('stage'),app,meta.get('sha'))
+          if s!=200 or meta.get('sdk')!='static' or not app: raise SystemExit('HF_SPACE_METADATA_INVALID')
+          for attempt in range(36):
+              try:
+                  s,body=read(app.rstrip('/')+'/')
+                  if s==200 and all(x in body for x in ['YAIWES UI Factory','Canvas listo','Elementos','Herramientas del paso']):
+                      print('HTTP_READBACK_PASS='+app);break
+              except Exception: pass
+              time.sleep(5)
+          else: raise SystemExit('PERSISTENT_URL_VERIFY_FAILED')
           print('HF_STATIC_SPACE_PUBLISH=PASS')
           PY
