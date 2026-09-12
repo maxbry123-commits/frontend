@@ -2,11 +2,11 @@
   "schema": "yaiwes.astra.factory.state.v1",
   "identity": "➡️ Astra plan fábrica UI YAIWES",
   "contract": "tel.workflow/v3",
-  "status": "VERIFIED_CLOSED",
+  "status": "ACTIVE_LOOP",
   "gate": "T1_FACTORY_FRONTEND",
-  "t2_interface": "READY_TO_RESUME",
-  "current_node": "T1_FACTORY_V1_1_LIVE_BROWSER_LOOP20_VERIFIED_CLOSED",
-  "factory_v1_1": {
+  "t2_interface": "BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
+  "current_node": "T1_FACTORY_V1_8_50_CYCLE_AND_REVIEWER_REVALIDATION",
+  "historical_factory_v1_1": {
     "source_sha": "245efadec5f01513c8ee4203224fba739ad0d2f2",
     "space_repo": "COMAND-CENTER-1/yaiwes-ui-factory",
     "space_commit": "2621ef7d770a84d2ff43afbb70f6a699a535f591",
@@ -17,78 +17,55 @@
       "result": "PASS_20_OF_20",
       "job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa59caa5527934177ed1183"
     },
-    "deployment": {
-      "workflow_run": "https://github.com/maxbry123-commits/frontend/actions/runs/34711961080",
-      "package_verify": "PASS",
-      "hub_http": 200,
-      "static_host_http": 200
-    },
     "live_loop20": {
       "result": "PASS_20_OF_20",
-      "job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa59d0621047bf1b037e15f",
-      "desktop_capture": {
-        "bytes": 96388,
-        "sha256": "a2029a700477fc235309c24888ad19f5e9bcd99f419471a765c5a04b1f9a695f"
-      },
-      "mobile_capture": {
-        "bytes": 99929,
-        "sha256": "9cc032e04ed8eee3d4213e9162832b34af8ce5aaa45a53480532eac9271a332a"
-      }
+      "job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa59d0621047bf1b037e15f"
     },
     "independent_browser_reviewer": {
       "result": "PASS",
-      "job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa59d3021047bf1b037e163",
-      "desktop": {
-        "http": 200,
-        "panel_count": 10,
-        "visible_tabs": 10,
-        "button_count": 54,
-        "visible_button_click_ok": 29,
-        "button_click_fail": 0,
-        "console_errors": 0,
-        "horizontal_overflow": false
-      },
-      "mobile": {
-        "http": 200,
-        "panel_count": 10,
-        "visible_tabs": 10,
-        "button_count": 54,
-        "visible_button_click_ok": 29,
-        "button_click_fail": 0,
-        "console_errors": 0,
-        "horizontal_overflow": false
-      }
+      "job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa59d3021047bf1b037e163"
     },
-    "director_gates": {
-      "multi_ai_router": "PASS_UI_CONFIG_AND_STATE",
-      "remote_ai_mcp_http_api_websocket": "PASS_CONFIG_FAIL_CLOSED_WITHOUT_ENDPOINT",
-      "design_skills": "PASS",
-      "file_photo_html_url_github_inputs": "PASS",
-      "destinations_download_github_hf_vercel_mcp_share_custom": "PASS_PLAN_AND_CONFIG",
-      "multiple_reference_urls": "PASS",
-      "web_page_creator": "PASS",
-      "media_image_video_audio_3d": "PASS_UPLOAD_AND_AI_QUEUE_STATE",
-      "default_theme_panel": "PASS",
-      "microkernel": "PASS"
-    },
-    "security": "secret_ref_only_no_raw_api_keys",
-    "evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/FACTORY-V1.1-LIVE-BROWSER-LOOP20-EVIDENCE-2026-09-12.md",
-    "verified_closed": true
+    "status": "HISTORICAL_VERIFIED_CLOSED_SUPERSEDED_BY_SOURCE_CHANGE"
   },
-  "resolved_gaps": [
-    "LIVE_UI_EXPECTED_PANEL_IDS_MISSING",
-    "LIVE_UI_CONFIG_PANEL_HIDDEN_BY_DEFAULT",
-    "THEME_PANEL_CONTROL_ID_COLLISION",
-    "MEDIA_JOB_STATUS_NOT_VISIBLE",
-    "INSUFFICIENT_PREVIOUS_BROWSER_COVERAGE"
+  "factory_v1_8_candidate": {
+    "source_sha": "f66624e90e154e6ba4c9c61963973e7659f25431",
+    "feature_parent_sha": "4f25afa43a682830630f2e69d6c2bc94f2f6c5ab",
+    "publish_workflow_commit": "ccad6803c72bb80ed27df380ccb5f5994d8d85e1",
+    "publish_run": "https://github.com/maxbry123-commits/frontend/actions/runs/34716725960",
+    "publish_job": "https://github.com/maxbry123-commits/frontend/actions/runs/34716725960/job/103615195530",
+    "publish_result": "PASS",
+    "package_verify": "PASS",
+    "http_readback": "PASS",
+    "url": "https://comand-center-1-yaiwes-ui-factory.static.hf.space/",
+    "human_like_interaction_cycles_50": "PENDING_FRESH_EVIDENCE",
+    "each_step_and_button": "PENDING_FRESH_EVIDENCE",
+    "canvas_drag_drop": "PENDING_FRESH_EVIDENCE",
+    "panel_mouse_touch_scroll": "PENDING_FRESH_EVIDENCE",
+    "breakpoints_zoom_fit_view": "PENDING_FRESH_EVIDENCE",
+    "independent_browser_reviewer": "PENDING_FRESH_EVIDENCE",
+    "verified_closed": false
+  },
+  "security": "secret_ref_only_no_raw_api_keys",
+  "safety": {
+    "allowed_connectors": ["GitHub", "Hugging Face"],
+    "secrets_exposed": false,
+    "force_push": false,
+    "lfs": false,
+    "backend_productive_write": false
+  },
+  "reopened_gaps": [
+    "CURRENT_FACTORY_SOURCE_CHANGED_AFTER_V1_1_CLOSURE",
+    "V1_8_50_INTERACTION_CYCLES_NOT_YET_EVIDENCED",
+    "V1_8_INDEPENDENT_BROWSER_REVIEW_NOT_YET_EVIDENCED"
   ],
-  "remaining_project_gaps_not_T1_blockers": [
+  "remaining_project_gaps_not_current_queue": [
     "LIVE_REMOTE_AI_EXECUTION_REQUIRES_CONFIGURED_ROUTER_MCP_HTTP_ENDPOINT",
     "LIVE_MEDIA_GENERATION_REQUIRES_CONFIGURED_AI_ROUTER",
     "T2_RECON_38_WINDOWS_AND_BACKEND_PENDING",
     "T2_COMPONENT_REUSE_AND_INTERFACE_BUILD_PENDING"
   ],
-  "closure_rule": "candidate LOOP20 + OIDC deploy + HTTP readback + live LOOP20 + browser captures + independent browser reviewer",
-  "closure_result": "VERIFIED_CLOSED",
-  "next_node": "T2_RECON_38_WINDOWS_BACKEND_AND_COMPONENT_REUSE"
+  "evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/FACTORY-V1.8-WATCHDOG-REGRESSION-2026-09-12.json",
+  "closure_rule": "For any visual shell/editor source change: fresh current-source verification must include 50 human-like interaction cycles covering steps/buttons/canvas drag-drop/panel mouse-touch scroll/breakpoints/zoom plus deployed readback and independent browser reviewer before VERIFIED_CLOSED.",
+  "closure_result": "REOPENED_VALIDATION_REQUIRED",
+  "next_node": "VALIDATE_V1_8_WITH_50_INTERACTION_CYCLES_THEN_INDEPENDENT_BROWSER_REVIEWER"
 }
