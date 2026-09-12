@@ -1,0 +1,41 @@
+{
+  "schema": "yaiwes.crazywall.delta.v1",
+  "identity": "➡️ Astra plan fábrica UI YAIWES",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "event": "T1_FACTORY_V1_8_LIVE_50_CYCLE_GATE_STARTED",
+  "preserve_history": true,
+  "candidate": {
+    "version": "V1.8",
+    "source_sha": "f66624e90e154e6ba4c9c61963973e7659f25431",
+    "live_url": "https://comand-center-1-yaiwes-ui-factory.static.hf.space/",
+    "publish_and_readback": "PASS"
+  },
+  "validation": {
+    "test_commit": "d7a98d833b574886e72ebf81648278578a6879d3",
+    "workflow_commit": "180b25092f13f6c773b9c615d572374e88d7dd05",
+    "run": 34721912175,
+    "job": 103629254847,
+    "status_at_record": "IN_PROGRESS",
+    "pass_claim": false
+  },
+  "gaps": [
+    "V1_8_50_INTERACTION_CYCLES_NOT_YET_TERMINAL_PASS",
+    "V1_8_INDEPENDENT_BROWSER_REVIEW_NOT_YET_EVIDENCED"
+  ],
+  "ownership": {
+    "owner": "➡️ Astra plan fábrica UI YAIWES",
+    "t2_productive": "BLOCKED",
+    "backend_productive": "DENY_WRITE",
+    "sol_nodes": "NO_COLLISION"
+  },
+  "queue_1x1": "READ_50_CYCLE_TERMINAL_RESULT_THEN_STRATEGYDELTA_OR_INDEPENDENT_REVIEWER",
+  "security": {
+    "connector_allowlist": ["GitHub", "Hugging Face"],
+    "secret_ref_only": true,
+    "raw_secrets_exposed": false,
+    "force": false,
+    "lfs": false
+  },
+  "evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/FACTORY-V1.8-LIVE-50-CYCLE-GATE-2026-09-12.json"
+}
