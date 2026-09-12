@@ -1,3 +1,5 @@
+import { CRAFTJS_DONOR } from './donors/craftjs-patterns.js';
+
 const SNAP = 8;
 const MIN_W = 100;
 const MIN_H = 60;
@@ -66,5 +68,12 @@ document.addEventListener('pointerup', event => {
 
 window.__YAIWES_INTERACTIONS__ = Object.freeze({
   ...(window.__YAIWES_INTERACTIONS__ || {}),
-  resize: { snap: SNAP, minWidth: MIN_W, minHeight: MIN_H, state: 'UPDATE_COMPONENT' }
+  resize: {
+    snap: SNAP,
+    minWidth: MIN_W,
+    minHeight: MIN_H,
+    state: 'UPDATE_COMPONENT',
+    donor: CRAFTJS_DONOR.name,
+    sourceBlob: CRAFTJS_DONOR.sources.resizer.blob
+  }
 });
