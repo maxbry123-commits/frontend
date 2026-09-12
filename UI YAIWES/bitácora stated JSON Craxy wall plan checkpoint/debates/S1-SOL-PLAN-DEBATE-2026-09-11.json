@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S1-DEBATE-SOLPLAN-20260911-01",
-  "status": "ACTIVE_DEBATE_LOOP_S1_10_NO_DESTINATION_S1_11_RUNNING",
+  "status": "ACTIVE_DEBATE_LOOP_S1_11_HANDOFF_CONTRACT_READY_S1_12_RUNNING",
   "from": "Sol ☀️ 🏈gpt 1 backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
@@ -13,127 +13,106 @@
   "document_anchors": {
     "max_system_blob": "b9bc9a7f56cf17607b863829213f7bcb0f8b8081",
     "virtual_computer_blob": "ecc8b3b1444ade0ca894789e149e881a08b999c0",
-    "memory_workflow_blob": "da109ae2d91e4563c01492ad365bbaa00fc6baa6",
-    "adapters_readme_blob": "d20358aa2e725de11e46190c8b7b3997d8f7e890",
-    "integration_readme_blob": "0aefd2511eeb0378a9204fafba54a49b9c8c3255"
-  },
-  "round_4_answer": {
-    "verdict": "PARTIAL_PASS_EXECUTION_RECOVERY_IMPLEMENTED_PRODUCT_MEMORY_BOUNDARY_MISSING",
-    "implemented": ["Wordflow durable ledger hash-chain verification.","Atomic persistence tmp+fsync+replace.","Runner restart recovery and completed-node rehydration.","Restart recovery test PASS in GitHub CI.","Fables path+SHA+contract+CI PASS."],
-    "missing": ["runtime/src/storage product implementation","runtime/src/recovery product implementation","runtime/src/agent product implementation","chat/project/agent memory scope isolation contract+implementation+tests"],
-    "placeholder_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    "memory_workflow_blob": "da109ae2d91e4563c01492ad365bbaa00fc6baa6"
   },
   "fables_verified": {
-    "contract_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py",
-    "current_contract_blob_sha": "23f4e1b8b91301f2df396e7a0860fc65b977cfb3",
-    "previous_contract_blob_sha": "36ee0b1b184b709e292fd8c617f0e795e7e98451",
+    "contract_blob_sha": "23f4e1b8b91301f2df396e7a0860fc65b977cfb3",
     "contract_id": "yaiwes.fables.v1",
-    "test_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_fables_socket.py",
     "test_blob_sha": "cfc63c5363330ea0746c1d3e041c17dc11df9b0c",
     "current_contract_commit": "671d9bb545b958c75b0c040806f096bf76f55175",
     "ci_run_id": 34573676252,
     "ci_job_id": 103181192888,
-    "ci_head_sha": "671d9bb545b958c75b0c040806f096bf76f55175",
     "ci_conclusion": "success",
-    "wordflow_tests": "12 passed in 0.05s",
     "socket_fables_tests": "9 passed in 0.02s",
     "verdict": "CURRENT_FABLES_BLOB_REVALIDATED_BY_OWN_CI"
   },
-  "s1_06_memory_boundary_discovery": {
-    "status": "GAP_VERIFIED_READONLY",
-    "adapter_spec_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/README.md",
-    "adapter_spec_blob_sha": "d20358aa2e725de11e46190c8b7b3997d8f7e890",
-    "memory_adapter_exact_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/memory_adapter.py",
-    "memory_adapter_readback": "404_NOT_FOUND",
-    "integration_spec_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/README.md",
-    "integration_spec_blob_sha": "0aefd2511eeb0378a9204fafba54a49b9c8c3255",
-    "verdict": "MEMORY_BOUNDARY_SPECIFIED_BUT_ADAPTER_NOT_IMPLEMENTED"
-  },
-  "s1_07_memory_adapter_contract_preflight": {
-    "status": "PREFLIGHT_COMPLETE_NO_CODE_WRITE",
-    "documented_read_operations": ["GET_CONTEXT","GET_MEMORY","GET_EVIDENCE","GET_STATE","GET_HISTORY","GET_ARTIFACT","GET_RELATIONS","AUDIT_MEMORY"],
-    "documented_write_operations": ["SAVE_STATE_DELTA","SAVE_ARTIFACT","SAVE_CLAIM","SAVE_EVIDENCE","SAVE_CONSOLIDATION","CREATE_CHECKPOINT"],
-    "documented_memory_layers": ["L0_RAW_SOURCE","L1_WORKING_MEMORY","L2_TASK_MEMORY","L3_PROJECT_MEMORY","L4_LONG_TERM_KNOWLEDGE"],
-    "canonical_write_gate": ["LLM_OUTPUT","NORMALIZER","SCHEMA_VALIDATION","AUDIT","STATE_DELTA","MEMORY_UPDATE"],
-    "direct_llm_canonical_write": "FORBIDDEN_BY_SOURCE_CONTRACT",
-    "agent_memory_scope": "NOT_DEFINED_AS_CANONICAL_LAYER_IN_INSPECTED_CONTRACT",
-    "implementation_authorized": false,
-    "verdict": "MINIMAL_CONTRACT_DERIVED_FROM_SOURCES_IMPLEMENTATION_NOT_AUTHORIZED"
-  },
-  "s1_08_r4_coordinator_handoff_poll": {
-    "status": "POLL_COMPLETE_NO_ACTIONABLE_HANDOFF",
-    "main_head_observed": "3e8d2baca499d6a0b34608b33b5938358ec06ce6",
-    "latest_round": 4,
-    "round_5": "NOT_PRESENT_IN_DEBATES_DIRECTORY",
-    "coordinator_reply_blob_sha": "132ced4f3155f3562019f73ed32435d9b43809f3",
-    "coordinator_reply_delta": "NO_NEW_R4_Q1_TO_Q6_DECISIONS",
-    "vite_destination": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
-    "supabase_destination": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
-    "memory_adapter_readback_current_main": "404_NOT_FOUND",
-    "verdict": "NO_NEW_HANDOFF_OR_IMPLEMENTATION_FOUND_CONTINUE_FREE_READONLY_NODE"
-  },
   "s1_09_current_main_evidence_drift_audit": {
     "status": "COMPLETE_REVALIDATED",
-    "l05": {"current_blob_sha":"f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f","drift":false},
-    "l05_tests": {"current_blob_sha":"76515236717e2d36985458275c51ef8c552873a9","drift":false},
-    "fables": {"current_blob_sha":"23f4e1b8b91301f2df396e7a0860fc65b977cfb3","previous_blob_sha":"36ee0b1b184b709e292fd8c617f0e795e7e98451","drift":true,"current_commit":"671d9bb545b958c75b0c040806f096bf76f55175","ci_run":34573676252,"ci_job":103181192888,"ci":"SUCCESS_CURRENT_BLOB_9_FABLES_SOCKET_TESTS_PASS"},
-    "ledger": {"current_blob_sha":"79ae3da7f20188874ffdc9e5a6b5e9cd3fbc4c83","drift":true,"latest_commit":"cbf16fe60dbfbdcca87988fbf7fb3d936e7dabfc"},
-    "runner": {"current_blob_sha":"4fd01eb441cf3c10638d1a6f80924fc3fc8533a5","drift":true,"latest_commit":"52e18f9420268c4b899e51bd663fe46a2a3725da"},
-    "test_core": {"current_blob_sha":"66af6aff97a889c41ee3e8e85653d57ea1cf2bd4","drift":true,"latest_commit":"36beaed55989b03313c92ee819b63280259e57e4"},
-    "persistence_ci": {"ledger_head_run":34641867379,"ledger_head_result":"SUCCESS","ledger_head_tests":"14 Wordflow passed; 41 runtime passed + 6 subtests","latest_test_core_run":34641893033,"latest_test_core_result":"SUCCESS"},
-    "memory_adapter": "404_NOT_FOUND",
-    "verdict": "DRIFT_FOUND_BUT_CURRENT_FABLES_AND_PERSISTENCE_REVALIDATED_BY_MATCHING_CI"
+    "l05_blob": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
+    "l05_tests_blob": "76515236717e2d36985458275c51ef8c552873a9",
+    "ledger_blob": "79ae3da7f20188874ffdc9e5a6b5e9cd3fbc4c83",
+    "runner_blob": "4fd01eb441cf3c10638d1a6f80924fc3fc8533a5",
+    "test_core_blob": "66af6aff97a889c41ee3e8e85653d57ea1cf2bd4",
+    "persistence_ci": [34641867379,34641893033],
+    "verdict": "CURRENT_FABLES_AND_PERSISTENCE_REVALIDATED_BY_MATCHING_CI"
   },
   "s1_10_vite_supabase_literal_destination_discovery": {
     "status": "COMPLETE_FAIL_CLOSED",
     "vite_source_ref": "134ce6817984bad0f5fb043481502531fee9b1db",
     "supabase_source_ref": "0500c21b37cc11b6b6140dde9827f89fb7d3097d",
-    "code_search": {
-      "vite_source_ref": "NO_RESULTS",
-      "supabase_source_ref": "NO_RESULTS",
-      "Vite_DEST_ROOT": "NO_RESULTS",
-      "Supabase_DEST_ROOT": "NO_RESULTS",
-      "vitejs_vite": "NO_RESULTS",
-      "supabase_supabase": "NO_RESULTS"
-    },
-    "canonical_queue": {
-      "path": "UI YAIWES/automation/residual-03-motores-canonicos-20260910/QUEUE.json",
-      "blob_sha": "ea92b3004175fe7f9f6adcce8a49d0a843060879",
-      "finding": "Vite/Supabase have exact URL+immutable source_ref+publish:true but no DEST_REPO, DEST_BRANCH or DEST_ROOT."
-    },
-    "canonical_handoff": {
-      "path": "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-WATCHDOG-MOTORES-CANONICOS-2026-09-10.md",
-      "blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
-      "finding": "Defines canonical motor flow and temporary root but does not authorize a literal final destination."
-    },
-    "active_workflows": "NO_VITE_NO_SUPABASE_NO_SOL_GPT1_NAMED_WORKFLOW",
-    "physical_readback": {
-      "UI YAIWES/componentes open soure UI YAIWES/Vite": "404_NOT_FOUND",
-      "UI YAIWES/componentes open soure UI YAIWES/Supabase": "404_NOT_FOUND"
-    },
-    "roles_directory": {
-      "only_s1_reply": "SOL-PLAN-ORQUESTADOR-REPLY-S1.json",
-      "reply_blob_sha": "132ced4f3155f3562019f73ed32435d9b43809f3",
-      "additional_s1_handoff": "NOT_FOUND"
-    },
+    "queue_blob_sha": "ea92b3004175fe7f9f6adcce8a49d0a843060879",
+    "handoff_blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
+    "vite_physical_readback": "404_NOT_FOUND",
+    "supabase_physical_readback": "404_NOT_FOUND",
+    "additional_s1_handoff": "NOT_FOUND",
     "verdict": "DESTINATION_AUTHORITY_NOT_FOUND",
-    "gaps": ["DESTINATION_INPUT_GAP","DESTINATION_AUTHORITY_PROVENANCE_GAP"],
-    "execution_rule": "DO_NOT_DISPATCH_CANONICAL_MOTORS_UNTIL_LITERAL_DEST_REPO_DEST_BRANCH_DEST_ROOT_AUTHORITY_EXISTS"
+    "gaps": ["DESTINATION_INPUT_GAP","DESTINATION_AUTHORITY_PROVENANCE_GAP"]
+  },
+  "s1_11_vite_downstream_handoff_revalidation": {
+    "status": "COMPLETE_CONTRACT_READY_SOURCE_ACQUISITION_BLOCKED",
+    "integration_metadata": {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/integration-01-20-step1.json",
+      "blob_sha": "f7f5eef5e33bafc81a1f7c246cef4d478603d8cb",
+      "vite_component_id": 18,
+      "vite_status": "PENDING_SOURCE",
+      "historical_runtime_destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vite",
+      "authority_classification": "DOWNSTREAM_TARGET_METADATA_ONLY_NOT_ACQUISITION_AUTHORIZATION"
+    },
+    "s3_state": {
+      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT3-BACKEND-STATE.json",
+      "current_blob_sha": "b852f5ec08aac4eab4259626a9c243e5c0b4ad56",
+      "vite_runtime_test": "NOT_RUN_BLOCKED_OWNER_S1_NO_VERIFIED_HANDOFF",
+      "vite_owner": "S1"
+    },
+    "s3_debate": {
+      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/S3-SOL-PLAN-DEBATE-2026-09-11.json",
+      "blob_sha": "6810e75e8d631fb9e85e4121b11bb7a5234599d9",
+      "q3_decision": "VITE_HANDOFF_ACCEPTANCE_EXPLICIT",
+      "q3_current_status": "NOT_ACCEPTED_NO_Q3_COMPLETE_HANDOFF_OBSERVED"
+    },
+    "required_s1_to_s3_handoff_evidence": [
+      "immutable source_ref",
+      "source tree SHA",
+      "canonical motor identity and commit",
+      "failed_count == 0",
+      "pending_count == 0",
+      "exact destination read-back",
+      "destination hash/tree evidence",
+      "authorized touched_paths",
+      "handoff file SHA"
+    ],
+    "known_vite_source_ref": "134ce6817984bad0f5fb043481502531fee9b1db",
+    "missing_before_handoff": [
+      "literal authorized DEST_REPO",
+      "literal authorized DEST_BRANCH",
+      "literal authorized DEST_ROOT",
+      "canonical motor execution result",
+      "source tree SHA from execution evidence",
+      "destination read-back/hash",
+      "handoff file SHA"
+    ],
+    "refutation": [
+      "runtime/vendor/vite is not an acquisition destination authorization.",
+      "Fables PASS does not satisfy Vite acquisition evidence.",
+      "S3 vendor/runtime test cannot run until S1 publishes the full Q3 handoff package."
+    ],
+    "verdict": "DOWNSTREAM_HANDOFF_CONTRACT_KNOWN_NO_EXECUTABLE_ACQUISITION_AUTHORITY"
+  },
+  "cross_role_fables_discrepancy": {
+    "s1_current": "FABLES_CURRENT_BLOB_CI_PASS",
+    "s3_current": "Q4_STILL_REQUIRES_CURRENT_A2_FABLES_IDENTITY_CONTRACT_TEST_EVIDENCE",
+    "classification": "CROSS_ROLE_GATE_NOT_SAME_AS_S1_LOCAL_FABLES_TEST_PASS",
+    "rule": "Do not edit S3 or A2 state. Verify A2 current state read-only and report to coordinator."
   },
   "acquisition_status": {
     "Vite": "BLOCKED_DESTINATION_INPUT_GAP",
     "Supabase": "BLOCKED_DESTINATION_INPUT_GAP",
-    "Fables_dependency": "RESOLVED_CURRENT_BLOB_CI_PASS"
+    "Fables_local_S1_evidence": "RESOLVED_CURRENT_BLOB_CI_PASS",
+    "Fables_cross_role_A2_gate": "PENDING_READONLY_CROSSCHECK"
   },
   "debate_turns": [
-    {"turn":13,"author":"Sol ☀️ 🏈gpt 1 backend","action":"FABLES_CI_VERIFIED"},
-    {"turn":14,"author":"DIRECTOR via 🌞👷 sol osquestador plan 🎯","action":"ROUND_4_ORDER"},
-    {"turn":15,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_4_ANSWER"},
-    {"turn":16,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_06_MEMORY_BOUNDARY_DISCOVERY"},
-    {"turn":17,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_07_MEMORY_ADAPTER_CONTRACT_PREFLIGHT"},
-    {"turn":18,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_08_COORDINATOR_HANDOFF_POLL"},
-    {"turn":19,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_09_CURRENT_MAIN_EVIDENCE_DRIFT_AUDIT"},
-    {"turn":20,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_10_LITERAL_DESTINATION_DISCOVERY","result":"No literal authority; physical paths still 404; canonical motors remain blocked"}
+    {"turn":20,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_10_LITERAL_DESTINATION_DISCOVERY","result":"No literal authority; motors blocked"},
+    {"turn":21,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_11_VITE_DOWNSTREAM_HANDOFF_REVALIDATION","result":"S3 Q3 handoff contract explicit; acquisition authority still absent; runtime/vendor/vite classified as downstream metadata only"}
   ],
   "questions_for_sol_plan": [
     {"id":"R4-Q1","question":"¿MOTOR_BLOB_IDENTITY_GAP y MOTOR_AUX_INPUT_CONTRACT_GAP pertenecen a L05 o al dispatcher/motor wrapper?"},
@@ -141,13 +120,14 @@
     {"id":"R4-Q3","question":"¿Memory-scope chat/proyecto/agente pertenece a S1 runtime o al Memory/Audit Orchestrator separado?"},
     {"id":"R4-Q4","question":"Fables actual está CI PASS. Con destinos bloqueados, publica siguiente nodo S1 o destinos literales Vite/Supabase."},
     {"id":"R4-Q5","question":"¿Autorizas a S1 a implementar runtime/src/adapters/memory_adapter.py? Si sí, publica EXACT_WRITE_PATHS, transport contract and acceptance criteria."},
-    {"id":"R4-Q6","question":"¿Defines explícitamente external-agent memory as a separate scope/owner, or should the adapter expose only documented L0-L4 memory layers and keep agent-owned memory outside canonical Memory/Audit?"}
+    {"id":"R4-Q6","question":"¿Defines explícitamente external-agent memory as a separate scope/owner?"},
+    {"id":"R4-Q7","question":"S3 Q4 todavía exige Fables validado por A2 aunque S1 tiene current-blob CI PASS. ¿Debe A2 publicar identidad/contrato/test como gate cross-role separado antes de wiring?"}
   ],
   "next_free_node": {
-    "id": "S1-11-VITE-DOWNSTREAM-HANDOFF-REVALIDATION-READONLY",
+    "id": "S1-12-A2-FABLES-GATE-CROSSCHECK-READONLY",
     "status": "RUNNING",
-    "action": "Read current integration-01-20 metadata plus current S3 state/debate to determine the exact downstream Vite handoff contract expected after S1 acquisition. Treat runtime/vendor/vite only as downstream target metadata, never as acquisition destination authority."
+    "action": "Read current ASTRA2 state and any A2 Fables evidence. Determine whether S3 Q4 cross-role gate is satisfied. Do not mutate A2/S3 state and do not conflate S1 local Fables CI with A2 ownership validation."
   },
   "loop_rule": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. GAP does not stop the lane.",
-  "closure": "OPEN_S1_10_BLOCKED_S1_11_RUNNING"
+  "closure": "OPEN_S1_11_COMPLETE_S1_12_RUNNING"
 }
