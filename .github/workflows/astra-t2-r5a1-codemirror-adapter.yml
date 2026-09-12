@@ -1,0 +1,28 @@
+name: astra-t2-r5a1-codemirror-adapter
+
+on:
+  push:
+    paths:
+      - 'UI YAIWES interface/Fromtend/modules/M_RUNTIME_ORCHESTRATION/adapters/codemirror-adapter.mjs'
+      - 'UI YAIWES interface/Fromtend/modules/M_RUNTIME_ORCHESTRATION/tests/codemirror-adapter.test.mjs'
+      - '.github/workflows/astra-t2-r5a1-codemirror-adapter.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  isolated-adapter-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run isolated adapter harness
+        run: node --test 'UI YAIWES interface/Fromtend/modules/M_RUNTIME_ORCHESTRATION/tests/codemirror-adapter.test.mjs'
