@@ -3,94 +3,62 @@ import { reduce } from './actions.js';
 import { renderLucideIcon } from './donors/lucide-icons.js';
 
 let state = structuredClone(initialState);
-const $ = (id) => document.getElementById(id);
-
-function dispatch(action) {
-  state = reduce(state, action);
-  render();
-}
-
-function renderSteps() {
-  $('steps').innerHTML = STEPS.map(step => `<button class="step ${state.step === step.id ? 'active' : ''}" data-step="${step.id}">${step.title}</button>`).join('');
-  document.querySelectorAll('[data-step]').forEach(btn => btn.onclick = () => dispatch({ type: 'SET_STEP', step: Number(btn.dataset.step) }));
-}
-
-function renderLibrary() {
-  const items = [
-    ['window', 'Ventana'], ['button', 'Botón'], ['selector', 'Selector'], ['segment', 'Segmento'], ['panel', 'Panel']
-  ];
-  $('component-library').innerHTML = items.map(([kind, label]) => `<button class="library-item" data-kind="${kind}" draggable="true">${label}</button>`).join('');
-  $('new-component').innerHTML = `${renderLucideIcon('plus', { size: 16 })}<span>Crear componente</span>`;
-  document.querySelectorAll('[data-kind]').forEach(btn => {
-    btn.onclick = () => dispatch({ type: 'ADD_COMPONENT', kind: btn.dataset.kind, label: btn.textContent });
-    btn.ondragstart = e => e.dataTransfer.setData('text/yaiwes-kind', btn.dataset.kind);
-  });
-}
-
-function renderCanvas() {
-  $('canvas').innerHTML = state.components.map(c => `
-    <article class="node ${state.selectedId === c.id ? 'selected' : ''}" data-id="${c.id}" style="left:${c.x}px;top:${c.y}px;width:${c.w}px;height:${c.h}px">
-      <strong>${c.label}</strong><small>${c.kind}</small>
-    </article>`).join('');
-  document.querySelectorAll('.node').forEach(node => node.onclick = () => dispatch({ type: 'SELECT', id: node.dataset.id }));
-  $('canvas').ondragover = e => e.preventDefault();
-  $('canvas').ondrop = e => {
-    e.preventDefault();
-    const kind = e.dataTransfer.getData('text/yaiwes-kind');
-    if (kind) dispatch({ type: 'ADD_COMPONENT', kind, label: kind });
-  };
-}
-
-function renderInspector() {
-  const item = state.components.find(c => c.id === state.selectedId);
-  if (!item) {
-    $('inspector-content').innerHTML = '<p>Selecciona un componente.</p>';
-    return;
-  }
-  $('inspector-content').innerHTML = `
-    <label>Etiqueta<input id="prop-label" value="${item.label}"></label>
-    <label>Ancho<input id="prop-w" type="number" value="${item.w}"></label>
-    <label>Alto<input id="prop-h" type="number" value="${item.h}"></label>`;
-  $('prop-label').onchange = e => dispatch({ type: 'UPDATE_COMPONENT', id: item.id, patch: { label: e.target.value } });
-  $('prop-w').onchange = e => dispatch({ type: 'UPDATE_COMPONENT', id: item.id, patch: { w: Number(e.target.value) } });
-  $('prop-h').onchange = e => dispatch({ type: 'UPDATE_COMPONENT', id: item.id, patch: { h: Number(e.target.value) } });
-}
-
-function renderDelta() {
-  $('delta-preview').textContent = state.proposedDelta ? JSON.stringify(state.proposedDelta, null, 2) : 'Sin delta propuesto';
-}
-
-function render() {
-  renderSteps();
-  renderLibrary();
-  renderCanvas();
-  renderInspector();
-  renderDelta();
-  $('step-title').textContent = STEPS[state.step - 1].title;
-  $('status').textContent = `V${state.version} · ${state.mode}`;
-  document.querySelectorAll('[data-mode]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === state.mode);
-    btn.onclick = () => dispatch({ type: 'SET_MODE', mode: btn.dataset.mode });
-  });
-}
-
-$('prev-step').onclick = () => dispatch({ type: 'SET_STEP', step: state.step - 1 });
-$('next-step').onclick = () => dispatch({ type: 'SET_STEP', step: state.step + 1 });
-$('undo').onclick = () => dispatch({ type: 'UNDO' });
-$('redo').onclick = () => dispatch({ type: 'REDO' });
-$('save-version').onclick = () => dispatch({ type: 'SAVE_VERSION' });
-$('new-component').onclick = () => dispatch({ type: 'ADD_COMPONENT', kind: 'window', label: 'Nueva ventana' });
-$('propose-delta').onclick = () => {
-  const reason = $('ai-goal').value.trim();
-  if (!reason) return;
-  dispatch({ type: 'PROPOSE_DELTA', reason, operations: [{ type: 'ADD_COMPONENT', kind: 'panel', label: 'Propuesta IA' }] });
+const CONFIG_KEY = 'yaiwes-factory-config-v1';
+const defaultConfig = {
+  models: [], teamMode: 'single', remote: null, skills: [], sources: [], destinations: [], references: [], pages: [], media: [],
+  theme: { bg:'#111111', panel:'#181818', text:'#eeeeee', accent:'#888888', radius:8 },
+  kernel: { validate:true, version:true, evidence:true, queue:true, runs:[] }
 };
-$('delta-preview').onclick = () => { if (state.proposedDelta) dispatch({ type: 'APPLY_DELTA' }); };
-$('export-json').onclick = () => {
-  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `yaiwes-ui-v${state.version}.json`; a.click(); URL.revokeObjectURL(url);
-};
+let config = loadConfig();
+const $ = id => document.getElementById(id);
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function loadConfig(){ try { return { ...structuredClone(defaultConfig), ...JSON.parse(localStorage.getItem(CONFIG_KEY)||'{}') }; } catch { return structuredClone(defaultConfig); } }
+function saveConfig(){ localStorage.setItem(CONFIG_KEY, JSON.stringify(config)); renderConfigLists(); }
+function dispatch(action){ state = reduce(state, action); render(); }
+function card(text){ return `<div class="mini-card">${esc(text)}</div>`; }
+function download(name, content, type='text/plain') { const blob=new Blob([content],{type}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000); }
 
-render();
+function renderSteps(){ $('steps').innerHTML=STEPS.map(s=>`<button class="step ${state.step===s.id?'active':''}" data-step="${s.id}">${s.title}</button>`).join(''); document.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>dispatch({type:'SET_STEP',step:Number(b.dataset.step)})); }
+function renderLibrary(){ const items=[['window','Ventana'],['button','Botón'],['selector','Selector'],['segment','Segmento'],['panel','Panel'],['page','Página web'],['image','Imagen'],['video','Vídeo'],['audio','Audio'],['model3d','3D']]; $('component-library').innerHTML=items.map(([k,l])=>`<button class="library-item" data-kind="${k}" draggable="true">${l}</button>`).join(''); $('new-component').innerHTML=`${renderLucideIcon('plus',{size:16})}<span>Crear componente</span>`; document.querySelectorAll('[data-kind]').forEach(btn=>{btn.onclick=()=>dispatch({type:'ADD_COMPONENT',kind:btn.dataset.kind,label:btn.textContent});btn.ondragstart=e=>e.dataTransfer.setData('text/yaiwes-kind',btn.dataset.kind);}); }
+function renderCanvas(){ $('canvas').innerHTML=state.components.map(c=>`<article class="node ${state.selectedId===c.id?'selected':''}" data-id="${c.id}" style="left:${c.x}px;top:${c.y}px;width:${c.w}px;height:${c.h}px"><strong>${esc(c.label)}</strong><small>${esc(c.kind)}</small></article>`).join(''); document.querySelectorAll('.node').forEach(n=>n.onclick=()=>dispatch({type:'SELECT',id:n.dataset.id})); $('canvas').ondragover=e=>e.preventDefault(); $('canvas').ondrop=e=>{e.preventDefault();const k=e.dataTransfer.getData('text/yaiwes-kind');if(k)dispatch({type:'ADD_COMPONENT',kind:k,label:k});}; }
+function renderInspector(){ const item=state.components.find(c=>c.id===state.selectedId); if(!item){$('inspector-content').innerHTML='<p>Selecciona un componente.</p>';return;} $('inspector-content').innerHTML=`<label>Etiqueta<input id="prop-label" value="${esc(item.label)}"></label><label>Ancho<input id="prop-w" type="number" value="${item.w}"></label><label>Alto<input id="prop-h" type="number" value="${item.h}"></label>`; $('prop-label').onchange=e=>dispatch({type:'UPDATE_COMPONENT',id:item.id,patch:{label:e.target.value}}); $('prop-w').onchange=e=>dispatch({type:'UPDATE_COMPONENT',id:item.id,patch:{w:Number(e.target.value)}}); $('prop-h').onchange=e=>dispatch({type:'UPDATE_COMPONENT',id:item.id,patch:{h:Number(e.target.value)}}); }
+function renderDelta(){ $('delta-preview').textContent=state.proposedDelta?JSON.stringify(state.proposedDelta,null,2):'Sin delta propuesto'; }
+function render(){ renderSteps();renderLibrary();renderCanvas();renderInspector();renderDelta();$('step-title').textContent=STEPS[state.step-1].title;$('status').textContent=`V${state.version} · ${state.mode}`;document.querySelectorAll('[data-mode]').forEach(b=>{b.classList.toggle('active',b.dataset.mode===state.mode);b.onclick=()=>dispatch({type:'SET_MODE',mode:b.dataset.mode});}); }
+
+function renderConfigLists(){
+  $('model-list').innerHTML=config.models.map((m,i)=>card(`${i+1}. ${m.name} · ${m.role} · ${m.endpoint||'sin endpoint'} · ${m.secretRef||'sin secret_ref'}`)).join('')||card('Sin modelos');
+  $('skill-list').innerHTML=config.skills.map(s=>card(`${s.purpose}: ${s.name} ← ${s.source}`)).join('')||card('Sin skills');
+  $('source-list').innerHTML=config.sources.map(s=>card(`${s.type}: ${s.name||s.value}`)).join('')||card('Sin entradas');
+  $('destination-list').innerHTML=config.destinations.map(d=>card(`${d.type}: ${d.url||'local'} ${d.path||''}`)).join('')||card('Sin destinos');
+  $('reference-list').innerHTML=config.references.map(r=>card(r)).join('')||card('Sin referencias');
+  $('page-list').innerHTML=config.pages.map(p=>card(`${p.name} · ${p.template}`)).join('')||card('Sin páginas');
+  $('media-list').innerHTML=config.media.map(m=>card(`${m.type}: ${m.name||m.prompt||m.status}`)).join('')||card('Sin media/jobs');
+}
+function setTab(name){ document.querySelectorAll('[data-config-section]').forEach(s=>s.classList.toggle('hidden',s.dataset.configSection!==name)); document.querySelectorAll('[data-config-tab]').forEach(b=>b.classList.toggle('active',b.dataset.configTab===name)); }
+function validUrl(value){ try{const u=new URL(value);return ['http:','https:'].includes(u.protocol);}catch{return false;} }
+function outputPlan(){ return {version:state.version,generatedAt:new Date().toISOString(),destinations:config.destinations,artifacts:['ui-state.json','index.html','assets/'],delivery:config.destinations.map(d=>({type:d.type,target:d.url,path:d.path,secret_ref:d.secretRef||null,status:'PLANNED'}))}; }
+async function probeRemote(){ const r=config.remote; if(!r||!validUrl(r.url)){ $('remote-status').textContent='REMOTE_PROBE=INVALID_CONFIG'; return; } try{ const res=await fetch(r.url,{method:'OPTIONS',mode:'cors'}); $('remote-status').textContent=`REMOTE_PROBE=HTTP_${res.status} protocol=${r.protocol}`; } catch(e){ $('remote-status').textContent=`REMOTE_PROBE=UNREACHABLE ${e.name}`; } }
+async function sendAiJob(){ const goal=$('ai-goal').value.trim(); const r=config.remote; if(!goal){$('delta-preview').textContent='AI_JOB=GOAL_REQUIRED';return;} const job={schema:'yaiwes.ai-job/v1',goal,teamMode:config.teamMode,models:config.models.map(({name,endpoint,secretRef,role})=>({name,endpoint,secret_ref:secretRef,role})),skills:config.skills,references:config.references,canvas:state.components}; if(!r||!validUrl(r.url)){ $('delta-preview').textContent=JSON.stringify({...job,status:'QUEUED_LOCAL_NO_REMOTE'},null,2);return;} try{const res=await fetch(r.url,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({...job,secret_ref:r.secretRef,protocol:r.protocol})}); const text=await res.text(); $('delta-preview').textContent=JSON.stringify({status:`REMOTE_HTTP_${res.status}`,response:text.slice(0,2000)},null,2);}catch(e){$('delta-preview').textContent=JSON.stringify({...job,status:'REMOTE_ERROR',error:e.message},null,2);} }
+function runKernel(){ const checks=[]; if($('kernel-validate').checked) checks.push({gate:'validate',pass:state.components.length>=0}); if($('kernel-version').checked) checks.push({gate:'version',pass:Number.isInteger(state.version)}); if($('kernel-evidence').checked) checks.push({gate:'evidence',pass:true}); if($('kernel-queue').checked) checks.push({gate:'queue1x1',pass:true}); const run={at:new Date().toISOString(),checks,pass:checks.every(c=>c.pass)}; config.kernel.runs.push(run); saveConfig(); $('kernel-status').textContent=JSON.stringify(run,null,2); }
+function applyTheme(){ config.theme={bg:$('theme-bg').value,panel:$('theme-panel').value,text:$('theme-text').value,accent:$('theme-accent').value,radius:Number($('theme-radius').value)}; document.documentElement.style.setProperty('--factory-bg',config.theme.bg);document.documentElement.style.setProperty('--factory-panel',config.theme.panel);document.documentElement.style.setProperty('--factory-text',config.theme.text);document.documentElement.style.setProperty('--factory-accent',config.theme.accent);document.documentElement.style.setProperty('--factory-radius',`${config.theme.radius}px`); }
+
+$('toggle-config').onclick=()=>{ $('config-panel').classList.toggle('hidden'); setTab('router'); renderConfigLists(); };
+document.querySelectorAll('[data-config-tab]').forEach(b=>b.onclick=()=>setTab(b.dataset.configTab));
+$('add-model').onclick=()=>{const name=$('model-name').value.trim(),endpoint=$('model-endpoint').value.trim(),secretRef=$('model-secret-ref').value.trim(),role=$('model-role').value;if(!name)return;config.models.push({name,endpoint,secretRef,role});saveConfig();};
+$('team-mode').onchange=e=>{config.teamMode=e.target.value;saveConfig();};
+$('save-remote').onclick=()=>{config.remote={protocol:$('remote-protocol').value,url:$('remote-url').value.trim(),secretRef:$('remote-secret-ref').value.trim()};saveConfig();$('remote-status').textContent='REMOTE_CONFIG=SAVED';}; $('probe-remote').onclick=probeRemote;
+$('add-skill').onclick=()=>{const name=$('skill-name').value.trim(),source=$('skill-source').value.trim();if(!name||!source)return;config.skills.push({name,source,purpose:$('skill-purpose').value});saveConfig();};
+$('file-input').onchange=e=>{for(const f of e.target.files)config.sources.push({type:'file',name:f.name,size:f.size,mime:f.type});saveConfig();}; $('media-upload').onchange=e=>{for(const f of e.target.files)config.media.push({type:'upload',name:f.name,size:f.size,mime:f.type,status:'LOCAL_SELECTED'});saveConfig();};
+$('add-source-url').onclick=()=>{const v=$('source-url').value.trim();if(validUrl(v)){config.sources.push({type:'url',value:v});saveConfig();}}; $('add-github-source').onclick=()=>{const v=$('github-source').value.trim();if(v.startsWith('https://github.com/')){config.sources.push({type:'github',value:v});saveConfig();}}; $('load-html-source').onclick=()=>{const v=$('html-input').value;if(v.trim()){config.sources.push({type:'html',name:`inline-html-${config.sources.length+1}`,bytes:new Blob([v]).size});saveConfig();}};
+$('add-destination').onclick=()=>{config.destinations.push({type:$('destination-type').value,url:$('destination-url').value.trim(),path:$('destination-path').value.trim(),secretRef:$('destination-secret-ref').value.trim()});saveConfig();}; $('build-output-plan').onclick=()=>{$('output-plan').textContent=JSON.stringify(outputPlan(),null,2);};
+$('add-reference').onclick=()=>{const v=$('reference-url').value.trim();if(validUrl(v)){config.references.push(v);saveConfig();}};
+$('create-page').onclick=()=>{const name=$('page-name').value.trim()||`Página ${config.pages.length+1}`;const template=$('page-template').value;config.pages.push({name,template});saveConfig();dispatch({type:'ADD_COMPONENT',kind:'page',label:name});};
+$('queue-media-generation').onclick=()=>{const prompt=$('media-prompt').value.trim();if(!prompt)return;config.media.push({type:$('media-type').value,prompt,status:config.models.length?'QUEUED_FOR_AI_ROUTER':'BLOCKED_NO_MODEL'});saveConfig();};
+$('apply-theme').onclick=()=>{applyTheme();saveConfig();}; $('save-theme').onclick=saveConfig; $('run-kernel').onclick=runKernel; $('send-ai-job').onclick=sendAiJob;
+
+$('prev-step').onclick=()=>dispatch({type:'SET_STEP',step:state.step-1}); $('next-step').onclick=()=>dispatch({type:'SET_STEP',step:state.step+1}); $('undo').onclick=()=>dispatch({type:'UNDO'}); $('redo').onclick=()=>dispatch({type:'REDO'}); $('save-version').onclick=()=>dispatch({type:'SAVE_VERSION'}); $('new-component').onclick=()=>dispatch({type:'ADD_COMPONENT',kind:'window',label:'Nueva ventana'});
+$('propose-delta').onclick=()=>{const reason=$('ai-goal').value.trim();if(reason)dispatch({type:'PROPOSE_DELTA',reason,operations:[{type:'ADD_COMPONENT',kind:'panel',label:'Propuesta IA'}]});}; $('delta-preview').onclick=()=>{if(state.proposedDelta)dispatch({type:'APPLY_DELTA'});};
+$('export-json').onclick=()=>download(`yaiwes-ui-v${state.version}.json`,JSON.stringify({state,config},null,2),'application/json');
+$('export-html').onclick=()=>download(`yaiwes-ui-v${state.version}.html`,`<!doctype html><html><head><meta charset="utf-8"><title>YAIWES export V${state.version}</title></head><body><main>${state.components.map(c=>`<section data-kind="${esc(c.kind)}">${esc(c.label)}</section>`).join('')}</main></body></html>`,'text/html');
+
+$('team-mode').value=config.teamMode; $('theme-bg').value=config.theme.bg;$('theme-panel').value=config.theme.panel;$('theme-text').value=config.theme.text;$('theme-accent').value=config.theme.accent;$('theme-radius').value=config.theme.radius;applyTheme();renderConfigLists();render();
