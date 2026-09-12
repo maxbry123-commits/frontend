@@ -1,0 +1,1 @@
+.node.selected::after{content:"";position:absolute;right:-6px;bottom:-6px;width:14px;height:14px;border:2px solid #081018;border-radius:4px;background:var(--accent);box-shadow:0 0 0 1px var(--accent);cursor:nwse-resize;z-index:3}.node.selected.is-resizing{cursor:nwse-resize;outline-style:dashed}.node.selected.is-resizing::before{content:attr(style);display:none}
