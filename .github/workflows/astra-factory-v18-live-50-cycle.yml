@@ -1,0 +1,58 @@
+name: astra-factory-v18-live-50-cycle
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/astra-factory-v18-live-50-cycle.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/factory-v18-live-50-cycle.spec.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: astra-factory-v18-live-50-cycle
+  cancel-in-progress: false
+
+jobs:
+  live-browser-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - name: Checkout exact source tree
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install test harness only
+        run: npm install --no-audit --no-fund
+
+      - name: Install Chromium runtime
+        run: npx playwright install --with-deps chromium
+
+      - name: Verify live Factory V1.8 with 50 interaction cycles
+        env:
+          FACTORY_EXPECTED_URL: https://comand-center-1-yaiwes-ui-factory.static.hf.space/
+          FACTORY_EXPECTED_VERSION: V1.8
+        run: npx playwright test tests/e2e/factory-v18-live-50-cycle.spec.mjs --reporter=line
+
+      - name: Preserve browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: astra-factory-v18-live-50-cycle-evidence
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+          if-no-files-found: warn
+          retention-days: 14
