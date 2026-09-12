@@ -1,0 +1,31 @@
+.context-scroll{
+  overflow-y:auto!important;
+  overflow-x:hidden;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:auto;
+}
+.context-scroll::-webkit-scrollbar{width:10px}
+.context-scroll::-webkit-scrollbar-thumb{background:#465263;border-radius:999px;border:2px solid #12161c}
+.canvas-stage{position:relative;touch-action:none}
+.canvas-stage.drag-over::after{
+  content:'Suelta para colocar';
+  position:absolute;
+  inset:12px;
+  display:grid;
+  place-items:center;
+  border:2px dashed var(--accent);
+  border-radius:12px;
+  background:color-mix(in srgb,var(--accent) 8%,transparent);
+  color:var(--text);
+  font-weight:700;
+  pointer-events:none;
+  z-index:20;
+}
+@media(max-width:760px){
+  .context-pane{height:auto;min-height:0;max-height:none}
+  .context-scroll{max-height:62vh;min-height:340px}
+  .canvas-pane{height:58vh;min-height:440px}
+  .library-pane{max-height:46vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+}
