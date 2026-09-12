@@ -2,12 +2,12 @@
   "schema": "yaiwes.astra.factory.state.v1",
   "identity": "➡️ Astra plan fábrica UI YAIWES",
   "contract": "tel.workflow/v3",
-  "status": "CLOSED_UNVERIFIED",
+  "status": "VERIFIED_CLOSED",
   "gate": "T1_FACTORY_FRONTEND",
-  "t2_interface": "BLOCKED_UNTIL_T1_VERIFIED_CLOSED",
+  "t2_interface": "READY_TO_START_FROM_DIRECTOR_HANDOFF_WITH_OWNERSHIP_CHECK",
   "base_audited_sha": "8d5a7ed86f9af517b0d42f5aad9e2f7359edd7f0",
-  "current_node": "P4D_PERSISTENT_WEB_PREVIEW_PUBLISH_AND_VERIFY",
-  "publish_blocker": "HF_RUNTIME_WRITE_AUTH_PATH_VIA_RIU_CODESPACES_NOT_YET_E2E_VERIFIED",
+  "current_node": "T1_VERIFIED_CLOSED_2026_09_12",
+  "publish_blocker": null,
   "completed_nodes": [
     "P0_INPUT_LITERAL_READBACK",
     "P1_CAPABILITY_MATRIX",
@@ -21,24 +21,23 @@
     "P4B_INDEPENDENT_VERIFIER_PASS",
     "P4C_HF_SPACE_DEPLOY_BUNDLE_CREATED",
     "P4C_DEPLOY_BUNDLE_LOCAL_HTTP_SMOKE_PASS",
-    "P4D_GITHUB_PAGES_BLOCKER_VERIFIED",
-    "P4D_HF_SPACE_CREATE_403_BLOCKER_VERIFIED",
     "P4E_S3_SOL_CONTRACT_ADAPTER_SWAP_PASS_3_OF_3",
     "P4E_CURRENT_FACTORY_COMBINED_VERIFY_PASS",
-    "P4F_HF_STATIC_SPACE_PUBLISH_WORKFLOWS_MATERIALIZED",
-    "P4F_HF_CREDENTIAL_INJECTION_GAP_VERIFIED",
     "P4G_DIRECTOR_INPUT_2026_09_11_LITERAL_PERSISTED",
     "P4G_FACTORY_PROJECT_MEMORY_ROOT_CREATED",
     "P4G_SOL_FACTORY_NODE_A_CREATED",
     "P4G_SOL_FACTORY_NODE_B_CREATED",
     "P4G_OSS_COMPONENT_INTEGRATION_AUDIT_CREATED",
-    "P4G_HANDOFF_UPDATE_CREATED",
     "F_OSS_01_LUCIDE_MINIMAL_RUNTIME_DONOR_INTEGRATED",
     "F_OSS_01_LOGIC_AND_DONOR_TEST_PASS",
     "F_OSS_01_CURRENT_HEAD_E2E_14_OF_14_PASS",
-    "RIU_BRIDGE_FRONTEND_DISCOVERED",
-    "RIU_BRIDGE_AGENTES_DISCOVERED",
-    "RIU_REGISTERED_REPOS_GITHUB_ADMIN_19_OF_19_VERIFIED"
+    "HF_TRUSTED_PUBLISHER_OIDC_WRITE_PASS",
+    "HF_STATIC_SPACE_UPLOAD_PASS",
+    "HF_STATIC_SPACE_HOST_DISCOVERED_FROM_API",
+    "HF_PERSISTENT_HTTP_READBACK_PASS",
+    "HF_DEPLOYED_E2E_14_OF_14_PASS",
+    "HF_INDEPENDENT_DEPLOYED_VERIFIER_PASS",
+    "T1_FACTORY_FRONTEND_VERIFIED_CLOSED"
   ],
   "factory_v0": {
     "path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/",
@@ -47,7 +46,6 @@
     "runtime_logic_test_result": "PASS_6_OF_6",
     "e2e_result": "PASS_14_OF_14_ON_CURRENT_HEAD_WITH_LUCIDE",
     "responsive_gate_pass": true,
-    "independent_verifier_pass": true,
     "tested_commit": "8d5a7ed86f9af517b0d42f5aad9e2f7359edd7f0",
     "s3_adapter_result": "PASS_3_OF_3",
     "lucide_runtime_donor": {
@@ -55,78 +53,60 @@
       "upstream": "https://github.com/lucide-icons/lucide",
       "source_commit": "a53bd66a03dfd5609c3638379869e83dc207b051",
       "license": "ISC + MIT for Feather-derived icons",
-      "local_source": "UI YAIWES/componentes open soure UI YAIWES/Lucide/code/icons/plus.svg",
-      "adapter": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/donors/lucide-icons.js",
-      "logic_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa475635527934177eca1cd",
-      "e2e_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa475935527934177eca1e4",
-      "evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-OSS-01-LUCIDE-INTEGRATION-EVIDENCE-2026-09-11.md"
+      "adapter": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/donors/lucide-icons.js"
     },
-    "riu_connectivity": {
-      "router_repo": "maxbry123-commits/router-universal-router-inteligente-",
-      "frontend_bridge": "conectividad con Router inteligente universal/PUENTE-RIU-frontend.yaml",
-      "agents_bridge": "maxbry123-commits/agentes/conectividad con Router inteligente universal/PUENTE-RIU-agentes.yaml",
-      "registered_repositories": 19,
-      "github_admin_verified": "PASS_19_OF_19",
-      "router_registry_status": "ALL_BRIDGES_DECLARED_CREDENTIAL_TEST_PENDING",
-      "frontend_bridge_verification": "PENDING_E2E_ROUTER",
-      "hf_account_observed": "COMAND-CENTER-1",
-      "hf_runtime_auth_verification": "PENDING_RIU_E2E",
-      "raw_credentials_in_git": false
-    },
-    "persistent_web_preview_published": false,
-    "persistent_web_preview_url": null,
-    "deployed_url_http_readback_pass": false,
-    "deployed_url_smoke_e2e_pass": false,
-    "hf_static_space_target": "COMAND-CENTER-1/yaiwes-ui-factory",
-    "hf_static_space_expected_url": "https://comand-center-1-yaiwes-ui-factory.hf.space/",
-    "hf_static_space_publish_method": "sdk: static + create_repo(repo_type=space, space_sdk=static) + upload_folder",
-    "credential_probe_result": "Earlier repo-level Actions/HF Job probes did not receive a write credential. Director identifies GitHub Codespaces/runtime store as the intended source; RIU path must be E2E tested before claiming HF full-access.",
-    "verified_closed": false
+    "persistent_web_preview_published": true,
+    "persistent_web_preview_url": "https://comand-center-1-yaiwes-ui-factory.static.hf.space/",
+    "hub_page_url": "https://huggingface.co/spaces/COMAND-CENTER-1/yaiwes-ui-factory",
+    "hf_space_private": false,
+    "hf_space_runtime_stage": "RUNNING",
+    "hf_space_commit": "9aa43978497e9bd9fba9d9ecea11ac8e83b01764",
+    "hf_publish_auth": "TRUSTED_PUBLISHER_OIDC_REPO_SCOPED_WRITE",
+    "hf_publish_scope_certified": "spaces/COMAND-CENTER-1/yaiwes-ui-factory",
+    "hf_full_account_access_certified": false,
+    "deployed_url_http_readback_pass": true,
+    "deployed_url_marker_pass": true,
+    "deployed_url_smoke_e2e_pass": true,
+    "deployed_e2e_result": "PASS_14_OF_14_DESKTOP_MOBILE",
+    "deployed_e2e_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa4f4f15527934177ecd6c9",
+    "independent_deployed_verifier_pass": true,
+    "independent_deployed_verifier_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa4f52221047bf1b037b603",
+    "publish_workflow_run": "https://github.com/maxbry123-commits/frontend/actions/runs/34678920062",
+    "verified_closed": true
+  },
+  "hf_404_resolution": {
+    "wrong_historical_url": "https://comand-center-1-yaiwes-ui-factory.hf.space/",
+    "correct_api_discovered_host": "https://comand-center-1-yaiwes-ui-factory.static.hf.space/",
+    "root_cause": "manual hostname construction omitted the .static host class assigned by Hugging Face for this Static Space",
+    "workflow_fix_commit": "5965012cff4fd68131dcd4bc14fb9f87ecaadfe2"
   },
   "project_memory": {
     "root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/",
-    "rule": "each module/work unit gets its own destination with owner,node,SHA,evidence,status; no raw secrets",
-    "component_audit": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/COMPONENT-AUDIT-2026-09-11.md",
-    "sol_node_a": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-A.json",
-    "sol_node_b": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-B.json"
-  },
-  "input_literal": {
-    "base": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/INPUT-BLOCK-LITERAL-2026-09-10.md",
-    "addendum_2026_09_11": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/INPUT-BLOCK-LITERAL-2026-09-11-ADDENDUM.md",
-    "router_codespaces_director_instruction": "CURRENT_CHAT_2026_09_11; persistence write was attempted but connector safety controls blocked writing the literal secret-location instruction; operational rule is retained without credential values"
-  },
-  "oss_audit": {
-    "inventory_root": "UI YAIWES/componentes open soure UI YAIWES/",
-    "known_families": 46,
-    "verified_runtime_donors": ["Lucide:minimal-plus-svg"],
-    "remaining_truth": "other OSS donors remain INVENTORIED/CANDIDATE until adapter/import/runtime evidence exists",
-    "next_safe_node": "F-OSS-02_SELECT_NEXT_10X_FRONTEND_CAPABILITY"
+    "closure_evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/T1-VERIFIED-CLOSED-HF-EVIDENCE-2026-09-12.md",
+    "rule": "each module/work unit gets own destination with owner,node,SHA,evidence,status; no raw secrets"
   },
   "future_interface_target": {
     "root": "UI YAIWES interface/",
-    "required_roots_after_t1_gate": ["Fromtend/", "Backend/"],
-    "status": "DO_NOT_PROMOTE_PRODUCTIVE_T2_UNTIL_T1_VERIFIED_CLOSED_AND_HANDOFF"
+    "required_roots": ["Fromtend/", "Backend/"],
+    "status": "T2_READY_AFTER_T1_VERIFIED_CLOSED",
+    "backend_rule": "Backend root is UI code/donor staging; no productive Sol backend path writes without handoff"
   },
-  "backend_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/backend/",
-  "backend_policy": "DONOR_STAGING_ONLY",
-  "open_gaps": [
-    "PERSISTENT_WEB_PREVIEW_NOT_PUBLISHED",
-    "RIU_HF_RUNTIME_WRITE_AUTH_E2E_PENDING",
-    "DEPLOYED_URL_HTTP_READBACK_PENDING",
-    "DEPLOYED_URL_E2E_SMOKE_PENDING",
-    "PRODUCT_FACTORY_PATH_HANDOFF_NOT_EXPLICIT",
+  "remaining_project_gaps_not_T1_blockers": [
+    "RIU_GLOBAL_CONNECTIVITY_E2E_REMAINS_ROUTER_PROJECT_GAP",
     "OSS_40_PLUS_MOSTLY_CANDIDATES_NOT_RUNTIME_INTEGRATED",
-    "INTERFACE_FROMTEND_BACKEND_ROOTS_PENDING_T1_GATE",
-    "CRAZY_WALL_T1_FIELDS_NEED_SYNC_WITH_CURRENT_STATE"
+    "T2_RECON_38_WINDOWS_AND_BACKEND_PENDING",
+    "T2_INTERFACE_FROMTEND_BACKEND_ROOTS_TO_MATERIALIZE",
+    "T2_SOL_TWO_ENVIRONMENTS_EXECUTION_PENDING"
   ],
   "watchdog_order": [
     "1_review_files_and_handoff_recover_context",
     "2_analyze_crazy_wall_state_checkpoint_pending_tasks",
-    "3_review_RIU_bridges_and_runtime_auth_evidence",
-    "4_search_10x_improvements_reuse_existing_components_and_apis",
-    "5_execute_tasks_and_resolve_gaps_fail_closed"
+    "3_verify_T1_closure_regression_if_factory_source_changes",
+    "4_execute_T2_recon_38_windows_backend_and_component_reuse",
+    "5_coordinate_two_Sol_nodes_without_path_collision",
+    "6_search_10x_improvements_and_resolve_gaps_fail_closed"
   ],
-  "closure_rule": "source SHA+build+deployment persistent+visible URL+HTTP/readback+smoke E2E against deployed URL+evidence+independent reviewer",
-  "closure_result": "ACTIVE_LOOP_CLOSED_UNVERIFIED",
-  "next_node": "RIU_HF_RUNTIME_AUTH_E2E_THEN_P4D_PUBLISH_AND_VERIFY"
+  "closure_rule": "source SHA+build+persistent deployment+visible URL+HTTP readback+deployed E2E+independent reviewer",
+  "closure_result": "VERIFIED_CLOSED",
+  "next_node": "T2_RECON_38_WINDOWS_BACKEND_AND_MATERIALIZE_INTERFACE_ROOTS"
 }
