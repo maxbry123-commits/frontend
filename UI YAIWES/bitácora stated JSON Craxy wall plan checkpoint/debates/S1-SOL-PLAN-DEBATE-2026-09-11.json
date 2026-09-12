@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S1-DEBATE-SOLPLAN-20260911-01",
-  "status": "ACTIVE_DEBATE_LOOP_S1_08_POLL_COMPLETE_DRIFT_AUDIT_RUNNING",
+  "status": "ACTIVE_DEBATE_LOOP_S1_09_DRIFT_REVALIDATED_DESTINATION_SEARCH_RUNNING",
   "from": "Sol ☀️ 🏈gpt 1 backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
@@ -36,15 +36,19 @@
   },
   "fables_verified": {
     "contract_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py",
-    "contract_blob_sha": "36ee0b1b184b709e292fd8c617f0e795e7e98451",
+    "current_contract_blob_sha": "23f4e1b8b91301f2df396e7a0860fc65b977cfb3",
+    "previous_contract_blob_sha": "36ee0b1b184b709e292fd8c617f0e795e7e98451",
     "contract_id": "yaiwes.fables.v1",
     "test_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_fables_socket.py",
     "test_blob_sha": "cfc63c5363330ea0746c1d3e041c17dc11df9b0c",
-    "ci_run_id": 34569726823,
-    "ci_job_id": 103169993658,
+    "current_contract_commit": "671d9bb545b958c75b0c040806f096bf76f55175",
+    "ci_run_id": 34573676252,
+    "ci_job_id": 103181192888,
+    "ci_head_sha": "671d9bb545b958c75b0c040806f096bf76f55175",
     "ci_conclusion": "success",
     "wordflow_tests": "12 passed in 0.05s",
-    "socket_fables_tests": "9 passed in 0.02s"
+    "socket_fables_tests": "9 passed in 0.02s",
+    "verdict": "CURRENT_FABLES_BLOB_REVALIDATED_BY_OWN_CI"
   },
   "s1_06_memory_boundary_discovery": {
     "status": "GAP_VERIFIED_READONLY",
@@ -58,121 +62,13 @@
   },
   "s1_07_memory_adapter_contract_preflight": {
     "status": "PREFLIGHT_COMPLETE_NO_CODE_WRITE",
-    "boundary": "Workflow/Runtime controls execution. Memory/Audit retrieves, stores, audits and consolidates external cognitive memory. Adapter only transports typed requests/results and must not become a second orchestrator.",
-    "documented_read_operations": [
-      "GET_CONTEXT",
-      "GET_MEMORY",
-      "GET_EVIDENCE",
-      "GET_STATE",
-      "GET_HISTORY",
-      "GET_ARTIFACT",
-      "GET_RELATIONS",
-      "AUDIT_MEMORY"
-    ],
-    "documented_write_operations": [
-      "SAVE_STATE_DELTA",
-      "SAVE_ARTIFACT",
-      "SAVE_CLAIM",
-      "SAVE_EVIDENCE",
-      "SAVE_CONSOLIDATION",
-      "CREATE_CHECKPOINT"
-    ],
-    "documented_memory_layers": [
-      "L0_RAW_SOURCE",
-      "L1_WORKING_MEMORY",
-      "L2_TASK_MEMORY",
-      "L3_PROJECT_MEMORY",
-      "L4_LONG_TERM_KNOWLEDGE"
-    ],
-    "minimal_request_contract": {
-      "operation": "required; must be one documented Memory/Audit operation",
-      "memory_layer": "required when operation targets memory; one documented L0-L4 layer",
-      "project_ref": "required when project-scoped retrieval/storage is used; source docs define PROJECT tag and L3 project memory",
-      "task_ref": "required when task-scoped retrieval/storage is used; source docs define TASK tag and L2 task memory",
-      "checkpoint_ref": "required when creating/referencing recovery checkpoints",
-      "source_identity": {
-        "source": "required for raw-source/provenance-bearing operations",
-        "version": "required when source is versioned",
-        "hash": "required when immutable evidence is available",
-        "location": "required for recoverable raw source",
-        "provenance": "required for canonical evidence/claims"
-      },
-      "transport_identity": {
-        "route": "required by adapters boundary for external/remote Memory service",
-        "source_version": "required by adapters boundary",
-        "evidence_refs": "required when request/result depends on evidence"
-      },
-      "authorization": "must be supplied by Runtime/Policy; Memory Orchestrator must not decide authorization",
-      "context_budget": "required for GET_CONTEXT when a bounded Context Pack is requested",
-      "payload": "typed operation-specific body; writes carry candidate StateDelta/artifact/claim/evidence/consolidation/checkpoint request, never raw free-form canonical mutation"
-    },
-    "canonical_write_gate": [
-      "LLM_OUTPUT",
-      "NORMALIZER",
-      "SCHEMA_VALIDATION",
-      "AUDIT",
-      "STATE_DELTA",
-      "MEMORY_UPDATE"
-    ],
-    "write_rule": "LLM must never write directly to canonical memory. Adapter must reject or refuse any write lacking normalized/schema-validated/audited provenance required by its operation contract.",
-    "minimal_read_response": {
-      "type": "CONTEXT_PACK_OR_TYPED_MEMORY_RESULT",
-      "context_pack_fields": [
-        "relevant_memory",
-        "evidence",
-        "relations",
-        "current_state",
-        "consolidation",
-        "open_questions",
-        "provenance",
-        "confidence",
-        "context_budget"
-      ],
-      "rule": "Memory response is structured data, not a conversational answer"
-    },
-    "minimal_write_response": {
-      "status": "PASS | BLOCKED | FAIL | INCONCLUSIVE",
-      "new_version": "new memory/state version or null when no mutation occurred",
-      "checkpoint_ref": "when checkpoint created",
-      "evidence_refs": "evidence produced/linked by validated write",
-      "provenance": "producer/source/task/checkpoint validation trace",
-      "readback": "strong read-back/receipt required before promoting mutation to PASS"
-    },
-    "versioning_traceability": [
-      "no silent overwrite",
-      "retain source/version/hash/location/provenance",
-      "record who produced it",
-      "record task",
-      "record evidence",
-      "record checkpoint",
-      "record validation status"
-    ],
-    "fail_closed_gaps": [
-      "MEMORY_ADAPTER_NOT_IMPLEMENTED",
-      "MEMORY_ROUTE_GAP",
-      "MEMORY_SCOPE_GAP",
-      "MEMORY_PROVENANCE_GAP",
-      "MEMORY_AUTHORIZATION_GAP",
-      "MEMORY_SCHEMA_VALIDATION_GAP",
-      "MEMORY_AUDIT_GAP",
-      "MEMORY_READBACK_GAP"
-    ],
-    "agent_memory_boundary": {
-      "status": "NOT_DEFINED_AS_CANONICAL_MEMORY_LAYER_IN_INSPECTED_MEMORY_CONTRACT",
-      "evidence": "Source defines L0 raw, L1 working, L2 task, L3 project, L4 long-term. Virtual Computer defines Agent Window/Agent Engine and capability authorization, but inspected runtime has no implemented agent-memory contract.",
-      "rule": "Do not invent agent_id as a mandatory canonical-memory field until Director/Memory contract explicitly defines ownership and isolation semantics. The requested separation of product chat/project state from external-agent own memory remains a real contract GAP."
-    },
-    "local_first_boundary": {
-      "virtual_computer_requirement": "storage is 100 percent local by default",
-      "product_runtime_status": "runtime/src/storage is placeholder-only",
-      "adapter_rule": "HTTPX transport only when Memory service is remote; local implementation must not be forced through cloud transport"
-    },
-    "refutation": [
-      "Refuto usar workflow ledger como backend de Memory/Audit: execution ledger and cognitive memory have different responsibilities.",
-      "Refuto permitir direct LLM canonical-memory writes: source contract explicitly requires normalize→schema validate→audit→StateDelta before memory update.",
-      "Refuto convertir memory_adapter into a second orchestrator: adapters README forbids duplicating Memory/Router and requires typed routes/evidence.",
-      "Refuto inventar agent memory fields from UI/Agent Window existence: runtime capability control is not proof of a canonical agent-memory scope."
-    ],
+    "documented_read_operations": ["GET_CONTEXT","GET_MEMORY","GET_EVIDENCE","GET_STATE","GET_HISTORY","GET_ARTIFACT","GET_RELATIONS","AUDIT_MEMORY"],
+    "documented_write_operations": ["SAVE_STATE_DELTA","SAVE_ARTIFACT","SAVE_CLAIM","SAVE_EVIDENCE","SAVE_CONSOLIDATION","CREATE_CHECKPOINT"],
+    "documented_memory_layers": ["L0_RAW_SOURCE","L1_WORKING_MEMORY","L2_TASK_MEMORY","L3_PROJECT_MEMORY","L4_LONG_TERM_KNOWLEDGE"],
+    "canonical_write_gate": ["LLM_OUTPUT","NORMALIZER","SCHEMA_VALIDATION","AUDIT","STATE_DELTA","MEMORY_UPDATE"],
+    "direct_llm_canonical_write": "FORBIDDEN_BY_SOURCE_CONTRACT",
+    "agent_memory_scope": "NOT_DEFINED_AS_CANONICAL_LAYER_IN_INSPECTED_CONTRACT",
+    "implementation_authorized": false,
     "verdict": "MINIMAL_CONTRACT_DERIVED_FROM_SOURCES_IMPLEMENTATION_NOT_AUTHORIZED"
   },
   "s1_08_r4_coordinator_handoff_poll": {
@@ -184,41 +80,98 @@
     "coordinator_reply_delta": "NO_NEW_R4_Q1_TO_Q6_DECISIONS",
     "vite_destination": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
     "supabase_destination": "BLOCK_NO_LITERAL_AUTHORIZATION_FOUND",
-    "memory_adapter_exact_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/memory_adapter.py",
     "memory_adapter_readback_current_main": "404_NOT_FOUND",
-    "equivalent_code_search": {
-      "memory_adapter.py": "NO_RESULTS",
-      "GET_CONTEXT_SAVE_STATE_DELTA_CREATE_CHECKPOINT": "NO_RESULTS",
-      "GET_CONTEXT": "NO_RESULTS"
-    },
     "verdict": "NO_NEW_HANDOFF_OR_IMPLEMENTATION_FOUND_CONTINUE_FREE_READONLY_NODE"
+  },
+  "s1_09_current_main_evidence_drift_audit": {
+    "status": "COMPLETE_REVALIDATED",
+    "l05": {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/layers/layer_05_download_extract.py",
+      "current_blob_sha": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
+      "previous_blob_sha": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
+      "drift": false
+    },
+    "l05_tests": {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_layers.py",
+      "current_blob_sha": "76515236717e2d36985458275c51ef8c552873a9",
+      "previous_blob_sha": "76515236717e2d36985458275c51ef8c552873a9",
+      "drift": false
+    },
+    "fables": {
+      "current_blob_sha": "23f4e1b8b91301f2df396e7a0860fc65b977cfb3",
+      "previous_blob_sha": "36ee0b1b184b709e292fd8c617f0e795e7e98451",
+      "drift": true,
+      "current_commit": "671d9bb545b958c75b0c040806f096bf76f55175",
+      "ci_run": 34573676252,
+      "ci_job": 103181192888,
+      "ci": "SUCCESS_CURRENT_BLOB_9_FABLES_SOCKET_TESTS_PASS"
+    },
+    "fables_test": {
+      "current_blob_sha": "cfc63c5363330ea0746c1d3e041c17dc11df9b0c",
+      "drift": false
+    },
+    "ledger": {
+      "current_blob_sha": "79ae3da7f20188874ffdc9e5a6b5e9cd3fbc4c83",
+      "previous_blob_sha": "60b35f1e2b9d61232020ec84d08868eaf89a9cec",
+      "drift": true,
+      "latest_commit": "cbf16fe60dbfbdcca87988fbf7fb3d936e7dabfc",
+      "delta": "cross-process lock + persistent append serialization + fsync parent directory after atomic replace"
+    },
+    "runner": {
+      "current_blob_sha": "4fd01eb441cf3c10638d1a6f80924fc3fc8533a5",
+      "previous_blob_sha": "14b097a9775a9d39417f15344d01e1c9e6886b13",
+      "drift": true,
+      "latest_commit": "52e18f9420268c4b899e51bd663fe46a2a3725da",
+      "delta": "refresh durable shared ledger state before run/recovery"
+    },
+    "test_core": {
+      "current_blob_sha": "66af6aff97a889c41ee3e8e85653d57ea1cf2bd4",
+      "previous_blob_sha": "38f40cec4ac6075a87470c137ab215f108deeb03",
+      "drift": true,
+      "latest_commit": "36beaed55989b03313c92ee819b63280259e57e4",
+      "delta": "stale-runner shared ledger recovery + tampered-ledger fail-closed tests"
+    },
+    "persistence_ci": {
+      "ledger_head_run": 34641867379,
+      "ledger_head_result": "SUCCESS",
+      "ledger_head_tests": "14 Wordflow passed; 41 runtime passed + 6 subtests",
+      "latest_test_core_run": 34641893033,
+      "latest_test_core_result": "SUCCESS"
+    },
+    "adapters_readme": {
+      "current_blob_sha": "d20358aa2e725de11e46190c8b7b3997d8f7e890",
+      "drift": false
+    },
+    "memory_adapter": "404_NOT_FOUND",
+    "verdict": "DRIFT_FOUND_BUT_CURRENT_FABLES_AND_PERSISTENCE_REVALIDATED_BY_MATCHING_CI"
   },
   "acquisition_status": {
     "Vite": "BLOCKED_DESTINATION_INPUT_GAP",
     "Supabase": "BLOCKED_DESTINATION_INPUT_GAP",
-    "Fables_dependency": "RESOLVED_CI_PASS"
+    "Fables_dependency": "RESOLVED_CURRENT_BLOB_CI_PASS"
   },
   "debate_turns": [
-    {"turn":13,"author":"Sol ☀️ 🏈gpt 1 backend","action":"FABLES_CI_VERIFIED","result":"Fables path+SHA+contract+CI PASS"},
+    {"turn":13,"author":"Sol ☀️ 🏈gpt 1 backend","action":"FABLES_CI_VERIFIED","result":"Initial Fables path+SHA+contract+CI PASS"},
     {"turn":14,"author":"DIRECTOR via 🌞👷 sol osquestador plan 🎯","action":"ROUND_4_ORDER","source_blob":"6e34e6149a5359e731feaf4d2412fba69e7397d0"},
-    {"turn":15,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_4_ANSWER","result":"Ledger/restart PASS; product storage/recovery/agent placeholders; memory scope isolation GAP"},
-    {"turn":16,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_06_MEMORY_BOUNDARY_DISCOVERY","result":"memory_adapter specified in README but exact file 404; integration spec-only"},
-    {"turn":17,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_07_MEMORY_ADAPTER_CONTRACT_PREFLIGHT","result":"Minimal typed adapter contract derived; direct LLM canonical writes prohibited; agent-memory ownership remains GAP; no code mutation without handoff"},
-    {"turn":18,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_08_COORDINATOR_HANDOFF_POLL","result":"No Round5; no coordinator R4 delta; destinations still blocked; memory_adapter still 404 on current main"}
+    {"turn":15,"author":"Sol ☀️ 🏈gpt 1 backend","action":"ROUND_4_ANSWER","result":"Ledger/restart PASS; product memory scope GAP"},
+    {"turn":16,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_06_MEMORY_BOUNDARY_DISCOVERY","result":"memory_adapter specified but 404"},
+    {"turn":17,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_07_MEMORY_ADAPTER_CONTRACT_PREFLIGHT","result":"Minimal typed adapter contract derived; no write without handoff"},
+    {"turn":18,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_08_COORDINATOR_HANDOFF_POLL","result":"No Round5; no coordinator R4 delta; destinations still blocked"},
+    {"turn":19,"author":"Sol ☀️ 🏈gpt 1 backend","action":"S1_09_CURRENT_MAIN_EVIDENCE_DRIFT_AUDIT","result":"Fables/ledger/runner/test drift detected; current versions revalidated by matching GitHub CI; L05 unchanged"}
   ],
   "questions_for_sol_plan": [
     {"id":"R4-Q1","question":"¿MOTOR_BLOB_IDENTITY_GAP y MOTOR_AUX_INPUT_CONTRACT_GAP pertenecen a L05 o al dispatcher/motor wrapper?"},
     {"id":"R4-Q2","question":"¿Qué evidencia de DESTINATION_AUTHORITY_PROVENANCE aceptas?"},
     {"id":"R4-Q3","question":"¿Memory-scope chat/proyecto/agente pertenece a S1 runtime o al Memory/Audit Orchestrator separado?"},
-    {"id":"R4-Q4","question":"Fables ya está CI PASS. Con destinos bloqueados, publica siguiente nodo S1 o destinos literales Vite/Supabase."},
+    {"id":"R4-Q4","question":"Fables actual está CI PASS. Con destinos bloqueados, publica siguiente nodo S1 o destinos literales Vite/Supabase."},
     {"id":"R4-Q5","question":"¿Autorizas a S1 a implementar runtime/src/adapters/memory_adapter.py? Si sí, publica EXACT_WRITE_PATHS, transport contract and acceptance criteria."},
     {"id":"R4-Q6","question":"¿Defines explícitamente external-agent memory as a separate scope/owner, or should the adapter expose only documented L0-L4 memory layers and keep agent-owned memory outside canonical Memory/Audit?"}
   ],
   "next_free_node": {
-    "id": "S1-09-CURRENT-MAIN-EVIDENCE-DRIFT-AUDIT-READONLY",
+    "id": "S1-10-VITE-SUPABASE-LITERAL-DESTINATION-DISCOVERY-READONLY",
     "status": "RUNNING",
-    "action": "Revalidate current-main blob SHAs and existence for S1-owned evidence: L05, L05 tests, Fables contract/test, ledger/runner/test_core, adapters README and memory_adapter exact path. Publish any drift; do not mutate shared runtime without handoff."
+    "action": "Search current main for a post-block literal authorization that binds Vite/Supabase source refs to explicit DEST_REPO, DEST_BRANCH and DEST_ROOT. Accept only explicit authority evidence; historical runtime/vendor paths do not count."
   },
   "loop_rule": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE. Releer main y rounds after every write; GAP does not stop the lane.",
-  "closure": "OPEN_S1_08_COMPLETE_S1_09_RUNNING"
+  "closure": "OPEN_S1_09_COMPLETE_S1_10_RUNNING"
 }
