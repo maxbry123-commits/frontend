@@ -3,8 +3,8 @@
   "contract": "tel.workflow/v3",
   "role": "ASTRA_GPT1_BACKEND",
   "name": "🧑‍💻Astra gpt 1 backend UI YAIWES 🌀🌀🌀 👷👷🕵️‍♀️",
-  "updated_at": "2026-09-12T11:35:05.720Z",
-  "base_sha": "0d5f374f1783c170a45db0b0e74aaaf35c197c9b",
+  "updated_at": "2026-09-12T12:35:16.179Z",
+  "base_sha": "7d61e061ca579e9f1ece4fe4235112e9f936a155",
   "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
   "status": "ACTIVE_LOOP_GAPS_OPEN",
   "scope": "A1 audit only; sole write path is this role_state_path",
@@ -72,13 +72,13 @@
     {
       "id": "A1-01",
       "status": "PASS_AUDIT_SUMMARIES_STALE",
-      "finding": "STATE, CHECKPOINT, HANDOFF y estado canónico S3 continúan sin reconciliar resultados recientes. El debate registra el retry Chart.js como in_progress, aunque el run ya terminó failure.",
+      "finding": "STATE, CHECKPOINT, HANDOFF y estados canónicos de roles siguen sin reconciliar evidencia terminal reciente. El debate S3 reconoce Chart.js y Excalidraw, pero el estado canónico S3 permanece obsoleto.",
       "evidence": {
         "state_blob_sha": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
         "checkpoint_blob_sha": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
         "handoff_blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
         "s3_state_blob_sha": "b852f5ec08aac4eab4259626a9c243e5c0b4ad56",
-        "s3_debate_blob_sha": "e9fbaa4175ed1c5da4891874d981b5c042370dee",
+        "s3_debate_blob_sha": "3bbbe86ad4fb73f612ef38ff0a7e6966c8a36c8c",
         "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea"
       },
       "closure": false
@@ -118,8 +118,8 @@
     },
     {
       "id": "A1-03",
-      "status": "PASS_AUDIT_CHARTJS_FUNCTIONAL_FIXTURE_FAIL_NOT_PASS",
-      "finding": "El retry Chart.js con Xvfb resolvió DISPLAY y ejecutó navegadores. Chrome pasó 1702/1702; Firefox falló el fixture polarArea overlapping tras 808 pruebas. Total terminal: 2509 SUCCESS, 1 FAILED.",
+      "status": "PASS_AUDIT_EXCALIDRAW_INSTALL_FAIL_AND_CODEMIRROR_ISOLATED_PASS",
+      "finding": "01-20 permanece 17/20. Excalidraw falló durante instalación porque marked@16.4.2 exige Node >=20 y el workflow usa Node 18; build/tests no iniciaron. En T2, el adaptador aislado CodeMirror pasó 3/3, pero no está cableado a RUN-07/RUN-08 ni probado E2E.",
       "integration_01_20": {
         "passed": 17,
         "total": 20,
@@ -189,17 +189,50 @@
         "fables_wired": false,
         "product_e2e": false,
         "log_read_back": true
+      },
+      "excalidraw": {
+        "classification": "INSTALL_ENGINE_MISMATCH_NOT_PASS",
+        "package": "excalidraw-monorepo",
+        "workflow_commit": "94d555529d459748b989e97eeb91bfef9c44826b",
+        "workflow_run_id": 34691576762,
+        "workflow_job_id": 103547638287,
+        "status": "completed",
+        "conclusion": "failure",
+        "metadata": "PASS",
+        "install": "FAIL",
+        "build": "NOT_RUN",
+        "tests": "NOT_RUN",
+        "root_cause": "marked@16.4.2 requires Node >=20; runner used Node 18.20.8",
+        "fables_wired": false,
+        "product_e2e": false,
+        "log_read_back": true
+      },
+      "codemirror_t2": {
+        "classification": "ISOLATED_ADAPTER_PASS_NOT_WIRED",
+        "adapter_commit": "be8a6059139ba60cce2401cc45287144e183d41a",
+        "test_commit": "6ba08456ed64d88ff03b6b29bde63ed0349c7a1a",
+        "workflow_commit": "3a8108efd40e755754376c48206096a35dc257ed",
+        "workflow_run_id": 34692174640,
+        "workflow_job_id": 103549254048,
+        "status": "completed",
+        "conclusion": "success",
+        "tests": 3,
+        "pass": 3,
+        "fail": 0,
+        "run07_run08_wired": false,
+        "e2e": false,
+        "log_read_back": true
       }
     },
     {
       "id": "A1-04",
-      "status": "PASS_REFUTATION_CHARTJS_REAL_TEST_FAIL",
+      "status": "PASS_REFUTATION_EXCALIDRAW_AND_CODEMIRROR_SCOPE",
       "refutations": [
-        "Xvfb resolvió el fallo de infraestructura; el segundo resultado contiene pruebas ejecutadas.",
-        "2509 SUCCESS no permite PASS porque existe 1 FAIL terminal.",
-        "El fallo es un fixture visual Firefox con diferencia 0.11% sobre tolerancia 0.1%; requiere reproducción focalizada antes de atribuirlo a YAIWES.",
-        "Chrome 1702/1702 PASS no sustituye Fables ni E2E.",
-        "Debate y estado S3 deben reconciliarse; 4 residuales y 17/20 no cambian."
+        "Excalidraw no alcanzó build ni tests; presencia y metadata no permiten RUNTIME_PASS.",
+        "El fallo Excalidraw es un conflicto de engine verificable: Node 18.20.8 frente a dependencia que exige >=20; procede retry acotado con Node 20, no edición del vendor.",
+        "CodeMirror 3/3 demuestra únicamente el adaptador aislado y su conducta fail-closed; no prueba integración RUN-07/RUN-08, Fables ni E2E.",
+        "Los nuevos resultados pertenecen a 21-40/T2 y no modifican el informe canónico 01-20.",
+        "Cuatro residuales 404 y 17/20 permanecen; no procede VERIFIED_CLOSED."
       ],
       "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "closure": false,
@@ -218,9 +251,9 @@
   "instructions_for_owners": {
     "SOL_GPT1_BACKEND": "Releer main y reclamar S1-09 con SHA fresco. Probar aislamiento/persistencia de memoria y frontera de agente con read-back; mantener Vite y Supabase bloqueados hasta que el coordinador confirme destinos literales y adquisición canónica.",
     "SOL_GPT2_BACKEND": "Releer main y reclamar S2-08. Ejecutar selector de plataforma fail-closed con evidencia por host; mantener DuckDB y AVF como residuales separados y no inferir soporte AVF universal.",
-    "SOL_GPT3_BACKEND": "Registrar Chart.js 34688976382/job 103540801094 como TEST_FUNCTIONAL_FIXTURE_FAIL_NOT_PASS: Chrome 1702/1702 PASS; Firefox polarArea overlapping FAIL, total 2509/1. Reproducir con seed 38385 y Firefox soportado/pinneado; no relajar tolerancia ni editar vendor sin causa.",
+    "SOL_GPT3_BACKEND": "Registrar Excalidraw 34691576762/job 103547638287 como INSTALL_ENGINE_MISMATCH_NOT_PASS. Retry acotado con Node 20 manteniendo Yarn 1.22.22 y lockfile; no usar --ignore-engines ni editar vendor. Exigir build y suite terminal antes de promover.",
     "ASTRA2_GPT_BACKEND": "Reclamar únicamente un nodo A2 libre con SHA fresco y validar consumo real del contrato Fables por un adaptador; presencia del plugin o tests unitarios aislados no bastan.",
-    "SOL_PLAN_ORQUESTADOR": "Reconciliar debate/estado S3 con Chart.js terminal. Mantener NOT_PASS hasta reproducción focalizada y retry limpio; 2509 PASS + 1 FAIL no es RUNTIME_PASS. Conservar 120/124 y 17/20."
+    "SOL_PLAN_ORQUESTADOR": "Reconciliar estados: CodeMirror adapter aislado pasó 3/3, pero mantener NOT_WIRED hasta RUN-07/RUN-08 + E2E. Excalidraw requiere retry Node20. Conservar 120/124 físico y 17/20."
   },
   "next_iteration": [
     "Re-read wall and canonical summaries.",
@@ -2357,18 +2390,236 @@
         "own_state_only": true,
         "verified_closed": false
       }
+    },
+    {
+      "snapshot_reason": "PRE_EXCALIDRAW_AND_CODEMIRROR_TERMINAL_AUDIT",
+      "updated_at": "2026-09-12T11:35:05.720Z",
+      "base_sha": "0d5f374f1783c170a45db0b0e74aaaf35c197c9b",
+      "nodes": [
+        {
+          "id": "A1-01",
+          "status": "PASS_AUDIT_SUMMARIES_STALE",
+          "finding": "STATE, CHECKPOINT, HANDOFF y estados canónicos de roles siguen sin reconciliar evidencia terminal reciente. El debate S3 reconoce Chart.js y Excalidraw, pero el estado canónico S3 permanece obsoleto.",
+          "evidence": {
+            "state_blob_sha": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
+            "checkpoint_blob_sha": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
+            "handoff_blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
+            "s3_state_blob_sha": "b852f5ec08aac4eab4259626a9c243e5c0b4ad56",
+            "s3_debate_blob_sha": "3bbbe86ad4fb73f612ef38ff0a7e6966c8a36c8c",
+            "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea"
+          },
+          "closure": false
+        },
+        {
+          "id": "A1-02",
+          "status": "BLOCKED_FOUR_RESIDUALS_ABSENT",
+          "finding": "Los cuatro destinos finales literales continúan ausentes; no existe read-back físico 124/124.",
+          "residuals": [
+            {
+              "name": "Vite",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Vite",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            },
+            {
+              "name": "Supabase",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            },
+            {
+              "name": "DuckDB",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            },
+            {
+              "name": "AVF",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/AVF",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            }
+          ],
+          "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "closure": false
+        },
+        {
+          "id": "A1-03",
+          "status": "PASS_AUDIT_EXCALIDRAW_INSTALL_FAIL_AND_CODEMIRROR_ISOLATED_PASS",
+          "finding": "01-20 permanece 17/20. Excalidraw falló durante instalación porque marked@16.4.2 exige Node >=20 y el workflow usa Node 18; build/tests no iniciaron. En T2, el adaptador aislado CodeMirror pasó 3/3, pero no está cableado a RUN-07/RUN-08 ni probado E2E.",
+          "integration_01_20": {
+            "passed": 17,
+            "total": 20,
+            "pending": [
+              "big-AGI",
+              "Vite",
+              "Vercel AI SDK"
+            ],
+            "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1"
+          },
+          "sortablejs": {
+            "classification": "RUNTIME_PASS_NOT_WIRED",
+            "package": "sortablejs@1.15.7",
+            "source_commit": "51b4e320c7af1a207fc398331371854f9a79c643",
+            "workflow_run_id": 34683230511,
+            "workflow_job_id": 103525571319,
+            "job_status": "completed",
+            "job_conclusion": "success",
+            "build_step": "PASS",
+            "upstream_chrome_headless_test": "PASS",
+            "terminal_assertion": "FAILED COUNT 0",
+            "log_read_back": true,
+            "fables_wired": false,
+            "product_e2e": false,
+            "warnings_only": [
+              "circular dependencies",
+              "outdated browserslist",
+              "deprecated Node action runtime"
+            ]
+          },
+          "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "closure": false,
+          "chartjs": {
+            "classification": "TEST_FUNCTIONAL_FIXTURE_FAIL_NOT_PASS",
+            "package": "chart.js@4.5.1",
+            "source_commit": "e6041073fdc93dc067ef8f43aa93b7bc97287ed1",
+            "retry_workflow_commit": "b51b2841d853ad5f744701b1a500319bd86363bb",
+            "workflow_run_id": 34688976382,
+            "workflow_job_id": 103540801094,
+            "job_status": "completed",
+            "job_conclusion": "failure",
+            "metadata": "PASS",
+            "install": "PASS",
+            "build": "PASS",
+            "xvfb_harness": "PASS",
+            "chrome": {
+              "version": "152.0.0.0",
+              "executed": 1702,
+              "success": 1702,
+              "failed": 0,
+              "seed": 90192
+            },
+            "firefox": {
+              "version": "155.0",
+              "executed": 808,
+              "failed": 1,
+              "seed": 38385
+            },
+            "total": {
+              "success": 2509,
+              "failed": 1
+            },
+            "failing_fixture": "test/fixtures/controller.polarArea/pointLabels/overlapping.js",
+            "pixel_difference": "293px / 0.11%",
+            "tolerance": "0.1%",
+            "functional_product_regression_proven": false,
+            "fables_wired": false,
+            "product_e2e": false,
+            "log_read_back": true
+          },
+          "excalidraw": {
+            "classification": "INSTALL_ENGINE_MISMATCH_NOT_PASS",
+            "package": "excalidraw-monorepo",
+            "workflow_commit": "94d555529d459748b989e97eeb91bfef9c44826b",
+            "workflow_run_id": 34691576762,
+            "workflow_job_id": 103547638287,
+            "status": "completed",
+            "conclusion": "failure",
+            "metadata": "PASS",
+            "install": "FAIL",
+            "build": "NOT_RUN",
+            "tests": "NOT_RUN",
+            "root_cause": "marked@16.4.2 requires Node >=20; runner used Node 18.20.8",
+            "fables_wired": false,
+            "product_e2e": false,
+            "log_read_back": true
+          },
+          "codemirror_t2": {
+            "classification": "ISOLATED_ADAPTER_PASS_NOT_WIRED",
+            "adapter_commit": "be8a6059139ba60cce2401cc45287144e183d41a",
+            "test_commit": "6ba08456ed64d88ff03b6b29bde63ed0349c7a1a",
+            "workflow_commit": "3a8108efd40e755754376c48206096a35dc257ed",
+            "workflow_run_id": 34692174640,
+            "workflow_job_id": 103549254048,
+            "status": "completed",
+            "conclusion": "success",
+            "tests": 3,
+            "pass": 3,
+            "fail": 0,
+            "run07_run08_wired": false,
+            "e2e": false,
+            "log_read_back": true
+          }
+        },
+        {
+          "id": "A1-04",
+          "status": "PASS_REFUTATION_EXCALIDRAW_AND_CODEMIRROR_SCOPE",
+          "refutations": [
+            "Excalidraw no alcanzó build ni tests; presencia y metadata no permiten RUNTIME_PASS.",
+            "El fallo Excalidraw es un conflicto de engine verificable: Node 18.20.8 frente a dependencia que exige >=20; procede retry acotado con Node 20, no edición del vendor.",
+            "CodeMirror 3/3 demuestra únicamente el adaptador aislado y su conducta fail-closed; no prueba integración RUN-07/RUN-08, Fables ni E2E.",
+            "Los nuevos resultados pertenecen a 21-40/T2 y no modifican el informe canónico 01-20.",
+            "Cuatro residuales 404 y 17/20 permanecen; no procede VERIFIED_CLOSED."
+          ],
+          "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "closure": false,
+          "observed_out_of_scope_delta": {
+            "riufrontend_bridge_commit": "9f4942771230b6aafad1aeb059bdb8d68026a2dc",
+            "riufrontend_bridge_blob_sha": "96164bad724e80c3beedb3422e0152541c253be0",
+            "runtime_url": "https://comand-center-1-yaiwes-ui-factory.static.hf.space/",
+            "source_evidence_corrected_to": "maxbry123-commits/frontend/.github/workflows/astra-hf-static-space-publish.yml",
+            "credential_e2e": "PENDING",
+            "t2_window_map_commit": "1ca252c64c6cdc1ce8797f0a2a6983bf267cbac6",
+            "t2_boundary_map_commit": "18594b2a0d4baddf01c8640bb5b26ee47abd9df4",
+            "t2_module_implementation_started": false
+          }
+        }
+      ],
+      "instructions_for_owners": {
+        "SOL_GPT1_BACKEND": "Releer main y reclamar S1-09 con SHA fresco. Probar aislamiento/persistencia de memoria y frontera de agente con read-back; mantener Vite y Supabase bloqueados hasta que el coordinador confirme destinos literales y adquisición canónica.",
+        "SOL_GPT2_BACKEND": "Releer main y reclamar S2-08. Ejecutar selector de plataforma fail-closed con evidencia por host; mantener DuckDB y AVF como residuales separados y no inferir soporte AVF universal.",
+        "SOL_GPT3_BACKEND": "Registrar Excalidraw 34691576762/job 103547638287 como INSTALL_ENGINE_MISMATCH_NOT_PASS. Retry acotado con Node 20 manteniendo Yarn 1.22.22 y lockfile; no usar --ignore-engines ni editar vendor. Exigir build y suite terminal antes de promover.",
+        "ASTRA2_GPT_BACKEND": "Reclamar únicamente un nodo A2 libre con SHA fresco y validar consumo real del contrato Fables por un adaptador; presencia del plugin o tests unitarios aislados no bastan.",
+        "SOL_PLAN_ORQUESTADOR": "Reconciliar estados: CodeMirror adapter aislado pasó 3/3, pero mantener NOT_WIRED hasta RUN-07/RUN-08 + E2E. Excalidraw requiere retry Node20. Conservar 120/124 físico y 17/20."
+      },
+      "current_delta": {
+        "summary": "Chart.js retry con Xvfb: Chrome 1702/1702 PASS; Firefox falló polarArea, 0.11% frente a tolerancia 0.1%. Total 2509 SUCCESS/1 FAILED. TEST_FUNCTIONAL_FIXTURE_FAIL_NOT_PASS; sin Fables/E2E.",
+        "chartjs_run": 34688976382,
+        "chartjs_job": 103540801094,
+        "chartjs_classification": "TEST_FUNCTIONAL_FIXTURE_FAIL_NOT_PASS",
+        "chartjs_total": {
+          "success": 2509,
+          "failed": 1
+        },
+        "chartjs_failing_fixture": "controller.polarArea/pointLabels/overlapping.js",
+        "residuals_absent": [
+          "Vite",
+          "Supabase",
+          "DuckDB",
+          "AVF"
+        ],
+        "integration_01_20": "17/20",
+        "runtime_tests_executed_this_cycle": false,
+        "ci_logs_independently_read": true,
+        "own_state_only": true,
+        "verified_closed": false
+      }
     }
   ],
   "current_delta": {
-    "summary": "Chart.js retry con Xvfb: Chrome 1702/1702 PASS; Firefox falló polarArea, 0.11% frente a tolerancia 0.1%. Total 2509 SUCCESS/1 FAILED. TEST_FUNCTIONAL_FIXTURE_FAIL_NOT_PASS; sin Fables/E2E.",
-    "chartjs_run": 34688976382,
-    "chartjs_job": 103540801094,
-    "chartjs_classification": "TEST_FUNCTIONAL_FIXTURE_FAIL_NOT_PASS",
-    "chartjs_total": {
-      "success": 2509,
-      "failed": 1
+    "summary": "Excalidraw falló en instalación: marked@16.4.2 exige Node >=20 y el workflow usó 18.20.8; build/tests no corrieron. El adaptador aislado CodeMirror pasó 3/3, pero sigue NOT_WIRED y sin E2E. Cuatro residuales 404; 01-20 17/20.",
+    "excalidraw": {
+      "run": 34691576762,
+      "job": 103547638287,
+      "classification": "INSTALL_ENGINE_MISMATCH_NOT_PASS"
     },
-    "chartjs_failing_fixture": "controller.polarArea/pointLabels/overlapping.js",
+    "codemirror": {
+      "run": 34692174640,
+      "job": 103549254048,
+      "classification": "ISOLATED_ADAPTER_PASS_NOT_WIRED",
+      "pass": 3,
+      "fail": 0
+    },
     "residuals_absent": [
       "Vite",
       "Supabase",
