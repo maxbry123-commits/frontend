@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>YAIWES UI Factory V1.5</title><link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./interaction-fix.css"><link rel="stylesheet" href="./frappe-context-menu.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>YAIWES UI Factory V1.6</title><link rel="stylesheet" href="./styles.css"><link rel="stylesheet" href="./interaction-fix.css"><link rel="stylesheet" href="./frappe-context-menu.css"><link rel="stylesheet" href="./resize-snap.css"></head>
 <body>
 <div id="app" class="app-shell">
   <header class="topbar">
-    <div class="brand"><span class="brand-mark">Y</span><div><strong>YAIWES UI Factory</strong><small>V1.5 · arrastra, compone y publica</small></div></div>
+    <div class="brand"><span class="brand-mark">Y</span><div><strong>YAIWES UI Factory</strong><small>V1.6 · arrastra, compone y publica</small></div></div>
     <nav id="steps" class="steps" aria-label="Pasos"></nav>
     <div class="mode-switch"><button data-mode="MANUAL">Manual</button><button data-mode="AI_ASSIST">IA</button><button data-mode="AUTOPILOT">Auto</button></div>
   </header>
@@ -14,7 +14,7 @@
       <div class="pane-head"><div><small>BIBLIOTECA</small><h2>Elementos</h2></div><span class="hint">Arrastra al canvas</span></div>
       <div id="component-library" class="component-grid"></div>
       <button id="new-component" class="primary wide">+ Crear bloque</button>
-      <div class="library-help">Toca para añadir · arrastra para colocar · selecciona y mueve dentro del canvas.</div>
+      <div class="library-help">Toca para añadir · arrastra para colocar · selecciona, mueve y redimensiona desde la esquina.</div>
       <div class="layers-head"><div><small>ESTRUCTURA</small><h2>Capas</h2></div><span id="layer-count" class="step-badge">0</span></div>
       <div id="layer-list" class="layer-list"></div>
     </aside>
@@ -46,4 +46,5 @@
 <script type="module" src="./src/interaction-fix.js"></script>
 <script type="module" src="./src/scroll-preserver.js"></script>
 <script type="module" src="./src/donors/frappe-context-menu-adapter.js"></script>
+<script type="module" src="./src/resize-snap.js"></script>
 </body></html>
