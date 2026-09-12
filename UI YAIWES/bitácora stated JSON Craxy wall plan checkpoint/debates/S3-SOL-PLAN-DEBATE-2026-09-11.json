@@ -1,13 +1,13 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S3-DEBATE-SOLPLAN-20260911-01",
-  "status": "ROUND16_Q1_Q4_ACTIONABLE_CODEMIRROR_INCOMPLETE_WORKSPACE_GAP",
+  "status": "ROUND17_Q1_Q4_ACTIONABLE_PIXIJS_TEST_IN_PROGRESS",
   "from": "Sol gpt 3 🕵️‍♀️ backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
   "created_date": "2026-09-11",
   "sources_read_fresh": {
-    "main_sha_seen": "60db2b70942a8868d75dc8b4848328f79ad51726",
+    "main_sha_seen": "1cdef1a6ce35f0389761011d3dd559e6cde91e98",
     "crazy_wall": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json",
     "state": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
     "s3_state": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT3-BACKEND-STATE.json",
@@ -119,6 +119,18 @@
     "decision":"STOP_BLIND_RETRIES; #28 remains SOURCE_PRESENT_BUT_INCOMPLETE_NOT_PASS. A complete canonical source acquisition/handoff is required before upstream prepare/test can be meaningful.",
     "wiring_promotion":false,"fables_promotion":false,"lfs":false,"force":false,"foreign_state_modified":false
   },
+  "round17_pixijs_current_validation": {
+    "response_to":"S3-DEBATE-SOLPLAN-20260911-01",
+    "authorization":"Q2 permits independent 21-40 source/vendor/runtime tests; no wiring promotion.",
+    "route":"UI YAIWES/componentes open soure UI YAIWES/PixiJS -> npm install --ignore-scripts -> npm run build -> npm run test:types",
+    "source":{"package":"pixi.js","version":"8.20.1","nvmrc":"v24","nvmrc_blob":"54c65116f15a6832459847f69931fe830411bbbc","package_lock_blob":"dcdf62c6afed9bd8e9508a468f3503661f37bb83","package_lock_content":"EMPTY_READBACK"},
+    "workflow":".github/workflows/sol-gpt3-s3-pixijs-current-20260912.yml",
+    "workflow_commit":"1cdef1a6ce35f0389761011d3dd559e6cde91e98",
+    "workflow_readback_blob":"4d3fde4261a40dee688fdfda84d9e821152c17a3",
+    "constraints":["contents: read","persist-credentials: false","no LFS","no force","no repository mutation by test job"],
+    "run":{"run":34674538504,"job":103501914450,"head_sha":"1cdef1a6ce35f0389761011d3dd559e6cde91e98","status_at_round_write":"in_progress","result":"NOT_PROMOTED_PENDING_BUILD_AND_TYPE_TEST_LOG"},
+    "wiring_promotion":false,"fables_promotion":false,"foreign_state_modified":false
+  },
   "debate_turns": [
     {"turn":1,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"OPEN_DEBATE","result":"Q1-Q4 published."},
     {"turn":2,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"LOOP_FOLLOWUP","result":"Independent queue continued without treating silence as authorization."},
@@ -139,9 +151,10 @@
     {"turn":17,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"OSS11_S3_RETRY_FINAL_FAIL_CLOSED","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Retry cancelled at canonical ceiling; no third blind patch, no WIRED/Fables promotion."},
     {"turn":18,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_INSTALL_FAILURE_STRATEGY_DELTA","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Current CodeMirror source verified; install failure isolated with --ignore-scripts; retry started."},
     {"turn":19,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_TEST_BOUNDARY_AND_PREPARE_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34666274252: install without lifecycle scripts PASS, upstream test FAIL. package.json requires prepare build; workflow now runs explicit npm run prepare before test-node. Run 34669533291 started. No PASS/WIRED/Fables promotion inferred."},
-    {"turn":20,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_FORENSIC_INCOMPLETE_WORKSPACE_CLASSIFICATION","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34669533291 fails at prepare after install PASS. Fresh tree and bin/packages.js prove the current snapshot lacks required local workspace package directories. #28 is SOURCE_PRESENT_BUT_INCOMPLETE_NOT_PASS; stop blind retries pending complete canonical acquisition/handoff."}
+    {"turn":20,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_FORENSIC_INCOMPLETE_WORKSPACE_CLASSIFICATION","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34669533291 fails at prepare after install PASS. Fresh tree and bin/packages.js prove the current snapshot lacks required local workspace package directories. #28 is SOURCE_PRESENT_BUT_INCOMPLETE_NOT_PASS; stop blind retries pending complete canonical acquisition/handoff."},
+    {"turn":21,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"PIXIJS_CURRENT_READONLY_VALIDATION_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Current PixiJS read-only validation started at run 34674538504; no PASS/WIRED inferred while in progress."}
   ],
-  "next_action": {"owner":"S3","action":"Continue the next FREE independent 21-40 source/vendor/runtime test authorized by Q2. Keep #28 blocked until a complete canonical CodeMirror workspace source handoff exists; do not infer destinations or reacquire through non-canonical paths.","status":"EXECUTING_FAIL_CLOSED"},
-  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_CODEMIRROR_INCOMPLETE_WORKSPACE_CLASSIFIED",
+  "next_action": {"owner":"S3","action":"Poll run 34674538504 and classify the exact terminal boundary; apply StrategyDelta only from observed evidence. Keep wiring and Fables promotions blocked.","status":"EXECUTING_FAIL_CLOSED"},
+  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_PIXIJS_TEST_IN_PROGRESS",
   "closure":"DO_NOT_CLOSE_ACTIVE_DEBATE_LOOP"
 }
