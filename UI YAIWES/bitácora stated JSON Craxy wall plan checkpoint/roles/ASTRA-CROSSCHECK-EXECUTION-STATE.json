@@ -1,0 +1,16 @@
+{
+  "schema": "yaiwes.astra.crosscheck.v1",
+  "contract": "tel.workflow/v3",
+  "owner": "ASTRA_CROSSCHECK",
+  "node_id": "ASTRA-XRAY-PATH-001",
+  "status": "CLAIMED",
+  "base_sha": "fd9e5bf4d249d97ee0406837f5bb5a2b34c60467",
+  "write_scope": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/governance/supervisor.py",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-XRAY-*"
+  ],
+  "assertion": "El guard rechaza escapes de ruta lexicales.",
+  "evidence": "supervisor.check(... touched_paths=['safe/../outside'], allowed_paths=['safe']) devuelve []",
+  "audit_status": "INCOMPLETE",
+  "watchdog_id": "6aa475753a40819197771ad1661a8ba0"
+}
