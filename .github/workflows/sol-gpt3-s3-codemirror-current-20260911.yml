@@ -39,6 +39,12 @@ jobs:
           set -euo pipefail
           cd 'UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6'
           npm install --ignore-scripts --no-audit --no-fund
+      - name: Run explicit upstream prepare build
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6'
+          npm run prepare
       - name: Run upstream node tests
         shell: bash
         run: |
