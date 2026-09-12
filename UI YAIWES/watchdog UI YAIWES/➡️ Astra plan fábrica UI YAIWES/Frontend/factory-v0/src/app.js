@@ -32,7 +32,7 @@ function renderConfigLists(){
   $('destination-list').innerHTML=config.destinations.map(d=>card(`${d.type}: ${d.url||'local'} ${d.path||''}`)).join('')||card('Sin destinos');
   $('reference-list').innerHTML=config.references.map(r=>card(r)).join('')||card('Sin referencias');
   $('page-list').innerHTML=config.pages.map(p=>card(`${p.name} · ${p.template}`)).join('')||card('Sin páginas');
-  $('media-list').innerHTML=config.media.map(m=>card(`${m.type}: ${m.name||m.prompt||m.status}`)).join('')||card('Sin media/jobs');
+  $('media-list').innerHTML=config.media.map(m=>card(`${m.type}: ${m.name||m.prompt||'sin nombre'} · ${m.status||'NO_STATUS'}`)).join('')||card('Sin media/jobs');
 }
 function setTab(name){
   document.querySelectorAll('[data-config-section]').forEach(s=>s.classList.toggle('hidden',s.dataset.configSection!==name));
