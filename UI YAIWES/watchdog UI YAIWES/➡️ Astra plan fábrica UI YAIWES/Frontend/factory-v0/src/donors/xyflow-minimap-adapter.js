@@ -26,17 +26,26 @@ function ensureMiniMap() {
   return root;
 }
 
+function ensureFitView() {
+  const controls = document.querySelector('.canvas-controls');
+  if (!controls || document.getElementById('fit-view')) return;
+  const button = document.createElement('button');
+  button.id = 'fit-view';
+  button.type = 'button';
+  button.textContent = 'Ajustar';
+  button.title = 'Ajustar todos los elementos a la vista · patrón xyflow';
+  button.dataset.donor = XYFLOW_DONOR.name;
+  controls.appendChild(button);
+}
+
 function svgEl(name, attrs = {}) {
   const node = document.createElementNS(NS, name);
   Object.entries(attrs).forEach(([key, value]) => node.setAttribute(key, String(value)));
   return node;
 }
 
-function model() {
-  const canvas = document.getElementById('canvas');
-  if (!canvas) return null;
-  const zoom = canvasZoom(canvas);
-  const nodes = [...canvas.querySelectorAll('[data-node]')].map(node => ({
+function readNodes(canvas) {
+  return [...canvas.querySelectorAll('[data-node]')].map(node => ({
     id: node.dataset.node,
     x: Number.parseFloat(node.style.left) || 0,
     y: Number.parseFloat(node.style.top) || 0,
@@ -44,6 +53,13 @@ function model() {
     h: Number.parseFloat(node.style.height) || node.offsetHeight || 1,
     selected: node.classList.contains('selected')
   }));
+}
+
+function model() {
+  const canvas = document.getElementById('canvas');
+  if (!canvas) return null;
+  const zoom = canvasZoom(canvas);
+  const nodes = readNodes(canvas);
   const view = {
     x: canvas.scrollLeft / zoom,
     y: canvas.scrollTop / zoom,
@@ -66,6 +82,7 @@ function model() {
 
 function render() {
   raf = 0;
+  ensureFitView();
   const root = ensureMiniMap();
   const svg = root?.querySelector('svg');
   geometry = model();
@@ -109,6 +126,35 @@ function schedule() {
   if (!raf) raf = requestAnimationFrame(render);
 }
 
+function fitView() {
+  const canvas = document.getElementById('canvas');
+  const nodes = canvas ? readNodes(canvas) : [];
+  if (!canvas || !nodes.length) return;
+  const minX = Math.min(...nodes.map(n => n.x));
+  const minY = Math.min(...nodes.map(n => n.y));
+  const maxX = Math.max(...nodes.map(n => n.x + n.w));
+  const maxY = Math.max(...nodes.map(n => n.y + n.h));
+  const contentW = Math.max(1, maxX - minX + 80);
+  const contentH = Math.max(1, maxY - minY + 80);
+  const target = Math.max(.5, Math.min(2, Math.floor(Math.min(canvas.clientWidth / contentW, canvas.clientHeight / contentH) * 10) / 10));
+
+  document.getElementById('zoom-reset')?.click();
+  const controlId = target < 1 ? 'zoom-out' : 'zoom-in';
+  for (let i = 0; i < Math.round(Math.abs(target - 1) * 10); i += 1) document.getElementById(controlId)?.click();
+
+  requestAnimationFrame(() => {
+    const zoom = canvasZoom(canvas);
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
+    canvas.scrollTo({
+      left: Math.max(0, centerX * zoom - canvas.clientWidth / 2),
+      top: Math.max(0, centerY * zoom - canvas.clientHeight / 2),
+      behavior: 'smooth'
+    });
+    schedule();
+  });
+}
+
 function bindCanvas() {
   const canvas = document.getElementById('canvas');
   if (!canvas || canvas.dataset.minimapBound === '1') return;
@@ -118,6 +164,10 @@ function bindCanvas() {
 }
 
 document.addEventListener('click', event => {
+  if (event.target.closest?.('#fit-view')) {
+    fitView();
+    return;
+  }
   const rect = event.target.closest?.('[data-minimap-node]');
   if (rect) {
     document.querySelector(`[data-node="${CSS.escape(rect.dataset.minimapNode)}"]`)?.click();
@@ -139,11 +189,11 @@ document.addEventListener('click', event => {
   });
 });
 
-document.addEventListener('DOMContentLoaded', () => { bindCanvas(); schedule(); });
+document.addEventListener('DOMContentLoaded', () => { bindCanvas(); ensureFitView(); schedule(); });
 window.addEventListener('resize', schedule);
-queueMicrotask(() => { bindCanvas(); schedule(); });
+queueMicrotask(() => { bindCanvas(); ensureFitView(); schedule(); });
 
 window.__YAIWES_DONOR_EVIDENCE__ = Object.freeze({
   ...(window.__YAIWES_DONOR_EVIDENCE__ || {}),
-  xyflowMinimap: { donor: XYFLOW_DONOR.name, sourceBlob: XYFLOW_DONOR.minimap.blob, mode: 'native-svg-adapter' }
+  xyflowMinimap: { donor: XYFLOW_DONOR.name, sourceBlob: XYFLOW_DONOR.minimap.blob, mode: 'native-svg-adapter', capabilities: ['minimap', 'node-navigation', 'fit-view'] }
 });
