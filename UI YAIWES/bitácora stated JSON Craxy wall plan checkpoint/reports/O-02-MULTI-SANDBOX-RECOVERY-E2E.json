@@ -3,34 +3,37 @@
   "contract": "tel.workflow/v3",
   "node_id": "O-02-MULTI-SANDBOX-RECOVERY-E2E",
   "owner": "SOL_ORQUESTADOR",
-  "base_main_sha": "ebdcee483822021500324b13af33adeae325c29f",
-  "status": "EXECUTING_VERIFY_COMPLETE",
+  "base_main_sha": "02acab512a22407269bce8c806439dcf876bcfdc",
+  "status": "EXECUTING_DELTA_AUTHORIZED",
   "claimed_at": "2026-09-12T06:40:00Z",
+  "claim_refreshed_at": "2026-09-12T20:23:08Z",
   "write_scope": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/recovery/**",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_recovery_control_plane.py",
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-*.json",
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-*.json",
     "UI YAIWES/readme arquitectura UI YAIWES/*XRAY*"
   ],
-  "assertion_to_validate": "Workspace/global recovery and sandbox failover must be demonstrated beyond local durable-ledger subgates, reusing existing sandbox/VM components before any new acquisition.",
+  "collision_check": "GitHub code search found no other fresh claim for runtime/src/recovery/** at claim refresh.",
+  "assertion_to_validate": "YAIWES needs only a thin deterministic project recovery control-plane over existing Stabilize WorkflowRecovery and Wordflow durable ledger; it must not duplicate the recovery engine.",
   "verify": {
-    "fresh_head": "ebdcee483822021500324b13af33adeae325c29f",
-    "o01_report_status": "PASS_AUDIT_NODE_GLOBAL_PROJECT_STILL_OPEN",
-    "source_present_reuse_candidates": {
-      "Firecracker": "1b4fef7e89ee8db98c40f6e06221888b07b92642",
-      "gVisor": "fa6b9f1ca81285907f24d71ef100410ef48aac1f",
-      "QEMU": "2684081288b3309e64d0d50227d00ddb014716e0",
-      "crosvm": "538312bf9369660f13dda65ce7b899cf6ac9589d",
-      "bubblewrap": "37a2ef33144b59859b01050bfde6f86bcc4cc81b",
-      "nsjail": "6b5ef4f698c68df95602292a9defee775f79f817",
-      "UTM": "e83f2d6b6ece0221bea0ed24795017bdcefa0949"
-    },
-    "classification": "SOURCE_PRESENT_REUSE_CANDIDATES_NOT_WIRED_NOT_RUNTIME_PASS"
+    "stabilize_recovery_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/recovery.py",
+    "stabilize_capabilities": [
+      "recover RUNNING/NOT_STARTED workflows",
+      "requeue stages/tasks/workflow",
+      "idempotent recovery sweep",
+      "transactional recovery message push",
+      "audit recovery results"
+    ],
+    "wordflow_durability": ["hash-chain ledger","cross-process lock","fsync","atomic replace","tamper fail-closed","latest-state replay"],
+    "classification": "REUSE_STABILIZE_ENGINE_PLUS_MINIMAL_YAIWES_CONTROL_PLANE"
   },
   "current_gap": [
-    "runtime/src/recovery remains a project-level control-plane gap",
-    "workspace/multi-host failover E2E not yet evidenced",
-    "sandbox lifecycle/backend selection not yet proven end-to-end"
+    "runtime/src/recovery has no YAIWES control-plane implementation",
+    "project recovery must reject missing/tampered checkpoint evidence",
+    "workflow recovery results must be summarized into deterministic project recovery evidence",
+    "workspace/multi-host sandbox failover remains separate downstream subgate"
   ],
-  "next_step": "Dedup existing runtime recovery/sandbox code against these physical components; implement only genuinely missing orchestration glue, then run restart/failover/reconstruction test.",
+  "next_step": "Implement minimal Python recovery control-plane + deterministic unit tests; do not implement queue/store/recovery engine again.",
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
 }
