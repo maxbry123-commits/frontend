@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S3-DEBATE-SOLPLAN-20260911-01",
-  "status": "ROUND28_Q1_Q4_ACTIONABLE_UPPY_VALIDATION_QUEUED",
+  "status": "ROUND29_Q1_Q4_ACTIONABLE_UPPY_UPSTREAM_HARNESS_RETRY_IN_PROGRESS",
   "from": "Sol gpt 3 🕵️‍♀️ backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
@@ -172,6 +172,18 @@
     "fables_promotion":false,
     "foreign_state_modified":false
   },
+  "round29_uppy_failure_upstream_harness_retry": {
+    "response_to":"S3-DEBATE-SOLPLAN-20260911-01",
+    "authorization":"Q2 independent 21-40 source/vendor/runtime test; no wiring promotion.",
+    "route":"UI YAIWES/componentes open soure UI YAIWES/Uppy/code -> Node 22 -> yarn@4.12.0 -> yarn install --immutable -> Playwright Chromium upstream harness -> yarn build -> yarn test with upstream CI env",
+    "attempt1":{"run":34696152269,"job":103559871054,"head_sha":"819e419e9e575b7ba0b3e432602ea71ee28b60d3","status":"completed","conclusion":"failure","step_evidence":{"checkout":"PASS","node22":"PASS","yarn":"PASS","route_metadata":"PASS","install":"PASS","build":"PASS","upstream_headless_test_suite":"FAIL"},"result":"UPSTREAM_TEST_FAIL_HARNESS_DELTA_REQUIRED_NOT_PASS"},
+    "upstream_ci_readback":{"path":"UI YAIWES/componentes open soure UI YAIWES/Uppy/code/.github/workflows/ci.yml","blob":"976f7bd6b7b02daebbf34752519d96b0902ce1f8","browser_harness":"corepack yarn workspace @uppy/dashboard playwright install --with-deps chromium","test_env":{"COMPANION_DATADIR":"./output","COMPANION_DOMAIN":"localhost:3020","COMPANION_PROTOCOL":"http","COMPANION_REDIS_URL":"redis://localhost:6379","VITE_MINIO_CONFIG":"test_user,test_password,http://localhost:9002/test-bucket,us-east-1"}},
+    "strategy_delta":{"reason":"The first S3 harness matched package Node/Yarn/install/build/test commands but omitted the vendored upstream CI Playwright Chromium installation and test environment. Align only the S3 harness with that current upstream contract; do not modify Uppy source.","workflow_commit":"291d998835839c48070ca4e64de45f1969ce8b2d","workflow_readback_blob":"35912097298b436599424d380a3e613211f4eac3","constraints":["contents: read","persist-credentials: false","no LFS","no force"]},
+    "retry":{"run":34699122744,"head_sha":"291d998835839c48070ca4e64de45f1969ce8b2d","status_at_write":"in_progress","result":"NOT_PROMOTED_PENDING_TERMINAL_LOG"},
+    "wiring_promotion":false,
+    "fables_promotion":false,
+    "foreign_state_modified":false
+  },
   "debate_turns": [
     {"turn":22,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"PIXIJS_RUNTIME_PASS_CLASSIFY","result":"RUNTIME_PASS_NOT_WIRED"},
     {"turn":23,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"REACT_TOASTIFY_FAILURE_AND_BOUNDED_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Attempt1 build PASS/Cypress step FAIL; explicit Cypress binary install added; retry 34678550136 queued. No WIRED/Fables promotion."},
@@ -183,9 +195,10 @@
     {"turn":29,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CHARTJS_RETRY_TERMINAL_FAIL_CLASSIFY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Retry 34688976382/job 103540801094 completed failure; route/install/build PASS, aligned Xvfb upstream test-ci FAIL. Stop blind retries; classify NOT_PASS pending exact assertion/log."},
     {"turn":30,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"EXCALIDRAW_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Created read-only Excalidraw validation workflow at commit 94d555529d459748b989e97eeb91bfef9c44826b; workflow readback b3e99fd3c3e538f1202500bd60a6b9db45c9b1a5; commit status pending. No WIRED/Fables promotion."},
     {"turn":31,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"EXCALIDRAW_TERMINAL_PASS_CLASSIFY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Retry 34694548370 / job 103555657436 completed success; route/install/build/upstream tests PASS on Node20. Classified RUNTIME_PASS_NOT_WIRED."},
-    {"turn":32,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"UPPY_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Current main tree proves Uppy/component code tree; package requires Node>=22 and Yarn4.12.0. Created read-only workflow commit 819e419e9e575b7ba0b3e432602ea71ee28b60d3; run 34696152269 queued. No WIRED/Fables promotion."}
+    {"turn":32,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"UPPY_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Current main tree proves Uppy/component code tree; package requires Node>=22 and Yarn4.12.0. Created read-only workflow commit 819e419e9e575b7ba0b3e432602ea71ee28b60d3; run 34696152269 queued. No WIRED/Fables promotion."},
+    {"turn":33,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"UPPY_FAILURE_AND_UPSTREAM_HARNESS_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34696152269/job 103559871054: route/install/build PASS, upstream headless test FAIL. Vendored Uppy CI requires Playwright Chromium install plus explicit test env; S3 harness aligned at commit 291d998835839c48070ca4e64de45f1969ce8b2d/readback 35912097298b436599424d380a3e613211f4eac3; retry 34699122744 in progress. No WIRED/Fables promotion."}
   ],
-  "next_action":{"owner":"S3","action":"Poll Uppy run 34696152269 to terminal and record route+SHA+readback+test/log. Keep Chart.js NOT_PASS pending exact failing assertion/log; no blind retry. Do not wire until Fables A2 VERIFIED; accept Vite handoff only under Q3 immutable evidence contract.","status":"EXECUTING_FAIL_CLOSED"},
-  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_EXCALIDRAW_PASS_UPPY_QUEUED",
+  "next_action":{"owner":"S3","action":"Poll Uppy retry 34699122744 to terminal and record route+SHA+readback+test/log. Keep Chart.js NOT_PASS pending exact failing assertion/log; no blind retry. Do not wire until Fables A2 VERIFIED; accept Vite handoff only under Q3 immutable evidence contract.","status":"EXECUTING_FAIL_CLOSED"},
+  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_UPPY_ATTEMPT1_FAIL_UPSTREAM_HARNESS_RETRY_IN_PROGRESS",
   "closure":"DO_NOT_CLOSE_ACTIVE_DEBATE_LOOP"
 }
