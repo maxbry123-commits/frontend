@@ -4,7 +4,7 @@
   "role": "SOL_GPT1_BACKEND",
   "name": "Sol ☀️ 🏈gpt 1 backend",
   "node_prefix": "S1",
-  "status": "CLAIMED_XRS1_MEMORY_AGENT_BOUNDARY",
+  "status": "XRS1_STEP3_VERIFY_CI_PENDING",
   "coordination": {
     "source": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-STATE-HANDOFF-XRAY-2026-09-11.json",
     "source_blob_sha": "a2683070871975a95ea4d16ac125125dcfb11649",
@@ -14,36 +14,72 @@
   "claim": {
     "node_id": "XRS1-MEMORY-AGENT-BOUNDARY",
     "owner": "SOL_GPT1_BACKEND",
-    "base_main_sha_observed": "c6f888bba0fe2bd0a4358e9207d009064ed3d6de",
-    "state_base_blob_sha": "23ed7f6bdf7c8256029aceebb59ad75f1cf6c0cd",
     "claimed_at": "2026-09-12T16:45:28-05:00",
     "write_scope": [
       "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT1-BACKEND-STATE.json",
       "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/**"
     ],
     "max_steps": 3,
-    "steps": ["1_RESEARCH_OR_VERIFY","2_EXECUTE_AUTHORIZED_DELTA","3_VERIFY_AND_REPORT"],
-    "anti_collision": "Do not edit SOL2/SOL3/Astra states or shared Crazy Wall; report in S1 state/debate and let coordinator consolidate shared truth."
+    "steps": ["1_RESEARCH_OR_VERIFY","2_EXECUTE_AUTHORIZED_DELTA","3_VERIFY_AND_REPORT"]
+  },
+  "research": {
+    "workflow_definition_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/core/workflow_definition.py",
+    "workflow_definition_blob": "ee7d708cd4dbcedee7ca65e9aa7f5db8e3cccde1",
+    "workflow_owner": "stabilize_core",
+    "workflow_contract": "tel.workflow/v3",
+    "workflow_order_boundary": "MemoryAdapter -> RouterAdapter -> AgentTask -> StateDeltaValidation -> AuditTask -> ConsolidatorTask -> MemoryUpdate",
+    "stabilize_tasks_blob": "3ea6817e23ca4b5b99780c81c7c737725f700284",
+    "stabilize_tools_blob": "ecd36cabd0619cc723ee13ef3270835ab7ea1bdc",
+    "reuse": ["LLMClient","LLMTask","AgentLoopTask","ToolRegistry"],
+    "finding": "Do not create a second ReAct loop, workflow owner, tool dispatcher or canonical-memory writer."
+  },
+  "implementation": {
+    "boundary_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/boundary.py",
+    "boundary_blob_sha": "cb69a7bd172f91e2117a567fa1b4195204fad434",
+    "boundary_commits": [
+      "b576be5210d73e6818d132b1115a957178852fdd",
+      "26fa7311368a05af891e3dceda94b4e3e7ade01b"
+    ],
+    "init_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/__init__.py",
+    "init_commit": "ee5d50b59a402b0d19f28788af1743200a922f04",
+    "test_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/tests/test_boundary.py",
+    "test_blob_sha": "e662a6fcdcd7ce522763cfc5a390e56e1ae2cf31",
+    "test_commits": [
+      "e579fcf3b414c86ffc4c4f7ff9ea0e864d1f47c6",
+      "d9d44658dae613012fa93da06fd5aa29bc4f5eee"
+    ],
+    "controls": [
+      "AGENT_PRIVATE memory is distinct from CHAT and PROJECT scopes",
+      "workflow owner fixed to stabilize_core",
+      "workflow contract fixed to tel.workflow/v3",
+      "LLM context allowlist rejects unknown keys and memory-writer smuggling",
+      "ToolRegistry schemas must match Policy-authorized allowed_tools exactly",
+      "existing AgentLoopTask is composed by injection/lazy import; no second loop",
+      "agent output is candidate-only with canonical_memory_write=false"
+    ]
+  },
+  "verification": {
+    "readback": "PASS",
+    "boundary_blob": "cb69a7bd172f91e2117a567fa1b4195204fad434",
+    "test_blob": "e662a6fcdcd7ce522763cfc5a390e56e1ae2cf31",
+    "py_compile": "PASS",
+    "targeted_unittest": "PASS_8_OF_8",
+    "structural_duplicate_loop_check": "PASS_NO_WHILE_NO_QUEUE_NO_SCHEDULER_NO_PERSISTENCE_OWNER",
+    "github_ci": {
+      "workflow": "YAIWES Wordflow LOOP Pytest",
+      "run_id": 34721174155,
+      "head_sha": "d9d44658dae613012fa93da06fd5aa29bc4f5eee",
+      "status": "pending",
+      "conclusion": null,
+      "note": "Older intermediate runs 34721090431 and 34721160796 were cancelled as superseded heads; they are not counted as failures."
+    },
+    "verdict": "TARGETED_TEST_PASS_REGRESSION_CI_PENDING_NO_FALSE_PASS"
   },
   "owned_gaps": {
     "G02_VITE_DEST": "OPEN_DESTINATION_INPUT_GAP",
     "G03_SUPABASE_DEST": "OPEN_DESTINATION_INPUT_GAP",
-    "G09_MEMORY_BOUNDARY": "AUDIT_REQUIRED",
-    "G13_RUNTIME_AGENT_EMPTY": "AUDIT_MAPPED_REUSE_FOUND"
-  },
-  "g13_contract": {
-    "current_agent_root": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/.gitkeep",
-    "current_agent_root_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
-    "reuse": ["Stabilize.LLMClient","Stabilize.LLMTask","Stabilize.AgentLoopTask","Stabilize.ToolRegistry"],
-    "forbidden": ["second ReAct loop","second workflow owner","memory duplication","router duplication"],
-    "required_delta": "Define minimal YAIWES Agent↔own-memory↔Tools↔Workflow adapter/contract and test isolation from chat/project memory."
-  },
-  "fables": {
-    "ledger_status": "TESTED_OWNER_SOL_GPT3",
-    "current_blob_sha": "23f4e1b8b91301f2df396e7a0860fc65b977cfb3",
-    "contract": "yaiwes.fables.v1",
-    "s1_ci_run": 34573676252,
-    "note": "Newest coordination assigns integration consumption to S3; A2 is not current Fables owner."
+    "G09_MEMORY_BOUNDARY": "PARTIAL_AGENT_BOUNDARY_IMPLEMENTED_FULL_MEMORY_AUDIT_MAPPING_REMAINS",
+    "G13_RUNTIME_AGENT_EMPTY": "IMPLEMENTED_TARGETED_TEST_PASS_CI_PENDING"
   },
   "acquisition": {
     "Vite": "BLOCKED_NO_LITERAL_DESTINATION",
@@ -51,6 +87,6 @@
     "canonical_motor_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
     "rule": "No motor dispatch until literal DEST_REPO/DEST_BRANCH/DEST_ROOT authority exists."
   },
-  "next_action": "STEP1_RESEARCH_OR_VERIFY: inspect Stabilize agent exports and current chat/project/memory contracts; derive smallest non-duplicative adapter API and tests inside runtime/src/agent/** before mutation.",
-  "closure_rule": "CLAIMED != PASS; code + tests + readback + evidence required"
+  "next_action": "STEP3: poll GitHub Actions run 34721174155 to real conclusion; on success publish VERIFIED evidence and release XRS1 claim to coordinator. Do not write more runtime/src until this head is verified.",
+  "closure_rule": "TARGETED_PASS != VERIFIED_CLOSED until current-head GitHub CI concludes and readback is recorded"
 }
