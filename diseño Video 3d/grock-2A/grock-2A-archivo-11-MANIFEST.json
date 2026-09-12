@@ -1,0 +1,30 @@
+{
+  "pack": "grock-2A",
+  "role": "GROCK 2A",
+  "brand": "MAXBRY AGI · YAIWES · NCT CODE",
+  "theme": "cuna interestelar / nacimiento de agentes",
+  "destino_github": "maxbry123-commits/frontend/diseño Video 3d/grock-2A/",
+  "audio_policy": "original_only",
+  "prohibido_ost": ["Transformers", "Iron Man", "cualquier OST comercial"],
+  "claims_vs_fables": "TARGET|SIM",
+  "no_html_windows": true,
+  "watchdog": "1h",
+  "pieces": [
+    {"file": "grock-2A-archivo-01.md", "track": 1, "id": "T1-P1", "title": "YAIWES HUD cian nace de un anillo", "kind": "micro_video_3d_loop", "duration_s_min": 6, "duration_s_max": 12, "ratio": "9:16", "aspect": "9:16", "theme": "cuna interestelar / nacimiento de agentes", "claim_class": "SIM", "loop": true},
+    {"file": "grock-2A-archivo-02.md", "track": 1, "id": "T1-P2", "title": "NCT CODE swarm gold", "kind": "micro_video_3d_loop", "duration_s_min": 6, "duration_s_max": 12, "ratio": "9:16", "aspect": "9:16", "theme": "cuna interestelar / nacimiento de agentes", "claim_class": "SIM", "loop": true},
+    {"file": "grock-2A-archivo-03.md", "track": 2, "id": "T2-P1", "title": "YAIWES no es un chat", "kind": "pub_vo_es", "duration_s_min": 15, "duration_s_max": 30, "ratio": "16:9", "aspect": "16:9", "theme": "cuna interestelar / nacimiento de agentes", "claim_class": "TARGET", "loop": false},
+    {"file": "grock-2A-archivo-04.md", "track": 2, "id": "T2-P2", "title": "NCT CODE frontend backend app web", "kind": "pub_vo_es", "duration_s_min": 15, "duration_s_max": 30, "ratio": "16:9", "aspect": "16:9", "theme": "cuna interestelar / nacimiento de agentes", "claim_class": "TARGET", "loop": false},
+    {"file": "grock-2A-archivo-05.md", "track": 3, "id": "T3-P1", "title": "35 dimensiones", "kind": "thinking_overlay", "duration_s_min": 3, "duration_s_max": 8, "ratio": "1:1", "aspect": "1:1", "theme": "cuna interestelar / nacimiento de agentes", "claim_class": "SIM", "loop": true},
+    {"file": "grock-2A-archivo-06.md", "track": 3, "id": "T3-P2", "title": "1000 agentes votan", "kind": "thinking_overlay", "duration_s_min": 3, "duration_s_max": 8, "ratio": "1:1", "aspect": "1:1", "theme": "cuna interestelar / nacimiento de agentes", "claim_class": "SIM", "loop": true},
+    {"file": "grock-2A-archivo-07.md", "track": 4, "id": "T4-P1", "title": "origen MAXBRY órbita→wordmark Netflix→HUD→CTA waitlist", "kind": "youtube_sequence_script", "duration_s_min": 480, "duration_s_max": 720, "ratio": "16:9", "aspect": "16:9", "theme": "cuna interestelar / nacimiento de agentes", "claim_class": "TARGET", "loop": false},
+    {"file": "grock-2A-archivo-08.md", "track": 4, "id": "T4-P2", "title": "4 edades siempre return MAXBRY", "kind": "youtube_sequence_script", "duration_s_min": 480, "duration_s_max": 720, "ratio": "16:9", "aspect": "16:9", "theme": "cuna interestelar / nacimiento de agentes", "claim_class": "TARGET", "loop": false},
+    {"file": "grock-2A-archivo-09.md", "track": 5, "id": "T5-P1", "title": "holo web/UI + audio 3D wordmark", "kind": "holo_web_ui_audio3d", "duration_s_min": 8, "duration_s_max": 16, "ratio": "16:9", "aspect": "16:9", "theme": "cuna interestelar / nacimiento de agentes", "claim_class": "TARGET", "loop": true},
+    {"file": "grock-2A-archivo-10.md", "track": 5, "id": "T5-P2", "title": "ticket COLA rojo", "kind": "holo_web_ui_audio3d", "duration_s_min": 8, "duration_s_max": 16, "ratio": "9:16", "aspect": "9:16", "theme": "cuna interestelar / nacimiento de agentes", "claim_class": "TARGET", "loop": true}
+  ],
+  "counts": {"tracks": 5, "pieces": 10, "per_track": 2},
+  "continuity_lock": "wordmark MAXBRY serif-tech condensed; YAIWES HUD cyan #00D4E8 on matte #0A0A0D; NCT CODE swarm gold #C9A227; ticket COLA #E11D2E; always return MAXBRY end-card",
+  "estado": "PUSHED_MAIN",
+  "pass_llm": false,
+  "commits": ["2d75149c8f81b9602e157b7c45961885139a66f9", "c9676f9ea5298ac282c303a43d5909c8cfdfa9ba"],
+  "ts": "2026-09-12T05:25:00-05:00"
+}
