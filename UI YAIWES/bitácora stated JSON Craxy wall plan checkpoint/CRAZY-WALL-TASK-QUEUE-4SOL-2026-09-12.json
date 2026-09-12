@@ -3,7 +3,7 @@
   "contract": "tel.workflow/v3",
   "status": "ACTIVE_LOOP",
   "created_at_utc": "2026-09-12T06:10:00Z",
-  "base_main_sha": "acbcfef50fc20f152e319037845401b02d6d54ff",
+  "base_main_sha": "6937dd6a58e44f077130a0a550e6228e3a244797",
   "rules": {
     "one_task_one_node": true,
     "one_active_node_per_role": true,
@@ -300,7 +300,7 @@
     "durable ledger replay/fsync/tamper-detection subgates"
   ],
   "global_closure_gate": "G12 requirement→layer→file/function→test→evidence must reach 100%; Memory/Audit, Agent boundary, Integration/Consolidator, Sandbox/UEK/Recovery and platform routing must be implemented or closed by evidenced equivalence before final judge.",
-  "updated_at_utc": "2026-09-12T17:43:00.121Z",
+  "updated_at_utc": "2026-09-12T18:42:43.621Z",
   "completed_nodes": [
     {
       "node_id": "O-01-G12-GLOBAL-COVERAGE-XRAY",
@@ -310,8 +310,8 @@
     }
   ],
   "orchestrator_reconciliation": {
-    "checked_at_utc": "2026-09-12T17:43:00.121Z",
-    "checked_head_sha": "acbcfef50fc20f152e319037845401b02d6d54ff",
+    "checked_at_utc": "2026-09-12T18:42:43.621Z",
+    "checked_head_sha": "6937dd6a58e44f077130a0a550e6228e3a244797",
     "mode": "FAIL_CLOSED_LOOP",
     "queue_drift_repaired": true,
     "sol_claims": {
@@ -327,6 +327,25 @@
       "classification": "TESTED_SUBGATE_PASS_FULL_RUNTIME_CANCELLED_NOT_PASS"
     },
     "last_full_audit_completed_at": null,
-    "full_audit_status": "INCOMPLETE_DO_NOT_ADVANCE_TIMESTAMP"
+    "full_audit_status": "INCOMPLETE_DO_NOT_ADVANCE_TIMESTAMP",
+    "changes_since_last_check": [
+      {
+        "commit": "342d9c25aee96793f8566194c327c5b9d8ae561e",
+        "classification": "CODE_PATCH_WITH_REGRESSION_TESTS_PRESENT_CI_UNCONFIRMED",
+        "delta": "X-Ray documents now reject blank/invalid inputs; code inventory detects pass/docstring/ellipsis function stubs; syntax errors remain INCONCLUSIVE."
+      },
+      {
+        "commit": "6937dd6a58e44f077130a0a550e6228e3a244797",
+        "classification": "PUBLISH_WORKFLOW_UPDATED_NO_TERMINAL_RUN_EVIDENCE",
+        "delta": "HF Factory V1.1 workflow pins source 245efadec5f01513c8ee4203224fba739ad0d2f2 and strengthens panel/marker checks; G19 remains open until terminal upload/readback."
+      }
+    ],
+    "invariants": {
+      "o02": "EXECUTING_NOT_CLOSED",
+      "g12": "OPEN",
+      "integration_01_20": "17/20",
+      "physical_components": "120/124",
+      "oss11": "6/11_VERIFIED_5_GAP"
+    }
   }
 }
