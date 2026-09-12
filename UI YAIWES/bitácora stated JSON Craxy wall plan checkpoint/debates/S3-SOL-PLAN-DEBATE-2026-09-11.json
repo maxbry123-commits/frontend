@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S3-DEBATE-SOLPLAN-20260911-01",
-  "status": "ROUND24_Q1_Q4_ACTIONABLE_CHARTJS_XVFB_RETRY_IN_PROGRESS",
+  "status": "ROUND26_Q1_Q4_ACTIONABLE_EXCALIDRAW_VALIDATION_STARTED",
   "from": "Sol gpt 3 🕵️‍♀️ backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
@@ -118,6 +118,32 @@
     "fables_promotion":false,
     "foreign_state_modified":false
   },
+  "round25_chartjs_retry_terminal": {
+    "response_to":"S3-DEBATE-SOLPLAN-20260911-01",
+    "authorization":"Q2 independent 21-40 source/vendor/runtime test; no wiring promotion.",
+    "run":34688976382,
+    "job":103540801094,
+    "head_sha":"b51b2841d853ad5f744701b1a500319bd86363bb",
+    "status":"completed",
+    "conclusion":"failure",
+    "step_evidence":{"checkout":"PASS","node16":"PASS","pnpm8_13":"PASS","route_metadata":"PASS","install":"PASS","build":"PASS","xvfb_upstream_test_ci":"FAIL"},
+    "result":"UPSTREAM_TEST_CI_FAIL_AFTER_HARNESS_ALIGNMENT_NOT_PASS",
+    "strategy_delta":"STOP_BLIND_RETRIES; concrete test step still fails after matching vendored Linux Xvfb/Node16 harness. Preserve source and classify NOT_PASS pending exact failing assertion/log evidence.",
+    "wiring_promotion":false,
+    "fables_promotion":false,
+    "foreign_state_modified":false
+  },
+  "round26_excalidraw_start": {
+    "response_to":"S3-DEBATE-SOLPLAN-20260911-01",
+    "authorization":"Q2 independent 21-40 source/vendor/runtime test; no wiring promotion.",
+    "route":"UI YAIWES/componentes open soure UI YAIWES/Excalidraw -> Node 18 -> yarn@1.22.22 -> yarn install --frozen-lockfile --ignore-scripts --non-interactive -> yarn build -> yarn test:all",
+    "source_readback":{"package_blob":"c91ee030c3800a91359082661a89d20a4da051f5","lock_blob":"e2eb9e911b805274a3e3e83a372a82a1e7f621bf","package":"excalidraw-monorepo","package_manager":"yarn@1.22.22","node":">=18.0.0"},
+    "workflow":{"path":".github/workflows/sol-gpt3-s3-excalidraw-current-20260912.yml","commit":"94d555529d459748b989e97eeb91bfef9c44826b","readback_blob":"b3e99fd3c3e538f1202500bd60a6b9db45c9b1a5","permissions":"contents: read","persist_credentials":false,"no_lfs":true,"no_force":true},
+    "run_state_at_write":{"commit_status":"pending","result":"NOT_PROMOTED_PENDING_TERMINAL_LOG"},
+    "wiring_promotion":false,
+    "fables_promotion":false,
+    "foreign_state_modified":false
+  },
   "debate_turns": [
     {"turn":22,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"PIXIJS_RUNTIME_PASS_CLASSIFY","result":"RUNTIME_PASS_NOT_WIRED"},
     {"turn":23,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"REACT_TOASTIFY_FAILURE_AND_BOUNDED_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Attempt1 build PASS/Cypress step FAIL; explicit Cypress binary install added; retry 34678550136 queued. No WIRED/Fables promotion."},
@@ -125,9 +151,11 @@
     {"turn":25,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"SORTABLEJS_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Created read-only validation workflow at commit 51b4e320c7af1a207fc398331371854f9a79c643; run 34683230511 / job 103525571319 in progress. No WIRED/Fables promotion."},
     {"turn":26,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"SORTABLEJS_TERMINAL_PASS_CLASSIFY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34683230511 / job 103525571319 completed success; route/install/build/upstream Chrome headless tests PASS. Classified RUNTIME_PASS_NOT_WIRED."},
     {"turn":27,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CHARTJS_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Created read-only Chart.js validation workflow at commit e6041073fdc93dc067ef8f43aa93b7bc97287ed1; run 34687059804 in progress. No WIRED/Fables promotion."},
-    {"turn":28,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CHARTJS_FAILURE_AND_UPSTREAM_XVFB_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34687059804/job 103535772959: route/install/build PASS, test-ci FAIL. Vendored upstream CI read-back uses Node 16 + xvfb-run on Linux; S3 workflow aligned at commit b51b2841d853ad5f744701b1a500319bd86363bb, retry 34688976382 in progress. No WIRED/Fables promotion."}
+    {"turn":28,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CHARTJS_FAILURE_AND_UPSTREAM_XVFB_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34687059804/job 103535772959: route/install/build PASS, test-ci FAIL. Vendored upstream CI read-back uses Node 16 + xvfb-run on Linux; S3 workflow aligned at commit b51b2841d853ad5f744701b1a500319bd86363bb, retry 34688976382 in progress. No WIRED/Fables promotion."},
+    {"turn":29,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CHARTJS_RETRY_TERMINAL_FAIL_CLASSIFY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Retry 34688976382/job 103540801094 completed failure; route/install/build PASS, aligned Xvfb upstream test-ci FAIL. Stop blind retries; classify NOT_PASS pending exact assertion/log."},
+    {"turn":30,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"EXCALIDRAW_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Created read-only Excalidraw validation workflow at commit 94d555529d459748b989e97eeb91bfef9c44826b; workflow readback b3e99fd3c3e538f1202500bd60a6b9db45c9b1a5; commit status pending. No WIRED/Fables promotion."}
   ],
-  "next_action":{"owner":"S3","action":"Poll Chart.js retry 34688976382 to terminal status; record terminal step evidence and StrategyDelta only on concrete failure. If terminal, continue next Q2-authorized independent node #39 Excalidraw. Do not wire until Fables A2 VERIFIED; accept Vite handoff only under Q3 immutable evidence contract.","status":"EXECUTING_FAIL_CLOSED"},
-  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_CHARTJS_ATTEMPT1_TEST_FAIL_UPSTREAM_XVFB_RETRY_IN_PROGRESS",
+  "next_action":{"owner":"S3","action":"Poll Excalidraw validation tied to commit 94d555529d459748b989e97eeb91bfef9c44826b to terminal status; record terminal step evidence. Keep Chart.js NOT_PASS until exact failing test evidence exists; no blind third retry. Then continue Q2-authorized node #40 Uppy if independent. Do not wire until Fables A2 VERIFIED; accept Vite handoff only under Q3 immutable evidence contract.","status":"EXECUTING_FAIL_CLOSED"},
+  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_CHARTJS_RETRY_FAIL_EXCALIDRAW_VALIDATION_STARTED",
   "closure":"DO_NOT_CLOSE_ACTIVE_DEBATE_LOOP"
 }
