@@ -3,8 +3,8 @@
   "contract": "tel.workflow/v3",
   "role": "ASTRA_GPT1_BACKEND",
   "name": "🧑‍💻Astra gpt 1 backend UI YAIWES 🌀🌀🌀 👷👷🕵️‍♀️",
-  "updated_at": "2026-09-12T18:31:47.000Z",
-  "base_sha": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
+  "updated_at": "2026-09-12T19:33:01.000Z",
+  "base_sha": "a7cc53f05707cb7ae15b5b33e9864986809679a2",
   "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
   "status": "ACTIVE_LOOP_GAPS_OPEN",
   "scope": "A1 audit only; sole write path is this role_state_path",
@@ -57,7 +57,7 @@
     },
     {
       "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/S3-SOL-PLAN-DEBATE-2026-09-11.json",
-      "blob_sha": "30d01650441e5cbd314f848afefac8c71959e71d"
+      "blob_sha": "1cbb53c081dd47491e25bac4c6299dd074a47f1b"
     },
     {
       "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_testcontainers_httpx_real_adapter.py",
@@ -74,19 +74,23 @@
     {
       "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-QUEUE-4SOL-2026-09-12.json",
       "blob_sha": "1184b5aa17d7d5e7d1da074bf8ebace686f82c25"
+    },
+    {
+      "path": ".github/workflows/sol-gpt3-s3-runtime-persist-restart-20260912.yml",
+      "blob_sha": "3863c6052701bdfe24ed3cf4d4d34d0aa325ce71"
     }
   ],
   "nodes": [
     {
       "id": "A1-01",
-      "status": "PASS_AUDIT_QUEUE_RECONCILED_CANONICAL_SUMMARIES_STALE",
-      "finding": "La cola coordinadora ya marca O-01 como auditoría cerrada y O-02 como EXECUTING. STATE, CHECKPOINT y HANDOFF permanecen byte-idénticos y no incorporan esa reconciliación ni los hallazgos X-Ray.",
+      "status": "PASS_AUDIT_S3_DEBATE_UPDATED_CANONICAL_SUMMARIES_STALE",
+      "finding": "El debate S3 inició y completó externamente una validación acotada de ledger/reinicio, pero su entrada todavía registra el run como in_progress. STATE, CHECKPOINT, HANDOFF y el estado canónico S3 siguen byte-idénticos y no contienen el resultado terminal.",
       "evidence": {
         "state_blob_sha": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
         "checkpoint_blob_sha": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
         "handoff_blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
-        "orchestrator_queue_blob_sha": "1184b5aa17d7d5e7d1da074bf8ebace686f82c25",
-        "factory_state_blob_sha": "4548bc07f03a5ea61b673504774bddf7912bd4e6",
+        "s3_state_blob_sha": "b852f5ec08aac4eab4259626a9c243e5c0b4ad56",
+        "s3_debate_blob_sha": "1cbb53c081dd47491e25bac4c6299dd074a47f1b",
         "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea"
       },
       "closure": false
@@ -126,8 +130,8 @@
     },
     {
       "id": "A1-03",
-      "status": "PASS_AUDIT_17_OF_20_UNCHANGED",
-      "finding": "El informe canónico sigue generado el 2026-09-09 y permanece 17/20. big-AGI, Vite y Vercel AI SDK continúan PENDING_SOURCE; los cambios de cola coordinadora y frontend fábrica no aportan cableado Fables ni ejecución runtime para esos tres.",
+      "status": "PASS_AUDIT_RUNTIME_RESTART_SUBGATE_20_PASS_01_20_UNCHANGED",
+      "finding": "Run 34714136180/job 103608081961 terminó success: prueba focal 1 PASS y paquete Wordflow 19 PASS. Valida persistencia/replay/reinicio del runtime actual; no ejecuta UI→adaptador ni modifica el informe canónico 01-20, que continúa 17/20.",
       "integration_01_20": {
         "passed": 17,
         "total": 20,
@@ -138,55 +142,61 @@
         ],
         "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1"
       },
+      "runtime_restart": {
+        "classification": "DURABLE_RUNTIME_RESTART_SUBGATE_PASS_UI_ADAPTER_E2E_PENDING",
+        "workflow_commit": "6ea197c575ca31e9c9a13efdf45fdc6149773d35",
+        "workflow_blob_sha": "3863c6052701bdfe24ed3cf4d4d34d0aa325ce71",
+        "workflow_run_id": 34714136180,
+        "workflow_job_id": 103608081961,
+        "status": "completed",
+        "conclusion": "success",
+        "targeted_tests": {
+          "pass": 1,
+          "fail": 0
+        },
+        "package_tests": {
+          "pass": 19,
+          "fail": 0
+        },
+        "runner_sha256": "8082903343389b878dcb78b8c47e06e8f111c6b3a123d3a53486c056bf9bcf9e",
+        "ledger_sha256": "3dcfc7851ed254f6dd7206720bfad1ce9cccdf3fe1959907e2a61d54f8329fcd",
+        "restart_test_sha256": "2ebbaee44bddc3270ff4e6ead8a32ca0d8466569e95f2a618f81661a20313c54",
+        "log_read_back": true,
+        "ui_adapter_e2e": false,
+        "cancel_disconnect": false,
+        "no_duplicate_side_effects": false
+      },
       "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "closure": false
     },
     {
       "id": "A1-04",
-      "status": "PASS_REFUTATION_LIVE_BROWSER_REOPENS_FACTORY_NOT_GLOBAL_CLOSURE",
+      "status": "PASS_REFUTATION_RUNTIME_RESTART_SUBGATE_NOT_PRODUCT_RECOVERY_E2E",
       "refutations": [
-        "La reconciliación O-01 cierra únicamente el nodo de clasificación; el propio registro mantiene G12 global abierto y O-02 en ejecución.",
-        "La evidencia del frontend fábrica reabre su VERIFIED_CLOSED: el audit registrado esperaba 11 paneles, encontró 1 presente y 0 visibles.",
-        "Cuarenta clics sin error no prueban efecto funcional; las anteriores 28/28 pruebas fueron reclasificadas como cobertura insuficiente.",
-        "El job externo de navegador está referenciado por el estado fábrica, pero no fue leído independientemente en este ciclo; se conserva fail-closed.",
-        "La regresión de fábrica es un gate de producto separado y no cambia cuatro residuales ni integración 01-20.",
-        "Persisten los gaps X-Ray de guard pre-handler y verificación real de fuentes; no procede VERIFIED_CLOSED."
+        "Veinte pruebas PASS validan el paquete Wordflow y su ledger; no prueban la ruta UI→adaptador→runtime.",
+        "El workflow no contiene navegador, ActionBus, adaptador productivo ni reinicio del workspace completo.",
+        "La propia entrada S3 declara cancelación/desconexión y efectos duplicados como no probados.",
+        "El debate conserva el run como in_progress aunque el job ya terminó success; requiere reconciliación terminal.",
+        "El subgate no aporta fuente, Fables ni runtime a big-AGI, Vite o Vercel AI SDK y no cambia 17/20.",
+        "Cuatro destinos siguen 404 y persisten gaps X-Ray; no procede VERIFIED_CLOSED."
       ],
       "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
-      "closure": false,
-      "observed_out_of_scope_delta": {
-        "orchestrator_reconciliation_commit": "ce7d49bf2f20de7de90bb977055fcb465ef5aeb6",
-        "orchestrator_queue_blob_sha": "1184b5aa17d7d5e7d1da074bf8ebace686f82c25",
-        "o01": "PASS_AUDIT_NODE_GLOBAL_PROJECT_STILL_OPEN",
-        "o02": "EXECUTING",
-        "factory_reopen_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
-        "factory_state_blob_sha": "4548bc07f03a5ea61b673504774bddf7912bd4e6",
-        "live_browser_audit": {
-          "expected_panels": 11,
-          "present": 1,
-          "visible": 0,
-          "buttons_clicked": 40,
-          "click_failures": 0,
-          "result": "FAIL_FUNCTIONAL_UI_PANEL_VISIBILITY",
-          "external_job_independently_read": false
-        },
-        "factory_verified_closed": false
-      }
+      "closure": false
     }
   ],
   "instructions_for_owners": {
-    "SOL_GPT1_BACKEND": "Continuar S1-09 con prueba adversarial de frontera y persistencia/read-back. No usar el PASS de cola O-01 ni el frontend fábrica como evidencia de aislamiento; Vite y Supabase permanecen 404.",
-    "SOL_GPT2_BACKEND": "Continuar selector fail-closed por host y mantener DuckDB/AVF separados. No inferir soporte de hardware ni presencia física desde la reconciliación coordinadora.",
-    "SOL_GPT3_BACKEND": "Mantener 01-20 en 17/20 hasta evidencia actual de fuente+Fables+runtime para big-AGI, Vite y Vercel AI SDK. La regresión de fábrica no altera ese denominador.",
-    "ASTRA2_GPT_BACKEND": "Validar consumo real de Fables mediante adaptador integrado y prueba runtime. Mantener aparte los gaps X-Ray de guard pre-handler y verificación de fuente.",
-    "SOL_PLAN_ORQUESTADOR": "Reconciliar STATE/CHECKPOINT/HANDOFF con O-01 cerrado solo como auditoría y O-02 EXECUTING. Mantener T2 pausado hasta reparar los 11 paneles y demostrar efectos funcionales en navegador; leer el job externo y publicar evidencia reproducible. Conservar 120/124 y 17/20."
+    "SOL_GPT1_BACKEND": "Continuar S1-09 con frontera de memoria/agente y prueba adversarial pre-handler. El PASS del ledger/reinicio no demuestra aislamiento del workspace ni observación física de efectos.",
+    "SOL_GPT2_BACKEND": "Continuar selector fail-closed por host; mantener DuckDB y AVF separados y en 404 hasta adquisición/destino canónico con read-back.",
+    "SOL_GPT3_BACKEND": "Reconciliar run 34714136180/job 103608081961 como DURABLE_RUNTIME_RESTART_SUBGATE_PASS: 1 focal + 19 paquete PASS. Después localizar la ruta productiva UI→adaptador y probar navegador, cancelación/desconexión y no duplicación; no promover 01-20 ni Fables.",
+    "ASTRA2_GPT_BACKEND": "Validar consumo Fables en un adaptador integrado. No usar el PASS del ledger como sustituto de socket/adaptador/UI ni de verificación real de fuentes.",
+    "SOL_PLAN_ORQUESTADOR": "Reconciliar STATE/CHECKPOINT/HANDOFF y estado S3 con el resultado terminal, limitado al subgate runtime. Mantener O-02 abierto hasta E2E real UI→adaptador→runtime→persist→restart→resume con cancelación y no duplicación. Conservar 120/124 y 17/20."
   },
   "next_iteration": [
-    "Releer Crazy Wall y base SHA antes de cada nodo.",
-    "Comprobar si STATE/CHECKPOINT/HANDOFF incorporan la reconciliación O-01/O-02.",
-    "Revalidar exactamente los cuatro destinos residuales.",
-    "Mantener 01-20 hasta evidencia por componente.",
-    "Comprobar reparación y read-back independiente del frontend fábrica sin apropiarse de su cola."
+    "Releer Crazy Wall y SHA base antes de cada nodo.",
+    "Verificar reconciliación terminal del run S3 en estados canónicos.",
+    "Revalidar los cuatro destinos exactos.",
+    "Mantener 01-20 hasta evidencia fuente+Fables+runtime por pendiente.",
+    "Auditar el futuro E2E productivo sin ampliar el PASS del ledger."
   ],
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
   "research_delta": {
@@ -4162,24 +4172,163 @@
         "ASTRA2_GPT_BACKEND": "Validar consumo real del contrato Fables por un adaptador con prueba integrada. La nueva falla semántica de research refuerza que un hash de candidatos no equivale a fuente verificada.",
         "SOL_PLAN_ORQUESTADOR": "Crear y asignar tres nodos separados: guard de capacidad pre-handler, evidencia research con verificador de fuente, y partición acotada de suite runtime para evitar cancelación. Reconciliar sus resultados en STATE/CHECKPOINT/HANDOFF sin promover el reporte X-Ray INCONCLUSIVE. Conservar 120/124 y 17/20."
       }
+    },
+    {
+      "snapshot_reason": "PRE_S3_DURABLE_RESTART_TERMINAL_AUDIT",
+      "updated_at": "2026-09-12T18:31:47.000Z",
+      "base_sha": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
+      "nodes": [
+        {
+          "id": "A1-01",
+          "status": "PASS_AUDIT_QUEUE_RECONCILED_CANONICAL_SUMMARIES_STALE",
+          "finding": "La cola coordinadora ya marca O-01 como auditoría cerrada y O-02 como EXECUTING. STATE, CHECKPOINT y HANDOFF permanecen byte-idénticos y no incorporan esa reconciliación ni los hallazgos X-Ray.",
+          "evidence": {
+            "state_blob_sha": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
+            "checkpoint_blob_sha": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
+            "handoff_blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
+            "orchestrator_queue_blob_sha": "1184b5aa17d7d5e7d1da074bf8ebace686f82c25",
+            "factory_state_blob_sha": "4548bc07f03a5ea61b673504774bddf7912bd4e6",
+            "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea"
+          },
+          "closure": false
+        },
+        {
+          "id": "A1-02",
+          "status": "BLOCKED_FOUR_RESIDUALS_ABSENT",
+          "finding": "Los cuatro destinos finales literales continúan ausentes con 404 independiente; no existe read-back físico 124/124.",
+          "residuals": [
+            {
+              "name": "Vite",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Vite",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            },
+            {
+              "name": "Supabase",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            },
+            {
+              "name": "DuckDB",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            },
+            {
+              "name": "AVF",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/AVF",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            }
+          ],
+          "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "closure": false
+        },
+        {
+          "id": "A1-03",
+          "status": "PASS_AUDIT_17_OF_20_UNCHANGED",
+          "finding": "El informe canónico sigue generado el 2026-09-09 y permanece 17/20. big-AGI, Vite y Vercel AI SDK continúan PENDING_SOURCE; los cambios de cola coordinadora y frontend fábrica no aportan cableado Fables ni ejecución runtime para esos tres.",
+          "integration_01_20": {
+            "passed": 17,
+            "total": 20,
+            "pending": [
+              "big-AGI",
+              "Vite",
+              "Vercel AI SDK"
+            ],
+            "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1"
+          },
+          "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "closure": false
+        },
+        {
+          "id": "A1-04",
+          "status": "PASS_REFUTATION_LIVE_BROWSER_REOPENS_FACTORY_NOT_GLOBAL_CLOSURE",
+          "refutations": [
+            "La reconciliación O-01 cierra únicamente el nodo de clasificación; el propio registro mantiene G12 global abierto y O-02 en ejecución.",
+            "La evidencia del frontend fábrica reabre su VERIFIED_CLOSED: el audit registrado esperaba 11 paneles, encontró 1 presente y 0 visibles.",
+            "Cuarenta clics sin error no prueban efecto funcional; las anteriores 28/28 pruebas fueron reclasificadas como cobertura insuficiente.",
+            "El job externo de navegador está referenciado por el estado fábrica, pero no fue leído independientemente en este ciclo; se conserva fail-closed.",
+            "La regresión de fábrica es un gate de producto separado y no cambia cuatro residuales ni integración 01-20.",
+            "Persisten los gaps X-Ray de guard pre-handler y verificación real de fuentes; no procede VERIFIED_CLOSED."
+          ],
+          "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "closure": false,
+          "observed_out_of_scope_delta": {
+            "orchestrator_reconciliation_commit": "ce7d49bf2f20de7de90bb977055fcb465ef5aeb6",
+            "orchestrator_queue_blob_sha": "1184b5aa17d7d5e7d1da074bf8ebace686f82c25",
+            "o01": "PASS_AUDIT_NODE_GLOBAL_PROJECT_STILL_OPEN",
+            "o02": "EXECUTING",
+            "factory_reopen_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
+            "factory_state_blob_sha": "4548bc07f03a5ea61b673504774bddf7912bd4e6",
+            "live_browser_audit": {
+              "expected_panels": 11,
+              "present": 1,
+              "visible": 0,
+              "buttons_clicked": 40,
+              "click_failures": 0,
+              "result": "FAIL_FUNCTIONAL_UI_PANEL_VISIBILITY",
+              "external_job_independently_read": false
+            },
+            "factory_verified_closed": false
+          }
+        }
+      ],
+      "instructions_for_owners": {
+        "SOL_GPT1_BACKEND": "Continuar S1-09 con prueba adversarial de frontera y persistencia/read-back. No usar el PASS de cola O-01 ni el frontend fábrica como evidencia de aislamiento; Vite y Supabase permanecen 404.",
+        "SOL_GPT2_BACKEND": "Continuar selector fail-closed por host y mantener DuckDB/AVF separados. No inferir soporte de hardware ni presencia física desde la reconciliación coordinadora.",
+        "SOL_GPT3_BACKEND": "Mantener 01-20 en 17/20 hasta evidencia actual de fuente+Fables+runtime para big-AGI, Vite y Vercel AI SDK. La regresión de fábrica no altera ese denominador.",
+        "ASTRA2_GPT_BACKEND": "Validar consumo real de Fables mediante adaptador integrado y prueba runtime. Mantener aparte los gaps X-Ray de guard pre-handler y verificación de fuente.",
+        "SOL_PLAN_ORQUESTADOR": "Reconciliar STATE/CHECKPOINT/HANDOFF con O-01 cerrado solo como auditoría y O-02 EXECUTING. Mantener T2 pausado hasta reparar los 11 paneles y demostrar efectos funcionales en navegador; leer el job externo y publicar evidencia reproducible. Conservar 120/124 y 17/20."
+      },
+      "current_delta": {
+        "summary": "La cola coordinadora reconcilió O-01 como auditoría cerrada y O-02 en ejecución, pero los resúmenes canónicos siguen obsoletos. El frontend fábrica reabrió su cierre tras un audit de navegador con 11 paneles esperados, 1 presente y 0 visibles. Cuatro residuales 404; 01-20 17/20.",
+        "orchestrator": {
+          "commit": "ce7d49bf2f20de7de90bb977055fcb465ef5aeb6",
+          "queue_blob_sha": "1184b5aa17d7d5e7d1da074bf8ebace686f82c25",
+          "o01": "PASS_AUDIT_NODE_GLOBAL_PROJECT_STILL_OPEN",
+          "o02": "EXECUTING"
+        },
+        "factory": {
+          "reopen_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
+          "state_blob_sha": "4548bc07f03a5ea61b673504774bddf7912bd4e6",
+          "status": "ACTIVE_LOOP_REGRESSION_GAP",
+          "expected_panels": 11,
+          "present": 1,
+          "visible": 0,
+          "external_job_independently_read": false
+        },
+        "residuals_absent": [
+          "Vite",
+          "Supabase",
+          "DuckDB",
+          "AVF"
+        ],
+        "integration_01_20": "17/20",
+        "own_state_only": true,
+        "verified_closed": false
+      },
+      "instructions": {
+        "SOL_GPT1_BACKEND": "Continuar S1-09 con prueba adversarial de frontera y persistencia/read-back. No usar el PASS de cola O-01 ni el frontend fábrica como evidencia de aislamiento; Vite y Supabase permanecen 404.",
+        "SOL_GPT2_BACKEND": "Continuar selector fail-closed por host y mantener DuckDB/AVF separados. No inferir soporte de hardware ni presencia física desde la reconciliación coordinadora.",
+        "SOL_GPT3_BACKEND": "Mantener 01-20 en 17/20 hasta evidencia actual de fuente+Fables+runtime para big-AGI, Vite y Vercel AI SDK. La regresión de fábrica no altera ese denominador.",
+        "ASTRA2_GPT_BACKEND": "Validar consumo real de Fables mediante adaptador integrado y prueba runtime. Mantener aparte los gaps X-Ray de guard pre-handler y verificación de fuente.",
+        "SOL_PLAN_ORQUESTADOR": "Reconciliar STATE/CHECKPOINT/HANDOFF con O-01 cerrado solo como auditoría y O-02 EXECUTING. Mantener T2 pausado hasta reparar los 11 paneles y demostrar efectos funcionales en navegador; leer el job externo y publicar evidencia reproducible. Conservar 120/124 y 17/20."
+      }
     }
   ],
   "current_delta": {
-    "summary": "La cola coordinadora reconcilió O-01 como auditoría cerrada y O-02 en ejecución, pero los resúmenes canónicos siguen obsoletos. El frontend fábrica reabrió su cierre tras un audit de navegador con 11 paneles esperados, 1 presente y 0 visibles. Cuatro residuales 404; 01-20 17/20.",
-    "orchestrator": {
-      "commit": "ce7d49bf2f20de7de90bb977055fcb465ef5aeb6",
-      "queue_blob_sha": "1184b5aa17d7d5e7d1da074bf8ebace686f82c25",
-      "o01": "PASS_AUDIT_NODE_GLOBAL_PROJECT_STILL_OPEN",
-      "o02": "EXECUTING"
-    },
-    "factory": {
-      "reopen_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
-      "state_blob_sha": "4548bc07f03a5ea61b673504774bddf7912bd4e6",
-      "status": "ACTIVE_LOOP_REGRESSION_GAP",
-      "expected_panels": 11,
-      "present": 1,
-      "visible": 0,
-      "external_job_independently_read": false
+    "summary": "S3 obtuvo 1 prueba focal y 19 pruebas Wordflow PASS en el run 34714136180. Es un subgate de persistencia/replay/reinicio del runtime; UI→adaptador, cancelación, desconexión y no duplicación siguen pendientes. Estados canónicos obsoletos, cuatro residuales 404 e integración 17/20.",
+    "runtime_restart": {
+      "run": 34714136180,
+      "job": 103608081961,
+      "classification": "DURABLE_RUNTIME_RESTART_SUBGATE_PASS_UI_ADAPTER_E2E_PENDING",
+      "targeted_pass": 1,
+      "package_pass": 19,
+      "ui_adapter_e2e": false,
+      "cancel_disconnect": false,
+      "no_duplicate_side_effects": false
     },
     "residuals_absent": [
       "Vite",
@@ -4192,10 +4341,10 @@
     "verified_closed": false
   },
   "instructions": {
-    "SOL_GPT1_BACKEND": "Continuar S1-09 con prueba adversarial de frontera y persistencia/read-back. No usar el PASS de cola O-01 ni el frontend fábrica como evidencia de aislamiento; Vite y Supabase permanecen 404.",
-    "SOL_GPT2_BACKEND": "Continuar selector fail-closed por host y mantener DuckDB/AVF separados. No inferir soporte de hardware ni presencia física desde la reconciliación coordinadora.",
-    "SOL_GPT3_BACKEND": "Mantener 01-20 en 17/20 hasta evidencia actual de fuente+Fables+runtime para big-AGI, Vite y Vercel AI SDK. La regresión de fábrica no altera ese denominador.",
-    "ASTRA2_GPT_BACKEND": "Validar consumo real de Fables mediante adaptador integrado y prueba runtime. Mantener aparte los gaps X-Ray de guard pre-handler y verificación de fuente.",
-    "SOL_PLAN_ORQUESTADOR": "Reconciliar STATE/CHECKPOINT/HANDOFF con O-01 cerrado solo como auditoría y O-02 EXECUTING. Mantener T2 pausado hasta reparar los 11 paneles y demostrar efectos funcionales en navegador; leer el job externo y publicar evidencia reproducible. Conservar 120/124 y 17/20."
+    "SOL_GPT1_BACKEND": "Continuar S1-09 con frontera de memoria/agente y prueba adversarial pre-handler. El PASS del ledger/reinicio no demuestra aislamiento del workspace ni observación física de efectos.",
+    "SOL_GPT2_BACKEND": "Continuar selector fail-closed por host; mantener DuckDB y AVF separados y en 404 hasta adquisición/destino canónico con read-back.",
+    "SOL_GPT3_BACKEND": "Reconciliar run 34714136180/job 103608081961 como DURABLE_RUNTIME_RESTART_SUBGATE_PASS: 1 focal + 19 paquete PASS. Después localizar la ruta productiva UI→adaptador y probar navegador, cancelación/desconexión y no duplicación; no promover 01-20 ni Fables.",
+    "ASTRA2_GPT_BACKEND": "Validar consumo Fables en un adaptador integrado. No usar el PASS del ledger como sustituto de socket/adaptador/UI ni de verificación real de fuentes.",
+    "SOL_PLAN_ORQUESTADOR": "Reconciliar STATE/CHECKPOINT/HANDOFF y estado S3 con el resultado terminal, limitado al subgate runtime. Mantener O-02 abierto hasta E2E real UI→adaptador→runtime→persist→restart→resume con cancelación y no duplicación. Conservar 120/124 y 17/20."
   }
 }
