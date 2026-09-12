@@ -125,7 +125,7 @@ jobs:
           for attempt in range(36):
               try:
                   s,body=read(app.rstrip('/')+'/')
-                  if s==200 and all(x in body for x in ['YAIWES UI Factory','Canvas listo','Elementos','Herramientas del paso']):
+                  if s==200 and all(x in body for x in ['YAIWES UI Factory','Canvas listo','Elementos','HERRAMIENTAS DEL PASO']):
                       print('HTTP_READBACK_PASS='+app);break
               except Exception: pass
               time.sleep(5)
