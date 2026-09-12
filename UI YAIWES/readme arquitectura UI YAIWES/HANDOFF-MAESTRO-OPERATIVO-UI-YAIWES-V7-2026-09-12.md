@@ -7,67 +7,81 @@ Contrato: `tel.workflow/v3`
 Modo: `FAIL_CLOSED_LOOP`
 Estado: `ACTIVE_LOOP_NOT_CLOSED`
 
-## Punto de entrada único
+## Punto de entrada único — orden obligatorio
 
-1. `ARQUITECTURA-WORDFLOW-PYTHON-DSL-DAG-96-4-V7-2026-09-12.md`
-2. `CROSSCHECK-3-FUENTES-WORDFLOW-2026-09-11.json`
-3. `AUDIT-GAP-LEDGER-4AI-2026-09-11.json`
-4. `CRAZY-WALL-TASK-QUEUE-MULTI-AI-V2-2026-09-12.json`
-5. `NOTAS-ASTRA-100X-CROSSCHECK-CODE-COMPONENTS-2026-09-12.md`
-6. los 3 documentos fuente de verdad del Wordflow/Virtual Computer/MAX-SYSTEM.
-7. HEAD real + workflow runs reales.
+1. `UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-WORDFLOW-PYTHON-DSL-DAG-96-4-V7-2026-09-12.md`
+2. `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json`
+3. `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/WORDFLOW-FILE-BY-FILE-XRAY-2026-09-12.md`
+4. `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CROSSCHECK-3-FUENTES-WORDFLOW-2026-09-11.json`
+5. `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/AUDIT-GAP-LEDGER-4AI-2026-09-11.json`
+6. `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-QUEUE-MULTI-AI-V2-2026-09-12.json`
+7. `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/NOTAS-ASTRA-100X-CROSSCHECK-CODE-COMPONENTS-2026-09-12.md`
+8. Los 3 documentos fuente de verdad: MAX-SYSTEM, Virtual Computer/14 objetivos y Memory/Audit Wordflow.
+9. HEAD real + Actions/runs reales + reports/role states frescos.
 
-## Estado probado
+Autoridad: `code/runtime/test/log real > Crazy Wall/STATE/checkpoint > arquitectura/handoff > documentos fuente > memoria chat > inferencia`.
 
-- Wordflow fail-closed: `contracts.py`, `runner.py`, `ledger.py`, L01–L06, governance.
-- Fables + Stabilize bridge: TESTED.
-- OPA/OpenFGA policy lane: SOURCE_PRESENT + FABLES_WIRED + LIVE_RUNTIME_PASS.
-- Durable ledger/restart/tamper subgates: PASS.
-- Python DSL/DAG P01–P23 creado en `wordflow_loop/architecture_dsl.py`.
-- LLM gate actualizado a máximo 4%; determinismo objetivo 96%.
+## Arquitectura ejecutable vigente
 
-## GAPs globales que siguen abiertos
+- Python DSL/DAG: `wordflow_loop/wordflow_loop/architecture_dsl.py`.
+- P01–P23 congelados como procesos fuente.
+- Determinismo mínimo `96%`.
+- LLM máximo `4%`; sólo P09/P10/P19 pueden usarlo para ambigüedad/ranking/resumen acotado.
+- Owner workflow único: `stabilize_core`.
+- `runtime/src/core/workflow_definition.py` sigue siendo la proyección Python de ejecución; no crear segundo scheduler/DAG owner.
 
-- Memory/Audit Orchestrator + retrieval/context fabric.
-- Agent↔Memory↔Tools↔Workflow.
-- Sandbox/UEK + VM/platform router.
-- Integration/Consolidator/Coverage/Final Judge.
-- Workspace/global recovery E2E.
-- Resource Brain/router global.
-- API/control surface.
-- G12 bidireccional 100%.
+## Estado probado / no repetir como nuevo
 
-## Cola por carriles
+- Contracts + literal hash + Evidence fuerte.
+- LayerRunner fail-closed + Sheriff/Validator/Sentinel/Verifier/Supervisor/Judge/Guardian.
+- Ledger hash-chain + locking + fsync + atomic replace + restart/tamper subgates.
+- Layers L01–L06.
+- Fables + Stabilize bridge TESTED.
+- OPA/OpenFGA: SOURCE_PRESENT + FABLES_WIRED + LIVE_RUNTIME_PASS en policy sublane.
 
-- SOL_GPT1: memory/agent boundary y local-first memory.
-- SOL_GPT2: platform/sandbox/UEK/adapters/telemetry.
-- SOL_GPT3: integration/Fables/E2E/component batches.
-- ASTRA_GPT: 4-pass docs↔code, research/dedup 100x, sólo code unowned de audit/coverage/consolidation.
-- SOL_ORQUESTADOR: G12, recovery global, OSS5, publish blockers, final judge y consolidación shared.
+## GAPs first-party confirmados por read-back fresco
 
-## Regla nodo
+- `runtime/src/adapters`: README-only.
+- `runtime/src/agent`: `.gitkeep`.
+- `runtime/src/integration`: README-only.
+- `runtime/src/recovery`, `uek`, `storage`, `conn`, `observability`, `mission`, `install`: `.gitkeep`.
 
-`FREE → CLAIMED → EXECUTING → PASS|GAP → REPORT`
+Vacío por sí solo NO autoriza code. Primero: source requirement → dedup/equivalence → owner/write_scope → delta mínimo → test.
 
-Cada nodo máximo 3 pasos:
+## Carriles / nodos
+
+- SOL_GPT1: P08 Memory → P09 Retrieval → P10 Context Fabric → local-first storage/agent boundary.
+- SOL_GPT2: P11 Sandbox/UEK → P12 Worker boundary → P16 Router → OTel runtime boundary.
+- SOL_GPT3: P20 Global Integration → P17 Continuous Loop → P22 Python API/control.
+- ASTRA_GPT: P14 Audit5 → P15 Consolidator → P21 Five-pass + P19 research/dedup + mission/install classification.
+- SOL_ORQUESTADOR: P18 recovery/reconstruction + G12 global bidirectional coverage + shared consolidation/final judge.
+
+Nodo lifecycle:
+`FREE → CLAIMED → EXECUTING → PASS|GAP → REPORT`.
+
+Máximo 3 pasos:
 `VERIFY_OR_RESEARCH → EXECUTE_AUTHORIZED_DELTA → TEST_AND_REPORT`.
 
-Claim obligatorio:
-`role + node_id + fresh_base_main_sha + write_scope + claimed_at`.
+Claim: `role + node_id + fresh_base_main_sha + write_scope + claimed_at`.
+Report: `paths + SHA/blob + run/job/log + evidence + gaps + next_free_node`.
 
-Report obligatorio:
-`paths + SHA/blob + run/job/log + evidence + gaps + next_free_node`.
+## CI global — gate P3
 
-## CI global
+Workflow: `.github/workflows/yaiwes-wordflow-loop-pytest.yml`.
+Corre todo `wordflow_loop/tests` y todo `runtime/tests`.
 
-Workflow: `.github/workflows/yaiwes-wordflow-loop-pytest.yml`
-Ejecuta:
-- `python -m pytest -q` sobre todo `wordflow_loop/tests`.
-- `python -m pytest -q tests` sobre todo `runtime/tests`.
+Blind spot corregido en commit `baed8f07e9a205f28def181931d9eb7420e76fd7`:
+- trigger ahora incluye `runtime/src/**`;
+- sparse-checkout ahora incluye `runtime/src` completo.
 
-El run asociado al commit del test 96/4 debe usarse como gate; hasta `completed/success` no promover el nuevo DSL a TESTED.
+Run gate: `34716613952`; estado observado al último snapshot: `PENDING`. No promover DSL 96/4 ni “test total” a PASS hasta `completed/success` y read-back de job/log.
+
+## Regla de mejora / componentes
+
+`REUSE_EXISTING > PATCH > ADAPT > GENERATE > NEW_DOWNLOAD`.
+No añadir otro gran orquestador. Componentes nuevos sólo por capability gap único probado, con provenance/destino/motor canónico.
 
 ## Cierre
 
 `SPECIFIED != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED`.
-Sólo el Final Judge puede cerrar cuando G12 y los límites Memory/Agent/Sandbox/Integration/Recovery estén 100% evidenciados.
+Final Judge sólo puede cerrar con G12 100% y Memory/Audit + Agent + Sandbox/UEK + Integration/Consolidator + Recovery + platform routing evidenciados.
