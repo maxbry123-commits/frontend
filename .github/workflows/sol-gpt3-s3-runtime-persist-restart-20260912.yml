@@ -1,0 +1,58 @@
+name: S3 runtime persist restart validation
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/sol-gpt3-s3-runtime-persist-restart-20260912.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sol-gpt3-s3-runtime-persist-restart
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Route and source readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop'
+          test -f "$ROOT/wordflow_loop/runner.py"
+          test -f "$ROOT/wordflow_loop/ledger.py"
+          test -f "$ROOT/tests/test_recovery_latest_status.py"
+          sha256sum "$ROOT/wordflow_loop/runner.py" "$ROOT/wordflow_loop/ledger.py" "$ROOT/tests/test_recovery_latest_status.py"
+
+      - name: Install package and pytest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check pytest
+          python -m pip install --disable-pip-version-check -e 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop'
+
+      - name: Durable persist restart resume regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          pytest -q 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_recovery_latest_status.py'
+
+      - name: Current Wordflow package regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          pytest -q 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests'
