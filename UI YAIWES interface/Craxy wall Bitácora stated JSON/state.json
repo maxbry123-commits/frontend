@@ -1,13 +1,13 @@
 {
-  "v": 6,
+  "v": 7,
   "tab": "B",
   "mode": "ask",
   "proyecto": "UI YAIWES interface beta",
-  "updated": "2026-09-12T02:49:52-05:00",
-  "fase": "T2-RECON-39-WINDOWS",
-  "parte_actual": "RECON",
-  "ok_ids": [],
-  "pending_next": "T2-R1_MAP_39_WINDOWS_TO_PRODUCT_CAPABILITIES",
+  "updated": "2026-09-12T04:49:37-05:00",
+  "fase": "T2-R5-FIRST-MODULE-PREFLIGHT",
+  "parte_actual": "PREFLIGHT_COMPLETE_IMPLEMENTATION_NOT_STARTED",
+  "ok_ids": ["T2-R1","T2-R2","T2-R3"],
+  "pending_next": "T2-R5A_ADAPT_CODEMIRROR_MINIMUM_CAPABILITY_IN_FACTORY_WORKFLOW",
   "conteo": {
     "fotos14": 14,
     "gbot": 1,
@@ -23,24 +23,32 @@
     "00": "39 FROMTED split subidas. Fábrica DAG+seguridad+empaque.",
     "20": "hot path wordflow: no reescribir runner. fuera de este lote UI.",
     "t1": "T1_FACTORY_FRONTEND VERIFIED_CLOSED: source 8d5a7ed86f9af517b0d42f5aad9e2f7359edd7f0; HF 9aa43978497e9bd9fba9d9ecea11ac8e83b01764.",
-    "t2": "Recon físico confirma 39 ventanas, no 38. Antes de módulos: mapear ventanas, backend/API-MCP y donantes OSS."
+    "t2": "R1 39 ventanas VERIFIED_COMPLETE; R2 backend/API/MCP boundary VERIFIED_COMPLETE; R3 OSS donor capability map VERIFIED_COMPLETE; R4 Sol A/B coordinado pero esperando claims de sus owners; R5 preflight del primer módulo completo, sin implementación.",
+    "oss": "Shortlist frontend: CodeMirror 6, Lucide, Excalidraw, PDF.js, Chart.js. Presencia no equivale a runtime PASS.",
+    "sol": "SOL_FACTORY_A_T1_CONTRACT_CONSUMER y SOL_FACTORY_B_T1_OSS_BACKEND_DONOR_REVIEW siguen READY_TO_CLAIM; Astra no reclama nodos Sol."
   },
   "extra": [],
   "sel": "20",
   "selKind": "block",
   "metodo": "LOOP L0-L10 + 01-original + 02-fromted",
   "loop": {
-    "step": "T2-R1",
-    "current": "MAP_39_WINDOWS_TO_PRODUCT_CAPABILITIES"
+    "step": "T2-R5A",
+    "current": "ADAPT_CODEMIRROR_MINIMUM_CAPABILITY_IN_FACTORY_WORKFLOW"
   },
   "t1_gate": "VERIFIED_CLOSED",
   "t2": {
-    "status": "RECON_ACTIVE",
+    "status": "R5_PREFLIGHT_COMPLETE_IMPLEMENTATION_NOT_STARTED",
     "owner": "➡️ Astra plan fábrica UI YAIWES",
     "frontend_root": "UI YAIWES interface/Fromtend/",
     "backend_root": "UI YAIWES interface/Backend/",
     "backend_policy": "DONOR_STAGING_ONLY",
-    "recon_evidence": "UI YAIWES interface/Fromtend/project-memory/T2-RECON-39-WINDOWS-2026-09-12.json"
+    "recon_evidence": "UI YAIWES interface/Fromtend/project-memory/T2-RECON-39-WINDOWS-2026-09-12.json",
+    "r1_evidence": "UI YAIWES interface/Fromtend/project-memory/T2-R1-WINDOW-CAPABILITY-MAP-2026-09-12.json",
+    "r2_evidence": "UI YAIWES interface/Backend/project-memory/T2-R2-BACKEND-API-MCP-BOUNDARY-MAP-2026-09-12.json",
+    "r3_evidence": "UI YAIWES interface/Fromtend/project-memory/T2-R3-OSS-DONOR-CAPABILITY-MAP-2026-09-12.json",
+    "r4_evidence": "UI YAIWES interface/Fromtend/project-memory/T2-R4-SOL-COORDINATION-2026-09-12.json",
+    "r5_preflight": "UI YAIWES interface/Fromtend/project-memory/T2-R5-FIRST-MODULE-PREFLIGHT-2026-09-12.json",
+    "first_module": "M_RUNTIME_ORCHESTRATION"
   },
   "legacy_aesthetic_checkpoint": {
     "phase": "S6-SHOW-RUN-01",
