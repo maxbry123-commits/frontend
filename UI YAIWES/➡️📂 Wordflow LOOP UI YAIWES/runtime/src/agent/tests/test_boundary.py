@@ -25,6 +25,17 @@ class FakeAgentLoop:
         self.tools = tools
 
 
+class FakeToolRegistry:
+    def __init__(self, *names: str):
+        self._names = names
+
+    def schemas(self):
+        return [
+            {"type": "function", "function": {"name": name, "parameters": {}}}
+            for name in self._names
+        ]
+
+
 class AgentBoundaryTests(unittest.TestCase):
     def _request(self) -> AgentBoundaryRequest:
         return AgentBoundaryRequest(
@@ -91,10 +102,21 @@ class AgentBoundaryTests(unittest.TestCase):
         self.assertNotIn("canonical_memory_writer", context)
         self.assertNotIn("save_memory", context)
 
+    def test_unknown_llm_context_key_fails_closed(self):
+        with self.assertRaisesRegex(
+            AgentBoundaryError, "unsupported_llm_context_keys:memory_writer"
+        ):
+            build_stage_context(
+                self._request(),
+                context_pack={},
+                llm_input={"prompt": "solve", "memory_writer": object()},
+            )
+
     def test_existing_agent_loop_type_is_composed_not_reimplemented(self):
         client = object()
-        tools = object()
+        tools = FakeToolRegistry("search", "code")
         loop = build_agent_loop(
+            self._request(),
             client=client,
             tools=tools,
             agent_loop_type=FakeAgentLoop,
@@ -102,6 +124,16 @@ class AgentBoundaryTests(unittest.TestCase):
         self.assertIsInstance(loop, FakeAgentLoop)
         self.assertIs(loop.client, client)
         self.assertIs(loop.tools, tools)
+
+    def test_tool_registry_must_match_policy_authorized_tools(self):
+        with self.assertRaisesRegex(
+            AgentBoundaryError, "tool_registry_authorization_mismatch"
+        ):
+            build_agent_loop(
+                self._request(),
+                tools=FakeToolRegistry("search", "code", "unauthorized"),
+                agent_loop_type=FakeAgentLoop,
+            )
 
     def test_candidate_result_is_explicitly_noncanonical(self):
         candidate = candidate_from_task_outputs(
