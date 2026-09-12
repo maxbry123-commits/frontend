@@ -1,0 +1,31 @@
+{
+  "schema": "yaiwes.s2.duckdb.publish-gap.v1",
+  "role": "SOL_GPT2_BACKEND",
+  "node": "S2-01",
+  "component": "DuckDB",
+  "observed_main_sha_before_write": "8299a4102bdc3b8246cabcd6c936180021eb0c75",
+  "workflow": ".github/workflows/sol-gpt2-s2-01-duckdb-materialize-20260911.yml",
+  "run_id": 34567558458,
+  "job_id": 103162673765,
+  "canonical_motors_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
+  "observed_steps": {
+    "motor_2_download_extract": "PASS",
+    "refresh_before_move": "PASS",
+    "motor_4_move": "PASS",
+    "publish_motor_4_move_without_force": "FAIL",
+    "final_readback": "SKIPPED"
+  },
+  "expected_publish_commit_message": "build(yaiwes): materialize DuckDB via canonical motors",
+  "expected_publish_commit_found_on_main": false,
+  "canonical_final_readback_at_last_check": "404_ABSENT",
+  "classification": "PUBLISH_GAP_EXACT_SUBCAUSE_UNAVAILABLE",
+  "reason": "GitHub job metadata proves the publication step failed after Motor 2 and Motor 4 passed, but the connector did not expose a reliable fatal-line subtype for Step 8. No rebase/push subcause is inferred.",
+  "safety": {
+    "motor_modified": false,
+    "force_used": false,
+    "lfs_used": false,
+    "manual_alternate_mover_used": false,
+    "verified_closed_claimed": false
+  },
+  "next_gate": "Do not mark DuckDB present until a permitted publication path succeeds and canonical final-root readback is verified."
+}
