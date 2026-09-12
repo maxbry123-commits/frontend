@@ -3,8 +3,8 @@
   "contract": "tel.workflow/v3",
   "role": "ASTRA_GPT1_BACKEND",
   "name": "🧑‍💻Astra gpt 1 backend UI YAIWES 🌀🌀🌀 👷👷🕵️‍♀️",
-  "updated_at": "2026-09-12T03:33:13.572Z",
-  "base_sha": "37bd728a9f43ac8baa8cb380360a3fa144733cae",
+  "updated_at": "2026-09-12T05:34:58.592Z",
+  "base_sha": "d62b02cc95a5d732b7531b99ae597d4d14b1aa7a",
   "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
   "status": "ACTIVE_LOOP_GAPS_OPEN",
   "scope": "A1 audit only; sole write path is this role_state_path",
@@ -57,7 +57,7 @@
     },
     {
       "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/S3-SOL-PLAN-DEBATE-2026-09-11.json",
-      "blob_sha": "3c3d07874dabc50592580180fa0c023dbbe7cbf9"
+      "blob_sha": "c2f5b8604e0483d5709d0c444026d5921706e536"
     },
     {
       "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_testcontainers_httpx_real_adapter.py",
@@ -71,8 +71,8 @@
   "nodes": [
     {
       "id": "A1-01",
-      "status": "AUDITED_CANONICAL_SUMMARIES_STALE",
-      "base_sha": "37bd728a9f43ac8baa8cb380360a3fa144733cae",
+      "status": "AUDITED_STALE_CANONICAL_SUMMARIES_WITH_NEW_AUX_DELTA",
+      "base_sha": "d62b02cc95a5d732b7531b99ae597d4d14b1aa7a",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "wall_reads_before_nodes": [
         "2404928bd332e2abb1466c9a4095bd52bd24acea",
@@ -86,14 +86,14 @@
         "HANDOFF": "8302687aaebdd48b9364f5febec8e90dfcffbd49"
       },
       "findings": [
-        "STATE, CHECKPOINT and canonical HANDOFF remain byte-identical and do not include S3 CodeMirror round16.",
-        "The S3 canonical role state also remains stale; the fresh result is in its debate artifact only."
+        "STATE, CHECKPOINT and canonical HANDOFF remain byte-identical.",
+        "S3 PixiJS evidence exists only in its debate artifact; canonical S3 state remains unchanged."
       ]
     },
     {
       "id": "A1-02",
       "status": "EVIDENCE_AUDITED_CLOSURE_BLOCKED",
-      "base_sha": "37bd728a9f43ac8baa8cb380360a3fa144733cae",
+      "base_sha": "d62b02cc95a5d732b7531b99ae597d4d14b1aa7a",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "residuals": [
         {
@@ -123,13 +123,13 @@
       ],
       "findings": [
         "All four exact canonical destination paths still return 404.",
-        "No new destination tree hash/read-back closes a residual."
+        "No current source/tree hash plus exact final read-back closes any residual."
       ]
     },
     {
       "id": "A1-03",
-      "status": "AUDITED_CODEMIRROR_ROUND16_STALE_01_20",
-      "base_sha": "37bd728a9f43ac8baa8cb380360a3fa144733cae",
+      "status": "AUDITED_PIXIJS_RUNTIME_PASS_STALE_01_20",
+      "base_sha": "d62b02cc95a5d732b7531b99ae597d4d14b1aa7a",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1",
       "reported_pass": 17,
@@ -140,41 +140,52 @@
         "Vercel AI SDK"
       ],
       "new_independent_evidence": {
-        "lane": "S3 batch 21-40 CodeMirror 6",
-        "debate_blob_sha": "3c3d07874dabc50592580180fa0c023dbbe7cbf9",
-        "workflow_run": 34669533291,
-        "job_id": 103488124661,
-        "head_sha": "60db2b70942a8868d75dc8b4848328f79ad51726",
-        "result": "PREPARE_FAIL_NOT_PASS",
-        "steps": "route metadata PASS; install --ignore-scripts PASS; npm run prepare FAIL; tests SKIPPED",
-        "root_cause_classification": "CURRENT_VENDOR_SNAPSHOT_IS_UPSTREAM_DEV_SCAFFOLD_WITHOUT_DECLARED_WORKSPACE_PACKAGE_DIRECTORIES",
-        "readback": "state/package.json 404; required workspaces absent",
-        "scope": "Separate 21-40 lane; does not modify integration 01-20."
+        "lane": "S3 batch 21-40 PixiJS",
+        "debate_blob_sha": "c2f5b8604e0483d5709d0c444026d5921706e536",
+        "workflow_run": 34674538504,
+        "job_id": 103501914450,
+        "head_sha": "1cdef1a6ce35f0389761011d3dd559e6cde91e98",
+        "result": "RUNTIME_PASS_NOT_WIRED",
+        "log_read_back": true,
+        "package": "pixi.js@8.20.1",
+        "runtime": "Node 24 / npm 11.19.0",
+        "steps": [
+          "source metadata PASS",
+          "npm install --ignore-scripts PASS",
+          "npm run build PASS",
+          "npm run test:types PASS"
+        ],
+        "type_assertions": [
+          ".configs/tsconfig.build.json PASS",
+          "examples/tsconfig.json PASS",
+          "playground/tsconfig.json PASS"
+        ],
+        "scope": "Separate 21-40 lane; no Fables wiring or product E2E demonstrated."
       },
       "findings": [
-        "The third CodeMirror attempt confirms incomplete source shape; it is not a transient npm lifecycle failure.",
-        "Canonical integration 01-20 remains 17/20 and byte-identical."
+        "PixiJS current source builds and its three type configurations pass in CI.",
+        "This does not change canonical integration 01-20, which remains byte-identical at 17/20."
       ]
     },
     {
       "id": "A1-04",
       "status": "INSTRUCTIONS_PUBLISHED_IN_OWN_STATE",
-      "base_sha": "37bd728a9f43ac8baa8cb380360a3fa144733cae",
+      "base_sha": "d62b02cc95a5d732b7531b99ae597d4d14b1aa7a",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "refutations": [
-        "Running cm install is an acquisition operation because it clones multiple package repositories; it cannot be treated as a test-only preparation step.",
-        "A dev scaffold without required workspace package directories is not a complete CodeMirror component snapshot.",
-        "Debate evidence does not reconcile canonical S3 state, STATE, CHECKPOINT or HANDOFF.",
-        "No auxiliary 21-40 result changes Action124 120/124 or integration 17/20."
+        "PixiJS build and type-test PASS is not WIRED or product E2E evidence.",
+        "The new HF OIDC workflow change is outside the four residual and 01-20 evidence lanes and cannot change their denominators.",
+        "Debate-only results do not reconcile canonical S3 state, STATE, CHECKPOINT or HANDOFF.",
+        "The four 404 destination read-backs prohibit 124/124 physical closure."
       ]
     }
   ],
   "instructions_for_owners": {
     "SOL_GPT1_BACKEND": "Keep Vite/Supabase fail-closed until literal final destinations are published. Then use only pinned canonical motors and record source ref, tree hash, failed=0, pending=0 and exact read-back; hand verified Vite to S3.",
     "SOL_GPT2_BACKEND": "Keep DuckDB symlink and AVF provider/capability gaps fail-closed. Continue only coordinator-approved provider/source-shape work; do not patch immutable motors or infer guest boot.",
-    "SOL_GPT3_BACKEND": "Reconcile CodeMirror run 34669533291/job 103488124661 into canonical S3 state as PREPARE_FAIL_NOT_PASS. Stop blind retries. Submit the exact list of required CodeMirror workspace repositories/refs/destinations to the coordinator for canonical acquisition or reject this snapshot; do not run cm install as an implicit downloader.",
-    "ASTRA2_GPT_BACKEND": "Canonical state remains READY_TO_CLAIM. Claim a concrete A2 node with node_id/base SHA/claimed_at and validate actual Fables consumption; do not promote generic socket or research-only evidence.",
-    "COORDINATOR": "Reconcile STATE/CHECKPOINT/HANDOFF and canonical role states. Decide a pinned canonical acquisition plan for CodeMirror's required workspace repositories or mark the current dev scaffold unsuitable. Publish literal Vite/Supabase destinations and approved DuckDB/AVF strategies. Keep Action124 120/124, integration 17/20 and auxiliary lanes separate."
+    "SOL_GPT3_BACKEND": "Promote PixiJS only to RUNTIME_PASS_NOT_WIRED using run 34674538504/job 103501914450 and reconcile it into canonical S3 state. Do not count build/type PASS as Fables wiring or E2E. CodeMirror remains incomplete and NOT_PASS; continue the next independent authorized node.",
+    "ASTRA2_GPT_BACKEND": "Canonical state remains READY_TO_CLAIM. Claim a concrete node with node_id/base SHA/claimed_at and validate actual Fables consumption; do not promote generic socket or research-only evidence.",
+    "COORDINATOR": "Reconcile STATE/CHECKPOINT/HANDOFF and canonical role states. Keep Action124 120/124, integration 17/20 and auxiliary 21-40 results separate. Resolve literal Vite/Supabase destinations, DuckDB/AVF strategy and CodeMirror canonical source shape."
   },
   "next_iteration": [
     "Re-read wall and canonical summaries.",
@@ -1298,17 +1309,141 @@
         "mutation_performed": "OWN_STATE_ONLY",
         "new_evidence": "S3 CodeMirror run 34666274252/job 103478672955 failed after installation because the required cm install workspace state is absent; cm install would clone additional package repositories and needs canonical acquisition approval. Four residual exact paths remain absent and integration 01-20 stays 17/20."
       }
+    },
+    {
+      "snapshot_reason": "Preserve previous A1 state before PixiJS audit",
+      "updated_at": "2026-09-12T03:33:13.572Z",
+      "base_sha": "37bd728a9f43ac8baa8cb380360a3fa144733cae",
+      "nodes": [
+        {
+          "id": "A1-01",
+          "status": "AUDITED_CANONICAL_SUMMARIES_STALE",
+          "base_sha": "37bd728a9f43ac8baa8cb380360a3fa144733cae",
+          "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "wall_reads_before_nodes": [
+            "2404928bd332e2abb1466c9a4095bd52bd24acea",
+            "2404928bd332e2abb1466c9a4095bd52bd24acea",
+            "2404928bd332e2abb1466c9a4095bd52bd24acea",
+            "2404928bd332e2abb1466c9a4095bd52bd24acea"
+          ],
+          "evidence": {
+            "STATE": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
+            "CHECKPOINT": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
+            "HANDOFF": "8302687aaebdd48b9364f5febec8e90dfcffbd49"
+          },
+          "findings": [
+            "STATE, CHECKPOINT and canonical HANDOFF remain byte-identical and do not include S3 CodeMirror round16.",
+            "The S3 canonical role state also remains stale; the fresh result is in its debate artifact only."
+          ]
+        },
+        {
+          "id": "A1-02",
+          "status": "EVIDENCE_AUDITED_CLOSURE_BLOCKED",
+          "base_sha": "37bd728a9f43ac8baa8cb380360a3fa144733cae",
+          "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "residuals": [
+            {
+              "name": "Vite",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Vite",
+              "readback": "404_NOT_FOUND_AT_BASE_SHA",
+              "scope_limit": "Exact final path only; repository-wide absence not inferred"
+            },
+            {
+              "name": "Supabase",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
+              "readback": "404_NOT_FOUND_AT_BASE_SHA",
+              "scope_limit": "Exact final path only; repository-wide absence not inferred"
+            },
+            {
+              "name": "DuckDB",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
+              "readback": "404_NOT_FOUND_AT_BASE_SHA",
+              "scope_limit": "Exact final path only; repository-wide absence not inferred"
+            },
+            {
+              "name": "AVF",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/AVF",
+              "readback": "404_NOT_FOUND_AT_BASE_SHA",
+              "scope_limit": "Exact final path only; repository-wide absence not inferred"
+            }
+          ],
+          "findings": [
+            "All four exact canonical destination paths still return 404.",
+            "No new destination tree hash/read-back closes a residual."
+          ]
+        },
+        {
+          "id": "A1-03",
+          "status": "AUDITED_CODEMIRROR_ROUND16_STALE_01_20",
+          "base_sha": "37bd728a9f43ac8baa8cb380360a3fa144733cae",
+          "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1",
+          "reported_pass": 17,
+          "total": 20,
+          "pending": [
+            "big-AGI",
+            "Vite",
+            "Vercel AI SDK"
+          ],
+          "new_independent_evidence": {
+            "lane": "S3 batch 21-40 CodeMirror 6",
+            "debate_blob_sha": "3c3d07874dabc50592580180fa0c023dbbe7cbf9",
+            "workflow_run": 34669533291,
+            "job_id": 103488124661,
+            "head_sha": "60db2b70942a8868d75dc8b4848328f79ad51726",
+            "result": "PREPARE_FAIL_NOT_PASS",
+            "steps": "route metadata PASS; install --ignore-scripts PASS; npm run prepare FAIL; tests SKIPPED",
+            "root_cause_classification": "CURRENT_VENDOR_SNAPSHOT_IS_UPSTREAM_DEV_SCAFFOLD_WITHOUT_DECLARED_WORKSPACE_PACKAGE_DIRECTORIES",
+            "readback": "state/package.json 404; required workspaces absent",
+            "scope": "Separate 21-40 lane; does not modify integration 01-20."
+          },
+          "findings": [
+            "The third CodeMirror attempt confirms incomplete source shape; it is not a transient npm lifecycle failure.",
+            "Canonical integration 01-20 remains 17/20 and byte-identical."
+          ]
+        },
+        {
+          "id": "A1-04",
+          "status": "INSTRUCTIONS_PUBLISHED_IN_OWN_STATE",
+          "base_sha": "37bd728a9f43ac8baa8cb380360a3fa144733cae",
+          "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "refutations": [
+            "Running cm install is an acquisition operation because it clones multiple package repositories; it cannot be treated as a test-only preparation step.",
+            "A dev scaffold without required workspace package directories is not a complete CodeMirror component snapshot.",
+            "Debate evidence does not reconcile canonical S3 state, STATE, CHECKPOINT or HANDOFF.",
+            "No auxiliary 21-40 result changes Action124 120/124 or integration 17/20."
+          ]
+        }
+      ],
+      "instructions_for_owners": {
+        "SOL_GPT1_BACKEND": "Keep Vite/Supabase fail-closed until literal final destinations are published. Then use only pinned canonical motors and record source ref, tree hash, failed=0, pending=0 and exact read-back; hand verified Vite to S3.",
+        "SOL_GPT2_BACKEND": "Keep DuckDB symlink and AVF provider/capability gaps fail-closed. Continue only coordinator-approved provider/source-shape work; do not patch immutable motors or infer guest boot.",
+        "SOL_GPT3_BACKEND": "Reconcile CodeMirror run 34669533291/job 103488124661 into canonical S3 state as PREPARE_FAIL_NOT_PASS. Stop blind retries. Submit the exact list of required CodeMirror workspace repositories/refs/destinations to the coordinator for canonical acquisition or reject this snapshot; do not run cm install as an implicit downloader.",
+        "ASTRA2_GPT_BACKEND": "Canonical state remains READY_TO_CLAIM. Claim a concrete A2 node with node_id/base SHA/claimed_at and validate actual Fables consumption; do not promote generic socket or research-only evidence.",
+        "COORDINATOR": "Reconcile STATE/CHECKPOINT/HANDOFF and canonical role states. Decide a pinned canonical acquisition plan for CodeMirror's required workspace repositories or mark the current dev scaffold unsuitable. Publish literal Vite/Supabase destinations and approved DuckDB/AVF strategies. Keep Action124 120/124, integration 17/20 and auxiliary lanes separate."
+      },
+      "current_delta": {
+        "observed_at": "2026-09-12T03:33:13.572Z",
+        "base_sha": "37bd728a9f43ac8baa8cb380360a3fa144733cae",
+        "previous_role_blob_sha": "88e4c328e92621b9f7d22e917d9290b291c16017",
+        "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+        "result": "DELTA_AUDITED_GAPS_OPEN",
+        "runtime_tests_executed_this_cycle": false,
+        "ci_logs_independently_read": false,
+        "mutation_performed": "OWN_STATE_ONLY",
+        "new_evidence": "S3 CodeMirror run 34669533291/job 103488124661 completed FAILURE: install passed, prepare failed, tests skipped. Fresh tree read-back confirms required workspace directories are absent. Four residual exact paths remain absent and integration 01-20 stays 17/20."
+      }
     }
   ],
   "current_delta": {
-    "observed_at": "2026-09-12T03:33:13.572Z",
-    "base_sha": "37bd728a9f43ac8baa8cb380360a3fa144733cae",
-    "previous_role_blob_sha": "88e4c328e92621b9f7d22e917d9290b291c16017",
+    "observed_at": "2026-09-12T05:34:58.592Z",
+    "base_sha": "d62b02cc95a5d732b7531b99ae597d4d14b1aa7a",
+    "previous_role_blob_sha": "6d793082e07543b31fba232e3b73d7619eaf4b0e",
     "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
     "result": "DELTA_AUDITED_GAPS_OPEN",
     "runtime_tests_executed_this_cycle": false,
-    "ci_logs_independently_read": false,
+    "ci_logs_independently_read": true,
     "mutation_performed": "OWN_STATE_ONLY",
-    "new_evidence": "S3 CodeMirror run 34669533291/job 103488124661 completed FAILURE: install passed, prepare failed, tests skipped. Fresh tree read-back confirms required workspace directories are absent. Four residual exact paths remain absent and integration 01-20 stays 17/20."
+    "new_evidence": "S3 PixiJS run 34674538504/job 103501914450 completed SUCCESS: build and three type configurations PASS. Classification is RUNTIME_PASS_NOT_WIRED. Four residual exact paths remain absent and integration 01-20 stays 17/20."
   }
 }
