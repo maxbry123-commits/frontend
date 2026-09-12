@@ -44,7 +44,8 @@ Autoridad: `code/runtime/test/log real > Crazy Wall/STATE/checkpoint > arquitect
 - `runtime/src/adapters`: README-only.
 - `runtime/src/agent`: `.gitkeep`.
 - `runtime/src/integration`: README-only.
-- `runtime/src/recovery`, `uek`, `storage`, `conn`, `observability`, `mission`, `install`: `.gitkeep`.
+- `runtime/src/recovery`: control-plane Stabilize-backed implementado y globalmente probado; failover E2E pendiente.
+- `runtime/src/uek`, `storage`, `conn`, `observability`, `mission`, `install`: pendientes según readback.
 
 Vacío por sí solo NO autoriza code. Primero: source requirement → dedup/equivalence → owner/write_scope → delta mínimo → test.
 
@@ -74,7 +75,7 @@ Blind spot corregido en commit `baed8f07e9a205f28def181931d9eb7420e76fd7`:
 - trigger ahora incluye `runtime/src/**`;
 - sparse-checkout ahora incluye `runtime/src` completo.
 
-Run gate: `34716613952`; estado observado al último snapshot: `PENDING`. No promover DSL 96/4 ni “test total” a PASS hasta `completed/success` y read-back de job/log.
+Gate fresco: run `34723669555`, job `103633952112`, `completed/success`; log: Wordflow 23 PASS y runtime 62 PASS + 9 subtests. P18 recovery control-plane queda TESTED, pero workspace/multi-host sandbox failover E2E y G12 siguen abiertos.
 
 ## Regla de mejora / componentes
 
