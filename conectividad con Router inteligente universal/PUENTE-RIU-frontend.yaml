@@ -12,6 +12,8 @@ router:
   registry: conectividad con Router inteligente universal/REGISTRY-CONECTIVIDAD-RIU.json
   map: conectividad con Router inteligente universal/MAPA-MENTAL-CONECTIVIDAD-RIU.md
   handoff: Handoff router inteligente universal.md
+  runtime_module: router inteligente universal/integration/connectivity_runtime.py
+  verify_runner: router inteligente universal/integration/verify_runtime_connectivity.py
   mode: FAIL_CLOSED_LOOP
 
 secret_store:
@@ -27,6 +29,16 @@ secret_store:
     claude_github_mcp:
       accepted_env_refs: [RIU_GITHUB_PAT, GITHUB_TOKEN, GH_TOKEN]
   rule: resolve_at_runtime_only
+
+codespace_runtime:
+  requirement: secrets_must_be_authorized_for_repo_and_codespace_restarted_or_recreated_after_secret_change
+  router_checkout: maxbry123-commits/router-universal-router-inteligente-
+  verify_command: 'PYTHONPATH="router inteligente universal/integration" python "router inteligente universal/integration/verify_runtime_connectivity.py" --repo maxbry123-commits/frontend'
+  expected_gates: [github, huggingface, github_mcp]
+  expected_account_huggingface: COMAND-CENTER-1
+  success_status: PASS
+  missing_secret_status: FAIL_CLOSED
+  never_print_secret_values: true
 
 connections:
   github:
@@ -81,5 +93,5 @@ security:
   raw_credentials_in_git: false
   never_log_secret_values: true
 
-status: FRONTEND_BRIDGE_V2_DECLARED
+status: FRONTEND_BRIDGE_V2_READY_FOR_CODESPACE_E2E
 verification: PENDING_E2E_ROUTER_CREDENTIALS
