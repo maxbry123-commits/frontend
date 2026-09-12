@@ -1,0 +1,62 @@
+{
+  "schema": "yaiwes.crazy-wall.wordflow-xray.v3",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_LOOP_NOT_CLOSED",
+  "source_architecture": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-WORDFLOW-PYTHON-DSL-DAG-96-4-V7-2026-09-12.md",
+  "handoff": "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V7-2026-09-12.md",
+  "python_dsl": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/architecture_dsl.py",
+  "deterministic_ratio": 0.96,
+  "llm_max_ratio": 0.04,
+  "test_gate": {
+    "workflow": ".github/workflows/yaiwes-wordflow-loop-pytest.yml",
+    "run": 34716429065,
+    "head_sha": "d9b426d234ffecd5b338354ee397afb201e119ee",
+    "state_at_write": "PENDING",
+    "rule": "Do not promote Python DSL/96-4 to TESTED until completed/success and job log readback."
+  },
+  "implemented": [
+    "P01 core state base",
+    "P04 task contract",
+    "P05 fail-closed state machine base",
+    "P07 policy engine sublane",
+    "P13 output/evidence schema",
+    "Wordflow L01-L06",
+    "Sheriff Validator Sentinel Verifier Supervisor Judge Guardian",
+    "durable hash-chain ledger/replay/fsync",
+    "Fables socket and Stabilize bridge",
+    "OPA/OpenFGA live policy sublane"
+  ],
+  "partial": [
+    "P02 event model",
+    "P03 task domain model",
+    "P06 project checkpoint engine",
+    "P11 sandbox contract source-only",
+    "P12 worker contract",
+    "P14 global audit engine",
+    "P16 resource router",
+    "P17 continuous multi-stage loop",
+    "P18 global recovery",
+    "P20 global integration"
+  ],
+  "gaps": [
+    {"id":"WF-G08-MEMORY","process":"P08","state":"FREE","lane":"SOL_GPT1","task":"Implement/evidence Memory/Audit contract and canonical write gate; no direct LLM canonical writes.","write_scope":"runtime/src/memory/**|runtime/src/agent/**"},
+    {"id":"WF-G09-RETRIEVAL","process":"P09","state":"FREE_AFTER_WF-G08","lane":"SOL_GPT1","task":"Implement/evidence GET_CONTEXT GET_MEMORY GET_EVIDENCE retrieval contract and tests.","write_scope":"runtime/src/memory/**|runtime/tests/test_memory*"},
+    {"id":"WF-G10-CONTEXT-FABRIC","process":"P10","state":"FREE_AFTER_WF-G09","lane":"SOL_GPT1","task":"Minimal sufficient context pack, budget/filter/rerank, provenance and tests.","write_scope":"runtime/src/memory/**|runtime/tests/test_memory*"},
+    {"id":"WF-G11-SANDBOX-UEK","process":"P11","state":"FREE","lane":"SOL_GPT2","task":"Capability router/lifecycle for existing sandbox and VM backends; fail closed unsupported hosts.","write_scope":"runtime/src/uek/**|runtime/src/adapters/**|runtime/tests/test_platform*|runtime/tests/test_sandbox*"},
+    {"id":"WF-G12-WORKER","process":"P12","state":"FREE_AFTER_WF-G11","lane":"SOL_GPT2","task":"Dedup Stabilize worker primitives and add only missing YAIWES worker/adapter boundary.","write_scope":"runtime/src/adapters/**|runtime/tests/test_platform*"},
+    {"id":"WF-G14-AUDITOR5","process":"P14","state":"FREE","lane":"ASTRA_GPT","task":"Executable five-pass audit/coverage logic from source requirements; audit only, no owner collision.","write_scope":"runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*"},
+    {"id":"WF-G15-CONSOLIDATOR","process":"P15","state":"FREE_AFTER_WF-G14","lane":"ASTRA_GPT","task":"Task→phase→project deterministic consolidation with evidence references.","write_scope":"runtime/src/consolidation/**|runtime/tests/test_consolidation*"},
+    {"id":"WF-G16-ROUTER","process":"P16","state":"FREE_AFTER_WF-G11","lane":"SOL_GPT2","task":"Resource/capability routing without unsupported promotion.","write_scope":"runtime/src/adapters/**|runtime/src/uek/**"},
+    {"id":"WF-G17-LOOP","process":"P17","state":"FREE_AFTER_INTEGRATION","lane":"SOL_GPT3","task":"Prove multi-stage continuous loop consumes Fables and state deltas end-to-end.","write_scope":"runtime/src/integration/**|runtime/tests/test_integration*"},
+    {"id":"WF-G18-RECOVERY","process":"P18","state":"EXECUTING","lane":"SOL_ORQUESTADOR","task":"Workspace/global restart/failover/reconstruction E2E beyond ledger-only recovery.","write_scope":"reports/O-*|shared consolidation after fresh readback"},
+    {"id":"WF-G19-RESOURCE-BRAIN","process":"P19","state":"FREE_AFTER_WF-G16","lane":"ASTRA_GPT_RESEARCH_THEN_OWNER","task":"Research/dedup resource brain capability; leave recommendation and component/code delta to proper owner.","write_scope":"ASTRA reports only until owner claim"},
+    {"id":"WF-G20-GLOBAL-INTEGRATION","process":"P20","state":"FREE","lane":"SOL_GPT3","task":"Minimal global integration state/consolidation boundary using tested Fables; no unrelated promotion.","write_scope":"runtime/src/integration/**|runtime/tests/test_integration*"},
+    {"id":"WF-G21-FIVE-PASS","process":"P21","state":"FREE_AFTER_WF-G14","lane":"ASTRA_GPT","task":"Run deterministic five-pass build auditor over G12 matrix and report gaps.","write_scope":"runtime/src/audit/**|runtime/src/coverage/**"},
+    {"id":"WF-G22-API","process":"P22","state":"FREE_AFTER_WF-G20","lane":"SOL_GPT3","task":"Define minimal Python API/control boundary only after runtime contracts exist.","write_scope":"runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*"},
+    {"id":"WF-G23-UI","process":"P23","state":"BLOCKED_UNTIL_RUNTIME","lane":"UI_FACTORY","task":"UI is last; consume verified API/runtime only.","write_scope":"no runtime mutation"},
+    {"id":"WF-G12-GLOBAL-COVERAGE","process":"GLOBAL","state":"EXECUTING","lane":"SOL_ORQUESTADOR","task":"Complete bidirectional GOAL→REQUIREMENT→FILE/FUNCTION→TEST→EVIDENCE and inverse map to 100%.","write_scope":"Crazy Wall/Handoff/architecture/reports"}
+  ],
+  "claim_rule": "One task = one node. One active node per role. Claim requires fresh HEAD + owner + node_id + write_scope + claimed_at.",
+  "report_rule": "PASS/GAP requires SHA/blob + test/run/log + evidence + next_free_node.",
+  "closure_rule": "SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+}
