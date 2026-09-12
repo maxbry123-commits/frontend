@@ -1,0 +1,47 @@
+{
+  "schema":"yaiwes.crazy-wall.task-queue.delta.v1",
+  "contract":"tel.workflow/v3",
+  "status":"ACTIVE_LOOP",
+  "parent":"UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-QUEUE-4SOL-2026-09-12.json",
+  "parent_blob":"0be5ef48249678de2ed579f4402fc7caf105c171",
+  "events":[
+    {
+      "role":"SOL_ORQUESTADOR",
+      "node_id":"O-01-G12-GLOBAL-COVERAGE-XRAY",
+      "state":"REPORT",
+      "result":"PASS_AUDIT_NODE_GLOBAL_PROJECT_STILL_OPEN",
+      "report_path":"UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-01-G12-GLOBAL-COVERAGE-XRAY.json",
+      "report_commit":"4c9ca241e1948c45bbe826ff4cd779edcf704b78",
+      "finding":"Core deterministic workflow is evidenced; Memory/Audit, Agent boundary, Platform/Sandbox router, Integration/Consolidator and project-level recovery remain open.",
+      "next":"O-02-MULTI-SANDBOX-RECOVERY-E2E"
+    },
+    {
+      "role":"SOL_ORQUESTADOR",
+      "node_id":"O-02-MULTI-SANDBOX-RECOVERY-E2E",
+      "state":"CLAIMED",
+      "base_main_sha":"4c9ca241e1948c45bbe826ff4cd779edcf704b78",
+      "write_scope":[
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-02-*.json",
+        "UI YAIWES/readme arquitectura UI YAIWES/*XRAY*"
+      ],
+      "assertion_to_validate":"Existing sandbox components plus current durable-ledger/recovery primitives either provide or can support project-level multi-sandbox/workspace recovery without creating a parallel workflow engine.",
+      "preflight_evidence":{
+        "firecracker_source_present":"UI YAIWES/componentes open soure UI YAIWES/Firecracker/",
+        "gvisor_source_present":"UI YAIWES/componentes open soure UI YAIWES/gVisor/",
+        "runtime_recovery_current":"placeholder_only per current crosscheck",
+        "durable_ledger_subgates":"already tested; do not duplicate"
+      },
+      "steps":[
+        "Map existing sandbox backends and Stabilize/ledger recovery primitives to workspace lifecycle/checkpoint/failover requirements",
+        "Classify whether missing delta belongs to orchestrator recovery glue or SOL_GPT2 platform router; do not cross write_scope",
+        "Publish executable test plan/evidence; implement only genuinely unowned orchestrator recovery glue"
+      ]
+    }
+  ],
+  "free_role_slots_unchanged":[
+    "S1-09-MEMORY-AGENT-BOUNDARY",
+    "S2-08-PLATFORM-SANDBOX-ROUTER",
+    "S3-10-INTEGRATION-FABLES-E2E"
+  ],
+  "rule":"Other roles must claim their own FREE slot with fresh HEAD; this delta does not claim for them."
+}
