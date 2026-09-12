@@ -43,7 +43,7 @@ LLM sólo se admite de forma acotada en P09 Retrieval, P10 Context Fabric y P19 
 | P15 | CONSOLIDATOR | ❌ GAP | task→phase→project no materializado completo |
 | P16 | ROUTER | 🟡 parcial | registry/plugins existen; Resource/Capability Router global incompleto |
 | P17 | CONTINUOUS_LOOP | 🟡 parcial | runner nodo literal; loop multi-stage autónomo no probado E2E |
-| P18 | RECOVERY | 🟡 parcial | durable ledger/restart PASS; workspace/global recovery pendiente |
+| P18 | RECOVERY | 🟡 TESTED subgate | Stabilize-backed control-plane + SHA256/ledger gate PASS; workspace/multi-host sandbox failover E2E pendiente |
 | P19 | RESOURCE_BRAIN | ❌ GAP | selección dinámica de recursos/capacidades no completa |
 | P20 | GLOBAL_INTEGRATION | 🟡 parcial | OPA/OpenFGA sublane PASS; integration global abierta |
 | P21 | FIVE_PASS_BUILD_AUDITOR | ❌ GAP | cobertura documental existe; motor Python 5-pass falta |
@@ -61,7 +61,7 @@ LLM sólo se admite de forma acotada en P09 Retrieval, P10 Context Fabric y P19 
 - `src/adapters/` ❌ README-only.
 - `src/agent/` ❌ `.gitkeep`.
 - `src/integration/` ❌ README-only.
-- `src/recovery/`, `src/uek/`, `src/storage/`, `src/conn/`, `src/observability/`, `src/mission/`, `src/install/` ❌ `.gitkeep` al X-Ray fresco.
+- `src/recovery/` 🟡 control-plane implementado y probado globalmente; `src/uek/`, `src/storage/`, `src/conn/`, `src/observability/`, `src/mission/`, `src/install/` siguen pendientes según readback. Recovery no prueba todavía failover multi-host/sandbox E2E.
 
 No se genera código por tener un directorio vacío: primero debe existir REQUIREMENT y dedup contra Stabilize/Fables/plugins/vendors.
 
@@ -73,7 +73,7 @@ Commit corrección cobertura: `baed8f07e9a205f28def181931d9eb7420e76fd7`.
 Antes: sparse-checkout sólo incluía core/plugins/governance.
 Ahora: trigger `runtime/src/**` + sparse-checkout completo `runtime/src`, además de `wordflow_loop` y `runtime/tests`.
 
-Run de gate creado: `34716613952`; mientras no sea `completed/success` + log leído, el DSL 96/4 permanece `PENDING_TEST_GATE`.
+Gate fresco: run `34723669555`, job `103633952112`, `completed/success`, log leído: Wordflow 23 PASS; runtime 62 PASS + 9 subtests. Promoción limitada al regression gate y control-plane P18; no cierra G12 ni failover E2E.
 
 ## Cola de ejecución
 
