@@ -4,7 +4,7 @@
   "role": "SOL_GPT1_BACKEND",
   "name": "Sol ☀️ 🏈gpt 1 backend",
   "node_prefix": "S1",
-  "status": "ACTIVE_LOOP_S1_09_COMPLETE_S1_10_RUNNING",
+  "status": "ACTIVE_LOOP_S1_10_COMPLETE_S1_11_RUNNING",
   "watchdog": {
     "enabled": true,
     "automation_id": "6aa3065afd048191a6a4c720d4ba97e7",
@@ -27,9 +27,9 @@
   "debate": {
     "central_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-DEBATE-4AI-2026-09-11.json",
     "s1_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/S1-SOL-PLAN-DEBATE-2026-09-11.json",
-    "s1_latest_commit": "cf6603a2cbfe8fed27e3d577706c53092e720b00",
-    "s1_latest_blob_sha": "249a1ffabe5167d5e523a1f97ec21f5771b33a4b",
-    "status": "S1_09_CURRENT_MAIN_DRIFT_REVALIDATED",
+    "s1_latest_commit": "f8e9832469f703e5bad770fddc588ce890aa28ce",
+    "s1_latest_blob_sha": "5dd465c71ac09dc72df3135359c2335b633d69a0",
+    "status": "S1_10_DESTINATION_AUTHORITY_NOT_FOUND_S1_11_RUNNING",
     "open_questions": ["R4-Q1","R4-Q2","R4-Q3","R4-Q4","R4-Q5","R4-Q6"]
   },
   "canonical_motor": {
@@ -39,7 +39,6 @@
     "destination_rule": "DEST_REPO/DEST_BRANCH/DEST_ROOT must be literal per operation; never infer/reuse historical destination."
   },
   "l05": {
-    "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/layers/layer_05_download_extract.py",
     "blob_sha": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
     "tests_blob_sha": "76515236717e2d36985458275c51ef8c552873a9",
     "drift": false,
@@ -47,63 +46,58 @@
   },
   "fables": {
     "status": "CURRENT_BLOB_VERIFIED_CI_PASS",
-    "contract_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py",
     "contract_blob_sha": "23f4e1b8b91301f2df396e7a0860fc65b977cfb3",
-    "previous_blob_sha": "36ee0b1b184b709e292fd8c617f0e795e7e98451",
-    "contract_id": "yaiwes.fables.v1",
-    "test_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_fables_socket.py",
     "test_blob_sha": "cfc63c5363330ea0746c1d3e041c17dc11df9b0c",
     "commit": "671d9bb545b958c75b0c040806f096bf76f55175",
     "ci_run_id": 34573676252,
     "ci_job_id": 103181192888,
     "ci_conclusion": "success",
-    "wordflow_tests": "12 passed in 0.05s",
     "socket_fables_tests": "9 passed in 0.02s"
   },
   "persistence": {
     "ledger_blob_sha": "79ae3da7f20188874ffdc9e5a6b5e9cd3fbc4c83",
     "runner_blob_sha": "4fd01eb441cf3c10638d1a6f80924fc3fc8533a5",
     "test_core_blob_sha": "66af6aff97a889c41ee3e8e85653d57ea1cf2bd4",
-    "ledger_latest_commit": "cbf16fe60dbfbdcca87988fbf7fb3d936e7dabfc",
-    "runner_latest_commit": "52e18f9420268c4b899e51bd663fe46a2a3725da",
-    "test_core_latest_commit": "36beaed55989b03313c92ee819b63280259e57e4",
     "ledger_ci_run": 34641867379,
     "latest_test_core_ci_run": 34641893033,
     "ci_conclusion": "success",
     "verified_delta": ["hash-chain integrity","atomic replace","fsync file and parent directory","cross-process ledger lock","stale-runner refresh","tampered-ledger recovery fail-closed"]
   },
-  "round_4": {
-    "status": "ANSWERED",
-    "verdict": "PARTIAL_PASS_EXECUTION_RECOVERY_IMPLEMENTED_PRODUCT_MEMORY_BOUNDARY_MISSING",
-    "memory_scope_isolation": "GAP_NOT_IMPLEMENTED_OR_TESTED"
-  },
   "memory_boundary": {
-    "adapter_spec_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/README.md",
     "adapter_spec_blob_sha": "d20358aa2e725de11e46190c8b7b3997d8f7e890",
     "memory_adapter_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/memory_adapter.py",
     "memory_adapter_readback": "404_NOT_FOUND",
-    "implementation_authorized": false,
-    "verdict": "MEMORY_BOUNDARY_SPECIFIED_BUT_ADAPTER_NOT_IMPLEMENTED"
+    "implementation_authorized": false
+  },
+  "s1_10": {
+    "status": "COMPLETE_FAIL_CLOSED",
+    "verdict": "DESTINATION_AUTHORITY_NOT_FOUND",
+    "vite_source_ref": "134ce6817984bad0f5fb043481502531fee9b1db",
+    "supabase_source_ref": "0500c21b37cc11b6b6140dde9827f89fb7d3097d",
+    "queue_blob_sha": "ea92b3004175fe7f9f6adcce8a49d0a843060879",
+    "handoff_blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
+    "vite_physical_readback": "404_NOT_FOUND",
+    "supabase_physical_readback": "404_NOT_FOUND",
+    "additional_s1_handoff": "NOT_FOUND",
+    "gaps": ["DESTINATION_INPUT_GAP","DESTINATION_AUTHORITY_PROVENANCE_GAP"]
   },
   "nodes": {
-    "S1-01": {"component":"Vite","source_ref":"134ce6817984bad0f5fb043481502531fee9b1db","status":"BLOCKED_FAIL_CLOSED","gap":"DESTINATION_INPUT_GAP"},
-    "S1-02": {"component":"Supabase","source_ref":"0500c21b37cc11b6b6140dde9827f89fb7d3097d","status":"BLOCKED_FAIL_CLOSED","gap":"DESTINATION_INPUT_GAP"},
+    "S1-01": {"component":"Vite","status":"BLOCKED_FAIL_CLOSED","gap":"DESTINATION_INPUT_GAP"},
+    "S1-02": {"component":"Supabase","status":"BLOCKED_FAIL_CLOSED","gap":"DESTINATION_INPUT_GAP"},
     "S1-03": {"status":"BLOCKED_DEPENDENCY","gap":"AUTHORIZED_DESTINATION_NOT_DEFINED"},
     "S1-04": {"status":"READY_FABLES_RESOLVED_WAITING_SOURCE_ACQUISITION","gap":"VITE_SOURCE_NOT_ACQUIRED_DESTINATION_INPUT_GAP"},
-    "S1-05": {"status":"PARTIAL_PASS","pass":["DURABLE_LEDGER_PASS","RESTART_RECOVERY_PASS"],"gap":["PRODUCT_MEMORY_RUNTIME_MISSING","MEMORY_SCOPE_SEPARATION_NOT_EVIDENCED"]},
+    "S1-05": {"status":"PARTIAL_PASS","gap":["PRODUCT_MEMORY_RUNTIME_MISSING","MEMORY_SCOPE_SEPARATION_NOT_EVIDENCED"]},
     "S1-06": {"status":"GAP_VERIFIED_READONLY","gap":"MEMORY_ADAPTER_404"},
     "S1-07": {"status":"PREFLIGHT_COMPLETE","gap":"IMPLEMENTATION_NOT_AUTHORIZED"},
     "S1-08": {"status":"COMPLETE_NO_HANDOFF"},
     "S1-09": {"status":"COMPLETE_REVALIDATED_CURRENT_MAIN"},
-    "S1-10": {"status":"ACTIVE","task":"search current main for literal Vite/Supabase destination authorization"}
+    "S1-10": {"status":"COMPLETE_FAIL_CLOSED","gap":"DESTINATION_AUTHORITY_NOT_FOUND"},
+    "S1-11": {"status":"ACTIVE","task":"revalidate downstream Vite handoff contract to S3"}
   },
   "loop_history": [
-    {"cycle":10,"result":"FABLES_INITIAL_PASS; DESTINATIONS_BLOCKED"},
-    {"cycle":11,"result":"ROUND4_LEDGER_RESTART_PASS; PRODUCT_MEMORY_GAP"},
-    {"cycle":12,"result":"MEMORY_ADAPTER_404; PREFLIGHT_COMPLETE"},
-    {"cycle":13,"result":"NO_R5_OR_COORDINATOR_HANDOFF"},
-    {"cycle":14,"result":"CURRENT_MAIN_DRIFT_REVALIDATED; FABLES_AND_PERSISTENCE_CURRENT_CI_PASS"}
+    {"cycle":14,"result":"CURRENT_MAIN_DRIFT_REVALIDATED"},
+    {"cycle":15,"result":"VITE_SUPABASE_DESTINATION_AUTHORITY_NOT_FOUND; CANONICAL_MOTORS_NOT_DISPATCHED"}
   ],
-  "next_allowed_delta": "Execute S1-10 read-only: search current main for post-block literal authority binding Vite/Supabase immutable source refs to DEST_REPO/DEST_BRANCH/DEST_ROOT. Historical runtime/vendor paths do not count. If explicit authority exists, consume it; otherwise preserve DESTINATION_INPUT_GAP and continue next S1 FREE node.",
+  "next_allowed_delta": "Execute S1-11 read-only. Read current integration-01-20 metadata and current S3 state/debate. Determine exact evidence package S3 expects after Vite acquisition. Runtime/vendor/vite is downstream target metadata only and must not be treated as acquisition authorization.",
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
 }
