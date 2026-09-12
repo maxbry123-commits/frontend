@@ -2,43 +2,93 @@
   "schema": "yaiwes.astra.factory.state.v1",
   "identity": "➡️ Astra plan fábrica UI YAIWES",
   "contract": "tel.workflow/v3",
-  "status": "ACTIVE_LOOP_REGRESSION_GAP",
+  "status": "VERIFIED_CLOSED",
   "gate": "T1_FACTORY_FRONTEND",
-  "t2_interface": "PAUSED_UNTIL_FACTORY_LIVE_BROWSER_REVERIFY",
-  "current_node": "T1_FACTORY_V1_LIVE_BROWSER_PANEL_AND_FUNCTION_REPAIR",
-  "factory_v1": {
-    "source_sha": "68353b77356b667356827748bade0fe7207e134a",
+  "t2_interface": "READY_TO_RESUME",
+  "current_node": "T1_FACTORY_V1_1_LIVE_BROWSER_LOOP20_VERIFIED_CLOSED",
+  "factory_v1_1": {
+    "source_sha": "245efadec5f01513c8ee4203224fba739ad0d2f2",
     "space_repo": "COMAND-CENTER-1/yaiwes-ui-factory",
-    "space_commit": "8288eb11ddabf48b82353a5cad2783e7f1142253",
+    "space_commit": "2621ef7d770a84d2ff43afbb70f6a699a535f591",
     "url": "https://comand-center-1-yaiwes-ui-factory.static.hf.space/",
     "publish_auth": "TRUSTED_PUBLISHER_OIDC_REPO_SCOPED_WRITE",
     "http_readback": "PASS",
-    "previous_candidate_e2e": "PASS_28_OF_28_DESKTOP_MOBILE_BUT_INSUFFICIENT_COVERAGE",
-    "previous_deployed_e2e": "PASS_28_OF_28_DESKTOP_MOBILE_BUT_INSUFFICIENT_COVERAGE",
-    "live_browser_audit": {
-      "job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa59a1e5527934177ed1113",
-      "http": 200,
-      "title": "YAIWES UI Factory V1",
-      "panels_expected": 11,
-      "panels_present": 1,
-      "panels_visible": 0,
-      "buttons_clicked": 40,
-      "button_click_failures": 0,
-      "console_errors": 0,
-      "result": "FAIL_FUNCTIONAL_UI_PANEL_VISIBILITY"
+    "candidate_loop20": {
+      "result": "PASS_20_OF_20",
+      "job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa59caa5527934177ed1183"
     },
-    "verified_closed": false
+    "deployment": {
+      "workflow_run": "https://github.com/maxbry123-commits/frontend/actions/runs/34711961080",
+      "package_verify": "PASS",
+      "hub_http": 200,
+      "static_host_http": 200
+    },
+    "live_loop20": {
+      "result": "PASS_20_OF_20",
+      "job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa59d0621047bf1b037e15f",
+      "desktop_capture": {
+        "bytes": 96388,
+        "sha256": "a2029a700477fc235309c24888ad19f5e9bcd99f419471a765c5a04b1f9a695f"
+      },
+      "mobile_capture": {
+        "bytes": 99929,
+        "sha256": "9cc032e04ed8eee3d4213e9162832b34af8ce5aaa45a53480532eac9271a332a"
+      }
+    },
+    "independent_browser_reviewer": {
+      "result": "PASS",
+      "job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa59d3021047bf1b037e163",
+      "desktop": {
+        "http": 200,
+        "panel_count": 10,
+        "visible_tabs": 10,
+        "button_count": 54,
+        "visible_button_click_ok": 29,
+        "button_click_fail": 0,
+        "console_errors": 0,
+        "horizontal_overflow": false
+      },
+      "mobile": {
+        "http": 200,
+        "panel_count": 10,
+        "visible_tabs": 10,
+        "button_count": 54,
+        "visible_button_click_ok": 29,
+        "button_click_fail": 0,
+        "console_errors": 0,
+        "horizontal_overflow": false
+      }
+    },
+    "director_gates": {
+      "multi_ai_router": "PASS_UI_CONFIG_AND_STATE",
+      "remote_ai_mcp_http_api_websocket": "PASS_CONFIG_FAIL_CLOSED_WITHOUT_ENDPOINT",
+      "design_skills": "PASS",
+      "file_photo_html_url_github_inputs": "PASS",
+      "destinations_download_github_hf_vercel_mcp_share_custom": "PASS_PLAN_AND_CONFIG",
+      "multiple_reference_urls": "PASS",
+      "web_page_creator": "PASS",
+      "media_image_video_audio_3d": "PASS_UPLOAD_AND_AI_QUEUE_STATE",
+      "default_theme_panel": "PASS",
+      "microkernel": "PASS"
+    },
+    "security": "secret_ref_only_no_raw_api_keys",
+    "evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/FACTORY-V1.1-LIVE-BROWSER-LOOP20-EVIDENCE-2026-09-12.md",
+    "verified_closed": true
   },
-  "open_gaps": [
-    "LIVE_UI_EXPECTED_11_PANELS_ONLY_1_PRESENT",
-    "LIVE_UI_ZERO_EXPECTED_PANELS_VISIBLE",
-    "BUTTON_CLICK_SUCCESS_DOES_NOT_PROVE_FUNCTIONAL_EFFECT",
-    "E2E_COVERAGE_WAS_INSUFFICIENT_FOR_DIRECTOR_REQUIREMENTS",
-    "LIVE_REMOTE_AI_EXECUTION_REQUIRES_CONFIGURED_ENDPOINT",
-    "LIVE_MEDIA_GENERATION_REQUIRES_CONFIGURED_AI_ROUTER",
-    "T2_PAUSED_UNTIL_T1_REVERIFIED"
+  "resolved_gaps": [
+    "LIVE_UI_EXPECTED_PANEL_IDS_MISSING",
+    "LIVE_UI_CONFIG_PANEL_HIDDEN_BY_DEFAULT",
+    "THEME_PANEL_CONTROL_ID_COLLISION",
+    "MEDIA_JOB_STATUS_NOT_VISIBLE",
+    "INSUFFICIENT_PREVIOUS_BROWSER_COVERAGE"
   ],
-  "closure_rule": "each required panel visible + each control functional effect verified + candidate browser E2E + deploy + live browser audit + deployed E2E + independent reviewer",
-  "closure_result": "REOPENED_FAIL_CLOSED",
-  "next_node": "REPAIR_PANEL_DOM_VISIBILITY_AND_EFFECT_TESTS_THEN_REDEPLOY"
+  "remaining_project_gaps_not_T1_blockers": [
+    "LIVE_REMOTE_AI_EXECUTION_REQUIRES_CONFIGURED_ROUTER_MCP_HTTP_ENDPOINT",
+    "LIVE_MEDIA_GENERATION_REQUIRES_CONFIGURED_AI_ROUTER",
+    "T2_RECON_38_WINDOWS_AND_BACKEND_PENDING",
+    "T2_COMPONENT_REUSE_AND_INTERFACE_BUILD_PENDING"
+  ],
+  "closure_rule": "candidate LOOP20 + OIDC deploy + HTTP readback + live LOOP20 + browser captures + independent browser reviewer",
+  "closure_result": "VERIFIED_CLOSED",
+  "next_node": "T2_RECON_38_WINDOWS_BACKEND_AND_COMPONENT_REUSE"
 }
