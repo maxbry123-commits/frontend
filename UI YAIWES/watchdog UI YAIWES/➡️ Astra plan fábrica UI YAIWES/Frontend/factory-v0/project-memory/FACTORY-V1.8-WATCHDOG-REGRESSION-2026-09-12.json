@@ -1,0 +1,43 @@
+{
+  "schema": "yaiwes.astra.factory.watchdog.regression.v1",
+  "identity": "➡️ Astra plan fábrica UI YAIWES",
+  "gate": "T1_FACTORY_FRONTEND",
+  "verdict": "REOPENED_VALIDATION_REQUIRED",
+  "reason": "Factory source changed after the last VERIFIED_CLOSED V1.1 baseline. V1.8 publish/readback succeeded, but no fresh evidence was found tying the V1.8 editor/shell change to the Director-required 50 human-like interaction cycles and an independent browser reviewer. Historical V1.1 PASS evidence is preserved but cannot be inherited by V1.8.",
+  "historical_verified_baseline": {
+    "version": "V1.1",
+    "source_sha": "245efadec5f01513c8ee4203224fba739ad0d2f2",
+    "space_commit": "2621ef7d770a84d2ff43afbb70f6a699a535f591",
+    "status": "HISTORICAL_VERIFIED_CLOSED_SUPERSEDED_BY_SOURCE_CHANGE"
+  },
+  "current_candidate": {
+    "version": "V1.8",
+    "source_sha": "f66624e90e154e6ba4c9c61963973e7659f25431",
+    "feature_parent_sha": "4f25afa43a682830630f2e69d6c2bc94f2f6c5ab",
+    "publish_workflow_commit": "ccad6803c72bb80ed27df380ccb5f5994d8d85e1",
+    "publish_run": 34716725960,
+    "publish_job": 103615195530,
+    "publish_result": "PASS",
+    "package_result": "PASS",
+    "http_readback_result": "PASS",
+    "url": "https://comand-center-1-yaiwes-ui-factory.static.hf.space/"
+  },
+  "required_fresh_gates": {
+    "human_like_interaction_cycles_50": "MISSING_FRESH_EVIDENCE",
+    "each_step_and_button": "MISSING_FRESH_EVIDENCE_FOR_V1_8",
+    "canvas_drag_drop": "MISSING_FRESH_EVIDENCE_FOR_V1_8",
+    "panel_mouse_touch_scroll": "MISSING_FRESH_EVIDENCE_FOR_V1_8",
+    "breakpoints_zoom_fit_view": "MISSING_FRESH_EVIDENCE_FOR_V1_8",
+    "independent_browser_reviewer": "MISSING_FRESH_EVIDENCE_FOR_V1_8"
+  },
+  "safety": {
+    "allowed_connectors_used": ["GitHub"],
+    "secrets_read_or_exposed": false,
+    "force_push": false,
+    "lfs": false,
+    "backend_productive_write": false,
+    "t2_productive_write": false
+  },
+  "queue_1x1_next": "VALIDATE_V1_8_WITH_50_INTERACTION_CYCLES_THEN_INDEPENDENT_BROWSER_REVIEWER",
+  "closure_rule": "Do not return T1 to VERIFIED_CLOSED until all current visual/editor-change gates have fresh evidence tied to V1.8 or a later current source."
+}
