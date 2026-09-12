@@ -5,7 +5,7 @@
   "status": "ACTIVE_LOOP",
   "gate": "T1_FACTORY_FRONTEND",
   "t2_interface": "BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
-  "current_node": "T1_FACTORY_V1_8_50_CYCLE_AND_REVIEWER_REVALIDATION",
+  "current_node": "T1_FACTORY_V1_8_LIVE_50_CYCLE_GATE_RUNNING",
   "historical_factory_v1_1": {
     "source_sha": "245efadec5f01513c8ee4203224fba739ad0d2f2",
     "space_repo": "COMAND-CENTER-1/yaiwes-ui-factory",
@@ -37,12 +37,16 @@
     "package_verify": "PASS",
     "http_readback": "PASS",
     "url": "https://comand-center-1-yaiwes-ui-factory.static.hf.space/",
-    "human_like_interaction_cycles_50": "PENDING_FRESH_EVIDENCE",
-    "each_step_and_button": "PENDING_FRESH_EVIDENCE",
-    "canvas_drag_drop": "PENDING_FRESH_EVIDENCE",
-    "panel_mouse_touch_scroll": "PENDING_FRESH_EVIDENCE",
-    "breakpoints_zoom_fit_view": "PENDING_FRESH_EVIDENCE",
+    "human_like_interaction_cycles_50": "RUNNING_NOT_TERMINAL",
+    "each_step_and_button": "RUNNING_NOT_TERMINAL",
+    "canvas_drag_drop": "RUNNING_NOT_TERMINAL",
+    "panel_mouse_touch_scroll": "RUNNING_NOT_TERMINAL",
+    "breakpoints_zoom_fit_view": "RUNNING_NOT_TERMINAL",
     "independent_browser_reviewer": "PENDING_FRESH_EVIDENCE",
+    "validation_test_commit": "d7a98d833b574886e72ebf81648278578a6879d3",
+    "validation_workflow_commit": "180b25092f13f6c773b9c615d572374e88d7dd05",
+    "validation_run": "https://github.com/maxbry123-commits/frontend/actions/runs/34721912175",
+    "validation_job": "https://github.com/maxbry123-commits/frontend/actions/runs/34721912175/job/103629254847",
     "verified_closed": false
   },
   "security": "secret_ref_only_no_raw_api_keys",
@@ -54,8 +58,7 @@
     "backend_productive_write": false
   },
   "reopened_gaps": [
-    "CURRENT_FACTORY_SOURCE_CHANGED_AFTER_V1_1_CLOSURE",
-    "V1_8_50_INTERACTION_CYCLES_NOT_YET_EVIDENCED",
+    "V1_8_50_INTERACTION_CYCLES_NOT_YET_TERMINAL_PASS",
     "V1_8_INDEPENDENT_BROWSER_REVIEW_NOT_YET_EVIDENCED"
   ],
   "remaining_project_gaps_not_current_queue": [
@@ -64,8 +67,8 @@
     "T2_RECON_38_WINDOWS_AND_BACKEND_PENDING",
     "T2_COMPONENT_REUSE_AND_INTERFACE_BUILD_PENDING"
   ],
-  "evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/FACTORY-V1.8-WATCHDOG-REGRESSION-2026-09-12.json",
+  "evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/FACTORY-V1.8-LIVE-50-CYCLE-GATE-2026-09-12.json",
   "closure_rule": "For any visual shell/editor source change: fresh current-source verification must include 50 human-like interaction cycles covering steps/buttons/canvas drag-drop/panel mouse-touch scroll/breakpoints/zoom plus deployed readback and independent browser reviewer before VERIFIED_CLOSED.",
-  "closure_result": "REOPENED_VALIDATION_REQUIRED",
-  "next_node": "VALIDATE_V1_8_WITH_50_INTERACTION_CYCLES_THEN_INDEPENDENT_BROWSER_REVIEWER"
+  "closure_result": "ACTIVE_LOOP_GATE_RUNNING_NOT_PASS",
+  "next_node": "WAIT_FOR_50_CYCLE_TERMINAL_RESULT_THEN_STRATEGYDELTA_OR_INDEPENDENT_BROWSER_REVIEWER"
 }
