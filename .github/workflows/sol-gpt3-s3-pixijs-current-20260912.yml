@@ -1,0 +1,47 @@
+name: Sol GPT3 S3 PixiJS current validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sol-gpt3-s3-pixijs-current-20260912.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pixijs-current:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Read back source metadata
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/PixiJS
+        run: |
+          node --version
+          test "$(cat .nvmrc)" = "v24"
+          node -e "const p=require('./package.json'); if(p.name!=='pixi.js'||p.version!=='8.20.1') process.exit(1); console.log(p.name,p.version,p.scripts.build,p.scripts['test:types'])"
+          git rev-parse HEAD
+          git hash-object package.json
+
+      - name: Install current vendored source
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/PixiJS
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: Build current source
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/PixiJS
+        run: npm run build
+
+      - name: Run upstream type tests
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/PixiJS
+        run: npm run test:types
