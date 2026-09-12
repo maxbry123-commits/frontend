@@ -59,7 +59,8 @@ jobs:
           echo "SOURCE_REF=$SOURCE_REF"
           echo "PACKAGE_FILES=$(find _hf_space_publish -type f | wc -l)"
           grep -q 'YAIWES UI Factory' _hf_space_publish/index.html
-          grep -q 'LUCIDE_SOURCE_COMMIT' _hf_space_publish/src/donors/lucide-icons.js
+          grep -q 'LUCIDE_PROVENANCE' _hf_space_publish/src/donors/lucide-icons.js
+          grep -q 'a53bd66a03dfd5609c3638379869e83dc207b051' _hf_space_publish/src/donors/lucide-icons.js
           sha256sum _hf_space_publish/index.html _hf_space_publish/styles.css _hf_space_publish/src/*.js _hf_space_publish/src/donors/*.js
           echo 'PACKAGE_VERIFY=PASS'
 
