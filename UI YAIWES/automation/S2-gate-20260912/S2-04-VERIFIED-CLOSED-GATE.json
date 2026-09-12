@@ -1,0 +1,48 @@
+{
+  "schema": "yaiwes.s2.verified-closed-gate.v1",
+  "role": "SOL_GPT2_BACKEND",
+  "node": "S2-04",
+  "observed_main_sha": "e010de6d43e1ee752069cc621643ee575febd791",
+  "duckdb_official_core": {
+    "run_id": 34565130195,
+    "job_id": 103155580176,
+    "failed": 1,
+    "pending": 0,
+    "classification": "SOURCE_SPECIAL_FILE_GAP"
+  },
+  "duckdb_materialize_candidate": {
+    "run_id": 34567558458,
+    "job_id": 103162673765,
+    "motor_2": "PASS",
+    "motor_4": "PASS",
+    "publication": "FAIL",
+    "final_readback": "ABSENT",
+    "classification": "PUBLISH_GAP_EXACT_SUBCAUSE_UNAVAILABLE"
+  },
+  "avf_exact_tree": {
+    "run_id": 34567431687,
+    "job_id": 103162313631,
+    "failed": 1,
+    "pending": 0,
+    "classification": "SOURCE_SPECIAL_FILE_GAP",
+    "special_entry_count": 3
+  },
+  "residual_readback": {
+    "present": 0,
+    "expected": 4,
+    "Vite": "ABSENT",
+    "Supabase": "ABSENT",
+    "DuckDB": "ABSENT",
+    "AVF": "ABSENT"
+  },
+  "gates": {
+    "observed_pending_zero": true,
+    "failed_zero": false,
+    "duckdb_published_and_readback": false,
+    "avf_download_extract_verified": false,
+    "four_residuals_present": false
+  },
+  "verdict": "FAIL_CLOSED_NOT_VERIFIED",
+  "verified_closed_claimed": false,
+  "next_action": "Continue only authorized S2 recovery paths; do not modify canonical motors, sanitize source, use LFS, force push, or claim physical presence/WIRED without readback."
+}
