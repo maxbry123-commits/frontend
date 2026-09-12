@@ -3,8 +3,8 @@
   "contract": "tel.workflow/v3",
   "role": "ASTRA_GPT1_BACKEND",
   "name": "🧑‍💻Astra gpt 1 backend UI YAIWES 🌀🌀🌀 👷👷🕵️‍♀️",
-  "updated_at": "2026-09-11T23:38:07.310Z",
-  "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
+  "updated_at": "2026-09-12T02:36:46.100Z",
+  "base_sha": "acf2165e094238c3a4dfe6beefb0d56b6d57e180",
   "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
   "status": "ACTIVE_LOOP_GAPS_OPEN",
   "scope": "A1 audit only; sole write path is this role_state_path",
@@ -71,8 +71,8 @@
   "nodes": [
     {
       "id": "A1-01",
-      "status": "AUDITED_STALE_SUMMARIES_WITH_NEW_SEPARATE_DELTAS",
-      "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
+      "status": "AUDITED_STALE_CANONICAL_SUMMARIES_NEW_S3_DELTA",
+      "base_sha": "acf2165e094238c3a4dfe6beefb0d56b6d57e180",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "wall_reads_before_nodes": [
         "2404928bd332e2abb1466c9a4095bd52bd24acea",
@@ -83,70 +83,61 @@
       "evidence": {
         "STATE": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
         "CHECKPOINT": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
-        "HANDOFF": "8302687aaebdd48b9364f5febec8e90dfcffbd49"
+        "HANDOFF": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
+        "WATCHDOG_DELTA": "9760271d97da2aae190dfdea3eca2d0c20d22145"
       },
       "findings": [
-        "STATE, CHECKPOINT and canonical HANDOFF remain byte-identical and do not reconcile current runtime, policy, auxiliary OSS or router-bridge deltas.",
-        "The frontend RIU bridge is newly declared at blob 9c78844fa2f83bcbf0b5606ae3fecfc9d73d7503, but its own status is PENDING_E2E_ROUTER; declaration is not connectivity proof."
-      ],
-      "riu_bridge": {
-        "blob_sha": "9c78844fa2f83bcbf0b5606ae3fecfc9d73d7503",
-        "schema": "riu.connectivity.bridge/v2",
-        "status": "FRONTEND_BRIDGE_V2_DECLARED",
-        "verification": "PENDING_E2E_ROUTER_CREDENTIALS",
-        "health_gates": [
-          "github:PENDING_RUNTIME_CREDENTIAL_TEST",
-          "huggingface:PENDING_RUNTIME_CREDENTIAL_TEST",
-          "huggingface_space:PENDING_RUNTIME_CREDENTIAL_TEST",
-          "claude_github_mcp:PENDING_RUNTIME_CREDENTIAL_TEST"
-        ]
-      }
+        "STATE, CHECKPOINT and canonical HANDOFF remain byte-identical; none reconciles the latest S3 CodeMirror result, auxiliary OSS status or RIU bridge.",
+        "WATCHDOG delta is a separate coordination artifact and correctly keeps G12 global OPEN; it does not supersede canonical summaries."
+      ]
     },
     {
       "id": "A1-02",
       "status": "EVIDENCE_AUDITED_CLOSURE_BLOCKED",
-      "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
+      "base_sha": "acf2165e094238c3a4dfe6beefb0d56b6d57e180",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "residuals": [
         {
           "name": "Vite",
           "path": "UI YAIWES/componentes open soure UI YAIWES/Vite",
-          "readback": "ABSENT_AT_BASE_SHA",
+          "readback": "404_NOT_FOUND_AT_BASE_SHA",
           "scope_limit": "Exact final path only; repository-wide absence not inferred"
         },
         {
           "name": "Supabase",
           "path": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
-          "readback": "ABSENT_AT_BASE_SHA",
+          "readback": "404_NOT_FOUND_AT_BASE_SHA",
           "scope_limit": "Exact final path only; repository-wide absence not inferred"
         },
         {
           "name": "DuckDB",
           "path": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
-          "readback": "ABSENT_AT_BASE_SHA",
+          "readback": "404_NOT_FOUND_AT_BASE_SHA",
           "scope_limit": "Exact final path only; repository-wide absence not inferred"
         },
         {
           "name": "AVF",
           "path": "UI YAIWES/componentes open soure UI YAIWES/AVF",
-          "readback": "ABSENT_AT_BASE_SHA",
+          "readback": "404_NOT_FOUND_AT_BASE_SHA",
           "scope_limit": "Exact final path only; repository-wide absence not inferred"
         }
       ],
       "owner_state_blobs": {
         "SOL_GPT1_BACKEND": "89ee5114679abe3726942fb420e1e55882950b38",
         "SOL_GPT2_BACKEND": "f5fd829084d88a6dbd017856e453a78855cf06f0",
-        "SOL_GPT3_BACKEND": "b852f5ec08aac4eab4259626a9c243e5c0b4ad56"
+        "SOL_GPT3_BACKEND": "b852f5ec08aac4eab4259626a9c243e5c0b4ad56",
+        "ASTRA2_GPT_BACKEND": "0f6dcf0b804e7c35298645d65a318c0d782a01ad"
       },
       "findings": [
-        "No source/tree hash plus exact final read-back appeared for any residual.",
-        "No residual can be promoted from the separate Testcontainers or router-bridge work."
+        "All four exact canonical destination paths return 404 at the audited base.",
+        "S1 remains blocked by missing literal destination authorization; S2 records DuckDB symlink rejection and AVF provider/capability gates; S3 canonical state is stale while work is recorded in its debate artifact.",
+        "No source/tree hash plus exact destination read-back closes any residual."
       ]
     },
     {
       "id": "A1-03",
-      "status": "AUDITED_NEW_CI_CANCELLATION_STALE_01_20",
-      "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
+      "status": "AUDITED_NEW_CODEMIRROR_FAIL_STALE_01_20",
+      "base_sha": "acf2165e094238c3a4dfe6beefb0d56b6d57e180",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1",
       "reported_pass": 17,
@@ -157,46 +148,50 @@
         "Vercel AI SDK"
       ],
       "new_independent_evidence": {
-        "lane": "Auxiliary OSS Testcontainers real-adapter lifecycle",
-        "workflow_run": 34656458039,
-        "job_id": 103449840014,
-        "head_sha": "e75cd3f5089845b45d87cad2ed595f0c07405039",
-        "result": "TEST_CANCELLED_NOT_PASS",
+        "lane": "S3 batch 21-40 CodeMirror 6 upstream source test",
+        "workflow_run": 34666274252,
+        "job_id": 103478672955,
+        "head_sha": "20e593a4f0a684f7169bce7ea29c75ec9d2283d2",
+        "result": "TEST_FAIL_NOT_PASS",
         "log_read_back": true,
-        "assertions": "15 Wordflow LOOP tests passed; complete runtime suite was cancelled after approximately 9m58s and produced no Testcontainers lifecycle verdict.",
-        "scope": "Separate auxiliary OSS lane; does not modify integration 01-20."
+        "steps": "route/source metadata PASS; npm install --ignore-scripts PASS; npm run test-node FAIL",
+        "exact_error": "module state is missing. Did you forget to run 'cm install'?",
+        "source_commit": "c010426d06689a7115aa9df08425126b6d3ead2f",
+        "package_blob": "f8523b84db19f68e735fa430792798aeac54c4d2",
+        "bin_blob": "428656171c85ad79ac431f26cac6195a582f6d37",
+        "interpretation": "The checked-in CodeMirror dev root expects multiple package directories populated by cm install. cm install clones repositories, so invoking it blindly would bypass canonical acquisition policy."
       },
       "findings": [
-        "Canonical 01-20 report remains byte-identical, generated 2026-09-09, with 17 PASS and three PENDING_SOURCE.",
-        "Two bounded Testcontainers attempts ended cancelled; adding subprocess timeouts did not yield a completed lifecycle result under the job ceiling.",
-        "The cancellation is infrastructure/runtime-suite evidence, not a functional PASS or functional FAIL for Testcontainers."
+        "Canonical integration 01-20 remains byte-identical at 17/20 with big-AGI, Vite and Vercel AI SDK pending.",
+        "CodeMirror belongs to the separate 21-40 lane and cannot change the 01-20 denominator.",
+        "The second CodeMirror attempt resolved install-script failure but exposed an incomplete dev-workspace/source-shape gap; no runtime or wiring PASS exists."
       ]
     },
     {
       "id": "A1-04",
       "status": "INSTRUCTIONS_PUBLISHED_IN_OWN_STATE",
-      "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
+      "base_sha": "acf2165e094238c3a4dfe6beefb0d56b6d57e180",
       "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
       "refutations": [
-        "A declared RIU YAML bridge with PENDING_E2E_ROUTER cannot be counted as connected.",
-        "A cancelled aggregate runtime suite cannot promote Testcontainers to TESTED or WIRED.",
-        "Auxiliary OSS work cannot change the Action124 120/124 or integration 17/20 denominators.",
-        "Unchanged STATE/CHECKPOINT/HANDOFF cannot be treated as reconciled merely because newer delta files exist."
+        "A successful npm dependency install is not a successful upstream test.",
+        "Running cm install without a coordinator-approved acquisition plan would clone additional repositories outside the pinned canonical motors.",
+        "S3 debate updates do not update its canonical role state or the canonical 01-20 report.",
+        "A declared RIU bridge and unchanged canonical summaries do not prove E2E connectivity or global closure."
       ]
     }
   ],
   "instructions_for_owners": {
-    "SOL_GPT1_BACKEND": "Publish fresh canonical own-state heartbeat. Obtain literal Vite/Supabase destination authorization, run only pinned canonical motors, and record source commit, final tree hash, failed=0, pending=0 and exact destination read-back; hand verified Vite to S3.",
-    "SOL_GPT2_BACKEND": "Publish fresh canonical own-state heartbeat. Keep DuckDB symlink handling and AVF provider/permission/host-capability/guest-boot gates fail-closed; record coordinator-approved strategy and exact destination read-back without changing immutable motors.",
-    "SOL_GPT3_BACKEND": "Keep Testcontainers TEST_CANCELLED_NOT_PASS after two attempts. Split the specific real-adapter lifecycle test into a separately bounded CI job or exclude unrelated long-running tests from that verification; capture its exact log and only then classify. Keep 01-20 at 17/20 until big-AGI, Vite and Vercel AI SDK have current destination+wiring+runtime evidence.",
-    "ASTRA2_GPT_BACKEND": "Canonical state remains READY_TO_CLAIM. Claim a concrete A2 node with base SHA and validate actual Fables consumption beyond socket tests; candidate research and generic socket presence are not Fables integration.",
-    "COORDINATOR": "Reconcile STATE/CHECKPOINT/HANDOFF with current deltas. Keep separate denominators: Action124 120/124, integration 17/20, auxiliary OSS 6/11. Treat the RIU bridge as DECLARED/PENDING_E2E and assign a request-response-healthcheck E2E before promotion. No new component download is justified by this A1 cycle."
+    "SOL_GPT1_BACKEND": "Keep Vite/Supabase fail-closed until the coordinator publishes literal authorized final destinations. Then use only pinned canonical motors and record source ref, tree hash, failed=0, pending=0 and exact read-back; hand verified Vite to S3.",
+    "SOL_GPT2_BACKEND": "Keep DuckDB and AVF fail-closed. Request a coordinator-approved source-shape/provider strategy that preserves provenance and immutable-motor rules; do not sanitize symlinks, patch Motor2 or infer AVF guest boot from source presence.",
+    "SOL_GPT3_BACKEND": "Record run 34666274252/job 103478672955 in canonical S3 state as TEST_FAIL_NOT_PASS. Do not call cm install blindly: it clones missing package repositories. Ask the coordinator to choose exact canonical acquisition of required CodeMirror package roots or REUSE_REJECT; then rerun bounded upstream tests. Keep 01-20 at 17/20.",
+    "ASTRA2_GPT_BACKEND": "State remains READY_TO_CLAIM with no node claimed. Claim only with node_id/base SHA/claimed_at and validate actual Fables consumption or assigned candidate dedup; do not count research as acquisition.",
+    "COORDINATOR": "Reconcile STATE/CHECKPOINT/HANDOFF and canonical role states. Publish literal Vite/Supabase destinations, decide DuckDB/AVF provider strategies, and decide the CodeMirror source-shape plan without bypassing canonical motors. Keep Action124 120/124, integration 17/20 and auxiliary lanes separate; RIU remains PENDING_E2E."
   },
   "next_iteration": [
-    "Re-read roles wall and canonical summaries.",
-    "Check exact four residual paths and canonical owner states.",
-    "Check regeneration of integration-01-20 report.",
-    "Check a completed, isolated Testcontainers lifecycle job and RIU E2E evidence."
+    "Re-read wall and canonical summaries.",
+    "Re-check four exact residual paths and owner-state blob changes.",
+    "Read any completed S3 CodeMirror follow-up log and verify canonical S3 state reconciliation.",
+    "Keep 01-20 unchanged until per-component current source+wiring+runtime evidence exists."
   ],
   "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
   "research_delta": {
@@ -1038,18 +1033,158 @@
         "mutation_performed": "OWN_STATE_ONLY",
         "new_evidence": "New source crosscheck reports 6/11 auxiliary OSS verified and 5 blocked; G12 policy lane is mapped PASS. Four Action124 residual paths remain absent and canonical integration stays 17/20."
       }
+    },
+    {
+      "snapshot_reason": "Preserve previous A1 state before CodeMirror audit",
+      "updated_at": "2026-09-11T23:38:07.310Z",
+      "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
+      "nodes": [
+        {
+          "id": "A1-01",
+          "status": "AUDITED_STALE_SUMMARIES_WITH_NEW_SEPARATE_DELTAS",
+          "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
+          "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "wall_reads_before_nodes": [
+            "2404928bd332e2abb1466c9a4095bd52bd24acea",
+            "2404928bd332e2abb1466c9a4095bd52bd24acea",
+            "2404928bd332e2abb1466c9a4095bd52bd24acea",
+            "2404928bd332e2abb1466c9a4095bd52bd24acea"
+          ],
+          "evidence": {
+            "STATE": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
+            "CHECKPOINT": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
+            "HANDOFF": "8302687aaebdd48b9364f5febec8e90dfcffbd49"
+          },
+          "findings": [
+            "STATE, CHECKPOINT and canonical HANDOFF remain byte-identical and do not reconcile current runtime, policy, auxiliary OSS or router-bridge deltas.",
+            "The frontend RIU bridge is newly declared at blob 9c78844fa2f83bcbf0b5606ae3fecfc9d73d7503, but its own status is PENDING_E2E_ROUTER; declaration is not connectivity proof."
+          ],
+          "riu_bridge": {
+            "blob_sha": "9c78844fa2f83bcbf0b5606ae3fecfc9d73d7503",
+            "schema": "riu.connectivity.bridge/v2",
+            "status": "FRONTEND_BRIDGE_V2_DECLARED",
+            "verification": "PENDING_E2E_ROUTER_CREDENTIALS",
+            "health_gates": [
+              "github:PENDING_RUNTIME_CREDENTIAL_TEST",
+              "huggingface:PENDING_RUNTIME_CREDENTIAL_TEST",
+              "huggingface_space:PENDING_RUNTIME_CREDENTIAL_TEST",
+              "claude_github_mcp:PENDING_RUNTIME_CREDENTIAL_TEST"
+            ]
+          }
+        },
+        {
+          "id": "A1-02",
+          "status": "EVIDENCE_AUDITED_CLOSURE_BLOCKED",
+          "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
+          "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "residuals": [
+            {
+              "name": "Vite",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Vite",
+              "readback": "ABSENT_AT_BASE_SHA",
+              "scope_limit": "Exact final path only; repository-wide absence not inferred"
+            },
+            {
+              "name": "Supabase",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
+              "readback": "ABSENT_AT_BASE_SHA",
+              "scope_limit": "Exact final path only; repository-wide absence not inferred"
+            },
+            {
+              "name": "DuckDB",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
+              "readback": "ABSENT_AT_BASE_SHA",
+              "scope_limit": "Exact final path only; repository-wide absence not inferred"
+            },
+            {
+              "name": "AVF",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/AVF",
+              "readback": "ABSENT_AT_BASE_SHA",
+              "scope_limit": "Exact final path only; repository-wide absence not inferred"
+            }
+          ],
+          "owner_state_blobs": {
+            "SOL_GPT1_BACKEND": "89ee5114679abe3726942fb420e1e55882950b38",
+            "SOL_GPT2_BACKEND": "f5fd829084d88a6dbd017856e453a78855cf06f0",
+            "SOL_GPT3_BACKEND": "b852f5ec08aac4eab4259626a9c243e5c0b4ad56"
+          },
+          "findings": [
+            "No source/tree hash plus exact final read-back appeared for any residual.",
+            "No residual can be promoted from the separate Testcontainers or router-bridge work."
+          ]
+        },
+        {
+          "id": "A1-03",
+          "status": "AUDITED_NEW_CI_CANCELLATION_STALE_01_20",
+          "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
+          "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1",
+          "reported_pass": 17,
+          "total": 20,
+          "pending": [
+            "big-AGI",
+            "Vite",
+            "Vercel AI SDK"
+          ],
+          "new_independent_evidence": {
+            "lane": "Auxiliary OSS Testcontainers real-adapter lifecycle",
+            "workflow_run": 34656458039,
+            "job_id": 103449840014,
+            "head_sha": "e75cd3f5089845b45d87cad2ed595f0c07405039",
+            "result": "TEST_CANCELLED_NOT_PASS",
+            "log_read_back": true,
+            "assertions": "15 Wordflow LOOP tests passed; complete runtime suite was cancelled after approximately 9m58s and produced no Testcontainers lifecycle verdict.",
+            "scope": "Separate auxiliary OSS lane; does not modify integration 01-20."
+          },
+          "findings": [
+            "Canonical 01-20 report remains byte-identical, generated 2026-09-09, with 17 PASS and three PENDING_SOURCE.",
+            "Two bounded Testcontainers attempts ended cancelled; adding subprocess timeouts did not yield a completed lifecycle result under the job ceiling.",
+            "The cancellation is infrastructure/runtime-suite evidence, not a functional PASS or functional FAIL for Testcontainers."
+          ]
+        },
+        {
+          "id": "A1-04",
+          "status": "INSTRUCTIONS_PUBLISHED_IN_OWN_STATE",
+          "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
+          "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "refutations": [
+            "A declared RIU YAML bridge with PENDING_E2E_ROUTER cannot be counted as connected.",
+            "A cancelled aggregate runtime suite cannot promote Testcontainers to TESTED or WIRED.",
+            "Auxiliary OSS work cannot change the Action124 120/124 or integration 17/20 denominators.",
+            "Unchanged STATE/CHECKPOINT/HANDOFF cannot be treated as reconciled merely because newer delta files exist."
+          ]
+        }
+      ],
+      "instructions_for_owners": {
+        "SOL_GPT1_BACKEND": "Publish fresh canonical own-state heartbeat. Obtain literal Vite/Supabase destination authorization, run only pinned canonical motors, and record source commit, final tree hash, failed=0, pending=0 and exact destination read-back; hand verified Vite to S3.",
+        "SOL_GPT2_BACKEND": "Publish fresh canonical own-state heartbeat. Keep DuckDB symlink handling and AVF provider/permission/host-capability/guest-boot gates fail-closed; record coordinator-approved strategy and exact destination read-back without changing immutable motors.",
+        "SOL_GPT3_BACKEND": "Keep Testcontainers TEST_CANCELLED_NOT_PASS after two attempts. Split the specific real-adapter lifecycle test into a separately bounded CI job or exclude unrelated long-running tests from that verification; capture its exact log and only then classify. Keep 01-20 at 17/20 until big-AGI, Vite and Vercel AI SDK have current destination+wiring+runtime evidence.",
+        "ASTRA2_GPT_BACKEND": "Canonical state remains READY_TO_CLAIM. Claim a concrete A2 node with base SHA and validate actual Fables consumption beyond socket tests; candidate research and generic socket presence are not Fables integration.",
+        "COORDINATOR": "Reconcile STATE/CHECKPOINT/HANDOFF with current deltas. Keep separate denominators: Action124 120/124, integration 17/20, auxiliary OSS 6/11. Treat the RIU bridge as DECLARED/PENDING_E2E and assign a request-response-healthcheck E2E before promotion. No new component download is justified by this A1 cycle."
+      },
+      "current_delta": {
+        "observed_at": "2026-09-11T23:37:34.623Z",
+        "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
+        "previous_role_blob_sha": "215803c03b7db56f53ab0dc274a946272b1ef097",
+        "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+        "result": "DELTA_AUDITED_GAPS_OPEN",
+        "runtime_tests_executed_this_cycle": false,
+        "ci_logs_independently_read": true,
+        "mutation_performed": "OWN_STATE_ONLY",
+        "new_evidence": "S3 Testcontainers retry run 34656458039/job 103449840014 independently confirmed CANCELLED_NOT_PASS; frontend RIU bridge is DECLARED/PENDING_E2E. Four residual exact paths remain absent and canonical 01-20 stays 17/20.",
+        "corrected_current_bridge_blob": "9c78844fa2f83bcbf0b5606ae3fecfc9d73d7503"
+      }
     }
   ],
   "current_delta": {
-    "observed_at": "2026-09-11T23:37:34.623Z",
-    "base_sha": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
-    "previous_role_blob_sha": "215803c03b7db56f53ab0dc274a946272b1ef097",
+    "observed_at": "2026-09-12T02:36:46.100Z",
+    "base_sha": "acf2165e094238c3a4dfe6beefb0d56b6d57e180",
+    "previous_role_blob_sha": "ce40019e69e838f9093b60824d14c8d7867e60fa",
     "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
     "result": "DELTA_AUDITED_GAPS_OPEN",
     "runtime_tests_executed_this_cycle": false,
     "ci_logs_independently_read": true,
     "mutation_performed": "OWN_STATE_ONLY",
-    "new_evidence": "S3 Testcontainers retry run 34656458039/job 103449840014 independently confirmed CANCELLED_NOT_PASS; frontend RIU bridge is DECLARED/PENDING_E2E. Four residual exact paths remain absent and canonical 01-20 stays 17/20.",
-    "corrected_current_bridge_blob": "9c78844fa2f83bcbf0b5606ae3fecfc9d73d7503"
+    "new_evidence": "S3 CodeMirror run 34666274252/job 103478672955 failed after installation because the required cm install workspace state is absent; cm install would clone additional package repositories and needs canonical acquisition approval. Four residual exact paths remain absent and integration 01-20 stays 17/20."
   }
 }
