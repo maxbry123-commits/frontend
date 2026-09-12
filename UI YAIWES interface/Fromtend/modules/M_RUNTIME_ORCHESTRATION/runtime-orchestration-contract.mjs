@@ -34,7 +34,22 @@ function freezeSnapshot(value) {
   return Object.freeze(copy);
 }
 
-export function createRuntimeOrchestrationContract({ codeMirrorAdapter, actionBus, postMessageTarget } = {}) {
+function assertExplicitOrigin(origin) {
+  if (typeof origin !== "string" || !origin.trim()) throw new Error("POSTMESSAGE_ORIGIN_REQUIRED");
+  if (origin === "*") throw new Error("POSTMESSAGE_WILDCARD_ORIGIN_DENIED");
+  let parsed;
+  try {
+    parsed = new URL(origin);
+  } catch {
+    throw new Error("POSTMESSAGE_ORIGIN_INVALID");
+  }
+  if (!/^https?:$/.test(parsed.protocol) || parsed.origin !== origin || parsed.pathname !== "/") {
+    throw new Error("POSTMESSAGE_ORIGIN_INVALID");
+  }
+  return parsed.origin;
+}
+
+export function createRuntimeOrchestrationContract({ codeMirrorAdapter, actionBus, postMessageTarget, postMessageOrigin } = {}) {
   if (!codeMirrorAdapter || typeof codeMirrorAdapter.mount !== "function") {
     throw new Error("CODEMIRROR_ADAPTER_REQUIRED");
   }
@@ -44,12 +59,13 @@ export function createRuntimeOrchestrationContract({ codeMirrorAdapter, actionBu
   if (postMessageTarget != null && typeof postMessageTarget.postMessage !== "function") {
     throw new Error("POSTMESSAGE_TARGET_INVALID");
   }
+  const targetOrigin = postMessageTarget ? assertExplicitOrigin(postMessageOrigin) : null;
 
   const publish = (type, payload) => {
     assertNoSecretFields(payload);
     const event = Object.freeze({ schema: "yaiwes.runtime-orchestration.v1", type, payload: freezeSnapshot(payload) });
     actionBus.publish(event);
-    if (postMessageTarget) postMessageTarget.postMessage(event, "*");
+    if (postMessageTarget) postMessageTarget.postMessage(event, targetOrigin);
     return event;
   };
 
