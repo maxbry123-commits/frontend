@@ -34,6 +34,20 @@ def run(node: NodeContract, payload: dict) -> LayerResult:
         for item in ast.walk(tree):
             if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
                 symbols.append(item.name)
+                if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    body = item.body
+                    if (body and isinstance(body[0], ast.Expr)
+                            and isinstance(body[0].value, ast.Constant)
+                            and isinstance(body[0].value.value, str)):
+                        body = body[1:]
+                    if not body or (len(body) == 1 and (
+                        isinstance(body[0], ast.Pass) or (
+                            isinstance(body[0], ast.Expr)
+                            and isinstance(body[0].value, ast.Constant)
+                            and body[0].value.value is Ellipsis
+                        )
+                    )):
+                        stubs.append(item.name)
             elif isinstance(item, ast.Import):
                 imports.extend(alias.name for alias in item.names)
             elif isinstance(item, ast.ImportFrom):
@@ -44,12 +58,6 @@ def run(node: NodeContract, payload: dict) -> LayerResult:
                 and item.func.id in DANGEROUS
             ):
                 dangerous.append(item.func.id)
-            elif (
-                isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef))
-                and len(item.body) == 1
-                and isinstance(item.body[0], ast.Pass)
-            ):
-                stubs.append(item.name)
 
         output[str(path)] = {
             "symbols": sorted(set(symbols)),

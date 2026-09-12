@@ -17,7 +17,11 @@ def run(node: NodeContract, payload: dict) -> LayerResult:
 
     output: dict[str, dict] = {}
     evidence: list[Evidence] = []
+    gaps: list[str] = []
     for name, text in documents.items():
+        if not isinstance(text, str) or not text.strip():
+            gaps.append(f"empty_or_invalid_document:{name}")
+            continue
         lines = str(text).splitlines()
         output[str(name)] = {
             "requirements": [
@@ -42,7 +46,8 @@ def run(node: NodeContract, payload: dict) -> LayerResult:
     return LayerResult(
         node_id=node.node_id,
         layer=node.layer,
-        status=Status.PASS,
+        status=Status.INCONCLUSIVE if gaps else Status.PASS,
         output={"documents": output},
         evidence=evidence,
+        gaps=gaps,
     )
