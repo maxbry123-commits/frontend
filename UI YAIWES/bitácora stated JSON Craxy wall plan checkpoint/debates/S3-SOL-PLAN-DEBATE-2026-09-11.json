@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S3-DEBATE-SOLPLAN-20260911-01",
-  "status": "ROUND31_Q1_Q4_ACTIONABLE_FABLES_A2_GATE_STILL_BLOCKED",
+  "status": "ROUND32_Q1_Q4_ACTIONABLE_RUNTIME_PERSIST_RESTART_VALIDATION_IN_PROGRESS",
   "from": "Sol gpt 3 🕵️‍♀️ backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
@@ -213,6 +213,37 @@
     "fables_promotion":false,
     "foreign_state_modified":false
   },
+  "round32_runtime_persist_restart_validation_start": {
+    "response_to":"S3-DEBATE-SOLPLAN-20260911-01",
+    "authorization":"Current Crazy Wall assignment to S3: test actual UI→adapter→runtime→persist→restart→resume; include cancellation/disconnect and no duplicated side effects. Execution is fail-closed and does not waive the A2 Fables gate.",
+    "scope_classification":"PARTIAL_ROUTE_PROBE_RUNTIME_PERSIST_RESTART_ONLY; no exact UI→adapter implementation was identified by the literal GitHub search used in this turn, so no end-to-end UI claim is made.",
+    "source_readback": {
+      "runner_path":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/runner.py",
+      "runner_blob":"4fd01eb441cf3c10638d1a6f80924fc3fc8533a5",
+      "ledger_path":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/ledger.py",
+      "ledger_blob":"79ae3da7f20188874ffdc9e5a6b5e9cd3fbc4c83",
+      "restart_test_path":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_recovery_latest_status.py",
+      "restart_test_blob":"d5e117cce7279fec5d04e8a8a9ce13cdeb8be22f",
+      "pyproject_blob":"8d04c18f5555dde0fd5d80dfffe8a21a2cd54136"
+    },
+    "observed_contract":"LayerRunner with ledger_path reloads durable ledger, rebuilds latest replay state, persists output/evidence/actions/touched_paths, and recover_event refreshes from disk. Existing regression verifies PASS→FAIL revokes dependency, restart preserves latest FAIL, then repaired PASS allows child PASS.",
+    "workflow": {
+      "path":".github/workflows/sol-gpt3-s3-runtime-persist-restart-20260912.yml",
+      "commit":"6ea197c575ca31e9c9a13efdf45fdc6149773d35",
+      "readback_blob":"3863c6052701bdfe24ed3cf4d4d34d0aa325ce71",
+      "permissions":"contents: read",
+      "persist_credentials":false,
+      "lfs":false,
+      "force":false
+    },
+    "route":"checkout read-only -> Python 3.11 -> SHA/readback runner+ledger+restart regression -> editable install + pytest -> targeted durable persist/restart/resume regression -> current Wordflow package regression",
+    "run":{"id":34714136180,"job":103608081961,"head_sha":"6ea197c575ca31e9c9a13efdf45fdc6149773d35","status_at_write":"in_progress","current_step":"Checkout","result":"NOT_PROMOTED_PENDING_TERMINAL_LOG"},
+    "cancel_disconnect":"NOT_CLAIMED_BY_THIS_PROBE; existing Vercel AI SDK lifecycle evidence covers cancel/disconnect at vendor level but is not reclassified as the requested UI→adapter end-to-end path.",
+    "duplicate_side_effects":"NOT_CLAIMED_PENDING_EXACT_END_TO_END_ROUTE_TEST",
+    "wiring_promotion":false,
+    "fables_promotion":false,
+    "foreign_state_modified":false
+  },
   "debate_turns": [
     {"turn":22,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"PIXIJS_RUNTIME_PASS_CLASSIFY","result":"RUNTIME_PASS_NOT_WIRED"},
     {"turn":23,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"REACT_TOASTIFY_FAILURE_AND_BOUNDED_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Attempt1 build PASS/Cypress step FAIL; explicit Cypress binary install added; retry 34678550136 queued. No WIRED/Fables promotion."},
@@ -227,9 +258,10 @@
     {"turn":32,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"UPPY_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Current main tree proves Uppy/component code tree; package requires Node>=22 and Yarn4.12.0. Created read-only workflow commit 819e419e9e575b7ba0b3e432602ea71ee28b60d3; run 34696152269 queued. No WIRED/Fables promotion."},
     {"turn":33,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"UPPY_FAILURE_AND_UPSTREAM_HARNESS_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34696152269/job 103559871054: route/install/build PASS, upstream headless test FAIL. Vendored Uppy CI requires Playwright Chromium install plus explicit test env; S3 harness aligned at commit 291d998835839c48070ca4e64de45f1969ce8b2d/readback 35912097298b436599424d380a3e613211f4eac3; retry 34699122744 in progress. No WIRED/Fables promotion."},
     {"turn":34,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"UPPY_RETRY_TERMINAL_PASS_CLASSIFY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Retry 34699122744/job 103567633257 completed success; route/install/Playwright Chromium/build/upstream headless tests PASS. Classified RUNTIME_PASS_NOT_WIRED; no WIRED/Fables promotion."},
-    {"turn":35,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"FABLES_A2_GATE_CROSSCHECK","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"S1 reports Fables path/blob/test/CI success, but current A2 role state does not publish A2 Fables validation and is READY_TO_CLAIM on another mission. Coordinator hard gate explicitly requires A2 evidence, so keep Fables/socket/WIRED fail-closed. No foreign state edits."}
+    {"turn":35,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"FABLES_A2_GATE_CROSSCHECK","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"S1 reports Fables path/blob/test/CI success, but current A2 role state does not publish A2 Fables validation and is READY_TO_CLAIM on another mission. Coordinator hard gate explicitly requires A2 evidence, so keep Fables/socket/WIRED fail-closed. No foreign state edits."},
+    {"turn":36,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"RUNTIME_PERSIST_RESTART_VALIDATION_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Current Crazy Wall assigns UI→adapter→runtime→persist→restart→resume validation. Exact GitHub source proves runtime durable-ledger/restart path, but no literal UI→adapter route was identified in this probe; created read-only S3 workflow commit 6ea197c575ca31e9c9a13efdf45fdc6149773d35/readback 3863c6052701bdfe24ed3cf4d4d34d0aa325ce71; run 34714136180/job 103608081961 in progress. No WIRED/Fables promotion."}
   ],
-  "next_action":{"owner":"S3","action":"Q2 21-40 validation window remains exhausted through #40. Keep Chart.js NOT_PASS pending exact assertion/log evidence. Keep Q4 blocked because current A2 state lacks Fables validation despite S1 technical evidence. Accept Vite only under Q3 immutable evidence contract; no historical destination authority.","status":"EXECUTING_FAIL_CLOSED"},
-  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_A2_FABLES_EVIDENCE_STILL_MISSING",
+  "next_action":{"owner":"S3","action":"Poll run 34714136180 to terminal and classify only the durable runtime persist/restart/resume evidence actually exercised. Do not claim full UI→adapter E2E, cancellation/disconnect, or duplicate-side-effect safety until an exact current route/test exists. Q4 remains blocked on A2 Fables evidence; Vite only under Q3 immutable handoff contract.","status":"EXECUTING_FAIL_CLOSED"},
+  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_RUNTIME_PERSIST_RESTART_TEST_IN_PROGRESS_FABLES_A2_STILL_GATED",
   "closure":"DO_NOT_CLOSE_ACTIVE_DEBATE_LOOP"
 }
