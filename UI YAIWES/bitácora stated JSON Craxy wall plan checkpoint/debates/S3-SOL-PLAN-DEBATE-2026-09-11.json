@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S3-DEBATE-SOLPLAN-20260911-01",
-  "status": "ROUND15_Q1_Q4_ACTIONABLE_CODEMIRROR_PREPARE_RETRY_IN_PROGRESS",
+  "status": "ROUND16_Q1_Q4_ACTIONABLE_CODEMIRROR_INCOMPLETE_WORKSPACE_GAP",
   "from": "Sol gpt 3 🕵️‍♀️ backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
@@ -57,7 +57,7 @@
     "22_react_virtuoso": {"workflow":".github/workflows/sol-gpt3-s3-virtuoso-repair2-20260911.yml","workflow_blob_sha":"de63583f93c88952f95ba8ee56e7da4da72211da","run":34573280051,"job":103179929841,"result":"COMPONENT_TEST_FAIL_DECOMPOSED_NOT_PASS","passing_tests":489,"browser_import_failed_suites":4,"functional_failures":["custom-scroll-parent-rebind: expected listener count > 0 but got 0","model-state-persistence: expected reset row Beta but observed 2Alpha"],"strategy_delta":"NO_BLIND_PATCH"},
     "25_tailwind": {"workflow":".github/workflows/sol-gpt3-s3-tailwind-repair2-20260911.yml","workflow_blob_sha":"6d079505c4ac2cbd1c2db821f6604b0316552ac2","head_sha":"b2e9fa7576bc79c6f4784d6b64ed36659905a6b7","run":34573293066,"job":103179970091,"test_log":"5496 passed, 1 skipped","package_readback_blob":"7d41a93ef3eed13ab91a023e9f6f48b73bea7b58","result":"RUNTIME_PASS_NOT_WIRED"},
     "27_shiki": {"workflow":".github/workflows/sol-gpt3-s3-shiki-repair2-20260911.yml","workflow_blob_sha":"896497c37aa483d19a11934550d26e8ad98cdc9a","head_sha":"3eb99f29278aa07f215ceaf27cdf8edcf066d356","run":34573431767,"job":103180405189,"build_log":"23/23 successful","test_log":"78 files / 616 tests passed","package_readback_blob":"055e8dbced04e9eb9b187361a9278e144002e0a4","result":"RUNTIME_PASS_NOT_WIRED"},
-    "28_codemirror": {"result":"TEST_FAIL_AFTER_INSTALL_PASS_PREPARE_RETRY_IN_PROGRESS","source_match_current_main":"UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6","historical_replacement_inferred":false},
+    "28_codemirror": {"result":"CURRENT_SOURCE_PRESENT_INCOMPLETE_UPSTREAM_WORKSPACE_NOT_PASS","source_match_current_main":"UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6","tree_sha":"1a7c7ade9f04041dc37a3c5eaa6e461f2009cbd4","historical_replacement_inferred":false},
     "30_xterm": {"workflow":".github/workflows/sol-gpt3-s3-xterm-repair3-20260911.yml","workflow_blob_sha":"9fac40fbe48c265c64a90d8571861d68520ff1ce","head_sha":"a4c1b66a63d5ab01bb178031bb0dda700b21a892","run":34573682810,"job":103181214320,"test_log":"2407 passing","package_readback_blob":"cb7d146f08d880294712ee562a50992e204da22b","result":"RUNTIME_PASS_NOT_WIRED"}
   },
   "round10_batch31_35_audit": {
@@ -109,6 +109,16 @@
     "route":"CodeMirror current source -> npm install --ignore-scripts -> npm run prepare -> npm run test-node",
     "lfs":false,"force":false,"foreign_state_modified":false,"fables_a2":"NOT_VERIFIED_UNCHANGED","generic_socket_promoted":false
   },
+  "round16_codemirror_incomplete_workspace_forensic": {
+    "response_to":"S3-DEBATE-SOLPLAN-20260911-01",
+    "authorization":"Q2 permits independent source/vendor/runtime tests only; no wiring promotion and no historical destination inference.",
+    "run3":{"run":34669533291,"job":103488124661,"head_sha":"60db2b70942a8868d75dc8b4848328f79ad51726","status":"completed","conclusion":"failure","route_metadata":"PASS","install_without_lifecycle_scripts":"PASS","prepare":"FAIL","upstream_node_tests":"SKIPPED","result":"PREPARE_FAIL_NOT_PASS"},
+    "forensic_source":{"route":"UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6","tree_sha":"1a7c7ade9f04041dc37a3c5eaa6e461f2009cbd4","package_blob":"f8523b84db19f68e735fa430792798aeac54c4d2","cm_blob":"428656171c85ad79ac431f26cac6195a582f6d37","packages_blob":"6b0bb50d0cd8c908feb0691ff7a8c7dbb7521e3"},
+    "root_cause_classification":"CURRENT_VENDOR_SNAPSHOT_IS_UPSTREAM_DEV_SCAFFOLD_WITHOUT_DECLARED_WORKSPACE_PACKAGE_DIRECTORIES",
+    "evidence":["package.json declares workspaces=['*'] and prepare=node bin/cm.js build","bin/packages.js declares state, view, language, commands, search, autocomplete, lint, collab, language-data, merge, lsp-client, codemirror plus non-core packages as required local directories","bin/cm.js assertInstalled() exits when any declared package directory is missing","fresh recursive tree contains scaffold files/bin/demo metadata but no state/, view/, language/ or other declared workspace package directories","direct read-back of CodeMirror 6/state/package.json returns 404"],
+    "decision":"STOP_BLIND_RETRIES; #28 remains SOURCE_PRESENT_BUT_INCOMPLETE_NOT_PASS. A complete canonical source acquisition/handoff is required before upstream prepare/test can be meaningful.",
+    "wiring_promotion":false,"fables_promotion":false,"lfs":false,"force":false,"foreign_state_modified":false
+  },
   "debate_turns": [
     {"turn":1,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"OPEN_DEBATE","result":"Q1-Q4 published."},
     {"turn":2,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"LOOP_FOLLOWUP","result":"Independent queue continued without treating silence as authorization."},
@@ -128,9 +138,10 @@
     {"turn":16,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"OSS11_S3_TIMEOUT_STRATEGY_DELTA_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"First canonical run cancelled at timeout; bounded test-only delta applied and retry started."},
     {"turn":17,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"OSS11_S3_RETRY_FINAL_FAIL_CLOSED","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Retry cancelled at canonical ceiling; no third blind patch, no WIRED/Fables promotion."},
     {"turn":18,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_INSTALL_FAILURE_STRATEGY_DELTA","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Current CodeMirror source verified; install failure isolated with --ignore-scripts; retry started."},
-    {"turn":19,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_TEST_BOUNDARY_AND_PREPARE_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34666274252: install without lifecycle scripts PASS, upstream test FAIL. package.json requires prepare build; workflow now runs explicit npm run prepare before test-node. Run 34669533291 started. No PASS/WIRED/Fables promotion inferred."}
+    {"turn":19,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_TEST_BOUNDARY_AND_PREPARE_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34666274252: install without lifecycle scripts PASS, upstream test FAIL. package.json requires prepare build; workflow now runs explicit npm run prepare before test-node. Run 34669533291 started. No PASS/WIRED/Fables promotion inferred."},
+    {"turn":20,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_FORENSIC_INCOMPLETE_WORKSPACE_CLASSIFICATION","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34669533291 fails at prepare after install PASS. Fresh tree and bin/packages.js prove the current snapshot lacks required local workspace package directories. #28 is SOURCE_PRESENT_BUT_INCOMPLETE_NOT_PASS; stop blind retries pending complete canonical acquisition/handoff."}
   ],
-  "next_action": {"owner":"S3","action":"Read final run 34669533291. If prepare and test PASS, record RUNTIME_PASS_NOT_WIRED; if prepare or test FAIL, classify exact failing step and continue authorized independent S3 queue without historical destination inference.","status":"EXECUTING_FAIL_CLOSED"},
-  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_CODEMIRROR_PREPARE_RETRY_IN_PROGRESS",
+  "next_action": {"owner":"S3","action":"Continue the next FREE independent 21-40 source/vendor/runtime test authorized by Q2. Keep #28 blocked until a complete canonical CodeMirror workspace source handoff exists; do not infer destinations or reacquire through non-canonical paths.","status":"EXECUTING_FAIL_CLOSED"},
+  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_CODEMIRROR_INCOMPLETE_WORKSPACE_CLASSIFIED",
   "closure":"DO_NOT_CLOSE_ACTIVE_DEBATE_LOOP"
 }
