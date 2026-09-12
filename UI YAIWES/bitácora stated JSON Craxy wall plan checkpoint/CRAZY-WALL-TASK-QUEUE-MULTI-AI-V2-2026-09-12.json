@@ -2,7 +2,7 @@
   "schema": "yaiwes.crazy-wall.multi-ai-node-queue.v2",
   "contract": "tel.workflow/v3",
   "status": "ACTIVE_LOOP",
-  "base_main_sha": "84678c4cd81394bdb2712a6a18a2b7ea8fab6fe3",
+  "base_main_sha": "16adf8093830cf41022b7a4635edb935174cf7b4",
   "supersedes_for_new_claims": "CRAZY-WALL-TASK-QUEUE-4SOL-2026-09-12.json",
   "history_rule": "Do not delete prior queue; V2 is authoritative for new claims only.",
   "node_schema": {
@@ -47,18 +47,26 @@
     {
       "node_id": "O-02-MULTI-SANDBOX-RECOVERY-E2E",
       "role": "SOL_ORQUESTADOR",
-      "state": "EXECUTING_STRATEGY_DELTA",
+      "state": "EXECUTING",
       "write_scope": [
         "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-*.json",
         "UI YAIWES/readme arquitectura UI YAIWES/*XRAY*",
         ".github/workflows/yaiwes-wordflow-loop-pytest.yml"
       ],
       "task": "Finish verification of workspace/global recovery and sandbox failover; reuse Firecracker/gVisor/QEMU/crosvm/bubblewrap/nsjail/UTM before any new acquisition.",
-      "current_gap": "Recovery run 34717056926 cancelled by newer queued request; latest global run 34721174155 exceeded 10-minute job timeout.",
+      "current_gap": "Recovery control-plane is globally TESTED; workspace/multi-host sandbox failover and lifecycle/backend selection remain unproved.",
       "report_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-02-MULTI-SANDBOX-RECOVERY-E2E.json",
       "fresh_base_main_sha": "fce6b6480c697c07131ca06d52716087d7b0400b",
       "claim_refreshed_at": "2026-09-12T22:47:18.532Z",
-      "next_strategy": "Canonical workflow timeout raised to 30 minutes at 84678c4cd81394bdb2712a6a18a2b7ea8fab6fe3; await completed/success + job/log readback."
+      "next_strategy": "Implement/test one real workspace/sandbox failover-reconstruction path reusing Stabilize and existing sandbox backends.",
+      "recovery_gate": {
+        "run": 34723669555,
+        "job": 103633952112,
+        "conclusion": "success",
+        "wordflow": "23 passed",
+        "runtime": "62 passed + 9 subtests",
+        "log_readback": true
+      }
     },
     {
       "node_id": "S1-09-MEMORY-AGENT-BOUNDARY",
@@ -201,14 +209,15 @@
   },
   "mandatory_report_note": "Every role must leave a report in reports/ at node end. Astra must additionally leave recommendations for SOL_ORQUESTADOR/SOL_GPT1/SOL_GPT2/SOL_GPT3 indicating which FREE node should consume each finding; findings are not claims.",
   "global_close": "Only after Memory/Audit, Agent boundary, Integration/Consolidator, Sandbox/UEK/Recovery, platform routing and G12 coverage are evidenced end-to-end.",
-  "updated_at_utc": "2026-09-12T22:47:18.532Z",
+  "updated_at_utc": "2026-09-12T23:01:09.459Z",
   "latest_gate_observation": {
-    "checked_at_utc": "2026-09-12T22:47:18.532Z",
-    "recovery_run": 34717056926,
-    "recovery_run_conclusion": "cancelled",
-    "latest_full_suite_run": 34721174155,
-    "latest_full_suite_conclusion": "cancelled",
-    "strategy_delta_commit": "84678c4cd81394bdb2712a6a18a2b7ea8fab6fe3",
-    "promotion": "DENIED_PENDING_FRESH_TERMINAL_RUN"
+    "checked_at_utc": "2026-09-12T23:01:09.459Z",
+    "run": 34723669555,
+    "job": 103633952112,
+    "conclusion": "success",
+    "wordflow_tests": 23,
+    "runtime_tests": 62,
+    "runtime_subtests": 9,
+    "promotion": "P18_RECOVERY_CONTROL_PLANE_TESTED_ONLY"
   }
 }
