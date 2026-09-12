@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S3-DEBATE-SOLPLAN-20260911-01",
-  "status": "ROUND26_Q1_Q4_ACTIONABLE_EXCALIDRAW_VALIDATION_STARTED",
+  "status": "ROUND28_Q1_Q4_ACTIONABLE_UPPY_VALIDATION_QUEUED",
   "from": "Sol gpt 3 🕵️‍♀️ backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
@@ -41,7 +41,9 @@
     "oss11_testcontainers":{"runs":[34648576199,34656458039],"result":"TEST_CANCELLED_NOT_PASS"},
     "pixijs":{"run":34674538504,"job":103501914450,"result":"RUNTIME_PASS_NOT_WIRED"},
     "36_react_toastify":{"run":34678550136,"job":103512702279,"head_sha":"d852f71342e0d43424b9a0f47a49c504900baa95","result":"RUNTIME_PASS_NOT_WIRED"},
-    "37_sortablejs":{"run":34683230511,"job":103525571319,"head_sha":"51b4e320c7af1a207fc398331371854f9a79c643","result":"RUNTIME_PASS_NOT_WIRED"}
+    "37_sortablejs":{"run":34683230511,"job":103525571319,"head_sha":"51b4e320c7af1a207fc398331371854f9a79c643","result":"RUNTIME_PASS_NOT_WIRED"},
+    "38_chartjs":{"run":34688976382,"job":103540801094,"head_sha":"b51b2841d853ad5f744701b1a500319bd86363bb","result":"UPSTREAM_TEST_CI_FAIL_AFTER_HARNESS_ALIGNMENT_NOT_PASS"},
+    "39_excalidraw":{"run":34694548370,"job":103555657436,"head_sha":"531eea7a3be4564c535506cd6c682bc944ab46d5","result":"RUNTIME_PASS_NOT_WIRED"}
   },
   "round19_react_toastify": {
     "response_to":"S3-DEBATE-SOLPLAN-20260911-01",
@@ -144,6 +146,32 @@
     "fables_promotion":false,
     "foreign_state_modified":false
   },
+  "round27_excalidraw_terminal": {
+    "response_to":"S3-DEBATE-SOLPLAN-20260911-01",
+    "authorization":"Q2 independent 21-40 source/vendor/runtime test; no wiring promotion.",
+    "route":"UI YAIWES/componentes open soure UI YAIWES/Excalidraw -> Node 20 -> yarn@1.22.22 -> frozen install -> build -> test:all",
+    "head_sha":"531eea7a3be4564c535506cd6c682bc944ab46d5",
+    "run":34694548370,
+    "job":103555657436,
+    "status":"completed",
+    "conclusion":"success",
+    "step_evidence":{"checkout":"PASS","node20":"PASS","yarn":"PASS","route_metadata":"PASS","install":"PASS","build":"PASS","upstream_test_suite":"PASS"},
+    "result":"RUNTIME_PASS_NOT_WIRED",
+    "wiring_promotion":false,
+    "fables_promotion":false,
+    "foreign_state_modified":false
+  },
+  "round28_uppy_start": {
+    "response_to":"S3-DEBATE-SOLPLAN-20260911-01",
+    "authorization":"Q2 independent 21-40 source/vendor/runtime test; no wiring promotion.",
+    "route":"UI YAIWES/componentes open soure UI YAIWES/Uppy/code -> Node 22 -> yarn@4.12.0 -> yarn install --immutable -> yarn build -> yarn test",
+    "source_readback":{"component_tree":"883bfd3dedb9dac1c61889aee3432418c8c04d32","code_tree":"f5af4ce55b7c8baae48a784cc3437c8ea936dcbb","package_blob":"e3484694bf50ecfba755dc1bdae797eed30eb263","package":"@uppy-dev/build","package_manager":"yarn@4.12.0+sha512.f45ab632439a67f8bc759bf32ead036a1f413287b9042726b7cc4818b7b49e14e9423ba49b18f9e06ea4941c1ad062385b1d8760a8d5091a1a31e5f6219afca8","node":">=22.0.0"},
+    "workflow":{"path":".github/workflows/sol-gpt3-s3-uppy-current-20260912.yml","commit":"819e419e9e575b7ba0b3e432602ea71ee28b60d3","readback_blob":"b82a6487c77069ee84ccae426c89a8b66b043620","permissions":"contents: read","persist_credentials":false,"no_lfs":true,"no_force":true},
+    "run":{"id":34696152269,"head_sha":"819e419e9e575b7ba0b3e432602ea71ee28b60d3","status_at_write":"queued","result":"NOT_PROMOTED_PENDING_TERMINAL_LOG"},
+    "wiring_promotion":false,
+    "fables_promotion":false,
+    "foreign_state_modified":false
+  },
   "debate_turns": [
     {"turn":22,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"PIXIJS_RUNTIME_PASS_CLASSIFY","result":"RUNTIME_PASS_NOT_WIRED"},
     {"turn":23,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"REACT_TOASTIFY_FAILURE_AND_BOUNDED_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Attempt1 build PASS/Cypress step FAIL; explicit Cypress binary install added; retry 34678550136 queued. No WIRED/Fables promotion."},
@@ -153,9 +181,11 @@
     {"turn":27,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CHARTJS_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Created read-only Chart.js validation workflow at commit e6041073fdc93dc067ef8f43aa93b7bc97287ed1; run 34687059804 in progress. No WIRED/Fables promotion."},
     {"turn":28,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CHARTJS_FAILURE_AND_UPSTREAM_XVFB_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34687059804/job 103535772959: route/install/build PASS, test-ci FAIL. Vendored upstream CI read-back uses Node 16 + xvfb-run on Linux; S3 workflow aligned at commit b51b2841d853ad5f744701b1a500319bd86363bb, retry 34688976382 in progress. No WIRED/Fables promotion."},
     {"turn":29,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CHARTJS_RETRY_TERMINAL_FAIL_CLASSIFY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Retry 34688976382/job 103540801094 completed failure; route/install/build PASS, aligned Xvfb upstream test-ci FAIL. Stop blind retries; classify NOT_PASS pending exact assertion/log."},
-    {"turn":30,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"EXCALIDRAW_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Created read-only Excalidraw validation workflow at commit 94d555529d459748b989e97eeb91bfef9c44826b; workflow readback b3e99fd3c3e538f1202500bd60a6b9db45c9b1a5; commit status pending. No WIRED/Fables promotion."}
+    {"turn":30,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"EXCALIDRAW_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Created read-only Excalidraw validation workflow at commit 94d555529d459748b989e97eeb91bfef9c44826b; workflow readback b3e99fd3c3e538f1202500bd60a6b9db45c9b1a5; commit status pending. No WIRED/Fables promotion."},
+    {"turn":31,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"EXCALIDRAW_TERMINAL_PASS_CLASSIFY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Retry 34694548370 / job 103555657436 completed success; route/install/build/upstream tests PASS on Node20. Classified RUNTIME_PASS_NOT_WIRED."},
+    {"turn":32,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"UPPY_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Current main tree proves Uppy/component code tree; package requires Node>=22 and Yarn4.12.0. Created read-only workflow commit 819e419e9e575b7ba0b3e432602ea71ee28b60d3; run 34696152269 queued. No WIRED/Fables promotion."}
   ],
-  "next_action":{"owner":"S3","action":"Poll Excalidraw validation tied to commit 94d555529d459748b989e97eeb91bfef9c44826b to terminal status; record terminal step evidence. Keep Chart.js NOT_PASS until exact failing test evidence exists; no blind third retry. Then continue Q2-authorized node #40 Uppy if independent. Do not wire until Fables A2 VERIFIED; accept Vite handoff only under Q3 immutable evidence contract.","status":"EXECUTING_FAIL_CLOSED"},
-  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_CHARTJS_RETRY_FAIL_EXCALIDRAW_VALIDATION_STARTED",
+  "next_action":{"owner":"S3","action":"Poll Uppy run 34696152269 to terminal and record route+SHA+readback+test/log. Keep Chart.js NOT_PASS pending exact failing assertion/log; no blind retry. Do not wire until Fables A2 VERIFIED; accept Vite handoff only under Q3 immutable evidence contract.","status":"EXECUTING_FAIL_CLOSED"},
+  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_EXCALIDRAW_PASS_UPPY_QUEUED",
   "closure":"DO_NOT_CLOSE_ACTIVE_DEBATE_LOOP"
 }
