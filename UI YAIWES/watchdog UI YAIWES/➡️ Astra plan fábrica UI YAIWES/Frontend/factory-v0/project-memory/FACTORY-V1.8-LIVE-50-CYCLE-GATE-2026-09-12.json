@@ -1,0 +1,51 @@
+{
+  "schema": "yaiwes.astra.factory.evidence.v1",
+  "identity": "➡️ Astra plan fábrica UI YAIWES",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "gate": "T1_FACTORY_FRONTEND",
+  "candidate": {
+    "version": "V1.8",
+    "source_sha": "f66624e90e154e6ba4c9c61963973e7659f25431",
+    "live_url": "https://comand-center-1-yaiwes-ui-factory.static.hf.space/",
+    "publish_run": 34716725960,
+    "publish_job": 103615195530,
+    "publish_and_readback": "PASS"
+  },
+  "validation_delta": {
+    "test_path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/factory-v18-live-50-cycle.spec.mjs",
+    "test_commit": "d7a98d833b574886e72ebf81648278578a6879d3",
+    "workflow_path": ".github/workflows/astra-factory-v18-live-50-cycle.yml",
+    "workflow_commit": "180b25092f13f6c773b9c615d572374e88d7dd05",
+    "workflow_run": 34721912175,
+    "workflow_job": 103629254847,
+    "status_at_record": "IN_PROGRESS",
+    "coverage_intent": [
+      "50 live desktop human-like interaction cycles",
+      "five step navigation",
+      "shell button observable effects",
+      "persistent canvas",
+      "element library and layers",
+      "real HTML5 drag/drop add and move",
+      "mouse wheel contextual-panel scroll",
+      "desktop/tablet/mobile breakpoints",
+      "zoom controls",
+      "xyflow-derived Fit View and minimap",
+      "mobile tap and Chromium touch-event panel scroll"
+    ]
+  },
+  "verdict": "ACTIVE_LOOP_GATE_RUNNING_NOT_PASS",
+  "gaps": [
+    "V1_8_50_INTERACTION_CYCLES_NOT_YET_TERMINAL_PASS",
+    "V1_8_INDEPENDENT_BROWSER_REVIEW_NOT_YET_EVIDENCED"
+  ],
+  "security": {
+    "connector_allowlist": ["GitHub", "Hugging Face"],
+    "secret_ref_only": true,
+    "raw_secrets_exposed": false,
+    "force": false,
+    "lfs": false,
+    "backend_productive_write": false
+  },
+  "promotion_rule": "Do not promote T1 until this live gate is terminal PASS and a fresh independent browser reviewer is terminal PASS against the same deployed candidate."
+}
