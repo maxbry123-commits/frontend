@@ -1,0 +1,41 @@
+{
+  "schema": "yaiwes.crazy-wall.task-queue.delta.v1",
+  "contract": "tel.workflow/v3",
+  "observed_head_before_delta": "ebdcee483822021500324b13af33adeae325c29f",
+  "reason": "Reconcile stale central queue after O-01 report PASS and advance orchestrator to next FREE node without claiming other roles' nodes.",
+  "changes": [
+    {
+      "role": "SOL_ORQUESTADOR",
+      "node_id": "O-01-G12-GLOBAL-COVERAGE-XRAY",
+      "from": "CLAIMED",
+      "to": "REPORT",
+      "evidence": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-01-G12-GLOBAL-COVERAGE-XRAY.json",
+      "verdict": "PASS_AUDIT_NODE_GLOBAL_PROJECT_STILL_OPEN"
+    },
+    {
+      "role": "SOL_ORQUESTADOR",
+      "node_id": "O-02-MULTI-SANDBOX-RECOVERY-E2E",
+      "from": "FREE_AFTER_O-01",
+      "to": "EXECUTING",
+      "base_main_sha": "ebdcee483822021500324b13af33adeae325c29f",
+      "write_scope": [
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-*.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-*.json",
+        "UI YAIWES/readme arquitectura UI YAIWES/*XRAY*"
+      ],
+      "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-02-MULTI-SANDBOX-RECOVERY-E2E.json"
+    }
+  ],
+  "other_role_slots": {
+    "SOL_GPT1": {"node_id": "S1-09-MEMORY-AGENT-BOUNDARY", "state": "FREE_NO_REPORT_FOUND"},
+    "SOL_GPT2": {"node_id": "S2-08-PLATFORM-SANDBOX-ROUTER", "state": "FREE_NO_REPORT_FOUND"},
+    "SOL_GPT3": {"node_id": "S3-10-INTEGRATION-FABLES-E2E", "state": "FREE_NO_REPORT_FOUND"}
+  },
+  "reuse_evidence": {
+    "sandbox_vm_sources_present": ["Firecracker", "gVisor", "QEMU", "crosvm", "bubblewrap", "nsjail", "UTM"],
+    "promotion": "NONE",
+    "truth": "Physical source presence is REUSE evidence only; no WIRED/RUNTIME_PASS claim."
+  },
+  "global_state": "ACTIVE_LOOP_NOT_CLOSED",
+  "global_gaps": ["MEMORY_AUDIT_E2E", "AGENT_BOUNDARY", "PLATFORM_SANDBOX_ROUTER", "INTEGRATION_CONSOLIDATOR", "PROJECT_RECOVERY_E2E", "G12_NOT_100_PERCENT"]
+}
