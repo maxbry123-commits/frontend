@@ -1,0 +1,47 @@
+name: Sol GPT3 S3 CodeMirror 6 current-source test
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/sol-gpt3-s3-codemirror-current-20260911.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  codemirror-current-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout current main snapshot
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Verify route and source metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC='UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6'
+          test -f "$SRC/package.json"
+          test -f "$SRC/SOURCE_COMMIT.txt"
+          printf 'route=%s\n' "$SRC"
+          printf 'package_sha256=' && sha256sum "$SRC/package.json" | awk '{print $1}'
+          printf 'source_commit=' && cat "$SRC/SOURCE_COMMIT.txt"
+      - name: Install current vendored source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6'
+          npm install --no-audit --no-fund
+      - name: Run upstream node tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6'
+          npm run test-node
