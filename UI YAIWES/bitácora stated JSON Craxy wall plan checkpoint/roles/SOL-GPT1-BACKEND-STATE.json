@@ -1,103 +1,56 @@
 {
-  "schema": "yaiwes.role-state.v1",
+  "schema": "yaiwes.role-state.v2",
   "contract": "tel.workflow/v3",
   "role": "SOL_GPT1_BACKEND",
   "name": "Sol ☀️ 🏈gpt 1 backend",
   "node_prefix": "S1",
-  "status": "ACTIVE_LOOP_S1_10_COMPLETE_S1_11_RUNNING",
-  "watchdog": {
-    "enabled": true,
-    "automation_id": "6aa3065afd048191a6a4c720d4ba97e7",
-    "mode": "condition_watch",
-    "cadence": "1 hour",
-    "rule": "Read fresh Director instruction + recovery patch + central debate + active round + S1 debate/state every cycle; consume explicit Sol Plan decisions immediately; never stop on unrelated GAP."
+  "status": "CLAIMED_XRS1_MEMORY_AGENT_BOUNDARY",
+  "coordination": {
+    "source": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-STATE-HANDOFF-XRAY-2026-09-11.json",
+    "source_blob_sha": "a2683070871975a95ea4d16ac125125dcfb11649",
+    "gap_ledger": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/AUDIT-GAP-LEDGER-4AI-2026-09-11.json",
+    "precedence": "repo/runtime real > current operational ledger/handoff > historical debate round > chat inference"
   },
-  "director": {
-    "instruction_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/DIRECTOR-INSTRUCTION-DEBATE-SOL123-2026-09-11.json",
-    "instruction_blob_sha": "25ee7de3c92cedc2134f61a13fc61bd13809ab88",
-    "active_round_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/ROUND-4-SOL123-2026-09-11.json",
-    "active_round_blob_sha": "6e34e6149a5359e731feaf4d2412fba69e7397d0",
-    "mode": "ACTIVE_LOOP_NO_STOP"
+  "claim": {
+    "node_id": "XRS1-MEMORY-AGENT-BOUNDARY",
+    "owner": "SOL_GPT1_BACKEND",
+    "base_main_sha_observed": "c6f888bba0fe2bd0a4358e9207d009064ed3d6de",
+    "state_base_blob_sha": "23ed7f6bdf7c8256029aceebb59ad75f1cf6c0cd",
+    "claimed_at": "2026-09-12T16:45:28-05:00",
+    "write_scope": [
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT1-BACKEND-STATE.json",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/**"
+    ],
+    "max_steps": 3,
+    "steps": ["1_RESEARCH_OR_VERIFY","2_EXECUTE_AUTHORIZED_DELTA","3_VERIFY_AND_REPORT"],
+    "anti_collision": "Do not edit SOL2/SOL3/Astra states or shared Crazy Wall; report in S1 state/debate and let coordinator consolidate shared truth."
   },
-  "recovery_patch": {
-    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/PARCHE-RECUPERACION-DEBATE-SOL123-2026-09-11.md",
-    "blob_sha": "1c95dba5f2bad6af36462b8721ed0073766ea35c",
-    "rule": "ACTIVE_DEBATE_LOOP / DO_NOT_CLOSE"
+  "owned_gaps": {
+    "G02_VITE_DEST": "OPEN_DESTINATION_INPUT_GAP",
+    "G03_SUPABASE_DEST": "OPEN_DESTINATION_INPUT_GAP",
+    "G09_MEMORY_BOUNDARY": "AUDIT_REQUIRED",
+    "G13_RUNTIME_AGENT_EMPTY": "AUDIT_MAPPED_REUSE_FOUND"
   },
-  "debate": {
-    "central_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-DEBATE-4AI-2026-09-11.json",
-    "s1_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/debates/S1-SOL-PLAN-DEBATE-2026-09-11.json",
-    "s1_latest_commit": "f8e9832469f703e5bad770fddc588ce890aa28ce",
-    "s1_latest_blob_sha": "5dd465c71ac09dc72df3135359c2335b633d69a0",
-    "status": "S1_10_DESTINATION_AUTHORITY_NOT_FOUND_S1_11_RUNNING",
-    "open_questions": ["R4-Q1","R4-Q2","R4-Q3","R4-Q4","R4-Q5","R4-Q6"]
-  },
-  "canonical_motor": {
-    "commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
-    "policy": "COPY_ONLY_IMMUTABLE_NO_LFS_NO_FORCE",
-    "skill_blob_sha": "b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54",
-    "destination_rule": "DEST_REPO/DEST_BRANCH/DEST_ROOT must be literal per operation; never infer/reuse historical destination."
-  },
-  "l05": {
-    "blob_sha": "f3f57d4bf3eee606d7a2729a335a8247e9c9ca8f",
-    "tests_blob_sha": "76515236717e2d36985458275c51ef8c552873a9",
-    "drift": false,
-    "remaining_gaps": ["MOTOR_BLOB_IDENTITY_GAP","MOTOR_AUX_INPUT_CONTRACT_GAP","DESTINATION_AUTHORITY_PROVENANCE_GAP"]
+  "g13_contract": {
+    "current_agent_root": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/.gitkeep",
+    "current_agent_root_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+    "reuse": ["Stabilize.LLMClient","Stabilize.LLMTask","Stabilize.AgentLoopTask","Stabilize.ToolRegistry"],
+    "forbidden": ["second ReAct loop","second workflow owner","memory duplication","router duplication"],
+    "required_delta": "Define minimal YAIWES Agent↔own-memory↔Tools↔Workflow adapter/contract and test isolation from chat/project memory."
   },
   "fables": {
-    "status": "CURRENT_BLOB_VERIFIED_CI_PASS",
-    "contract_blob_sha": "23f4e1b8b91301f2df396e7a0860fc65b977cfb3",
-    "test_blob_sha": "cfc63c5363330ea0746c1d3e041c17dc11df9b0c",
-    "commit": "671d9bb545b958c75b0c040806f096bf76f55175",
-    "ci_run_id": 34573676252,
-    "ci_job_id": 103181192888,
-    "ci_conclusion": "success",
-    "socket_fables_tests": "9 passed in 0.02s"
+    "ledger_status": "TESTED_OWNER_SOL_GPT3",
+    "current_blob_sha": "23f4e1b8b91301f2df396e7a0860fc65b977cfb3",
+    "contract": "yaiwes.fables.v1",
+    "s1_ci_run": 34573676252,
+    "note": "Newest coordination assigns integration consumption to S3; A2 is not current Fables owner."
   },
-  "persistence": {
-    "ledger_blob_sha": "79ae3da7f20188874ffdc9e5a6b5e9cd3fbc4c83",
-    "runner_blob_sha": "4fd01eb441cf3c10638d1a6f80924fc3fc8533a5",
-    "test_core_blob_sha": "66af6aff97a889c41ee3e8e85653d57ea1cf2bd4",
-    "ledger_ci_run": 34641867379,
-    "latest_test_core_ci_run": 34641893033,
-    "ci_conclusion": "success",
-    "verified_delta": ["hash-chain integrity","atomic replace","fsync file and parent directory","cross-process ledger lock","stale-runner refresh","tampered-ledger recovery fail-closed"]
+  "acquisition": {
+    "Vite": "BLOCKED_NO_LITERAL_DESTINATION",
+    "Supabase": "BLOCKED_NO_LITERAL_DESTINATION",
+    "canonical_motor_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
+    "rule": "No motor dispatch until literal DEST_REPO/DEST_BRANCH/DEST_ROOT authority exists."
   },
-  "memory_boundary": {
-    "adapter_spec_blob_sha": "d20358aa2e725de11e46190c8b7b3997d8f7e890",
-    "memory_adapter_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/memory_adapter.py",
-    "memory_adapter_readback": "404_NOT_FOUND",
-    "implementation_authorized": false
-  },
-  "s1_10": {
-    "status": "COMPLETE_FAIL_CLOSED",
-    "verdict": "DESTINATION_AUTHORITY_NOT_FOUND",
-    "vite_source_ref": "134ce6817984bad0f5fb043481502531fee9b1db",
-    "supabase_source_ref": "0500c21b37cc11b6b6140dde9827f89fb7d3097d",
-    "queue_blob_sha": "ea92b3004175fe7f9f6adcce8a49d0a843060879",
-    "handoff_blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
-    "vite_physical_readback": "404_NOT_FOUND",
-    "supabase_physical_readback": "404_NOT_FOUND",
-    "additional_s1_handoff": "NOT_FOUND",
-    "gaps": ["DESTINATION_INPUT_GAP","DESTINATION_AUTHORITY_PROVENANCE_GAP"]
-  },
-  "nodes": {
-    "S1-01": {"component":"Vite","status":"BLOCKED_FAIL_CLOSED","gap":"DESTINATION_INPUT_GAP"},
-    "S1-02": {"component":"Supabase","status":"BLOCKED_FAIL_CLOSED","gap":"DESTINATION_INPUT_GAP"},
-    "S1-03": {"status":"BLOCKED_DEPENDENCY","gap":"AUTHORIZED_DESTINATION_NOT_DEFINED"},
-    "S1-04": {"status":"READY_FABLES_RESOLVED_WAITING_SOURCE_ACQUISITION","gap":"VITE_SOURCE_NOT_ACQUIRED_DESTINATION_INPUT_GAP"},
-    "S1-05": {"status":"PARTIAL_PASS","gap":["PRODUCT_MEMORY_RUNTIME_MISSING","MEMORY_SCOPE_SEPARATION_NOT_EVIDENCED"]},
-    "S1-06": {"status":"GAP_VERIFIED_READONLY","gap":"MEMORY_ADAPTER_404"},
-    "S1-07": {"status":"PREFLIGHT_COMPLETE","gap":"IMPLEMENTATION_NOT_AUTHORIZED"},
-    "S1-08": {"status":"COMPLETE_NO_HANDOFF"},
-    "S1-09": {"status":"COMPLETE_REVALIDATED_CURRENT_MAIN"},
-    "S1-10": {"status":"COMPLETE_FAIL_CLOSED","gap":"DESTINATION_AUTHORITY_NOT_FOUND"},
-    "S1-11": {"status":"ACTIVE","task":"revalidate downstream Vite handoff contract to S3"}
-  },
-  "loop_history": [
-    {"cycle":14,"result":"CURRENT_MAIN_DRIFT_REVALIDATED"},
-    {"cycle":15,"result":"VITE_SUPABASE_DESTINATION_AUTHORITY_NOT_FOUND; CANONICAL_MOTORS_NOT_DISPATCHED"}
-  ],
-  "next_allowed_delta": "Execute S1-11 read-only. Read current integration-01-20 metadata and current S3 state/debate. Determine exact evidence package S3 expects after Vite acquisition. Runtime/vendor/vite is downstream target metadata only and must not be treated as acquisition authorization.",
-  "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+  "next_action": "STEP1_RESEARCH_OR_VERIFY: inspect Stabilize agent exports and current chat/project/memory contracts; derive smallest non-duplicative adapter API and tests inside runtime/src/agent/** before mutation.",
+  "closure_rule": "CLAIMED != PASS; code + tests + readback + evidence required"
 }
