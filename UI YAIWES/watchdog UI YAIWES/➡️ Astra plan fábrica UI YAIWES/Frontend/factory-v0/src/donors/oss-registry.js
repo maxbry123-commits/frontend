@@ -13,7 +13,7 @@ const VISUAL_OSS = [
   ['BESSER','reference','model-driven-low-code · EXTRACTED','AVAILABLE_EXTRACTED'],
   ['tldraw','frontend','infinite-canvas · EXTRACTED','AVAILABLE_EXTRACTED'],
   ['draw.io','frontend','diagram-editor · EXTRACTED','AVAILABLE_EXTRACTED'],
-  ['xyflow','frontend','node-workflow-canvas · EXTRACTED','AVAILABLE_EXTRACTED'],
+  ['xyflow','frontend','node-workflow-canvas · EXTRACTED · minimap DONOR','DONOR_ACTIVE'],
   ['Craft.js','frontend','react-page-editor · EXTRACTED · DONOR','DONOR_ACTIVE'],
   ['assistant-ui','frontend','ai-chat-components · EXTRACTED','AVAILABLE_EXTRACTED'],
   ['Dockview','frontend','dockable-panels-tabs · EXTRACTED','AVAILABLE_EXTRACTED'],
