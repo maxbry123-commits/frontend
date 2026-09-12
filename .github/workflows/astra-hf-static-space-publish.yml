@@ -26,10 +26,10 @@ jobs:
       HF_TOKEN_E: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
       SPACE_REPO: COMAND-CENTER-1/yaiwes-ui-factory
       HF_OIDC_RESOURCE: spaces/COMAND-CENTER-1/yaiwes-ui-factory
-      SOURCE_REF: bcf4a2037a3092d6cf1343ecd0185c0c6edfa758
-      RAW_ROOT: https://raw.githubusercontent.com/maxbry123-commits/frontend/bcf4a2037a3092d6cf1343ecd0185c0c6edfa758/UI%20YAIWES/watchdog%20UI%20YAIWES/%E2%9E%A1%EF%B8%8F%20Astra%20plan%20f%C3%A1brica%20UI%20YAIWES/Frontend/factory-v0
+      SOURCE_REF: f66624e90e154e6ba4c9c61963973e7659f25431
+      RAW_ROOT: https://raw.githubusercontent.com/maxbry123-commits/frontend/f66624e90e154e6ba4c9c61963973e7659f25431/UI%20YAIWES/watchdog%20UI%20YAIWES/%E2%9E%A1%EF%B8%8F%20Astra%20plan%20f%C3%A1brica%20UI%20YAIWES/Frontend/factory-v0
     steps:
-      - name: Package exact verified Factory V1.7 payload
+      - name: Package exact verified Factory V1.8 payload
         shell: bash
         run: |
           set -euo pipefail
@@ -55,9 +55,9 @@ jobs:
           pinned: false
           ---
 
-          # YAIWES UI Factory V1.7
-          Zero-friction editor with persistent canvas, draggable library, layers, responsive breakpoints, zoom, Frappe-derived context actions, Craft-derived resize semantics with 8 px snap, xyflow-derived viewport minimap/navigation, and audited 66-family OSS capability catalog.
-          Verified source SHA: `bcf4a2037a3092d6cf1343ecd0185c0c6edfa758`.
+          # YAIWES UI Factory V1.8
+          Zero-friction editor with persistent canvas, draggable library, layers, responsive breakpoints, zoom, Frappe-derived context actions, Craft-derived resize semantics with 8 px snap, and xyflow-derived minimap/navigation/Fit View over an audited 66-family OSS capability catalog.
+          Verified source SHA: `f66624e90e154e6ba4c9c61963973e7659f25431`.
           EOF
 
           node --check _hf_space_publish/src/app.js
@@ -76,6 +76,7 @@ jobs:
           grep -q 'resize-snap.js' _hf_space_publish/index.html
           grep -q 'scroll-preserver.js' _hf_space_publish/index.html
           grep -q 'xyflow-minimap-adapter.js' _hf_space_publish/index.html
+          grep -q 'fit-view' _hf_space_publish/src/donors/xyflow-minimap-adapter.js
           grep -q 'DONOR_ACTIVE' _hf_space_publish/src/donors/oss-registry.js
           grep -q 'Craft.js' _hf_space_publish/src/donors/oss-registry.js
           grep -q 'Frappe Builder' _hf_space_publish/src/donors/oss-registry.js
@@ -121,10 +122,10 @@ jobs:
           from huggingface_hub import HfApi, create_repo
           token=os.environ['HF_PUBLISH_TOKEN']; repo_id=os.environ['SPACE_REPO']; api=HfApi(token=token)
           create_repo(repo_id=repo_id,repo_type='space',space_sdk='static',private=False,exist_ok=True,token=token)
-          print(api.upload_folder(repo_id=repo_id,repo_type='space',folder_path='_hf_space_publish',commit_message='Publish YAIWES UI Factory V1.7'))
+          print(api.upload_folder(repo_id=repo_id,repo_type='space',folder_path='_hf_space_publish',commit_message='Publish YAIWES UI Factory V1.8'))
           PY
           else
-            hf upload "$SPACE_REPO" _hf_space_publish . --repo-type space --commit-message "Publish YAIWES UI Factory V1.7 via GitHub OIDC ${GITHUB_SHA::7}"
+            hf upload "$SPACE_REPO" _hf_space_publish . --repo-type space --commit-message "Publish YAIWES UI Factory V1.8 via GitHub OIDC ${GITHUB_SHA::7}"
           fi
           echo 'HF_SPACE_UPLOAD=PASS'
 
@@ -144,7 +145,7 @@ jobs:
           for attempt in range(36):
               try:
                   s,body=read(app.rstrip('/')+'/')
-                  if s==200 and all(x in body for x in ['YAIWES UI Factory','V1.7','Canvas listo','Elementos','Capas','HERRAMIENTAS DEL PASO','Desktop','Tablet','Móvil','resize-snap.js','frappe-context-menu-adapter.js','xyflow-minimap-adapter.js']):
+                  if s==200 and all(x in body for x in ['YAIWES UI Factory','V1.8','Canvas listo','Elementos','Capas','HERRAMIENTAS DEL PASO','Desktop','Tablet','Móvil','resize-snap.js','frappe-context-menu-adapter.js','xyflow-minimap-adapter.js']):
                       print('HTTP_READBACK_PASS='+app);break
               except Exception: pass
               time.sleep(5)
