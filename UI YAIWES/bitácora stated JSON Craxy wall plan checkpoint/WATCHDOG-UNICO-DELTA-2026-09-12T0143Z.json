@@ -1,0 +1,37 @@
+{
+  "schema": "yaiwes.watchdog.unico.delta.v1",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_LOOP",
+  "audited_head": "3651b804704ac79025fb29e8b1a241d98b151840",
+  "oss11": {
+    "source_present_readback_verified": 6,
+    "provider_special_file_gap": 5,
+    "rqlite": "SOURCE_PRESENT_READBACK_VERIFIED_NOT_WIRED",
+    "otel_collector": "SOURCE_PRESENT_READBACK_VERIFIED_NOT_WIRED",
+    "testcontainers": "SOURCE_PRESENT_READBACK_VERIFIED_TEST_CANCELLED_NOT_PASS",
+    "opa_openfga": "SOURCE_PRESENT_FABLES_WIRED_LIVE_RUNTIME_PASS"
+  },
+  "evidence": {
+    "testcontainers_latest_audit_commit": "90112b2ced4d0d78bf1e378fea2f92743065bf91",
+    "testcontainers_cancelled_run": 34656458039,
+    "testcontainers_cancelled_job": 103449840014,
+    "testcontainers_note": "Two bounded attempts cancelled; no lifecycle verdict; not functional PASS or FAIL.",
+    "opa_openfga_live_run": 34647825462
+  },
+  "g12": {
+    "global": "OPEN",
+    "next_free": [
+      "SOL_GPT1 verify/wire/test rqlite or REUSE_REJECT",
+      "SOL_GPT2 verify/wire/test OTel Collector",
+      "SOL_GPT3 split Testcontainers lifecycle test into separately bounded job and classify exact result",
+      "SOL_ORQUESTADOR continue requirement→layer→file→test→evidence mapping"
+    ]
+  },
+  "truth_rules": [
+    "SOURCE_PRESENT != WIRED",
+    "WIRED != RUNTIME_TEST_PASS",
+    "RUNTIME_TEST_PASS != VERIFIED_CLOSED",
+    "TEST_CANCELLED_NOT_PASS cannot be promoted"
+  ],
+  "closure": "ACTIVE_LOOP_NOT_GLOBAL_VERIFIED_CLOSED"
+}
