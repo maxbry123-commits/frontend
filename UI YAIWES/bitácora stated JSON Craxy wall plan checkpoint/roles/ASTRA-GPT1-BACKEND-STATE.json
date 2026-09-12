@@ -3,8 +3,8 @@
   "contract": "tel.workflow/v3",
   "role": "ASTRA_GPT1_BACKEND",
   "name": "🧑‍💻Astra gpt 1 backend UI YAIWES 🌀🌀🌀 👷👷🕵️‍♀️",
-  "updated_at": "2026-09-12T16:37:18.466Z",
-  "base_sha": "aacca18c67db09f8605206a0e222d6202b4a85ee",
+  "updated_at": "2026-09-12T17:34:57.987Z",
+  "base_sha": "fd2ca8ff9cf9cd7d1cda2c5708bed1cd1d5b2e25",
   "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
   "status": "ACTIVE_LOOP_GAPS_OPEN",
   "scope": "A1 audit only; sole write path is this role_state_path",
@@ -71,16 +71,16 @@
   "nodes": [
     {
       "id": "A1-01",
-      "status": "PASS_AUDIT_PARTIAL_RECONCILIATION_SUMMARIES_STALE",
-      "finding": "El debate S3 ya reconcilió Uppy como RUNTIME_PASS_NOT_WIRED. STATE, CHECKPOINT, HANDOFF, estado canónico S3 y el estado T2 anterior continúan obsoletos; la evidencia T2 nueva delimita correctamente el PASS al gate contractual.",
+      "status": "PASS_AUDIT_XRAY_INCONCLUSIVE_SUMMARIES_STALE",
+      "finding": "STATE, CHECKPOINT, HANDOFF y estados canónicos continúan desactualizados. La nueva auditoría X-Ray es explícitamente INCONCLUSIVE y descubre límites reales: validación de rutas posterior al handler y evidencia research sin consulta de fuente.",
       "evidence": {
         "state_blob_sha": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
         "checkpoint_blob_sha": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
         "handoff_blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
         "s3_state_blob_sha": "b852f5ec08aac4eab4259626a9c243e5c0b4ad56",
         "s3_debate_blob_sha": "0214ebd72f6d86031a4a2e01fcbc9fbd38ab4a82",
-        "t2_state_blob_sha": "2ab696b0d4005c2752b2eb332750cc505bc6010a",
-        "t2_contract_evidence_blob_sha": "8bfd41ffaaa00e05eb70fba45d1c8a42dc09961f",
+        "xray_report_blob_sha": "d82601bdcf55d2b3bcf56fb333090ebdb2f42598",
+        "xray_state_blob_sha": "f911ddc227f88aa12837fcda211fd3b9a8650741",
         "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea"
       },
       "closure": false
@@ -120,8 +120,8 @@
     },
     {
       "id": "A1-03",
-      "status": "PASS_AUDIT_UPPY_RUNTIME_PASS_NOT_WIRED_RECONCILED_IN_DEBATE",
-      "finding": "01-20 permanece 17/20. El debate S3 ya registra Uppy terminal success como RUNTIME_PASS_NOT_WIRED; build 54/54 y suite 20/20 tareas, 76 archivos y 572 pruebas PASS. Estado canónico S3 aún no está reconciliado.",
+      "status": "PASS_AUDIT_17_OF_20_XRAY_PARTIAL_CI_CANCELLED",
+      "finding": "01-20 permanece 17/20. El patch de containment léxico superó 15 pruebas Wordflow y 8 aserciones de borde, pero la suite runtime completa del run 34707983948/job 103591416028 fue cancelada tras aproximadamente 10 minutos; no existe PASS integral.",
       "integration_01_20": {
         "passed": 17,
         "total": 20,
@@ -264,17 +264,32 @@
         "fables_wired": false,
         "product_e2e": false,
         "log_read_back": true
+      },
+      "xray_runtime_ci": {
+        "classification": "TESTED_SUBGATE_PASS_FULL_RUNTIME_CANCELLED_NOT_PASS",
+        "workflow_run_id": 34707983948,
+        "workflow_job_id": 103591416028,
+        "status": "completed",
+        "conclusion": "cancelled",
+        "wordflow_tests": {
+          "pass": 15
+        },
+        "lexical_assertions": {
+          "pass": 8
+        },
+        "full_runtime_suite": "CANCELLED_AFTER_APPROX_10_MINUTES",
+        "log_read_back": true
       }
     },
     {
       "id": "A1-04",
-      "status": "PASS_REFUTATION_T2_VERIFIED_COMPLETE_IS_CONTRACT_GATE_ONLY",
+      "status": "PASS_REFUTATION_XRAY_SUBGATE_NOT_GLOBAL_GUARD",
       "refutations": [
-        "La evidencia T2 usa VERIFIED_COMPLETE únicamente para el gate contractual RUN-07/RUN-08 y declara expresamente separado el E2E desplegado/revisor.",
-        "La CI 34700407038/job 103571035669 conserva 5/5 PASS, origen explícito obligatorio y wildcard denegado.",
-        "Ese PASS no verifica navegador real, persistencia, recuperación de workspace, ActionBus productivo ni integración YAIWES completa.",
-        "Uppy RUNTIME_PASS no demuestra consumo Fables ni E2E.",
-        "Los resultados T2/21-40 no modifican el informe canónico 01-20.",
+        "El patch supervisor rechaza '..', barra invertida y NUL en touched_paths, pero supervisor.check se ejecuta después del handler; no impide efectos previos fuera de alcance.",
+        "touched_paths es declarado por el propio resultado del handler; el guard no observa por sí mismo escrituras físicas, symlinks ni TOCTOU.",
+        "layer_01_research devuelve PASS por URL sintáctica, snippet y clase, y hashea el conjunto; no consulta ni valida la fuente remota.",
+        "15 pruebas Wordflow y 8 límites PASS son un subgate; la suite runtime completa fue CANCELLED y no permite declarar PASS global.",
+        "La auditoría X-Ray se autodeclara INCONCLUSIVE; no sustituye STATE/CHECKPOINT/HANDOFF ni cierra los seis gaps globales.",
         "Cuatro residuales 404 y 17/20 permanecen; no procede VERIFIED_CLOSED."
       ],
       "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
@@ -308,7 +323,19 @@
         "t2_contract_evidence_blob_sha": "8bfd41ffaaa00e05eb70fba45d1c8a42dc09961f",
         "t2_declared_status": "VERIFIED_COMPLETE",
         "t2_verified_scope": "CONTRACT_GATE_ONLY",
-        "deployed_reviewer_e2e": "PENDING"
+        "deployed_reviewer_e2e": "PENDING",
+        "xray_report_commit": "cee290c4ab44a851642bf72d466fda8a02624d3c",
+        "xray_release_commit": "fd2ca8ff9cf9cd7d1cda2c5708bed1cd1d5b2e25",
+        "xray_report_blob_sha": "d82601bdcf55d2b3bcf56fb333090ebdb2f42598",
+        "supervisor_patch_commit": "4a3a0ffe0eecaebb1ecfae904e08f3fd25560fcf",
+        "supervisor_blob_sha": "92f20cb69b52632635a706044c03e04fa966cb25",
+        "runner_blob_sha": "4fd01eb441cf3c10638d1a6f80924fc3fc8533a5",
+        "research_layer_blob_sha": "67d6eec997b5df812116bbce3662e66f7652f695",
+        "path_subgate": "PASS",
+        "pre_effect_capability_guard": false,
+        "physical_write_observation": false,
+        "research_source_fetch_verification": false,
+        "full_runtime_ci": "CANCELLED_NOT_PASS"
       }
     }
   ],
@@ -3700,21 +3727,304 @@
         "own_state_only": true,
         "verified_closed": false
       }
+    },
+    {
+      "snapshot_reason": "PRE_XRAY_RUNTIME_EVIDENCE_AND_PATH_GAPS_AUDIT",
+      "updated_at": "2026-09-12T16:37:18.466Z",
+      "base_sha": "aacca18c67db09f8605206a0e222d6202b4a85ee",
+      "nodes": [
+        {
+          "id": "A1-01",
+          "status": "PASS_AUDIT_PARTIAL_RECONCILIATION_SUMMARIES_STALE",
+          "finding": "El debate S3 ya reconcilió Uppy como RUNTIME_PASS_NOT_WIRED. STATE, CHECKPOINT, HANDOFF, estado canónico S3 y el estado T2 anterior continúan obsoletos; la evidencia T2 nueva delimita correctamente el PASS al gate contractual.",
+          "evidence": {
+            "state_blob_sha": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
+            "checkpoint_blob_sha": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
+            "handoff_blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
+            "s3_state_blob_sha": "b852f5ec08aac4eab4259626a9c243e5c0b4ad56",
+            "s3_debate_blob_sha": "0214ebd72f6d86031a4a2e01fcbc9fbd38ab4a82",
+            "t2_state_blob_sha": "2ab696b0d4005c2752b2eb332750cc505bc6010a",
+            "t2_contract_evidence_blob_sha": "8bfd41ffaaa00e05eb70fba45d1c8a42dc09961f",
+            "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea"
+          },
+          "closure": false
+        },
+        {
+          "id": "A1-02",
+          "status": "BLOCKED_FOUR_RESIDUALS_ABSENT",
+          "finding": "Los cuatro destinos finales literales continúan ausentes con 404 independiente; no existe read-back físico 124/124.",
+          "residuals": [
+            {
+              "name": "Vite",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Vite",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            },
+            {
+              "name": "Supabase",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            },
+            {
+              "name": "DuckDB",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            },
+            {
+              "name": "AVF",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/AVF",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            }
+          ],
+          "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "closure": false
+        },
+        {
+          "id": "A1-03",
+          "status": "PASS_AUDIT_UPPY_RUNTIME_PASS_NOT_WIRED_RECONCILED_IN_DEBATE",
+          "finding": "01-20 permanece 17/20. El debate S3 ya registra Uppy terminal success como RUNTIME_PASS_NOT_WIRED; build 54/54 y suite 20/20 tareas, 76 archivos y 572 pruebas PASS. Estado canónico S3 aún no está reconciliado.",
+          "integration_01_20": {
+            "passed": 17,
+            "total": 20,
+            "pending": [
+              "big-AGI",
+              "Vite",
+              "Vercel AI SDK"
+            ],
+            "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1"
+          },
+          "sortablejs": {
+            "classification": "RUNTIME_PASS_NOT_WIRED",
+            "package": "sortablejs@1.15.7",
+            "source_commit": "51b4e320c7af1a207fc398331371854f9a79c643",
+            "workflow_run_id": 34683230511,
+            "workflow_job_id": 103525571319,
+            "job_status": "completed",
+            "job_conclusion": "success",
+            "build_step": "PASS",
+            "upstream_chrome_headless_test": "PASS",
+            "terminal_assertion": "FAILED COUNT 0",
+            "log_read_back": true,
+            "fables_wired": false,
+            "product_e2e": false,
+            "warnings_only": [
+              "circular dependencies",
+              "outdated browserslist",
+              "deprecated Node action runtime"
+            ]
+          },
+          "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "closure": false,
+          "chartjs": {
+            "classification": "TEST_FUNCTIONAL_FIXTURE_FAIL_NOT_PASS",
+            "package": "chart.js@4.5.1",
+            "source_commit": "e6041073fdc93dc067ef8f43aa93b7bc97287ed1",
+            "retry_workflow_commit": "b51b2841d853ad5f744701b1a500319bd86363bb",
+            "workflow_run_id": 34688976382,
+            "workflow_job_id": 103540801094,
+            "job_status": "completed",
+            "job_conclusion": "failure",
+            "metadata": "PASS",
+            "install": "PASS",
+            "build": "PASS",
+            "xvfb_harness": "PASS",
+            "chrome": {
+              "version": "152.0.0.0",
+              "executed": 1702,
+              "success": 1702,
+              "failed": 0,
+              "seed": 90192
+            },
+            "firefox": {
+              "version": "155.0",
+              "executed": 808,
+              "failed": 1,
+              "seed": 38385
+            },
+            "total": {
+              "success": 2509,
+              "failed": 1
+            },
+            "failing_fixture": "test/fixtures/controller.polarArea/pointLabels/overlapping.js",
+            "pixel_difference": "293px / 0.11%",
+            "tolerance": "0.1%",
+            "functional_product_regression_proven": false,
+            "fables_wired": false,
+            "product_e2e": false,
+            "log_read_back": true
+          },
+          "excalidraw": {
+            "classification": "RUNTIME_PASS_NOT_WIRED",
+            "package": "excalidraw-monorepo",
+            "retry_workflow_commit": "531eea7a3be4564c535506cd6c682bc944ab46d5",
+            "workflow_run_id": 34694548370,
+            "workflow_job_id": 103555657436,
+            "status": "completed",
+            "conclusion": "success",
+            "node": "20",
+            "metadata": "PASS",
+            "install": "PASS",
+            "build": "PASS",
+            "test_files": {
+              "passed": 123,
+              "total": 123
+            },
+            "tests": {
+              "passed": 1872,
+              "skipped": 47,
+              "todo": 1,
+              "total": 1920
+            },
+            "fables_wired": false,
+            "product_e2e": false,
+            "log_read_back": true
+          },
+          "codemirror_t2": {
+            "classification": "ISOLATED_ADAPTER_PASS_NOT_WIRED",
+            "adapter_commit": "be8a6059139ba60cce2401cc45287144e183d41a",
+            "test_commit": "6ba08456ed64d88ff03b6b29bde63ed0349c7a1a",
+            "workflow_commit": "3a8108efd40e755754376c48206096a35dc257ed",
+            "workflow_run_id": 34692174640,
+            "workflow_job_id": 103549254048,
+            "status": "completed",
+            "conclusion": "success",
+            "tests": 3,
+            "pass": 3,
+            "fail": 0,
+            "run07_run08_wired": false,
+            "e2e": false,
+            "log_read_back": true
+          },
+          "uppy": {
+            "classification": "RUNTIME_PASS_NOT_WIRED",
+            "package": "uppy-monorepo",
+            "workflow_commit": "291d998835839c48070ca4e64de45f1969ce8b2d",
+            "workflow_run_id": 34699122744,
+            "workflow_job_id": 103567633257,
+            "status": "completed",
+            "conclusion": "success",
+            "node": "22",
+            "yarn": "4.12.0",
+            "metadata": "PASS",
+            "install": "PASS",
+            "playwright_chromium_harness": "PASS",
+            "build": {
+              "status": "PASS",
+              "tasks_successful": 54,
+              "tasks_total": 54
+            },
+            "test": {
+              "status": "PASS",
+              "tasks_successful": 20,
+              "tasks_total": 20,
+              "files_passed": 76,
+              "files_skipped": 1,
+              "tests_passed": 572,
+              "tests_skipped": 5
+            },
+            "fables_wired": false,
+            "product_e2e": false,
+            "log_read_back": true
+          }
+        },
+        {
+          "id": "A1-04",
+          "status": "PASS_REFUTATION_T2_VERIFIED_COMPLETE_IS_CONTRACT_GATE_ONLY",
+          "refutations": [
+            "La evidencia T2 usa VERIFIED_COMPLETE únicamente para el gate contractual RUN-07/RUN-08 y declara expresamente separado el E2E desplegado/revisor.",
+            "La CI 34700407038/job 103571035669 conserva 5/5 PASS, origen explícito obligatorio y wildcard denegado.",
+            "Ese PASS no verifica navegador real, persistencia, recuperación de workspace, ActionBus productivo ni integración YAIWES completa.",
+            "Uppy RUNTIME_PASS no demuestra consumo Fables ni E2E.",
+            "Los resultados T2/21-40 no modifican el informe canónico 01-20.",
+            "Cuatro residuales 404 y 17/20 permanecen; no procede VERIFIED_CLOSED."
+          ],
+          "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "closure": false,
+          "observed_out_of_scope_delta": {
+            "riufrontend_bridge_commit": "9f4942771230b6aafad1aeb059bdb8d68026a2dc",
+            "riufrontend_bridge_blob_sha": "96164bad724e80c3beedb3422e0152541c253be0",
+            "runtime_url": "https://comand-center-1-yaiwes-ui-factory.static.hf.space/",
+            "source_evidence_corrected_to": "maxbry123-commits/frontend/.github/workflows/astra-hf-static-space-publish.yml",
+            "credential_e2e": "PENDING",
+            "t2_window_map_commit": "1ca252c64c6cdc1ce8797f0a2a6983bf267cbac6",
+            "t2_boundary_map_commit": "18594b2a0d4baddf01c8640bb5b26ee47abd9df4",
+            "t2_module_implementation_started": false,
+            "run07_run08_contract_commit": "abc9561d0b9c630072aa1e9bfc72d625a5fccd1b",
+            "run07_run08_test_commit": "375f65cc70c1ecf64cfb4791882eac332db1e5e8",
+            "run07_run08_workflow_commit": "6caac2747f9a16432b35d3d96b0b6ef4b6964fcc",
+            "run07_run08_workflow_run_id": 34700407038,
+            "run07_run08_workflow_job_id": 103571035669,
+            "run07_run08_tests": {
+              "pass": 5,
+              "fail": 0
+            },
+            "run07_run08_classification": "CONTRACT_UNIT_PASS_BROWSER_E2E_PENDING",
+            "postmessage_target_origin": "EXPLICIT_REQUIRED",
+            "product_e2e": false,
+            "log_read_back": true,
+            "run07_run08_origin_fix_commit": "19bb5e9b5efca670d84ff84bda909f6447befa46",
+            "run07_run08_origin_test_commit": "eaa81923cb9ea84b9d1219ab01d04e66ee94ea38",
+            "wildcard_origin_denied": true,
+            "t2_contract_evidence_commit": "aacca18c67db09f8605206a0e222d6202b4a85ee",
+            "t2_contract_evidence_blob_sha": "8bfd41ffaaa00e05eb70fba45d1c8a42dc09961f",
+            "t2_declared_status": "VERIFIED_COMPLETE",
+            "t2_verified_scope": "CONTRACT_GATE_ONLY",
+            "deployed_reviewer_e2e": "PENDING"
+          }
+        }
+      ],
+      "instructions_for_owners": {
+        "SOL_GPT1_BACKEND": "Releer main y reclamar S1-09 con SHA fresco. Probar aislamiento/persistencia de memoria y frontera de agente con read-back; mantener Vite y Supabase bloqueados hasta que el coordinador confirme destinos literales y adquisición canónica.",
+        "SOL_GPT2_BACKEND": "Releer main y reclamar S2-08. Ejecutar selector de plataforma fail-closed con evidencia por host; mantener DuckDB y AVF como residuales separados y no inferir soporte AVF universal.",
+        "SOL_GPT3_BACKEND": "Q2 21-40 quedó agotado y Uppy está correctamente reconciliado en debate. Actualizar solo el estado canónico S3 con el terminal Uppy; mantener Chart.js NOT_PASS y no iniciar otra validación fuera de autorización.",
+        "ASTRA2_GPT_BACKEND": "Reclamar únicamente un nodo A2 libre con SHA fresco y validar consumo real del contrato Fables por un adaptador ya probado; exigir prueba integrada, no presencia ni unidad aislada.",
+        "SOL_PLAN_ORQUESTADOR": "Reconciliar STATE/CHECKPOINT/HANDOFF, estado S3 y estado T2. Registrar T2 VERIFIED_COMPLETE solo como contract gate; ejecutar después E2E real desplegado/revisor con origen configurado, ActionBus y CodeMirror productivos. Conservar 120/124 físico y 17/20."
+      },
+      "current_delta": {
+        "summary": "Debate S3 ya reconcilió Uppy RUNTIME_PASS_NOT_WIRED. T2 publicó evidencia VERIFIED_COMPLETE limitada expresamente al contract gate; E2E desplegado/revisor sigue pendiente. Cuatro residuales 404; 01-20 17/20.",
+        "s3_debate": {
+          "commit": "2893bb8f7fa04b4ee175b8ebc0d2686984c58406",
+          "blob_sha": "0214ebd72f6d86031a4a2e01fcbc9fbd38ab4a82",
+          "uppy_reconciled": true,
+          "canonical_state_reconciled": false
+        },
+        "t2": {
+          "evidence_commit": "aacca18c67db09f8605206a0e222d6202b4a85ee",
+          "blob_sha": "8bfd41ffaaa00e05eb70fba45d1c8a42dc09961f",
+          "contract_gate": "VERIFIED_COMPLETE",
+          "deployed_reviewer_e2e": "PENDING"
+        },
+        "residuals_absent": [
+          "Vite",
+          "Supabase",
+          "DuckDB",
+          "AVF"
+        ],
+        "integration_01_20": "17/20",
+        "runtime_tests_executed_this_cycle": false,
+        "ci_logs_independently_read": true,
+        "own_state_only": true,
+        "verified_closed": false
+      }
     }
   ],
   "current_delta": {
-    "summary": "Debate S3 ya reconcilió Uppy RUNTIME_PASS_NOT_WIRED. T2 publicó evidencia VERIFIED_COMPLETE limitada expresamente al contract gate; E2E desplegado/revisor sigue pendiente. Cuatro residuales 404; 01-20 17/20.",
-    "s3_debate": {
-      "commit": "2893bb8f7fa04b4ee175b8ebc0d2686984c58406",
-      "blob_sha": "0214ebd72f6d86031a4a2e01fcbc9fbd38ab4a82",
-      "uppy_reconciled": true,
-      "canonical_state_reconciled": false
+    "summary": "X-Ray corrigió traversal léxico como subgate, pero confirmó dos gaps: supervisor valida después del handler sobre touched_paths autodeclarados, y research PASS no consulta la fuente. CI: 15 Wordflow PASS; suite runtime completa CANCELLED_NOT_PASS. Cuatro residuales 404; 01-20 17/20.",
+    "xray": {
+      "report_commit": "cee290c4ab44a851642bf72d466fda8a02624d3c",
+      "status": "INCONCLUSIVE",
+      "path_subgate": "PASS",
+      "pre_effect_guard": "MISSING",
+      "research_source_verification": "MISSING"
     },
-    "t2": {
-      "evidence_commit": "aacca18c67db09f8605206a0e222d6202b4a85ee",
-      "blob_sha": "8bfd41ffaaa00e05eb70fba45d1c8a42dc09961f",
-      "contract_gate": "VERIFIED_COMPLETE",
-      "deployed_reviewer_e2e": "PENDING"
+    "ci": {
+      "run": 34707983948,
+      "job": 103591416028,
+      "wordflow_pass": 15,
+      "full_runtime": "CANCELLED_NOT_PASS"
     },
     "residuals_absent": [
       "Vite",
@@ -3729,10 +4039,10 @@
     "verified_closed": false
   },
   "instructions": {
-    "SOL_GPT1_BACKEND": "Releer main y reclamar S1-09 con SHA fresco. Probar aislamiento/persistencia de memoria y frontera de agente con read-back; mantener Vite y Supabase bloqueados hasta que el coordinador confirme destinos literales y adquisición canónica.",
+    "SOL_GPT1_BACKEND": "Completar S1-09 sin inferir aislamiento físico desde supervisor.check. Añadir prueba de frontera con handler adversarial y documentar que cualquier guard efectivo debe actuar antes del handler; no mezclar este hallazgo con cierre de memoria.",
     "SOL_GPT2_BACKEND": "Releer main y reclamar S2-08. Ejecutar selector de plataforma fail-closed con evidencia por host; mantener DuckDB y AVF como residuales separados y no inferir soporte AVF universal.",
-    "SOL_GPT3_BACKEND": "Q2 21-40 quedó agotado y Uppy está correctamente reconciliado en debate. Actualizar solo el estado canónico S3 con el terminal Uppy; mantener Chart.js NOT_PASS y no iniciar otra validación fuera de autorización.",
-    "ASTRA2_GPT_BACKEND": "Reclamar únicamente un nodo A2 libre con SHA fresco y validar consumo real del contrato Fables por un adaptador ya probado; exigir prueba integrada, no presencia ni unidad aislada.",
-    "SOL_PLAN_ORQUESTADOR": "Reconciliar STATE/CHECKPOINT/HANDOFF, estado S3 y estado T2. Registrar T2 VERIFIED_COMPLETE solo como contract gate; ejecutar después E2E real desplegado/revisor con origen configurado, ActionBus y CodeMirror productivos. Conservar 120/124 físico y 17/20."
+    "SOL_GPT3_BACKEND": "Mantener Q2 21-40 agotado y Chart.js NOT_PASS. Registrar que run 34707983948 es CANCELLED_NOT_PASS para suite runtime completa; no promover el subgate léxico a PASS global.",
+    "ASTRA2_GPT_BACKEND": "Validar consumo real del contrato Fables por un adaptador con prueba integrada. La nueva falla semántica de research refuerza que un hash de candidatos no equivale a fuente verificada.",
+    "SOL_PLAN_ORQUESTADOR": "Crear y asignar tres nodos separados: guard de capacidad pre-handler, evidencia research con verificador de fuente, y partición acotada de suite runtime para evitar cancelación. Reconciliar sus resultados en STATE/CHECKPOINT/HANDOFF sin promover el reporte X-Ray INCONCLUSIVE. Conservar 120/124 y 17/20."
   }
 }
