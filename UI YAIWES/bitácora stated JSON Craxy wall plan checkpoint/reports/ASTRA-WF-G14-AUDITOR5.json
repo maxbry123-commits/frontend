@@ -1,23 +1,298 @@
 {
-  "schema": "yaiwes.node-report.v1",
-  "node_id": "WF-G14-AUDITOR5",
-  "owner": "ASTRA_GPT",
-  "status": "CLAIMED",
   "base_sha": "a936295b6e8c62d7d01e50c81bdfe5ffd653ec0f",
   "claimed_at": "2026-09-12T20:28:40.971Z",
-  "write_scope": [
-    "runtime/src/audit/five_pass.py",
-    "runtime/tests/test_audit_five_pass.py"
+  "gaps": [
+    {
+      "id": "G01",
+      "gap": "Memoria persistente del workspace",
+      "recommended_owner": "SOL_GPT1",
+      "existing_node": "WF-G08-MEMORY",
+      "evidence": "runtime/src/storage/.gitkeep; runtime/src/adapters/README.md",
+      "required_delta": "Implementar contrato de memoria y escritura normalizer/schema/audit/StateDelta; recuperar chat/proyecto/ventana con separación de memoria del agente.",
+      "status": "OPEN",
+      "classification": "Operational workstream, not a count of every atomic defect"
+    },
+    {
+      "id": "G02",
+      "gap": "Recuperación de contexto para LLM pequeñas",
+      "recommended_owner": "SOL_GPT1",
+      "existing_node": "WF-G09-RETRIEVAL / WF-G10-CONTEXT-FABRIC",
+      "evidence": "runtime/src/memory absent in inspected tree",
+      "required_delta": "ContextPack con presupuesto, procedencia, instrucciones fijadas y pruebas de recuperación.",
+      "status": "OPEN",
+      "classification": "Operational workstream, not a count of every atomic defect"
+    },
+    {
+      "id": "G03",
+      "gap": "Frontera agente/herramientas/memoria",
+      "recommended_owner": "SOL_GPT1",
+      "existing_node": "WF-G08-MEMORY",
+      "evidence": "runtime/src/agent/.gitkeep",
+      "required_delta": "Adaptar agente separado, impedir escrituras canónicas directas de LLM y probar aislamiento.",
+      "status": "OPEN",
+      "classification": "Operational workstream, not a count of every atomic defect"
+    },
+    {
+      "id": "G04",
+      "gap": "Sandbox y plataformas",
+      "recommended_owner": "SOL_GPT2",
+      "existing_node": "WF-G11-SANDBOX-UEK",
+      "evidence": "runtime/src/uek/.gitkeep; adapters README only",
+      "required_delta": "Seleccionar backend por capacidades; probar permisos, arranque y ciclo de vida en cada host.",
+      "status": "OPEN",
+      "classification": "Operational workstream, not a count of every atomic defect"
+    },
+    {
+      "id": "G05",
+      "gap": "Router y workers",
+      "recommended_owner": "SOL_GPT2",
+      "existing_node": "WF-G12-WORKER / WF-G16-ROUTER",
+      "evidence": "adapters README only; llm_gate.py callable boundary",
+      "required_delta": "Adaptar router existente y workers Stabilize; fallos de proveedor, presupuesto y timeout reales.",
+      "status": "OPEN",
+      "classification": "Operational workstream, not a count of every atomic defect"
+    },
+    {
+      "id": "G06",
+      "gap": "Integración/API/loop global",
+      "recommended_owner": "SOL_GPT3",
+      "existing_node": "WF-G20-GLOBAL-INTEGRATION / WF-G17-LOOP / WF-G22-API",
+      "evidence": "runtime/src/integration/README.md; runtime/src/conn/.gitkeep",
+      "required_delta": "UI→Fables→Stabilize→Memory/Router→resultado; stream/status/cancel y pruebas E2E.",
+      "status": "OPEN",
+      "classification": "Operational workstream, not a count of every atomic defect"
+    },
+    {
+      "id": "G07",
+      "gap": "Recovery global sin efectos duplicados",
+      "recommended_owner": "SOL_ORQUESTADOR",
+      "existing_node": "WF-G18-RECOVERY",
+      "evidence": "runtime/src/recovery/control_plane.py + runner.py",
+      "required_delta": "Checkpoint real leído/hasheado; reinicio de proceso, desconexión, failover, idempotencia de efectos.",
+      "status": "OPEN",
+      "classification": "Operational workstream, not a count of every atomic defect"
+    },
+    {
+      "id": "G08",
+      "gap": "Auditoría/cobertura/consolidación",
+      "recommended_owner": "ASTRA_GPT",
+      "existing_node": "WF-G14-AUDITOR5 / WF-G15-CONSOLIDATOR",
+      "evidence": "runtime/src/audit/five_pass.py newly implemented",
+      "required_delta": "Cablear verificador CI independiente y matriz completa; consolidación tarea/fase/proyecto. Local 9 PASS is not global closure.",
+      "status": "OPEN",
+      "classification": "Operational workstream, not a count of every atomic defect"
+    },
+    {
+      "id": "G09",
+      "gap": "Verificación de fuentes y guard previo a efectos",
+      "recommended_owner": "SOL_ORQUESTADOR",
+      "existing_node": "WF-G12-GLOBAL-COVERAGE: assign bounded producer",
+      "evidence": "layer_01_research.py; runner.py post-handler supervisor",
+      "required_delta": "Verificar bytes de fuentes por adaptador autorizado; control previo de capacidades y aislamiento real.",
+      "status": "OPEN",
+      "classification": "Operational workstream, not a count of every atomic defect"
+    },
+    {
+      "id": "G10",
+      "gap": "Adquisición/integración residual",
+      "recommended_owner": "SOL_ORQUESTADOR",
+      "existing_node": "existing S1/S2/S3 residual nodes",
+      "evidence": "Vite/Supabase/DuckDB/AVF exact final paths 404",
+      "required_delta": "Resolver destino/proveedor autorizado, no repetir motor ante idéntico fallo; cerrar tres pending del lote con ejecución.",
+      "status": "OPEN",
+      "classification": "Operational workstream, not a count of every atomic defect"
+    },
+    {
+      "id": "G11",
+      "gap": "100x y observabilidad",
+      "recommended_owner": "SOL_GPT2 / ASTRA_GPT_RESEARCH",
+      "existing_node": "WF-GOBS-OTEL-RUNTIME / WF-G19-RESOURCE-BRAIN",
+      "evidence": "runtime/src/parallel/.gitkeep; observability/.gitkeep; existing vendor capabilities",
+      "required_delta": "Cablear fan-out/fan-in/batching/backpressure/idempotencia; benchmark antes/después con recursos iguales.",
+      "status": "OPEN",
+      "classification": "Operational workstream, not a count of every atomic defect"
+    },
+    {
+      "id": "G12",
+      "gap": "UI completa y reconciliación de verdad",
+      "recommended_owner": "SOL_ORQUESTADOR / UI_FACTORY",
+      "existing_node": "WF-G23-UI / WF-G12-GLOBAL-COVERAGE",
+      "evidence": "stale canonical summaries; factory regression recorded in A1 state",
+      "required_delta": "Reparar paneles/efectos y demostrar persistencia local/exportación/plataformas; actualizar resúmenes sin promover PASS parcial.",
+      "status": "OPEN",
+      "classification": "Operational workstream, not a count of every atomic defect"
+    }
   ],
+  "next": "Wire independent CI verifier and complete requirement matrix; then WF-G15-CONSOLIDATOR under fresh claim.",
+  "node_id": "WF-G14-AUDITOR5",
+  "owner": "ASTRA_GPT",
+  "prior_active_state": "ASTRA-CROSSCHECK state retains historical scanner claim; new V7 node uses disjoint audit paths; preserve it.",
   "requirement": "Deterministic five-pass requirement/code/test/evidence coverage. Local read-back hashes; explicit test evidence; no self-certification of product.",
+  "schema": "yaiwes.node-report.v1",
+  "status": "LOCAL_TEST_PASS_INTEGRATION_PENDING",
   "steps": [
     "VERIFY_OR_RESEARCH",
     "EXECUTE_AUTHORIZED_DELTA",
     "TEST_AND_REPORT"
   ],
-  "gaps": [
-    "GLOBAL_E2E_NOT_VERIFIED"
+  "write_scope": [
+    "runtime/src/audit/five_pass.py",
+    "runtime/tests/test_audit_five_pass.py"
   ],
-  "prior_active_state": "ASTRA-CROSSCHECK state retains historical scanner claim; new V7 node uses disjoint audit paths; preserve it.",
-  "next": "TEST_AND_REPORT"
+  "completed_at": "2026-09-12T20:32:25.284Z",
+  "code_commit": "ecb51bd654ebe2ce09af72620b47958e227c4db9",
+  "test_commit": "389ee3f9da4e84a89c70a2ed00cb222332419b3a",
+  "code_blob": "dbacb054cb837ef362032b95ee6da68809caf606",
+  "test_blob": "dfbd83cc4cf6928705fb9ef96dafc15a5794736e",
+  "test_run_or_log": {
+    "command": "python -m unittest discover -s runtime/tests -p test_audit_five_pass.py -v",
+    "tests": 9,
+    "failures": 0,
+    "result": "OK",
+    "scope": "Local standard-library unittest; fixture execution verifier; not live CI or product E2E"
+  },
+  "readback": "Both files byte-identical to tested local sources",
+  "five_passes": [
+    "literal identity/source hash",
+    "Python implementation/test symbol validation",
+    "independent execution verifier contract",
+    "artifact to task/requirement/goal inverse",
+    "coverage against explicit requirement inventory"
+  ],
+  "limitations": [
+    "Caller must provide complete authoritative inventory",
+    "Trusted execution verifier adapter not yet wired",
+    "Immutable checkout required; filesystem reader is not a sandbox or TOCTOU guard",
+    "Product verified always false; semantic completeness and E2E not inferred"
+  ],
+  "source_review": {
+    "blobs": [
+      "b9bc9a7f56cf17607b863829213f7bcb0f8b8081",
+      "ecc8b3b1444ade0ca894789e149e881a08b999c0",
+      "da109ae2d91e4563c01492ad365bbaa00fc6baa6"
+    ],
+    "scope": "Complete blobs retrieved and current identities matched; requirements/sections and implementation boundaries reviewed. Full four-pass every-line audit not completed.",
+    "current_user_instruction": "Auditoría forense X-Ray con verificación cruzada del plan, este chat, las instrucciones y Crazy Wall; informe detallado, porcentajes con denominador y plan de tres pasos."
+  },
+  "progress": {
+    "components": {
+      "recorded_present": 120,
+      "total": 124,
+      "recorded_percent": 96.77,
+      "remaining": 4,
+      "independently_checked_this_turn": "Four exact residual paths NOT_FOUND; not full 124 recount"
+    },
+    "batch": {
+      "recorded_pass": 17,
+      "total": 20,
+      "percent": 85,
+      "remaining": [
+        "big-AGI",
+        "Vite",
+        "Vercel AI SDK"
+      ]
+    },
+    "oss11": {
+      "recorded_source_present": 6,
+      "total": 11,
+      "percent": 54.55,
+      "remaining": 5
+    },
+    "global_product_percent": null,
+    "global_reason": "No complete requirement/code/test/evidence denominator validated; 96/4 constants and 100x target are not measured compliance."
+  },
+  "verified_runtime_restart": {
+    "run": 34714136180,
+    "job": 103608081961,
+    "log_read_this_turn": true,
+    "targeted_pass": 1,
+    "package_pass": 19,
+    "scope": "Runtime replay/restart only"
+  },
+  "three_step_plan": [
+    {
+      "step": 1,
+      "name": "Fijar requisitos y cerrar cimientos",
+      "owners": [
+        "ASTRA_GPT",
+        "SOL_GPT1",
+        "SOL_ORQUESTADOR"
+      ],
+      "tasks": [
+        "Matriz requisito/código/test/evidencia",
+        "Memory/write gate/context scopes",
+        "Reconciliar estados y resolver bloqueos literales"
+      ],
+      "acceptance": "Persistencia real de workspace y rechazo de referencias/deltas inválidos con evidencia."
+    },
+    {
+      "step": 2,
+      "name": "Conectar camino completo",
+      "owners": [
+        "SOL_GPT2",
+        "SOL_GPT3",
+        "ASTRA_GPT",
+        "SOL_ORQUESTADOR"
+      ],
+      "tasks": [
+        "Capabilities/router/worker",
+        "Fables/API/stream/cancel",
+        "Audit/consolidator",
+        "Global recovery"
+      ],
+      "acceptance": "E2E chat→runtime→memoria→reinicio→respuesta sin duplicar efectos."
+    },
+    {
+      "step": 3,
+      "name": "Verificar plataformas y rendimiento",
+      "owners": [
+        "SOL_GPT2",
+        "SOL_GPT3",
+        "SOL_ORQUESTADOR",
+        "UI_FACTORY"
+      ],
+      "tasks": [
+        "UI funcional y datos locales",
+        "Desconexión/failover/cancel",
+        "Matriz por plataforma",
+        "Benchmark 100x y G12"
+      ],
+      "acceptance": "Cobertura bidireccional completa y cierre por evidencia aplicable; unsupported declarado."
+    }
+  ],
+  "component_decisions": {
+    "mandatory_new_downloads_justified": 0,
+    "pending_existing_acquisitions": [
+      "Vite",
+      "Supabase",
+      "DuckDB",
+      "AVF"
+    ],
+    "conditional_existing_backlog": [
+      {
+        "name": "Litestream",
+        "decision": "DEFER_UNTIL_SQLITE_REPLICATION_REQUIREMENT",
+        "official": "https://litestream.io/"
+      },
+      {
+        "name": "Grafana Tempo",
+        "decision": "DEFER_UNTIL_TRACE_RETENTION_QUERY_REQUIREMENT",
+        "official": "https://grafana.com/docs/tempo/latest/"
+      },
+      {
+        "name": "Schemathesis",
+        "decision": "DEFER_UNTIL_OPENAPI_RUNTIME_EXISTS",
+        "official": "https://schemathesis.readthedocs.io/en/stable/"
+      },
+      {
+        "name": "Kata Containers",
+        "decision": "REUSE_CANDIDATES_REQUIRE_EQUIVALENCE_TEST_NOT_CLOSED"
+      },
+      {
+        "name": "Grype",
+        "decision": "REUSE_TRIVY_SYFT_CANDIDATES_REQUIRE_EQUIVALENCE_TEST_NOT_CLOSED"
+      }
+    ]
+  },
+  "global_closed": false
 }
