@@ -33,12 +33,12 @@ jobs:
           printf 'route=%s\n' "$SRC"
           printf 'package_sha256=' && sha256sum "$SRC/package.json" | awk '{print $1}'
           printf 'source_commit=' && cat "$SRC/SOURCE_COMMIT.txt"
-      - name: Install current vendored source
+      - name: Install dependencies without lifecycle scripts
         shell: bash
         run: |
           set -euo pipefail
           cd 'UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6'
-          npm install --no-audit --no-fund
+          npm install --ignore-scripts --no-audit --no-fund
       - name: Run upstream node tests
         shell: bash
         run: |
