@@ -53,6 +53,13 @@ jobs:
           set -euo pipefail
           yarn install --immutable
 
+      - name: Install upstream Playwright browser harness
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/Uppy/code
+        shell: bash
+        run: |
+          set -euo pipefail
+          yarn workspace @uppy/dashboard playwright install --with-deps chromium
+
       - name: Build upstream source
         working-directory: UI YAIWES/componentes open soure UI YAIWES/Uppy/code
         shell: bash
@@ -63,6 +70,12 @@ jobs:
       - name: Run upstream headless test suite
         working-directory: UI YAIWES/componentes open soure UI YAIWES/Uppy/code
         shell: bash
+        env:
+          COMPANION_DATADIR: ./output
+          COMPANION_DOMAIN: localhost:3020
+          COMPANION_PROTOCOL: http
+          COMPANION_REDIS_URL: redis://localhost:6379
+          VITE_MINIO_CONFIG: "test_user,test_password,http://localhost:9002/test-bucket,us-east-1"
         run: |
           set -euo pipefail
           yarn test
