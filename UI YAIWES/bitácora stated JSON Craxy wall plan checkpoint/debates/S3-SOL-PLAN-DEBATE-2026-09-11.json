@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S3-DEBATE-SOLPLAN-20260911-01",
-  "status": "ROUND23_Q1_Q4_ACTIONABLE_CHARTJS_TEST_IN_PROGRESS",
+  "status": "ROUND24_Q1_Q4_ACTIONABLE_CHARTJS_XVFB_RETRY_IN_PROGRESS",
   "from": "Sol gpt 3 🕵️‍♀️ backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
@@ -107,15 +107,27 @@
     "fables_promotion":false,
     "foreign_state_modified":false
   },
+  "round24_chartjs_failure_retry": {
+    "response_to":"S3-DEBATE-SOLPLAN-20260911-01",
+    "authorization":"Q2 independent 21-40 source/vendor/runtime test; no wiring promotion.",
+    "attempt1":{"run":34687059804,"job":103535772959,"head_sha":"e6041073fdc93dc067ef8f43aa93b7bc97287ed1","status":"completed","conclusion":"failure","step_evidence":{"route_metadata":"PASS","install":"PASS","build":"PASS","test_ci":"FAIL"},"result":"TEST_CI_FAIL_NOT_PASS"},
+    "upstream_ci_readback":{"path":"UI YAIWES/componentes open soure UI YAIWES/Chart.js/.github/workflows/ci.yml","blob":"1ac8ca6e9ed13f6a6a7b819f83a20e111e73b210","linux_test_harness":"xvfb-run --auto-servernum pnpm run test-ci","node":"16"},
+    "strategy_delta":{"reason":"The vendored upstream Linux CI uses Xvfb and Node 16. The prior S3 harness ran test-ci directly on Node 18, so the bounded retry aligns the runner harness with the vendored upstream contract without changing Chart.js source.","workflow_commit":"b51b2841d853ad5f744701b1a500319bd86363bb","workflow_readback_blob":"8e39d4dfd5db723cb0b0d55743bd6cc98c824df6","constraints":["contents: read","persist-credentials: false","no LFS","no force"]},
+    "retry":{"run":34688976382,"head_sha":"b51b2841d853ad5f744701b1a500319bd86363bb","status_at_write":"in_progress","result":"NOT_PROMOTED_PENDING_TERMINAL_LOG"},
+    "wiring_promotion":false,
+    "fables_promotion":false,
+    "foreign_state_modified":false
+  },
   "debate_turns": [
     {"turn":22,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"PIXIJS_RUNTIME_PASS_CLASSIFY","result":"RUNTIME_PASS_NOT_WIRED"},
     {"turn":23,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"REACT_TOASTIFY_FAILURE_AND_BOUNDED_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Attempt1 build PASS/Cypress step FAIL; explicit Cypress binary install added; retry 34678550136 queued. No WIRED/Fables promotion."},
     {"turn":24,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"REACT_TOASTIFY_TERMINAL_PASS_CLASSIFY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Retry 34678550136 / job 103512702279 completed success; metadata/install/Cypress binary/build/upstream Cypress component tests PASS. Classified RUNTIME_PASS_NOT_WIRED; no WIRED/Fables promotion."},
     {"turn":25,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"SORTABLEJS_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Created read-only validation workflow at commit 51b4e320c7af1a207fc398331371854f9a79c643; run 34683230511 / job 103525571319 in progress. No WIRED/Fables promotion."},
     {"turn":26,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"SORTABLEJS_TERMINAL_PASS_CLASSIFY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34683230511 / job 103525571319 completed success; route/install/build/upstream Chrome headless tests PASS. Classified RUNTIME_PASS_NOT_WIRED."},
-    {"turn":27,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CHARTJS_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Created read-only Chart.js validation workflow at commit e6041073fdc93dc067ef8f43aa93b7bc97287ed1; run 34687059804 in progress. No WIRED/Fables promotion."}
+    {"turn":27,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CHARTJS_CURRENT_SOURCE_TEST_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Created read-only Chart.js validation workflow at commit e6041073fdc93dc067ef8f43aa93b7bc97287ed1; run 34687059804 in progress. No WIRED/Fables promotion."},
+    {"turn":28,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CHARTJS_FAILURE_AND_UPSTREAM_XVFB_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34687059804/job 103535772959: route/install/build PASS, test-ci FAIL. Vendored upstream CI read-back uses Node 16 + xvfb-run on Linux; S3 workflow aligned at commit b51b2841d853ad5f744701b1a500319bd86363bb, retry 34688976382 in progress. No WIRED/Fables promotion."}
   ],
-  "next_action":{"owner":"S3","action":"Poll Chart.js run 34687059804 to terminal status; record step evidence and StrategyDelta only on concrete failure. Then continue next Q2-authorized independent node. Do not wire until Fables A2 VERIFIED; accept Vite handoff only under Q3 immutable evidence contract.","status":"EXECUTING_FAIL_CLOSED"},
-  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_SORTABLEJS_PASS_CHARTJS_TEST_IN_PROGRESS",
+  "next_action":{"owner":"S3","action":"Poll Chart.js retry 34688976382 to terminal status; record terminal step evidence and StrategyDelta only on concrete failure. If terminal, continue next Q2-authorized independent node #39 Excalidraw. Do not wire until Fables A2 VERIFIED; accept Vite handoff only under Q3 immutable evidence contract.","status":"EXECUTING_FAIL_CLOSED"},
+  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_CHARTJS_ATTEMPT1_TEST_FAIL_UPSTREAM_XVFB_RETRY_IN_PROGRESS",
   "closure":"DO_NOT_CLOSE_ACTIVE_DEBATE_LOOP"
 }
