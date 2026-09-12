@@ -3,8 +3,8 @@
   "contract": "tel.workflow/v3",
   "role": "ASTRA_GPT1_BACKEND",
   "name": "🧑‍💻Astra gpt 1 backend UI YAIWES 🌀🌀🌀 👷👷🕵️‍♀️",
-  "updated_at": "2026-09-12T08:36:02.655Z",
-  "base_sha": "ec97ab54c37c2fedccdf448594d55552fab5010f",
+  "updated_at": "2026-09-12T08:36:28.126Z",
+  "base_sha": "dd849dc7ef6ee96de801f3ffb7e355e349bafcc7",
   "wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
   "status": "ACTIVE_LOOP_GAPS_OPEN",
   "scope": "A1 audit only; sole write path is this role_state_path",
@@ -140,7 +140,7 @@
         "job_conclusion": "success",
         "build_step": "PASS",
         "upstream_chrome_headless_test": "PASS",
-        "terminal_assertion": "NOT_FOUND",
+        "terminal_assertion": "FAILED COUNT 0",
         "log_read_back": true,
         "fables_wired": false,
         "product_e2e": false,
@@ -1689,10 +1689,142 @@
         "mutation_performed": "OWN_STATE_ONLY",
         "new_evidence": "O-01 classification PASS leaves six global gaps. React-Toastify run 34678550136/job 103512702279 SUCCESS: build and Cypress 8 specs/76 total/69 pass/7 pending/0 fail; RUNTIME_PASS_NOT_WIRED. Four residuals absent; 01-20 stays 17/20."
       }
+    },
+    {
+      "snapshot_reason": "CORRECT_TERMINAL_ASSERTION_EXTRACTION",
+      "updated_at": "2026-09-12T08:36:02.655Z",
+      "base_sha": "ec97ab54c37c2fedccdf448594d55552fab5010f",
+      "nodes": [
+        {
+          "id": "A1-01",
+          "status": "PASS_AUDIT_SUMMARIES_STALE",
+          "finding": "STATE, CHECKPOINT y HANDOFF siguen sin reconciliar la evidencia terminal reciente. El estado canónico S3 permanece anterior a PixiJS, React-Toastify y SortableJS; el artefacto de debate registra SortableJS sólo como in_progress.",
+          "evidence": {
+            "state_blob_sha": "6e9ba8cd30279fab0fca79381af31e2d55f64f54",
+            "checkpoint_blob_sha": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
+            "handoff_blob_sha": "8302687aaebdd48b9364f5febec8e90dfcffbd49",
+            "s3_state_blob_sha": "b852f5ec08aac4eab4259626a9c243e5c0b4ad56",
+            "s3_debate_blob_sha": "46ff9fa4b96355e59bc4315454c93a959148c880",
+            "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea"
+          },
+          "closure": false
+        },
+        {
+          "id": "A1-02",
+          "status": "BLOCKED_FOUR_RESIDUALS_ABSENT",
+          "finding": "Los cuatro destinos finales literales continúan ausentes; no existe read-back físico 124/124.",
+          "residuals": [
+            {
+              "name": "Vite",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Vite",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            },
+            {
+              "name": "Supabase",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            },
+            {
+              "name": "DuckDB",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            },
+            {
+              "name": "AVF",
+              "path": "UI YAIWES/componentes open soure UI YAIWES/AVF",
+              "result": "NOT_FOUND_404",
+              "independently_read": true
+            }
+          ],
+          "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "closure": false
+        },
+        {
+          "id": "A1-03",
+          "status": "PASS_AUDIT_SORTABLEJS_RUNTIME_NOT_WIRED",
+          "finding": "El informe 01-20 permanece 17/20; pendientes: big-AGI, Vite, Vercel AI SDK. SortableJS pertenece a la cola independiente 21-40 y logró build + pruebas upstream en Chrome headless, sin evidencia Fables ni E2E del producto.",
+          "integration_01_20": {
+            "passed": 17,
+            "total": 20,
+            "pending": [
+              "big-AGI",
+              "Vite",
+              "Vercel AI SDK"
+            ],
+            "report_blob_sha": "88c894ef0754c0e17ad9605ba4f3f316cfd99df1"
+          },
+          "sortablejs": {
+            "classification": "RUNTIME_PASS_NOT_WIRED",
+            "package": "sortablejs@1.15.7",
+            "source_commit": "51b4e320c7af1a207fc398331371854f9a79c643",
+            "workflow_run_id": 34683230511,
+            "workflow_job_id": 103525571319,
+            "job_status": "completed",
+            "job_conclusion": "success",
+            "build_step": "PASS",
+            "upstream_chrome_headless_test": "PASS",
+            "terminal_assertion": "FAILED COUNT 0",
+            "log_read_back": true,
+            "fables_wired": false,
+            "product_e2e": false,
+            "warnings_only": [
+              "circular dependencies",
+              "outdated browserslist",
+              "deprecated Node action runtime"
+            ]
+          },
+          "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "closure": false
+        },
+        {
+          "id": "A1-04",
+          "status": "PASS_REFUTATION_INSTRUCTIONS_PUBLISHED",
+          "refutations": [
+            "Build exitoso y FAILED COUNT 0 prueban únicamente el runtime/test del proveedor SortableJS; no prueban cableado Fables ni E2E YAIWES.",
+            "Actualizar el artefacto de debate no reconcilia el estado canónico S3.",
+            "Cambios de T2/interfaz no alteran los denominadores de residuales ni integración 01-20.",
+            "Cuatro 404 literales impiden declarar 124/124 físico y VERIFIED_CLOSED."
+          ],
+          "crazy_wall_blob_sha": "2404928bd332e2abb1466c9a4095bd52bd24acea",
+          "closure": false
+        }
+      ],
+      "instructions_for_owners": {
+        "SOL_GPT1_BACKEND": "Releer main y reclamar S1-09 con SHA fresco. Probar aislamiento/persistencia de memoria y frontera de agente con read-back; mantener Vite y Supabase bloqueados hasta que el coordinador confirme destinos literales y adquisición canónica.",
+        "SOL_GPT2_BACKEND": "Releer main y reclamar S2-08. Ejecutar selector de plataforma fail-closed con evidencia por host; mantener DuckDB y AVF como residuales separados y no inferir soporte AVF universal.",
+        "SOL_GPT3_BACKEND": "Registrar en su estado canónico el run 34683230511/job 103525571319 como RUNTIME_PASS_NOT_WIRED y reconciliar PixiJS/React-Toastify. Continuar nodo independiente autorizado. Antes de cualquier integración, reclamar S3-10 con SHA fresco y demostrar consumo Fables + E2E real.",
+        "ASTRA2_GPT_BACKEND": "Reclamar únicamente un nodo A2 libre con SHA fresco y validar consumo real del contrato Fables por un adaptador; presencia del plugin o tests unitarios aislados no bastan.",
+        "SOL_PLAN_ORQUESTADOR": "Reconciliar STATE/CHECKPOINT/HANDOFF y estados de roles con evidencia terminal. No promover O-02 sin recuperación/failover E2E. Mantener 120/124 físico y 17/20 integración hasta evidencia literal."
+      },
+      "current_delta": {
+        "summary": "SortableJS terminó success: build y pruebas upstream Chrome headless PASS; el log leído contiene exactamente FAILED COUNT 0. Clasificación limitada a RUNTIME_PASS_NOT_WIRED. Cuatro residuales siguen 404 y la integración 01-20 sigue 17/20.",
+        "sortablejs_run": 34683230511,
+        "sortablejs_job": 103525571319,
+        "residuals_absent": [
+          "Vite",
+          "Supabase",
+          "DuckDB",
+          "AVF"
+        ],
+        "integration_01_20": "17/20",
+        "pending_01_20": [
+          "big-AGI",
+          "Vite",
+          "Vercel AI SDK"
+        ],
+        "runtime_tests_executed_this_cycle": false,
+        "ci_logs_independently_read": true,
+        "own_state_only": true,
+        "verified_closed": false,
+        "correction": "Terminal assertion re-read from full job log and recorded exactly."
+      }
     }
   ],
   "current_delta": {
-    "summary": "SortableJS terminó success: build y pruebas upstream Chrome headless PASS con FAILED COUNT 0. Clasificación limitada a RUNTIME_PASS_NOT_WIRED. Cuatro residuales siguen 404 y la integración 01-20 sigue 17/20.",
+    "summary": "SortableJS terminó success: build y pruebas upstream Chrome headless PASS; el log leído contiene exactamente FAILED COUNT 0. Clasificación limitada a RUNTIME_PASS_NOT_WIRED. Cuatro residuales siguen 404 y la integración 01-20 sigue 17/20.",
     "sortablejs_run": 34683230511,
     "sortablejs_job": 103525571319,
     "residuals_absent": [
@@ -1710,6 +1842,7 @@
     "runtime_tests_executed_this_cycle": false,
     "ci_logs_independently_read": true,
     "own_state_only": true,
-    "verified_closed": false
+    "verified_closed": false,
+    "correction": "Terminal assertion re-read from full job log and recorded exactly."
   }
 }
