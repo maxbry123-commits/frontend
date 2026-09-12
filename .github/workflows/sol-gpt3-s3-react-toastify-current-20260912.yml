@@ -1,0 +1,56 @@
+name: Sol GPT3 S3 React-Toastify current validation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sol-gpt3-s3-react-toastify-current-20260912.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sol-gpt3-s3-react-toastify-current
+  cancel-in-progress: false
+
+jobs:
+  react-toastify-current:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Enable pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10 --activate
+          pnpm --version
+
+      - name: Read back source metadata
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/React-Toastify
+        run: |
+          node -e "const p=require('./package.json'); if(p.name!=='react-toastify'||p.version!=='11.1.0') process.exit(1); console.log(p.name,p.version,p.scripts.build,p.scripts['test:run'])"
+          git hash-object package.json
+          git hash-object pnpm-lock.yaml
+          cat SOURCE_COMMIT.txt
+
+      - name: Install current vendored source
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/React-Toastify
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Build current source
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/React-Toastify
+        run: pnpm build
+
+      - name: Run upstream Cypress component tests
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/React-Toastify
+        run: pnpm test:run
