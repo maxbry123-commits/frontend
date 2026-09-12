@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>YAIWES UI Factory V1</title>
+  <title>YAIWES UI Factory V1.1</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
@@ -15,12 +15,12 @@
         <button data-mode="MANUAL">Manual</button>
         <button data-mode="AI_ASSIST">AI Assist</button>
         <button data-mode="AUTOPILOT">Autopilot</button>
-        <button id="toggle-config">⚙ Configuración</button>
+        <button id="toggle-config" aria-expanded="true">⚙ Configuración</button>
       </div>
     </header>
 
-    <section id="config-panel" class="config-panel hidden" aria-label="Configuración de fábrica">
-      <div class="config-tabs">
+    <section id="config-panel" class="config-panel" aria-label="Configuración de fábrica">
+      <div class="config-tabs" role="tablist" aria-label="Paneles de configuración">
         <button data-config-tab="router">1. Router IA</button>
         <button data-config-tab="remote">2. Remoto</button>
         <button data-config-tab="skills">3. Skills</button>
@@ -34,7 +34,7 @@
       </div>
 
       <div class="config-body">
-        <section data-config-section="router">
+        <section id="ai-router-panel" data-config-section="router">
           <h2>Router de modelos / equipo IA</h2>
           <div class="form-grid">
             <input id="model-name" placeholder="Modelo: gpt / claude / kimi / etc." />
@@ -47,7 +47,7 @@
           <label>Modo equipo<select id="team-mode"><option value="single">1 IA</option><option value="race">Race</option><option value="quorum">Quorum</option><option value="sequence">Secuencia</option></select></label>
         </section>
 
-        <section data-config-section="remote" class="hidden">
+        <section id="remote-ai-panel" data-config-section="remote" class="hidden">
           <h2>IA remota</h2>
           <div class="form-grid">
             <select id="remote-protocol"><option>MCP_HTTP</option><option>HTTP</option><option>WEBSOCKET</option><option>API</option></select>
@@ -59,7 +59,7 @@
           <pre id="remote-status"></pre>
         </section>
 
-        <section data-config-section="skills" class="hidden">
+        <section id="skills-panel" data-config-section="skills" class="hidden">
           <h2>Skills de diseño</h2>
           <input id="skill-name" placeholder="Nombre del skill" />
           <input id="skill-source" placeholder="URL / GitHub / ruta" />
@@ -68,7 +68,7 @@
           <div id="skill-list" class="card-list"></div>
         </section>
 
-        <section data-config-section="inputs" class="hidden">
+        <section id="inputs-panel" data-config-section="inputs" class="hidden">
           <h2>Entradas de trabajo</h2>
           <input id="file-input" type="file" multiple accept="image/*,audio/*,video/*,.html,.htm,.json,.css,.js,.zip,.pdf" />
           <textarea id="html-input" placeholder="Pega HTML aquí"></textarea>
@@ -80,7 +80,7 @@
           <div id="source-list" class="card-list"></div>
         </section>
 
-        <section data-config-section="destinations" class="hidden">
+        <section id="destinations-panel" data-config-section="destinations" class="hidden">
           <h2>Salida y publicación</h2>
           <div class="form-grid">
             <select id="destination-type"><option>DOWNLOAD</option><option>GITHUB</option><option>HUGGINGFACE</option><option>VERCEL</option><option>MCP</option><option>SHARE</option><option>CUSTOM_HTTP</option></select>
@@ -94,14 +94,14 @@
           <div id="destination-list" class="card-list"></div>
         </section>
 
-        <section data-config-section="references" class="hidden">
+        <section id="references-panel" data-config-section="references" class="hidden">
           <h2>Réplicas / referencias web</h2>
           <input id="reference-url" placeholder="URL de página de referencia" />
           <button id="add-reference">Añadir referencia</button>
           <div id="reference-list" class="card-list"></div>
         </section>
 
-        <section data-config-section="web" class="hidden">
+        <section id="web-page-panel" data-config-section="web" class="hidden">
           <h2>Creador de páginas web</h2>
           <input id="page-name" placeholder="Nombre de página" />
           <select id="page-template"><option>landing</option><option>dashboard</option><option>saas</option><option>portfolio</option><option>blank</option></select>
@@ -109,7 +109,7 @@
           <div id="page-list" class="card-list"></div>
         </section>
 
-        <section data-config-section="media" class="hidden">
+        <section id="media-panel" data-config-section="media" class="hidden">
           <h2>Media / IA generativa</h2>
           <input id="media-upload" type="file" multiple accept="image/*,audio/*,video/*,.glb,.gltf,.obj,.fbx" />
           <textarea id="media-prompt" placeholder="Prompt para imagen / vídeo / audio / 3D"></textarea>
@@ -118,11 +118,11 @@
           <div id="media-list" class="card-list"></div>
         </section>
 
-        <section data-config-section="theme" class="hidden">
+        <section id="theme-panel" data-config-section="theme" class="hidden">
           <h2>Colores y diseño predeterminado</h2>
           <div class="form-grid">
             <label>Fondo<input id="theme-bg" type="color" value="#111111" /></label>
-            <label>Panel<input id="theme-panel" type="color" value="#181818" /></label>
+            <label>Panel<input id="theme-panel-color" type="color" value="#181818" /></label>
             <label>Texto<input id="theme-text" type="color" value="#eeeeee" /></label>
             <label>Acento<input id="theme-accent" type="color" value="#888888" /></label>
             <label>Radio<input id="theme-radius" type="range" min="0" max="24" value="8" /></label>
@@ -131,7 +131,7 @@
           <button id="save-theme">Guardar preset</button>
         </section>
 
-        <section data-config-section="kernel" class="hidden">
+        <section id="microkernel-panel" data-config-section="kernel" class="hidden">
           <h2>Micro-kernel / motores internos</h2>
           <label><input id="kernel-validate" type="checkbox" checked /> Validator</label>
           <label><input id="kernel-version" type="checkbox" checked /> Versioner</label>
