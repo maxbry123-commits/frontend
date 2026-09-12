@@ -26,10 +26,10 @@ jobs:
       HF_TOKEN_E: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
       SPACE_REPO: COMAND-CENTER-1/yaiwes-ui-factory
       HF_OIDC_RESOURCE: spaces/COMAND-CENTER-1/yaiwes-ui-factory
-      SOURCE_REF: 68353b77356b667356827748bade0fe7207e134a
-      RAW_ROOT: https://raw.githubusercontent.com/maxbry123-commits/frontend/68353b77356b667356827748bade0fe7207e134a/UI%20YAIWES/watchdog%20UI%20YAIWES/%E2%9E%A1%EF%B8%8F%20Astra%20plan%20f%C3%A1brica%20UI%20YAIWES/Frontend/factory-v0
+      SOURCE_REF: 245efadec5f01513c8ee4203224fba739ad0d2f2
+      RAW_ROOT: https://raw.githubusercontent.com/maxbry123-commits/frontend/245efadec5f01513c8ee4203224fba739ad0d2f2/UI%20YAIWES/watchdog%20UI%20YAIWES/%E2%9E%A1%EF%B8%8F%20Astra%20plan%20f%C3%A1brica%20UI%20YAIWES/Frontend/factory-v0
     steps:
-      - name: Package exact verified Factory V1 payload
+      - name: Package exact verified Factory V1.1 payload
         shell: bash
         run: |
           set -euo pipefail
@@ -52,17 +52,25 @@ jobs:
           pinned: false
           ---
 
-          # YAIWES UI Factory V1
+          # YAIWES UI Factory V1.1
           Visual Static Space for the YAIWES UI Factory.
-          Verified source SHA: `68353b77356b667356827748bade0fe7207e134a`.
-          Director 10-requirement rebuild: router IA, remote, skills, inputs, destinations, references, web, media, theme, micro-kernel.
+          Verified source SHA: `245efadec5f01513c8ee4203224fba739ad0d2f2`.
+          Director 10-requirement rebuild + visible configuration panels + media status repair.
           EOF
           echo "SOURCE_REF=$SOURCE_REF"
           echo "PACKAGE_FILES=$(find _hf_space_publish -type f | wc -l)"
           grep -q 'YAIWES UI Factory' _hf_space_publish/index.html
-          grep -q 'toggle-config' _hf_space_publish/index.html
-          grep -q 'queue-media-generation' _hf_space_publish/index.html
-          grep -q 'run-kernel' _hf_space_publish/index.html
+          grep -q 'ai-router-panel' _hf_space_publish/index.html
+          grep -q 'remote-ai-panel' _hf_space_publish/index.html
+          grep -q 'skills-panel' _hf_space_publish/index.html
+          grep -q 'inputs-panel' _hf_space_publish/index.html
+          grep -q 'destinations-panel' _hf_space_publish/index.html
+          grep -q 'references-panel' _hf_space_publish/index.html
+          grep -q 'web-page-panel' _hf_space_publish/index.html
+          grep -q 'media-panel' _hf_space_publish/index.html
+          grep -q 'theme-panel' _hf_space_publish/index.html
+          grep -q 'microkernel-panel' _hf_space_publish/index.html
+          grep -q 'BLOCKED_NO_MODEL' _hf_space_publish/src/app.js
           grep -q 'LUCIDE_PROVENANCE' _hf_space_publish/src/donors/lucide-icons.js
           sha256sum _hf_space_publish/index.html _hf_space_publish/styles.css _hf_space_publish/src/*.js _hf_space_publish/src/donors/*.js
           echo 'PACKAGE_VERIFY=PASS'
@@ -105,12 +113,12 @@ jobs:
           repo_id = os.environ['SPACE_REPO']
           api = HfApi(token=token)
           create_repo(repo_id=repo_id, repo_type='space', space_sdk='static', private=False, exist_ok=True, token=token)
-          commit = api.upload_folder(repo_id=repo_id, repo_type='space', folder_path='_hf_space_publish', commit_message='Publish YAIWES UI Factory V1 verified preview')
+          commit = api.upload_folder(repo_id=repo_id, repo_type='space', folder_path='_hf_space_publish', commit_message='Publish YAIWES UI Factory V1.1 verified preview')
           print('HF_SPACE_UPLOAD_COMMIT=' + str(commit))
           PY
           else
             echo "HF_OIDC_RESOURCE=$HF_OIDC_RESOURCE"
-            hf upload "$SPACE_REPO" _hf_space_publish . --repo-type space --commit-message "Publish YAIWES UI Factory V1 via GitHub OIDC ${GITHUB_SHA::7}"
+            hf upload "$SPACE_REPO" _hf_space_publish . --repo-type space --commit-message "Publish YAIWES UI Factory V1.1 via GitHub OIDC ${GITHUB_SHA::7}"
           fi
           echo 'HF_SPACE_UPLOAD=PASS'
 
@@ -132,7 +140,7 @@ jobs:
           print(f'HF_SPACE_META status={status} sdk={meta.get("sdk")} private={meta.get("private")} stage={meta.get("runtime",{}).get("stage")} host={app} sha={meta.get("sha")}')
           if status != 200 or meta.get('sdk') != 'static' or not app:
               raise SystemExit('HF_SPACE_METADATA_INVALID')
-          for url, markers in [(page, ['YAIWES']), (app.rstrip('/')+'/', ['YAIWES UI Factory','Configuración','Router IA'])]:
+          for url, markers in [(page, ['YAIWES']), (app.rstrip('/')+'/', ['YAIWES UI Factory','Configuración','Router IA','Micro-kernel'])]:
               last=None
               for attempt in range(36):
                   try:
