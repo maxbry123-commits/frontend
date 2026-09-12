@@ -58,9 +58,9 @@ connections:
     spaces:
       - repo_id: COMAND-CENTER-1/yaiwes-ui-factory
         url: https://huggingface.co/spaces/COMAND-CENTER-1/yaiwes-ui-factory
-        runtime_url: https://comand-center-1-yaiwes-ui-factory.hf.space/
+        runtime_url: https://comand-center-1-yaiwes-ui-factory.static.hf.space/
         purpose: frontend_factory_visual_runtime
-        source_evidence: maxbry123-commits/TAREA-1/.github/workflows/yaiwes-hf-static-publish.yml
+        source_evidence: maxbry123-commits/frontend/.github/workflows/astra-hf-static-space-publish.yml
     verification: [whoami, scope_check, api_probe, job_probe, space_probe]
 
   claude_github_mcp:
