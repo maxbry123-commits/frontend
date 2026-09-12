@@ -1,0 +1,29 @@
+{
+  "job": "MAXBRY-WEB",
+  "grock": "1",
+  "role": "web-windows-designer",
+  "updated": "2026-09-12T04:39:00-05:00",
+  "contrato": "CONTRATO-2 fail-closed",
+  "repo": "maxbry123-commits/frontend",
+  "branch": "main",
+  "source_of_truth": "GitHub",
+  "paths": {
+    "web_root": "Maxbry web/",
+    "code": "Maxbry web/download code Maxbry web/",
+    "design_bank": "Maxbry web/banco biblioteca de diseño/",
+    "diseno_web": "diseño web/",
+    "diseno_video_3d": "diseño Video 3d/"
+  },
+  "window_01_home": {
+    "status": "REVIEW",
+    "variants": [
+      {"id": "grock-1A-archivo-01", "theme": "kimi-paper", "approved": false},
+      {"id": "grock-1A-archivo-02", "theme": "minimax-cinematic", "approved": false},
+      {"id": "grock-1A-archivo-03", "theme": "grok-minimal-invert", "approved": false},
+      {"id": "grock-1A-archivo-04", "theme": "jarvis-hud", "approved": false},
+      {"id": "grock-1A-archivo-05", "theme": "fusion-4env-upload", "approved": false}
+    ]
+  },
+  "paypal": {"connector": false, "module": "paypal-module.js stub"},
+  "pass": false
+}
