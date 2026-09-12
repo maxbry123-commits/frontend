@@ -1,0 +1,62 @@
+{
+  "schema": "yaiwes.crazy-wall.wordflow-xray.v4",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_LOOP_NOT_CLOSED",
+  "supersedes": "CRAZY-WALL-WORDFLOW-XRAY-V3-2026-09-12.json",
+  "architecture": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-WORDFLOW-PYTHON-DSL-DAG-96-4-V7-2026-09-12.md",
+  "handoff": "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V7-2026-09-12.md",
+  "file_by_file_xray": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/WORDFLOW-FILE-BY-FILE-XRAY-2026-09-12.md",
+  "python_dsl": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/architecture_dsl.py",
+  "ratios": {"deterministic":0.96,"llm_max":0.04},
+  "ci_gate": {
+    "workflow":".github/workflows/yaiwes-wordflow-loop-pytest.yml",
+    "workflow_fix_commit":"baed8f07e9a205f28def181931d9eb7420e76fd7",
+    "run":34716613952,
+    "state":"PENDING_AT_SNAPSHOT",
+    "coverage_change":"trigger runtime/src/**; sparse checkout entire runtime/src; run all wordflow tests + all runtime/tests",
+    "promotion_rule":"No TESTED promotion until completed/success + job/log readback"
+  },
+  "rules": {
+    "one_task_one_node":true,
+    "one_active_node_per_role":true,
+    "max_steps":3,
+    "steps":["VERIFY_OR_RESEARCH","EXECUTE_AUTHORIZED_DELTA","TEST_AND_REPORT"],
+    "claim_requires":["fresh_head","owner","node_id","write_scope","claimed_at"],
+    "report_requires":["paths","sha_or_blob","run_job_log","evidence","gaps","next_free_node"],
+    "collision":"No role writes another role write_scope; shared files only Orchestrator after fresh readback."
+  },
+  "nodes": [
+    {"id":"WF-G08-MEMORY","process":"P08","state":"FREE","owner_lane":"SOL_GPT1","scope":"runtime/src/memory/**|runtime/src/agent/**|runtime/tests/test_memory*|runtime/tests/test_agent*","task":"Memory/Audit contract + canonical write gate; direct LLM canonical writes forbidden."},
+    {"id":"WF-G09-RETRIEVAL","process":"P09","state":"AFTER_WF-G08","owner_lane":"SOL_GPT1","scope":"runtime/src/memory/**|runtime/tests/test_memory*","task":"GET_CONTEXT/GET_MEMORY/GET_EVIDENCE + provenance retrieval E2E."},
+    {"id":"WF-G10-CONTEXT-FABRIC","process":"P10","state":"AFTER_WF-G09","owner_lane":"SOL_GPT1","scope":"runtime/src/memory/**|runtime/tests/test_memory*","task":"Minimal sufficient context, budget, filter/rerank, source retention."},
+    {"id":"WF-GSTORAGE-LOCAL-FIRST","process":"P06/P08","state":"AFTER_WF-G08","owner_lane":"SOL_GPT1","scope":"runtime/src/storage/**|runtime/src/memory/**|runtime/tests/test_memory*","task":"Local-first storage/checkpoint boundary; dedup Stabilize/rqlite before code."},
+    {"id":"WF-G11-SANDBOX-UEK","process":"P11","state":"FREE","owner_lane":"SOL_GPT2","scope":"runtime/src/uek/**|runtime/src/adapters/**|runtime/tests/test_platform*|runtime/tests/test_sandbox*","task":"Sandbox/VM backend capability router and lifecycle; unsupported hosts fail closed."},
+    {"id":"WF-G12-WORKER","process":"P12","state":"AFTER_WF-G11","owner_lane":"SOL_GPT2","scope":"runtime/src/adapters/**|runtime/tests/test_platform*","task":"Reuse Stabilize workers; add only missing YAIWES adapter contract."},
+    {"id":"WF-G16-ROUTER","process":"P16","state":"AFTER_WF-G11","owner_lane":"SOL_GPT2","scope":"runtime/src/adapters/**|runtime/src/uek/**","task":"Resource/capability routing with explicit supported/conditional/blocked matrix."},
+    {"id":"WF-GOBS-OTEL-RUNTIME","process":"P14/P16","state":"AFTER_WF-G16","owner_lane":"SOL_GPT2","scope":"runtime/src/observability/**|runtime/src/adapters/**|runtime/tests/test_observability*","task":"Wire acquired OTel Collector only if distinct from plugin instrumentation; prove runtime telemetry."},
+    {"id":"WF-G14-AUDITOR5","process":"P14/P21","state":"FREE","owner_lane":"ASTRA_GPT","scope":"runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*","task":"Executable deterministic five-pass audit/coverage; docs↔code↔tests↔evidence."},
+    {"id":"WF-G15-CONSOLIDATOR","process":"P15","state":"AFTER_WF-G14","owner_lane":"ASTRA_GPT","scope":"runtime/src/consolidation/**|runtime/tests/test_consolidation*","task":"Task→phase→project deterministic consolidation with evidence links."},
+    {"id":"WF-G19-RESOURCE-BRAIN","process":"P19","state":"RESEARCH_FREE","owner_lane":"ASTRA_GPT_RESEARCH","scope":"Astra reports only until owner claim","task":"Research/dedup resource brain; REUSE>PATCH>ADAPT>GENERATE>NEW_DOWNLOAD."},
+    {"id":"WF-GMISSION-MAP","process":"P03/P19","state":"AUDIT_FREE","owner_lane":"ASTRA_GPT","scope":"Astra audit reports only","task":"Prove whether empty mission/ needs code or existing goals/requirements are equivalent; do not generate by directory name."},
+    {"id":"WF-GINSTALL-MAP","process":"P22/P23-downstream","state":"AUDIT_FREE","owner_lane":"ASTRA_GPT","scope":"Astra audit reports only","task":"Map install/package capability to truth docs; keep outside Wordflow core unless requirement proves ownership."},
+    {"id":"WF-G20-GLOBAL-INTEGRATION","process":"P20","state":"FREE","owner_lane":"SOL_GPT3","scope":"runtime/src/integration/**|runtime/tests/test_integration*","task":"Fables-backed global integration state/consolidation boundary with runtime E2E."},
+    {"id":"WF-G17-LOOP","process":"P17","state":"AFTER_WF-G20","owner_lane":"SOL_GPT3","scope":"runtime/src/integration/**|runtime/tests/test_integration*","task":"Continuous multi-stage loop using state delta/audit/repair/next, deterministic E2E."},
+    {"id":"WF-G22-API","process":"P22","state":"AFTER_WF-G20","owner_lane":"SOL_GPT3","scope":"runtime/src/conn/**|runtime/src/integration/**|runtime/tests/test_integration*","task":"Minimal Python API/control boundary after runtime contracts exist."},
+    {"id":"WF-G18-RECOVERY","process":"P18","state":"EXECUTING","owner_lane":"SOL_ORQUESTADOR","scope":"orchestrator report/shared consolidation; runtime path claim required before code","task":"Workspace/global restart/failover/reconstruction E2E beyond durable-ledger subgate."},
+    {"id":"WF-G12-GLOBAL-COVERAGE","process":"GLOBAL","state":"EXECUTING","owner_lane":"SOL_ORQUESTADOR","scope":"Crazy Wall/Handoff/architecture/reports","task":"GOAL→REQUIREMENT→FILE/FUNCTION→TEST→EVIDENCE and inverse to 100%."},
+    {"id":"WF-G23-UI","process":"P23","state":"BLOCKED_UNTIL_RUNTIME","owner_lane":"UI_FACTORY","scope":"no Wordflow mutation","task":"Consume verified API/runtime only; UI cannot close runtime gaps."}
+  ],
+  "fresh_physical_gaps": {
+    "adapters":"README_ONLY",
+    "agent":"GITKEEP_ONLY",
+    "integration":"README_ONLY",
+    "recovery":"GITKEEP_ONLY",
+    "uek":"GITKEEP_ONLY",
+    "storage":"GITKEEP_ONLY",
+    "conn":"GITKEEP_ONLY",
+    "observability":"GITKEEP_ONLY",
+    "mission":"GITKEEP_ONLY",
+    "install":"GITKEEP_ONLY"
+  },
+  "closure":"SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+}
