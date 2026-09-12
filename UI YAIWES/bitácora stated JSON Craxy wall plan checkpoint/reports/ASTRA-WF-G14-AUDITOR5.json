@@ -1,0 +1,23 @@
+{
+  "schema": "yaiwes.node-report.v1",
+  "node_id": "WF-G14-AUDITOR5",
+  "owner": "ASTRA_GPT",
+  "status": "CLAIMED",
+  "base_sha": "a936295b6e8c62d7d01e50c81bdfe5ffd653ec0f",
+  "claimed_at": "2026-09-12T20:28:40.971Z",
+  "write_scope": [
+    "runtime/src/audit/five_pass.py",
+    "runtime/tests/test_audit_five_pass.py"
+  ],
+  "requirement": "Deterministic five-pass requirement/code/test/evidence coverage. Local read-back hashes; explicit test evidence; no self-certification of product.",
+  "steps": [
+    "VERIFY_OR_RESEARCH",
+    "EXECUTE_AUTHORIZED_DELTA",
+    "TEST_AND_REPORT"
+  ],
+  "gaps": [
+    "GLOBAL_E2E_NOT_VERIFIED"
+  ],
+  "prior_active_state": "ASTRA-CROSSCHECK state retains historical scanner claim; new V7 node uses disjoint audit paths; preserve it.",
+  "next": "TEST_AND_REPORT"
+}
