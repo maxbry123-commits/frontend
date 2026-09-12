@@ -3,14 +3,20 @@
   "contract": "tel.workflow/v3",
   "owner": "ASTRA_CROSSCHECK",
   "node_id": "ASTRA-XRAY-PATH-001",
-  "status": "CLAIMED",
+  "status": "TESTED_SUBGATE_PASS_RELEASED",
   "base_sha": "fd9e5bf4d249d97ee0406837f5bb5a2b34c60467",
-  "write_scope": [
-    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/governance/supervisor.py",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-XRAY-*"
-  ],
+  "write_scope": [],
   "assertion": "El guard rechaza escapes de ruta lexicales.",
-  "evidence": "supervisor.check(... touched_paths=['safe/../outside'], allowed_paths=['safe']) devuelve []",
+  "evidence": {
+    "commit": "4a3a0ffe0eecaebb1ecfae904e08f3fd25560fcf",
+    "local": "15 pytest passed + 8 boundary assertions",
+    "ci_run": 34707983948,
+    "ci_status": "IN_PROGRESS",
+    "readback": true
+  },
   "audit_status": "INCOMPLETE",
-  "watchdog_id": "6aa475753a40819197771ad1661a8ba0"
+  "watchdog_id": "6aa475753a40819197771ad1661a8ba0",
+  "current_node": null,
+  "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-XRAY-DELTA-2026-09-12.json",
+  "remaining": "Full 4+4 source audit, G12 matrix, additional document identity, shared consolidation."
 }
