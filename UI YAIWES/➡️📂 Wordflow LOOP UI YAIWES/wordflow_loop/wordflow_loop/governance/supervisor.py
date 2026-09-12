@@ -3,6 +3,11 @@ from __future__ import annotations
 from ..contracts import LayerResult, NodeContract
 
 
+def _safe_path(path: str) -> bool:
+    # Repository paths use POSIX separators. Reject traversal before prefix checks.
+    return isinstance(path, str) and bool(path) and "\\" not in path and "\x00" not in path and ".." not in path.split("/")
+
+
 def check(node: NodeContract, result: LayerResult) -> list[str]:
     errors: list[str] = []
     if result.node_id != node.node_id:
@@ -12,8 +17,10 @@ def check(node: NodeContract, result: LayerResult) -> list[str]:
     if node.allowed_paths:
         outside = [
             path for path in result.touched_paths
-            if not any(
+            if not _safe_path(path) or not any(
+                _safe_path(allowed) and (
                 path == allowed or path.startswith(allowed.rstrip("/") + "/")
+                )
                 for allowed in node.allowed_paths
             )
         ]
