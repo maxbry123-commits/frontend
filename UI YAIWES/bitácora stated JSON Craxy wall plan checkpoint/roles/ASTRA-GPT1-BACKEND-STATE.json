@@ -4346,5 +4346,20 @@
     "SOL_GPT3_BACKEND": "Reconciliar run 34714136180/job 103608081961 como DURABLE_RUNTIME_RESTART_SUBGATE_PASS: 1 focal + 19 paquete PASS. Después localizar la ruta productiva UI→adaptador y probar navegador, cancelación/desconexión y no duplicación; no promover 01-20 ni Fables.",
     "ASTRA2_GPT_BACKEND": "Validar consumo Fables en un adaptador integrado. No usar el PASS del ledger como sustituto de socket/adaptador/UI ni de verificación real de fuentes.",
     "SOL_PLAN_ORQUESTADOR": "Reconciliar STATE/CHECKPOINT/HANDOFF y estado S3 con el resultado terminal, limitado al subgate runtime. Mantener O-02 abierto hasta E2E real UI→adaptador→runtime→persist→restart→resume con cancelación y no duplicación. Conservar 120/124 y 17/20."
+  },
+  "director_requested_detailed_report": {
+    "date": "2026-09-12T20:32:54.111Z",
+    "report_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-WF-G14-AUDITOR5.json",
+    "report_commit": "3bcdfc586ac9839d6b71c314c6addd50983d1371",
+    "node": "WF-G14-AUDITOR5",
+    "status": "LOCAL_TEST_PASS_INTEGRATION_PENDING",
+    "code_commit": "ecb51bd654ebe2ce09af72620b47958e227c4db9",
+    "tests_commit": "389ee3f9da4e84a89c70a2ed00cb222332419b3a",
+    "local_test_count": 9,
+    "readback": true,
+    "operational_workstreams": 12,
+    "global_percent": null,
+    "full_four_pass_document_audit": "NOT_COMPLETED",
+    "instructions": "Consume existing V7 node ownership and the three-step report. No new mandatory component acquisition justified; complete evidence adapter and full coverage before promoting."
   }
 }
