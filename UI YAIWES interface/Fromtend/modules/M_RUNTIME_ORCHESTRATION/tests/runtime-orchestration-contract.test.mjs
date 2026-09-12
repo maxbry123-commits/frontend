@@ -5,6 +5,8 @@ import {
   RUNTIME_ORCHESTRATION_WINDOWS,
 } from "../runtime-orchestration-contract.mjs";
 
+const TEST_ORIGIN = "https://comand-center-1-yaiwes-ui-factory.static.hf.space";
+
 function fixture() {
   const busEvents = [];
   const postMessages = [];
@@ -28,6 +30,7 @@ function fixture() {
     codeMirrorAdapter,
     actionBus,
     postMessageTarget,
+    postMessageOrigin: TEST_ORIGIN,
     busEvents,
     postMessages,
     destroyed: () => destroyed,
@@ -39,6 +42,24 @@ test("fails closed without required frontend dependencies", () => {
   assert.throws(
     () => createRuntimeOrchestrationContract({ codeMirrorAdapter: { mount() {} } }),
     /ACTION_BUS_REQUIRED/,
+  );
+});
+
+test("fails closed when postMessage origin is absent, wildcard, or invalid", () => {
+  const f = fixture();
+  const base = {
+    codeMirrorAdapter: f.codeMirrorAdapter,
+    actionBus: f.actionBus,
+    postMessageTarget: f.postMessageTarget,
+  };
+  assert.throws(() => createRuntimeOrchestrationContract(base), /POSTMESSAGE_ORIGIN_REQUIRED/);
+  assert.throws(
+    () => createRuntimeOrchestrationContract({ ...base, postMessageOrigin: "*" }),
+    /POSTMESSAGE_WILDCARD_ORIGIN_DENIED/,
+  );
+  assert.throws(
+    () => createRuntimeOrchestrationContract({ ...base, postMessageOrigin: "javascript:alert(1)" }),
+    /POSTMESSAGE_ORIGIN_INVALID/,
   );
 });
 
@@ -57,7 +78,7 @@ test("RUN-07 editor routes changes only through ActionBus/postMessage contract",
   assert.equal(f.busEvents[0].type, "RUN07_DOCUMENT_CHANGED");
   assert.deepEqual(f.busEvents[0].payload, { windowId: "RUN-07", value: "node: B" });
   assert.equal(f.postMessages.length, 1);
-  assert.equal(f.postMessages[0].targetOrigin, "*");
+  assert.equal(f.postMessages[0].targetOrigin, TEST_ORIGIN);
   editor.destroy();
   assert.equal(f.destroyed(), true);
   assert.equal("backend" in contract, false);
@@ -78,6 +99,7 @@ test("RUN-08 inspector publishes an immutable safe snapshot", () => {
   assert.equal(Object.isFrozen(event.payload.snapshot), true);
   assert.equal(f.busEvents.length, 1);
   assert.equal(f.postMessages.length, 1);
+  assert.equal(f.postMessages[0].targetOrigin, TEST_ORIGIN);
 });
 
 test("RUN-08 rejects undeclared and secret-bearing fields", () => {
