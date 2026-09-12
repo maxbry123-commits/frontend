@@ -4,15 +4,17 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
+function hasYaiwesPayload(dataTransfer) {
+  if (!dataTransfer) return false;
+  const types = Array.from(dataTransfer.types || []);
+  return types.includes('text/yaiwes-kind') || types.includes('text/yaiwes-node');
+}
+
 function redirectStageDrop(event) {
   const canvas = document.getElementById('canvas');
-  if (!canvas || !stage) return;
+  if (!canvas || !stage || typeof canvas.ondrop !== 'function') return;
   if (event.target === canvas || canvas.contains(event.target)) return;
-  if (!event.dataTransfer) return;
-
-  const hasPayload = event.dataTransfer.types.includes('text/yaiwes-kind') ||
-    event.dataTransfer.types.includes('text/yaiwes-node');
-  if (!hasPayload) return;
+  if (!hasYaiwesPayload(event.dataTransfer)) return;
 
   event.preventDefault();
   event.stopPropagation();
@@ -21,35 +23,33 @@ function redirectStageDrop(event) {
   const clientX = clamp(event.clientX, rect.left + 8, rect.right - 8);
   const clientY = clamp(event.clientY, rect.top + 8, rect.bottom - 8);
 
-  const redirected = new DragEvent('drop', {
-    bubbles: true,
-    cancelable: true,
-    dataTransfer: event.dataTransfer,
+  canvas.ondrop({
+    preventDefault() {},
+    stopPropagation() {},
     clientX,
     clientY,
+    dataTransfer: event.dataTransfer,
+    target: canvas,
+    currentTarget: canvas,
   });
-  redirected.yaiwesRedirected = true;
-  canvas.dispatchEvent(redirected);
 }
 
 if (stage) {
   stage.addEventListener('dragover', event => {
     const canvas = document.getElementById('canvas');
     if (!canvas || event.target === canvas || canvas.contains(event.target)) return;
-    if (!event.dataTransfer) return;
-    const hasPayload = event.dataTransfer.types.includes('text/yaiwes-kind') ||
-      event.dataTransfer.types.includes('text/yaiwes-node');
-    if (!hasPayload) return;
+    if (!hasYaiwesPayload(event.dataTransfer)) return;
     event.preventDefault();
-    event.dataTransfer.dropEffect = event.dataTransfer.types.includes('text/yaiwes-node') ? 'move' : 'copy';
+    event.dataTransfer.dropEffect = Array.from(event.dataTransfer.types || []).includes('text/yaiwes-node') ? 'move' : 'copy';
     stage.classList.add('drag-over');
   });
+
   stage.addEventListener('dragleave', event => {
     if (!stage.contains(event.relatedTarget)) stage.classList.remove('drag-over');
   });
+
   stage.addEventListener('drop', event => {
     stage.classList.remove('drag-over');
-    if (event.yaiwesRedirected) return;
     redirectStageDrop(event);
   });
 }
