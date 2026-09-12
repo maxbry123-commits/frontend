@@ -1,0 +1,93 @@
+{
+  "schema": "yaiwes.crazy-wall.multi-ai-node-queue.v2",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_LOOP",
+  "base_main_sha": "a753e630016eb38936df4f93f6118f99a919ab74",
+  "supersedes_for_new_claims": "CRAZY-WALL-TASK-QUEUE-4SOL-2026-09-12.json",
+  "history_rule": "Do not delete prior queue; V2 is authoritative for new claims only.",
+  "node_schema": {
+    "one_task_one_node": true,
+    "one_active_node_per_role": true,
+    "max_steps": 3,
+    "steps": ["VERIFY_OR_RESEARCH", "EXECUTE_AUTHORIZED_DELTA", "TEST_AND_REPORT"],
+    "states": ["FREE", "CLAIMED", "EXECUTING", "GAP", "PASS", "REPORT"],
+    "claim_requires": ["role", "node_id", "fresh_base_main_sha", "write_scope", "claimed_at"],
+    "report_requires": ["status", "paths", "commit_or_blob_sha", "test_run_or_log", "evidence", "gaps", "next_free_node"],
+    "truth_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
+    "collision_rule": "No role writes outside its declared write_scope. Shared truth files are consolidated only by SOL_ORQUESTADOR after fresh readback.",
+    "gap_rule": "A GAP blocks only its literal node. Report it, then claim another FREE independent node.",
+    "claim_protocol": "Fetch HEAD + queue + target role state; if node remains FREE and scope does not overlap an active claim, write claim to role report/state before mutation."
+  },
+  "active_or_next_nodes": [
+    {
+      "node_id": "O-02-MULTI-SANDBOX-RECOVERY-E2E",
+      "role": "SOL_ORQUESTADOR",
+      "state": "EXECUTING",
+      "write_scope": ["UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-*.json", "UI YAIWES/readme arquitectura UI YAIWES/*XRAY*"],
+      "task": "Finish verification of workspace/global recovery and sandbox failover; reuse Firecracker/gVisor/QEMU/crosvm/bubblewrap/nsjail/UTM before any new acquisition.",
+      "current_gap": "project recovery control-plane + sandbox lifecycle/backend selection + failover E2E not yet proved",
+      "report_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-02-MULTI-SANDBOX-RECOVERY-E2E.json"
+    },
+    {
+      "node_id": "S1-09-MEMORY-AGENT-BOUNDARY",
+      "role": "SOL_GPT1",
+      "state": "FREE",
+      "write_scope": ["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/memory/**", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/**", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_memory*", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_agent*", "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S1-*.json"],
+      "task": "Implement/evidence minimal Agent↔Memory↔Tools↔Workflow boundary; keep agent memory separate from chat/project memory; forbid direct LLM canonical writes.",
+      "next": ["S1-10-RQLITE-DISTINCT-STATE", "S1-11-LOCAL-FIRST-CHECKPOINT-MEMORY"]
+    },
+    {
+      "node_id": "S2-08-PLATFORM-SANDBOX-ROUTER",
+      "role": "SOL_GPT2",
+      "state": "FREE",
+      "write_scope": ["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/**", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/**", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/telemetry/**", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform*", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_sandbox*", "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S2-*.json"],
+      "task": "Implement/evidence fail-closed platform capability router for QEMU/KVM/WHPX/crosvm/AVF and sandbox backends without unsupported capability claims.",
+      "next": ["S2-09-OTEL-COLLECTOR-BOUNDARY", "S2-10-VM-MANAGER-CAPABILITY"]
+    },
+    {
+      "node_id": "S3-10-INTEGRATION-FABLES-E2E",
+      "role": "SOL_GPT3",
+      "state": "FREE",
+      "write_scope": ["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/**", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_integration*", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_reconstruction*", "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S3-*.json"],
+      "task": "Consume tested Fables through a minimal integration/consolidation path and prove source→adapter→runtime→evidence E2E.",
+      "next": ["S3-11-INTEGRATION-01-20", "S3-12-BATCH-21-40", "S3-13-TESTCONTAINERS-HARNESS"]
+    },
+    {
+      "node_id": "A1-01-XRAY-DOCS-CODE-4PASS",
+      "role": "ASTRA_GPT",
+      "state": "FREE",
+      "write_scope": ["UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-*.json", "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json", "UI YAIWES/readme arquitectura UI YAIWES/ASTRA-XRAY-*.md"],
+      "task": "Four-pass audit of the 3 primary project documents against wordflow_loop, runtime/src, runtime/tests, Crazy Wall and current evidence; produce bidirectional GOAL→REQUIREMENT→LAYER→FILE/FUNCTION→TEST→EVIDENCE and ARTIFACT→TASK→REQUIREMENT→GOAL matrix.",
+      "next": ["A1-02-100X-COMPONENT-RESEARCH-DEDUP", "A1-03-UNOWNED-CODE-GAPS"]
+    }
+  ],
+  "astra_nodes": [
+    {
+      "node_id": "A1-02-100X-COMPONENT-RESEARCH-DEDUP",
+      "state": "FREE_AFTER_A1-01",
+      "write_scope": ["UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-*.json", "UI YAIWES/readme arquitectura UI YAIWES/ASTRA-XRAY-*.md"],
+      "task": "Research improvements/components that could materially improve YAIWES 100x. For every candidate record capability gap, official URL, license, pin/ref, overlap with existing components, KEEP/DEFER/REJECT and exact destination if acquisition is justified. Prefer REUSE existing. No download by Astra in this node."
+    },
+    {
+      "node_id": "A1-03-UNOWNED-CODE-GAPS",
+      "state": "FREE_AFTER_A1-02",
+      "write_scope": ["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/audit/**", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/coverage/**", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/consolidation/**", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_audit*", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage*", "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_consolidation*", "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-*.json"],
+      "task": "Only after A1-01 classifies genuinely unowned gaps, implement minimal audit/coverage/consolidation code that does not overlap Sol1 memory/agent, Sol2 platform/UEK/adapters or Sol3 integration. Test and report each delta."
+    }
+  ],
+  "shared_backlog": [
+    {"node_id": "O-03-OSS5-REUSE-OR-PROVIDER", "role": "SOL_ORQUESTADOR", "state": "FREE_AFTER_O-02", "task": "Resolve Litestream/Tempo/Schemathesis/Kata/Grype via evidenced REUSE equivalence or provider-compatible acquisition; never fake PASS or modify canonical motors."},
+    {"node_id": "O-04-G12-GLOBAL-COVERAGE", "role": "SOL_ORQUESTADOR", "state": "FREE_AFTER_O-03", "task": "Merge role/Astra reports into final requirement→layer→file/function→test→evidence matrix."},
+    {"node_id": "O-05-PUBLISH-BLOCKERS", "role": "SOL_ORQUESTADOR", "state": "FREE_AFTER_O-04", "task": "Resolve preview/HF publish blockers separately from runtime closure."},
+    {"node_id": "O-06-FINAL-JUDGE-RECONSTRUCTION", "role": "SOL_ORQUESTADOR", "state": "BLOCKED_UNTIL_COVERAGE", "task": "Top-down + bottom-up coverage, reconstruction without chat and final E2E before VERIFIED_CLOSED."}
+  ],
+  "component_state": {
+    "new_oss_total": 11,
+    "source_present_readback_verified": 6,
+    "reuse_or_provider_resolution_pending": 5,
+    "verified": ["OPA", "OpenFGA", "rqlite", "OpenTelemetry Collector", "ORAS", "Testcontainers Python"],
+    "pending": ["Litestream", "Grafana Tempo", "Schemathesis", "Kata Containers", "Grype"]
+  },
+  "mandatory_report_note": "Every role must leave a report in reports/ at node end. Astra must additionally leave recommendations for SOL_ORQUESTADOR/SOL_GPT1/SOL_GPT2/SOL_GPT3 indicating which FREE node should consume each finding; findings are not claims.",
+  "global_close": "Only after Memory/Audit, Agent boundary, Integration/Consolidator, Sandbox/UEK/Recovery, platform routing and G12 coverage are evidenced end-to-end."
+}
