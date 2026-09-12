@@ -15,7 +15,7 @@ ALLOWED_LLM_REASONS = {
 class LLMBudget:
     deterministic_units: int
     llm_units: int = 0
-    max_ratio: float = 0.05
+    max_ratio: float = 0.04
 
     @property
     def ratio(self) -> float:
@@ -32,7 +32,7 @@ class LLMBudget:
 
 
 class LLMGate:
-    """LLM is optional, injected, and capped at 5% of declared work units."""
+    """LLM is optional, injected, and capped at 4% of declared work units."""
 
     def call(
         self,
@@ -48,5 +48,5 @@ class LLMGate:
         if caller is None:
             raise RuntimeError("LLM caller is not connected")
         if not budget.allows(units):
-            raise PermissionError("LLM budget would exceed 5%")
+            raise PermissionError("LLM budget would exceed 4%")
         return caller(prompt)
