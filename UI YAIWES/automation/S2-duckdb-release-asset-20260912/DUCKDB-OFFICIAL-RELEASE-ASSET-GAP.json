@@ -1,0 +1,30 @@
+{
+  "schema": "yaiwes.s2.duckdb.release-asset-gap.v1",
+  "role": "SOL_GPT2_BACKEND",
+  "node": "S2-01",
+  "observed_main_sha": "35b67f880d55c72e4962ffab235cb74db084b8a5",
+  "canonical_repo": "https://github.com/duckdb/duckdb",
+  "release": "v1.5.5",
+  "release_published_at": "2026-07-22T10:51:50Z",
+  "asset": {
+    "name": "libduckdb-src.zip",
+    "size_bytes": 4974643,
+    "sha256": "102813201cf8072b8a56b6013978963f3c89202a148fd152d06909477e36fbf8",
+    "url": "https://github.com/duckdb/duckdb/releases/download/v1.5.5/libduckdb-src.zip"
+  },
+  "canonical_motor_compatibility": {
+    "motor_2": "UNSUPPORTED_FOR_RELEASE_ASSET; acquisition is git fetch/checkout only",
+    "motor_1": "EXTRACT_ONLY_LOCAL_ARCHIVE; ARCHIVE_INPUT must already exist as file/directory",
+    "asset_already_present_in_frontend_repo": false
+  },
+  "classification": "OFFICIAL_RELEASE_ASSET_ACQUISITION_GAP",
+  "safety": {
+    "alternate_downloader_used": false,
+    "motor_modified": false,
+    "lfs_used": false,
+    "force_used": false,
+    "published": false
+  },
+  "verdict": "FAIL_CLOSED_CANDIDATE_NOT_EXECUTED",
+  "next_gate": "Execution requires a canonical/explicitly authorized acquisition path for the official ZIP and explicit operation destination; then Motor 1 may validate/extract it."
+}
