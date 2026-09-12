@@ -61,10 +61,10 @@ async function verifyMouseScroll(page) {
 async function verifyBreakpointsZoomAndFit(page) {
   await page.locator('[data-step="2"]').click();
   for (const bp of ['desktop', 'tablet', 'mobile']) {
-    await page.locator(`[data-breakpoint="${bp}"]`).click();
+    await page.locator(`.canvas-controls button[data-breakpoint="${bp}"]`).click();
     await expect(page.locator('#canvas')).toHaveAttribute('data-breakpoint', bp);
   }
-  await page.locator('[data-breakpoint="desktop"]').click();
+  await page.locator('.canvas-controls button[data-breakpoint="desktop"]').click();
 
   await page.locator('#zoom-reset').click();
   await expect(page.locator('#zoom-label')).toHaveText('100%');
@@ -129,17 +129,22 @@ test.describe('YAIWES Factory V1.8 live human-like regression gate', () => {
     await expect(page.locator('[data-node]')).toHaveCount(1);
 
     const panel = page.locator('#context-scroll');
-    const before = await panel.evaluate(el => el.scrollTop);
+    const metrics = await panel.evaluate(el => ({ top: el.scrollTop, height: el.scrollHeight, client: el.clientHeight }));
+    expect(metrics.height).toBeGreaterThan(metrics.client);
     const box = await panel.boundingBox();
     if (!box) throw new Error('context panel bounding box unavailable');
     const session = await page.context().newCDPSession(page);
     const x = Math.round(box.x + box.width / 2);
-    const startY = Math.round(box.y + Math.min(box.height - 30, box.height * 0.8));
-    const endY = Math.round(box.y + Math.max(30, box.height * 0.25));
+    const startY = Math.round(box.y + Math.min(box.height - 30, box.height * 0.82));
+    const endY = Math.round(box.y + Math.max(30, box.height * 0.2));
     await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y: startY }] });
-    await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: endY }] });
+    for (let i = 1; i <= 8; i += 1) {
+      const y = Math.round(startY + ((endY - startY) * i) / 8);
+      await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y }] });
+      await page.waitForTimeout(25);
+    }
     await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-    await expect.poll(() => panel.evaluate(el => el.scrollTop)).toBeGreaterThan(before);
+    await expect.poll(() => panel.evaluate(el => el.scrollTop), { timeout: 7000 }).toBeGreaterThan(metrics.top);
 
     await expect(page.locator('#canvas')).toBeVisible();
     await expect(page.locator('#component-library')).toBeVisible();
