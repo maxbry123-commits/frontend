@@ -1,0 +1,60 @@
+name: sol-gpt3-s3-chartjs-current-20260912
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sol-gpt3-s3-chartjs-current-20260912.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sol-gpt3-s3-chartjs-current-20260912
+  cancel-in-progress: false
+
+jobs:
+  validate-chartjs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Enable pinned pnpm
+        shell: bash
+        run: |
+          corepack enable
+          corepack prepare pnpm@8.13.0 --activate
+          pnpm --version
+
+      - name: Verify current route and immutable source metadata
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/Chart.js
+        shell: bash
+        run: |
+          test -f package.json
+          test -f pnpm-lock.yaml
+          node -e "const p=require('./package.json'); if(p.name!=='chart.js'||p.version!=='4.5.1'||p.packageManager!=='pnpm@8.13.0') process.exit(1); console.log(p.name,p.version,p.packageManager)"
+          sha256sum package.json pnpm-lock.yaml
+
+      - name: Install current vendored source
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/Chart.js
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Build upstream source
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/Chart.js
+        run: pnpm build
+
+      - name: Run upstream CI tests
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/Chart.js
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: pnpm test-ci
