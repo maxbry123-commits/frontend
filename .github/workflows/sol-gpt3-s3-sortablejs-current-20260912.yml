@@ -1,0 +1,53 @@
+name: sol-gpt3-s3-sortablejs-current-20260912
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/sol-gpt3-s3-sortablejs-current-20260912.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sol-gpt3-s3-sortablejs-current-20260912
+  cancel-in-progress: false
+
+jobs:
+  validate-sortablejs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Verify current route and immutable source metadata
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/SortableJS
+        run: |
+          set -euo pipefail
+          test -f package.json
+          test -f SOURCE_COMMIT.txt
+          test -f scripts/test.js
+          printf 'route=%s\n' "$PWD"
+          printf 'source_commit=%s\n' "$(cat SOURCE_COMMIT.txt)"
+          node -e "const p=require('./package.json'); if(p.name!=='sortablejs') process.exit(2); console.log('package='+p.name+' version='+p.version)"
+
+      - name: Install current vendored source
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/SortableJS
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: Build upstream source
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/SortableJS
+        run: npm run build
+
+      - name: Run upstream Chrome headless tests
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/SortableJS
+        run: npm test
