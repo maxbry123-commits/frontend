@@ -6,15 +6,17 @@ Modo: `FAIL_CLOSED_LOOP`
 Owner workflow: `stabilize_core`
 Definición ejecutable: `UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/architecture_dsl.py`
 Gate LLM: `.../wordflow_loop/llm_gate.py`
+X-Ray 1×1: `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/WORDFLOW-FILE-BY-FILE-XRAY-2026-09-12.md`
+Crazy Wall vigente: `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json`
 
 ## Regla de arquitectura
 
-El orquestador se expresa en Python ejecutable. JSON/YAML quedan únicamente como formatos externos de estado/configuración histórica cuando ya existen; no son la definición autoritativa del DAG.
+El DAG autoritativo del Wordflow se expresa en Python ejecutable. JSON/YAML pueden existir como estado/configuración externa o CI, pero no definen el ownership ni la lógica autoritativa del orquestador.
 
 `DETERMINISTIC_RATIO = 0.96`
 `LLM_RATIO = 0.04`
 
-LLM sólo puede intervenir en ambigüedad/semantic ranking/resumen acotado; runtime, estado, política, auditoría, recovery y cierre son deterministas.
+LLM sólo se admite de forma acotada en P09 Retrieval, P10 Context Fabric y P19 Resource Brain para `ambiguity_resolution | semantic_ranking | bounded_summary`. Runtime, estado, policy, audit, recovery y cierre son deterministas.
 
 ## Microflujo transversal
 
@@ -25,67 +27,65 @@ LLM sólo puede intervenir en ambigüedad/semantic ranking/resumen acotado; runt
 | ID | Proceso | Estado código | Evidencia / GAP |
 |---|---|---|---|
 | P01 | CORE_STATE_MODEL | ✅ base | `contracts.py`: Status/Evidence/NodeContract/LayerResult |
-| P02 | EVENT_MODEL | 🟡 parcial | ledger persiste eventos dict; falta modelo tipado de eventos de dominio |
-| P03 | TASK_MODEL | 🟡 parcial | NodeContract cubre nodo/tarea mínima; falta Task/Requirement domain model global |
+| P02 | EVENT_MODEL | 🟡 parcial | ledger persiste eventos; falta modelo tipado de eventos de dominio |
+| P03 | TASK_MODEL | 🟡 parcial | NodeContract cubre nodo mínimo; falta Goal/Requirement/Task global |
 | P04 | TASK_CONTRACT | ✅ | `NodeContract` + hash literal + allowed/forbidden/mutation/auth |
-| P05 | STATE_MACHINE | ✅ base | `LayerRunner` + status fail-closed + dependencia/replay |
-| P06 | CHECKPOINT_ENGINE | 🟡 parcial | ledger durable/replay/fsync PASS; checkpoint de proyecto/workspace global incompleto |
+| P05 | STATE_MACHINE | ✅ base | `LayerRunner` + fail-closed + dependency/replay |
+| P06 | CHECKPOINT_ENGINE | 🟡 parcial | ledger durable/replay/fsync probado; workspace/project checkpoint global incompleto |
 | P07 | POLICY_ENGINE | ✅ sublane | governance + rule-engine + OPA/OpenFGA live policy lane |
 | P08 | MEMORY_CONTRACT | ❌ GAP | Memory/Audit runtime completo no materializado |
 | P09 | RETRIEVAL_CONTRACT | ❌ GAP | GET_CONTEXT/GET_MEMORY/GET_EVIDENCE no E2E |
 | P10 | CONTEXT_FABRIC | ❌ GAP | context packing/rerank/budget no E2E |
-| P11 | SANDBOX_CONTRACT | 🟡 source-only | Firecracker/gVisor/nsjail/bwrap/QEMU/crosvm presentes; `runtime/src/uek` sin control-plane completo |
-| P12 | WORKER_CONTRACT | 🟡 parcial | Stabilize aporta tareas/worker primitives; adapter YAIWES incompleto |
+| P11 | SANDBOX_CONTRACT | 🟡 source-only | Firecracker/gVisor/nsjail/bwrap/QEMU/crosvm presentes; `runtime/src/uek` vacío |
+| P12 | WORKER_CONTRACT | 🟡 parcial | Stabilize aporta primitives; adapter YAIWES incompleto |
 | P13 | OUTPUT_SCHEMA | ✅ | LayerResult + Evidence fuerte + verifier |
-| P14 | AUDIT_ENGINE | 🟡 parcial | Sheriff/Validator/Sentinel/Verifier/Supervisor/Judge/Guardian; falta auditor global 5-pass sobre goals |
-| P15 | CONSOLIDATOR | ❌ GAP | consolidación task→phase→project no materializada completa |
-| P16 | ROUTER | 🟡 parcial | component registry/plugins existen; Resource Router global incompleto |
-| P17 | CONTINUOUS_LOOP | 🟡 parcial | runner ejecuta nodo literal y retry externo; loop multi-stage autónomo completo no probado E2E |
-| P18 | RECOVERY | 🟡 parcial | durable ledger/restart PASS; workspace/multi-host/global recovery pendiente |
-| P19 | RESOURCE_BRAIN | ❌ GAP | selección dinámica de recursos/capacidades no materializada completa |
-| P20 | GLOBAL_INTEGRATION | 🟡 parcial | OPA/OpenFGA sublane PASS; integración global todavía abierta |
-| P21 | FIVE_PASS_BUILD_AUDITOR | ❌ GAP | cobertura documental existe; motor ejecutable 5-pass todavía incompleto |
-| P22 | API | ❌/parcial | faltan API de chat/control del workflow y contracts completos |
-| P23 | UI | fuera del core | UI se construye después del runtime; no puede cerrar el orquestador |
+| P14 | AUDIT_ENGINE | 🟡 parcial | governance local; falta auditor global 5-pass sobre goals |
+| P15 | CONSOLIDATOR | ❌ GAP | task→phase→project no materializado completo |
+| P16 | ROUTER | 🟡 parcial | registry/plugins existen; Resource/Capability Router global incompleto |
+| P17 | CONTINUOUS_LOOP | 🟡 parcial | runner nodo literal; loop multi-stage autónomo no probado E2E |
+| P18 | RECOVERY | 🟡 parcial | durable ledger/restart PASS; workspace/global recovery pendiente |
+| P19 | RESOURCE_BRAIN | ❌ GAP | selección dinámica de recursos/capacidades no completa |
+| P20 | GLOBAL_INTEGRATION | 🟡 parcial | OPA/OpenFGA sublane PASS; integration global abierta |
+| P21 | FIVE_PASS_BUILD_AUDITOR | ❌ GAP | cobertura documental existe; motor Python 5-pass falta |
+| P22 | API | ❌ GAP | `runtime/src/conn` vacío; falta API/control workflow |
+| P23 | UI | downstream | UI sólo después de runtime/API verificados |
 
-## Archivos ejecutables auditados
+## Código first-party auditado
 
-### Wordflow package
-- `contracts.py` — contratos/evidencia/hash.
-- `runner.py` — nodo literal fail-closed, replay y gobernanza.
-- `ledger.py` — hash-chain, lock, fsync, atomic replace.
-- `llm_gate.py` — límite LLM 4%.
-- `component_registry.py` — catálogo físico; no prueba integración por sí solo.
-- `layers/layer_01_research.py` — research funnel.
-- `layers/layer_02_xray_documents.py` — X-Ray documental.
-- `layers/layer_03_xray_code.py` — X-Ray code.
-- `layers/layer_04_copy_move.py` — mutación bajo autorización.
-- `layers/layer_05_download_extract.py` — motor canónico/destino/provider/special-file guards.
-- `layers/layer_06_source_evolution.py` — reuse/patch/adapter/delta decision.
-- `governance/{sheriff,validator,sentinel,verifier,supervisor,judge,guardian}.py` — gates.
-- `architecture_dsl.py` — DAG Python P01–P23, 96/4.
+### Wordflow
+`contracts.py`, `runner.py`, `ledger.py`, `llm_gate.py`, `architecture_dsl.py`, `component_registry.py`, L01–L06 y governance Sheriff/Validator/Sentinel/Verifier/Supervisor/Judge/Guardian.
 
 ### Runtime
-- `src/core/workflow_definition.py` — proyección Python 19 pasos de ejecución; owner Stabilize preservado.
-- `src/plugins/**` — socket/Fables/activation/catalog/loader/adapters, implementado y testeado parcialmente.
-- `src/governance/**` — policy lane.
-- `src/agent/**` — GAP principal.
-- `src/integration/**` — GAP global; README/manifests no equivalen a implementación.
-- `src/recovery/**` — GAP de control-plane global.
-- `src/uek/**` — GAP sandbox/VM lifecycle/router.
-- `src/adapters/**` — parcial, requiere platform/provider owners.
+- `src/core/workflow_definition.py` ✅ Python 19-step projection; Stabilize permanece único owner.
+- `src/plugins/**` ✅ Fables/catalog/loader/activation/adapters reales; sólo subgates probados.
+- `src/adapters/` ❌ README-only.
+- `src/agent/` ❌ `.gitkeep`.
+- `src/integration/` ❌ README-only.
+- `src/recovery/`, `src/uek/`, `src/storage/`, `src/conn/`, `src/observability/`, `src/mission/`, `src/install/` ❌ `.gitkeep` al X-Ray fresco.
 
-## Tareas siguientes
+No se genera código por tener un directorio vacío: primero debe existir REQUIREMENT y dedup contra Stabilize/Fables/plugins/vendors.
 
-1. Memory/Audit + retrieval/context fabric.
-2. Agent↔Memory↔Tools↔Workflow.
-3. Sandbox/UEK + VM/platform capability router.
-4. Integration/Consolidator/Coverage/Final Judge.
-5. Workspace/global recovery E2E.
-6. API/control surface después del runtime.
-7. G12 bidireccional `GOAL→REQUIREMENT→FILE/FUNCTION→TEST→EVIDENCE` al 100%.
+## CI global corregido
+
+Workflow: `.github/workflows/yaiwes-wordflow-loop-pytest.yml`
+Commit corrección cobertura: `baed8f07e9a205f28def181931d9eb7420e76fd7`.
+
+Antes: sparse-checkout sólo incluía core/plugins/governance.
+Ahora: trigger `runtime/src/**` + sparse-checkout completo `runtime/src`, además de `wordflow_loop` y `runtime/tests`.
+
+Run de gate creado: `34716613952`; mientras no sea `completed/success` + log leído, el DSL 96/4 permanece `PENDING_TEST_GATE`.
+
+## Cola de ejecución
+
+- SOL_GPT1: P08→P09→P10 + storage/agent boundary.
+- SOL_GPT2: P11→P12→P16 + OTel runtime boundary.
+- SOL_GPT3: P20→P17→P22.
+- ASTRA_GPT: P14→P15→P21 + P19 research/dedup + mission/install classification.
+- SOL_ORQUESTADOR: P18 recovery/reconstruction + G12 bidireccional + shared consolidation/final judge.
+
+Cada tarea = 1 nodo; máximo 3 pasos: `VERIFY_OR_RESEARCH → EXECUTE_AUTHORIZED_DELTA → TEST_AND_REPORT`.
 
 ## Cierre
 
 `SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED`.
-El proyecto sigue `ACTIVE_LOOP`; no se declara cerrado hasta P08–P23 relevantes y G12 tengan evidencia real.
+El proyecto sigue `ACTIVE_LOOP`; no se cierra hasta que G12 y los límites Memory/Agent/Sandbox/Integration/Recovery/Platform tengan evidencia real.
