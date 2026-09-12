@@ -25,10 +25,15 @@ Gate: T1_FACTORY_FRONTEND must be VERIFIED_CLOSED before productive T2_INTERFACE
 - Factory source later changed to V1.8 source `f66624e90e154e6ba4c9c61963973e7659f25431` after feature parent `4f25afa43a682830630f2e69d6c2bc94f2f6c5ab`.
 - Publish workflow commit `ccad6803c72bb80ed27df380ccb5f5994d8d85e1` pinned the V1.8 source.
 - GitHub Actions run `34716725960`, job `103615195530`, completed SUCCESS: payload packaging, HF CLI/OIDC-capable install, authentication resolution without exposing credentials, public Static Space upload and persistent page/app-host verification all passed.
-- The current Director addendum requires 50 human-like interaction cycles whenever shell/editor visual behavior changes. No fresh repository evidence was found tying V1.8 to those 50 cycles or to a fresh independent browser reviewer.
-- Therefore `T1_FACTORY_FRONTEND=ACTIVE_LOOP / REOPENED_VALIDATION_REQUIRED`; V1.1 PASS cannot be inherited by V1.8.
+- The current Director addendum requires 50 human-like interaction cycles whenever shell/editor visual behavior changes.
+- A fresh live-only Playwright gate was materialized at `Frontend/factory-v0/tests/e2e/factory-v18-live-50-cycle.spec.mjs`, commit `d7a98d833b574886e72ebf81648278578a6879d3`.
+- Its GitHub Actions runner is `.github/workflows/astra-factory-v18-live-50-cycle.yml`, commit `180b25092f13f6c773b9c615d572374e88d7dd05`.
+- Run `34721912175`, job `103629254847` was `IN_PROGRESS` when this handoff delta was persisted; therefore no 50-cycle PASS is claimed yet.
+- Coverage requested by the gate: 50 live desktop cycles; five steps; shell button effects; persistent canvas; elements/layers; real drag/drop; contextual-panel mouse scroll; breakpoints; zoom/Fit View/minimap; plus mobile tap and touch-event scroll.
+- Independent browser reviewer remains pending and MUST run only after a terminal PASS of the 50-cycle gate.
+- Therefore `T1_FACTORY_FRONTEND=ACTIVE_LOOP`; V1.1 PASS cannot be inherited by V1.8.
 - Productive T2 remains blocked until current-source revalidation closes.
-- Evidence: `Frontend/factory-v0/project-memory/FACTORY-V1.8-WATCHDOG-REGRESSION-2026-09-12.json`.
+- Current evidence: `Frontend/factory-v0/project-memory/FACTORY-V1.8-LIVE-50-CYCLE-GATE-2026-09-12.json`.
 
 ## OSS / ownership truth
 - 40+ OSS families are physically present; presence alone does not prove runtime integration.
@@ -44,13 +49,14 @@ After T1 current source is VERIFIED_CLOSED and explicit product-path handoff:
 Backend OSS donors discovered by Astra/Sol are staged/classified before promotion; no silent writes into Sol production backend.
 
 ## Current queue 1x1
-1. Validate current Factory V1.8 with 50 human-like interaction cycles covering steps/buttons, persistent canvas, real drag/drop, element/layers surfaces, panel mouse/touch scroll, breakpoints, zoom/Fit View and observable button effects.
-2. If and only if the 50-cycle gate passes, run a fresh independent browser reviewer against the deployed URL and record evidence/read-back.
-3. Only after all current-source gates pass may T1 return to VERIFIED_CLOSED; otherwise register the failing GAP and execute a materially distinct StrategyDelta.
+1. Read terminal result/logs/artifacts of run `34721912175`, job `103629254847`.
+2. If any interaction assertion fails: register exact GAP, execute a materially distinct StrategyDelta, and rerun the live gate; do not promote T1.
+3. If and only if all 50 cycles plus mobile touch gate pass, run a fresh independent browser reviewer against the deployed URL and record evidence/read-back.
+4. Only after all current-source gates pass may T1 return to VERIFIED_CLOSED.
 
 ## Watchdog order every hour
 1. Review INPUT/HANDOFF/RECOVERY/PLAN/architecture/STATE/CHECKPOINT/Crazy Wall and recover context.
 2. Analyze ownership and task queue; remain single-writer per path.
 3. Search 10x improvements using existing local OSS first.
 4. Execute queue1x1 and resolve GAPs fail-closed.
-5. Never PASS by presence, publish success alone, or historical evidence from a superseded source.
+5. Never PASS by presence, publish success alone, test creation alone, or historical evidence from a superseded source.
