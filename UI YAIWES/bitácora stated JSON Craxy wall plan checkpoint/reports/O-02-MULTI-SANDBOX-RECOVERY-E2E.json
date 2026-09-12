@@ -4,7 +4,7 @@
   "node_id": "O-02-MULTI-SANDBOX-RECOVERY-E2E",
   "owner": "SOL_ORQUESTADOR",
   "base_main_sha": "fce6b6480c697c07131ca06d52716087d7b0400b",
-  "status": "EXECUTING_STRATEGY_DELTA_CI_TIMEOUT",
+  "status": "TESTED_RECOVERY_CONTROL_PLANE_O02_EXECUTING",
   "claimed_at": "2026-09-12T06:40:00Z",
   "claim_refreshed_at": "2026-09-12T22:46:49.119Z",
   "write_scope": [
@@ -44,26 +44,31 @@
   },
   "test": {
     "global_workflow": ".github/workflows/yaiwes-wordflow-loop-pytest.yml",
-    "latest_run": 34717056926,
+    "latest_run": 34723669555,
     "state_at_report": "PENDING_NO_JOB_YET",
     "earlier_full_src_run": 34716613952,
     "earlier_job": 103615713852,
     "earlier_progress": "Wordflow LOOP tests success; runtime tests in_progress",
     "rule": "No PASS until latest run completed/success + job/log readback",
     "latest_run_status": "completed",
-    "latest_run_conclusion": "cancelled",
+    "latest_run_conclusion": "success",
     "latest_run_reason": "cancelled_by_higher_priority_waiting_request",
     "latest_global_run": 34721174155,
     "latest_global_conclusion": "cancelled",
     "latest_global_reason": "job_exceeded_10_minute_timeout",
     "targeted_recovery_tests": "5_TESTS_PRESENT_NOT_GLOBAL_CI_PROMOTED",
-    "promotion": "DENIED"
+    "promotion": "RECOVERY_CONTROL_PLANE_TESTED_SUBGATE",
+    "strategy_delta_commit": "84678c4cd81394bdb2712a6a18a2b7ea8fab6fe3",
+    "latest_job": 103633952112,
+    "wordflow_tests": "23 passed in 0.11s",
+    "runtime_tests": "62 passed + 9 subtests in 674.36s",
+    "log_readback": true
   },
   "remaining_gap": [
-    "canonical full-suite CI lacks completed/success after recovery delta",
-    "10-minute job timeout is insufficient for current full runtime suite",
-    "workspace/multi-host sandbox failover E2E remains separate downstream subgate"
+    "workspace/multi-host sandbox failover E2E remains unproved",
+    "sandbox lifecycle/backend selection remains unproved"
   ],
-  "next_step": "StrategyDelta: raise canonical job timeout while preserving the complete wordflow+runtime suite; require terminal success and log readback.",
-  "closure_rule": "SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+  "next_step": "Continue O-02 with one real workspace/sandbox failover-reconstruction test; do not treat the control-plane unit/global regression PASS as failover E2E.",
+  "closure_rule": "SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
+  "updated_at_utc": "2026-09-12T23:01:09.459Z"
 }
