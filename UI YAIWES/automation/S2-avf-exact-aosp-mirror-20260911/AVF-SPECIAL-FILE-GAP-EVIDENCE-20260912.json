@@ -1,0 +1,36 @@
+{
+  "schema": "yaiwes.s2.avf.special-file-gap.v1",
+  "role": "SOL_GPT2_BACKEND",
+  "node": "S2-02",
+  "component": "AVF",
+  "canonical_source": "https://android.googlesource.com/platform/packages/modules/Virtualization/",
+  "transport_probe_repo": "https://github.com/GrapheneOS/platform_packages_modules_Virtualization",
+  "transport_probe_ref": "175a51b30123fa6b02b541f1969665708f7ec2c3",
+  "transport_probe_tree": "d1dfcf5819575b6ce7388c062988c9c4f00305a8",
+  "publish": false,
+  "workflow": ".github/workflows/sol-gpt2-s2-02-avf-exact-aosp-mirror-20260911.yml",
+  "run_id": 34567431687,
+  "job_id": 103162313631,
+  "canonical_motors_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
+  "result": {
+    "download_extract": "FAIL",
+    "failed": 1,
+    "pending": 0,
+    "classification": "SOURCE_SPECIAL_FILE_GAP",
+    "special_paths": [
+      "apex",
+      "guest/storage_balloon_agent/rustfmt.toml",
+      "tests/pvmfw/assets/bcc.dat"
+    ]
+  },
+  "interpretation": "The GitHub transport candidate reaches the intended AVF lineage, but immutable Motor 2 rejects special/symlink entries before a verified extraction can complete. Provider identity is not the primary failure observed in this run.",
+  "safety": {
+    "motor_modified": false,
+    "source_sanitized": false,
+    "symlinks_materialized_manually": false,
+    "alternate_manual_extractor_used": false,
+    "published": false,
+    "verified_closed_claimed": false
+  },
+  "next_gate": "Remain fail-closed until an explicitly authorized canonical path handles the special entries without source sanitization or motor mutation."
+}
