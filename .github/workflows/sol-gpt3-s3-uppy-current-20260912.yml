@@ -1,0 +1,68 @@
+name: sol-gpt3-s3-uppy-current-20260912
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sol-gpt3-s3-uppy-current-20260912.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-uppy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Enable pinned Yarn
+        shell: bash
+        run: |
+          set -euo pipefail
+          corepack enable
+          corepack prepare yarn@4.12.0 --activate
+          yarn --version
+
+      - name: Verify current route and immutable source metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='UI YAIWES/componentes open soure UI YAIWES/Uppy'
+          CODE="$ROOT/code"
+          test -d "$ROOT"
+          test -d "$CODE"
+          test -f "$ROOT/DOWNLOAD_EXTRACT_MANIFEST.json"
+          test -f "$CODE/package.json"
+          test -f "$CODE/yarn.lock"
+          node -e "const p=require('./UI YAIWES/componentes open soure UI YAIWES/Uppy/code/package.json'); if(p.packageManager!=='yarn@4.12.0+sha512.f45ab632439a67f8bc759bf32ead036a1f413287b9042726b7cc4818b7b49e14e9423ba49b18f9e06ea4941c1ad062385b1d8760a8d5091a1a31e5f6219afca8') process.exit(2); if(!p.engines?.node || !p.scripts?.build || !p.scripts?.test) process.exit(3); console.log({name:p.name,node:p.engines.node,packageManager:p.packageManager})"
+
+      - name: Install current vendored source
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/Uppy/code
+        shell: bash
+        run: |
+          set -euo pipefail
+          yarn install --immutable
+
+      - name: Build upstream source
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/Uppy/code
+        shell: bash
+        run: |
+          set -euo pipefail
+          yarn build
+
+      - name: Run upstream headless test suite
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/Uppy/code
+        shell: bash
+        run: |
+          set -euo pipefail
+          yarn test
