@@ -4,7 +4,7 @@
   "node_id": "O-02-MULTI-SANDBOX-RECOVERY-E2E",
   "owner": "SOL_ORQUESTADOR",
   "base_main_sha": "02acab512a22407269bce8c806439dcf876bcfdc",
-  "status": "EXECUTING_DELTA_AUTHORIZED",
+  "status": "EXECUTING_TEST_PENDING",
   "claimed_at": "2026-09-12T06:40:00Z",
   "claim_refreshed_at": "2026-09-12T20:23:08Z",
   "write_scope": [
@@ -14,26 +14,33 @@
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-*.json",
     "UI YAIWES/readme arquitectura UI YAIWES/*XRAY*"
   ],
-  "collision_check": "GitHub code search found no other fresh claim for runtime/src/recovery/** at claim refresh.",
-  "assertion_to_validate": "YAIWES needs only a thin deterministic project recovery control-plane over existing Stabilize WorkflowRecovery and Wordflow durable ledger; it must not duplicate the recovery engine.",
+  "collision_check": "No competing fresh claim for runtime/src/recovery/** found before write.",
+  "assertion_to_validate": "YAIWES uses a thin deterministic project recovery control-plane over Stabilize WorkflowRecovery and Wordflow durable ledger; it does not duplicate the recovery engine.",
   "verify": {
     "stabilize_recovery_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/recovery.py",
-    "stabilize_capabilities": [
-      "recover RUNNING/NOT_STARTED workflows",
-      "requeue stages/tasks/workflow",
-      "idempotent recovery sweep",
-      "transactional recovery message push",
-      "audit recovery results"
-    ],
-    "wordflow_durability": ["hash-chain ledger","cross-process lock","fsync","atomic replace","tamper fail-closed","latest-state replay"],
-    "classification": "REUSE_STABILIZE_ENGINE_PLUS_MINIMAL_YAIWES_CONTROL_PLANE"
+    "classification": "REUSE_STABILIZE_ENGINE_PLUS_MINIMAL_YAIWES_CONTROL_PLANE",
+    "stabilize_capabilities": ["recover pending/running workflows","requeue workflow/stage/task","idempotent sweep","transactional queue push","RecoveryResult audit"],
+    "wordflow_durability": ["hash-chain ledger","cross-process lock","fsync","atomic replace","tamper fail-closed","latest-state replay"]
   },
-  "current_gap": [
-    "runtime/src/recovery has no YAIWES control-plane implementation",
-    "project recovery must reject missing/tampered checkpoint evidence",
-    "workflow recovery results must be summarized into deterministic project recovery evidence",
-    "workspace/multi-host sandbox failover remains separate downstream subgate"
+  "delta": {
+    "package_commit": "fd65f363a5df418c6497fb04f29c8d9896f44073",
+    "control_plane_commit": "f3df601dd33a5a06f080cca1bb7fb47582b9618c",
+    "test_commit": "1854f9ed19d2d2782b8a174035423a6557f15b5f",
+    "implementation": "requires strong checkpoint SHA256 + ledger integrity, delegates workflow recovery, summarizes recovered/skipped/partial/failed, safe_to_continue only when partial=failed=0"
+  },
+  "test": {
+    "global_workflow": ".github/workflows/yaiwes-wordflow-loop-pytest.yml",
+    "latest_run": 34717056926,
+    "state_at_report": "PENDING_NO_JOB_YET",
+    "earlier_full_src_run": 34716613952,
+    "earlier_job": 103615713852,
+    "earlier_progress": "Wordflow LOOP tests success; runtime tests in_progress",
+    "rule": "No PASS until latest run completed/success + job/log readback"
+  },
+  "remaining_gap": [
+    "workspace/multi-host sandbox failover E2E remains separate downstream subgate",
+    "latest recovery control-plane CI not yet completed"
   ],
-  "next_step": "Implement minimal Python recovery control-plane + deterministic unit tests; do not implement queue/store/recovery engine again.",
-  "closure_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+  "next_step": "Read latest CI; on success promote recovery control-plane subgate TESTED, then continue sandbox/workspace failover E2E. On failure convert exact log to StrategyDelta node.",
+  "closure_rule": "SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
 }
