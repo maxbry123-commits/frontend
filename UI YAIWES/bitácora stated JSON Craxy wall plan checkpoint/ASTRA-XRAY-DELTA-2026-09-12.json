@@ -1,0 +1,272 @@
+{
+  "schema": "yaiwes.astra.xray.delta.v1",
+  "contract": "tel.workflow/v3",
+  "date_utc": "2026-09-12",
+  "base_sha": "fd9e5bf4d249d97ee0406837f5bb5a2b34c60467",
+  "status": "INCONCLUSIVE",
+  "scope": "Auditoría parcial reproducible; NO auditoría exhaustiva ni cierre global.",
+  "completed": [
+    {
+      "node": "ASTRA-XRAY-PATH-001",
+      "status": "TESTED_SUBGATE_PASS",
+      "commit": "4a3a0ffe0eecaebb1ecfae904e08f3fd25560fcf",
+      "blob": "92f20cb69b52632635a706044c03e04fa966cb25",
+      "before": "safe/../outside aceptado por supervisor.check",
+      "after": "8/8 assertions lexical containment PASS",
+      "test": "python -m pytest -q: 15 passed in 0.05s",
+      "readback": true,
+      "limits": "Guard posterior al handler. No demuestra aislamiento físico, symlinks, TOCTOU ni prevención previa de efectos."
+    },
+    {
+      "node": "WATCHDOG-CONTRACT-001",
+      "status": "VERIFIED_CLOSED",
+      "automation_id": "6aa475753a40819197771ad1661a8ba0",
+      "enabled": true,
+      "schedule": "FREQ=HOURLY",
+      "daily_audit": "al inicio y 24h desde última auditoría completa",
+      "last_full_audit_completed_at": null
+    }
+  ],
+  "simulations": [
+    {
+      "id": 1,
+      "scenario": "traversal lexical",
+      "before": "errors=[]",
+      "after": "rejected",
+      "status": "PASS_AFTER_PATCH"
+    },
+    {
+      "id": 2,
+      "scenario": "research sin candidatos",
+      "observed": "INCONCLUSIVE",
+      "status": "PASS"
+    },
+    {
+      "id": 3,
+      "scenario": "research URL sintáctica no verificada .invalid",
+      "observed": "PASS",
+      "status": "GAP_SEMANTIC_EVIDENCE",
+      "limit": "PASS demuestra filtrado del conjunto, no acceso a fuente. No hubo consulta de red en esta simulación."
+    }
+  ],
+  "refutations": [
+    {
+      "claim": "PASS research demuestra fuente real",
+      "result": "REFUTED: capa sólo parsea URL y hashea candidatos."
+    },
+    {
+      "claim": "guard posterior impide toda escritura fuera de scope",
+      "result": "REFUTED: se ejecuta después del handler; patch sólo valida reporte lexical."
+    },
+    {
+      "claim": "estados históricos y carpetas demuestran cierre global",
+      "result": "REFUTED: agent/recovery/uek tienen .gitkeep; estados de roles contienen referencias históricas desalineadas."
+    }
+  ],
+  "goals12": [
+    [
+      "G01",
+      "INPUT preservado",
+      "PARTIAL: contrato operativo registrado; no copia literal completa"
+    ],
+    [
+      "G02",
+      "Fuentes verdad leídas 4x",
+      "PENDING"
+    ],
+    [
+      "G03",
+      "Código cruzado 4x",
+      "PARTIAL: 30 archivos Wordflow recuperados; no todo runtime/vendor"
+    ],
+    [
+      "G04",
+      "Matriz G12 bidireccional",
+      "PENDING_OWNER_SOL_ORQUESTADOR"
+    ],
+    [
+      "G05",
+      "Tres refutaciones",
+      "DONE"
+    ],
+    [
+      "G06",
+      "Council12",
+      "DONE_SINGLE_ASSISTANT_REVIEW_NOT_EXTERNAL_COUNCIL"
+    ],
+    [
+      "G07",
+      "Tres simulaciones",
+      "DONE"
+    ],
+    [
+      "G08",
+      "Mejoras 10x",
+      "TEN_PROPOSALS_ONLY_NO_MEASURED_10X"
+    ],
+    [
+      "G09",
+      "REUSE/PATCH/ADAPT",
+      "PATCH_PROVEN_FOR_ONE_NODE"
+    ],
+    [
+      "G10",
+      "Nodos y anti-colisión",
+      "OWN_REPAIR_CLAIMED; shared files await consolidator"
+    ],
+    [
+      "G11",
+      "Persistencia completa",
+      "PARTIAL: reporte + role + probe; shared files pending"
+    ],
+    [
+      "G12",
+      "Watchdog horario/daily",
+      "CONFIGURED_NOT_PROOF_OF_FUTURE_RUN"
+    ]
+  ],
+  "council12": [
+    "Objetivo: evidencia verificable",
+    "Autoridad: main fijado",
+    "Cobertura: auditoría parcial",
+    "Inventario: runtime separado de vendor",
+    "Propietarios: Sol1/2/3 y Orquestador",
+    "Riesgo: traversal lexical reproducido",
+    "Alternativa: normalización puede ocultar entrada inválida",
+    "Decisión: rechazar .., NUL y separador Windows",
+    "Prueba: 8 casos límite y 15 tests existentes",
+    "Refutación: no aislamiento previo ni fuente real",
+    "Persistencia: commit + readback + probe",
+    "Cierre: sólo subgate; global INCONCLUSIVE"
+  ],
+  "improvements": [
+    {
+      "node": "ASTRA-NEXT-01",
+      "proposal": "Rechazo lexical de traversal",
+      "decision": "PATCH_DONE",
+      "metric": "8/8 boundary assertions",
+      "source": "wordflow_loop/governance/supervisor.py"
+    },
+    {
+      "node": "ASTRA-NEXT-02",
+      "proposal": "Evidencia tipada con proveedor verificador",
+      "decision": "ADAPT_PENDING_CONTRACT",
+      "metric": "cero cierres de runtime basados sólo en hash declarado",
+      "source": "wordflow_loop/contracts.py + governance/verifier.py"
+    },
+    {
+      "node": "ASTRA-NEXT-03",
+      "proposal": "Distinguir research filtrado de fuente consultada",
+      "decision": "PATCH_PENDING_CONTRACT",
+      "metric": "URL no consultada nunca equivale SOURCE_VERIFIED",
+      "source": "wordflow_loop/layers/layer_01_research.py"
+    },
+    {
+      "node": "ASTRA-NEXT-04",
+      "proposal": "Guard de capacidad anterior a efectos",
+      "decision": "ADAPT_PENDING",
+      "metric": "operación fuera de scope rechazada antes del handler",
+      "source": "wordflow_loop/runner.py"
+    },
+    {
+      "node": "ASTRA-NEXT-05",
+      "proposal": "Memoria aislada por ámbito",
+      "decision": "OWNER_SOL1",
+      "metric": "sin lecturas/escrituras cruzadas",
+      "source": "runtime/vendor/stabilize; S1-09"
+    },
+    {
+      "node": "ASTRA-NEXT-06",
+      "proposal": "Recuperación workspace",
+      "decision": "OWNER_ORQUESTADOR",
+      "metric": "restauración tras fallo real",
+      "source": "wordflow_loop/ledger.py; O-02"
+    },
+    {
+      "node": "ASTRA-NEXT-07",
+      "proposal": "Routing plataforma por capability",
+      "decision": "OWNER_SOL2",
+      "metric": "cero PASS de guest boot sin ejecución",
+      "source": "S2-08 + S2-10"
+    },
+    {
+      "node": "ASTRA-NEXT-08",
+      "proposal": "Consolidación Fables",
+      "decision": "OWNER_SOL3",
+      "metric": "E2E source→adapter→runtime→evidence",
+      "source": "runtime/src/plugins/fables.py; S3-10"
+    },
+    {
+      "node": "ASTRA-NEXT-09",
+      "proposal": "G12 por SHA de requisito/artefacto",
+      "decision": "OWNER_ORQUESTADOR",
+      "metric": "100% enlaces inversos probados",
+      "source": "O-01"
+    },
+    {
+      "node": "ASTRA-NEXT-10",
+      "proposal": "Reconciliar role states con cola/automations",
+      "decision": "OWNER_ORQUESTADOR",
+      "metric": "cero ownership/watchdog IDs obsoletos",
+      "source": "roles/SOL-GPT1/2/3-BACKEND-STATE.json"
+    }
+  ],
+  "research": {
+    "date": "2026-09-12",
+    "official": [
+      "https://docs.python.org/3/library/pathlib.html",
+      "https://docs.python.org/3/library/os.path.html",
+      "https://github.com/encode/starlette/security/advisories/GHSA-v5gw-mw7f-84px"
+    ],
+    "community_signal": [
+      "https://github.com/python/cpython/issues/99334"
+    ],
+    "decision": "No descargar componente; PATCH del guard existente. No sustitución genérica por is_relative_to: documentación indica que es lexical."
+  },
+  "sol_orders": [
+    {
+      "node": "SOL-XRAY-CONSOLIDATE-001",
+      "assertion": "Valida que patch 4a3a0ffe y su evidencia constan en README arquitectura, Handoff, BITACORA, STATE, CHECKPOINT, PLAN y RECOVERY.",
+      "steps": [
+        "Releer HEAD, own state y reportes; respetar propietario",
+        "Fusionar aditivamente reporte sin promover auditoría global",
+        "Leer de vuelta y citar SHA por archivo"
+      ],
+      "status": "PENDING_CONSOLIDATOR"
+    },
+    {
+      "node": "SOL-XRAY-EVIDENCE-002",
+      "assertion": "Valida que ningún resultado research PASS se promueve a fuente verificada sin adaptador que consulte evidencia.",
+      "steps": [
+        "Deduplicar S56-G12-01",
+        "Definir contrato de refs antes de implementación",
+        "Probar URL ausente, hash incorrecto y evidencia vigente"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "node": "SOL-XRAY-SOURCES-003",
+      "assertion": "Valida cuatro pasadas completas de las tres fuentes y código, con matriz G12 y documento adicional identificado.",
+      "steps": [
+        "Registrar fuentes por SHA e identificar documento adicional",
+        "Completar trazabilidad y clasificación sin reescribir scopes ajenos",
+        "Registrar alcance exacto y pendientes, no porcentaje inventado"
+      ],
+      "status": "PENDING"
+    }
+  ],
+  "pending": [
+    "Auditoría literal completa 4+4",
+    "Documento adicional no identificado unívocamente",
+    "Consolidación compartida por owner",
+    "Prueba E2E global",
+    "Soluciones OSS por capacidad fuera de este parche"
+  ],
+  "no_claims": [
+    "No afirmo 12/12 cumplimiento",
+    "No afirmo mejora medida 10x",
+    "No afirmo Council externo",
+    "No afirmo lectura completa de documentos",
+    "No afirmo runtime global terminado"
+  ]
+}
