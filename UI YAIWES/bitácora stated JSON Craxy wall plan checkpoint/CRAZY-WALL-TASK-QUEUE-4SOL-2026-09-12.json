@@ -3,15 +3,39 @@
   "contract": "tel.workflow/v3",
   "status": "ACTIVE_LOOP",
   "created_at_utc": "2026-09-12T06:10:00Z",
-  "base_main_sha": "217396e578d824d4482057a52401d910071b4fce",
+  "base_main_sha": "acbcfef50fc20f152e319037845401b02d6d54ff",
   "rules": {
     "one_task_one_node": true,
     "one_active_node_per_role": true,
     "max_steps_per_node": 3,
-    "steps": ["VERIFY_OR_RESEARCH", "EXECUTE_AUTHORIZED_DELTA", "TEST_AND_REPORT"],
-    "states": ["FREE", "CLAIMED", "EXECUTING", "GAP", "PASS", "REPORT"],
-    "claim_requires": ["role", "node_id", "fresh_base_main_sha", "write_scope", "claimed_at"],
-    "report_requires": ["result", "paths", "commit_or_blob_sha", "test_run_or_log", "gaps", "next_free_node"],
+    "steps": [
+      "VERIFY_OR_RESEARCH",
+      "EXECUTE_AUTHORIZED_DELTA",
+      "TEST_AND_REPORT"
+    ],
+    "states": [
+      "FREE",
+      "CLAIMED",
+      "EXECUTING",
+      "GAP",
+      "PASS",
+      "REPORT"
+    ],
+    "claim_requires": [
+      "role",
+      "node_id",
+      "fresh_base_main_sha",
+      "write_scope",
+      "claimed_at"
+    ],
+    "report_requires": [
+      "result",
+      "paths",
+      "commit_or_blob_sha",
+      "test_run_or_log",
+      "gaps",
+      "next_free_node"
+    ],
     "truth_rule": "SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
     "collision_rule": "No role writes outside its write_scope. Shared truth files are consolidated only by SOL_ORQUESTADOR after fresh readback.",
     "gap_rule": "A GAP blocks only its node; the role reports it and claims the next FREE independent node.",
@@ -20,22 +44,23 @@
   },
   "active_slots": {
     "SOL_ORQUESTADOR": {
-      "node_id": "O-01-G12-GLOBAL-COVERAGE-XRAY",
-      "state": "CLAIMED",
+      "node_id": "O-02-MULTI-SANDBOX-RECOVERY-E2E",
+      "state": "EXECUTING",
       "owner": "SOL_ORQUESTADOR",
-      "base_main_sha": "217396e578d824d4482057a52401d910071b4fce",
+      "base_main_sha": "ebdcee483822021500324b13af33adeae325c29f",
+      "claimed_at": "2026-09-12T06:40:00Z",
       "write_scope": [
-        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-QUEUE-4SOL-2026-09-12.json",
         "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-*.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-*.json",
         "UI YAIWES/readme arquitectura UI YAIWES/*XRAY*"
       ],
-      "assertion_to_validate": "Every mandatory source requirement is mapped bidirectionally to an implementation/equivalence, test and evidence; unresolved items remain explicit GAPs.",
+      "assertion_to_validate": "Workspace/global recovery and sandbox failover must be demonstrated beyond local durable-ledger subgates, reusing existing sandbox/VM components before any new acquisition.",
       "steps": [
-        "Cross-check three principal source documents against wordflow_loop/runtime/tests and current ledger",
-        "Classify each missing requirement as equivalent-existing, owner-assigned, genuinely-unowned, provider-gap or product-layer-outside-current-runtime",
-        "Publish G12 matrix delta with evidence and next FREE node"
+        "VERIFY_OR_RESEARCH: dedup existing recovery/sandbox code against physical reuse candidates",
+        "EXECUTE_AUTHORIZED_DELTA: only genuinely missing orchestration glue and only after write_scope includes its exact path",
+        "TEST_AND_REPORT: restart/failover/reconstruction E2E with read-back evidence"
       ],
-      "report_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-01-G12-GLOBAL-COVERAGE-XRAY.json"
+      "report_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-02-MULTI-SANDBOX-RECOVERY-E2E.json"
     },
     "SOL_GPT1": {
       "node_id": "S1-09-MEMORY-AGENT-BOUNDARY",
@@ -99,28 +124,174 @@
     }
   },
   "backlog": [
-    {"node_id":"S1-10-RQLITE-DISTINCT-STATE","owner_lane":"SOL_GPT1","state":"FREE_AFTER_S1-09","maps_to":["G09_MEMORY_BOUNDARY","OSS11-S1-01-RQLITE"],"goal":"Prove rqlite distinct need vs existing local durability; wire only if non-duplicate."},
-    {"node_id":"S1-11-LOCAL-FIRST-CHECKPOINT-MEMORY","owner_lane":"SOL_GPT1","state":"FREE_AFTER_S1-10","maps_to":["G09_MEMORY_BOUNDARY","G11_MULTI_SANDBOX_RECOVERY"],"goal":"Local-first project memory/checkpoint contract and restart isolation."},
-    {"node_id":"S1-12-VITE-SUPABASE-DEST-AUTHORITY","owner_lane":"SOL_GPT1","state":"BLOCKED_INPUT","maps_to":["G02_VITE_DEST","G03_SUPABASE_DEST"],"goal":"Do not infer destination; close only from literal authoritative destination or documented supersede."},
-    {"node_id":"S2-09-OTEL-COLLECTOR-BOUNDARY","owner_lane":"SOL_GPT2","state":"FREE_AFTER_S2-08","maps_to":["G16_RUNTIME_ADAPTERS_SCAFFOLD","OSS11-S2-01-OTEL"],"goal":"Wire collector boundary without duplicating OpenTelemetry Python."},
-    {"node_id":"S2-10-VM-MANAGER-CAPABILITY","owner_lane":"SOL_GPT2","state":"FREE_AFTER_S2-09","maps_to":["G10_PLATFORM_MATRIX","G17_VM_MANAGER_SYMBOL"],"goal":"Materialize/evidence VM Manager capability selection or prove equivalent existing implementation."},
-    {"node_id":"S2-11-AVF-PROVIDER-HARDWARE","owner_lane":"SOL_GPT2","state":"BLOCKED_PROVIDER_OR_HARDWARE","maps_to":["G05_AVF_PROVIDER","G06_AVF_CAPABILITY"],"goal":"Keep provider/runtime/hardware gaps separate; no mirror or guest-boot claim without evidence."},
-    {"node_id":"S2-12-DUCKDB-SPECIAL-FILE","owner_lane":"SOL_GPT2","state":"BLOCKED_PROVIDER_SPECIAL_FILE","maps_to":["G04_DUCKDB_SPECIAL"],"goal":"Research official compatible provenance only; motor remains immutable."},
-    {"node_id":"S3-11-INTEGRATION-01-20","owner_lane":"SOL_GPT3","state":"FREE_AFTER_S3-10","maps_to":["G01_FABLES","G07_INTEGRATION_01_20","G15_RUNTIME_INTEGRATION_SCAFFOLD"],"goal":"Promote only components with real Fables wiring + runtime test."},
-    {"node_id":"S3-12-BATCH-21-40","owner_lane":"SOL_GPT3","state":"FREE_AFTER_S3-11","maps_to":["G08_BATCH_21_40"],"goal":"Continue 21-40 one component at a time; separate component failures from test infrastructure failures."},
-    {"node_id":"S3-13-TESTCONTAINERS-HARNESS","owner_lane":"SOL_GPT3","state":"FREE_AFTER_S3-12","maps_to":["OSS11-S3-01-TESTCONTAINERS"],"goal":"Use acquired Testcontainers only if CI host capability exists; prove a real adapter integration path."},
-    {"node_id":"O-02-MULTI-SANDBOX-RECOVERY-E2E","owner_lane":"SOL_ORQUESTADOR","state":"FREE_AFTER_O-01","maps_to":["G11_MULTI_SANDBOX_RECOVERY"],"goal":"Prove workspace/global recovery and failover beyond local durable ledger subgates."},
-    {"node_id":"O-03-OSS5-REUSE-OR-PROVIDER","owner_lane":"SOL_ORQUESTADOR","state":"FREE_AFTER_O-02","maps_to":["Litestream","Tempo","Schemathesis","Kata","Grype"],"goal":"Close each by proven REUSE equivalence or provider-compatible acquisition; do not force download."},
-    {"node_id":"O-04-OPA-OPENFGA-G12-MAP","owner_lane":"SOL_ORQUESTADOR","state":"FREE_AFTER_O-03","maps_to":["G12_GLOBAL_GOALS_COVERAGE"],"goal":"Attach existing live policy lane evidence into final requirement matrix."},
-    {"node_id":"O-05-PUBLISH-BLOCKERS","owner_lane":"SOL_ORQUESTADOR","state":"FREE_AFTER_O-04","maps_to":["G18_ASTRA_PREVIEW_PUBLISH","G19_HF_STATIC_SPACE_CREDENTIAL"],"goal":"Keep product publish blockers separate from runtime closure and resolve with exact workflow/credential evidence."},
-    {"node_id":"O-06-FINAL-JUDGE-RECONSTRUCTION","owner_lane":"SOL_ORQUESTADOR","state":"BLOCKED_UNTIL_COVERAGE","maps_to":["G12_GLOBAL_GOALS_COVERAGE"],"goal":"Run final top-down/bottom-up coverage, reconstruction without chat and final E2E before VERIFIED_CLOSED."}
+    {
+      "node_id": "S1-10-RQLITE-DISTINCT-STATE",
+      "owner_lane": "SOL_GPT1",
+      "state": "FREE_AFTER_S1-09",
+      "maps_to": [
+        "G09_MEMORY_BOUNDARY",
+        "OSS11-S1-01-RQLITE"
+      ],
+      "goal": "Prove rqlite distinct need vs existing local durability; wire only if non-duplicate."
+    },
+    {
+      "node_id": "S1-11-LOCAL-FIRST-CHECKPOINT-MEMORY",
+      "owner_lane": "SOL_GPT1",
+      "state": "FREE_AFTER_S1-10",
+      "maps_to": [
+        "G09_MEMORY_BOUNDARY",
+        "G11_MULTI_SANDBOX_RECOVERY"
+      ],
+      "goal": "Local-first project memory/checkpoint contract and restart isolation."
+    },
+    {
+      "node_id": "S1-12-VITE-SUPABASE-DEST-AUTHORITY",
+      "owner_lane": "SOL_GPT1",
+      "state": "BLOCKED_INPUT",
+      "maps_to": [
+        "G02_VITE_DEST",
+        "G03_SUPABASE_DEST"
+      ],
+      "goal": "Do not infer destination; close only from literal authoritative destination or documented supersede."
+    },
+    {
+      "node_id": "S2-09-OTEL-COLLECTOR-BOUNDARY",
+      "owner_lane": "SOL_GPT2",
+      "state": "FREE_AFTER_S2-08",
+      "maps_to": [
+        "G16_RUNTIME_ADAPTERS_SCAFFOLD",
+        "OSS11-S2-01-OTEL"
+      ],
+      "goal": "Wire collector boundary without duplicating OpenTelemetry Python."
+    },
+    {
+      "node_id": "S2-10-VM-MANAGER-CAPABILITY",
+      "owner_lane": "SOL_GPT2",
+      "state": "FREE_AFTER_S2-09",
+      "maps_to": [
+        "G10_PLATFORM_MATRIX",
+        "G17_VM_MANAGER_SYMBOL"
+      ],
+      "goal": "Materialize/evidence VM Manager capability selection or prove equivalent existing implementation."
+    },
+    {
+      "node_id": "S2-11-AVF-PROVIDER-HARDWARE",
+      "owner_lane": "SOL_GPT2",
+      "state": "BLOCKED_PROVIDER_OR_HARDWARE",
+      "maps_to": [
+        "G05_AVF_PROVIDER",
+        "G06_AVF_CAPABILITY"
+      ],
+      "goal": "Keep provider/runtime/hardware gaps separate; no mirror or guest-boot claim without evidence."
+    },
+    {
+      "node_id": "S2-12-DUCKDB-SPECIAL-FILE",
+      "owner_lane": "SOL_GPT2",
+      "state": "BLOCKED_PROVIDER_SPECIAL_FILE",
+      "maps_to": [
+        "G04_DUCKDB_SPECIAL"
+      ],
+      "goal": "Research official compatible provenance only; motor remains immutable."
+    },
+    {
+      "node_id": "S3-11-INTEGRATION-01-20",
+      "owner_lane": "SOL_GPT3",
+      "state": "FREE_AFTER_S3-10",
+      "maps_to": [
+        "G01_FABLES",
+        "G07_INTEGRATION_01_20",
+        "G15_RUNTIME_INTEGRATION_SCAFFOLD"
+      ],
+      "goal": "Promote only components with real Fables wiring + runtime test."
+    },
+    {
+      "node_id": "S3-12-BATCH-21-40",
+      "owner_lane": "SOL_GPT3",
+      "state": "FREE_AFTER_S3-11",
+      "maps_to": [
+        "G08_BATCH_21_40"
+      ],
+      "goal": "Continue 21-40 one component at a time; separate component failures from test infrastructure failures."
+    },
+    {
+      "node_id": "S3-13-TESTCONTAINERS-HARNESS",
+      "owner_lane": "SOL_GPT3",
+      "state": "FREE_AFTER_S3-12",
+      "maps_to": [
+        "OSS11-S3-01-TESTCONTAINERS"
+      ],
+      "goal": "Use acquired Testcontainers only if CI host capability exists; prove a real adapter integration path."
+    },
+    {
+      "node_id": "O-02-MULTI-SANDBOX-RECOVERY-E2E",
+      "owner_lane": "SOL_ORQUESTADOR",
+      "state": "EXECUTING",
+      "maps_to": [
+        "G11_MULTI_SANDBOX_RECOVERY"
+      ],
+      "goal": "Prove workspace/global recovery and failover beyond local durable ledger subgates."
+    },
+    {
+      "node_id": "O-03-OSS5-REUSE-OR-PROVIDER",
+      "owner_lane": "SOL_ORQUESTADOR",
+      "state": "FREE_AFTER_O-02",
+      "maps_to": [
+        "Litestream",
+        "Tempo",
+        "Schemathesis",
+        "Kata",
+        "Grype"
+      ],
+      "goal": "Close each by proven REUSE equivalence or provider-compatible acquisition; do not force download."
+    },
+    {
+      "node_id": "O-04-OPA-OPENFGA-G12-MAP",
+      "owner_lane": "SOL_ORQUESTADOR",
+      "state": "FREE_AFTER_O-03",
+      "maps_to": [
+        "G12_GLOBAL_GOALS_COVERAGE"
+      ],
+      "goal": "Attach existing live policy lane evidence into final requirement matrix."
+    },
+    {
+      "node_id": "O-05-PUBLISH-BLOCKERS",
+      "owner_lane": "SOL_ORQUESTADOR",
+      "state": "FREE_AFTER_O-04",
+      "maps_to": [
+        "G18_ASTRA_PREVIEW_PUBLISH",
+        "G19_HF_STATIC_SPACE_CREDENTIAL"
+      ],
+      "goal": "Keep product publish blockers separate from runtime closure and resolve with exact workflow/credential evidence."
+    },
+    {
+      "node_id": "O-06-FINAL-JUDGE-RECONSTRUCTION",
+      "owner_lane": "SOL_ORQUESTADOR",
+      "state": "BLOCKED_UNTIL_COVERAGE",
+      "maps_to": [
+        "G12_GLOBAL_GOALS_COVERAGE"
+      ],
+      "goal": "Run final top-down/bottom-up coverage, reconstruction without chat and final E2E before VERIFIED_CLOSED."
+    }
   ],
   "component_acquisition_state": {
     "new_oss_total": 11,
     "source_present_readback_verified": 6,
     "provider_special_file_gap": 5,
-    "verified": ["OPA","OpenFGA","rqlite","OpenTelemetry Collector","ORAS","Testcontainers Python"],
-    "blocked_or_reuse_pending": ["Litestream","Grafana Tempo","Schemathesis","Kata Containers","Grype"]
+    "verified": [
+      "OPA",
+      "OpenFGA",
+      "rqlite",
+      "OpenTelemetry Collector",
+      "ORAS",
+      "Testcontainers Python"
+    ],
+    "blocked_or_reuse_pending": [
+      "Litestream",
+      "Grafana Tempo",
+      "Schemathesis",
+      "Kata Containers",
+      "Grype"
+    ]
   },
   "known_completed_subgates": [
     "Wordflow fail-closed runner/governance/ledger/L01-L06",
@@ -128,5 +299,34 @@
     "OPA/OpenFGA Fables-wired live runtime policy lane",
     "durable ledger replay/fsync/tamper-detection subgates"
   ],
-  "global_closure_gate": "G12 requirement→layer→file/function→test→evidence must reach 100%; Memory/Audit, Agent boundary, Integration/Consolidator, Sandbox/UEK/Recovery and platform routing must be implemented or closed by evidenced equivalence before final judge."
+  "global_closure_gate": "G12 requirement→layer→file/function→test→evidence must reach 100%; Memory/Audit, Agent boundary, Integration/Consolidator, Sandbox/UEK/Recovery and platform routing must be implemented or closed by evidenced equivalence before final judge.",
+  "updated_at_utc": "2026-09-12T17:43:00.121Z",
+  "completed_nodes": [
+    {
+      "node_id": "O-01-G12-GLOBAL-COVERAGE-XRAY",
+      "status": "PASS_AUDIT_NODE_GLOBAL_PROJECT_STILL_OPEN",
+      "report_blob_sha": "0f8839d9ef5b2e275e9003b2821b6583c3c5c277",
+      "note": "Audit/classification node closed; G12 global closure remains open."
+    }
+  ],
+  "orchestrator_reconciliation": {
+    "checked_at_utc": "2026-09-12T17:43:00.121Z",
+    "checked_head_sha": "acbcfef50fc20f152e319037845401b02d6d54ff",
+    "mode": "FAIL_CLOSED_LOOP",
+    "queue_drift_repaired": true,
+    "sol_claims": {
+      "SOL_GPT1": "ABSENT_REPORT_404",
+      "SOL_GPT2": "ABSENT_REPORT_404",
+      "SOL_GPT3": "ABSENT_REPORT_404"
+    },
+    "ci_34707983948": {
+      "status": "completed",
+      "conclusion": "cancelled",
+      "wordflow_step": "success",
+      "complete_runtime_suite": "cancelled",
+      "classification": "TESTED_SUBGATE_PASS_FULL_RUNTIME_CANCELLED_NOT_PASS"
+    },
+    "last_full_audit_completed_at": null,
+    "full_audit_status": "INCOMPLETE_DO_NOT_ADVANCE_TIMESTAMP"
+  }
 }
