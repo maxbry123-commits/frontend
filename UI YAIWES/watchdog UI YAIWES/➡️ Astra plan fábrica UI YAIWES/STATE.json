@@ -2,58 +2,49 @@
   "schema": "yaiwes.astra.factory.state.v1",
   "identity": "➡️ Astra plan fábrica UI YAIWES",
   "contract": "tel.workflow/v3",
-  "status": "ACTIVE_REGRESSION_LOOP",
+  "status": "VERIFIED_CLOSED",
   "gate": "T1_FACTORY_FRONTEND",
-  "t2_interface": "PAUSED_UNTIL_FACTORY_V1_REGRESSION_GAPS_VERIFIED",
-  "base_audited_sha": "68353b77356b667356827748bade0fe7207e134a",
-  "current_node": "T1_FACTORY_V1_DIRECTOR_10_REQUIREMENTS_REBUILD_AND_VERIFY",
-  "previous_verified_baseline": {
-    "source_sha": "8d5a7ed86f9af517b0d42f5aad9e2f7359edd7f0",
-    "hf_space_commit": "9aa43978497e9bd9fba9d9ecea11ac8e83b01764",
-    "url": "https://comand-center-1-yaiwes-ui-factory.static.hf.space/",
-    "status": "SUPERSEDED_BY_DIRECTOR_REGRESSION_2026_09_12"
-  },
-  "director_regression_2026_09_12": {
-    "status": "IMPLEMENTED_PENDING_FULL_E2E_AND_REDEPLOY",
-    "requirements": {
-      "R1_multi_ai_router": "IMPLEMENTED",
-      "R2_remote_ai_mcp_http_api": "IMPLEMENTED",
-      "R3_design_skills_panel": "IMPLEMENTED",
-      "R4_upload_photo_html_url_files_github": "IMPLEMENTED",
-      "R5_download_github_mcp_hf_vercel_share_custom_destinations": "IMPLEMENTED",
-      "R6_multiple_reference_urls_replication": "IMPLEMENTED",
-      "R7_web_page_creator": "IMPLEMENTED",
-      "R8_audio_video_image_3d_upload_and_ai_jobs": "IMPLEMENTED",
-      "R9_default_color_design_panel": "IMPLEMENTED",
-      "R10_internal_microkernel_engines": "IMPLEMENTED"
-    },
-    "tested_candidate_sha": "68353b77356b667356827748bade0fe7207e134a",
-    "e2e_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa588635527934177ed0d20",
-    "e2e_status": "RUNNING",
-    "security_rule": "secret_ref only; never raw API keys in static frontend",
-    "closure_gate": "full E2E pass for all 10 requirements + OIDC redeploy + deployed HTTP/readback + deployed E2E + independent reviewer"
-  },
+  "t2_interface": "READY_TO_RESUME",
+  "current_node": "T1_FACTORY_V1_DIRECTOR_10_REQUIREMENTS_VERIFIED_CLOSED",
   "factory_v1": {
-    "path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/",
-    "candidate_sha": "68353b77356b667356827748bade0fe7207e134a",
-    "config_storage": "localStorage:yaiwes-factory-config-v1",
-    "router_team_modes": ["single", "race", "quorum", "sequence"],
-    "remote_protocols": ["MCP_HTTP", "HTTP", "WEBSOCKET", "API"],
-    "destination_types": ["DOWNLOAD", "GITHUB", "HUGGINGFACE", "VERCEL", "MCP", "SHARE", "CUSTOM_HTTP"],
-    "media_types": ["image", "video", "audio", "3d"],
-    "kernel_engines": ["validator", "versioner", "evidence", "queue1x1"],
-    "deployed": false,
-    "verified_closed": false
+    "source_sha": "68353b77356b667356827748bade0fe7207e134a",
+    "space_repo": "COMAND-CENTER-1/yaiwes-ui-factory",
+    "space_commit": "8288eb11ddabf48b82353a5cad2783e7f1142253",
+    "url": "https://comand-center-1-yaiwes-ui-factory.static.hf.space/",
+    "publish_workflow": "https://github.com/maxbry123-commits/frontend/actions/runs/34707684548",
+    "publish_auth": "TRUSTED_PUBLISHER_OIDC_REPO_SCOPED_WRITE",
+    "http_readback": "PASS",
+    "candidate_e2e": "PASS_28_OF_28_DESKTOP_MOBILE",
+    "candidate_e2e_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa588635527934177ed0d20",
+    "deployed_e2e": "PASS_28_OF_28_DESKTOP_MOBILE",
+    "deployed_e2e_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa588d15527934177ed0d42",
+    "independent_reviewer": "PASS",
+    "independent_reviewer_job": "https://huggingface.co/jobs/COMAND-CENTER-1/6aa588fc5527934177ed0d5c",
+    "requirements": {
+      "R1_multi_ai_router": "PASS",
+      "R2_remote_ai_mcp_http_api_websocket": "PASS",
+      "R3_design_skills_panel": "PASS",
+      "R4_file_photo_html_url_github_inputs": "PASS",
+      "R5_download_github_hf_vercel_mcp_share_custom_destinations": "PASS",
+      "R6_multiple_reference_urls": "PASS",
+      "R7_web_page_creator": "PASS",
+      "R8_image_video_audio_3d_upload_and_ai_jobs": "PASS",
+      "R9_default_color_design_panel": "PASS",
+      "R10_internal_microkernel_engines": "PASS"
+    },
+    "security": "secret_ref only in static frontend; no raw API keys",
+    "external_execution_boundary": "live remote AI/media generation requires configured Router/MCP/HTTP endpoint that resolves secret_ref; fail-closed when absent",
+    "verified_closed": true
+  },
+  "project_memory": {
+    "evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/FACTORY-V1-DIRECTOR-10-REQUIREMENTS-EVIDENCE-2026-09-12.md"
   },
   "open_gaps": [
-    "FACTORY_V1_FULL_E2E_PENDING",
-    "FACTORY_V1_OIDC_REDEPLOY_PENDING",
-    "FACTORY_V1_DEPLOYED_E2E_PENDING",
-    "FACTORY_V1_INDEPENDENT_REVIEW_PENDING",
-    "REMOTE_AI_LIVE_ENDPOINT_DEPENDS_ON_CONFIGURED_ROUTER_ENDPOINT_AND_SECRET_REF",
-    "MEDIA_GENERATION_LIVE_EXECUTION_DEPENDS_ON_CONFIGURED_AI_ROUTER"
+    "LIVE_REMOTE_AI_EXECUTION_REQUIRES_CONFIGURED_ENDPOINT",
+    "LIVE_MEDIA_GENERATION_REQUIRES_CONFIGURED_AI_ROUTER",
+    "T2_RECON_38_WINDOWS_AND_BACKEND_PENDING"
   ],
-  "closure_rule": "all director controls must have observable tests; source SHA + OIDC deploy + persistent URL + HTTP marker + deployed E2E + independent reviewer",
-  "closure_result": "NOT_CLOSED",
-  "next_node": "WAIT_FACTORY_V1_E2E_THEN_FIX_FAILURES_THEN_REDEPLOY"
+  "closure_rule": "all 10 director gates + candidate E2E + OIDC deploy + HTTP readback + deployed E2E + independent reviewer",
+  "closure_result": "VERIFIED_CLOSED",
+  "next_node": "T2_RECON_38_WINDOWS_BACKEND_AND_COMPONENT_REUSE"
 }
