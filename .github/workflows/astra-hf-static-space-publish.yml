@@ -26,20 +26,21 @@ jobs:
       HF_TOKEN_E: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
       SPACE_REPO: COMAND-CENTER-1/yaiwes-ui-factory
       HF_OIDC_RESOURCE: spaces/COMAND-CENTER-1/yaiwes-ui-factory
-      SOURCE_REF: f4117830f2141ce8363aff694b3fb513b20b02ca
-      RAW_ROOT: https://raw.githubusercontent.com/maxbry123-commits/frontend/f4117830f2141ce8363aff694b3fb513b20b02ca/UI%20YAIWES/watchdog%20UI%20YAIWES/%E2%9E%A1%EF%B8%8F%20Astra%20plan%20f%C3%A1brica%20UI%20YAIWES/Frontend/factory-v0
+      SOURCE_REF: 8d5a7ed86f9af517b0d42f5aad9e2f7359edd7f0
+      RAW_ROOT: https://raw.githubusercontent.com/maxbry123-commits/frontend/8d5a7ed86f9af517b0d42f5aad9e2f7359edd7f0/UI%20YAIWES/watchdog%20UI%20YAIWES/%E2%9E%A1%EF%B8%8F%20Astra%20plan%20f%C3%A1brica%20UI%20YAIWES/Frontend/factory-v0
     steps:
       - name: Package exact verified Factory V0 payload
         shell: bash
         run: |
           set -euo pipefail
           rm -rf _hf_space_publish
-          mkdir -p _hf_space_publish/src
+          mkdir -p _hf_space_publish/src/donors
           curl -fsSL "$RAW_ROOT/index.html" -o _hf_space_publish/index.html
           curl -fsSL "$RAW_ROOT/styles.css" -o _hf_space_publish/styles.css
           for f in app.js actions.js state.js backend-adapter.js; do
             curl -fsSL "$RAW_ROOT/src/$f" -o "_hf_space_publish/src/$f"
           done
+          curl -fsSL "$RAW_ROOT/src/donors/lucide-icons.js" -o _hf_space_publish/src/donors/lucide-icons.js
           cat > _hf_space_publish/README.md <<'EOF'
           ---
           title: YAIWES UI Factory
@@ -53,12 +54,13 @@ jobs:
 
           # YAIWES UI Factory
           Visual Static Space for the YAIWES UI Factory.
-          Verified source SHA: `f4117830f2141ce8363aff694b3fb513b20b02ca`.
+          Verified source SHA: `8d5a7ed86f9af517b0d42f5aad9e2f7359edd7f0`.
           EOF
           echo "SOURCE_REF=$SOURCE_REF"
           echo "PACKAGE_FILES=$(find _hf_space_publish -type f | wc -l)"
           grep -q 'YAIWES UI Factory' _hf_space_publish/index.html
-          sha256sum _hf_space_publish/index.html _hf_space_publish/styles.css _hf_space_publish/src/*.js
+          grep -q 'LUCIDE_SOURCE_COMMIT' _hf_space_publish/src/donors/lucide-icons.js
+          sha256sum _hf_space_publish/index.html _hf_space_publish/styles.css _hf_space_publish/src/*.js _hf_space_publish/src/donors/*.js
           echo 'PACKAGE_VERIFY=PASS'
 
       - name: Install current Hugging Face CLI with OIDC support
@@ -111,25 +113,33 @@ jobs:
           fi
           echo 'HF_SPACE_UPLOAD=PASS'
 
-      - name: Verify persistent Space page and app URL
+      - name: Verify persistent Space page and discovered static app host
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
-          import time, urllib.request
+          import json, time, urllib.request
+          api='https://huggingface.co/api/spaces/COMAND-CENTER-1/yaiwes-ui-factory'
           page='https://huggingface.co/spaces/COMAND-CENTER-1/yaiwes-ui-factory'
-          app='https://comand-center-1-yaiwes-ui-factory.hf.space/'
-          for url, marker in [(page, 'YAIWES'), (app, 'YAIWES UI Factory')]:
+          def read(url):
+              req=urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0'})
+              with urllib.request.urlopen(req, timeout=15) as r:
+                  return r.status, r.read().decode('utf-8','ignore')
+          status, meta_body = read(api)
+          meta=json.loads(meta_body)
+          app=meta.get('host')
+          print(f'HF_SPACE_META status={status} sdk={meta.get("sdk")} private={meta.get("private")} stage={meta.get("runtime",{}).get("stage")} host={app} sha={meta.get("sha")}')
+          if status != 200 or meta.get('sdk') != 'static' or not app:
+              raise SystemExit('HF_SPACE_METADATA_INVALID')
+          for url, marker in [(page, 'YAIWES'), (app.rstrip('/')+'/', 'YAIWES UI Factory')]:
               last=None
               for attempt in range(36):
                   try:
-                      req=urllib.request.Request(url, headers={'User-Agent':'Mozilla/5.0'})
-                      with urllib.request.urlopen(req, timeout=15) as r:
-                          body=r.read().decode('utf-8','ignore')
-                          print(f'HTTP_CHECK url={url} status={r.status} bytes={len(body)} attempt={attempt+1}')
-                          if r.status == 200 and marker in body:
-                              print(f'HTTP_READBACK_PASS={url}')
-                              break
+                      s, body=read(url)
+                      print(f'HTTP_CHECK url={url} status={s} bytes={len(body)} attempt={attempt+1}')
+                      if s == 200 and marker in body:
+                          print(f'HTTP_READBACK_PASS={url}')
+                          break
                   except Exception as e:
                       last=repr(e)
                   time.sleep(5)
