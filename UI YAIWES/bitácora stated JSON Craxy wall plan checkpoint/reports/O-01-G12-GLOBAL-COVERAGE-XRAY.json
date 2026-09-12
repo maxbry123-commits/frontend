@@ -1,0 +1,78 @@
+{
+  "schema": "yaiwes.node-report.v1",
+  "contract": "tel.workflow/v3",
+  "node_id": "O-01-G12-GLOBAL-COVERAGE-XRAY",
+  "owner": "SOL_ORQUESTADOR",
+  "base_main_sha": "916abd6f332291bec3e0322a4688f29dad3cdccb",
+  "status": "PASS_AUDIT_NODE_GLOBAL_PROJECT_STILL_OPEN",
+  "result": "Three-source cross-check against current Wordflow/runtime classified implemented, equivalent-partial and genuinely-missing boundaries. This node closes the audit/classification task only; it does not close G12 globally.",
+  "evidence": {
+    "source_docs": [
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌MAX-SYSTEM-100X-FINAL-1.md",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR Q grock tiene ventanas agente  linux iOS Android phyton 🤯🤯🤯🎯 14 objetivos💡💡💡✅✅✅🎯🎯🎯.md",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md"
+    ],
+    "prior_crosscheck": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CROSSCHECK-3-FUENTES-WORDFLOW-2026-09-11.json",
+    "runtime_runner": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/runner.py",
+    "workflow_dsl": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/contracts/workflow.dsl.yaml",
+    "observed_empty_boundaries": [
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/.gitkeep",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/recovery/.gitkeep",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/.gitkeep"
+    ],
+    "integration_boundary": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/README.md"
+  },
+  "classification": {
+    "implemented_and_evidenced": [
+      {"requirement":"literal-node fail-closed execution","implementation":"LayerRunner + NodeContract + governance chain","state":"IMPLEMENTED_TESTED_SUBGATE"},
+      {"requirement":"durable state/replay/integrity","implementation":"hash-chained durable ledger + recovery replay subgates","state":"IMPLEMENTED_TESTED_SUBGATE"},
+      {"requirement":"research/xray/acquire/source-evolution pipeline","implementation":"L01-L06 + tel.workflow/v3 DSL","state":"IMPLEMENTED_TESTED_SUBGATE"},
+      {"requirement":"universal plugin socket","implementation":"Fables + Stabilize bridge","state":"IMPLEMENTED_TESTED_SUBGATE"},
+      {"requirement":"policy/authorization live lane","implementation":"OPA/OpenFGA via Fables","state":"LIVE_RUNTIME_PASS_SUBLANE"}
+    ],
+    "equivalent_or_partial_existing": [
+      {"architecture_name":"contracts_yaiwes.py","equivalent":"wordflow_loop/contracts.py + contracts/workflow.dsl.yaml","state":"PARTIAL_EQUIVALENT; verify product-level schemas before generating duplicate file"},
+      {"architecture_name":"validator_rules.py","equivalent":"wordflow_loop/governance/validator.py + sheriff/verifier/judge/guardian chain","state":"EQUIVALENT_CORE; product-specific validation may still be missing"},
+      {"architecture_name":"final_judge_task.py","equivalent":"wordflow_loop/governance/judge.py","state":"PARTIAL_EQUIVALENT; global coverage/reconstruction inputs missing"},
+      {"architecture_name":"strategy_delta.py","equivalent":"layer_06_source_evolution.py decision ladder + GAP loop contract","state":"PARTIAL_EQUIVALENT; retry orchestration across global tasks not closed"},
+      {"architecture_name":"agent_task.py","equivalent":"Stabilize AgentLoopTask/LLMTask/ToolRegistry vendor capability","state":"REUSE_FOUND_NOT_YAIWES_ADAPTED"}
+    ],
+    "genuinely_missing_or_not_end_to_end_evidenced": [
+      {"architecture_name":"memory_adapter.py / Memory-Audit Orchestrator","owner_lane":"SOL_GPT1","reason":"GET_CONTEXT/GET_MEMORY/GET_EVIDENCE + canonical write pipeline are specified but not implemented end-to-end in current runtime boundary"},
+      {"architecture_name":"agent YAIWES boundary","owner_lane":"SOL_GPT1","reason":"runtime/src/agent is placeholder; memory/tools/workflow isolation adapter missing"},
+      {"architecture_name":"router_adapter.py / platform-resource router","owner_lane":"SOL_GPT2","reason":"no end-to-end capability/resource router proving AVF/WHPX/KVM/QEMU/iOS-Web fail-closed behavior"},
+      {"architecture_name":"UEK/sandbox control-plane","owner_lane":"SOL_GPT2","reason":"runtime/src/uek is placeholder; lifecycle/backend selection not materialized there"},
+      {"architecture_name":"integration_state.py","owner_lane":"SOL_GPT3","reason":"runtime/src/integration has README only; global integration state implementation missing"},
+      {"architecture_name":"consolidator_task.py","owner_lane":"SOL_GPT3","reason":"no executable project-level consolidator found in current source search/cross-check"},
+      {"architecture_name":"coverage_task.py","owner_lane":"SOL_ORQUESTADOR","reason":"G12 requirement→layer→file/function→test→evidence matrix remains incomplete"},
+      {"architecture_name":"audit_task.py","owner_lane":"SOL_ORQUESTADOR/SOL_GPT1","reason":"governance audit exists conceptually, but Memory/Audit orchestration over evidence/context is not end-to-end implemented"},
+      {"architecture_name":"chat_api.py","owner_lane":"PRODUCT/API_LATER","reason":"source order explicitly places API after core/global integration; no need to create before lower gates close"},
+      {"architecture_name":"project-level recovery/control-plane","owner_lane":"SOL_ORQUESTADOR","reason":"durable ledger subgates pass, but runtime/src/recovery is placeholder and workspace/multi-host failover E2E is unproven"}
+    ]
+  },
+  "g12_status": {
+    "global_verified_closed": false,
+    "reason": "Mandatory Memory/Audit, Agent boundary, Sandbox/UEK, Integration/Consolidator, project recovery and platform routing still lack complete code/test/evidence coverage.",
+    "next_required_nodes": [
+      "S1-09-MEMORY-AGENT-BOUNDARY",
+      "S2-08-PLATFORM-SANDBOX-ROUTER",
+      "S3-10-INTEGRATION-FABLES-E2E",
+      "O-02-MULTI-SANDBOX-RECOVERY-E2E"
+    ]
+  },
+  "tests_or_checks": [
+    "Fresh main readback before report",
+    "Current Wordflow runner/DSL readback",
+    "Current runtime boundary readback",
+    "Repository code searches for GET_CONTEXT, consolidator and final_judge returned no implementation matches"
+  ],
+  "gaps": [
+    "G12_NOT_100_PERCENT",
+    "MEMORY_AUDIT_E2E_GAP",
+    "AGENT_BOUNDARY_GAP",
+    "PLATFORM_SANDBOX_ROUTER_GAP",
+    "INTEGRATION_CONSOLIDATOR_GAP",
+    "PROJECT_RECOVERY_E2E_GAP"
+  ],
+  "next_free_node": "O-02-MULTI-SANDBOX-RECOVERY-E2E"
+}
