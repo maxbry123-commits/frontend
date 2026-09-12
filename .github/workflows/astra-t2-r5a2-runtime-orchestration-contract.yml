@@ -1,0 +1,28 @@
+name: astra-t2-r5a2-runtime-orchestration-contract
+
+on:
+  push:
+    paths:
+      - 'UI YAIWES interface/Fromtend/modules/M_RUNTIME_ORCHESTRATION/runtime-orchestration-contract.mjs'
+      - 'UI YAIWES interface/Fromtend/modules/M_RUNTIME_ORCHESTRATION/tests/runtime-orchestration-contract.test.mjs'
+      - '.github/workflows/astra-t2-r5a2-runtime-orchestration-contract.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend-contract-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          lfs: false
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Run RUN-07 RUN-08 frontend contract harness
+        run: node --test 'UI YAIWES interface/Fromtend/modules/M_RUNTIME_ORCHESTRATION/tests/runtime-orchestration-contract.test.mjs'
