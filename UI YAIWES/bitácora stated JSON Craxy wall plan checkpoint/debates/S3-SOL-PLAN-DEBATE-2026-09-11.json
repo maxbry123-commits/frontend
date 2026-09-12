@@ -1,19 +1,11 @@
 {
   "schema": "yaiwes.crazy-wall.debate.v1",
   "debate_id": "S3-DEBATE-SOLPLAN-20260911-01",
-  "status": "ROUND18_Q1_Q4_ACTIONABLE_PIXIJS_RUNTIME_PASS_NOT_WIRED",
+  "status": "ROUND19_Q1_Q4_ACTIONABLE_REACT_TOASTIFY_RETRY_QUEUED",
   "from": "Sol gpt 3 🕵️‍♀️ backend",
   "to": "🌞👷 sol osquestador plan 🎯",
   "mode": "FAIL_CLOSED_LOOP",
   "created_date": "2026-09-11",
-  "sources_read_fresh": {
-    "main_sha_seen": "6f123cf5ebdbdf918cb82b89c1597112f9c128f7",
-    "crazy_wall": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json",
-    "state": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
-    "s3_state": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT3-BACKEND-STATE.json",
-    "coordinator_reply": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-PLAN-ORQUESTADOR-REPLY-S3.json",
-    "coordinator_reply_blob_sha": "c85b3bf0c6e170ffd84a140cf03273379bdb9818"
-  },
   "coordinator_response": {
     "response_from": "🌞👷 sol osquestador plan 🎯",
     "response_to": "S3-DEBATE-SOLPLAN-20260911-01",
@@ -21,23 +13,10 @@
     "status": "ACTIONABLE_REPLY_CONSUMED"
   },
   "q1_q4_actionable": {
-    "Q1": {
-      "decision": "BLOCK_DESTINATION_AUTHORIZATION_AND_KEEP_FABLES_FAIL_CLOSED",
-      "action": "No new literal DEST_DIR is authorized for big-AGI or Vercel AI SDK. Historical runtime targets remain non-authoritative. Generic socket remains modular/non-canonical until A2 Fables verification succeeds.",
-      "historical_destinations_authoritative": false
-    },
-    "Q2": {
-      "decision": "AUTHORIZED_INDEPENDENT_S3_TESTS_21_40_NO_WIRING",
-      "action": "Continue source/vendor/runtime tests that do not require Fables and do not write S1/S2-owned paths. Record command, assertions, run/log and StrategyDelta on failure. Never promote WIRED from test PASS."
-    },
-    "Q3": {
-      "decision": "VITE_HANDOFF_ACCEPTANCE_EXPLICIT",
-      "action": "Accept S1→S3 only with immutable source ref/tree SHA + canonical motor identity/commit + failed=0 + pending=0 + exact destination read-back/hash + authorized touched paths + handoff file SHA. Vendor test alone is insufficient."
-    },
-    "Q4": {
-      "decision": "WIRE_UNRESOLVED_01_20_FIRST_AFTER_FABLES",
-      "action": "When Fables becomes VERIFIED, wire the three unresolved 01-20 items first; then process 21-40 one component/node at a time."
-    }
+    "Q1": {"decision":"BLOCK_DESTINATION_AUTHORIZATION_AND_KEEP_FABLES_FAIL_CLOSED","historical_destinations_authoritative":false},
+    "Q2": {"decision":"AUTHORIZED_INDEPENDENT_S3_TESTS_21_40_NO_WIRING","action":"Continue source/vendor/runtime tests that do not require Fables and do not write S1/S2-owned paths. Record command, assertions, run/log and StrategyDelta on failure. Never promote WIRED from test PASS."},
+    "Q3": {"decision":"VITE_HANDOFF_ACCEPTANCE_EXPLICIT","action":"Accept S1→S3 only with immutable source ref/tree SHA + canonical motor identity/commit + failed=0 + pending=0 + exact destination read-back/hash + authorized touched paths + handoff file SHA."},
+    "Q4": {"decision":"WIRE_UNRESOLVED_01_20_FIRST_AFTER_FABLES","action":"When Fables becomes VERIFIED, wire the three unresolved 01-20 items first; then process 21-40 one component/node at a time."}
   },
   "hard_gates": {
     "no_lfs": true,
@@ -45,92 +24,40 @@
     "no_foreign_state_edits": true,
     "no_historical_destination_as_authorization": true,
     "fables_a2_required_for_socket_promotion": true,
-    "fables_a2": {
-      "run": 34569640745,
-      "conclusion": "cancelled",
-      "decision": "NOT_VERIFIED_KEEP_GENERIC_SOCKET_MODULAR"
-    }
+    "fables_a2": {"run":34569640745,"conclusion":"cancelled","decision":"NOT_VERIFIED_KEEP_GENERIC_SOCKET_MODULAR"}
   },
-  "verified_prior_s3_evidence": {
-    "l06": {"state":"PRESENT_CI_PASS_NOT_WIRED","run":34568696244,"job":103165989964,"test":"pytest -q => 4 passed in 0.06s"},
-    "22_react_virtuoso": {"workflow":".github/workflows/sol-gpt3-s3-virtuoso-repair2-20260911.yml","workflow_blob_sha":"de63583f93c88952f95ba8ee56e7da4da72211da","run":34573280051,"job":103179929841,"result":"COMPONENT_TEST_FAIL_DECOMPOSED_NOT_PASS","passing_tests":489,"browser_import_failed_suites":4,"functional_failures":["custom-scroll-parent-rebind: expected listener count > 0 but got 0","model-state-persistence: expected reset row Beta but observed 2Alpha"],"strategy_delta":"NO_BLIND_PATCH"},
-    "25_tailwind": {"workflow":".github/workflows/sol-gpt3-s3-tailwind-repair2-20260911.yml","workflow_blob_sha":"6d079505c4ac2cbd1c2db821f6604b0316552ac2","head_sha":"b2e9fa7576bc79c6f4784d6b64ed36659905a6b7","run":34573293066,"job":103179970091,"test_log":"5496 passed, 1 skipped","package_readback_blob":"7d41a93ef3eed13ab91a023e9f6f48b73bea7b58","result":"RUNTIME_PASS_NOT_WIRED"},
-    "27_shiki": {"workflow":".github/workflows/sol-gpt3-s3-shiki-repair2-20260911.yml","workflow_blob_sha":"896497c37aa483d19a11934550d26e8ad98cdc9a","head_sha":"3eb99f29278aa07f215ceaf27cdf8edcf066d356","run":34573431767,"job":103180405189,"build_log":"23/23 successful","test_log":"78 files / 616 tests passed","package_readback_blob":"055e8dbced04e9eb9b187361a9278e144002e0a4","result":"RUNTIME_PASS_NOT_WIRED"},
-    "28_codemirror": {"result":"CURRENT_SOURCE_PRESENT_INCOMPLETE_UPSTREAM_WORKSPACE_NOT_PASS","source_match_current_main":"UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6","tree_sha":"1a7c7ade9f04041dc37a3c5eaa6e461f2009cbd4","historical_replacement_inferred":false},
-    "30_xterm": {"workflow":".github/workflows/sol-gpt3-s3-xterm-repair3-20260911.yml","workflow_blob_sha":"9fac40fbe48c265c64a90d8571861d68520ff1ce","head_sha":"a4c1b66a63d5ab01bb178031bb0dda700b21a892","run":34573682810,"job":103181214320,"test_log":"2407 passing","package_readback_blob":"cb7d146f08d880294712ee562a50992e204da22b","result":"RUNTIME_PASS_NOT_WIRED"}
+  "preserved_prior_evidence": {
+    "l06":{"state":"PRESENT_CI_PASS_NOT_WIRED","run":34568696244,"job":103165989964},
+    "22_react_virtuoso":{"result":"COMPONENT_TEST_FAIL_DECOMPOSED_NOT_PASS","passing_tests":489},
+    "25_tailwind":{"run":34573293066,"job":103179970091,"result":"RUNTIME_PASS_NOT_WIRED"},
+    "27_shiki":{"run":34573431767,"job":103180405189,"result":"RUNTIME_PASS_NOT_WIRED"},
+    "28_codemirror":{"tree_sha":"1a7c7ade9f04041dc37a3c5eaa6e461f2009cbd4","result":"CURRENT_SOURCE_PRESENT_INCOMPLETE_UPSTREAM_WORKSPACE_NOT_PASS"},
+    "30_xterm":{"run":34573682810,"job":103181214320,"result":"RUNTIME_PASS_NOT_WIRED"},
+    "31_xyflow":{"job":103182143881,"result":"TEST_FAIL_NOT_PASS"},
+    "32_rete":{"job":103182143843,"result":"RUNTIME_PASS_NOT_WIRED"},
+    "33_sigma":{"result":"COVERAGE_GAP_NOT_PASS"},
+    "34_gsap":{"job":103182143968,"result":"RUNTIME_PASS_NOT_WIRED"},
+    "35_lucide":{"job":103182143627,"result":"TEST_FAIL_NOT_PASS"},
+    "oss11_testcontainers":{"runs":[34648576199,34656458039],"result":"TEST_CANCELLED_NOT_PASS"},
+    "pixijs":{"run":34674538504,"job":103501914450,"result":"RUNTIME_PASS_NOT_WIRED"}
   },
-  "round10_batch31_35_audit": {
-    "response_to":"S3-DEBATE-SOLPLAN-20260911-01","authorization":"Coordinator permits independent source/vendor/runtime tests for 21-40 while wiring remains gate-locked.","workflow":".github/workflows/sol-gpt3-s3-batch31-35-tests-20260911.yml","workflow_blob_sha_at_tested_head":"180f8766bc5947b77ec685d8fb8fd5dcf08f0fc0","tested_head_sha":"b4a47773c95d719e5b42ea9089df03772944365f","run":34573966326,"run_conclusion":"failure","constraints_verified":["contents: read","persist-credentials: false","no LFS instruction","no force instruction","test workflow does not mutate repository"],
-    "31_xyflow":{"route":"UI YAIWES/componentes open soure UI YAIWES/XYFlow React Flow/code -> runner temp -> pnpm install --frozen-lockfile -> build -> typecheck -> Playwright Chromium -> pnpm test:react","job":103182143881,"steps_before_test":"PASS","test_step":"Run upstream React Playwright tests","test_step_result":"FAILURE","package_readback_blob":"7dd02bcaf610a74ce528864f179453a37f71b797","result":"TEST_FAIL_NOT_PASS"},
-    "32_rete":{"route":"UI YAIWES/componentes open soure UI YAIWES/Rete.js -> runner temp -> npm ci -> test -> perf -> lint -> build","job":103182143843,"test_perf_lint_build":"PASS","package_readback_blob":"e552de643150795dd8a11abb49955d60af96fb87","result":"RUNTIME_PASS_NOT_WIRED"},
-    "33_sigma":{"workflow_job_present":false,"result":"COVERAGE_GAP_NOT_PASS"},
-    "34_gsap":{"route":"UI YAIWES/componentes open soure UI YAIWES/GSAP -> npm pack exact snapshot -> clean consumer -> CommonJS smoke -> ESM smoke","job":103182143968,"cjs_smoke":"PASS","esm_smoke":"PASS","package_readback_blob":"6d9c0c424b35d554b930f5efc1e2f43e006809cd","result":"RUNTIME_PASS_NOT_WIRED"},
-    "35_lucide":{"route":"UI YAIWES/componentes open soure UI YAIWES/Lucide/code -> runner temp -> pnpm install --frozen-lockfile -> pnpm test -> pnpm build","job":103182143627,"install":"PASS","test_step_result":"FAILURE","build":"SKIPPED_AFTER_TEST_FAILURE","package_readback_blob":"5c9ddb24620c206652dea4218999fd3f53a0920a","result":"TEST_FAIL_NOT_PASS"},
-    "wiring_promotion":false,"fables_promotion":false,"foreign_state_modified":false
-  },
-  "round11_13_oss11_testcontainers": {
-    "response_to":"S3-DEBATE-SOLPLAN-20260911-01","handoff_node":"OSS11-S3-01-TESTCONTAINERS","authorization_source":"UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/DISPATCH-OSS11-SOL123-2026-09-11.json","allowed_paths":["runtime/src/integration/**","runtime/tests/**"],
-    "claim":{"state":"OWNER_CLAIMED","commit":"052b45306f4b70c4db8f21ab43abbb390b474d2a","readback_blob":"47db27d7b4b268fdf8a8fd46469d565b4d6a0979"},
-    "harness":{"route":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_testcontainers_httpx_real_adapter.py","commit":"8958c3a584d1e60ea0adfeee0c4f6e6e1dc546b4","readback_blob":"bfc9d1db7e6af6a4dbc0fbb84895fc46754f55a5","adapter":"plugins.httpx_adapter"},
-    "strategy_delta":{"commit":"e75cd3f5089845b45d87cad2ed595f0c07405039","readback_blob":"1848ed7b8856de0cfbebe055ce3475a03dddb768","local_source_install_timeout_seconds":120,"docker_lifecycle_timeout_seconds":180},
-    "attempts":[{"run":34648576199,"job":103425149331,"conclusion":"cancelled"},{"run":34656458039,"job":103449840014,"conclusion":"cancelled","runtime_step":"CANCELLED_AFTER_9M58S"}],
-    "verdict":"TEST_CANCELLED_NOT_PASS","no_blind_third_patch":true,"lfs":false,"force":false,"foreign_state_modified":false
-  },
-  "round14_16_codemirror": {
-    "response_to":"S3-DEBATE-SOLPLAN-20260911-01","route":"UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6","package_readback_blob":"f8523b84db19f68e735fa430792798aeac54c4d2",
-    "runs":[{"run":34662924625,"job":103469005739,"install":"FAIL","result":"INSTALL_FAIL_NOT_PASS"},{"run":34666274252,"job":103478672955,"install_without_lifecycle_scripts":"PASS","upstream_node_tests":"FAIL","result":"TEST_FAIL_AFTER_INSTALL_PASS_NOT_WIRED"},{"run":34669533291,"job":103488124661,"install_without_lifecycle_scripts":"PASS","prepare":"FAIL","upstream_node_tests":"SKIPPED","result":"PREPARE_FAIL_NOT_PASS"}],
-    "forensic_source":{"tree_sha":"1a7c7ade9f04041dc37a3c5eaa6e461f2009cbd4","cm_blob":"428656171c85ad79ac431f26cac6195a582f6d37","packages_blob":"6b0bb50d0cd8c908feb0691ff7a8c7dbb7521e3"},
-    "root_cause_classification":"CURRENT_VENDOR_SNAPSHOT_IS_UPSTREAM_DEV_SCAFFOLD_WITHOUT_DECLARED_WORKSPACE_PACKAGE_DIRECTORIES",
-    "decision":"STOP_BLIND_RETRIES; #28 remains SOURCE_PRESENT_BUT_INCOMPLETE_NOT_PASS. A complete canonical source acquisition/handoff is required before upstream prepare/test can be meaningful.",
-    "wiring_promotion":false,"fables_promotion":false,"lfs":false,"force":false,"foreign_state_modified":false
-  },
-  "round17_pixijs_current_validation": {
+  "round19_react_toastify": {
     "response_to":"S3-DEBATE-SOLPLAN-20260911-01",
-    "authorization":"Q2 permits independent 21-40 source/vendor/runtime tests; no wiring promotion.",
-    "route":"UI YAIWES/componentes open soure UI YAIWES/PixiJS -> npm install --ignore-scripts -> npm run build -> npm run test:types",
-    "source":{"package":"pixi.js","version":"8.20.1","nvmrc":"v24","nvmrc_blob":"54c65116f15a6832459847f69931fe830411bbbc","package_lock_blob":"dcdf62c6afed9bd8e9508a468f3503661f37bb83","package_lock_content":"EMPTY_READBACK"},
-    "workflow":".github/workflows/sol-gpt3-s3-pixijs-current-20260912.yml",
-    "workflow_commit":"1cdef1a6ce35f0389761011d3dd559e6cde91e98",
-    "workflow_readback_blob":"4d3fde4261a40dee688fdfda84d9e821152c17a3",
-    "constraints":["contents: read","persist-credentials: false","no LFS","no force","no repository mutation by test job"],
-    "run":{"run":34674538504,"job":103501914450,"head_sha":"1cdef1a6ce35f0389761011d3dd559e6cde91e98","status_at_round_write":"in_progress","result":"NOT_PROMOTED_PENDING_BUILD_AND_TYPE_TEST_LOG"},
-    "wiring_promotion":false,"fables_promotion":false,"foreign_state_modified":false
-  },
-  "round18_pixijs_terminal": {
-    "response_to":"S3-DEBATE-SOLPLAN-20260911-01",
-    "authorization":"Coordinator Q2 explicitly permits independent 21-40 source/vendor/runtime tests and forbids WIRED promotion from test PASS.",
-    "route":"UI YAIWES/componentes open soure UI YAIWES/PixiJS -> Node 24 -> npm install --ignore-scripts --no-audit --no-fund -> npm run build -> npm run test:types",
-    "source_readback":{"package_path":"UI YAIWES/componentes open soure UI YAIWES/PixiJS/package.json","package_blob":"5e2bc1f0b2ae278ae50ecf87cfe58d69dce6a07e","package":"pixi.js","version":"8.20.1","scripts_verified":["build=node ./scripts/build.mts","test:types=node ./scripts/test.mts types"]},
-    "workflow":{"path":".github/workflows/sol-gpt3-s3-pixijs-current-20260912.yml","blob":"4d3fde4261a40dee688fdfda84d9e821152c17a3","tested_head":"1cdef1a6ce35f0389761011d3dd559e6cde91e98","contents_read":true,"persist_credentials":false,"lfs":false,"force":false},
-    "test":{"run":34674538504,"job":103501914450,"status":"completed","conclusion":"success","steps":{"readback_metadata":"PASS","install":"PASS","build":"PASS","upstream_type_tests":"PASS"},"started_at":"2026-09-12T05:02:02Z","completed_at":"2026-09-12T05:10:23Z"},
-    "verdict":"RUNTIME_PASS_NOT_WIRED",
-    "wiring_promotion":false,"fables_promotion":false,"foreign_state_modified":false
+    "authorization":"Q2 independent 21-40 source/vendor/runtime test; no wiring promotion.",
+    "route":"UI YAIWES/componentes open soure UI YAIWES/React-Toastify -> Node 24 -> pnpm install --frozen-lockfile --ignore-scripts -> pnpm build -> pnpm test:run",
+    "source_readback":{"package_blob":"2ac035f1cf4caac1766a90ca2035b0d35b519087","package":"react-toastify","version":"11.1.0","cypress_config_blob":"c1172bb01239b971b267c4f69a60deb833e3112e"},
+    "attempt1":{"workflow_blob":"773ea7ea05b36230aa19ca28906a83f93fc57e91","head_sha":"6d26fe42b851d5459117f78de1bf03795f733686","run":34676507074,"job":103507205138,"status":"completed","conclusion":"failure","steps":{"metadata":"PASS","install":"PASS","build":"PASS","cypress_component_tests":"FAIL"},"result":"CYPRESS_TEST_STEP_FAIL_NOT_PASS"},
+    "strategy_delta":{"reason":"Install used --ignore-scripts, so Cypress package lifecycle did not install its browser binary; add explicit pnpm exec cypress install before test while preserving upstream test:run.","workflow_commit":"d852f71342e0d43424b9a0f47a49c504900baa95","workflow_readback_blob":"54879d884bf70cb6bf101fa80ef0a3c328e3bd1a","constraints":["contents: read","persist-credentials: false","no LFS","no force"]},
+    "retry":{"run":34678550136,"head_sha":"d852f71342e0d43424b9a0f47a49c504900baa95","status_at_write":"queued","result":"NOT_PROMOTED_PENDING_TERMINAL_LOG"},
+    "wiring_promotion":false,
+    "fables_promotion":false,
+    "foreign_state_modified":false
   },
   "debate_turns": [
-    {"turn":1,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"OPEN_DEBATE","result":"Q1-Q4 published."},
-    {"turn":2,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"LOOP_FOLLOWUP","result":"Independent queue continued without treating silence as authorization."},
-    {"turn":3,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"LOOP_DEBATE_CHALLENGE","result":"Fail-closed boundaries maintained."},
-    {"turn":4,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"COORDINATOR_RESPONSE_POLL","result":"No reply at that poll."},
-    {"turn":5,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"LOOP_NO_SILENT_AUTHORIZATION","result":"Silence not treated as authorization."},
-    {"turn":6,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"ANSWER_COORDINATOR_REPLY_AND_EXECUTE","result":"Coordinator reply consumed; 21-40 independent work continued."},
-    {"turn":7,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"ROUND3_CROSSCHECK_L06_FABLES_BATCH21_40","result":"L06/Fables/batch cross-check completed."},
-    {"turn":8,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CONSUME_EXPLICIT_COORDINATOR_REPLY_Q1_Q4","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Q1-Q4 made actionable; A2 remained NOT_VERIFIED."},
-    {"turn":9,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"REVALIDATE_A2_AND_QUEUE","result":"No false PASS or historical destination authorization."},
-    {"turn":10,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"XTERM_RUNTIME_PASS","result":"#30 RUNTIME_PASS_NOT_WIRED."},
-    {"turn":11,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"TAILWIND_SHIKI_RUNTIME_PASS","result":"#25/#27 RUNTIME_PASS_NOT_WIRED; #22 failed upstream tests."},
-    {"turn":12,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_CURRENT_SOURCE_GAP","result":"#28 CURRENT_SOURCE_READBACK_GAP_NOT_PASS."},
-    {"turn":13,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"DECOMPOSE_REACT_VIRTUOSO_FAILURES","result":"#22 failure separated into browser-import and functional failures; no blind patch."},
-    {"turn":14,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"AUDIT_BATCH31_35_ROUTE_SHA_READBACK_TEST","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"#32 Rete and #34 GSAP PASS_NOT_WIRED; #31 XYFlow and #35 Lucide TEST_FAIL_NOT_PASS; #33 coverage gap."},
-    {"turn":15,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CLAIM_AND_EXECUTE_OSS11_S3_TESTCONTAINERS","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"OSS11-S3-01 claimed and disposable Testcontainers→HTTPX harness added."},
-    {"turn":16,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"OSS11_S3_TIMEOUT_STRATEGY_DELTA_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"First canonical run cancelled at timeout; bounded test-only delta applied."},
-    {"turn":17,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"OSS11_S3_RETRY_FINAL_FAIL_CLOSED","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Retry cancelled at canonical ceiling; no third blind patch."},
-    {"turn":18,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_INSTALL_FAILURE_STRATEGY_DELTA","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Current CodeMirror source verified; install boundary isolated."},
-    {"turn":19,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_TEST_BOUNDARY_AND_PREPARE_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Install PASS after lifecycle isolation; prepare build explicitly tested."},
-    {"turn":20,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"CODEMIRROR_FORENSIC_INCOMPLETE_WORKSPACE_CLASSIFICATION","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"#28 SOURCE_PRESENT_BUT_INCOMPLETE_NOT_PASS; blind retries stopped."},
-    {"turn":21,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"PIXIJS_CURRENT_READONLY_VALIDATION_START","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"PixiJS validation started at run 34674538504."},
-    {"turn":22,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"PIXIJS_RUNTIME_PASS_CLASSIFY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Run 34674538504/job 103501914450 SUCCESS: metadata, install, build and upstream type tests PASS. Classified RUNTIME_PASS_NOT_WIRED; no Fables/socket promotion."}
+    {"turn":22,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"PIXIJS_RUNTIME_PASS_CLASSIFY","result":"RUNTIME_PASS_NOT_WIRED"},
+    {"turn":23,"author":"Sol gpt 3 🕵️‍♀️ backend","action":"REACT_TOASTIFY_FAILURE_AND_BOUNDED_RETRY","response_to":"S3-DEBATE-SOLPLAN-20260911-01","result":"Attempt1 build PASS/Cypress step FAIL; explicit Cypress binary install added; retry 34678550136 queued. No WIRED/Fables promotion."}
   ],
-  "next_action": {"owner":"S3","action":"Reread coordinator/Crazy Wall before the next FREE 21-40 node; continue independent test evidence only. Do not wire until Fables A2 is VERIFIED and explicit handoff prerequisites are satisfied.","status":"EXECUTING_FAIL_CLOSED"},
-  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_PIXIJS_RUNTIME_PASS_NOT_WIRED",
+  "next_action":{"owner":"S3","action":"Read terminal retry evidence for run 34678550136; classify fail-closed. Continue only Q2-authorized independent S3 work. Do not wire until Fables A2 VERIFIED.","status":"EXECUTING_FAIL_CLOSED"},
+  "last_poll_result":"COORDINATOR_REPLY_CONSUMED_Q1_Q4_ACTIONABLE_REACT_TOASTIFY_RETRY_QUEUED",
   "closure":"DO_NOT_CLOSE_ACTIVE_DEBATE_LOOP"
 }
