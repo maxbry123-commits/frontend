@@ -47,6 +47,10 @@ jobs:
         working-directory: UI YAIWES/componentes open soure UI YAIWES/React-Toastify
         run: pnpm install --frozen-lockfile --ignore-scripts
 
+      - name: Install Cypress browser binary
+        working-directory: UI YAIWES/componentes open soure UI YAIWES/React-Toastify
+        run: pnpm exec cypress install
+
       - name: Build current source
         working-directory: UI YAIWES/componentes open soure UI YAIWES/React-Toastify
         run: pnpm build
