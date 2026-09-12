@@ -10,6 +10,20 @@ WORKFLOW_OWNER = "stabilize_core"
 WORKFLOW_CONTRACT = "tel.workflow/v3"
 STABILIZE_AGENT_LOOP_TYPE = "stabilize.llm.tasks.AgentLoopTask"
 STABILIZE_TOOL_REGISTRY_TYPE = "stabilize.llm.tools.ToolRegistry"
+LLM_CONTEXT_KEYS = frozenset(
+    {
+        "prompt",
+        "system",
+        "messages",
+        "model",
+        "temperature",
+        "base_url",
+        "api_key",
+        "api",
+        "max_iterations",
+        "output_key",
+    }
+)
 
 
 class AgentBoundaryError(ValueError):
@@ -133,10 +147,11 @@ def build_stage_context(
     context_pack: Mapping[str, Any],
     llm_input: Mapping[str, Any],
 ) -> dict[str, Any]:
-    """Build context consumed by Stabilize AgentLoopTask.
+    """Build the closed context consumed by Stabilize AgentLoopTask.
 
     Context memory arrives as a read-only pack from the upstream Memory/Audit
-    boundary. No writer or canonical-memory mutation callback is accepted.
+    boundary. Unknown LLM context keys fail closed so a caller cannot smuggle
+    a memory writer or another orchestration control through this adapter.
     """
 
     request.validate()
@@ -144,6 +159,10 @@ def build_stage_context(
         raise AgentBoundaryError("context_pack_mapping_required")
     if not isinstance(llm_input, Mapping):
         raise AgentBoundaryError("llm_input_mapping_required")
+
+    unknown = sorted(set(llm_input) - LLM_CONTEXT_KEYS)
+    if unknown:
+        raise AgentBoundaryError(f"unsupported_llm_context_keys:{','.join(unknown)}")
     if not llm_input.get("prompt") and not llm_input.get("messages"):
         raise AgentBoundaryError("llm_prompt_or_messages_required")
 
@@ -163,13 +182,42 @@ def _resolve_stabilize_agent_loop_type() -> type[Any]:
     return agent_loop_type
 
 
+def _registered_tool_names(tools: Any) -> tuple[str, ...]:
+    if tools is None:
+        return ()
+    schemas = getattr(tools, "schemas", None)
+    if not callable(schemas):
+        raise AgentBoundaryError("tool_registry_schemas_required")
+
+    names: list[str] = []
+    for schema in schemas():
+        if not isinstance(schema, Mapping):
+            raise AgentBoundaryError("tool_schema_mapping_required")
+        function = schema.get("function")
+        if not isinstance(function, Mapping):
+            raise AgentBoundaryError("tool_schema_function_required")
+        name = function.get("name")
+        if not isinstance(name, str) or not name:
+            raise AgentBoundaryError("tool_schema_name_required")
+        names.append(name)
+    return tuple(names)
+
+
 def build_agent_loop(
+    request: AgentBoundaryRequest,
     *,
     client: Any = None,
     tools: Any = None,
     agent_loop_type: type[TAgentLoop] | None = None,
 ) -> TAgentLoop:
     """Compose the existing Stabilize AgentLoopTask; never implement another loop."""
+
+    request.validate()
+    registered = _registered_tool_names(tools)
+    if set(registered) != set(request.allowed_tools) or len(registered) != len(
+        request.allowed_tools
+    ):
+        raise AgentBoundaryError("tool_registry_authorization_mismatch")
 
     loop_type: type[Any] = agent_loop_type or _resolve_stabilize_agent_loop_type()
     return loop_type(client=client, tools=tools)
