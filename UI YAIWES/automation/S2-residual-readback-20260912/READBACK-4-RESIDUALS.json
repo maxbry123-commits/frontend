@@ -1,0 +1,17 @@
+{
+  "schema": "yaiwes.s2.residual-readback.v1",
+  "role": "SOL_GPT2_BACKEND",
+  "node": "S2-03",
+  "observed_main_sha": "1da3d581da393b7935f390e9c55c039e9be414d6",
+  "canonical_final_root": "UI YAIWES/componentes open soure UI YAIWES",
+  "checks": {
+    "Vite": "404_ABSENT_AND_NOT_IN_ROOT_LISTING",
+    "Supabase": "404_ABSENT_AND_NOT_IN_ROOT_LISTING",
+    "DuckDB": "404_ABSENT_AND_NOT_IN_ROOT_LISTING",
+    "AVF": "404_ABSENT_AND_NOT_IN_ROOT_LISTING"
+  },
+  "present": 0,
+  "expected": 4,
+  "verdict": "FAIL_CLOSED_NOT_PRESENT",
+  "verified_closed_claimed": false
+}
