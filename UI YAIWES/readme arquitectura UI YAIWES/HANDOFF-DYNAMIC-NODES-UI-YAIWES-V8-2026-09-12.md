@@ -1,7 +1,7 @@
 # HANDOFF DINÁMICO DE NODOS — UI YAIWES — V8
 
 Fecha base: 2026-09-12  
-Reconciliación N04: 2026-09-13  
+Reconciliación N04 refrescada: 2026-09-13 07:03Z  
 Repo: `maxbry123-commits/frontend`  
 Branch: `main`  
 Contrato: `tel.workflow/v3`  
@@ -36,25 +36,27 @@ Prioridad: `REUSE_EXISTING > PATCH > ADAPT > GENERATE > NEW_DOWNLOAD`.
 
 ## Reconciliación N04 — vigente
 
-N02 `N02-TRACEABILITY-BIDIRECTIONAL` y N03 `N03-AUTO-AUDITOR-EVIDENCE` están `VERIFIED_CLOSED` en la Crazy Wall fresca. N04 quedó habilitado por esas dependencias y fue reclamado por `SOL GPT <10>` mediante claim aditivo fusionado en `e4d860f6d6fed9b744af5d43a63b813a522719a7`.
+N02 `N02-TRACEABILITY-BIDIRECTIONAL` y N03 `N03-AUTO-AUDITOR-EVIDENCE` están `VERIFIED_CLOSED` en la Crazy Wall fresca. N04 fue reclamado nuevamente por `SOL GPT <10>` sobre `main` `31d1531f07c0c3c377901dc2b21a8d404cf204ed` mediante claim commit `8db8457ece8bdeca0d2cf1e63671f7e1137c48f1`.
 
-`STATE.json` y `CHECKPOINT.json` dejaron de presentar el contexto V5/Action124 como verdad operativa vigente. Los snapshots anteriores permanecen preservados por sus blobs Git exactos y sólo son evidencia histórica.
+`STATE.json` y `CHECKPOINT.json` expresan ahora el mismo snapshot operativo y preservan por blob Git las revisiones anteriores. La reconciliación no reescribe historia y no presenta el contexto V5/Action124 como verdad operativa vigente.
 
-No se publican conteos históricos de nodos como porcentaje funcional del producto. La cola dinámica es la fuente para el estado individual de cada nodo y debe releerse antes de cada claim o cierre.
+Desde el HEAD observado al reclamar N04, `N33-MIRROR-TRANSPORT-CONTROL` ya está certificado como cerrado por commit `31d1531f07c0c3c377901dc2b21a8d404cf204ed`; no debe seguir tratándose como GAP operativo.
 
-N03 ya no debe tratarse como GAP histórico. Del mismo modo, cualquier afirmación previa sobre N21/N32/N33 u otros nodos debe validarse contra la Crazy Wall y contra claims/código actuales antes de actuar; un estado `FREE` desfasado no autoriza sobrescribir evidencia de un claim real.
+No se publican conteos históricos de nodos como porcentaje funcional del producto. La cola dinámica es la fuente para el estado individual de cada nodo y debe releerse antes de cada claim o cierre. Un estado `FREE` desfasado no autoriza sobrescribir evidencia de un claim real.
 
 El proyecto **no** está cerrado. `SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED`. N17 E2E, N31 UI FINAL y Final Judge siguen siendo gates downstream según sus dependencias actuales.
 
 ## Evidencia de reconciliación
 
-- Claim N04 merge: `e4d860f6d6fed9b744af5d43a63b813a522719a7`.
-- STATE reconciliado: commit `ab0276dae9f09ed0488250772728e16c6184c2a3`.
-- CHECKPOINT reconciliado: commit `678f587289ac6f59a01f6d7034eec1bbf34a30ce`.
-- Snapshot histórico completo de este Handoff antes de N04: blob `060062ab78a9f29839f6de2f7a356b637e61f696`.
-- Snapshot histórico STATE anterior: blob `6e9ba8cd30279fab0fca79381af31e2d55f64f54`.
-- Snapshot histórico CHECKPOINT anterior: blob `99f09dca8cb5bd3415506a9cadfc5152606eee41`.
+- Claim N04 actual: `8db8457ece8bdeca0d2cf1e63671f7e1137c48f1`.
+- HEAD fresco al claim: `31d1531f07c0c3c377901dc2b21a8d404cf204ed`.
+- STATE refrescado: commit `73ea812f35a8d8a8ede7f9e89f174e31a711de03`.
+- CHECKPOINT refrescado: commit `2d33fc130818d79a49ab5337527966484c377378`.
+- Snapshot Handoff inmediatamente anterior: blob `fafc8eeed180fd9e37e631d66e0d155b20cd2f04`.
+- Snapshot STATE inmediatamente anterior: blob `8238a9f1f664e4ed88f11ae46f3aa8f9bffb5044`.
+- Snapshot CHECKPOINT inmediatamente anterior: blob `9c68b1bf641463ef2933c0b83e4173e85b67ed05`.
+- Snapshots V5 históricos previos siguen preservados por Git: STATE `6e9ba8cd30279fab0fca79381af31e2d55f64f54`; CHECKPOINT `99f09dca8cb5bd3415506a9cadfc5152606eee41`; Handoff pre-N04 `060062ab78a9f29839f6de2f7a356b637e61f696`.
 
 ## Cierre operativo
 
-N04 sólo puede marcarse `VERIFIED_CLOSED` después de readback de Crazy Wall + STATE + CHECKPOINT + Handoff y de demostrar que los cuatro expresan la misma autoridad operativa, dependencias N02/N03 cerradas y proyecto global todavía abierto.
+N04 sólo puede marcarse `VERIFIED_CLOSED` después de readback de Crazy Wall + STATE + CHECKPOINT + Handoff y de demostrar que los cuatro expresan la misma autoridad operativa, dependencias N02/N03 cerradas y proyecto global todavía abierto. La propia fila N04 de Crazy Wall debe dejar de estar `FREE`; si no se puede actualizar de forma segura por concurrencia, N04 permanece fail-closed y debe repetirse el LOOP.
