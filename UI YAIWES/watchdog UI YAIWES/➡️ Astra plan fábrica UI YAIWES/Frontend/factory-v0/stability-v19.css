@@ -1,0 +1,25 @@
+/* YAIWES UI Factory V1.9 stability delta.
+   V1.8 files remain immutable; this stylesheet is loaded only by index-v19.html. */
+
+.context-scroll {
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: auto;
+}
+
+/* One contextual scroll surface: nested OSS catalog no longer captures wheel/touch. */
+.oss-grid {
+  max-height: none;
+  overflow: visible;
+}
+
+/* Touch/pen node movement is handled by app-v19 pointer events. */
+.node {
+  touch-action: none;
+}
+
+.node.is-pointer-moving {
+  cursor: grabbing;
+  will-change: left, top;
+}
