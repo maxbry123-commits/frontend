@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+const {captureVersionSnapshot,restoreVersionSnapshot,listVersionSnapshots}=await import('../src/version-store-v1.js');
+const memory=new Map();
+const storage={getItem:k=>memory.has(k)?memory.get(k):null,setItem:(k,v)=>memory.set(k,v)};
+const project={schema:'yaiwes.factory.project/v1',state:{version:3,components:[{id:'a',kind:'button',label:'A',x:1,y:2,w:100,h:60,props:{}}],selectedId:'a'},zoom:1.2,breakpoint:'tablet'};
+storage.setItem('yaiwes-factory-project-v19',JSON.stringify(project));
+storage.setItem('yaiwes-factory-config-v13',JSON.stringify({theme:{accent:'#abc'}}));
+const saved=captureVersionSnapshot(storage);
+assert.equal(saved.saved,true);assert.equal(saved.version,3);assert.equal(listVersionSnapshots(storage).length,1);
+const changed=structuredClone(project);changed.state.components[0].label='MUTATED';changed.zoom=.5;
+storage.setItem('yaiwes-factory-project-v19',JSON.stringify(changed));
+const restored=restoreVersionSnapshot(3,storage);
+assert.equal(restored.restored,true);
+assert.deepEqual(JSON.parse(storage.getItem('yaiwes-factory-project-v19')),project);
+assert.deepEqual(JSON.parse(storage.getItem('yaiwes-factory-config-v13')),{theme:{accent:'#abc'}});
+assert.equal(restoreVersionSnapshot(999,storage).restored,false);
+console.log('F_IO_027_VERSION_STORE=PASS');
