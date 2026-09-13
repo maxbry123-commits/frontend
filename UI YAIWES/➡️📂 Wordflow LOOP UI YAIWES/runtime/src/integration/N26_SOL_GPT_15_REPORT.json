@@ -1,0 +1,28 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "chat_id": "SOL GPT <15>",
+  "node_id": "N26-GLOBAL-INTEGRATION",
+  "state": "VERIFIED_CLOSED",
+  "claim_commit_sha": "72a664f9764ca7d7f9eb59e59676acc2720dec92",
+  "implementation_sha": "511d4eabd0bb2d419bea4f707e87273d8ae1ccac",
+  "test_sha": "bd6ff79d3b402be15c60ca219f53c5b3f36b0d30",
+  "certified_revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+  "run_id": 34739510224,
+  "job_id": 103678337638,
+  "test": "authoritative descendant CI SUCCESS; Wordflow and complete runtime suite both completed successfully; N26 code/test blobs exact-match certified revision",
+  "evidence": [
+    "FablesIntegrationBoundary reuses existing Fables socket and owns no scheduler/orchestrator",
+    "multi-lane PASS/GAP state requires evidence and explicit gaps",
+    "duplicate lanes, PASS without evidence, GAP without cause, undeclared capability, and pre-effect no-evidence paths are tested",
+    "current main integration_state.py blob equals certified revision blob 511d4eabd0bb2d419bea4f707e87273d8ae1ccac",
+    "current main test_integration_state.py blob equals certified revision blob bd6ff79d3b402be15c60ca219f53c5b3f36b0d30",
+    "GitHub Actions run 34739510224 job 103678337638 status completed conclusion success"
+  ],
+  "remaining_gaps": [],
+  "refutations": [
+    "schema steps satisfied without adding a second workflow owner",
+    "no N26 code/test drift exists after trusted CI revision",
+    "trusted CI plus exact blob parity establishes the prior CI-only gap is resolved"
+  ],
+  "pass_percent": 100
+}
