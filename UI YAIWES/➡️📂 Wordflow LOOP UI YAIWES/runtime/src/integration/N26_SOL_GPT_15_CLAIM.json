@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "chat_id": "SOL GPT <15>",
+  "node_id": "N26-GLOBAL-INTEGRATION",
+  "fresh_main_sha": "e3d86ac3accd8520efcb52ebcd1e1d295a6a21b6",
+  "write_scope": "runtime/src/integration/**|runtime/tests/test_integration*",
+  "claimed_at": "2026-09-13T07:03:00Z",
+  "state": "CLAIMED",
+  "execution_state": "IN_PROGRESS"
+}
