@@ -12,7 +12,21 @@
     "pure_regressions_20260913": "4 PASS",
     "preflight_scope": {
       "local_tests": 28,
-      "ci": "NOT_VERIFIED"
+      "ci": "success",
+      "ci_evidence": {
+        "run_id": 34732684153,
+        "job_id": 103658281949,
+        "sha": "344a714fcce5c41e4f8ed4ad4555b55f6f08d14e",
+        "url": "https://github.com/maxbry123-commits/frontend/actions/runs/34732684153",
+        "completed_at_utc": "2026-09-13T02:28:20Z",
+        "wordflow": "32 passed in 0.12s",
+        "runtime": "75 passed, 9 subtests passed in 627.90s",
+        "commands": [
+          "python -m pytest -q",
+          "python -m pytest -q tests"
+        ],
+        "scope_limit": "Specific commit and suites only; not latest HEAD certification, platform E2E, effect confinement or global closure"
+      }
     }
   },
   "node_id": "ASTRA-PREFLIGHT-SCOPE-003",
@@ -28,7 +42,21 @@
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13",
+  "updated_at_utc": "2026-09-13T04:04:22Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
-  "write_scope": []
+  "write_scope": [],
+  "last_observed_head": "ac91c4812f3bac30ed6d91e0033ea0e723ab693b",
+  "last_activation": {
+    "node": "X17-11",
+    "status": "ACTIVE_LOOP",
+    "delta": "Verified successor preflight CI run and job logs; preserved cancelled scanner run as cancelled.",
+    "code_changes": 0,
+    "tests_executed_locally": 0,
+    "next": "Revalidate ownership and reproduce remaining execution/evidence defect before claiming a minimal code patch.",
+    "refutations": [
+      "Success at 344a714 does not certify latest HEAD.",
+      "Cancelled scanner run remains cancelled.",
+      "32+75 tests and 9 subtests do not establish semantic coverage or product E2E."
+    ]
+  }
 }
