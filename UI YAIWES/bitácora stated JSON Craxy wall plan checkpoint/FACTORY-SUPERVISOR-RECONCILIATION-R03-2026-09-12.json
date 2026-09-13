@@ -1,0 +1,55 @@
+{
+  "schema": "yaiwes.factory.supervisor.reconciliation.v1",
+  "round": "R03",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "project": "FABRICA_UI_YAIWES_ONLY",
+  "observed_main_sha": "36c33750c51bc643483d4d625600ccbf3b440a7c",
+  "supervisor": "SOL_GPT_PLAN",
+  "authority": "fresh Factory code+tests+Actions/claim files > Factory Crazy Wall/STATE/CHECKPOINT > historical docs > chat/inference",
+  "project_separation_rule": "Wordflow N01-N31 remains excluded from Factory state and supervision writes.",
+  "fresh_delta_since_r02": [
+    {
+      "commit": "36c33750c51bc643483d4d625600ccbf3b440a7c",
+      "node": "F-UI-049",
+      "chat_id": "FACTORY-SOL-8-GPT",
+      "owner": "SOL 8 GPT",
+      "observed_state": "IN_PROGRESS",
+      "classification": "CLAIM_CONTRACT_GAP",
+      "valid_namespace": true,
+      "valid_node_assignment": true,
+      "missing_required_claim_fields": ["fresh_main_sha", "repo", "paths"],
+      "detail": "The claim uses the required Factory namespace and correct reserved node, but does not satisfy the frontend lane claim_fields contract because fresh_main_sha, repo, and exact paths are absent. Treat as fail-closed reservation only; do not promote evidence or accept product writes until corrected/read back against fresh HEAD."
+    }
+  ],
+  "collision_audit": {
+    "cross_project": "NO_NEW_FACTORY_WRITE_TO_WORDFLOW_OBSERVED",
+    "one_chat_one_node": "NO_NEW_DUPLICATE_FACTORY_NODE_OBSERVED_IN_THIS_DELTA",
+    "one_path_one_writer": "INCONCLUSIVE_UNTIL_F_UI_049_EXACT_PATHS_ARE_DECLARED"
+  },
+  "orders": {
+    "SOL 8 GPT": [
+      "Fresh-read main and R03 before any product write.",
+      "Repair/reissue F-UI-049 claim metadata with chat_id FACTORY-SOL-8-GPT, fresh_main_sha, repo, exact paths array and path-disjoint write_scope.",
+      "Do not touch Wordflow N*; do not persist or expose Hugging Face tokens; secret_ref only.",
+      "After valid readback continue F-UI-049 only; F-UI-050 remains next after producer terminal state."
+    ],
+    "SOL 6 GPT": ["F-UI-045 remains first reserved node; fresh-read and claim only with full claim_fields contract."],
+    "SOL 7 GPT": ["Finish only grandfathered F-MOD-033; then F-UI-047 with Factory-scoped namespace and full claim_fields contract."],
+    "SOL 2 GPT": ["Fresh-read F-AI-021/F-AI-022/F-AI-023; preserve producer-closed F-AI-019/F-AI-020."],
+    "SOL 3 GPT": ["Fresh-read unclaimed F-CTL-007/F-CTL-008/F-CTL-010/F-CTL-012; preserve F-CTL-011."],
+    "SOL 4 GPT": ["Remain on F-ED-001 until fresh mobile discrimination; no speculative product patch."],
+    "SOL 5 GPT": ["Do not reopen F-IO-027/F-IO-030; take only fresh path-disjoint Factory FREE node."],
+    "SOL 1 GPT": ["Fresh-read Factory only; no Wordflow state imported as Factory evidence."]
+  },
+  "pass_pending_review_hold": ["F-IO-030", "F-AI-019", "F-AI-020", "F-CTL-011", "F-MOD-032", "F-MOD-034", "F-ED-002", "F-ED-003", "F-ED-004", "F-ED-005", "F-ED-006"],
+  "next_supervisor_checks": [
+    "Verify corrected F-UI-049 claim fields and exact paths against fresh HEAD.",
+    "Verify no overlap with any newly active Factory writer before accepting SOL8 writes.",
+    "Verify F-MOD-033 terminal evidence and redirect SOL7 to F-UI-047.",
+    "Verify F-UI-045 claim by FACTORY-SOL-6-GPT.",
+    "Verify fresh F-ED-001 mobile rerun evidence.",
+    "Preserve PASS_PENDING_REVIEW until independent review."
+  ],
+  "closure_rule": "No PASS or VERIFIED_CLOSED from malformed claim metadata, producer-only evidence, workflow green alone, or presence-only evidence."
+}
