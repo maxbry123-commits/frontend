@@ -1,0 +1,31 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N16-CHECKPOINT-BYTES-HASH",
+  "chat_id": "SOL GPT <10>",
+  "state": "PASS_TECHNICAL_CENTRAL_GAP",
+  "reported_at": "2026-09-13T07:09:00Z",
+  "claim_commit_sha": "f60cfa6c405760c94a93f836dfcaa75307998501",
+  "implementation_commit_sha": "f7e9af7d846000857005c342d042e0214edbf6c1",
+  "blobs": {
+    "runtime/src/recovery/control_plane.py": "252b5b5bd47d082df4c2963e624c64990e160bb4",
+    "runtime/tests/test_recovery_control_plane.py": "9631f9d112913d66836fab3f7c2627030bfac411"
+  },
+  "trusted_descendant_ci": {
+    "run_id": 34739510224,
+    "job_id": 103678337638,
+    "head_sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+    "conclusion": "success",
+    "wordflow": "41 passed",
+    "runtime": "206 passed, 39 subtests passed"
+  },
+  "evidence": [
+    "implementation commit is an ancestor of successful trusted CI head",
+    "current implementation/test blobs exactly match Crazy Wall registered hashes",
+    "checkpoint bytes are SHA256 checked before recovery effects",
+    "tampered bytes and checkpoint read failures fail closed before recovery initialization"
+  ],
+  "remaining_gaps": [
+    "Crazy Wall N16 row still records historical global CI NOT_EXECUTED and must be reconciled atomically"
+  ],
+  "next_free_node": "READ_FRESH_REQUIRED"
+}
