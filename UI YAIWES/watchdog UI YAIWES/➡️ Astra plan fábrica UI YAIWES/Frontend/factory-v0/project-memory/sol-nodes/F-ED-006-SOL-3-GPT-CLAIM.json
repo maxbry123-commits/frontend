@@ -1,0 +1,15 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "chat_id":"SOL-3-GPT-2026-09-12T21:44-05:00",
+  "agent_name":"SOL 3 GPT 🆘",
+  "node_id":"F-ED-006",
+  "fresh_main_sha":"4146b690ecd2c61f5b6d853e08a2ccefbb8f3523",
+  "base_sha":"4146b690ecd2c61f5b6d853e08a2ccefbb8f3523",
+  "write_scope":"F-ED-006 contextual single-panel mouse/touch scroll verification; evidence-only until failure reproduced",
+  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-ED-006-SOL-3-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-ED-006-SOL-3-EVIDENCE.json"],
+  "claimed_at":"2026-09-12T22:03:00-05:00",
+  "state":"CLAIMED",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "goals12_input":{"G01":"PASS literal panel+scroll requirement","G02":"PASS fresh head","G03":"PASS queue/state precedence","G04":"PASS no prior F-ED-006 claim found","G05":"PENDING","G06":"PASS reuse-first","G07":"PENDING","G08":"PENDING","G09":"PENDING","G10":"PENDING","G11":"PENDING","G12":"PENDING"}
+}
