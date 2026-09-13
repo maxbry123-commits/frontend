@@ -3,7 +3,7 @@
   "audit_status": "INCOMPLETE",
   "base_sha": "a29290b02cf4aa655b85581d0ba134d3ac3f04d6",
   "contract": "tel.workflow/v3",
-  "current_node": "X17-11",
+  "current_node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
   "evidence": {
     "ci_run": 34711848316,
     "ci_status": "cancelled",
@@ -93,12 +93,12 @@
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T07:07:00Z",
+  "updated_at_utc": "2026-09-13T08:11:08Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
   ],
-  "last_observed_head": "892b3d0a377d420e4eb4095284e56be9cc3fce63",
+  "last_observed_head": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
   "last_activation": {
     "node": "X17-11",
     "status": "ACTIVE_LOOP",
@@ -171,5 +171,19 @@
       "owner_unchanged": true
     },
     "limits": "No new simulations, external Council, full 17-document semantic audit, benchmark or global E2E executed."
+  },
+  "active_claim": {
+    "state": "IN_PROGRESS",
+    "claimed_at_utc": "2026-09-13T08:11:08Z",
+    "fresh_main_sha": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
+    "dependency_evidence": "N34 VERIFIED_CLOSED at 53dee9a50a; prior N35 released GAP_RESOLVABLE at e00b2e6e08; no later N35 claim observed",
+    "write_scope": [
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/audit/**",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/coverage/**",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_audit*",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage*",
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
+    ],
+    "bounded_strategy": "Add and test one strict fail-closed production RequirementTrace loader; do not synthesize traces or CI attestations."
   }
 }
