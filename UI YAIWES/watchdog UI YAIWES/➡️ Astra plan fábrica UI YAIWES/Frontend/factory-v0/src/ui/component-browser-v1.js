@@ -114,6 +114,12 @@ if (library && host) {
         }
       }, true);
       card.addEventListener('dragstart', e => {
+        const data = info(card);
+        if (e.dataTransfer) {
+          e.dataTransfer.setData('text/yaiwes-kind', data.kind);
+          e.dataTransfer.setData('text/yaiwes-label', data.label);
+          e.dataTransfer.effectAllowed = 'copyMove';
+        }
         const ghost = card.cloneNode(true);
         ghost.classList.remove('browser-hidden');
         ghost.style.cssText='position:fixed;left:-9999px;top:-9999px;width:180px;opacity:.9;pointer-events:none';
