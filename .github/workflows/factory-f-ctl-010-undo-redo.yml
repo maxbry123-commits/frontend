@@ -8,15 +8,28 @@ on:
       - '.github/workflows/factory-f-ctl-010-undo-redo.yml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   undo-redo-history:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout exact Factory subtree
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Static syntax check
+        working-directory: 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0'
+        run: node --check tests/e2e/f-ctl-010-undo-redo.spec.mjs
       - name: Run exact-history gate
         working-directory: 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0'
         run: node tests/e2e/f-ctl-010-undo-redo.spec.mjs
