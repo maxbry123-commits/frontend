@@ -1,19 +1,10 @@
 {
   "schema":"yaiwes.factory.sol.claim.v1","contract":"tel.workflow/v3","chat_id":"SOL-3-GPT-2026-09-12T21:44-05:00","agent_name":"SOL 3 GPT 🆘","node_id":"F-AI-019",
-  "fresh_main_sha":"9138766c6898ddedd232a3fe7fa01dfd9932cff9","base_sha":"9138766c6898ddedd232a3fe7fa01dfd9932cff9",
+  "base_sha":"9138766c6898ddedd232a3fe7fa01dfd9932cff9","tested_sha":"a2332e03daf9631d5009adcb769df358ad48fcd5",
   "write_scope":"F-AI-019 only: skill activation adapter + additive index-v192 wiring + dedicated test/workflow/evidence; excludes Wordflow N01-N31",
-  "paths":[
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-AI-019-SOL-3-GPT-CLAIM.json",
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-AI-019-SOL-3-EVIDENCE.json",
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/skill-activation-v1.js",
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v192.html",
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ai-019-skills.spec.mjs",
-    ".github/workflows/factory-f-ai-019-skills.yml"
-  ],
-  "claimed_at":"2026-09-12T22:20:30-05:00","state":"EXECUTING",
-  "classification":"PRODUCT_FAILURE",
-  "gap":"Skills could be catalogued but had no active/inactive state and no runtime consumer effect. Minimal adapter now toggles canonical config.skills[].active and injects only active skills into generated AI job payload.",
-  "strategy_delta":{"adapter_commit":"a6204addd92172e0399dd952352426cf808116b9","wiring_commit":"3a078fc97a73f140ab84eecf9c54238b0cd53f67","order":"ADAPT_EXISTING_CONFIG"},
-  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "goals12_input":{"G01":"PASS literal skill activation effect","G02":"PASS fresh HEAD/readback","G03":"PASS fresh queue/owners","G04":"PASS scope reconciled before further write","G05":"PASS existing config.skills reused","G06":"PASS no OSS/new state engine","G07":"EXECUTING minimum adapter+wiring","G08":"PENDING dedicated test","G09":"PENDING browser integration","G10":"PENDING 3+3","G11":"PENDING SHA/run/log/readback","G12":"LOCKED F-AI-019"}
+  "state":"PASS_PENDING_REVIEW","classification":["PRODUCT_FAILURE_PATCHED","IMPLEMENTATION_LOOP_FIXED","EVIDENCE_RESOLVED"],
+  "adapter_commit":"a6204addd92172e0399dd952352426cf808116b9","wiring_commit":"3a078fc97a73f140ab84eecf9c54238b0cd53f67","idempotent_fix_commit":"a2332e03daf9631d5009adcb769df358ad48fcd5","evidence_commit":"b48e46d87ee9352a7ffc95eb3d2d92f99826b329","evidence_blob":"2340af3477f2f5dad9268c2e0505565e497d5491",
+  "run_id":34735452047,"job_id":103665955820,"result":"SUCCESS","tests":["syntax PASS","Inactivo->Activo PASS","config active=true PASS","active skill enters AI payload PASS","Activo->Inactivo PASS","inactive payload=[] PASS"],
+  "simulations":3,"refutations":3,"review_required":true,"remaining_gaps":["independent reviewer before VERIFIED_CLOSED","global F-AI-024 downstream"],"next_free_node":"READ_FRESH_QUEUE",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],"goals12_output":{"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS","G08":"PASS","G09":"PASS","G10":"PASS","G11":"PASS","G12":"PASS"}
 }
