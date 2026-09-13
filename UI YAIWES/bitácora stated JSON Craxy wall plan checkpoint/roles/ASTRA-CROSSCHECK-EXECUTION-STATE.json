@@ -27,6 +27,22 @@
         ],
         "scope_limit": "Specific commit and suites only; not latest HEAD certification, platform E2E, effect confinement or global closure"
       }
+    },
+    "evidence_input_guard": {
+      "code_commit": "9ac5d14b6c7f2e783143e14ebbfcbc8a44408de1",
+      "test_commit": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+      "code_blob": "ef1c9b753a2495f0488962a8e7f1160d1593e75b",
+      "test_blob": "bc19c1502da720673b92d248f9d8bdaedc0c3cb9",
+      "ci_run": 34739510224,
+      "ci_status": "pending",
+      "regression_cases": [
+        "None",
+        "str",
+        "bytearray",
+        "memoryview",
+        "object"
+      ],
+      "claim": "Malformed non-bytes evidence returns False before trusted lookup"
     }
   },
   "node_id": "ASTRA-EVIDENCE-INPUT-004",
@@ -41,20 +57,21 @@
   "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-PREFLIGHT-SCOPE-003.json",
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
-  "status": "EXECUTING",
-  "updated_at_utc": "2026-09-13T05:05:19Z",
+  "status": "ACTIVE_LOOP",
+  "updated_at_utc": "2026-09-13T05:08:00Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
-  "write_scope": [
-    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/audit/evidence.py",
-    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_audit_evidence_matrix.py",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
-  ],
+  "write_scope": [],
   "last_observed_head": "ac91c4812f3bac30ed6d91e0033ea0e723ab693b",
   "last_activation": {
     "node": "ASTRA-EVIDENCE-INPUT-004",
-    "status": "EXECUTING",
-    "defect": "verify_ci_evidence calls evidence.decode before type validation; malformed untrusted non-bytes input raises instead of fail-closed False",
-    "reproduction": "direct API call with str/object/memoryview",
-    "next": "Add input gate and regression test, then execute focused/full local suites."
+    "status": "CLOSED_UNVERIFIED",
+    "delta": "Strict bytes gate added before decoding untrusted CI evidence; five malformed input types covered.",
+    "tests": "CI run 34739510224 pending; no local suite claimed",
+    "refutations": [
+      "Bytes type gate does not prove CI lookup authenticity.",
+      "Pending CI is not PASS.",
+      "This subgate does not establish product E2E or global closure."
+    ],
+    "next": "Verify exact CI job/logs; if success promote only this subgate, then continue semantic/effect isolation queue."
   }
 }
