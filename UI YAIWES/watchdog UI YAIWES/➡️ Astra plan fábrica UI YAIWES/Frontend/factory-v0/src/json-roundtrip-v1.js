@@ -1,4 +1,5 @@
 import { serializeFactoryHtml } from './html-export-v1.js';
+import './version-store-v1.js';
 
 const PROJECT_KEY='yaiwes-factory-project-v19';
 const CONFIG_KEY='yaiwes-factory-config-v13';
