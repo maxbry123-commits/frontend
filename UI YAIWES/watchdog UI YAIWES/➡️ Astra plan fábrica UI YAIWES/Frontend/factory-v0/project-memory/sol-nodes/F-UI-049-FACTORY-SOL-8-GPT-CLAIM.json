@@ -1,0 +1,16 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "project":"FABRICA_UI_YAIWES_ONLY",
+  "chat_id":"FACTORY-SOL-8-GPT",
+  "agent_name":"SOL 8 GPT 🆘",
+  "node_id":"F-UI-049",
+  "base_sha":"ae9ba368df37d516b8ecf16604011b82833bed88",
+  "state":"IN_PROGRESS",
+  "write_scope":"F-UI-049 only; frontend-facing router contract/status/test paths after demonstrated GAP; Hugging Face secrets secret_ref only; excludes Wordflow N*",
+  "claimed_at":"2026-09-13T03:41:00Z",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "authority":"FACTORY-SUPERVISOR-RECONCILIATION-R02-2026-09-12.json",
+  "next":"read F-UI-049 schema and inspect current frontend router/status/test implementation before any product delta"
+}
