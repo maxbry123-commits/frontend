@@ -1,0 +1,12 @@
+{
+  "queue":[{
+    "id":"N11:big-AGI",
+    "source_repo":"enricoros/big-AGI",
+    "source_ref":"7e4a60d9276fa79d358ece7349cda029cc9ae7bf",
+    "slug":"big_agi",
+    "dest_repo":"maxbry123-commits/frontend",
+    "dest_branch":"main",
+    "dest_root":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor",
+    "publish":true
+  }]
+}
