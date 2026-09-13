@@ -109,12 +109,12 @@
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T08:28:00Z",
+  "updated_at_utc": "2026-09-13T10:15:22Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
   ],
-  "last_observed_head": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
+  "last_observed_head": "edcbd013bafe766f26c9e1758a0f2c89067e1ec3",
   "last_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "status": "ACTIVE_LOOP",
@@ -239,6 +239,23 @@
     "simulations": "No new product simulation executed; prior simulations not re-counted.",
     "decision": "Keep X17-11 ACTIVE; do not collide with N34 or any product-code owner. Next activation must read N34 report, central reconciliation and latest CI before considering N35/N17.",
     "limits": "No local test runner, new code patch, full four-source semantic audit, platform E2E or benchmark executed this activation."
+  },
+  "candidate_patch": {
+    "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+    "status": "CLOSED_UNVERIFIED",
+    "base_sha": "edcbd013bafe766f26c9e1758a0f2c89067e1ec3",
+    "branch": "astra-crosscheck-n35-incomplete-inventory",
+    "pull_request": 55,
+    "head_sha": "c47ca6e75dfcd79c21f26608817132d27fcf775e",
+    "defect_reproduced": "A one-row inventory was accepted when three requirement IDs were expected: 1 failed, 4 passed.",
+    "delta": "Reject incomplete inventories with a deterministic missing_requirement_traces error; 3 production lines and 13 test lines.",
+    "tests": "5 passed in 0.02s; compileall PASS; git diff --check PASS",
+    "refutations": [
+      "Local targeted tests do not certify PR CI or main.",
+      "Completeness enforcement does not create or certify any RequirementTrace.",
+      "N35 remains 0/167 and global closure remains fail-closed."
+    ],
+    "next_action": "Merge PR 55 only after exact-revision CI succeeds, then continue with genuine source/code/test/evidence bindings."
   },
   "active_claim": {
     "state": "IN_PROGRESS",
