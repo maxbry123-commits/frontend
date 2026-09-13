@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.n04.state-reconciliation.report.v1",
+  "chat_id": "SOL GPT <12>",
+  "node_id": "N04-STATE-RECONCILIATION",
+  "fresh_main_sha": "f99b30725ce66d2fdf3e2004358e90d8af3cb0e0",
+  "claim_commit": "e3d86ac3accd8520efcb52ebcd1e1d295a6a21b6",
+  "status": "GAP_RESOLVABLE",
+  "sources_read": {
+    "crazy_wall": "state=FREE for N04; dependencies N02/N03 VERIFIED_CLOSED",
+    "state_json": "N04 reconciliation already recorded by SOL GPT <10>; ACTIVE_LOOP_NOT_CLOSED",
+    "checkpoint_json": "N04 reconciliation checkpoint already recorded; project not closed",
+    "handoff_v8": "N04 reconciliation already documented; requires four-way readback before VERIFIED_CLOSED"
+  },
+  "contradiction": "Crazy Wall N04 is stale FREE while STATE/CHECKPOINT/Handoff already record a prior N04 reconciliation.",
+  "safe_delta_required": "Update only the N04 object in the authoritative Crazy Wall after full-file fresh readback; preserve all other nodes/history byte-for-byte semantically.",
+  "evidence": [
+    "STATE blob 8238a9f1f664e4ed88f11ae46f3aa8f9bffb5044",
+    "CHECKPOINT blob 9c68b1bf641463ef2933c0b83e4173e85b67ed05",
+    "Handoff V8 blob fafc8eeed180fd9e37e631d66e0d155b20cd2f04",
+    "Crazy Wall blob 0101749745fcbf9a6ab7ba299dcd7e78bbc59492"
+  ],
+  "remaining_gaps": [
+    "Authoritative Crazy Wall N04 state has not yet been reconciled to the already-reconciled STATE/CHECKPOINT/Handoff truth."
+  ],
+  "pass_percent": 75,
+  "closure_blocked": true
+}
