@@ -1,22 +1,3 @@
 {
-  "schema":"yaiwes.factory.sol.claim.v1",
-  "contract":"tel.workflow/v3",
-  "chat_id":"SOL-5-GPT-2026-09-12T21:45-05:00",
-  "agent_name":"SOL 5 GPT 🆘",
-  "node_id":"F-IO-028",
-  "fresh_main_sha":"bf9cbec840ff45a059e1679cb545a5f90e2172a3",
-  "base_sha":"1d78b5b4cba0f344ef78a6a4eaacf31856815f85",
-  "write_scope":"Factory F-IO-028 only: make existing JSON export genuinely reimportable with minimum app-v19 delta + dedicated test/evidence; excludes touch harness, router, selection and Wordflow N01-N31",
-  "paths":[
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-IO-028-SOL-5-GPT-CLAIM.json",
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-IO-028-SOL-5-EVIDENCE.json",
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/app-v19.js",
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/f-io-028-json-roundtrip.test.mjs"
-  ],
-  "claimed_at":"2026-09-12T21:46:00-05:00",
-  "state":"EXECUTING",
-  "classification":"PRODUCT_FAILURE",
-  "gap":"Export button emits valid JSON {state,config}, but file-input only records JSON file metadata and never parses/restores the exported payload; acceptance requires reimportable JSON.",
-  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "goals12_input":{"G01":"PASS","G02":"PASS fresh bf9cbec after unrelated mobile harness commit","G03":"PASS","G04":"PASS app-v19 not in active F-ED-001/F-ED-003/F-AI-017 declared paths","G05":"PASS existing export inspected","G06":"PASS reuse existing normalizeProject/persist","G07":"EXECUTING minimal import path","G08":"PENDING","G09":"PENDING","G10":"PENDING","G11":"PENDING","G12":"PENDING"}
+"schema":"yaiwes.factory.sol.claim.v1","contract":"tel.workflow/v3","chat_id":"SOL-5-GPT-2026-09-12T21:45-05:00","agent_name":"SOL 5 GPT 🆘","node_id":"F-IO-028","fresh_main_sha":"5cd24a12300d9ba1b29724bd760da120c208ec13","base_sha":"1d78b5b4cba0f344ef78a6a4eaacf31856815f85","write_scope":"F-IO-028 JSON roundtrip only via additive adapter + V1.9.2 entrypoint + dedicated test/evidence; excludes touch/router/selection/Wordflow","paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-IO-028-SOL-5-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-IO-028-SOL-5-EVIDENCE.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/json-roundtrip-v1.js","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v192.html","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/f-io-028-json-roundtrip.test.mjs"],"claimed_at":"2026-09-12T21:46:00-05:00","state":"EXECUTING","classification":"PRODUCT_FAILURE","gap":"Export valid JSON exists; import path records metadata only and cannot restore export.","steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"]
 }
