@@ -1,0 +1,41 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N18-MEMORY-RETRIEVAL-CONTEXT",
+  "chat_id": "SOL GPT <20>",
+  "state": "VERIFIED_CLOSED",
+  "report_state": "PASS",
+  "claim_commit": "b45adf343536a134d5a4e6ed45165470e1e1f770",
+  "tested_sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+  "run_id": 34739510224,
+  "job_id": 103678337638,
+  "paths": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/memory/fabric.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_memory_context_fabric.py"
+  ],
+  "blob_sha": {
+    "fabric.py": "255909eab5aa4d83c3bd14712533a97611e5da04",
+    "test_memory_context_fabric.py": "ec254c1c9b4764d36000f196e36af32d7ded72c2"
+  },
+  "tests": {
+    "specific_historical": "10/10 PASS",
+    "trusted_descendant_ci": "PASS",
+    "wordflow_step": "PASS",
+    "runtime_step": "PASS"
+  },
+  "evidence": [
+    "current fabric.py blob equals tested SHA cf40e9cb...",
+    "current N18 test blob equals tested SHA cf40e9cb...",
+    "run 34739510224 completed success",
+    "job 103678337638 completed success",
+    "context fabric enforces deterministic ranking/budget/provenance/checkpoint identity and restart reproducibility",
+    "GET_MEMORY/GET_EVIDENCE share canonical read port and direct LLM canonical memory writes remain forbidden"
+  ],
+  "refutations": [
+    "Schema completeness: persistence identity, GET_CONTEXT/MEMORY/EVIDENCE, provenance, budget and no-direct-write are covered; PASS",
+    "Residual gap: previous global failure was upstream N14 research fixture/CI; trusted successful descendant CI now covers unchanged N18 bytes; no N18 blocker remains",
+    "Evidence strength: exact blob parity + specific historical suite + successful global CI establish current N18 closure; PASS"
+  ],
+  "remaining_gaps": [],
+  "delta": "NO_CODE_CHANGE_REQUIRED_REUSE_EXISTING",
+  "scope_note": "No second memory store, scheduler, workflow owner or alternate persistence engine introduced."
+}
