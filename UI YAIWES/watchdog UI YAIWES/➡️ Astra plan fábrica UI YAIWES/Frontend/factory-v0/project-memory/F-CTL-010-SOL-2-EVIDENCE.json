@@ -1,0 +1,21 @@
+{
+  "schema":"yaiwes.factory.atomic-node.evidence.v1",
+  "contract":"tel.workflow/v3",
+  "node_id":"F-CTL-010",
+  "agent_name":"SOL 2 GPT 🆘",
+  "base_sha":"33f0a9647d9a987b2e84fad33fa379ce87daa888",
+  "source_blobs":{"state.js":"32c6b9e619e146a1571766b2dcd9055c3a86d16d","actions.js":"5d5617507b3cd2e02e397f6e973e79adfb8297b1","app-v19.js":"1aab6ebec09a8e6a14f221b83226cf92552b4526"},
+  "product_delta":"NONE_REQUIRED",
+  "test_commit":"48616ed794a90269f8388e51d620ed26cb207328",
+  "workflow_strategy_delta_commit":"9138766c6898ddedd232a3fe7fa01dfd9932cff9",
+  "run_id":34735229765,
+  "job_id":103665351574,
+  "tested_sha":"9138766c6898ddedd232a3fe7fa01dfd9932cff9",
+  "result_marker":"F_CTL_010_RESULT=PASS_6_OF_6",
+  "simulations":["SIM1 PASS exact undo/redo snapshot","SIM2 PASS multi-state redo chain","SIM3 PASS history cap 50/no recursion"],
+  "refutations":["REFUTE1 PASS branch mutation clears redo","REFUTE2 PASS empty stacks safe no-op","REFUTE3 PASS snapshots exclude nested history/future"],
+  "closure_refutations":["schema 3/3 PASS","remaining F-CTL-010 gap NONE","evidence exact SHA+run+job+log PASS"],
+  "pass_percent":100,
+  "atomic_node_result":"PASS",
+  "project_verified_closed":false
+}
