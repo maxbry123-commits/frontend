@@ -1,0 +1,32 @@
+name: factory-f-mod-032-primitives
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-mod-032-primitives.spec.mjs'
+      - '.github/workflows/factory-f-mod-032-primitives.yml'
+  workflow_dispatch:
+jobs:
+  primitives-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Syntax
+        run: node --check tests/e2e/f-mod-032-primitives.spec.mjs
+      - name: F-MOD-032 browser gate
+        run: npx playwright test tests/e2e/f-mod-032-primitives.spec.mjs --project=chromium-desktop --reporter=line
