@@ -1,0 +1,34 @@
+name: factory-f-oss-015-frappe-donor
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-oss-015-frappe-context-menu.spec.mjs'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/donors/frappe-context-menu-adapter.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/donors/frappe-builder-patterns.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html'
+      - '.github/workflows/factory-f-oss-015-frappe-donor.yml'
+  workflow_dispatch:
+jobs:
+  runtime-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Syntax checks
+        run: |
+          node --check src/donors/frappe-builder-patterns.js
+          node --check src/donors/frappe-context-menu-adapter.js
+          node --check tests/e2e/f-oss-015-frappe-context-menu.spec.mjs
+      - name: F-OSS-015 runtime donor gate
+        run: npx playwright test tests/e2e/f-oss-015-frappe-context-menu.spec.mjs --project=chromium-desktop
