@@ -1,5 +1,7 @@
+import json
 import sys
 import unittest
+import warnings
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -119,6 +121,41 @@ class PlatformProbeTests(unittest.TestCase):
             probe_current_host(
                 system_name="Linux", environ={"YAIWES_HOST_PLATFORM": "magic"}
             )
+
+    def test_real_ci_host_probe_is_auditable_and_never_overpromises(self):
+        snapshot = probe_current_host()
+        row = assess_platform(snapshot)
+        payload = {
+            "schema": "yaiwes.n06.real-host-probe.v1",
+            "platform": snapshot.platform.value,
+            "available_backends": sorted(snapshot.available_backends),
+            "hardware_virtualization": snapshot.hardware_virtualization,
+            "native_permission": snapshot.native_permission,
+            "state": row.state.value,
+            "selected_backend": row.selected_backend,
+            "accelerated": row.accelerated,
+            "reason": row.reason,
+        }
+        warnings.warn(
+            "N06_REAL_HOST=" + json.dumps(payload, sort_keys=True),
+            RuntimeWarning,
+            stacklevel=1,
+        )
+        if row.state is SupportState.SUPPORTED:
+            self.assertTrue(row.accelerated)
+            self.assertIsNotNone(row.selected_backend)
+            if snapshot.platform is Platform.LINUX:
+                self.assertTrue({"KVM", "QEMU"}.issubset(snapshot.available_backends))
+            elif snapshot.platform is Platform.ANDROID:
+                self.assertTrue({"AVF", "CROSVM"}.issubset(snapshot.available_backends))
+                self.assertTrue(snapshot.native_permission)
+        if "QEMU" not in snapshot.available_backends and snapshot.platform in {
+            Platform.LINUX,
+            Platform.WINDOWS,
+            Platform.ANDROID,
+            Platform.IOS,
+        }:
+            self.assertEqual(row.state, SupportState.BLOCKED)
 
 
 if __name__ == "__main__":
