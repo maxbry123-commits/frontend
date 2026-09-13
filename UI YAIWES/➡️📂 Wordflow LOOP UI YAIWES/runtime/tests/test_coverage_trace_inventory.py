@@ -35,6 +35,19 @@ def test_loads_one_strict_trace_per_expected_requirement(tmp_path):
     assert traces[0].implementation.symbol == "audit_five_pass"
 
 
+def test_incomplete_inventory_fails_closed_with_missing_ids(tmp_path):
+    (tmp_path / "trace.json").write_text(json.dumps(_trace()), encoding="utf-8")
+
+    with pytest.raises(
+        ValueError,
+        match=r"missing_requirement_traces:REQ-S3-058,REQ-S3-059",
+    ):
+        load_trace_inventory(
+            tmp_path,
+            ("REQ-S3-057", "REQ-S3-059", "REQ-S3-058"),
+        )
+
+
 @pytest.mark.parametrize(
     "rows, error",
     [

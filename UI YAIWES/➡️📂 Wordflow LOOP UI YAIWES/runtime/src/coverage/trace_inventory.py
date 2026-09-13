@@ -91,4 +91,7 @@ def load_trace_inventory(
             raise ValueError("duplicate_requirement_trace")
         seen.add(trace.requirement_id)
         traces.append(trace)
+    missing = sorted(expected - seen)
+    if missing:
+        raise ValueError(f"missing_requirement_traces:{','.join(missing)}")
     return tuple(traces)
