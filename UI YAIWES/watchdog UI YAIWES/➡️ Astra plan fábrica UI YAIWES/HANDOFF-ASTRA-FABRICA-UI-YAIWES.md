@@ -1,18 +1,18 @@
 # HANDOFF — ➡️ Astra plan fábrica UI YAIWES
 
-Fecha actualización: 2026-09-12
+Fecha actualización: 2026-09-13
 Proyecto: UI YAIWES
 Repositorio: maxbry123-commits/frontend
 Branch: main
 Contrato: tel.workflow/v3
 Modo: FAIL_CLOSED_LOOP
 Identidad: `➡️ Astra plan fábrica UI YAIWES`
-Estado T1: `VERIFIED_CLOSED`
+Estado T1: `ACTIVE_LOOP / REGRESSION_GAP`
 
 ## 1. MISIÓN
 Astra mantiene la Fábrica UI YAIWES y el frontend como objetivo principal. Comprende el backend de Sol para diseñar contratos/adapters compatibles, pero no escribe en rutas backend ajenas. Donors backend OSS permanecen separados hasta handoff explícito.
 
-El gate `T1_FACTORY_FRONTEND -> VERIFIED_CLOSED` quedó satisfecho el 2026-09-12. T2 puede activarse respetando ownership y el destino ordenado por el Director.
+El cierre del 2026-09-12 fue reabierto por el RECOVERY PATCH y por regresiones/evidencia incompleta. `T2_INTERFACE_YAIWES` permanece bloqueada hasta certificar un único candidato integrado con todos los gates actuales.
 
 ## 2. ARCHIVOS QUE DEBEN LEERSE AL RECUPERAR
 1. `INPUT-BLOCK-LITERAL-2026-09-10.md`
@@ -46,7 +46,7 @@ Backend donor staging histórico:
 Integraciones autorizadas: GitHub y Hugging Face.
 No exponer secrets. Publish HF certificado por Trusted Publisher/OIDC repo-scoped al Space; esto NO certifica full-account access.
 
-## 6. FACTORY — CAPACIDADES CERRADAS
+## 6. FACTORY — CAPACIDADES PRESENTES, PENDIENTES DE REVALIDACIÓN INTEGRADA
 1. CREATE: primitives/windows/buttons/selectors/segments.
 2. COMPOSE: canvas/drag/drop/layout/responsive.
 3. TRANSFORM: donor OSS trazable; Lucide mínimo integrado con provenance/licencia.
@@ -55,7 +55,7 @@ No exponer secrets. Publish HF certificado por Trusted Publisher/OIDC repo-scope
 
 Módulos permanentes: Component Maker, UI Composer, Component Transformer, AI Intervention, Deterministic Toolbox.
 
-## 7. CIERRE T1 — EVIDENCIA ACTUAL
+## 7. EVIDENCIA HISTÓRICA — NO ACREDITA EL CIERRE ACTUAL
 Source SHA: `8d5a7ed86f9af517b0d42f5aad9e2f7359edd7f0`.
 
 Publish workflow:
@@ -102,14 +102,14 @@ Full closure evidence:
 ## 8. DECISIÓN DE CIERRE
 `SOURCE_PRESENT -> WIRED -> RUNTIME_TEST_PASS -> PERSISTENT_DEPLOY -> HTTP_READBACK_PASS -> DEPLOYED_E2E_PASS -> INDEPENDENT_VERIFIER_PASS`.
 
-`T1_FACTORY_FRONTEND = VERIFIED_CLOSED`.
+`T1_FACTORY_FRONTEND = ACTIVE_LOOP / REGRESSION_GAP`.
 
-The producer does not self-certify; the final promotion is backed by the separate stateless deployed verifier job above.
+La evidencia histórica sólo cubre el candidato entonces publicado. No certifica el `main` actual ni resuelve la divergencia entre `index-v19.html` e `index-v192.html`.
 
-## 9. TRANSICIÓN A T2
+## 9. TRANSICIÓN A T2 — BLOQUEADA
 Objetivo recibido literalmente del Director: usar la fábrica para construir `UI YAIWES interface`, analizar las 38 ventanas y backend, coordinar 2 entornos Sol y automatizar LOOP sin exponer API keys.
 
-Destino T2:
+T2 no puede iniciarse todavía. Destino reservado cuando T1 cierre:
 - `UI YAIWES interface/Fromtend/`
 - `UI YAIWES interface/Backend/`
 
@@ -119,3 +119,14 @@ Regla: revisar primero código/fuentes del proyecto y componentes OSS; `REUSE > 
 `INPUT literal -> GOALS12 -> prioridades -> plan -> queue1x1 -> execute/review -> verify/refute -> GAP/FLAG -> research hasta20 -> StrategyDelta -> retry/safe task -> Council12 -> 3 simulaciones -> 3 refutaciones -> cross-check -> CODA -> verify_final`.
 
 Toda modificación futura de Factory V0 posterior al SHA certificado invalida automáticamente el cierre de esa nueva versión hasta repetir tests/deploy/reviewer.
+
+## 11. RECONCILIACIÓN RECOVERY — 2026-09-13
+
+- Autoridad fresca: `STATE.json` + `FACTORY-SUPERVISOR-RECONCILIATION-R09-2026-09-13.json` + código/entrypoints/pruebas actuales.
+- Contradicción resuelta: este HANDOFF ya no hereda el cierre histórico.
+- GAP crítico: `ENTRYPOINT_DIVERGENCE`; `index-v19.html` e `index-v192.html` exponen capacidades distintas.
+- Orden queue1x1: SOL7 terminaliza `F-MOD-033`; luego un worker libre reclama `F-INT-035` y converge imports existentes en un único candidato sin motor de estado duplicado.
+- SOL6 mantiene ownership de `F-UI-051`; debe corregir steps 1..5 y selectores de breakpoint, y ejecutar la matriz sobre el candidato integrado.
+- SOL8 sólo terminaliza el reporte lane-specific de `F-UI-061`; ese recorrido único no equivale a 50 ciclos.
+- Gates pendientes: candidato integrado, matriz de efectos completa, drag/drop/scroll/touch/tablet/teclado, 50 ciclos candidato + live, publicación SHA exacta, capturas/hashes y reviewer independiente.
+- `F-UI-062` y `F-UI-063` permanecen bloqueados; sólo `F-UI-063` puede promover FRONTEND_100.
