@@ -14,7 +14,7 @@ test('F-MOD-032 creates editable window/button/selector/segment primitives', asy
   expect(project.state.components.map(c=>c.kind)).toEqual(['window','button','selector','segment']);
 
   const target=project.state.components.find(c=>c.kind==='selector');
-  await page.locator(`[data-node="${target.id}"]`).click();
+  await page.locator(`[data-layer="${target.id}"]`).click();
   await page.locator('[data-step="2"]').click();
   await page.locator('#prop-label').fill('Selector editable verificado');
   await page.locator('#prop-label').blur();
