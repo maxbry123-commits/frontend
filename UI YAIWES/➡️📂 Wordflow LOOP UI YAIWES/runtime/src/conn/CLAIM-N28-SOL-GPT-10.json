@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <10>",
+  "node_id": "N28-API-CONTROL",
+  "fresh_main_sha": "64149d21c192dac83f10189b340c79761b83a89a",
+  "write_scope": "runtime/src/conn/**|runtime/src/integration/**|runtime/tests/test_integration*",
+  "claimed_at": "2026-09-13T06:57:00Z",
+  "reason": "Crazy Wall fresh state GAP_RESOLVABLE; exact code/test blobs match recorded N28 and trusted descendant CI exists; verify before any patch."
+}
