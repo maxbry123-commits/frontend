@@ -1,0 +1,51 @@
+{
+  "schema": "yaiwes.n06.platform-matrix-benchmark.v1",
+  "node_id": "N06-PLATFORM-MATRIX-PERF-100X",
+  "owner": "sol 8 gpt",
+  "status": "TESTING_CI_PENDING",
+  "authority_note": "SOURCE_PRESENT is not runtime support. SUPPORTED requires executable backend facts from the read-only probe and passing tests.",
+  "source_requirement": {
+    "android": "AVF/crosvm primary with QEMU fallback; hardware virtualization when available",
+    "windows": "WHPX plus QEMU; software QEMU only as fallback",
+    "linux": "KVM plus QEMU; software QEMU only as fallback",
+    "ios": "secondary QEMU/UTM-style path; do not promise Android-equivalent acceleration",
+    "web": "UI/control may exist, but no local native hypervisor backend is specified"
+  },
+  "matrix_policy": [
+    {"platform": "web", "project_feasibility": "BLOCKED_LOCAL_VM", "runtime_promotion_rule": "never promote browser source/UI to native local hypervisor"},
+    {"platform": "windows", "project_feasibility": "CONDITIONAL", "runtime_promotion_rule": "SUPPORTED only after WHPX + QEMU + hardware virtualization are verified"},
+    {"platform": "linux", "project_feasibility": "CONDITIONAL", "runtime_promotion_rule": "SUPPORTED only after KVM + QEMU + hardware virtualization are verified"},
+    {"platform": "android", "project_feasibility": "CONDITIONAL", "runtime_promotion_rule": "SUPPORTED only after AVF + crosvm + hardware virtualization + native permission are verified; QEMU alone remains CONDITIONAL"},
+    {"platform": "ios", "project_feasibility": "CONDITIONAL", "runtime_promotion_rule": "QEMU remains CONDITIONAL pending device-specific validation"}
+  ],
+  "implementation": {
+    "classifier": "runtime/src/uek/platform_matrix.py",
+    "probe": "runtime/src/uek/probe.py",
+    "tests": [
+      "runtime/tests/test_platform_matrix.py",
+      "runtime/tests/test_platform_probe.py",
+      "runtime/tests/test_platform_benchmark.py"
+    ],
+    "lifecycle_owner_excluded": "N20-SANDBOX-UEK-ROUTER"
+  },
+  "benchmark": {
+    "metric": "policy_lookup_latency",
+    "baseline": "linear scan across 5 platform policies",
+    "candidate": "indexed dict lookup",
+    "method": "5 samples x 100000 lookups after warmup; compare medians",
+    "local_pre_ci_observation": {
+      "environment": "assistant Python sandbox; non-authoritative preflight",
+      "baseline_ns": 16611286,
+      "candidate_ns": 3548251,
+      "speedup_ratio": 4.6815,
+      "meets_100x": false
+    },
+    "authoritative_ci_observation": null,
+    "100x_claim": "NOT_DEMONSTRATED; preliminary measurement refutes 100x for this metric. CI result must replace preliminary value before closure."
+  },
+  "refutations": [
+    "Repository/vendor source presence alone cannot produce SUPPORTED.",
+    "Operating-system identity alone cannot invent WHPX/AVF/KVM permission.",
+    "100x is never inferred: benchmark computes the ratio and records meets_100x from the measured value."
+  ]
+}
