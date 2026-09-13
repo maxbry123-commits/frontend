@@ -1,0 +1,38 @@
+{
+  "schema":"yaiwes.factory.node-evidence.v1",
+  "contract":"tel.workflow/v3",
+  "node_id":"F-ED-004",
+  "agent_name":"SOL 6 GPT 🆘",
+  "chat_id":"SOL-6-GPT-2026-09-12T21:54-05:00",
+  "decision":"PASS_PENDING_REVIEW",
+  "classification":"EVIDENCE_FAILURE_RESOLVED",
+  "base_sha":"bf9cbec840ff45a059e1679cb545a5f90e2172a3",
+  "final_product_sha":"bf9cbec840ff45a059e1679cb545a5f90e2172a3",
+  "product_code_changed":false,
+  "assertion":"A moved component survives page reload with exact persisted left/top and component count.",
+  "run":{"id":34733865710,"attempt":2,"job_id":103662574511,"workflow":"astra-factory-v19-local-50-cycle","tested_sha":"bf9cbec840ff45a059e1679cb545a5f90e2172a3","global_conclusion":"failure"},
+  "tests":{
+    "syntax":"PASS src/app-v19.js + src/touch-dnd-v192.js",
+    "desktop_reload_recovery":"PASS 50/50; verifyReloadRecovery executes each cycle after real mouse move and compares persisted component count plus exact restored left/top after page.reload",
+    "mobile_touch_move":"PASS; adapter stats receivedStart=2 receivedMove=19 commits=1 and node moved",
+    "mobile_reload_recovery":"PASS by control-flow evidence: after touch move the spec reloads, asserts one node and exact restored left/top, then execution advanced into touchScrollPanel; the recorded failure occurs later at panel scrollTop assertion",
+    "global_gate":"FAIL outside F-ED-004 acceptance: touchScrollPanel expected scrollTop > 0 but received 0 after 7000ms"
+  },
+  "artifact":{"id":10310084717,"name":"astra-factory-v192-local-50-cycle-evidence","size_bytes":1033085,"digest":"sha256:f43258768d18a413c5206c201ddc920ded6b1d5c65cead59a919f4729c4a7454","expired":false},
+  "failure_boundary":{"node":"F-ED-006","gap":"MOBILE_CONTEXT_PANEL_TOUCH_SCROLL_ZERO","evidence":"touchScrollPanel line 158; expected panel.scrollTop > initial 0, received 0","ownership":"NOT_CLAIMED_BY_SOL_6"},
+  "simulations":[
+    "S1 desktop add+move -> dispatch MOVE_COMPONENT -> persistProject -> page.reload -> loadProject -> exact left/top recovery",
+    "S2 mobile tap+touch move -> touch adapter commit -> persistProject -> reload -> exact moved position recovery before contextual-scroll phase",
+    "S3 missing/malformed localStorage follows normalizeProject fallback path instead of manufacturing a false recovered project"
+  ],
+  "refutations":[
+    "R1 historical desktop evidence alone was rejected; exact post-harness SHA was rerun",
+    "R2 workflow global FAILURE was localized after F-ED-004 persistence assertions, so it does not convert reload recovery into a product failure",
+    "R3 desktop 50/50 alone was not used to certify mobile; mobile move+reload assertions also completed before the later scroll failure"
+  ],
+  "goals12_output":{"G01":"PASS","G02":"PASS exact tested SHA bf9cbec8","G03":"PASS queue/claim re-read","G04":"PASS evidence-only scope no collision","G05":"PASS existing product/test reused","G06":"PASS no OSS/new engine","G07":"PASS no unjustified product delta","G08":"PASS exact runtime reload test","G09":"PASS browser E2E for F-ED-004 acceptance; global suite later fails F-ED-006","G10":"PASS 3 simulations + 3 refutations","G11":"PASS run/job/artifact/SHA evidence persisted","G12":"PASS node reconciled; no next claim because user restricted SOL 6 to assigned node"},
+  "council12":{"01_objective":"verify reload persistence","02_requirement":"move/edit survives reload without loss","03_authority":"fresh exact-SHA Action log","04_prior_state":"EVIDENCE_FAILURE","05_owner":"SOL 6 GPT 🆘","06_collision":"evidence-only; shared product source untouched","07_gap":"missing terminal exact-SHA evidence","08_alternatives":"patch product vs rerun exact candidate","09_strategy":"rerun first; NO_PRODUCT_DELTA","10_tests":"syntax + 50-cycle desktop + mobile touch path","11_refutations":"3 completed","12_decision":"PASS_PENDING_REVIEW; separate F-ED-006 scroll gap remains"},
+  "review_required":true,
+  "remaining_gaps":["F-ED-006 mobile contextual panel touch scroll remains a separate reproducible gap; SOL 6 did not claim or modify it"],
+  "next_free_node":"NONE_USER_SCOPE_SOL6_ONLY"
+}
