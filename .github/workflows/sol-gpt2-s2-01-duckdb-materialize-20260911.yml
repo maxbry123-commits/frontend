@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Verify DuckDB evidence and atomically close N09 then claim next FREE
+      - name: Close N09 from fresh main and claim first valid FREE
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -31,11 +31,8 @@ jobs:
           AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
           pushed=0
           for attempt in 1 2 3 4 5; do
-            echo "close transaction attempt=$attempt"
             WORK="$RUNNER_TEMP/n09-close-$attempt"
-            rm -rf "$WORK"
-            mkdir -p "$WORK"
-            cd "$WORK"
+            rm -rf "$WORK" && mkdir -p "$WORK" && cd "$WORK"
             git init -q
             git remote add origin "https://github.com/$REPO.git"
             git sparse-checkout init --no-cone
@@ -50,129 +47,73 @@ jobs:
             export REPORTED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
             python - <<'PY'
           import hashlib, json, os, pathlib
-
-          cw = pathlib.Path(os.environ['CW_PATH'])
-          manifest_path = pathlib.Path(os.environ['MANIFEST_PATH'])
-          final_root = pathlib.Path(os.environ['FINAL_ROOT'])
-          manifest = json.loads(manifest_path.read_text())
-          assert manifest['schema'] == 'yaiwes.hf.download-extract.v1', manifest
-          assert manifest['slug'] == 'DuckDB', manifest
-          assert manifest['source_repo'] == 'https://github.com/duckdb/duckdb-r', manifest
-          assert manifest['source_commit'] == 'fdef8b2325d49774c990e59f127b90e4d54d3065', manifest
-          assert manifest['extraction_verified'] is True, manifest
-          assert manifest['reconstruction_verified'] is True, manifest
-          assert manifest['no_lfs'] is True, manifest
-
-          h = hashlib.sha256(); count = 0; total = 0
-          for p in sorted((x for x in final_root.rglob('*') if x.is_file() and '.git' not in x.parts), key=lambda x: x.as_posix()):
-              rel = p.relative_to(final_root).as_posix(); q = hashlib.sha256()
+          cw=pathlib.Path(os.environ['CW_PATH']); manifest_path=pathlib.Path(os.environ['MANIFEST_PATH']); root=pathlib.Path(os.environ['FINAL_ROOT'])
+          manifest=json.loads(manifest_path.read_text())
+          assert manifest['schema']=='yaiwes.hf.download-extract.v1'
+          assert manifest['slug']=='DuckDB'
+          assert manifest['source_repo']=='https://github.com/duckdb/duckdb-r'
+          assert manifest['source_commit']=='fdef8b2325d49774c990e59f127b90e4d54d3065'
+          assert manifest['extraction_verified'] is True and manifest['reconstruction_verified'] is True and manifest['no_lfs'] is True
+          h=hashlib.sha256(); count=0; total=0
+          for p in sorted((x for x in root.rglob('*') if x.is_file() and '.git' not in x.parts),key=lambda x:x.as_posix()):
+              rel=p.relative_to(root).as_posix(); q=hashlib.sha256()
               with p.open('rb') as f:
-                  for b in iter(lambda: f.read(1024 * 1024), b''):
-                      q.update(b)
-              h.update(rel.encode() + b'\0'); h.update(q.hexdigest().encode() + b'\n')
-              count += 1; total += p.stat().st_size
-          actual = {'files': count, 'bytes': total, 'sha256': h.hexdigest()}
-          expected = manifest['extracted_tree']
-          assert actual == expected, (actual, expected)
-          assert actual == {'files': 4122, 'bytes': 37127481, 'sha256': '203b13970343ee05276d6992dc42fd81c7b09b4fc3b3b27c3689edf27286f52b'}, actual
+                  for b in iter(lambda:f.read(1024*1024),b''): q.update(b)
+              h.update(rel.encode()+b'\0'); h.update(q.hexdigest().encode()+b'\n'); count+=1; total+=p.stat().st_size
+          actual={'files':count,'bytes':total,'sha256':h.hexdigest()}
+          exact={'files':4122,'bytes':37127481,'sha256':'203b13970343ee05276d6992dc42fd81c7b09b4fc3b3b27c3689edf27286f52b'}
+          assert actual==manifest['extracted_tree']==exact,(actual,manifest['extracted_tree'])
 
-          text = cw.read_text()
-          doc = json.loads(text)
-          by_id = {node['id']: node for node in doc['nodes']}
-          n9 = by_id['N09-DUCKDB-ACQUIRE-SPECIAL']
-          assert n9['state'] == 'CLAIMED', n9
-          assert n9['owner'] == 'sol 3 gpt' and n9['chat_id'] == 'sol 3 gpt', n9
-
-          claim_states = set(doc['coordination']['claim_states'])
-          candidates = sorted((node for node in doc['nodes'] if node['id'] != n9['id'] and node['state'] in claim_states), key=lambda x: x['n'])
-          next_node = candidates[0] if candidates else None
-          next_id = next_node['id'] if next_node else None
-
+          text=cw.read_text(); doc=json.loads(text); by_id={n['id']:n for n in doc['nodes']}
+          n9=by_id['N09-DUCKDB-ACQUIRE-SPECIAL']
+          assert n9['state']=='CLAIMED' and n9['owner']=='sol 3 gpt' and n9['chat_id']=='sol 3 gpt',n9
+          claim_states=set(doc['coordination']['claim_states'])
+          candidates=sorted((n for n in doc['nodes'] if n['id']!=n9['id'] and n['state'] in claim_states),key=lambda n:n['n'])
+          nxt=candidates[0] if candidates else None; next_id=nxt['id'] if nxt else None
           n9.update({
-              'state': 'VERIFIED_CLOSED',
-              'report_state': 'PASS',
-              'reported_at': os.environ['REPORTED_AT'],
-              'paths_changed': [
-                  '.github/workflows/sol-gpt2-s2-01-duckdb-materialize-20260911.yml',
-                  'UI YAIWES/componentes open soure UI YAIWES/DuckDB',
-                  'UI YAIWES/automation/S2-duckdb-materialize-20260911/staging/DuckDB/DOWNLOAD_EXTRACT_MANIFEST.json',
-                  os.environ['CW_PATH'],
-              ],
-              'commit_sha': '01e9817ed2159e6fe1706545197d9e6498d971c5',
-              'blob_sha': 'workflow=85a5cb7239d28a63e7bcc2b67e386543945d841c|tree_sha256=203b13970343ee05276d6992dc42fd81c7b09b4fc3b3b27c3689edf27286f52b',
-              'tests': 'materialization run 34738075968 job 103672927926 SUCCESS; idempotence branch run 34738315538 job 103673575865 SUCCESS; integrated main run 34738359677 job 103673688209 SUCCESS; exact final readback 4122 files / 37127481 bytes / sha256 203b13970343ee05276d6992dc42fd81c7b09b4fc3b3b27c3689edf27286f52b',
-              'run_id': 34738359677,
-              'job_id': 103673688209,
-              'evidence': [
-                  'official-compatible DuckDB source pinned to https://github.com/duckdb/duckdb-r commit fdef8b2325d49774c990e59f127b90e4d54d3065',
-                  'canonical Motor1/Motor2/engine/Motor3/copy-root/Motor4 blobs remained immutable; no sanitizer, Git LFS, force push or alternate motor introduced',
-                  'canonical materialization reached UI YAIWES/componentes open soure UI YAIWES/DuckDB and independent readback matched the verified staging manifest',
-                  'idempotence branch rerun verified existing final tree, skipped Motor4/publish effects and passed exact independent readback',
-                  'integrated main run 34738359677 on commit 01e9817ed2159e6fe1706545197d9e6498d971c5 repeated VERIFIED_EXISTING, Motor4 no-op, publish no-op and exact readback with failed=0 pending=0',
-                  'three refutations PASS: complete N09 schema; no residual N09 gap; exact source/tree/workflow/run evidence proves closure',
-              ],
-              'remaining_gaps': [],
-              'next_free_node': next_id,
+            'state':'VERIFIED_CLOSED','report_state':'PASS','reported_at':os.environ['REPORTED_AT'],
+            'paths_changed':['.github/workflows/sol-gpt2-s2-01-duckdb-materialize-20260911.yml','UI YAIWES/componentes open soure UI YAIWES/DuckDB','UI YAIWES/automation/S2-duckdb-materialize-20260911/staging/DuckDB/DOWNLOAD_EXTRACT_MANIFEST.json',os.environ['CW_PATH']],
+            'commit_sha':'01e9817ed2159e6fe1706545197d9e6498d971c5',
+            'blob_sha':'workflow=85a5cb7239d28a63e7bcc2b67e386543945d841c|tree_sha256=203b13970343ee05276d6992dc42fd81c7b09b4fc3b3b27c3689edf27286f52b',
+            'tests':'materialization run 34738075968 job 103672927926 SUCCESS; idempotence branch run 34738315538 job 103673575865 SUCCESS; integrated main run 34738359677 job 103673688209 SUCCESS; final readback 4122 files / 37127481 bytes / sha256 203b13970343ee05276d6992dc42fd81c7b09b4fc3b3b27c3689edf27286f52b',
+            'run_id':34738359677,'job_id':103673688209,
+            'evidence':['source duckdb/duckdb-r pinned to commit fdef8b2325d49774c990e59f127b90e4d54d3065','canonical acquisition/move motors remained immutable; no sanitizer, LFS, force or alternate motor','canonical final DuckDB root matches verified staging manifest exactly','branch idempotence run verified existing final and no-op Motor4/publish with exact readback','integrated main run 34738359677 repeated VERIFIED_EXISTING + exact independent readback with failed=0 pending=0','three refutations PASS: schema complete, no residual N09 GAP, exact source/tree/run evidence proves closure'],
+            'remaining_gaps':[],'next_free_node':next_id
           })
-
-          if next_node is not None:
-              assert next_node['state'] in claim_states, next_node
-              next_node.update({
-                  'state': 'CLAIMED',
-                  'owner': 'sol 3 gpt',
-                  'chat_id': 'sol 3 gpt',
-                  'node_id': next_node['id'],
-                  'fresh_main_sha': os.environ['FRESH_MAIN_SHA'],
-                  'write_scope': next_node['scope'],
-                  'claimed_at': os.environ['REPORTED_AT'],
-              })
-
-          lines = text.splitlines()
-          replacements = {n9['id']: n9}
-          if next_node is not None:
-              replacements[next_node['id']] = next_node
-          seen = set()
-          for idx, line in enumerate(lines):
-              for node_id, node in replacements.items():
+          if nxt:
+              assert nxt['state'] in claim_states
+              nxt.update({'state':'CLAIMED','owner':'sol 3 gpt','chat_id':'sol 3 gpt','node_id':nxt['id'],'fresh_main_sha':os.environ['FRESH_MAIN_SHA'],'write_scope':nxt['scope'],'claimed_at':os.environ['REPORTED_AT']})
+          replacements={n9['id']:n9};
+          if nxt: replacements[nxt['id']]=nxt
+          lines=text.splitlines(); seen=set()
+          for i,line in enumerate(lines):
+              for node_id,node in replacements.items():
                   if f'"id":"{node_id}"' in line:
-                      indent = line[:len(line) - len(line.lstrip())]
-                      suffix = ',' if line.rstrip().endswith(',') else ''
-                      lines[idx] = indent + json.dumps(node, ensure_ascii=False, separators=(',', ':')) + suffix
-                      seen.add(node_id)
-                      break
-          assert seen == set(replacements), (seen, set(replacements))
-          patched = '\n'.join(lines) + '\n'
-          check = json.loads(patched)
-          check_by_id = {node['id']: node for node in check['nodes']}
-          assert check_by_id['N09-DUCKDB-ACQUIRE-SPECIAL']['state'] == 'VERIFIED_CLOSED'
-          if next_id:
-              assert check_by_id[next_id]['state'] == 'CLAIMED'
-              assert check_by_id[next_id]['owner'] == 'sol 3 gpt'
+                      indent=line[:len(line)-len(line.lstrip())]; comma=',' if line.rstrip().endswith(',') else ''
+                      lines[i]=indent+json.dumps(node,ensure_ascii=False,separators=(',',':'))+comma; seen.add(node_id); break
+          assert seen==set(replacements),(seen,set(replacements))
+          patched='\n'.join(lines)+'\n'; check=json.loads(patched); chk={n['id']:n for n in check['nodes']}
+          assert chk[n9['id']]['state']=='VERIFIED_CLOSED'
+          if next_id: assert chk[next_id]['state']=='CLAIMED' and chk[next_id]['owner']=='sol 3 gpt'
           cw.write_text(patched)
-          pathlib.Path(os.environ['RUNNER_TEMP'], 'n09-close-summary.json').write_text(json.dumps({
-              'n09': 'VERIFIED_CLOSED',
-              'next_node': next_id,
-              'fresh_main_sha': os.environ['FRESH_MAIN_SHA'],
-              'tree': actual,
-          }, sort_keys=True) + '\n')
-          print(pathlib.Path(os.environ['RUNNER_TEMP'], 'n09-close-summary.json').read_text(), end='')
+          print(json.dumps({'fresh_main_sha':os.environ['FRESH_MAIN_SHA'],'n09':'VERIFIED_CLOSED','next_node':next_id,'tree':actual},sort_keys=True))
           PY
             git config user.name 'sol-3-gpt-yaiwes'
             git config user.email 'sol-3-gpt-yaiwes@users.noreply.github.com'
             git add -- "$CW_PATH"
-            test "$(git diff --cached --name-only | wc -l)" -eq 1
-            test "$(git diff --cached --name-only)" = "$CW_PATH"
+            changed="$(git -c core.quotepath=false diff --cached --name-only)"
+            test "$changed" = "$CW_PATH"
             git commit -m 'report(n09): close DuckDB acquisition and claim next free node'
             if git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" push origin HEAD:main; then
               pushed=1
               git rev-parse HEAD | tee "$RUNNER_TEMP/n09-close-commit.txt"
               break
             fi
-            echo "main moved during transaction; retrying from a fresh main read"
+            echo 'main moved; retrying from fresh main without force'
           done
           test "$pushed" = '1'
 
-      - name: Independent Crazy Wall readback
+      - name: Read back authoritative Crazy Wall
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -181,23 +122,17 @@ jobs:
         run: |
           set -euo pipefail
           AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
-          RB="$RUNNER_TEMP/n09-close-readback"
-          rm -rf "$RB" && mkdir -p "$RB" && cd "$RB"
-          git init -q
+          git init -q "$RUNNER_TEMP/rb" && cd "$RUNNER_TEMP/rb"
           git remote add origin "https://github.com/$REPO.git"
           git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 origin main
           git show FETCH_HEAD:"$CW_PATH" > "$RUNNER_TEMP/crazy-readback.json"
+          export READBACK_MAIN_SHA="$(git rev-parse FETCH_HEAD)"
           python - <<'PY'
-          import json, os, pathlib
-          doc=json.loads(pathlib.Path(os.environ['RUNNER_TEMP'],'crazy-readback.json').read_text())
-          by_id={node['id']:node for node in doc['nodes']}
-          n9=by_id['N09-DUCKDB-ACQUIRE-SPECIAL']
-          assert n9['state']=='VERIFIED_CLOSED' and n9['report_state']=='PASS', n9
-          assert n9['remaining_gaps']==[], n9
-          assert n9['run_id']==34738359677 and n9['job_id']==103673688209, n9
+          import json,os,pathlib
+          doc=json.loads(pathlib.Path(os.environ['RUNNER_TEMP'],'crazy-readback.json').read_text()); by_id={n['id']:n for n in doc['nodes']}; n9=by_id['N09-DUCKDB-ACQUIRE-SPECIAL']
+          assert n9['state']=='VERIFIED_CLOSED' and n9['report_state']=='PASS' and n9['remaining_gaps']==[]
           next_id=n9.get('next_free_node')
           if next_id:
-              nxt=by_id[next_id]
-              assert nxt['state']=='CLAIMED' and nxt['owner']=='sol 3 gpt' and nxt['chat_id']=='sol 3 gpt', nxt
-          print(json.dumps({'n09':n9['state'],'report_state':n9['report_state'],'next_node':next_id,'main_sha':os.popen('git rev-parse FETCH_HEAD').read().strip()},sort_keys=True))
+              nxt=by_id[next_id]; assert nxt['state']=='CLAIMED' and nxt['owner']=='sol 3 gpt' and nxt['chat_id']=='sol 3 gpt'
+          print(json.dumps({'main_sha':os.environ['READBACK_MAIN_SHA'],'n09':n9['state'],'report_state':n9['report_state'],'next_node':next_id},sort_keys=True))
           PY
