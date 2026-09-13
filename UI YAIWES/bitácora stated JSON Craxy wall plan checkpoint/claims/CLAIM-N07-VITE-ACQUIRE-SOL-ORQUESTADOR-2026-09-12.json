@@ -1,0 +1,17 @@
+{
+  "schema": "yaiwes.node-claim.v1",
+  "contract": "tel.workflow/v3",
+  "chat_id": "SOL_ORQUESTADOR_CHAT",
+  "node_id": "N07-VITE-ACQUIRE",
+  "state": "CLAIMED",
+  "fresh_main_sha": "4f685e1ec129cca0171bdc43fc0f88eb67f502e5",
+  "write_scope": "component acquisition + registry only",
+  "claimed_at": "2026-09-12T20:50:00-05:00",
+  "steps": [
+    "1_VERIFY_RESEARCH",
+    "2_EXECUTE_DELTA",
+    "3_TEST_REPORT"
+  ],
+  "stale_reopen_after_hours": 4,
+  "source_queue": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+}
