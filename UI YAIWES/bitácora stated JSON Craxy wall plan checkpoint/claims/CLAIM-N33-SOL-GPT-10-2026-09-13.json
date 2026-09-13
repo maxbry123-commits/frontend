@@ -1,11 +1,18 @@
 {
   "schema": "tel.workflow/v3.claim",
-  "state": "IN_PROGRESS",
+  "state": "ABORTED_COLLISION_RELEASED",
   "chat_id": "SOL GPT <10>",
   "node_id": "N33-MIRROR-TRANSPORT-CONTROL",
   "fresh_main_sha": "a5b3a2b385b1448edfd6decc95e75b1bd875098c",
   "write_scope": "runtime/src/mirror/**|runtime/tests/test_mirror*",
   "claimed_at": "2026-09-13T06:34:30Z",
+  "released_at": "2026-09-13T06:36:30Z",
   "claim_source": "additive-sidecar",
-  "note": "Authoritative Crazy Wall row was FREE at fresh read; sidecar preserves auditable claim without replacing concurrent shared-state JSON. Runtime writes require subsequent fresh collision check."
+  "collision_evidence": [
+    "runtime/src/mirror/CLAIM-N33-SOL-GPT-17.json",
+    "runtime/src/mirror/CLAIM-SOL-GPT-13.json",
+    "runtime/src/mirror/N33-SOL-GPT-17-REPORT.json",
+    "runtime/src/mirror/transport.py"
+  ],
+  "note": "Released without runtime writes after fresh collision check discovered prior N33 work on main; central Crazy Wall row remained stale FREE."
 }
