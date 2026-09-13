@@ -1,0 +1,39 @@
+{
+  "schema": "yaiwes.node-report.v1",
+  "node_id": "N32-GUEST-INSTALLER-VERIFICATION",
+  "owner": "SOL GPT <12>",
+  "state": "PASS_EVIDENCE_READY_FOR_CRAZY_WALL_RECONCILIATION",
+  "fresh_claim_sha": "6ec8262be4125e8eaa7d2de97358662299c5ed72",
+  "implementation_commits": [
+    "240241a54e76a31c04bc017df26ea72566dc8885",
+    "7321184702998fa1c34236bc039104d517cce676"
+  ],
+  "certified_descendant_sha": "c007818f318895b3911b5e7d0391109ac6891a79",
+  "run_id": 34741423692,
+  "job_id": 103682499179,
+  "tests": {
+    "wordflow": "41 passed",
+    "runtime": "238 passed",
+    "subtests": "39 passed",
+    "warnings": 2
+  },
+  "paths": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/install/guest_installer.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_install_guest_installer.py"
+  ],
+  "evidence": [
+    "Exact certified descendant contains guest_installer.py implementing hash/signature/format/arch/dependency pre-effect verification, guest snapshot before install, guest-only effect receipt and rollback on install failure.",
+    "Exact certified descendant contains tests proving zero guest effects for hash/format/arch/dependency/signature failures, snapshot-first install and rollback on install failure.",
+    "GitHub Actions run 34741423692 job 103682499179 completed success on c007818f318895b3911b5e7d0391109ac6891a79: Wordflow 41/41 PASS; runtime 238/238 PASS + 39 subtests PASS."
+  ],
+  "refutations": [
+    "Schema coverage refutation PASS: all N32 required verification/rollback/guest-only behaviors are implemented and tested.",
+    "Residual-gap refutation PASS for N32 implementation scope: no observed failing N32 behavior remains in trusted CI.",
+    "Evidence refutation PASS: tested descendant contains the exact N32 implementation and test files and full CI completed success."
+  ],
+  "remaining_gaps": [
+    "Crazy Wall node entry still reads FREE in the last authoritative read and requires shared-state reconciliation; this report does not silently overwrite concurrent Crazy Wall edits."
+  ],
+  "close_candidate": "VERIFIED_CLOSED",
+  "next_action": "Fresh-read Crazy Wall and reconcile N32 to VERIFIED_CLOSED only if no concurrent owner/state conflict exists."
+}
