@@ -15,6 +15,7 @@ RUNTIME_ROOT = PROJECT_ROOT / "runtime"
 TRACE_ROOT = RUNTIME_ROOT / "requirement_traces"
 TRACE_ID = "REQ-S3-057"
 SECOND_TRACE_ID = "REQ-S3-055"
+THIRD_TRACE_ID = "REQ-S3-054"
 
 
 def _copy_certified_trace(tmp_path: Path) -> Path:
@@ -85,6 +86,38 @@ def test_cross_check_trace_binds_reverse_inventory_and_real_ci(tmp_path):
     assert result.product_verified is False
 
 
+def test_integration_check_trace_binds_artifact_validation_and_real_ci(tmp_path):
+    target = tmp_path / f"{THIRD_TRACE_ID}.json"
+    target.write_bytes((TRACE_ROOT / f"{THIRD_TRACE_ID}.json").read_bytes())
+    traces = load_trace_inventory(tmp_path, (THIRD_TRACE_ID,))
+    trace = traces[0]
+
+    def trusted_lookup(run_id: int, job_id: int) -> TrustedCIExecution:
+        assert (run_id, job_id) == (34775560166, 103772919055)
+        return TrustedCIExecution(
+            run_id=run_id,
+            job_id=job_id,
+            revision="c480fcd8445d2d00501b01de4b0b45c37b6a6029",
+            status="completed",
+            conclusion="success",
+            implementation_sha256=trace.implementation.sha256,
+            test_sha256=trace.test.sha256,
+        )
+
+    result = audit_five_pass(
+        PROJECT_ROOT,
+        (THIRD_TRACE_ID,),
+        traces,
+        (trace.implementation.path,),
+        make_ci_verifier(trusted_lookup),
+    )
+
+    assert result.status == "TRACEABILITY_PASS"
+    assert result.verified_requirements == 1
+    assert result.total_requirements == 1
+    assert result.product_verified is False
+
+
 def test_product_inventory_stays_fail_closed_until_all_167_traces_exist():
     with pytest.raises(ValueError) as exc:
         load_trace_inventory(TRACE_ROOT, requirement_inventory())
@@ -94,4 +127,5 @@ def test_product_inventory_stays_fail_closed_until_all_167_traces_exist():
     missing = set(message.split(":", 1)[1].split(","))
     assert TRACE_ID not in missing
     assert SECOND_TRACE_ID not in missing
-    assert len(missing) == 165
+    assert THIRD_TRACE_ID not in missing
+    assert len(missing) == 164
