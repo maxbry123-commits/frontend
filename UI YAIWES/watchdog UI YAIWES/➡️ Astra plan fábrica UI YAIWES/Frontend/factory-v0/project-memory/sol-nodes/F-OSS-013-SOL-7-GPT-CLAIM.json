@@ -3,15 +3,18 @@
   "chat_id":"SOL-7-GPT-2026-09-12T21:46-05:00",
   "agent_name":"SOL 7 GPT 🆘",
   "node_id":"F-OSS-013",
-  "fresh_main_sha":"5cd24a12300d9ba1b29724bd760da120c208ec13",
+  "fresh_main_sha":"769aa0291fbc6a3e412c0c7f17d845bdc3139659",
   "base_sha":"5cd24a12300d9ba1b29724bd760da120c208ec13",
-  "write_scope":"F-OSS-013 only: read-only inventory of existing OSS/component/adapters plus additive project-memory matrix/evidence; no Factory runtime source writes; excludes Wordflow N01-N31",
-  "paths":[
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-OSS-013-SOL-7-GPT-CLAIM.json",
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-OSS-013-SOL-7-OSS-MATRIX.json"
-  ],
+  "final_sha":"769aa0291fbc6a3e412c0c7f17d845bdc3139659",
+  "write_scope":"F-OSS-013 additive project-memory evidence only; no runtime source writes; excludes Wordflow N01-N31",
+  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-OSS-013-SOL-7-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-OSS-013-SOL-7-OSS-MATRIX.json"],
   "claimed_at":"2026-09-12T21:46:58-05:00",
-  "state":"CLAIMED",
-  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "goals12_input":{"G01":"PASS literal matrix component->capability->path->adapter->test","G02":"PASS fresh main 5cd24a1","G03":"PASS dynamic Crazy Wall + STATE + CHECKPOINT read","G04":"PASS no F-OSS-013 competing claim found; additive unique paths","G05":"EXECUTING inventory dedup","G06":"PASS reuse-only; no download","G07":"PENDING","G08":"PENDING","G09":"N/A unless runtime assertion added","G10":"PENDING 3 simulations + 3 refutations","G11":"PENDING","G12":"PENDING"}
+  "state":"PASS_PENDING_REVIEW",
+  "commit_sha":"769aa0291fbc6a3e412c0c7f17d845bdc3139659",
+  "blob_sha":"74f051e88953ef72fa86458a894bd49e3adcac79",
+  "tests":["fresh directory readback src/donors","fresh registry content readback","fresh tests root readback","published matrix readback"],
+  "simulations":3,"refutations":3,
+  "remaining_gaps":["F-OSS-014 categories/variants","F-OSS-015 runtime donor wiring/test"],
+  "review_required":true,
+  "next_free_node":"F-OSS-014"
 }
