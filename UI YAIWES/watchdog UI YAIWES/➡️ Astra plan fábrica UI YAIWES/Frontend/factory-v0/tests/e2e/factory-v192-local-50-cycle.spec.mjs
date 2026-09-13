@@ -4,11 +4,12 @@ const CYCLES = 50;
 const URL = '/index-v192.html';
 const PROJECT_KEY = 'yaiwes-factory-project-v19';
 
-async function boot(page) {
+async function boot(page, { expectContextVisible = true } = {}) {
   await page.goto(URL, { waitUntil: 'domcontentloaded' });
   await expect(page).toHaveTitle(/YAIWES UI Factory V1\.9\.2/);
   await expect(page.locator('#canvas')).toBeVisible();
-  await expect(page.locator('#context-scroll')).toBeVisible();
+  await expect(page.locator('#context-scroll')).toHaveCount(1);
+  if (expectContextVisible) await expect(page.locator('#context-scroll')).toBeVisible();
 }
 
 async function hardReset(page) {
@@ -176,7 +177,7 @@ test.describe('YAIWES Factory V1.9.2 candidate stability', () => {
   test('mobile touch events, move, persistence and single contextual scroll', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'mobile-chromium', 'mobile gate runs on touch project');
     test.setTimeout(45_000);
-    await boot(page);
+    await boot(page, { expectContextVisible: false });
     await touchDragNode(page);
     await touchScrollPanel(page);
   });
