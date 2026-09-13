@@ -1,0 +1,18 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "project":"FABRICA_UI_YAIWES_ONLY",
+  "chat_id":"FACTORY-SOL-8-GPT",
+  "agent_name":"SOL 8 GPT 🆘",
+  "node_id":"F-UI-060",
+  "state":"IN_PROGRESS",
+  "task":"Revalidar panel Hugging Face Jobs end-to-end: run→status→logs→complete/cancel y UI sincronizada, sin exponer secretos.",
+  "depends_on":["F-UI-050 PASS_PENDING_REVIEW"],
+  "authority":"FACTORY-SUPERVISOR-RECONCILIATION-R05-2026-09-12.json + FACTORY-CRAZY-WALL-FRONTEND-QA-V3-2026-09-12.json",
+  "write_scope":"F-UI-060 only; tests/e2e hf-jobs-web + project-memory evidence; frontend HF Jobs UI/status paths only after demonstrated product GAP",
+  "acceptance":"Real/authorized sandbox HF job with job_id/logs; screenshots of states; cancel/complete idempotent; token absent from browser/repo/log",
+  "claimed_at":"2026-09-13T04:42:00Z",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "next":"inspect canonical HF Jobs panel implementation and real HF job integration before product write"
+}
