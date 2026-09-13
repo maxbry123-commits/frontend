@@ -5,7 +5,7 @@
   "status": "ACTIVE_LOOP",
   "gate": "T1_FACTORY_FRONTEND",
   "t2_interface": "BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
-  "current_node": "T1_FACTORY_V1_8_LIVE_50_CYCLE_GATE_RUNNING",
+  "current_node": "F_UI_051_CONTROL_EFFECT_MATRIX_AND_F_UI_061_FULL_JOURNEY_ACTIVE",
   "historical_factory_v1_1": {
     "source_sha": "245efadec5f01513c8ee4203224fba739ad0d2f2",
     "space_repo": "COMAND-CENTER-1/yaiwes-ui-factory",
@@ -51,15 +51,22 @@
   },
   "security": "secret_ref_only_no_raw_api_keys",
   "safety": {
-    "allowed_connectors": ["GitHub", "Hugging Face"],
+    "allowed_connectors": [
+      "GitHub",
+      "Hugging Face"
+    ],
     "secrets_exposed": false,
     "force_push": false,
     "lfs": false,
     "backend_productive_write": false
   },
   "reopened_gaps": [
-    "V1_8_50_INTERACTION_CYCLES_NOT_YET_TERMINAL_PASS",
-    "V1_8_INDEPENDENT_BROWSER_REVIEW_NOT_YET_EVIDENCED"
+    "F_UI_051_CONTROL_EFFECT_MATRIX_IN_PROGRESS_SOL6",
+    "F_UI_061_50_CYCLE_AND_FULL_INTERACTION_COVERAGE_IN_PROGRESS_SOL8",
+    "PANEL_MOUSE_TOUCH_SCROLL_EVIDENCE_MISSING",
+    "DRAG_DROP_DESKTOP_TABLET_MOBILE_EVIDENCE_MISSING",
+    "STEP_3_FULL_JOURNEY_COVERAGE_MISSING",
+    "INDEPENDENT_BROWSER_REVIEW_NOT_EVIDENCED"
   ],
   "remaining_project_gaps_not_current_queue": [
     "LIVE_REMOTE_AI_EXECUTION_REQUIRES_CONFIGURED_ROUTER_MCP_HTTP_ENDPOINT",
@@ -67,8 +74,38 @@
     "T2_RECON_38_WINDOWS_AND_BACKEND_PENDING",
     "T2_COMPONENT_REUSE_AND_INTERFACE_BUILD_PENDING"
   ],
-  "evidence": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/FACTORY-V1.8-LIVE-50-CYCLE-GATE-2026-09-12.json",
+  "evidence": "https://github.com/maxbry123-commits/frontend/actions/runs/34738871893",
   "closure_rule": "For any visual shell/editor source change: fresh current-source verification must include 50 human-like interaction cycles covering steps/buttons/canvas drag-drop/panel mouse-touch scroll/breakpoints/zoom plus deployed readback and independent browser reviewer before VERIFIED_CLOSED.",
-  "closure_result": "ACTIVE_LOOP_GATE_RUNNING_NOT_PASS",
-  "next_node": "WAIT_FOR_50_CYCLE_TERMINAL_RESULT_THEN_STRATEGYDELTA_OR_INDEPENDENT_BROWSER_REVIEWER"
+  "closure_result": "ACTIVE_LOOP_PARTIAL_LIVE_JOURNEY_PASS_CLOSURE_GATES_OPEN",
+  "next_node": "WAIT_FOR_SOL6_F_UI_051_AND_SOL8_F_UI_061_REPORTS_THEN_RUN_F_UI_062_INDEPENDENT_REVIEW",
+  "factory_v1_9_live_journey_probe": {
+    "published_source_sha": "60c21192381d9d2c66eeb3df61e21f0a06fc546b",
+    "run": "https://github.com/maxbry123-commits/frontend/actions/runs/34738871893",
+    "job": "https://github.com/maxbry123-commits/frontend/actions/runs/34738871893/job/103675029219",
+    "artifact_id": 10312236608,
+    "artifact_sha256": "78a12d9d1bf1b2c8a55a55cca4124619bffc2313ba2be5fed7df894216955d3d",
+    "exact_sha_readback": "PASS",
+    "desktop_single_journey": "PASS_1_OF_1",
+    "mobile_emulation_single_journey": "PASS_1_OF_1",
+    "console_errors": 0,
+    "network_errors": 0,
+    "coverage_refutation": [
+      "NOT_50_CYCLES",
+      "STEP_3_NOT_VISITED",
+      "DRAG_DROP_NOT_TESTED",
+      "PANEL_MOUSE_WHEEL_NOT_TESTED",
+      "PANEL_TOUCH_SCROLL_NOT_TESTED",
+      "ALL_VISIBLE_CONTROLS_NOT_ENUMERATED",
+      "TABLET_NOT_TESTED",
+      "KEYBOARD_ONLY_NOT_TESTED",
+      "INDEPENDENT_REVIEWER_NOT_EVIDENCED"
+    ],
+    "closure_effect": "PARTIAL_EVIDENCE_ONLY_NOT_VERIFIED_CLOSED"
+  },
+  "last_reconciliation": {
+    "at": "2026-09-13T06:35:26Z",
+    "actor": "ABSTRA_GPT",
+    "decision": "KEEP_T1_ACTIVE_LOOP",
+    "why": "Successful live single-journey probes do not satisfy the mandatory 50-cycle, full-control, drag-drop, panel scroll/touch, tablet, keyboard-only and independent-review gates."
+  }
 }
