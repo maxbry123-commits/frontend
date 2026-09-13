@@ -1,0 +1,31 @@
+{
+  "schema": "yaiwes.component-closure.state.v1",
+  "contract": "tel.workflow/v3",
+  "updated_at_utc": "2026-09-13T02:54:00Z",
+  "objective": "close missing components by canonical acquisition, wiring and tests",
+  "nodes": {
+    "N07-VITE-ACQUIRE": {
+      "state": "GAP_RESOLVABLE",
+      "owner": null,
+      "source": "vitejs/vite@v8.3.0",
+      "source_commit": "434e8e9495436a60789f2b588a04a6a24a3d1661",
+      "run_id": 34732661919,
+      "job_id": 103658218081,
+      "result": "SOURCE_SPECIAL_FILE_GAP",
+      "same_strategy_retry": "DENY"
+    },
+    "N13-VERCEL-AI-SDK-SOURCE-INTEGRATION": {
+      "state": "EXECUTING",
+      "owner": "WATCHDOG-COMPONENT-CLOSURE",
+      "source": "vercel/ai@ai@5.0.257",
+      "source_commit": "82137ec13283bb0f72d89f192403ab7378194a37",
+      "license": "Apache-2.0",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vercel_ai_sdk",
+      "run_id": 34734135513,
+      "job_id": 103662336769,
+      "progress": ["sparse bootstrap PASS", "immutable canonical motor blobs PASS", "Motor2 execute in progress"]
+    }
+  },
+  "next_free_component_order": ["N11-BIG-AGI-SOURCE-INTEGRATION", "N08-SUPABASE-ACQUIRE", "N09-DUCKDB-ACQUIRE-SPECIAL", "N10-AVF-PROVIDER-CAPABILITY"],
+  "closure_rule": "SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+}
