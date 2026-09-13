@@ -1,0 +1,15 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "chat_id":"SOL-4-GPT-2026-09-12T22:11-05:00",
+  "agent_name":"SOL 4 GPT 🆘",
+  "node_id":"F-AI-023",
+  "fresh_main_sha":"c09d651004d2a6d065b28e95e104bf350bce5358",
+  "base_sha":"c09d651004d2a6d065b28e95e104bf350bce5358",
+  "write_scope":"F-AI-023 reference URL -> adapter -> editable canvas; reuse shared import controller; dedicated test/workflow/evidence only; excludes Wordflow N01-N31",
+  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-AI-023-SOL-4-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-AI-023-SOL-4-EVIDENCE.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/file-import-controller-v1.js","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ai-023-reference-import.spec.mjs",".github/workflows/factory-f-ai-023-reference-import.yml"],
+  "claimed_at":"2026-09-12T22:11:00-05:00",
+  "state":"CLAIMED",
+  "classification":"PRODUCT_FAILURE_REPRODUCED: add-reference stores URL only; no adapter/canvas editable result",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"]
+}
