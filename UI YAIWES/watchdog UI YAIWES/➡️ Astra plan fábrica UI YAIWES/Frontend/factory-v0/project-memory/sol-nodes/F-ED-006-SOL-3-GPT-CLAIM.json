@@ -4,12 +4,21 @@
   "chat_id":"SOL-3-GPT-2026-09-12T21:44-05:00",
   "agent_name":"SOL 3 GPT 🆘",
   "node_id":"F-ED-006",
-  "fresh_main_sha":"4146b690ecd2c61f5b6d853e08a2ccefbb8f3523",
+  "fresh_main_sha":"6a98cb732e56b801c203ff9d4c6f35868af416c1",
   "base_sha":"4146b690ecd2c61f5b6d853e08a2ccefbb8f3523",
-  "write_scope":"F-ED-006 contextual single-panel mouse/touch scroll verification; evidence-only until failure reproduced",
-  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-ED-006-SOL-3-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-ED-006-SOL-3-EVIDENCE.json"],
+  "write_scope":"F-ED-006 only: src/scroll-preserver.js + V1.9.2 gate workflow + additive evidence/claim; no Wordflow writes",
+  "paths":[
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/scroll-preserver.js",
+    ".github/workflows/astra-factory-v19-local-50-cycle.yml",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-ED-006-SOL-3-GPT-CLAIM.json",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-ED-006-SOL-3-EVIDENCE.json"
+  ],
   "claimed_at":"2026-09-12T22:03:00-05:00",
-  "state":"CLAIMED",
+  "state":"EXECUTING",
+  "classification":["PRODUCT_FAILURE","EVIDENCE_FAILURE"],
+  "failure_evidence":{"prior_run":34733865710,"prior_job":103662574511,"candidate_sha":"bf9cbec840ff45a059e1679cb545a5f90e2172a3","desktop_reload":"PASS_50_OF_50","mobile_move_reload":"PASS","failure":"MOBILE_CONTEXT_PANEL_TOUCH_SCROLL_ZERO"},
+  "strategy_delta":{"order":"PATCH","product_commit":"fdfec70894ca18d225004b0f484c4fb1ec5939fa","product_blob":"71e5adadae7a71ebace583b62886013a80bdc5a5","ci_commit":"688f6d40830737d148d10d23a3db924ce1096727","description":"Add non-passive touchmove fallback to existing single scroll owner and include scroll-preserver in exact V1.9.2 CI trigger/syntax gate; no second panel/state engine."},
+  "active_test":{"run_id":34734622370,"job_id":103663670812,"tested_sha":"688f6d40830737d148d10d23a3db924ce1096727","status":"IN_PROGRESS"},
   "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "goals12_input":{"G01":"PASS literal panel+scroll requirement","G02":"PASS fresh head","G03":"PASS queue/state precedence","G04":"PASS no prior F-ED-006 claim found","G05":"PENDING","G06":"PASS reuse-first","G07":"PENDING","G08":"PENDING","G09":"PENDING","G10":"PENDING","G11":"PENDING","G12":"PENDING"}
+  "goals12_input":{"G01":"PASS literal single-panel mouse/touch scroll","G02":"PASS fresh head and exact candidate history","G03":"PASS fresh run/job evidence","G04":"PASS unique F-ED-006 writer","G05":"PASS existing scroll-preserver reused","G06":"PASS no OSS download","G07":"PASS minimum patch applied","G08":"IN_PROGRESS exact gate","G09":"IN_PROGRESS browser E2E","G10":"PENDING final 3+3","G11":"PENDING terminal run/artifact/readback","G12":"LOCKED F-ED-006 until terminal"}
 }
