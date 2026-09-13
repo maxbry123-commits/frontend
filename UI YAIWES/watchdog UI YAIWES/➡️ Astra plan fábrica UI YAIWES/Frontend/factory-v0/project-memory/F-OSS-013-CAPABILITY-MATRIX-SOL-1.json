@@ -1,0 +1,57 @@
+{
+  "schema": "yaiwes.factory.oss-capability-matrix.v1",
+  "node_id": "F-OSS-013",
+  "agent_name": "SOL 1 GPT 🆘",
+  "base_sha": "037ce6b915fe939f72d56ee0387478522a7a1909",
+  "claim_commit": "9e3cfc8a880aeea8f05b08face76c2ff07880864",
+  "classification": "EVIDENCE_DELTA",
+  "step1_verify_research": {
+    "result": "PASS_WITH_STALE_AUDIT_CONTRADICTION",
+    "facts": [
+      "COMPONENT-AUDIT-2026-09-11 inventories 46 core OSS families but predates current donor registry state.",
+      "src/donors/oss-registry.js currently defines 46 CORE_OSS plus 20 VISUAL_OSS = 66 deduplicated registry entries.",
+      "Registry states Lucide=RUNTIME_ACTIVE, Playwright=TEST_ACTIVE, Frappe Builder/xyflow/Craft.js=DONOR_ACTIVE; remaining entries are availability/candidate states.",
+      "package.json test script executes factory.test.mjs and lucide-donor.test.mjs; Playwright remains dev test harness.",
+      "src/donors contains concrete adapters/patterns including Lucide, Frappe context menu, xyflow minimap, Craft.js patterns and oss-registry."
+    ],
+    "failure_class": "EVIDENCE_FAILURE",
+    "gap": "Historical component audit undercounts current registry and cannot be used as current integration truth."
+  },
+  "step2_execute_delta": {
+    "strategy": "REUSE_EXISTING",
+    "product_code_changed": false,
+    "matrix": [
+      {"component":"Lucide","capability":"minimal SVG icon rendering","local_path":"Frontend/factory-v0/src/donors/lucide-icons.js","adapter":"renderLucideIcon","test":"Frontend/factory-v0/tests/lucide-donor.test.mjs","state":"RUNTIME_ACTIVE_TEST_DECLARED","evidence":"sourceCommit a53bd66a03dfd5609c3638379869e83dc207b051; ISC + MIT Feather-derived"},
+      {"component":"Playwright","capability":"browser E2E harness","local_path":"Frontend/factory-v0/package.json","adapter":"@playwright/test 1.55.0","test":"Frontend/factory-v0/tests/e2e/","state":"TEST_ACTIVE","evidence":"devDependency only; not product runtime"},
+      {"component":"Frappe Builder","capability":"block/context-menu donor","local_path":"Frontend/factory-v0/src/donors/frappe-context-menu-adapter.js","adapter":"frappe-context-menu-adapter","test":"REQUIRES_CURRENT_TEST_READBACK","state":"DONOR_ACTIVE_NOT_RUNTIME_CERTIFIED_BY_THIS_NODE"},
+      {"component":"xyflow","capability":"node workflow/minimap donor","local_path":"Frontend/factory-v0/src/donors/xyflow-minimap-adapter.js","adapter":"xyflow-minimap-adapter","test":"REQUIRES_CURRENT_TEST_READBACK","state":"DONOR_ACTIVE_NOT_RUNTIME_CERTIFIED_BY_THIS_NODE"},
+      {"component":"Craft.js","capability":"React page-editor patterns","local_path":"Frontend/factory-v0/src/donors/craftjs-patterns.js","adapter":"craftjs-patterns","test":"REQUIRES_CURRENT_TEST_READBACK","state":"DONOR_ACTIVE_NOT_RUNTIME_CERTIFIED_BY_THIS_NODE"},
+      {"component":"Remaining registry entries","capability":"see src/donors/oss-registry.js layer+capability fields","local_path":"UI YAIWES/componentes open soure UI YAIWES/ and other existing inventories","adapter":"NONE_PROVEN_BY_F_OSS_013","test":"NONE_PROVEN_BY_F_OSS_013","state":"SOURCE/EXTRACTED/AVAILABLE_CANDIDATE_ONLY"}
+    ],
+    "dedup_counts": {"core":46,"visual":20,"registry_total":66,"runtime_active_registry":1,"test_active_registry":1,"donor_active_visual":3},
+    "next_dependency": "F-OSS-014 may classify categories/variants from this matrix; F-OSS-015 must prove one donor wiring+runtime test before promotion."
+  },
+  "step3_test_report": {
+    "static_readback_checks": [
+      "oss-registry.js exports OSS_COMPONENTS and ossCounts",
+      "Lucide donor has explicit provenance and deterministic missing-icon failure",
+      "lucide-donor.test.mjs asserts upstream, source commit, license, local source, SVG output and unavailable-icon failure",
+      "package.json includes lucide donor test in npm test"
+    ],
+    "test_execution": "NOT_EXECUTED_IN_SHELL; connector provides repository readback, not a runtime shell. No runtime PASS is claimed.",
+    "simulations": [
+      "S1 registry classification: availability states are not promoted to integration states",
+      "S2 Lucide path: donor+declared test qualifies for integration candidate evidence but not fresh runtime certification without execution",
+      "S3 stale audit: historical 46-family count is superseded by current 66-entry registry for inventory purposes"
+    ],
+    "refutations": [
+      "R1 Refute presence=integration: rejected; most registry entries have no adapter/test evidence in this node",
+      "R2 Refute DONOR_ACTIVE=RUNTIME_PASS: rejected; Frappe/xyflow/Craft remain unpromoted without fresh runtime test evidence",
+      "R3 Refute declared test=PASS: rejected; lucide test source is present and wired in package.json, but no shell execution was performed here"
+    ],
+    "decision": "PASS_PENDING_REVIEW",
+    "acceptance": "Inventory matrix is deduplicated against current registry and grounded in current files; no product/runtime closure claimed."
+  },
+  "council12": ["objective=map OSS truth","requirement=component-capability-route-adapter-test","authority=current code over historical audit","prior=46-family audit","owner=SOL 1 GPT","collision=project-memory-only unique path","gap=stale inventory/integration ambiguity","alternatives=download rejected","strategy=REUSE_EXISTING","tests=static readback only","refutations=3 completed","decision=PASS_PENDING_REVIEW then F-OSS-014/F-OSS-015"],
+  "goals12_output": {"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS evidence-only","G08":"PASS static/readback","G09":"N/A runtime wiring intentionally deferred","G10":"PASS 3 simulations + 3 refutations","G11":"PASS file persisted; commit/readback pending after write","G12":"PASS next dependency identified"}
+}
