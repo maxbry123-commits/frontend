@@ -1,8 +1,13 @@
 {
   "schema":"yaiwes.factory.sol.claim.v1","contract":"tel.workflow/v3","chat_id":"SOL-3-GPT-2026-09-12T21:44-05:00","agent_name":"SOL 3 GPT 🆘","node_id":"F-AI-018",
-  "fresh_main_sha":"faefc0b334f6c54519d882c46bbd80af1a431c4f","base_sha":"faefc0b334f6c54519d882c46bbd80af1a431c4f",
-  "write_scope":"F-AI-018 model/team selector verification and minimum delta only; dedicated evidence/test/workflow paths first; excludes F-AI-017 and Wordflow N01-N31",
-  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-AI-018-SOL-3-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-AI-018-SOL-3-EVIDENCE.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ai-018-model-team-selector.spec.mjs",".github/workflows/factory-f-ai-018-model-team-selector.yml"],
-  "claimed_at":"2026-09-12T22:17:30-05:00","state":"CLAIMED","steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "goals12_input":{"G01":"PASS selector changes configuration actually used","G02":"PASS fresh HEAD","G03":"PASS fresh queue/owners","G04":"PASS no prior F-AI-018 claim found","G05":"PENDING inspect model/team wiring","G06":"PASS reuse-first","G07":"PENDING","G08":"PENDING","G09":"PENDING","G10":"PENDING","G11":"PENDING","G12":"LOCKED F-AI-018"}
+  "base_sha":"faefc0b334f6c54519d882c46bbd80af1a431c4f","tested_sha":"7ef9d0b48f6e8c32c448c5a689de53a126e991e0",
+  "write_scope":"F-AI-018 dedicated test/workflow/evidence only; no product mutation; excludes F-AI-017 and Wordflow N01-N31",
+  "state":"PASS_PENDING_REVIEW","classification":"NO_PRODUCT_FAILURE_REPRODUCED_REUSE_EXISTING",
+  "test_commit":"ce41a90e7dce9bfaf946421896fe7d9bdba8cb44","workflow_commit":"7ef9d0b48f6e8c32c448c5a689de53a126e991e0","evidence_commit":"0e7c93a12477a18183f39c21616a7e3921524a75","evidence_blob":"3fbbd95147a3258ae0d7383abaa0ca4ba52cbada",
+  "run_id":34735134030,"job_id":103665089139,"result":"SUCCESS",
+  "tests":["syntax PASS","sequence persisted","planner/reviewer models persisted","AI job consumed selected team/models","quorum selection changed next AI job payload","1/1 browser PASS"],
+  "simulations":3,"refutations":3,"review_required":true,
+  "remaining_gaps":["independent review/global integration downstream","F-AI-017 router transport separate","F-AI-024 blocked until all AI/import dependencies close"],
+  "next_free_node":"READ_FRESH_QUEUE","steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "goals12_output":{"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS_REUSE_NO_PRODUCT_PATCH","G08":"PASS","G09":"PASS","G10":"PASS","G11":"PASS","G12":"PASS"}
 }
