@@ -36,8 +36,8 @@ test.describe('F-CTL-011 project versions and rollback',()=>{
     expect(restored).toEqual(original);
     await expect(page.locator('#status')).toContainText('V1');
 
-    const last=await page.evaluate(()=>window.__YAIWES_VERSION_RESTORE_LAST__||null);
-    expect(last?.restored).toBe(true);
-    expect(last?.version).toBe(1);
+    const snapshots=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)||'[]'),VERSIONS_KEY);
+    expect(snapshots).toHaveLength(1);
+    expect(snapshots[0]?.version).toBe(1);
   });
 });
