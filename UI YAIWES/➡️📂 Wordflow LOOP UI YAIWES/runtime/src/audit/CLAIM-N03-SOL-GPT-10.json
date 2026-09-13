@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <10>",
+  "node_id": "N03-AUTO-AUDITOR-EVIDENCE",
+  "fresh_main_sha": "f1aae43a550be73f0f716c82356a7827c8440d3a",
+  "write_scope": "runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*",
+  "claimed_at": "2026-09-13T06:37:00Z",
+  "reason": "Crazy Wall state GAP_RESOLVABLE; no open N03 PR found; verify stale CI gap before any code delta."
+}
