@@ -13,7 +13,7 @@ permissions:
   contents: read
 concurrency:
   group: factory-f-ctl-009
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   zoom-fit-minimap-gate:
     runs-on: ubuntu-latest
