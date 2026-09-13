@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from hashlib import sha256
 from hmac import compare_digest
+from ipaddress import ip_address
 from typing import Mapping, Protocol
 
 
@@ -26,6 +27,7 @@ class Pairing:
     pairing_secret_sha256: str
     auth_token_sha256: str
     lan_only: bool = True
+    peer_host: str = "127.0.0.1"
 
 
 @dataclass(frozen=True)
@@ -34,6 +36,7 @@ class MirrorSession:
     peer_id: str
     auth_token_sha256: str
     lan_only: bool = True
+    peer_host: str = "127.0.0.1"
 
 
 @dataclass(frozen=True)
@@ -48,6 +51,16 @@ def _digest_text(value: str) -> str:
     return sha256(value.encode("utf-8")).hexdigest()
 
 
+def _require_lan_host(value: str) -> str:
+    try:
+        host = ip_address(value)
+    except ValueError as exc:
+        raise PermissionError("mirror peer_host must be a literal LAN IP") from exc
+    if not (host.is_private or host.is_loopback or host.is_link_local):
+        raise PermissionError("mirror peer_host is outside the LAN boundary")
+    return str(host)
+
+
 def pair(*, peer_id: str, pairing_secret: str, auth_token: str, expected: Pairing) -> MirrorSession:
     """Authenticate pairing before creating a mirror session."""
     if not peer_id.strip() or not pairing_secret or not auth_token:
@@ -56,12 +69,13 @@ def pair(*, peer_id: str, pairing_secret: str, auth_token: str, expected: Pairin
         raise PermissionError("peer mismatch")
     if not expected.lan_only:
         raise PermissionError("mirror must be LAN-first")
+    peer_host = _require_lan_host(expected.peer_host)
     if not compare_digest(_digest_text(pairing_secret), expected.pairing_secret_sha256.lower()):
         raise PermissionError("pairing rejected")
     if not compare_digest(_digest_text(auth_token), expected.auth_token_sha256.lower()):
         raise PermissionError("authentication rejected")
     session_id = sha256((peer_id + ":" + expected.auth_token_sha256).encode("utf-8")).hexdigest()[:24]
-    return MirrorSession(session_id, peer_id, expected.auth_token_sha256.lower(), True)
+    return MirrorSession(session_id, peer_id, expected.auth_token_sha256.lower(), True, peer_host)
 
 
 def send_frame(
@@ -80,6 +94,7 @@ def send_frame(
     """
     if not session.lan_only:
         raise PermissionError("non-LAN mirror session rejected")
+    _require_lan_host(session.peer_host)
     normalized = channel.strip().lower()
     if normalized in FORBIDDEN_CHANNELS or normalized not in ALLOWED_CHANNELS:
         raise PermissionError("mirror channel forbidden")
