@@ -83,10 +83,29 @@ async function dispatchSyntheticTouch(page, sx, sy, ex, ey) {
   await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
 }
 
+async function insertMobileButtonThroughCurrentUI(page) {
+  const leftToggle = page.locator('[data-workspace-toggle="left"]');
+  await expect(leftToggle).toBeVisible();
+  if (await leftToggle.getAttribute('aria-expanded') === 'false') await leftToggle.tap();
+  await expect(page.locator('.library-pane')).toHaveAttribute('aria-hidden', 'false');
+
+  const card = page.locator('[data-kind="button"]');
+  await expect(card).toBeVisible();
+  await card.tap();
+  await expect(page.locator('[data-component-preview]')).toBeVisible();
+  await expect(page.locator('[data-preview-insert]')).toHaveAttribute('data-selected-kind', 'button');
+  await page.locator('[data-preview-insert]').tap();
+  await expect(page.locator('[data-node]')).toHaveCount(1);
+
+  const closeLibrary = page.locator('[data-workspace-close="left"]');
+  await expect(closeLibrary).toBeVisible();
+  await closeLibrary.tap();
+  await expect(page.locator('.library-pane')).toHaveAttribute('aria-hidden', 'true');
+}
+
 async function touchDragNode(page) {
   await hardReset(page);
-  await page.locator('[data-kind="button"]').tap();
-  await expect(page.locator('[data-node]')).toHaveCount(1);
+  await insertMobileButtonThroughCurrentUI(page);
   const node = page.locator('[data-node]').first();
   const nodeId = await node.getAttribute('data-node');
 
@@ -147,7 +166,12 @@ async function touchDragNode(page) {
 
 async function touchScrollPanel(page) {
   await page.locator('[data-step="3"]').tap();
+  const rightToggle = page.locator('[data-workspace-toggle="right"]');
+  await expect(rightToggle).toBeVisible();
+  if (await rightToggle.getAttribute('aria-expanded') === 'false') await rightToggle.tap();
+  await expect(page.locator('.context-pane')).toHaveAttribute('aria-hidden', 'false');
   const panel = page.locator('#context-scroll');
+  await expect(panel).toBeVisible();
   const metrics = await panel.evaluate(el => ({ top: el.scrollTop, height: el.scrollHeight, client: el.clientHeight }));
   expect(metrics.height).toBeGreaterThan(metrics.client);
   const box = await panel.boundingBox();
