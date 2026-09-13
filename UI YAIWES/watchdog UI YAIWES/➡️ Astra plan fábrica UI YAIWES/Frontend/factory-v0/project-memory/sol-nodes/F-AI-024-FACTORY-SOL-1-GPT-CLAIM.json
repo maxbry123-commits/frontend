@@ -13,8 +13,13 @@
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-AI-024-FACTORY-SOL-1-GPT-CLAIM.json"
   ],
   "claimed_at":"2026-09-12T23:25:00-05:00",
-  "state":"IN_PROGRESS",
-  "dependencies":{"F-AI-017":"PASS_100_RELEASED","F-AI-018":"PASS_PENDING_REVIEW","F-AI-019":"PASS_PENDING_REVIEW","F-AI-020":"PASS_PENDING_REVIEW","F-AI-021":"PASS_PENDING_REVIEW","F-AI-022":"PASS_PENDING_REVIEW","F-AI-023":"PASS_100_RELEASED"},
-  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "acceptance":"E2E source->router/adapter->editor->editable state with evidence"
+  "released_at":"2026-09-12T23:26:00-05:00",
+  "state":"GAP_BLOCKED_BY_ACTIVE_OWNER_RELEASED",
+  "dependencies":{"F-AI-017":"PASS_100_RELEASED","F-AI-018":"PASS_PENDING_REVIEW","F-AI-019":"PASS_PENDING_REVIEW","F-AI-020":"PASS_PENDING_REVIEW","F-AI-021":"PASS_PENDING_REVIEW","F-AI-022":"PASS_PENDING_REVIEW","F-AI-023":"PASS_100_RELEASED","F-UI-050":"IN_PROGRESS"},
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA_BLOCKED_BY_OWNER","TEST_REPORT"],
+  "acceptance":"E2E source->router/adapter->editor->editable state with evidence",
+  "evidence_commit":"c58d9305f28b4bc82ac51b084a40c47027d695d0",
+  "pass_percent":35,
+  "remaining_gaps":["canonical index-v19.html does not yet wire frontend-router-bridge.js; active owner FACTORY-SOL-8-GPT controls F-UI-050 frontend integration lane"],
+  "next_free_node":"READ_FRESH_REQUIRED"
 }
