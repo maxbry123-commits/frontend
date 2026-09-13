@@ -1,9 +1,9 @@
 {
   "schema": "yaiwes.factory.sol.loop-node.v1",
   "node_id": "SOL_FACTORY_A_T1_CONTRACT_CONSUMER",
-  "owner": "SOL_GPT_ENV_A",
+  "owner": "SOL 2 GPT 🆘",
   "reviewer": "ASTRA",
-  "status": "READY_TO_CLAIM",
+  "status": "CLAIMED",
   "gate": "T1_FACTORY_FRONTEND",
   "task": "Use the existing Factory V0 as a consumer to validate one backend-facing UI contract without starting T2 product integration.",
   "max_steps": 3,
@@ -12,6 +12,33 @@
     "2_EXECUTE: run one mock-to-SolContractAdapter consumer simulation using existing factory interfaces; produce only contract/evidence deltas, no product-path writes.",
     "3_REPORT: write result/evidence into this project-memory node and report PASS/GAP with SHA/log/read-back; never self-certify VERIFIED_CLOSED."
   ],
+  "claim": {
+    "chat_id": "SOL-2-GPT-2026-09-12T21:44-05:00",
+    "agent_name": "SOL 2 GPT 🆘",
+    "node_id": "SOL_FACTORY_A_T1_CONTRACT_CONSUMER",
+    "fresh_main_sha": "71d2b7758e03116083e068964d53986b314509cc",
+    "base_sha": "71d2b7758e03116083e068964d53986b314509cc",
+    "write_scope": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-A.json plus additive evidence for this node only",
+    "paths": [
+      "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-A.json"
+    ],
+    "claimed_at": "2026-09-12T21:44:00-05:00",
+    "state": "CLAIMED"
+  },
+  "goals12_input": {
+    "G01": "PASS literal node requirement preserved",
+    "G02": "PASS fresh main read at claim",
+    "G03": "PASS Crazy Wall/STATE/CHECKPOINT/project-memory read",
+    "G04": "PASS node READY_TO_CLAIM and path not claimed by SOL 1",
+    "G05": "PENDING contract/source dedup",
+    "G06": "PASS reuse existing Factory interfaces first",
+    "G07": "PENDING evidence-only minimum delta",
+    "G08": "PENDING specific contract simulation",
+    "G09": "PENDING integration-level mock consumer check",
+    "G10": "PENDING 3 simulations + 3 refutations",
+    "G11": "PENDING SHA/readback evidence",
+    "G12": "PENDING reconcile next free node"
+  },
   "allowed_write_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/",
   "forbidden_write_roots": [
     "UI YAIWES/Interface YAIWES ui/",
