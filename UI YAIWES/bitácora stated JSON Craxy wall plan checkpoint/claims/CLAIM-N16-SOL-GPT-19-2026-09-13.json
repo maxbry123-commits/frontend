@@ -1,0 +1,12 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <19>",
+  "node_id": "N16-CHECKPOINT-BYTES-HASH",
+  "fresh_main_sha": "de4d5ee72bc69badfc7dda9328cc025a41085c94",
+  "write_scope": "runtime/src/recovery/**|runtime/tests/test_recovery*",
+  "claimed_at": "2026-09-13T07:00:00Z",
+  "authority": "Crazy Wall fresh read: N16 GAP_RESOLVABLE; repository search found no active N16 claim sidecar.",
+  "strategy": "RECONCILE_EXISTING_IMPLEMENTATION_WITH_TRUSTED_CI",
+  "collision_guard": "No writes outside N16 scope; fresh read before any patch."
+}
