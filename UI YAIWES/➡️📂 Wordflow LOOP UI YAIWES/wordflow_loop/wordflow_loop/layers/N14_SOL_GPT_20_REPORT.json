@@ -1,0 +1,39 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N14-RESEARCH-SOURCE-VERIFICATION",
+  "chat_id": "SOL GPT <20>",
+  "state": "VERIFIED_CLOSED",
+  "report_state": "PASS",
+  "claim_commit": "57cfe486d0d425d0eac838989a5428254696d63e",
+  "tested_sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+  "run_id": 34739510224,
+  "job_id": 103678337638,
+  "paths": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/layers/layer_01_research.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_core.py"
+  ],
+  "blob_sha": {
+    "layer_01_research.py": "d61e2c48fc618ea7b93ced207950891367fe19d6",
+    "test_core.py": "aa5175e539926aded7a2ce4cf37b5e5c379b9b6e"
+  },
+  "tests": {
+    "trusted_ci": "PASS",
+    "wordflow_step": "PASS",
+    "runtime_step": "PASS"
+  },
+  "evidence": [
+    "layer_01_research.py blob on current main equals tested SHA cf40e9cb...",
+    "test_core.py blob on current main equals tested SHA cf40e9cb...",
+    "run 34739510224 completed success",
+    "job 103678337638 completed success",
+    "research verification enforces VERIFIED status, checked_url equality, timestamp freshness, adapter presence, SHA256 content hash, official-source ranking and fail-closed inconclusive output"
+  ],
+  "refutations": [
+    "Schema completeness: verified-source gate, freshness policy and fail-closed behavior are present; PASS",
+    "Residual gap: historical CI failure is superseded by trusted successful CI over unchanged N14 code/tests; no N14 code gap remains",
+    "Evidence strength: exact blob parity + tested revision + successful run/job prove the current implementation under the same bytes; PASS"
+  ],
+  "remaining_gaps": [],
+  "delta": "NO_CODE_CHANGE_REQUIRED_REUSE_EXISTING",
+  "scope_note": "No new architecture, dependency, scheduler, workflow owner or alternate research engine introduced."
+}
