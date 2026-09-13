@@ -6,6 +6,8 @@ on:
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/**'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/**'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/orchestrator.py'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/rule_engine/**'
       - '.github/workflows/yaiwes-wordflow-loop-pytest.yml'
@@ -26,6 +28,9 @@ jobs:
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/orchestrator.py
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/rule_engine
           sparse-checkout-cone-mode: false
