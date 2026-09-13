@@ -1,9 +1,0 @@
-{
-  "schema": "tel.workflow/v3.claim",
-  "state": "IN_PROGRESS",
-  "chat_id": "SOL GPT <12>",
-  "node_id": "N04-STATE-RECONCILIATION",
-  "fresh_main_sha": "f99b30725ce66d2fdf3e2004358e90d8af3cb0e0",
-  "write_scope": "shared state docs only",
-  "claimed_at": "2026-09-13T07:02:30Z"
-}
