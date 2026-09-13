@@ -1,10 +1,23 @@
 {
   "schema": "tel.workflow/v3",
-  "state": "CLAIMED",
+  "state": "RELEASED_DUPLICATE_CLAIM",
   "owner": "SOL GPT <17>",
   "chat_id": "SOL GPT <17>",
   "node_id": "N33-MIRROR-TRANSPORT-CONTROL",
   "fresh_main_sha": "575e74e1fe5a9bbd45d916134eff38810c5347a2",
   "write_scope": "runtime/src/mirror/**|runtime/tests/test_mirror*",
-  "claimed_at": "2026-09-13T06:26:00Z"
+  "claimed_at": "2026-09-13T06:26:00Z",
+  "released_at": "2026-09-13T07:04:30Z",
+  "release_reason": "Earlier claim by SOL GPT <13> at 2026-09-13T05:51:20Z was discovered during fresh collision audit; released to preserve one-node ownership.",
+  "verified_functional_evidence": {
+    "implementation_commit": "f8477f0791b18aa249352085e2eaea910860ec9a",
+    "test_commit": "26ec8170efe5573dcd88e54f18683b3900dc6aa1",
+    "certified_descendant_sha": "13418e0dd9d73d2070497b9485757d098cbed0e8",
+    "run_id": 34743651221,
+    "job_id": 103687583217,
+    "transport_blob": "a7fb9e9b1584f403215e0976a81a137785fd68a6",
+    "test_blob": "dcb930555164e2f17f04aafd11494b9850062242",
+    "tests": "41/41 Wordflow PASS; 256/256 runtime PASS + 42 subtests PASS"
+  },
+  "refutation": "The earlier SOL GPT <13> marker cited run 34742769854 on SHA 54436297718fc33a64128002f96569250fe56579, which is an ancestor of the N33 test commit rather than a descendant. Valid descendant CI is recorded above."
 }
