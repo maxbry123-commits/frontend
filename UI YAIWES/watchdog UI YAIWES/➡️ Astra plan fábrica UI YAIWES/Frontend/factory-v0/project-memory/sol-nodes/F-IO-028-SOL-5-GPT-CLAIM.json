@@ -1,0 +1,18 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "chat_id":"SOL-5-GPT-2026-09-12T21:45-05:00",
+  "agent_name":"SOL 5 GPT 🆘",
+  "node_id":"F-IO-028",
+  "fresh_main_sha":"1d78b5b4cba0f344ef78a6a4eaacf31856815f85",
+  "base_sha":"1d78b5b4cba0f344ef78a6a4eaacf31856815f85",
+  "write_scope":"Factory F-IO-028 JSON export verification/evidence only until a product failure is reproduced; no shared source writes without fresh anti-collision reread; excludes Wordflow N01-N31",
+  "paths":[
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-IO-028-SOL-5-GPT-CLAIM.json",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-IO-028-SOL-5-EVIDENCE.json"
+  ],
+  "claimed_at":"2026-09-12T21:46:00-05:00",
+  "state":"CLAIMED",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "goals12_input":{"G01":"PASS literal Export JSON/reimportable requirement","G02":"PASS fresh main 1d78b5b4 read before claim","G03":"PASS dynamic Crazy Wall + STATE + CHECKPOINT read","G04":"PASS unique evidence-only paths; active F-ED-001/F-ED-003/F-AI-017 excluded","G05":"PENDING inspect current export implementation/tests","G06":"PASS reuse-first/no download","G07":"PENDING minimum delta only after classification","G08":"PENDING","G09":"PENDING","G10":"PENDING","G11":"PENDING","G12":"PENDING"}
+}
