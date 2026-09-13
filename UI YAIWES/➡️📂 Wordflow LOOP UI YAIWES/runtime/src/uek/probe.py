@@ -1,9 +1,10 @@
 """Read-only host capability probe for the N06/N10 platform matrix.
 
 The probe observes executable/device availability and, on Android, verifies the
-platform-declared AVF feature before advertising AVF/crosvm as executable. It
-never launches a VM, changes host state, or treats repository source presence
-as runtime support. Sandbox lifecycle remains owned by N20.
+platform-declared AVF feature plus a real read-only AVF service query before
+advertising AVF/crosvm as executable. It never launches a VM, changes host state,
+or treats repository source presence as runtime support. Sandbox lifecycle
+remains owned by N20.
 """
 from __future__ import annotations
 
@@ -36,6 +37,7 @@ class AndroidAvfEvidence:
     cuttlefish: bool
     vm_cli_present: bool
     crosvm_present: bool
+    service_accessible: bool
 
     @property
     def executable(self) -> bool:
@@ -44,6 +46,7 @@ class AndroidAvfEvidence:
             and self.abi in {"arm64-v8a", "x86_64"}
             and self.vm_cli_present
             and self.crosvm_present
+            and self.service_accessible
         )
 
     @property
@@ -144,17 +147,33 @@ def _detect_platform(system_name: str, environ: Mapping[str, str]) -> Platform:
     raise PlatformProbeError(f"unsupported_host_system:{system_name}")
 
 
+def _resolve_avf_vm_cli(
+    which: Callable[[str], Optional[str]],
+    exists: Callable[[str], bool],
+) -> str | None:
+    discovered = which("vm")
+    if discovered:
+        return discovered
+    if exists(AVF_VM_PATH):
+        return AVF_VM_PATH
+    if exists("/system/bin/vm"):
+        return "/system/bin/vm"
+    return None
+
+
 def probe_android_avf_runtime(
     *,
     which: Callable[[str], Optional[str]] = shutil.which,
     exists: Callable[[str], bool] = os.path.exists,
     run_command: CommandRunner = _run_readonly,
 ) -> AndroidAvfEvidence:
-    """Verify AVF from Android-owned feature/property/APEX signals.
+    """Verify AVF from Android-owned feature/property/APEX/service signals.
 
-    ``pm has-feature`` is the authoritative support gate. AOSP ships the AVF
-    ``vm`` and crosvm binaries in ``com.android.virt``; their presence is
-    necessary runtime evidence but cannot make a feature-less device supported.
+    ``pm has-feature`` is the authoritative framework support gate. AOSP ships
+    the AVF ``vm`` and crosvm binaries in ``com.android.virt``. Finally, ``vm
+    info`` is an AOSP-documented read-only service query: it proves that the
+    current execution context can actually reach AVF instead of inferring access
+    from file presence. Any query failure or permission denial fails closed.
     """
 
     feature_declared = _pm_has_avf_feature(run_command)
@@ -162,14 +181,19 @@ def probe_android_avf_runtime(
     device = _getprop("ro.product.device", run_command)
     model = _getprop("ro.product.model", run_command)
     name = _getprop("ro.product.name", run_command)
-    vm_cli = bool(which("vm") or exists(AVF_VM_PATH) or exists("/system/bin/vm"))
+    vm_cli_path = _resolve_avf_vm_cli(which, exists)
     crosvm = bool(which("crosvm") or exists(AVF_CROSVM_PATH))
+    service_accessible = False
+    if feature_declared and vm_cli_path:
+        code, _ = _query((vm_cli_path, "info"), run_command)
+        service_accessible = code == 0
     return AndroidAvfEvidence(
         feature_declared=feature_declared,
         abi=abi,
         cuttlefish=_is_cuttlefish(device, model, name),
-        vm_cli_present=vm_cli,
+        vm_cli_present=vm_cli_path is not None,
         crosvm_present=crosvm,
+        service_accessible=service_accessible,
     )
 
 
@@ -187,8 +211,9 @@ def probe_current_host(
     Windows WHPX is deliberately not inferred from OS identity. A future native
     adapter must provide a verified WHPX capability to the classifier. Likewise,
     repository vendor/source presence is never treated as an executable backend.
-    On Android, AVF is advertised only when the framework feature plus its APEX
-    runtime binaries and a supported 64-bit ABI are all observed.
+    On Android, AVF is advertised only when the framework feature, its APEX
+    runtime, a supported 64-bit ABI, and an actual read-only AVF service query
+    all succeed for the current execution context.
     """
 
     env = os.environ if environ is None else environ
