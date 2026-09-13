@@ -1,11 +1,18 @@
 {
   "schema": "tel.workflow/v3.claim",
-  "state": "IN_PROGRESS",
+  "state": "VERIFIED_CLOSED_RELEASED",
   "chat_id": "SOL GPT <10>",
   "node_id": "N04-STATE-RECONCILIATION",
   "fresh_main_sha": "48b22db7653eb3d25a0e58865cb0ef8d2994f606",
   "crazy_wall_source_blob": "0101749745fcbf9a6ab7ba299dcd7e78bbc59492",
+  "crazy_wall_final_blob": "a1042e93592af31124239730dd199d18613c22ea",
   "write_scope": "shared state docs only",
   "claimed_at": "2026-09-13T07:12:00Z",
-  "reason": "N04 remains FREE while verified lateral evidence proves stale central states; perform full-file JSON reconciliation guarded by source blob SHA."
+  "released_at": "2026-09-13T07:18:00Z",
+  "pass_percent": 100,
+  "central_reconcile_commit": "23777501cb4a36695d5d9e5afb467837ef9574de",
+  "run_id": 34744788246,
+  "job_id": 103690581688,
+  "result": "Crazy Wall + STATE + CHECKPOINT + HANDOFF readback consistent; three refutations PASS; no N04 remaining gaps.",
+  "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N04-STATE-RECONCILIATION-SOL-GPT-10-R3-2026-09-13T0717Z.json"
 }
