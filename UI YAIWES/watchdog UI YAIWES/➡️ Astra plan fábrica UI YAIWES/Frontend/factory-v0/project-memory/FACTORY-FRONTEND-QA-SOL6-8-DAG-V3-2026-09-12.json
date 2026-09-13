@@ -1,0 +1,66 @@
+{
+  "schema": "yaiwes.factory.frontend-qa-dag.v3",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "queue": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-FRONTEND-QA-V3-2026-09-12.json",
+  "deterministic_scheduler": {
+    "llm_scheduler_percent": 0,
+    "rules_percent": 100,
+    "max_parallel_workers": 3,
+    "identity_order": ["FACTORY-SOL-6-GPT","FACTORY-SOL-7-GPT","FACTORY-SOL-8-GPT"],
+    "node_order": "worker sequence then priority ASC then node_id ASC",
+    "claim_guard": ["fresh_main_sha","dependencies_terminal","node_not_claimed","no_path_overlap","worker_allowed"],
+    "terminal_states": ["PASS_PENDING_REVIEW","VERIFIED_CLOSED"],
+    "failure_states": ["GAP","GAP_RESOLVABLE","BLOCKED"],
+    "on_failure": "same node -> classify -> StrategyDelta -> retest; release only if externally blocked",
+    "on_collision": "do not write; refresh queue; choose next dependency-satisfied allowed node"
+  },
+  "step_machine": {
+    "steps": [
+      {"n":1,"id":"VERIFY_RESEARCH","requires":["fresh HEAD","fresh claim map","current UI/runtime/test readback","published URL if web validation","interactive inventory if button node"],"output":"GAP classification + minimal delta plan"},
+      {"n":2,"id":"EXECUTE_DELTA","strategy":["REUSE_EXISTING","PATCH","ADAPT","GENERATE","NEW_DOWNLOAD"],"guard":"write only declared paths; OSS download/extraction only after capability GAP and provenance validation"},
+      {"n":3,"id":"TEST_REPORT","requires":["specific test","browser/E2E","desktop/mobile as applicable","screenshots artifact","console/network check","readback","commit/blob SHA","run/job/artifact ids","3 simulations","3 refutations"],"output":"PASS_PENDING_REVIEW or GAP"}
+    ]
+  },
+  "worker_chains": {
+    "FACTORY-SOL-6-GPT": [
+      {"node":"F-UI-045","type":"existing_primary"},
+      {"node":"F-UI-046","type":"existing_primary"},
+      {"node":"F-UI-051","depends_on":["F-UI-045"]},
+      {"node":"F-UI-052","depends_on":["F-UI-045"]},
+      {"node":"F-UI-053","depends_on":["F-UI-046"]},
+      {"node":"F-UI-054","depends_on":["F-UI-051","F-UI-052","F-UI-053"]}
+    ],
+    "FACTORY-SOL-7-GPT": [
+      {"node":"F-MOD-033","type":"grandfathered_existing_claim"},
+      {"node":"F-UI-047","type":"existing_primary"},
+      {"node":"F-UI-048","type":"existing_primary"},
+      {"node":"F-UI-055","depends_on":["F-UI-047"]},
+      {"node":"F-UI-056","depends_on":["F-UI-048"]},
+      {"node":"F-UI-057","depends_on":["F-UI-055","F-UI-056"]},
+      {"node":"F-UI-058","depends_on":["F-UI-057"]}
+    ],
+    "FACTORY-SOL-8-GPT": [
+      {"node":"F-UI-049","type":"existing_primary","observed":"PASS_PENDING_REVIEW"},
+      {"node":"F-UI-050","type":"existing_primary"},
+      {"node":"F-UI-059","depends_on":["F-UI-049"]},
+      {"node":"F-UI-060","depends_on":["F-UI-050"]},
+      {"node":"F-UI-061","depends_on":["F-UI-059","F-UI-060"]}
+    ]
+  },
+  "join": [
+    {"node":"F-UI-062","depends_on":["F-UI-054","F-UI-058","F-UI-061"],"review_rule":"reviewer must differ from producer for each reviewed artifact"},
+    {"node":"F-UI-063","depends_on":["F-UI-062"],"final_gate":true,"pass_rule":"TESTED_SHA == PUBLISHED_SHA && 100% discovered controls evidenced && desktop+mobile+touch+keyboard+web-live+reload+export+screenshots+console0+independent-review"}
+  ],
+  "button_coverage_schema": ["control_id","surface","viewport","input_mode","expected_effect","actual_effect","state_before","state_after","screenshot_before","screenshot_after","console_errors","network_errors","result","evidence_ref"],
+  "friction_metrics": ["actions_to_complete_journey","dead_clicks","backtracks","forced_reload","hidden_essential_control","overlap_failures","state_loss","console_exceptions"],
+  "pass_constraints": {
+    "dead_clicks": 0,
+    "forced_reload": 0,
+    "hidden_essential_control": 0,
+    "overlap_failures": 0,
+    "state_loss": 0,
+    "console_exceptions": 0,
+    "control_matrix_coverage_percent": 100
+  }
+}
