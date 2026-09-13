@@ -1065,7 +1065,7 @@
     {
       "n": 27,
       "id": "N27-CONTINUOUS-LOOP",
-      "state": "CLAIMED",
+      "state": "VERIFIED_CLOSED",
       "owner": "ASTRA_GPT",
       "title": "Continuous LOOP multi-stage",
       "scope": "runtime/src/integration/**|runtime/tests/test_integration*",
@@ -1084,7 +1084,36 @@
       "node_id": "N27-CONTINUOUS-LOOP",
       "fresh_main_sha": "7575b8d1f6a44d519d90dc1cce6558e310bc3d19",
       "write_scope": "runtime/src/integration/**|runtime/tests/test_integration*|Crazy Wall N27/report Astra only",
-      "claimed_at": "2026-09-13T10:53:00Z"
+      "claimed_at": "2026-09-13T10:53:00Z",
+      "report_state": "PASS_RECONCILED_FROM_EXACT_HEAD_CI",
+      "reported_at": "2026-09-13T11:01:00Z",
+      "paths_changed": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/continuous_loop.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_integration_continuous_loop.py",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-N27-CONTINUOUS-LOOP-2026-09-13.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
+      "source_commit_sha": "7181ebadcd39769e739d508a56938a74b19bb976",
+      "report_commit_sha": "c7006d9838dbe2cd0bc1a161a4b9df9d0d619274",
+      "certified_sha": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
+      "blob_sha": "continuous_loop.py=eacde29fa9fd9944d2915cff77ba774ebec45ad8|test_integration_continuous_loop.py=cd72f070772becb8a66f12d3055699691e9a15af",
+      "tests": "exact-head CI run 34745090975 job 103691474425 SUCCESS: Wordflow 41 PASS; runtime 268 PASS + 42 subtests PASS; 5 focal N27 cases",
+      "run_id": 34745090975,
+      "job_id": 103691474425,
+      "evidence": [
+        "audit occurs before stage advance",
+        "single explicit gap is bound to StrategyDelta and reinjected into same stage",
+        "later stages are blocked until PASS",
+        "bounded exhaustion returns explicit GAP",
+        "exact source/test blobs certified at workflow head"
+      ],
+      "remaining_gaps": [],
+      "limitations": [
+        "Deterministic injected loop primitive; not a scheduler/watchdog.",
+        "No 100x claim; product acceptance remains global."
+      ],
+      "next_free_node": null
     },
     {
       "n": 28,
