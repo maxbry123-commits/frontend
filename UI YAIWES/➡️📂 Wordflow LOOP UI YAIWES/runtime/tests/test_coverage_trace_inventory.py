@@ -48,6 +48,16 @@ def test_incomplete_inventory_fails_closed_with_missing_ids(tmp_path):
         )
 
 
+@pytest.mark.parametrize("unsafe_path", ("C:/source.md", "source:alternate.md"))
+def test_loader_rejects_paths_that_five_pass_cannot_audit(tmp_path, unsafe_path):
+    row = _trace()
+    row["source"]["path"] = unsafe_path
+    (tmp_path / "trace.json").write_text(json.dumps(row), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="unsafe_trace_path"):
+        load_trace_inventory(tmp_path, ("REQ-S3-057",))
+
+
 @pytest.mark.parametrize(
     "rows, error",
     [
