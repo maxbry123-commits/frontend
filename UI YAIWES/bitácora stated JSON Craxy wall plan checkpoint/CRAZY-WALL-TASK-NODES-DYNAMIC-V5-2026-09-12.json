@@ -1239,7 +1239,7 @@
     {
       "n": 31,
       "id": "N31-UI-FINAL",
-      "state": "BLOCKED_AFTER_N17",
+      "state": "FREE",
       "owner": null,
       "title": "UI final sobre runtime verificado",
       "scope": "UI factory only; no runtime ownership",
@@ -1251,7 +1251,9 @@
         "Probar ventanas/chat/files/control sin bypass",
         "E2E final + Final Judge"
       ],
-      "close": "Producto completo VERIFIED_CLOSED"
+      "close": "Producto completo VERIFIED_CLOSED",
+      "reconciled_reason": "N17-FULL-PRODUCT-E2E VERIFIED_CLOSED at queue commit 7575b8d1f6a44d519d90dc1cce6558e310bc3d19",
+      "unblocked_at": "2026-09-13T11:04:00Z"
     },
     {
       "n": 32,
