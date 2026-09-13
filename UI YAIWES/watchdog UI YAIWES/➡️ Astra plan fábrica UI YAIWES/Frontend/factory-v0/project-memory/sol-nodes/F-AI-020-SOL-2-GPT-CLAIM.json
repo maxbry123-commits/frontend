@@ -6,15 +6,17 @@
   "node_id":"F-AI-020",
   "fresh_main_sha":"1a401ca0e608e6b15fd88e1d223f61cb31293fd8",
   "base_sha":"1a401ca0e608e6b15fd88e1d223f61cb31293fd8",
-  "write_scope":"F-AI-020 remote MCP/API connection connect/status/cancel verification; dedicated claim/evidence/test/workflow first; product source only after gap reproduction and fresh collision check",
+  "write_scope":"F-AI-020 remote MCP/API connect/status/cancel; existing remote-control-v1 reused; minimum product delta is entrypoint wiring only after reproduced integration gap",
   "paths":[
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-AI-020-SOL-2-GPT-CLAIM.json",
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-AI-020-SOL-2-EVIDENCE.json",
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ai-020-remote-connections.spec.mjs",
-    ".github/workflows/factory-f-ai-020-remote-connections.yml"
+    ".github/workflows/factory-f-ai-020-remote-connections.yml",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html"
   ],
   "claimed_at":"2026-09-12T22:27:30-05:00",
   "state":"CLAIMED",
   "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "goals12_input":{"G01":"PASS literal connect/status/cancel without secrets","G02":"PASS fresh HEAD","G03":"PASS Crazy Wall dynamic V2","G04":"PASS no F-AI-020 claim found","G05":"PENDING inspect existing connection/router code","G06":"PASS reuse-first","G07":"PENDING minimum delta","G08":"PENDING dedicated test","G09":"PENDING MCP/API integration contract","G10":"PENDING 3 simulations+3 refutations","G11":"PENDING run/job/log/readback","G12":"LOCKED F-AI-020"}
+  "verify_research":{"remote_control_blob":"69efb78dae6c7f2830cf45cced236b4654fbf71d","entrypoint_blob":"97ae9addb1c31f81c4057a3dc4cfad886bbd780c","classification":"PRODUCT_FAILURE_INTEGRATION_GAP","finding":"remote-control-v1 implements connect/status/cancel but index-v19.html does not load it","strategy_delta":"REUSE_EXISTING + one-line entrypoint wiring"},
+  "goals12_input":{"G01":"PASS literal connect/status/cancel without secrets","G02":"PASS fresh HEAD","G03":"PASS Crazy Wall dynamic V2","G04":"PASS no F-AI-020 competing claim found","G05":"PASS existing remote-control implementation deduplicated","G06":"PASS reuse-first","G07":"IN_PROGRESS minimum entrypoint delta","G08":"PENDING dedicated test","G09":"PENDING MCP/API integration contract","G10":"PENDING 3 simulations+3 refutations","G11":"PENDING run/job/log/readback","G12":"LOCKED F-AI-020"}
 }
