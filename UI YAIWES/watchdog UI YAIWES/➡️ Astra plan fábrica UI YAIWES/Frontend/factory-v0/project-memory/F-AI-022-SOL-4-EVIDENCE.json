@@ -1,0 +1,17 @@
+{
+  "schema":"yaiwes.factory.sol.node-evidence.v1",
+  "contract":"tel.workflow/v3",
+  "agent_name":"SOL 4 GPT 🆘",
+  "node_id":"F-AI-022",
+  "state":"PASS_PENDING_REVIEW",
+  "failure_class":"PRODUCT_FAILURE_RESOLVED",
+  "gap_original":"load-html-source persisted only inline HTML byte metadata; it did not materialize an editable canvas component.",
+  "strategy_delta":"ADAPT existing F-AI-021 import controller: capture load-html-source click, parse HTML descriptor, dispatch canonical canvas drop; no second state engine.",
+  "commits":{"controller":"e01e2395252e987114d7cad8e0c94abe7a97f069","e2e_test":"9361fa58f19627bf178291826479e308b92df79a","workflow":"ffb0120f9032fa7915c7e786d77b7a19e026c649"},
+  "tests":{"html_run_id":34734770943,"html_job_id":103664092658,"html_conclusion":"SUCCESS","regression_file_run_id":34734760325,"regression_file_job_id":103664061338,"regression_file_conclusion":"SUCCESS"},
+  "simulations":["S1 pasted HTML -> page descriptor -> canonical drop -> editable node","S2 edit imported label through existing selected editor","S3 reload restores edited imported page"],
+  "refutations":["R1 metadata-only byte record rejected as insufficient","R2 new HTML gate alone rejected until F-AI-021 shared-adapter regression also passed","R3 direct reducer/localStorage mutation rejected in favor of canonical drop path"],
+  "goals12_output":{"G01":"PASS","G02":"PASS fresh rereads","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS reuse","G07":"PASS minimum extension","G08":"PASS syntax/browser","G09":"PASS E2E+reload+regression","G10":"PASS 3+3","G11":"PASS run/job/commits persisted","G12":"PASS release and fresh next-node read"},
+  "review_required":true,
+  "remaining_gaps":["independent reviewer before VERIFIED_CLOSED","aggregate QA downstream"]
+}
