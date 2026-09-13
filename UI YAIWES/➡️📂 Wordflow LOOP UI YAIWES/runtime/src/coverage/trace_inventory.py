@@ -86,6 +86,8 @@ def load_trace_inventory(
     seen: set[str] = set()
     for path in sorted(root.glob("*.json")):
         trace = _load_trace(path)
+        if path.stem != trace.requirement_id:
+            raise ValueError("trace_filename_mismatch")
         if trace.requirement_id not in expected:
             raise ValueError("unexpected_requirement")
         if trace.requirement_id in seen:
