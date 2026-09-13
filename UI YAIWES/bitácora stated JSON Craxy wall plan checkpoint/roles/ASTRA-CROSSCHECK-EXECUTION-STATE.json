@@ -109,7 +109,7 @@
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T16:01:17Z",
+  "updated_at_utc": "2026-09-13T16:24:00Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
@@ -321,12 +321,16 @@
       {
         "revision": "adecb2012bff39fc24fdd20ab10c4463f1d0224c",
         "result": "NO_CHECKS_GENERATED"
+      },
+      {
+        "scope": "full local runtime",
+        "result": "276 PASS plus 42 subtests; 2 host/environment failures: canonical Pydantic version mismatch and Docker socket PermissionError"
       }
     ],
     "refutations": [
       "Local 38-pass regression does not replace exact-head CI.",
       "One certified trace is 0.60%, not full product coverage.",
-      "Main CI benchmark measured 2.5842x, not 100x."
+      "Current local benchmark measured 3.2356x, not 100x."
     ],
     "council12": "Single-agent evidence review covered objective, sources, restrictions, dependencies, architecture, reuse, risks, alternatives, proof, refutation, consolidation and decision; no external Council claimed.",
     "goals_output": {
