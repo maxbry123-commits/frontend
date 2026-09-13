@@ -76,30 +76,129 @@
       "n34_claim_commit": "a597e15cf29e659331696e55afe03cd0c0780e47",
       "claim_collision_prevented": true,
       "scanner_run_34711848316": "cancelled"
+    },
+    "n35_trace_loader": {
+      "claim_commit": "daa7fe7c35088b4e0377f851ec2c7e4db5afc6bf",
+      "code_commit": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
+      "implementation_blob": "79399322f92e20ea08f77d0c8c0f4f278c3dc977",
+      "test_blob": "e1b2a065dff7e48831cc37006b6daf2942d3b718",
+      "ci_run": 34747264318,
+      "ci_job": 103697357720,
+      "ci_status": "success",
+      "wordflow": "41 passed in 0.16s",
+      "runtime": "272 passed, 2 warnings",
+      "subtests": "42 passed",
+      "benchmark_speedup": "2.5167x, meets_100x=false",
+      "platform_probe": "BLOCKED: no_verified_runtime_backend",
+      "local_targeted": "32 passed, 24 subtests passed in 0.09s",
+      "local_full": "270 passed, 42 subtests; 2 environment failures: local Pydantic version mismatch and Docker socket PermissionError",
+      "trace_certification": "0/167; loader is plumbing only and does not synthesize evidence"
     }
   },
   "node_id": "X17-11",
   "owner": "ASTRA_CROSSCHECK",
   "remaining": [
-    "N34 four-source denominator is claimed by SOL GPT <16>; wait for its tested report before N35",
-    "N35 production RequirementTrace for the final denominator",
-    "N17 complete product E2E after truthful central reconciliation",
-    "E2E ownership/evidence for CHAT-001..CHAT-085",
-    "Platform/backend proof remains blocked where host reports no verified runtime backend",
-    "Benchmark 100x remains refuted: latest observed policy lookup 2.408x",
-    "Atomic Crazy Wall/STATE/CHECKPOINT/Handoff reconciliation by shared-state owner"
+    "Persist and independently attest exactly one real RequirementTrace per final requirement; current certification remains 0/167",
+    "Map still-missing Command Center/UI obligations to real implementation and tests before trace creation",
+    "N17 full-product E2E owner must publish a non-cancelled exact-revision result and must not be treated as platform E2E",
+    "Web/Windows/Linux/Android/iOS evidence remains incomplete; current CI host reports no verified runtime backend",
+    "Benchmark 100x remains refuted: latest canonical CI measured 2.5167x",
+    "Original scanner run 34711848316 remains CANCELLED"
   ],
   "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-PREFLIGHT-SCOPE-003.json",
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T08:11:08Z",
+  "updated_at_utc": "2026-09-13T08:28:00Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
   ],
-  "last_observed_head": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
+  "last_observed_head": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
   "last_activation": {
+    "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+    "status": "ACTIVE_LOOP",
+    "checkpoint_read": "b815aab2d750a711c75de19d65ba84ae5ae81dfa",
+    "observed_head": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
+    "verify_research": [
+      "N34 final denominator is 167 and VERIFIED_CLOSED.",
+      "Prior N35 owner released GAP_RESOLVABLE with 0/167 valid production RequirementTrace rows.",
+      "No later N35 claim existed before ASTRA claim; N17 and N27 were left to their active sidecar owners.",
+      "Fresh HEAD CI 34745090975 passed but did not provide a production trace loader or 167 attestations."
+    ],
+    "delta": "Added a strict JSON RequirementTrace inventory loader. It validates exact schema, hashes, revision, relative paths, expected IDs and uniqueness; it never creates evidence or grants PASS.",
+    "files": [
+      {
+        "path": "runtime/src/coverage/trace_inventory.py",
+        "blob": "79399322f92e20ea08f77d0c8c0f4f278c3dc977"
+      },
+      {
+        "path": "runtime/tests/test_coverage_trace_inventory.py",
+        "blob": "e1b2a065dff7e48831cc37006b6daf2942d3b718"
+      }
+    ],
+    "tests": [
+      {
+        "scope": "targeted loader+denominator+five-pass+CI verifier",
+        "result": "32 passed, 24 subtests passed in 0.09s"
+      },
+      {
+        "scope": "full local runtime",
+        "result": "270 passed, 42 subtests; 2 host/dependency failures unrelated to delta"
+      },
+      {
+        "run_id": 34747264318,
+        "job_id": 103697357720,
+        "revision": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
+        "result": "SUCCESS",
+        "wordflow": "41 passed",
+        "runtime": "272 passed",
+        "subtests": "42 passed"
+      }
+    ],
+    "simulations": [
+      "Malformed schema rejected with invalid_trace_fields.",
+      "Unknown requirement ID rejected with unexpected_requirement.",
+      "Duplicate trace identity rejected with duplicate_requirement_trace."
+    ],
+    "refutations": [
+      "A loader plus green CI does not certify any of the 167 requirements.",
+      "The successful Linux-host suite does not prove Windows, Android, iOS or a real virtualization backend.",
+      "Measured 2.5167x policy lookup improvement refutes a 100x claim."
+    ],
+    "goals_input": {
+      "source_integrity": "PASS",
+      "literal_preserved": "PASS",
+      "requirements_enumerated": "PASS_167",
+      "ownership_valid": "PASS",
+      "scope_respected": "PASS",
+      "reuse_evaluated": "PASS",
+      "code_real": "GAP_LOADER",
+      "tests_real": "GAP_LOADER",
+      "evidence_sha_bound": "PENDING_DELTA",
+      "states_coherent": "PARTIAL",
+      "regressions_refuted": "PENDING",
+      "global_closure": "FAIL_CLOSED"
+    },
+    "goals_output": {
+      "source_integrity": "PASS",
+      "literal_preserved": "PASS",
+      "requirements_enumerated": "PASS_167",
+      "ownership_valid": "PASS",
+      "scope_respected": "PASS",
+      "reuse_evaluated": "PASS",
+      "code_real": "PASS_LOADER_ONLY",
+      "tests_real": "PASS_LOADER_ONLY",
+      "evidence_sha_bound": "PASS_DELTA_CI",
+      "states_coherent": "PARTIAL",
+      "regressions_refuted": "PASS_DELTA_ONLY",
+      "global_closure": "FAIL_CLOSED_0_OF_167"
+    },
+    "council12": "Evidence review completed across objective, sources, restrictions, dependencies, architecture, reuse, risks, alternatives, proof, refutation, consolidation and decision; no external Council claimed.",
+    "decision": "Keep N35 ACTIVE_LOOP. Next activation must consume only real source/code/test/evidence bindings; do not generate synthetic traces or claim global closure.",
+    "limits": "No product/UI/platform implementation, full four-source semantic trace population, external Council, or 100x benchmark proof was produced."
+  },
+  "previous_activation": {
     "node": "X17-11",
     "status": "ACTIVE_LOOP",
     "checkpoint_read": "f36fc9632843cb62911a7bb12503363450d592e7",
@@ -141,37 +240,6 @@
     "decision": "Keep X17-11 ACTIVE; do not collide with N34 or any product-code owner. Next activation must read N34 report, central reconciliation and latest CI before considering N35/N17.",
     "limits": "No local test runner, new code patch, full four-source semantic audit, platform E2E or benchmark executed this activation."
   },
-  "previous_activation": {
-    "node": "ASTRA-EVIDENCE-INPUT-004",
-    "status": "VERIFIED_CLOSED",
-    "delta": "Verified completed CI and exact unchanged evidence guard/test blobs; no new code patch or local test execution.",
-    "tests": {
-      "run_id": 34739510224,
-      "job_id": 103678337638,
-      "sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
-      "completed_at_utc": "2026-09-13T05:33:39Z",
-      "wordflow": "41 passed in 0.15s",
-      "runtime": "206 passed, 2 warnings, 39 subtests passed in 663.12s",
-      "commands": [
-        "python -m pytest -q",
-        "python -m pytest -q tests"
-      ],
-      "current_code_test_blobs_unchanged": true
-    },
-    "refutations": [
-      "Successful CI applies to the recorded SHA/suites, not complete product closure.",
-      "Original scanner run 34711848316 remains cancelled.",
-      "N16 implementation/test hashes match this successful CI; stale queue state is not proof of missing code."
-    ],
-    "next": "N16 owner SOL GPT 🆘1 can reconcile its stale CI GAP against run 34739510224; N03 owner retains 98 production traces. Continue semantic mapping and E2E without overlapping claims.",
-    "n16_readback": {
-      "implementation_blob": "252b5b5bd47d082df4c2963e624c64990e160bb4",
-      "test_blob": "9631f9d112913d66836fab3f7c2627030bfac411",
-      "same_at_current_main_and_tested_sha": true,
-      "owner_unchanged": true
-    },
-    "limits": "No new simulations, external Council, full 17-document semantic audit, benchmark or global E2E executed."
-  },
   "active_claim": {
     "state": "IN_PROGRESS",
     "claimed_at_utc": "2026-09-13T08:11:08Z",
@@ -184,6 +252,8 @@
       "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage*",
       "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
     ],
-    "bounded_strategy": "Add and test one strict fail-closed production RequirementTrace loader; do not synthesize traces or CI attestations."
+    "bounded_strategy": "Add and test one strict fail-closed production RequirementTrace loader; do not synthesize traces or CI attestations.",
+    "code_commit": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
+    "next_action": "Load only genuine per-requirement records after exact source/code/test/evidence hashes and independent successful CI exist."
   }
 }
