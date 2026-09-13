@@ -167,7 +167,9 @@
     },
     "council12": "Reviewed objective, sources, restrictions, dependencies, architecture, reuse, risks, alternatives, proof, refutation, consolidation and decision locally; no external Council claimed.",
     "decision": "Publish the minimal N35 path-consistency delta for exact-revision CI; keep N35 ACTIVE_LOOP at 0/167.",
-    "code_commit": "e9a8b805a707c176bb818a2a66e49d41a262869c",
+    "branch": "astra-watchdog-20260913-1203",
+    "pull_request": 56,
+    "code_commit": "39d5cec3e0ebac503badc54601a4ae0d3a44456a",
     "limits": "No production RequirementTrace, cross-platform E2E, real virtualization backend or 100x benchmark proof was produced."
   },
   "prior_activation_20260913T1122Z": {
