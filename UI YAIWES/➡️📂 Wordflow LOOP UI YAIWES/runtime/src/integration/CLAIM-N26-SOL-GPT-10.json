@@ -1,10 +1,12 @@
 {
   "schema": "tel.workflow/v3.claim",
-  "state": "IN_PROGRESS",
+  "state": "GAP_RELEASED_EXACT_HEAD_CI_PENDING",
   "chat_id": "SOL GPT <10>",
   "node_id": "N26-GLOBAL-INTEGRATION",
   "fresh_main_sha": "2b695e023217af927af1f839563f34d3d5917e30",
   "write_scope": "runtime/src/integration/**|runtime/tests/test_integration*",
   "claimed_at": "2026-09-13T06:53:00Z",
-  "reason": "Crazy Wall fresh state GAP_RESOLVABLE; exact implementation/test blobs match recorded N26 and trusted descendant CI exists; verify before any code delta."
+  "released_at": "2026-09-13T06:56:00Z",
+  "result": "Technical PASS with exact current blobs and trusted descendant CI; authoritative close refused because exact-head run 34743795904 remains pending with zero jobs and Crazy Wall remains stale GAP_RESOLVABLE.",
+  "report": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/N26-SOL-GPT-10-EVIDENCE-REPORT.json"
 }
