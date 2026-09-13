@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
+import hmac
 import re
 from typing import Any, Callable, Iterable
 
@@ -43,6 +45,26 @@ def _validate_checkpoint(checkpoint_ref: str, checkpoint_sha256: str) -> None:
         raise RecoveryControlPlaneError("strong_checkpoint_sha256_required")
 
 
+def _verify_checkpoint_bytes(
+    *,
+    checkpoint_ref: str,
+    checkpoint_sha256: str,
+    checkpoint_bytes_loader: Callable[[str], bytes],
+) -> None:
+    try:
+        raw = checkpoint_bytes_loader(checkpoint_ref)
+    except Exception as exc:
+        raise RecoveryControlPlaneError(
+            f"checkpoint_read_failed:{type(exc).__name__}"
+        ) from exc
+    if not isinstance(raw, bytes):
+        raise RecoveryControlPlaneError("checkpoint_bytes_required")
+
+    actual_sha256 = hashlib.sha256(raw).hexdigest()
+    if not hmac.compare_digest(actual_sha256, checkpoint_sha256):
+        raise RecoveryControlPlaneError("checkpoint_sha256_mismatch")
+
+
 def _summarize(results: Iterable[Any]) -> tuple[int, int, int, int, int]:
     counts = {name: 0 for name in _ALLOWED_RESULTS}
     total = 0
@@ -67,21 +89,27 @@ def recover_project(
     queue: Any,
     checkpoint_ref: str,
     checkpoint_sha256: str,
+    checkpoint_bytes_loader: Callable[[str], bytes],
     ledger_integrity_check: Callable[[], bool],
     application: str | None = None,
     recovery_type: type | None = None,
 ) -> ProjectRecoveryEvidence:
-    """Validate project evidence, delegate workflow recovery to Stabilize, summarize.
+    """Validate checkpoint bytes/evidence, delegate recovery to Stabilize, summarize.
 
     This control-plane deliberately does not implement workflow recovery itself.
-    Stabilize remains the only recovery engine/owner; YAIWES adds the project
-    evidence gate required before continuation.
+    Stabilize remains the only recovery engine/owner; YAIWES adds fail-closed
+    project evidence gates before any restore/recovery effect is allowed.
     """
     if store is None:
         raise RecoveryControlPlaneError("store_required")
     if queue is None:
         raise RecoveryControlPlaneError("queue_required")
     _validate_checkpoint(checkpoint_ref, checkpoint_sha256)
+    _verify_checkpoint_bytes(
+        checkpoint_ref=checkpoint_ref,
+        checkpoint_sha256=checkpoint_sha256,
+        checkpoint_bytes_loader=checkpoint_bytes_loader,
+    )
 
     try:
         integrity_ok = bool(ledger_integrity_check())
