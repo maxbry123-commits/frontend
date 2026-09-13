@@ -80,3 +80,17 @@ No usar porcentajes históricos de lotes/integración como porcentaje global. El
 `SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED`.
 
 Final Judge sólo puede cerrar cuando no queden nodos obligatorios abiertos y N30 demuestre cobertura completa con evidencia fresca.
+
+## Balance y activación reconciliados — 2026-09-13
+
+Esta actualización prevalece sobre los conteos históricos anteriores; no certifica el producto completo.
+Cola publicada: commit 28b50e509b1d32f5ada460127df4dedc44285e6b.
+- 33 nodos: 11 VERIFIED_CLOSED, 6 CLAIMED, 8 GAP, 3 FREE y 5 BLOCKED. Cierre de nodos 33,3%; no porcentaje funcional.
+- Habilitados sin asignar: N21 WORKER ADAPTER, N32 GUEST INSTALLER y N33 MIRROR TRANSPORT. Cada Sol libre reclama sólo uno con HEAD fresco y scope del schema. No tocar claims vigentes.
+- Gate N20 revalidado: run 34735844744/job 103667777897 success; logs 41 Wordflow + 192 runtime + 32 subtests PASS. Blobs actuales sandbox_router.py=27fc0b6c7fc6e0a1844f47941ddecdcd06834be0 y test=85d6d6acf060113b0545494de5e0302ba311e311 coinciden con la evidencia registrada.
+- N03 sigue GAP con owner SOL-2-GPT: reutilizar RequirementMatrix/evidence/five_pass y materializar las 98 RequirementTrace de producción; coordinar con auditor/backend antes de escribir. N30 run 34738908302/job 103675124914 confirma 98/98 mapeadas, 0/98 certificadas y 98 missing_trace. Esto mide certificación pendiente, no ausencia de todo el código.
+- N14/N16/N18/N22/N24/N26/N28: responsables actuales deben comprobar CI y blobs frescos antes de reparar; no recrear módulos por un CI histórico pendiente.
+- Orden condicionado: N07→N12; N03→N04; N26+N23→N27; N18+N20+N26+N28+N29→N17→N31.
+- GAP documental: STATE.json conserva contexto V5 y faltantes históricos Supabase/DuckDB, mientras la cola registra N08/N09 cerrados; reconciliación integral sigue en N04.
+- Último arreglo de evidencia: run 34739510224, SHA cf40e9cbde77fb663aa58c06701b9dedab46d43e, consultado pending; no PASS.
+- Sin nueva arquitectura ni descargas obligatorias. Aplicar los tres pasos existentes: VERIFY_RESEARCH→EXECUTE_DELTA→TEST_REPORT. N21 reutiliza Stabilize; N32 limita efectos al guest y prueba rollback; N33 prueba pairing/auth/control sin mirror continuo de disco/RAM.
