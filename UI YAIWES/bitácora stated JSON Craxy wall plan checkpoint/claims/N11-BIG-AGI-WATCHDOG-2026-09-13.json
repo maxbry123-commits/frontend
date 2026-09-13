@@ -1,0 +1,15 @@
+{
+  "schema":"yaiwes.node.claim.v1",
+  "contract":"tel.workflow/v3",
+  "chat_id":"WATCHDOG-COMPONENT-CLOSURE",
+  "node_id":"N11-BIG-AGI-SOURCE-INTEGRATION",
+  "fresh_main_sha":"895cb056bbd6e35bd7d04fe93c10551ed2b88c25",
+  "write_scope":"component acquisition|runtime integration/UI donor evidence",
+  "claimed_at":"2026-09-13T02:55:00Z",
+  "state":"CLAIMED",
+  "official_source":"enricoros/big-AGI",
+  "source_ref":"7e4a60d9276fa79d358ece7349cda029cc9ae7bf",
+  "license":"MIT",
+  "destination":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/big_agi",
+  "stale_reopen_after_hours":4
+}
