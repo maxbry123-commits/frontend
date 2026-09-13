@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html'
       - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/backend-adapter.js'
       - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/frontend-router-bridge.js'
       - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/f-ui-050-router-bridge.test.mjs'
@@ -20,6 +21,7 @@ jobs:
         with:
           sparse-checkout: |
             UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index.html
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html
             UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src
             UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests
           sparse-checkout-cone-mode: false
@@ -29,9 +31,11 @@ jobs:
       - name: Syntax
         working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
         run: node --check src/backend-adapter.js && node --check src/frontend-router-bridge.js && node --check tests/f-ui-050-router-bridge.test.mjs
-      - name: Index wiring
+      - name: Entrypoint wiring
         working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
-        run: grep -F './src/frontend-router-bridge.js' index.html
+        run: |
+          grep -F './src/frontend-router-bridge.js' index.html
+          grep -F './src/frontend-router-bridge.js' index-v19.html
       - name: F-UI-050 bridge gate
         working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
         run: node tests/f-ui-050-router-bridge.test.mjs
