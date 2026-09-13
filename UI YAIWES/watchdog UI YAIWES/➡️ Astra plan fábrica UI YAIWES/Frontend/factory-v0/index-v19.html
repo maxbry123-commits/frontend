@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>YAIWES UI Factory V1.9</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./interaction-fix.css">
+  <link rel="stylesheet" href="./frappe-context-menu.css">
+  <link rel="stylesheet" href="./resize-snap.css">
+  <link rel="stylesheet" href="./xyflow-minimap.css">
+  <link rel="stylesheet" href="./stability-v19.css">
+</head>
+<body>
+<div id="app" class="app-shell">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">Y</span><div><strong>YAIWES UI Factory</strong><small>V1.9 · editor estable + recuperación local</small></div></div>
+    <nav id="steps" class="steps" aria-label="Pasos"></nav>
+    <div class="mode-switch"><button data-mode="MANUAL">Manual</button><button data-mode="AI_ASSIST">IA</button><button data-mode="AUTOPILOT">Auto</button></div>
+  </header>
+
+  <main class="studio">
+    <aside class="library-pane" aria-label="Elementos y capas">
+      <div class="pane-head"><div><small>BIBLIOTECA</small><h2>Elementos</h2></div><span class="hint">Arrastra o toca para añadir</span></div>
+      <div id="component-library" class="component-grid"></div>
+      <button id="new-component" class="primary wide">+ Crear bloque</button>
+      <div class="library-help">Toca para añadir · arrastra para colocar · toca y mueve en móvil · selecciona y redimensiona desde la esquina.</div>
+      <div class="layers-head"><div><small>ESTRUCTURA</small><h2>Capas</h2></div><span id="layer-count" class="step-badge">0</span></div>
+      <div id="layer-list" class="layer-list"></div>
+    </aside>
+
+    <section class="canvas-pane">
+      <div class="canvas-toolbar">
+        <div><small id="step-kicker">PASO 1</small><strong id="step-title">Crear</strong></div>
+        <div class="canvas-controls" aria-label="Vista del canvas">
+          <button data-breakpoint="desktop" class="active">Desktop</button><button data-breakpoint="tablet">Tablet</button><button data-breakpoint="mobile">Móvil</button>
+          <span class="divider"></span><button id="zoom-out">−</button><span id="zoom-label">100%</span><button id="zoom-in">+</button><button id="zoom-reset">Reset</button>
+        </div>
+        <span id="status" class="status-pill"></span>
+      </div>
+      <div class="canvas-stage"><div id="canvas" class="canvas" data-breakpoint="desktop" aria-label="Canvas de composición"><div id="canvas-empty" class="canvas-empty"><strong>Canvas listo</strong><span>Arrastra aquí una ventana, botón, imagen, página o cualquier elemento.</span></div></div></div>
+    </section>
+
+    <aside class="context-pane" aria-label="Panel contextual">
+      <div class="context-head"><div><small>HERRAMIENTAS DEL PASO</small><h2 id="context-title">Crear</h2></div><span id="context-count" class="step-badge">1/5</span></div>
+      <div id="context-scroll" class="context-scroll"><div id="context-content"></div></div>
+    </aside>
+  </main>
+
+  <footer class="bottom-bar">
+    <div class="history-actions"><button id="undo">↶ Deshacer</button><button id="redo">↷ Rehacer</button><button id="save-version">Guardar V+</button></div>
+    <div class="step-actions"><button id="prev-step">← Atrás</button><button id="next-step" class="primary">Siguiente →</button></div>
+  </footer>
+</div>
+<script type="module" src="./src/app-v19.js"></script>
+<script type="module" src="./src/interaction-fix.js"></script>
+<script type="module" src="./src/scroll-preserver.js"></script>
+<script type="module" src="./src/donors/frappe-context-menu-adapter.js"></script>
+<script type="module" src="./src/resize-snap.js"></script>
+<script type="module" src="./src/donors/xyflow-minimap-adapter.js"></script>
+</body></html>
