@@ -1065,8 +1065,8 @@
     {
       "n": 27,
       "id": "N27-CONTINUOUS-LOOP",
-      "state": "FREE",
-      "owner": null,
+      "state": "CLAIMED",
+      "owner": "ASTRA_GPT",
       "title": "Continuous LOOP multi-stage",
       "scope": "runtime/src/integration/**|runtime/tests/test_integration*",
       "depends_on": [
@@ -1079,7 +1079,12 @@
         "Test estabilidad/reinyección hasta cierre"
       ],
       "close": "Loop real multi-stage PASS y gap reinjection probada",
-      "reconciled_reason": "N26+N23 dependencies VERIFIED_CLOSED"
+      "reconciled_reason": "N26+N23 dependencies VERIFIED_CLOSED",
+      "chat_id": "ASTRA_GPT_WATCHDOG",
+      "node_id": "N27-CONTINUOUS-LOOP",
+      "fresh_main_sha": "7575b8d1f6a44d519d90dc1cce6558e310bc3d19",
+      "write_scope": "runtime/src/integration/**|runtime/tests/test_integration*|Crazy Wall N27/report Astra only",
+      "claimed_at": "2026-09-13T10:53:00Z"
     },
     {
       "n": 28,
