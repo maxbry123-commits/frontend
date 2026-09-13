@@ -1,0 +1,61 @@
+name: astra-factory-v19-local-50-cycle
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/astra-factory-v19-local-50-cycle.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/stability-v19.css'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/app-v19.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/factory-v19-local-50-cycle.spec.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: astra-factory-v19-local-50-cycle
+  cancel-in-progress: false
+
+jobs:
+  candidate-browser-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install test harness only
+        run: npm install --no-audit --no-fund
+
+      - name: Install Chromium runtime
+        run: npx playwright install --with-deps chromium
+
+      - name: Syntax check V1.9 runtime
+        run: node --check src/app-v19.js
+
+      - name: Verify V1.9 candidate with 50 cycles and mobile touch
+        run: npx playwright test tests/e2e/factory-v19-local-50-cycle.spec.mjs --reporter=line
+
+      - name: Preserve V1.9 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: astra-factory-v19-local-50-cycle-evidence
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+          if-no-files-found: warn
+          retention-days: 14
