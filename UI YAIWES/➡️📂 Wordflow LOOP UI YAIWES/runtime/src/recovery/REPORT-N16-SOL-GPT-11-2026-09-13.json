@@ -1,0 +1,32 @@
+{
+  "schema": "tel.workflow/v3",
+  "node_id": "N16-CHECKPOINT-BYTES-HASH",
+  "chat_id": "SOL GPT <11>",
+  "report_state": "PASS_RECONCILED_EXISTING_CI",
+  "fresh_claim_commit": "6a32e0fefddd3d4afa8b19efc5a3e824facb4837",
+  "implementation_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/recovery/control_plane.py",
+  "implementation_blob": "252b5b5bd47d082df4c2963e624c64990e160bb4",
+  "test_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_recovery_control_plane.py",
+  "test_blob": "9631f9d112913d66836fab3f7c2627030bfac411",
+  "certified_run_id": 34739510224,
+  "certified_job_id": 103678337638,
+  "certified_head_sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+  "ci_status": "completed/success",
+  "verification": [
+    "control_plane.py at certified SHA and current claim SHA read back byte-equivalent",
+    "test_recovery_control_plane.py at certified SHA and current claim SHA read back byte-equivalent",
+    "checkpoint bytes are SHA256 verified before recovery effects",
+    "tampered checkpoint bytes fail closed before FakeRecovery initialization",
+    "checkpoint read failure fails closed before recovery",
+    "ledger integrity failure fails closed",
+    "partial recovery blocks safe continuation",
+    "unknown recovery status fails closed"
+  ],
+  "refutations": [
+    "schema_complete: PASS — byte-for-byte SHA256 validation occurs before restore/recovery effect",
+    "remaining_real_gap: PASS — historical global-CI-not-executed gap is superseded by successful full CI on identical N16 blobs",
+    "evidence_sufficient: PASS — run/job success plus certified/current blob parity and negative tests"
+  ],
+  "remaining_gaps": [],
+  "conclusion": "N16 implementation/test evidence satisfies its close condition; no code patch required; queue state should be reconciled to VERIFIED_CLOSED by the authoritative Crazy Wall writer."
+}
