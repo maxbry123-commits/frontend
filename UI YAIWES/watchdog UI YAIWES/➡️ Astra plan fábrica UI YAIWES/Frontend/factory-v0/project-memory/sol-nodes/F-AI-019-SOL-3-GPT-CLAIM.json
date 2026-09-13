@@ -1,0 +1,8 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1","contract":"tel.workflow/v3","chat_id":"SOL-3-GPT-2026-09-12T21:44-05:00","agent_name":"SOL 3 GPT 🆘","node_id":"F-AI-019",
+  "fresh_main_sha":"9138766c6898ddedd232a3fe7fa01dfd9932cff9","base_sha":"9138766c6898ddedd232a3fe7fa01dfd9932cff9",
+  "write_scope":"F-AI-019 skills/plugins catalog activation verification and minimum delta only; dedicated test/workflow/evidence; excludes Wordflow N01-N31",
+  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-AI-019-SOL-3-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-AI-019-SOL-3-EVIDENCE.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ai-019-skills.spec.mjs",".github/workflows/factory-f-ai-019-skills.yml"],
+  "claimed_at":"2026-09-12T22:20:30-05:00","state":"CLAIMED","steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "goals12_input":{"G01":"PASS skill/plugin activation must produce effect or GAP","G02":"PASS fresh HEAD","G03":"PASS fresh queue/owners","G04":"PASS no prior F-AI-019 claim found","G05":"PENDING inspect existing skill catalog/activation","G06":"PASS reuse-first","G07":"PENDING","G08":"PENDING","G09":"PENDING","G10":"PENDING","G11":"PENDING","G12":"LOCKED F-AI-019"}
+}
