@@ -1,0 +1,48 @@
+{
+  "schema":"yaiwes.factory.sol.report.v1",
+  "contract":"tel.workflow/v3",
+  "chat_id":"SOL-8-GPT-2026-09-12T22:23-05:00",
+  "agent_name":"SOL 8 GPT 🆘",
+  "node_id":"F-CTL-011",
+  "state":"PASS",
+  "base_sha":"bb91ea2d7cc2a4c7cc4a6275f399bfccef282431",
+  "final_tested_sha":"34a5ae2ae65d0ff85e82a49291883b7c3dfa8a46",
+  "classification":"EVIDENCE_GAP_RESOLVED_BY_EXISTING_TRANSITIVE_WIRING",
+  "verify_research":{
+    "acceptance":"version guardada/restaurada sin perdida",
+    "version_store":"src/version-store-v1.js",
+    "wiring":"index-v192.html -> src/json-roundtrip-v1.js -> import ./version-store-v1.js",
+    "product_patch_required":false
+  },
+  "execute_delta":{
+    "strategy":"REUSE_EXISTING",
+    "test":"tests/e2e/f-ctl-011-version-rollback.spec.mjs",
+    "workflow":".github/workflows/factory-f-ctl-011-version-rollback.yml",
+    "product_source_changed_by_sol8":false
+  },
+  "test_report":{
+    "run_id":34735522782,
+    "job_id":103666146106,
+    "head_sha":"34a5ae2ae65d0ff85e82a49291883b7c3dfa8a46",
+    "conclusion":"success",
+    "static":"PASS",
+    "runtime_e2e":"PASS_1_OF_1",
+    "terminal":"1 passed (1.7s)",
+    "runtime_readback":["GET /src/json-roundtrip-v1.js 200","GET /src/version-store-v1.js 200","save-version creates V1 snapshot","mutation differs from snapshot","restore reload returns exact original DOM geometry/label","snapshot remains in localStorage"]
+  },
+  "simulations":[
+    "S1 clean project -> add component -> save V1 -> snapshot count becomes 1",
+    "S2 mutate saved component label -> restore V1 -> exact original id/label/geometry restored",
+    "S3 restore performs page reload -> project remains restored and V1 snapshot persists"
+  ],
+  "refutations":[
+    "R1 reducer version increment alone is insufficient; runtime snapshot storage and restore are asserted",
+    "R2 file presence alone is insufficient; browser log proves transitive module load and controls execute",
+    "R3 restore before reload alone is insufficient; post-reload DOM equality and persisted snapshot are asserted"
+  ],
+  "goals12_output":{"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS REUSE_EXISTING","G07":"PASS test/workflow only","G08":"PASS","G09":"PASS Chromium E2E","G10":"PASS 3 simulations + 3 refutations","G11":"PASS run/job/SHA/log persisted","G12":"PASS release then fresh next-node reconciliation"},
+  "remaining_gaps":[],
+  "review_required":false,
+  "result":"100_PASS_NODE_LEVEL",
+  "next_free_node":"READ_FRESH_REQUIRED"
+}
