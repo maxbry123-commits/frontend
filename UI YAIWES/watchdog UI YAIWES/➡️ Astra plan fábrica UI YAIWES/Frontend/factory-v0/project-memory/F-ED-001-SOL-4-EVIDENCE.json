@@ -1,0 +1,43 @@
+{
+  "schema":"yaiwes.factory.node-evidence.v1",
+  "node_id":"F-ED-001",
+  "agent_name":"SOL 4 GPT 🆘",
+  "base_sha":"b5f01d94b03c10c26efb954c907fe69808d6164c",
+  "claim_commit":"dcaa73978f8bd2a96b01d635606de8f574bc7baf",
+  "delta_commit":"bf9cbec840ff45a059e1679cb545a5f90e2172a3",
+  "step1_verify_research":{
+    "source_run":34732313529,
+    "job_id":103657241958,
+    "candidate_sha":"4f685e1ec129cca0171bdc43fc0f88eb67f502e5",
+    "artifact_id":10309427873,
+    "artifact_digest":"sha256:51207e1276823a4ea62f0666e560f41b1bc452e5a3018ddeaccebf2fd3f04ac4",
+    "trace_failure":"TOUCH_COORDINATE_MISS nodeId=button-* hit=null sx=237 sy=832 box={x:192,y:797.4375,width:220,height:120}",
+    "classification":"TEST_HARNESS_FAILURE",
+    "reason":"failure occurred at elementFromPoint precondition before dispatchSyntheticTouch and before touch-dnd-v192 adapter counters/commit assertions were exercised; therefore the historical run does not prove a product touch failure"
+  },
+  "step2_execute_delta":{
+    "strategy":"PATCH_EXISTING_HARNESS",
+    "product_code_changed":false,
+    "path":"Frontend/factory-v0/tests/e2e/factory-v192-local-50-cycle.spec.mjs",
+    "blob_sha":"454965b823a0593d3d5aa6aa10b0260fac2e99b0",
+    "delta":"scroll real node into viewport, compute synthetic start from visible node/viewport intersection, clamp destination to viewport; retain strict elementFromPoint, adapter event, commit, movement and reload assertions"
+  },
+  "step3_test_report":{
+    "static_readback":"PASS",
+    "runtime_rerun":"PENDING_NO_NEW_FACTORY_ACTION_ASSOCIATED_WITH_DELTA_SHA",
+    "decision":"GAP_PENDING_RUNTIME_RERUN",
+    "simulations":[
+      "S1 partially clipped node: visible intersection yields in-viewport start",
+      "S2 fully visible node: start remains inside real node",
+      "S3 destination near viewport edge: end coordinate is clamped while movement remains non-zero"
+    ],
+    "refutations":[
+      "R1 harness patch does not remove TOUCH_COORDINATE_MISS assertion",
+      "R2 harness patch does not bypass adapter receivedStart/receivedMove/commits assertions",
+      "R3 harness patch does not claim product PASS without a fresh runtime run on the delta SHA"
+    ],
+    "remaining_gaps":["fresh mobile-chromium runtime rerun on bf9cbec840ff45a059e1679cb545a5f90e2172a3 or descendant containing identical blob 454965b823a0593d3d5aa6aa10b0260fac2e99b0","if runtime then reaches PRODUCT_TOUCH_COMMIT_GAP or movement/reload failure, classify PRODUCT_FAILURE and patch touch runtime only with new evidence"]
+  },
+  "council12":["objective=resolve/refute mobile touch miss","requirement=real touch move+persistence","authority=trace over historical state","prior=V1.9.2 global failure","owner=SOL 4 GPT","collision=mobile harness only","gap=synthetic coordinate outside hittable viewport","alternatives=product patch rejected without product evidence","strategy=patch harness minimally","tests=static readback; runtime pending","refutations=3","decision=GAP_PENDING_RUNTIME_RERUN"],
+  "goals12_output":{"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS minimum harness delta","G08":"GAP runtime unavailable/not triggered","G09":"GAP pending fresh Action","G10":"PASS 3 simulations + 3 refutations","G11":"PASS delta commit+blob+readback persisted","G12":"PASS remain on F-ED-001 until runtime discrimination"}
+}
