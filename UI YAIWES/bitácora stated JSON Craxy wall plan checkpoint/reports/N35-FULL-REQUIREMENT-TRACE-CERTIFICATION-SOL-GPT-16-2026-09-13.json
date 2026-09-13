@@ -1,0 +1,68 @@
+{
+  "schema": "yaiwes.audit.n35.full-requirement-trace-certification.v1",
+  "contract": "tel.workflow/v3",
+  "node_id": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+  "chat_id": "SOL GPT <16>",
+  "state": "GAP_RESOLVABLE",
+  "claim_commit": "786bdc333b71483d6fbc5c7fd42c4efa4cfa2d4e",
+  "denominator_source": "N34-FOUR-SOURCE-DENOMINATOR-SOL-GPT-16-2026-09-13.json",
+  "denominator": 167,
+  "delta_commits": [
+    "7ef0a65d85c06f0f73b1722637e2b49cfe879af9",
+    "88bfa5c400b8e8b5cbfcf043e6c241948f0931e8",
+    "d5e15ff44526c42d1e1ec7d5f035fafbe2d58b1e"
+  ],
+  "paths_changed": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/coverage/__init__.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/coverage/requirements.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_requirements.py"
+  ],
+  "verify_research": {
+    "matrix_blob": "637b64161f67f6d2f8aaa0280555964385bef6e2",
+    "five_pass_blob": "7be820cb3642438a22f36778ecb5c2b549ffce12",
+    "evidence_blob": "ef1c9b753a2495f0488962a8e7f1160d1593e75b",
+    "requirements_per_trace": ["goal_id", "task_id", "source hash", "implementation hash+symbol", "test hash+symbol", "evidence hash", "revision", "independent trusted CI binding"],
+    "production_requirement_trace_search": "0 production RequirementTrace inventory/usages found",
+    "ci_evidence_schema_search": "0 yaiwes.ci-evidence.v1 evidence files found",
+    "ui_artifact_probe": "No indexed ChatComposer/ChatInput/ModelSelector implementation found during N35 verification"
+  },
+  "execute_delta": {
+    "result": "AUTHORITATIVE_EXPECTED_INVENTORY_MATERIALIZED",
+    "s1": 20,
+    "s2": 14,
+    "s3": 64,
+    "s4_unique_increment": 69,
+    "total": 167,
+    "anti_fake_pass": "No synthetic RequirementTrace or CI evidence rows were generated."
+  },
+  "tests": {
+    "specific_reconstructed_suite": "4/4 PASS in 0.05s",
+    "checks": [
+      "167 unique requirement IDs",
+      "REQ-S2-011 and REQ-S3-062 excluded as numbering gaps",
+      "REQ-S4-023 deduplicated to REQ-S4-004",
+      "REQ-S4-034 retained as authority-corrected authentication/authORIZATION requirement",
+      "only S1/S2/S3/S4 namespaces accepted"
+    ]
+  },
+  "certification": {
+    "verified_requirement_traces": 0,
+    "required_requirement_traces": 167,
+    "coverage_percent": 0.0,
+    "meaning": "Certification coverage only. This does not mean zero product code exists; it means no persisted per-requirement production trace currently satisfies the canonical exact-hash+symbol+independent-CI contract."
+  },
+  "remaining_gaps": [
+    "Persist exactly one valid RequirementTrace for every one of the 167 requirements.",
+    "Generate evidence files using yaiwes.ci-evidence.v1 only from independent trusted completed/success CI bound to exact revision and implementation/test SHA256.",
+    "Implement/test still-missing Command Center/UI obligations before they can have valid traces; documentation or generic green CI cannot substitute.",
+    "When non-Python implementation artifacts become in-scope, adapt the existing five-pass symbol verifier only against real artifacts and tests; do not create a second auditor."
+  ],
+  "refutations": [
+    {"question":"Is the final N34 denominator now executable and unique?","result":"PASS","evidence":"requirements.py plus reconstructed tests 4/4 PASS: 167 unique IDs."},
+    {"question":"Can N35 claim 100% certification from existing green suite evidence?","result":"REJECTED","evidence":"audit.evidence requires per-trace exact revision+implementation/test hashes and independent trusted lookup; no yaiwes.ci-evidence.v1 inventory exists."},
+    {"question":"Can missing UI/Command Center traces be fabricated from architecture documents?","result":"REJECTED","evidence":"SOURCE_PRESENT/documented != IMPLEMENTED != TESTED; no synthetic traces created."}
+  ],
+  "close_candidate": "NO",
+  "next_state": "GAP_RESOLVABLE",
+  "project_verified_closed": false
+}
