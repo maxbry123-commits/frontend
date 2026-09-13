@@ -1,0 +1,35 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N04-STATE-RECONCILIATION",
+  "chat_id": "SOL GPT <10>",
+  "state": "GAP",
+  "reported_at": "2026-09-13T07:04:00Z",
+  "claim_commit_sha": "8db8457ece8bdeca0d2cf1e63671f7e1137c48f1",
+  "paths": [
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CHECKPOINT.json",
+    "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-DYNAMIC-NODES-UI-YAIWES-V8-2026-09-12.md"
+  ],
+  "commits": {
+    "state": "73ea812f35a8d8a8ede7f9e89f174e31a711de03",
+    "checkpoint": "2d33fc130818d79a49ab5337527966484c377378",
+    "handoff": "3748e3cd602d4fb8ccbbda152eff7df495c7616d"
+  },
+  "test": "STATE/CHECKPOINT/Handoff readback PASS; Crazy Wall N04 row still FREE, therefore 4-way consistency FAIL_CLOSED",
+  "evidence": [
+    "N02 and N03 remain VERIFIED_CLOSED",
+    "STATE/CHECKPOINT/Handoff share dynamic Crazy Wall authority and current N04 claim",
+    "historical snapshots preserved by exact Git blob SHA",
+    "current main at claim 31d1531f07c0c3c377901dc2b21a8d404cf204ed carried N33 closure commit",
+    "fresh Crazy Wall readback still reports N04 state FREE"
+  ],
+  "remaining_gaps": [
+    "Crazy Wall N04 node entry must be atomically reconciled from FREE to a truthful closed/report state without overwriting concurrent node updates"
+  ],
+  "refutations": {
+    "schema_complete": "PASS",
+    "no_real_gap_remaining": "FAIL",
+    "evidence_proves_100_pass": "FAIL"
+  },
+  "next_free_node": "READ_FRESH_REQUIRED"
+}
