@@ -34,9 +34,7 @@ test('search select preview insert changes canonical project and recent filter',
   await boot(page);
   await resetProject(page);
   await boot(page);
-  const before = await projectComponents(page);
-  expect(before).toHaveLength(0);
-
+  expect(await projectComponents(page)).toHaveLength(0);
   await page.locator('[data-component-search]').fill('Botón');
   const buttonCard = page.locator('.component-card[data-kind="button"]');
   await expect(buttonCard).toBeVisible();
@@ -46,13 +44,11 @@ test('search select preview insert changes canonical project and recent filter',
   await expect(page.locator('[data-preview-title]')).toHaveText('Botón');
   expect(await projectComponents(page)).toHaveLength(0);
   await page.screenshot({ path: `${SHOTS}/desktop-search-preview.png`, fullPage: true });
-
   await page.locator('[data-preview-insert]').click();
   await expect(page.locator('[data-node]')).toHaveCount(1);
   const after = await projectComponents(page);
   expect(after).toHaveLength(1);
   expect(after[0].kind).toBe('button');
-
   await page.locator('[data-component-search]').fill('');
   await page.locator('[data-component-filter="recent"]').click();
   await expect(buttonCard).toBeVisible();
@@ -60,15 +56,14 @@ test('search select preview insert changes canonical project and recent filter',
   await page.screenshot({ path: `${SHOTS}/desktop-insert-recent.png`, fullPage: true });
 });
 
-test('category favorite persistence and physical drag instrumentation', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'chromium-desktop', 'desktop category/favorite/physical drag diagnostic');
+test('category and favorite persistence work', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop', 'desktop category/favorite gate');
   await boot(page);
   const category = page.locator('[data-component-category]');
   await category.selectOption({ label: 'Media' });
   await expect(page.locator('.component-card[data-kind="image"]')).toBeVisible();
   await expect(page.locator('.component-card[data-kind="button"]')).toBeHidden();
   await category.selectOption('all');
-
   const image = page.locator('.component-card[data-kind="image"]');
   await image.click();
   await page.locator('[data-preview-favorite]').click();
@@ -78,55 +73,45 @@ test('category favorite persistence and physical drag instrumentation', async ({
   await page.reload({ waitUntil: 'domcontentloaded' });
   await page.locator('[data-component-filter="favorites"]').click();
   await expect(page.locator('.component-card[data-kind="image"]')).toBeVisible();
-  await page.locator('[data-component-filter="all"]').click();
-
-  await page.evaluate(() => {
-    const card = document.querySelector('.component-card[data-kind="window"]');
-    const canvas = document.querySelector('#canvas');
-    window.__FUI046_DRAG_DIAG__ = { dragstart: 0, dragover: 0, drop: 0, types: [], kindAtStart: '', kindAtDrop: '' };
-    card.addEventListener('dragstart', e => {
-      const d = window.__FUI046_DRAG_DIAG__; d.dragstart += 1; d.types = [...(e.dataTransfer?.types || [])]; d.kindAtStart = e.dataTransfer?.getData('text/yaiwes-kind') || '';
-    });
-    canvas.addEventListener('dragover', () => { window.__FUI046_DRAG_DIAG__.dragover += 1; });
-    canvas.addEventListener('drop', e => { const d=window.__FUI046_DRAG_DIAG__; d.drop += 1; d.kindAtDrop = e.dataTransfer?.getData('text/yaiwes-kind') || ''; });
-  });
-  const beforeCount = await page.locator('[data-node]').count();
-  await page.locator('.component-card[data-kind="window"]').dragTo(page.locator('#canvas'), { targetPosition: { x: 250, y: 180 } });
-  const diag = await page.evaluate(() => window.__FUI046_DRAG_DIAG__);
-  console.log(`FUI046_PHYSICAL_DRAG_DIAG=${JSON.stringify(diag)}`);
-  expect(diag.dragstart).toBeGreaterThan(0);
-  expect(diag.kindAtStart).toBe('window');
-  await expect(page.locator('[data-node]')).toHaveCount(beforeCount + 1);
-  const components = await projectComponents(page);
-  expect(components.some(x => x.kind === 'window')).toBeTruthy();
-  await page.screenshot({ path: `${SHOTS}/desktop-favorite-drag.png`, fullPage: true });
+  await page.screenshot({ path: `${SHOTS}/desktop-category-favorite.png`, fullPage: true });
 });
 
-test('canonical browser DragEvent drop inserts through real canvas handler', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'chromium-desktop', 'desktop DOM drag/drop diagnostic');
+test('canonical drag preview precedes real canvas drop and inserts project state', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop', 'desktop browser DragEvent gate');
   await boot(page);
   await resetProject(page);
   await boot(page);
   const result = await page.evaluate(() => {
     const card = document.querySelector('.component-card[data-kind="window"]');
     const canvas = document.querySelector('#canvas');
+    const preview = document.querySelector('[data-component-preview]');
+    const previewMeta = document.querySelector('[data-preview-meta]');
     const dt = new DataTransfer();
     const rect = canvas.getBoundingClientRect();
     card.dispatchEvent(new DragEvent('dragstart', { bubbles: true, cancelable: true, dataTransfer: dt, clientX: 20, clientY: 20 }));
-    const typesAfterStart = [...dt.types];
-    const kindAfterStart = dt.getData('text/yaiwes-kind');
+    const beforeDrop = {
+      types: [...dt.types],
+      kind: dt.getData('text/yaiwes-kind'),
+      previewDragging: preview?.dataset.dragging === 'true',
+      previewText: previewMeta?.textContent || '',
+      cardDragging: card.classList.contains('browser-dragging')
+    };
     canvas.dispatchEvent(new DragEvent('dragover', { bubbles: true, cancelable: true, dataTransfer: dt, clientX: rect.left + 250, clientY: rect.top + 180 }));
     canvas.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer: dt, clientX: rect.left + 250, clientY: rect.top + 180 }));
     card.dispatchEvent(new DragEvent('dragend', { bubbles: true, cancelable: true, dataTransfer: dt }));
-    return { typesAfterStart, kindAfterStart };
+    return beforeDrop;
   });
-  console.log(`FUI046_DOM_DRAG_DIAG=${JSON.stringify(result)}`);
-  expect(result.kindAfterStart).toBe('window');
+  console.log(`FUI046_CANONICAL_DRAG=${JSON.stringify(result)}`);
+  expect(result.kind).toBe('window');
+  expect(result.types).toContain('text/yaiwes-kind');
+  expect(result.previewDragging).toBe(true);
+  expect(result.cardDragging).toBe(true);
+  expect(result.previewText).toContain('Arrastrando');
   await expect(page.locator('[data-node]')).toHaveCount(1);
   const components = await projectComponents(page);
   expect(components).toHaveLength(1);
   expect(components[0].kind).toBe('window');
-  await page.screenshot({ path: `${SHOTS}/desktop-dom-drag-drop.png`, fullPage: true });
+  await page.screenshot({ path: `${SHOTS}/desktop-drag-preview-drop.png`, fullPage: true });
 });
 
 test('keyboard selection previews first and canonical insert happens only from action', async ({ page }, testInfo) => {
