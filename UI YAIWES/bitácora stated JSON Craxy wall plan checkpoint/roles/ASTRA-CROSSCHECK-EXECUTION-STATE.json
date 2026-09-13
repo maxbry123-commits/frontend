@@ -322,7 +322,7 @@
         "result": "2 failed, 1 passed"
       },
       {
-        "scope": "local production/loader/five-pass/e/evidence",
+        "scope": "local production/loader/five-pass/evidence",
         "result": "35 passed, 24 subtests passed in 0.08s"
       },
       {
@@ -332,7 +332,7 @@
       {
         "run_id": 34773642113,
         "revision": "8d67425bb786fd052cd1a524b12d110e75fad16a",
-        "result": "WAITING_FOR_CONCURRENCY; not not declaredCLOSED_UNVERIFIED"
+        "result": "WAITING_FOR_CONCURRENCY; not declared PASS"
       }
     ],
     "refutations": [
@@ -341,11 +341,11 @@
       "REQ-S3-056 cannot be certified from workflow metadata alone."
     ],
     "simulations": [
-      "Missing trace file reprodu produces deterministic FileNotFoundError in the direct binding test.",
+      "Missing trace file reproduces a deterministic FileNotFoundError in the direct binding test.",
       "Incomplete full inventory still reports every unbound requirement.",
       "Trusted lookup is constrained to the exact historical run/job/revision."
     ],
-    "council12": "Single-agent evidence review covered objective, sources, restrictions, dependencies, architecture, reuse, risks,lk alternatives, proof, refutation, consolidation and decision; no external Council claimed.",
+    "council12": "Single-agent evidence review covered objective, sources, restrictions, dependencies, architecture, reuse, risks, alternatives, proof, refutation, consolidation and decision; no external Council claimed.",
     "decision": "Keep PR 59 open and N35 ACTIVE_LOOP until exact branch CI succeeds; then merge and verify post-merge CI. Certification remains 1/167 on main.",
     "pull_request": 59
   },
