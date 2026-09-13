@@ -1,0 +1,20 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v2",
+  "contract":"tel.workflow/v3",
+  "chat_id":"FACTORY-SOL-1-GPT",
+  "agent_name":"SOL 1 GPT 🆘",
+  "node_id":"F-AI-017",
+  "fresh_main_sha":"0ebc619aaed6dbf8e89b0ac9ae93f6c9c6023f12",
+  "base_sha":"0ebc619aaed6dbf8e89b0ac9ae93f6c9c6023f12",
+  "write_scope":"F-AI-017 only: add isolated Factory AI router contract + dedicated microtest; do not modify shared app/state/router UI paths owned by other nodes",
+  "paths":[
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/ai-router-fai017.js",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/f-ai-017-router.test.mjs",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-AI-017-FACTORY-SOL-1-EVIDENCE.json",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-AI-017-FACTORY-SOL-1-GPT-CLAIM.json"
+  ],
+  "claimed_at":"2026-09-12T23:21:00-05:00",
+  "state":"IN_PROGRESS",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "acceptance":"request->router->response traceable with explicit provider/model, fail-closed unknown provider/model, evidence and fresh readback"
+}
