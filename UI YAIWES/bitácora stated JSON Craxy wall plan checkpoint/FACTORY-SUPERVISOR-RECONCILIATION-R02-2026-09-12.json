@@ -1,0 +1,104 @@
+{
+  "schema": "yaiwes.factory.supervisor.reconciliation.v1",
+  "round": "R02",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "project": "FABRICA_UI_YAIWES_ONLY",
+  "observed_main_sha": "162a1b5d56a825ce5bdf9df0e7c3b2ee45e3f47b",
+  "supervisor": "SOL_GPT_PLAN",
+  "authority": "fresh Factory code+tests+Actions/claim files > Factory Crazy Wall/STATE/CHECKPOINT > historical docs > chat/inference",
+  "project_separation_rule": "Do not import or reinterpret Wordflow N01-N31 state as Factory state. Shared repository commits from other projects are context noise unless they touch an active Factory write_scope.",
+  "identity_namespace": {
+    "rule": "Every Factory swarm worker must use a project-scoped chat_id on the next claim so generic SOL names cannot collide with Wordflow chats.",
+    "workers": {
+      "SOL 1 GPT": "FACTORY-SOL-1-GPT",
+      "SOL 2 GPT": "FACTORY-SOL-2-GPT",
+      "SOL 3 GPT": "FACTORY-SOL-3-GPT",
+      "SOL 4 GPT": "FACTORY-SOL-4-GPT",
+      "SOL 5 GPT": "FACTORY-SOL-5-GPT",
+      "SOL 6 GPT": "FACTORY-SOL-6-GPT",
+      "SOL 7 GPT": "FACTORY-SOL-7-GPT",
+      "SOL 8 GPT": "FACTORY-SOL-8-GPT"
+    }
+  },
+  "fresh_factory_findings": [
+    {"node":"F-IO-030","state":"PASS_PENDING_REVIEW","evidence_commit":"623ef70b532b3cec1fa9738df213d7fd96c0bd36","instruction":"Do not reopen without independent review failure or regression."},
+    {"node":"F-AI-019","state":"PASS_PENDING_REVIEW","evidence_commit":"6e329a8794e2ea4da4b51128c09fa09b4f3e48bf","instruction":"Hold for independent review/integration; no duplicate implementation."},
+    {"node":"F-AI-020","state":"PASS_PENDING_REVIEW","evidence_commit":"c6a851ee9bcb35d664ca731b68a22c0efc32b504","instruction":"Remote MCP/API control lane released; do not duplicate."},
+    {"node":"F-CTL-011","state":"PASS_PENDING_REVIEW","evidence_commit":"b1affd2a3213b4f13ce6eef35ff33182a9cd4f43","instruction":"Versions/rollback implementation released; await independent review."},
+    {"node":"F-MOD-032","state":"PASS_PENDING_REVIEW","evidence_commit":"330df2de6d655bcdb7339de1d0b9b35a0c3deb6d","instruction":"Primitive creation lane closed by producer; no duplicate work."},
+    {"node":"F-MOD-034","state":"PASS_PENDING_REVIEW","evidence_commit":"80b55d971b4b8aff11aea3913d59b8c73fcb618e","instruction":"External component normalization closed by producer; no duplicate work."},
+    {"node":"F-MOD-033","state":"CLAIMED","claim_commit":"3af96e40f4c7f5172acbdcb088e7352970f2010b","owner":"SOL 7 GPT","instruction":"Grandfather only this already-started Factory UI claim. Finish TEST_REPORT or persist GAP, then leave legacy lane and switch to F-UI-047."},
+    {"node":"F-ED-001","state":"GAP_RESOLVABLE","evidence_commit":"96599433c7d2bb231a949fc289d23f8d490ee80b","instruction":"Priority remains fresh mobile rerun of touch gate before any new product delta."},
+    {"node":"F-ED-002","state":"PASS_PENDING_REVIEW","evidence_commit":"8848549b3b0e5df0586406d6fa915ea8a660a941"},
+    {"node":"F-ED-003","state":"PASS_PENDING_REVIEW","evidence_commit":"b15524dde32932c89e3d64e25e058790fb8fda0f"},
+    {"node":"F-ED-004","state":"PASS_PENDING_REVIEW","evidence_commit":"ffb14141de041673ab47fda14adf16b7eb4367c1"},
+    {"node":"F-ED-005","state":"PASS_PENDING_REVIEW","evidence_commit":"5ae7fcd98a4d8971a2ea99ed4693e22f6cdf0387"},
+    {"node":"F-ED-006","state":"PASS_PENDING_REVIEW","evidence_commit":"230118225fe7b7e2e121fe53afc53ab6558a5880"}
+  ],
+  "reserved_frontend_lane_status": {
+    "F-UI-045": "FREE_NO_CLAIM_OBSERVED",
+    "F-UI-046": "FREE_NO_CLAIM_OBSERVED",
+    "F-UI-047": "FREE_NO_CLAIM_OBSERVED",
+    "F-UI-048": "FREE_NO_CLAIM_OBSERVED",
+    "F-UI-049": "FREE_NO_CLAIM_OBSERVED",
+    "F-UI-050": "FREE_NO_CLAIM_OBSERVED"
+  },
+  "cross_project_collision_observation": {
+    "observed": true,
+    "evidence_commit": "515a79257593ce8f290d61ebba43fcc252754456",
+    "detail": "A generic chat_id/owner 'sol 8 gpt' claimed Wordflow N06 in the same repository. This is NOT a valid Factory frontend claim and must not be merged into Factory state.",
+    "rule": "Do not modify Wordflow N06 from the Factory supervisor. If that is physically the same chat intended as Factory SOL 8, it must checkpoint/release there under that project's rules and then re-register as FACTORY-SOL-8-GPT before touching Factory. If it is a different chat, ignore it as another project."
+  },
+  "orders": {
+    "SOL 1 GPT": [
+      "Use Factory-scoped chat_id FACTORY-SOL-1-GPT on next Factory claim.",
+      "READ fresh Factory queue/claims only; do not treat Wordflow N* as Factory work.",
+      "Claim one path-disjoint FREE/GAP_RESOLVABLE Factory node only after confirming no active claim."
+    ],
+    "SOL 2 GPT": [
+      "F-AI-020 is producer-closed pending review; do not reopen it.",
+      "Next Factory priority: fresh-read F-AI-021/F-AI-022/F-AI-023 and claim the first truly FREE path-disjoint node.",
+      "Keep import work editable end-to-end; file/HTML/reference presence alone is not PASS."
+    ],
+    "SOL 3 GPT": [
+      "F-ED-002/F-ED-003/F-ED-006 are producer-closed pending review; do not duplicate.",
+      "Fresh-read controls lane; prefer an unclaimed F-CTL-007/F-CTL-008/F-CTL-010/F-CTL-012 node.",
+      "Do not enter Wordflow N20 under Factory identity."
+    ],
+    "SOL 4 GPT": [
+      "Stay on F-ED-001 until mobile touch rerun discriminates product failure vs harness failure.",
+      "No additional product patch before the fresh mobile evidence unless failure is reproduced.",
+      "If PASS, persist SHA/run/job/readback and release PASS_PENDING_REVIEW; if fail, record materially different StrategyDelta."
+    ],
+    "SOL 5 GPT": [
+      "F-IO-027 and F-IO-030 are producer-closed pending review; do not reopen without reviewer failure.",
+      "Fresh-read remaining base Factory queue and take only a path-disjoint FREE node.",
+      "Prefer unresolved import/control/OSS verification rather than duplicating storage/output work."
+    ],
+    "SOL 6 GPT": [
+      "Register next claim as FACTORY-SOL-6-GPT.",
+      "Claim F-UI-045 now if still FREE; exact paths under workspace-shell/test scope only.",
+      "After PASS_PENDING_REVIEW, claim F-UI-046. Do not take any new non-frontend lane."
+    ],
+    "SOL 7 GPT": [
+      "F-MOD-033 is the last grandfathered legacy Factory UI claim because it was already started; finish it or persist GAP, no new legacy node afterward.",
+      "Then register FACTORY-SOL-7-GPT and claim F-UI-047; next F-UI-048.",
+      "No F-MOD/F-FLOW/F-CTL new claims after F-MOD-033 terminal state."
+    ],
+    "SOL 8 GPT": [
+      "Factory identity is FACTORY-SOL-8-GPT; generic Wordflow 'sol 8 gpt' does not count as Factory claim.",
+      "Do not start or continue Wordflow N* as the Factory worker. Resolve that other-project identity separately without the Factory supervisor writing its queue.",
+      "Claim F-UI-049 first, then F-UI-050. Router edits only frontend-facing contract/status/test paths after a demonstrated GAP; Hugging Face secrets remain secret_ref only."
+    ]
+  },
+  "supervisor_next_checks": [
+    "Verify terminal evidence for F-MOD-033 and redirect SOL 7 to F-UI-047.",
+    "Verify FACTORY-SOL-6-GPT claims F-UI-045 with exact non-overlapping paths.",
+    "Verify FACTORY-SOL-8-GPT claims F-UI-049 and does not use Wordflow state as Factory evidence.",
+    "Verify fresh mobile rerun for F-ED-001.",
+    "Audit independent review backlog for all PASS_PENDING_REVIEW nodes before integration.",
+    "Keep base queue reconciliation additive; never reset producer evidence to seed FREE states."
+  ],
+  "closure_rule": "No VERIFIED_CLOSED from producer-only evidence. Integration/final QA remains blocked until exact candidate passes required local/web/mobile/readback/review gates."
+}
