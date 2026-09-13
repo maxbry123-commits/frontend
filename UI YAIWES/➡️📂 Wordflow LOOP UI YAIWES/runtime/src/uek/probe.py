@@ -1,22 +1,106 @@
-"""Read-only host capability probe for the N06 platform matrix.
+"""Read-only host capability probe for the N06/N10 platform matrix.
 
-The probe only observes executable/device availability. It never launches a VM,
-changes host state, or claims that source presence equals runtime support.
-Sandbox lifecycle remains owned by N20.
+The probe observes executable/device availability and, on Android, verifies the
+platform-declared AVF feature before advertising AVF/crosvm as executable. It
+never launches a VM, changes host state, or treats repository source presence
+as runtime support. Sandbox lifecycle remains owned by N20.
 """
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
+from dataclasses import dataclass
 import os
 import platform as host_platform
 import shutil
+import subprocess
 from typing import Optional
 
 from .platform_matrix import CapabilitySnapshot, Platform
 
 
+AVF_FEATURE = "android.software.virtualization_framework"
+AVF_VM_PATH = "/apex/com.android.virt/bin/vm"
+AVF_CROSVM_PATH = "/apex/com.android.virt/bin/crosvm"
+
+
 class PlatformProbeError(RuntimeError):
     pass
+
+
+@dataclass(frozen=True)
+class AndroidAvfEvidence:
+    """Read-only Android AVF facts from platform-owned signals."""
+
+    feature_declared: bool
+    abi: str
+    cuttlefish: bool
+    vm_cli_present: bool
+    crosvm_present: bool
+
+    @property
+    def executable(self) -> bool:
+        return bool(
+            self.feature_declared
+            and self.abi in {"arm64-v8a", "x86_64"}
+            and self.vm_cli_present
+            and self.crosvm_present
+        )
+
+    @property
+    def protected_vm_supported(self) -> bool | None:
+        # AOSP AVF documents Cuttlefish as non-protected-VM only. For physical
+        # devices capability must be queried by the AVF API; do not infer it.
+        return False if self.cuttlefish else None
+
+
+CommandRunner = Callable[[tuple[str, ...]], tuple[int, str]]
+
+
+def _run_readonly(command: tuple[str, ...]) -> tuple[int, str]:
+    """Run one bounded read-only platform query; failures fail closed."""
+
+    try:
+        completed = subprocess.run(
+            command,
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=2,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return 127, ""
+    return completed.returncode, completed.stdout.strip()
+
+
+def _query(command: tuple[str, ...], run_command: CommandRunner) -> tuple[int, str]:
+    try:
+        code, output = run_command(command)
+    except Exception:
+        return 127, ""
+    try:
+        return int(code), str(output).strip()
+    except (TypeError, ValueError):
+        return 127, ""
+
+
+def _getprop(name: str, run_command: CommandRunner) -> str:
+    code, output = _query(("getprop", name), run_command)
+    return output if code == 0 else ""
+
+
+def _pm_has_avf_feature(run_command: CommandRunner) -> bool:
+    code, output = _query(("pm", "has-feature", AVF_FEATURE), run_command)
+    return code == 0 and output.lower() == "true"
+
+
+def _is_cuttlefish(device: str, model: str, name: str) -> bool:
+    """Match the three-property Cuttlefish identity used by AOSP CTS."""
+
+    return bool(
+        device.startswith("vsoc_")
+        and model.startswith("Cuttlefish ")
+        and (name.startswith("cf_") or name.startswith("aosp_cf_"))
+    )
 
 
 def _has_qemu(which: Callable[[str], Optional[str]]) -> bool:
@@ -60,6 +144,35 @@ def _detect_platform(system_name: str, environ: Mapping[str, str]) -> Platform:
     raise PlatformProbeError(f"unsupported_host_system:{system_name}")
 
 
+def probe_android_avf_runtime(
+    *,
+    which: Callable[[str], Optional[str]] = shutil.which,
+    exists: Callable[[str], bool] = os.path.exists,
+    run_command: CommandRunner = _run_readonly,
+) -> AndroidAvfEvidence:
+    """Verify AVF from Android-owned feature/property/APEX signals.
+
+    ``pm has-feature`` is the authoritative support gate. AOSP ships the AVF
+    ``vm`` and crosvm binaries in ``com.android.virt``; their presence is
+    necessary runtime evidence but cannot make a feature-less device supported.
+    """
+
+    feature_declared = _pm_has_avf_feature(run_command)
+    abi = _getprop("ro.product.cpu.abi", run_command)
+    device = _getprop("ro.product.device", run_command)
+    model = _getprop("ro.product.model", run_command)
+    name = _getprop("ro.product.name", run_command)
+    vm_cli = bool(which("vm") or exists(AVF_VM_PATH) or exists("/system/bin/vm"))
+    crosvm = bool(which("crosvm") or exists(AVF_CROSVM_PATH))
+    return AndroidAvfEvidence(
+        feature_declared=feature_declared,
+        abi=abi,
+        cuttlefish=_is_cuttlefish(device, model, name),
+        vm_cli_present=vm_cli,
+        crosvm_present=crosvm,
+    )
+
+
 def probe_current_host(
     *,
     system_name: str | None = None,
@@ -67,12 +180,15 @@ def probe_current_host(
     which: Callable[[str], Optional[str]] = shutil.which,
     exists: Callable[[str], bool] = os.path.exists,
     access: Callable[[str, int], bool] = os.access,
+    run_command: CommandRunner = _run_readonly,
 ) -> CapabilitySnapshot:
     """Return observed capabilities without performing any mutating effect.
 
     Windows WHPX is deliberately not inferred from OS identity. A future native
     adapter must provide a verified WHPX capability to the classifier. Likewise,
     repository vendor/source presence is never treated as an executable backend.
+    On Android, AVF is advertised only when the framework feature plus its APEX
+    runtime binaries and a supported 64-bit ABI are all observed.
     """
 
     env = os.environ if environ is None else environ
@@ -91,19 +207,15 @@ def probe_current_host(
             hardware = True
 
     elif target is Platform.ANDROID:
-        kvm = _kvm_usable(exists, access)
-        vm_cli = bool(
-            which("vm")
-            or exists("/apex/com.android.virt/bin/vm")
-            or exists("/system/bin/vm")
+        avf = probe_android_avf_runtime(
+            which=which,
+            exists=exists,
+            run_command=run_command,
         )
-        crosvm = bool(which("crosvm"))
-        if vm_cli:
-            backends.add("AVF")
-        if crosvm:
-            backends.add("CROSVM")
-        hardware = kvm
-        permission = bool(kvm and vm_cli and crosvm)
+        if avf.executable:
+            backends.update({"AVF", "CROSVM"})
+            hardware = True
+            permission = True
 
     elif target is Platform.WEB:
         # Python/WASI presence cannot turn the browser into a native hypervisor.
