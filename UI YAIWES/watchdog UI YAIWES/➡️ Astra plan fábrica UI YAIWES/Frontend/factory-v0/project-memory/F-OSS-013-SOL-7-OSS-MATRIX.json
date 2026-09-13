@@ -1,0 +1,24 @@
+{
+  "schema":"yaiwes.factory.oss-matrix.v1",
+  "node_id":"F-OSS-013",
+  "agent":"SOL 7 GPT 🆘",
+  "base_sha":"5cd24a12300d9ba1b29724bd760da120c208ec13",
+  "classification":"EVIDENCE_GAP",
+  "assertion":"Inventory must distinguish physical availability from donor/runtime/test integration.",
+  "sources_read":["src/donors/oss-registry.js","src/donors/ directory","tests/ directory"],
+  "matrix":[
+    {"component":"Frappe Builder","capability":"block/context menu patterns","local_path":"src/donors/frappe-builder-patterns.js","adapter":"src/donors/frappe-context-menu-adapter.js","test":"NOT_DEDICATED_IN_TESTS_ROOT_READBACK","state":"DONOR_ACTIVE_NOT_VERIFIED_CLOSED"},
+    {"component":"xyflow","capability":"node workflow canvas/minimap","local_path":"src/donors/xyflow-patterns.js","adapter":"src/donors/xyflow-minimap-adapter.js","test":"NOT_DEDICATED_IN_TESTS_ROOT_READBACK","state":"DONOR_ACTIVE_NOT_VERIFIED_CLOSED"},
+    {"component":"Craft.js","capability":"React page-editor patterns","local_path":"src/donors/craftjs-patterns.js","adapter":"DONOR_PATTERN_ONLY_IN_DIRECTORY_READBACK","test":"NOT_DEDICATED_IN_TESTS_ROOT_READBACK","state":"DONOR_ACTIVE_NOT_VERIFIED_CLOSED"},
+    {"component":"Lucide","capability":"runtime icons","local_path":"src/donors/lucide-icons.js","adapter":"src/donors/lucide-icons.js","test":"tests/lucide-donor.test.mjs","state":"RUNTIME_ACTIVE_TEST_PRESENT_NOT_REEXECUTED_BY_SOL7"},
+    {"component":"OpenPencil","capability":"design canvas","local_path":"registry provenance says ZIP_ONLY","adapter":"NONE_EVIDENCED","test":"NONE_EVIDENCED","state":"SOURCE_PRESENT_ONLY"},
+    {"component":"Silex","capability":"visual site builder","local_path":"registry provenance says EXTRACTED","adapter":"NONE_EVIDENCED","test":"NONE_EVIDENCED","state":"EXTRACTED_ONLY"},
+    {"component":"Playwright","capability":"browser E2E","local_path":"tests/e2e/","adapter":"test harness","test":"tests/e2e/","state":"TEST_ACTIVE"}
+  ],
+  "dedup_result":"Existing registry already inventories broad OSS families; no new download justified. F-OSS-014/015 must consume this evidence and prove category/adapter wiring rather than count folders.",
+  "simulations":["S1 source present without adapter => not integrated","S2 donor file plus adapter without dedicated test => not VERIFIED_CLOSED","S3 runtime donor plus test file => still requires fresh execution for TEST_PASS"],
+  "refutations":["R1 registry status DONOR_ACTIVE does not prove runtime wiring; matrix downgrades closure claim","R2 extracted/ZIP entries cannot be promoted to WIRED without adapter evidence","R3 test file presence is not PASS; Lucide marked test-present only"],
+  "council12":{"objective":"auditable OSS matrix","requirement":"component->capability->path->adapter->test","authority":"fresh repo","prior_state":"broad registry existed","owner":"SOL 7","collision":"none on additive evidence path","gap":"integration states conflated in registry labels","alternatives":"rewrite registry rejected; additive evidence chosen","strategy":"REUSE_EXISTING","tests":"structural readback only","refutations":"3 recorded","decision":"PASS_PENDING_REVIEW for F-OSS-013 evidence; runtime integration remains downstream F-OSS-015"},
+  "goals12_output":{"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS additive evidence only","G08":"PASS structural source/test readback","G09":"N/A no runtime claim","G10":"PASS 3+3","G11":"PENDING final SHA/readback","G12":"NEXT F-OSS-014 after dependency reconciliation"},
+  "state":"PASS_PENDING_REVIEW"
+}
