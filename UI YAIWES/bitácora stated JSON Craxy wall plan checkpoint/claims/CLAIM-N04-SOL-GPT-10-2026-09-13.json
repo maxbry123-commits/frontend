@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <10>",
+  "node_id": "N04-STATE-RECONCILIATION",
+  "fresh_main_sha": "02eccabd8ea51cea5feb7c27db683b10cbe9e344",
+  "write_scope": "shared state docs only",
+  "claimed_at": "2026-09-13T06:41:00Z",
+  "authority": "Crazy Wall fresh read: N04 FREE because N02+N03 VERIFIED_CLOSED"
+}
