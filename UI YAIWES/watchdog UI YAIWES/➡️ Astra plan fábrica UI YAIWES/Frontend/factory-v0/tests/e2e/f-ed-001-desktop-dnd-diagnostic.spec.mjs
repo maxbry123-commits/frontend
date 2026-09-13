@@ -19,9 +19,7 @@ test('F-ED-001 desktop DnD diagnostic preserves real HTML5 contract', async ({ p
       queueMicrotask(() => d.starts.push({ kind: card.dataset.kind, types: [...(event.dataTransfer?.types || [])] }));
     }, true);
     const canvas = document.getElementById('canvas');
-    canvas.addEventListener('dragover', event => {
-      window.__F_ED_001_DND_DIAG__.dragover += 1;
-    }, true);
+    canvas.addEventListener('dragover', () => { window.__F_ED_001_DND_DIAG__.dragover += 1; }, true);
     canvas.addEventListener('drop', event => {
       const d = window.__F_ED_001_DND_DIAG__;
       d.drop += 1;
@@ -38,14 +36,30 @@ test('F-ED-001 desktop DnD diagnostic preserves real HTML5 contract', async ({ p
 
   const source = page.locator('[data-kind="window"]');
   const canvas = page.locator('#canvas');
-  await source.dragTo(canvas, { targetPosition: { x: 180, y: 160 } });
+  const sourceInfo = await source.evaluate(el => ({ draggable: el.draggable, attr: el.getAttribute('draggable'), cls: el.className }));
+  const sourceBox = await source.boundingBox();
+  const canvasBox = await canvas.boundingBox();
+  expect(sourceInfo.draggable, `SOURCE_NOT_DRAGGABLE ${JSON.stringify(sourceInfo)}`).toBe(true);
+  expect(sourceBox, 'SOURCE_BOX_MISSING').not.toBeNull();
+  expect(canvasBox, 'CANVAS_BOX_MISSING').not.toBeNull();
+
+  const sx = sourceBox.x + sourceBox.width / 2;
+  const sy = sourceBox.y + sourceBox.height / 2;
+  const tx = canvasBox.x + Math.min(180, canvasBox.width * 0.35);
+  const ty = canvasBox.y + Math.min(160, canvasBox.height * 0.35);
+  await page.mouse.move(sx, sy);
+  await page.mouse.down();
+  await page.mouse.move(sx + 12, sy + 8, { steps: 4 });
+  await page.mouse.move(tx, ty, { steps: 24 });
+  await page.mouse.up();
   await page.waitForTimeout(250);
 
-  const diag = await page.evaluate(() => ({
+  const diag = await page.evaluate(source => ({
     ...window.__F_ED_001_DND_DIAG__,
+    source,
     nodeCount: document.querySelectorAll('[data-node]').length,
     project: JSON.parse(localStorage.getItem('yaiwes-factory-project-v19') || 'null')
-  }));
+  }), sourceInfo);
   console.log(`F_ED_001_DESKTOP_DND_DIAG=${JSON.stringify(diag)}`);
 
   expect(diag.dragstart, `NO_DRAGSTART ${JSON.stringify(diag)}`).toBeGreaterThan(0);
