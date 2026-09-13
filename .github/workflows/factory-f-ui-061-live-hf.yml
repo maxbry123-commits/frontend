@@ -1,0 +1,132 @@
+name: Factory F-UI-061 Live Full User Journey
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-061-full-user-journey-live.spec.mjs'
+      - '.github/workflows/factory-f-ui-061-live-hf.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: factory-f-ui-061-live-hf
+  cancel-in-progress: true
+jobs:
+  live-journey:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      HF_TOKEN_A: ${{ secrets.HF_TOKEN }}
+      HF_TOKEN_B: ${{ secrets.HUGGINGFACE_TOKEN }}
+      HF_TOKEN_C: ${{ secrets.HUGGING_FACE_TOKEN }}
+      HF_TOKEN_D: ${{ secrets.HUGGINGFACEHUB_API_TOKEN }}
+      HF_TOKEN_E: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
+      SPACE_REPO: COMAND-CENTER-1/yaiwes-ui-factory
+      HF_OIDC_RESOURCE: spaces/COMAND-CENTER-1/yaiwes-ui-factory
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Package exact candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf _hf_live && mkdir -p _hf_live
+          cp -R src _hf_live/src
+          for f in styles.css interaction-fix.css frappe-context-menu.css resize-snap.css xyflow-minimap.css stability-v19.css; do test -s "$f" && cp "$f" "_hf_live/$f"; done
+          cp index-v19.html _hf_live/index.html
+          printf '%s\n' "$GITHUB_SHA" > _hf_live/source-sha.txt
+          cat > _hf_live/README.md <<EOF
+          ---
+          title: YAIWES UI Factory
+          emoji: 🏭
+          colorFrom: indigo
+          colorTo: purple
+          sdk: static
+          app_file: index.html
+          pinned: false
+          ---
+          # YAIWES UI Factory V1.9
+          Verified GitHub source SHA: \`$GITHUB_SHA\`.
+          EOF
+          node --check _hf_live/src/app-v19.js
+          grep -F './src/frontend-router-bridge.js' _hf_live/index.html
+      - name: Install Hugging Face CLI
+        run: python -m pip install --quiet --disable-pip-version-check 'huggingface_hub>=1.19.0,<2'
+      - name: Resolve HF auth without exposing credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          token=''
+          for candidate in "$HF_TOKEN_A" "$HF_TOKEN_B" "$HF_TOKEN_C" "$HF_TOKEN_D" "$HF_TOKEN_E"; do if [ -n "$candidate" ]; then token="$candidate"; break; fi; done
+          if [ -n "$token" ]; then
+            echo "::add-mask::$token"
+            printf 'HF_PUBLISH_TOKEN=%s\n' "$token" >> "$GITHUB_ENV"
+            echo 'HF_AUTH_MODE=secret' >> "$GITHUB_ENV"
+          else
+            echo 'HF_AUTH_MODE=oidc' >> "$GITHUB_ENV"
+          fi
+      - name: Publish exact candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$HF_AUTH_MODE" = secret ]; then
+            python - <<'PY'
+          import os
+          from huggingface_hub import HfApi
+          api=HfApi(token=os.environ['HF_PUBLISH_TOKEN'])
+          print(api.upload_folder(repo_id=os.environ['SPACE_REPO'],repo_type='space',folder_path='_hf_live',commit_message=f"F-UI-061 exact {os.environ['GITHUB_SHA']}"))
+          PY
+          else
+            hf upload "$SPACE_REPO" _hf_live . --repo-type space --commit-message "F-UI-061 exact ${GITHUB_SHA}"
+          fi
+      - name: Resolve host and exact SHA readback
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json,os,time,urllib.request
+          api='https://huggingface.co/api/spaces/COMAND-CENTER-1/yaiwes-ui-factory'; expected=os.environ['GITHUB_SHA']
+          def read(url):
+              req=urllib.request.Request(url,headers={'User-Agent':'Mozilla/5.0'})
+              with urllib.request.urlopen(req,timeout=20) as r:return r.status,r.read().decode('utf-8','ignore')
+          for _ in range(48):
+              _,body=read(api); host=json.loads(body).get('host')
+              if host:
+                  try:
+                      status,served=read(host.rstrip('/')+'/source-sha.txt')
+                      if status==200 and served.strip()==expected:
+                          with open(os.environ['GITHUB_ENV'],'a') as f:
+                              f.write('FACTORY_LIVE_URL='+host.rstrip('/')+'\nFACTORY_EXPECTED_SHA='+expected+'\n')
+                          print('LIVE_READBACK_PASS',host,expected); break
+                  except Exception: pass
+              time.sleep(5)
+          else: raise SystemExit('LIVE_EXACT_SHA_READBACK_FAILED')
+          PY
+      - name: Install browser dependencies
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Desktop published journey
+        run: npx playwright test tests/e2e/f-ui-061-full-user-journey-live.spec.mjs --project=chromium-desktop
+      - name: Mobile published journey
+        run: npx playwright test tests/e2e/f-ui-061-full-user-journey-live.spec.mjs --project=mobile-chromium
+      - name: Upload live journey evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: f-ui-061-live-user-journey-${{ github.sha }}
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/f-ui-061-live/*.png
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/**/attachments/**
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report/**
+          if-no-files-found: warn
+          retention-days: 14
