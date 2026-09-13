@@ -1,0 +1,12 @@
+{
+  "schema": "yaiwes.node.claim.extension.v1",
+  "node_id": "FACTORY-E01-EDITOR-STABILITY",
+  "owner": "ASTRA_GPT",
+  "state": "CLAIMED_TEST_SCOPE",
+  "base_sha": "db5ac90b181b4452a9ee33845ccc63737df4e0b7",
+  "parent_claim": "CLAIM-FACTORY-E01-EDITOR-STABILITY-ASTRA-2026-09-12.json",
+  "additional_write_scope": ".github/workflows/astra-factory-v19-local-50-cycle.yml",
+  "reason": "No generic existing runner executes factory-v19-local-50-cycle.spec.mjs. Scope is restricted to the E01 candidate gate only.",
+  "forbidden": ["modify other workflows", "publish V1.9 before local gate PASS", "touch another owner's active scope"],
+  "required_evidence": ["workflow_run", "job_log", "artifact", "candidate_sha", "50_local_cycles", "mobile_touch_test"]
+}
