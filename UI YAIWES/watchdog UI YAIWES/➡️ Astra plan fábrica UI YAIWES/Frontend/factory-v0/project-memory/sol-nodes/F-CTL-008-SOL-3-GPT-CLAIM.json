@@ -1,8 +1,12 @@
 {
   "schema":"yaiwes.factory.sol.claim.v1","contract":"tel.workflow/v3","chat_id":"SOL-3-GPT-2026-09-12T21:44-05:00","agent_name":"SOL 3 GPT 🆘","node_id":"F-CTL-008",
-  "fresh_main_sha":"d94ba598f329e33fbc29c6ead66d779ff7691bcf","base_sha":"d94ba598f329e33fbc29c6ead66d779ff7691bcf",
-  "write_scope":"F-CTL-008 property editing verification and minimum delta only; dedicated evidence/test paths first; excludes active F-CTL-007/F-CTL-009 and Wordflow N01-N31",
-  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-CTL-008-SOL-3-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-CTL-008-SOL-3-EVIDENCE.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ctl-008-properties.spec.mjs",".github/workflows/factory-f-ctl-008-properties.yml"],
-  "claimed_at":"2026-09-12T22:13:00-05:00","state":"CLAIMED","steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "goals12_input":{"G01":"PASS properties edit attributes and reflect canvas/state","G02":"PASS fresh HEAD","G03":"PASS queue","G04":"PASS no prior claim found","G05":"PENDING inspect existing property bindings","G06":"PASS reuse-first","G07":"PENDING","G08":"PENDING","G09":"PENDING","G10":"PENDING","G11":"PENDING","G12":"LOCKED F-CTL-008"}
+  "base_sha":"d94ba598f329e33fbc29c6ead66d779ff7691bcf","tested_sha":"b71634c97cf78bc649d56d4e77b8074e8ad3f11d",
+  "write_scope":"F-CTL-008 dedicated test/workflow/evidence only; no product mutation; excludes Wordflow N01-N31",
+  "state":"PASS_PENDING_REVIEW","classification":"NO_PRODUCT_FAILURE_REPRODUCED_REUSE_EXISTING",
+  "test_commit":"7eb90fd60b83b8c7c40236f4653847f63b05f580","workflow_commit":"b71634c97cf78bc649d56d4e77b8074e8ad3f11d","evidence_commit":"8691e8898b4b9b53b8e725d6854d46763eb42e39","evidence_blob":"7d0e9d80bc0661df74f3fc543183a9c3c6b25edd",
+  "run_id":34734985635,"job_id":103664681702,"result":"SUCCESS",
+  "tests":["syntax PASS","label -> canvas/state PASS","width 333 -> canvas/state PASS","height 177 -> canvas/state PASS","localStorage exact readback PASS","reload exact same node PASS"],
+  "simulations":3,"refutations":3,"review_required":true,"remaining_gaps":["independent review/global integration downstream"],"next_free_node":"READ_FRESH_QUEUE",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "goals12_output":{"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS_REUSE_NO_PRODUCT_PATCH","G08":"PASS","G09":"PASS","G10":"PASS","G11":"PASS","G12":"PASS"}
 }
