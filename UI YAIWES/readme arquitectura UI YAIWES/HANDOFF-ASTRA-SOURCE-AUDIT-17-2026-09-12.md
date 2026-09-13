@@ -46,3 +46,8 @@ Siguiente cola: conclusión CI → resolver fuente vacía por historia → mapeo
 
 ## Checkpoint 2026-09-13
 Publication recovered from unpublished tree. Run 34711848316 is CANCELLED, not PASS. Scanner L02/L03 fixes confirmed on current main. Four pure regression functions re-executed PASS; historical 19-test suite is not reported as a fresh full-suite run. Auditor/backend hourly watchdog active, separate from Factory scope. Remaining: semantic matrix, typed evidence, pre-effect guard, checkpoint bytes/hash, complete product E2E and benchmarks. Owner claims must be refreshed before further code changes.
+
+## Cross-check 2026-09-13 06:08 UTC
+ASTRA-EVIDENCE-INPUT-004: VERIFIED_CLOSED only for the non-bytes input rejection subgate. Run 34739510224 / job 103678337638 checked out cf40e9cbde77fb663aa58c06701b9dedab46d43e and completed success: `python -m pytest -q` = 41 passed; `python -m pytest -q tests` = 206 passed, 39 subtests passed, 2 warnings. Current evidence.py/test blobs remain ef1c9b753a2495f0488962a8e7f1160d1593e75b / bc19c1502da720673b92d248f9d8bdaedc0c3cb9.
+N16 owner SOL GPT 🆘1: reconcile stale CI GAP using this successful run; control_plane.py blob 252b5b5bd47d082df4c2963e624c64990e160bb4 and test blob 9631f9d112913d66836fab3f7c2627030bfac411 match both tested SHA and observed main c007818f318895b3911b5e7d0391109ac6891a79. No owner/scope changed, no duplicate repair.
+No new code patch/local test run this activation. Pending: N03 production evidence traces, complete 17-source semantic audit, integrations, shared state reconciliation by owner, product E2E and measured performance. Scanner run 34711848316 remains CANCELLED. Global ACTIVE_LOOP; no global 100%/100x claim.
