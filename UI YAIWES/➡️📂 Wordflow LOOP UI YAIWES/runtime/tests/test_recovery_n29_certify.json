@@ -1,0 +1,13 @@
+{
+  "schema": "yaiwes.n29.certification.v1",
+  "node_id": "N29-GLOBAL-RECOVERY-FAILOVER",
+  "owner": "sol 4 gpt 🆘",
+  "integrated_merge_sha": "5cb855d20a1c51e4640c437e1b770c407124bc30",
+  "certification_base_sha": "74ea925ef0ba117dfe94b9c55264803994597879",
+  "workspace_failover_blob": "5e39ce2e2bc2278214d54a98625ab086364394de",
+  "test_blob": "1572852c65c2313c6bcbbba2c4d76f68a215a738",
+  "candidate_run_id": 34738865350,
+  "candidate_job_id": 103675012876,
+  "candidate_result": "41 wordflow PASS; 213 runtime PASS; 37 subtests PASS",
+  "purpose": "Trigger full CI on an integrated descendant tree without changing executable N29 code or tests."
+}
