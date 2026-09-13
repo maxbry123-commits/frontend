@@ -1,0 +1,24 @@
+{
+  "schema":"yaiwes.crazy-wall.report.v2",
+  "contract":"tel.workflow/v3",
+  "role":"SOL_GPT2",
+  "chat_id":"SOL-2-GPT-2026-09-12T22:41-05:00",
+  "node_id":"S2-09-OTEL-COLLECTOR-BOUNDARY",
+  "status":"PASS",
+  "pass_percent":100,
+  "classification":"REUSE_EXISTING_BOUNDARY_NO_NEW_OWNER",
+  "claim_commit":"ec87ee23e50535476e07f9fd7f567cafa3097d14",
+  "runtime_boundary":{"path":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/observability/runtime.py","blob":"ca42936d00dcd2160e69e2c5625d3a35bfc82a10","exports":["OpenTelemetrySink","RuntimeTelemetry","CorrelationContext"],"behavior":"injected tracer boundary; deterministic workflow/task correlation; evidence/recovery events; fail-closed invalid tracer/span"},
+  "collector_source":{"manifest":"UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Collector/DOWNLOAD_EXTRACT_MANIFEST.json","manifest_blob":"942c7120aa3c9c84212c6c7b9771e58f411f6d87","repo":"https://github.com/open-telemetry/opentelemetry-collector","source_commit":"65bcb4855bc033cd327cb8b4569296578fc4750d","source_files":2833,"extraction_verified":true,"reconstruction_verified":true,"no_lfs":true},
+  "test":{"path":"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_observability_runtime.py","blob":"7d628e722a536e618f8e2aded7f137a3acd372ec","run_id":34735844744,"job_id":103667777897,"tested_sha":"162a1b5d56a825ce5bdf9df0e7c3b2ee45e3f47b","conclusion":"success","runtime":"192 passed + 32 subtests","wordflow":"41 passed"},
+  "refutations":[
+    {"id":"R1","result":"PASS","assertion":"invalid tracer cannot be accepted as telemetry sink"},
+    {"id":"R2","result":"PASS","assertion":"invalid span without set_attribute fails closed"},
+    {"id":"R3","result":"PASS","assertion":"correlation id is deterministic per workflow/task and distinct across tasks"}
+  ],
+  "authorized_delta":"NONE; REUSE_EXISTING preferred over creating duplicate telemetry/export owner",
+  "remaining_gaps":[],
+  "scope_note":"PASS certifies the runtime OpenTelemetry/Collector boundary available in the fresh queue; it does not claim live external Collector deployment or project-global VERIFIED_CLOSED.",
+  "next_free_node":"S2-10-VM-MANAGER-CAPABILITY",
+  "project_verified_closed":false
+}
