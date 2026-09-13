@@ -10,7 +10,19 @@ if (root && studio && library && context && toolbar) {
   controls.className = 'workspace-shell-controls';
   controls.setAttribute('aria-label', 'Controles del workspace');
 
-  const makeButton = (label, side, target) => {
+  const buttons = new Map();
+  const targets = { left: library, right: context };
+
+  const setCollapsed = (side, collapsed) => {
+    const target = targets[side];
+    const button = buttons.get(side);
+    studio.classList.toggle(`workspace-${side}-collapsed`, collapsed);
+    if (button) button.setAttribute('aria-expanded', String(!collapsed));
+    target.setAttribute('aria-hidden', String(collapsed));
+    window.dispatchEvent(new CustomEvent('yaiwes:workspace-shell-change', { detail: { side, collapsed } }));
+  };
+
+  const makeButton = (label, side) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'workspace-shell-toggle';
@@ -18,34 +30,33 @@ if (root && studio && library && context && toolbar) {
     button.setAttribute('aria-expanded', 'true');
     button.textContent = label;
     button.addEventListener('click', () => {
-      const collapsed = studio.classList.toggle(`workspace-${side}-collapsed`);
-      button.setAttribute('aria-expanded', String(!collapsed));
-      target.setAttribute('aria-hidden', String(collapsed));
-      window.dispatchEvent(new CustomEvent('yaiwes:workspace-shell-change', { detail: { side, collapsed } }));
+      setCollapsed(side, !studio.classList.contains(`workspace-${side}-collapsed`));
     });
+    buttons.set(side, button);
     return button;
   };
 
-  controls.append(
-    makeButton('Biblioteca', 'left', library),
-    makeButton('Inspector', 'right', context)
-  );
+  const addDrawerClose = (side, target, label) => {
+    const close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'workspace-drawer-close';
+    close.dataset.workspaceClose = side;
+    close.setAttribute('aria-label', `Cerrar ${label}`);
+    close.textContent = '×';
+    close.addEventListener('click', () => setCollapsed(side, true));
+    target.prepend(close);
+  };
+
+  controls.append(makeButton('Biblioteca', 'left'), makeButton('Inspector', 'right'));
   toolbar.append(controls);
+  addDrawerClose('left', library, 'Biblioteca');
+  addDrawerClose('right', context, 'Inspector');
 
   const syncMobileDefaults = () => {
     const mobile = window.matchMedia('(max-width: 760px)').matches;
     root.dataset.workspaceMode = mobile ? 'mobile' : 'desktop';
-    if (mobile) {
-      studio.classList.add('workspace-left-collapsed', 'workspace-right-collapsed');
-      controls.querySelectorAll('button').forEach(button => button.setAttribute('aria-expanded', 'false'));
-      library.setAttribute('aria-hidden', 'true');
-      context.setAttribute('aria-hidden', 'true');
-    } else {
-      studio.classList.remove('workspace-left-collapsed', 'workspace-right-collapsed');
-      controls.querySelectorAll('button').forEach(button => button.setAttribute('aria-expanded', 'true'));
-      library.setAttribute('aria-hidden', 'false');
-      context.setAttribute('aria-hidden', 'false');
-    }
+    setCollapsed('left', mobile);
+    setCollapsed('right', mobile);
   };
 
   syncMobileDefaults();
