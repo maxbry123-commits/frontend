@@ -1,0 +1,12 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <19>",
+  "node_id": "N28-API-CONTROL",
+  "fresh_main_sha": "e3d86ac3accd8520efcb52ebcd1e1d295a6a21b6",
+  "write_scope": "runtime/src/conn/**|runtime/src/integration/**|runtime/tests/test_integration*",
+  "claimed_at": "2026-09-13T07:00:00Z",
+  "authority": "Crazy Wall fresh read at e3d86ac3accd8520efcb52ebcd1e1d295a6a21b6: N28 GAP_RESOLVABLE; repository search found no active N28 claim sidecar.",
+  "strategy": "RECONCILE_CODE_AND_TRUSTED_CI_BEFORE_PATCH",
+  "collision_guard": "No writes outside N28 scope; fresh read before every write."
+}
