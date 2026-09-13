@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <14>",
+  "node_id": "N16-CHECKPOINT-BYTES-HASH",
+  "fresh_main_sha": "5dc2af029cc8b025270a00e703fa12d3f6defea7",
+  "write_scope": "runtime/src/recovery/**|runtime/tests/test_recovery*",
+  "claimed_at": "2026-09-13T07:02:50Z",
+  "reason": "Crazy Wall remains GAP_RESOLVABLE after prior technical PASS; reconcile exact trusted CI evidence without code delta."
+}
