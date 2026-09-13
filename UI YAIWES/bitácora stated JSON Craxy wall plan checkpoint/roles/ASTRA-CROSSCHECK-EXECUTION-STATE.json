@@ -92,29 +92,28 @@
       "platform_probe": "BLOCKED: no_verified_runtime_backend",
       "local_targeted": "32 passed, 24 subtests passed in 0.09s",
       "local_full": "270 passed, 42 subtests; 2 environment failures: local Pydantic version mismatch and Docker socket PermissionError",
-      "trace_certification": "2/167 independently certified; 165 missing"
+      "trace_certification": "3/167 independently certified; 164 missing"
     }
   },
   "node_id": "X17-11",
   "owner": "ASTRA_CROSSCHECK",
   "remaining": [
-    "Wait for exact PR 60 head CI 34776772294; merge only on SUCCESS and verify post-merge CI",
-    "Persist and independently attest 164 further RequirementTrace rows after REQ-S3-054 is integrated",
+    "Persist and independently attest 164 missing RequirementTrace rows",
     "Implement and test executable FinalJudge behavior before considering REQ-S3-056",
-    "Web/Windows/Linux/Android/iOS evidence remains incomplete",
-    "Benchmark 100x remains refuted",
+    "Web/Windows/Linux/Android/iOS evidence remains incomplete; merge CI reports no verified runtime backend",
+    "Benchmark 100x remains refuted: post-merge CI measured 2.7475x",
     "Original scanner run 34711848316 remains CANCELLED"
   ],
   "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-PREFLIGHT-SCOPE-003.json",
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T19:09:22Z",
+  "updated_at_utc": "2026-09-13T20:15:16Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
   ],
-  "last_observed_head": "05f82331937e3f82d8719278c41280cbd435bd34",
+  "last_observed_head": "d60d5efa3ae99d6b776329ff4a8451823f4f33e0",
   "last_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "status": "ACTIVE_LOOP",
@@ -288,7 +287,7 @@
   "current_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "requirement_id": "REQ-S3-054",
-    "status": "CLOSED_UNVERIFIED_DELTA_ACTIVE_LOOP",
+    "status": "VERIFIED_CLOSED_DELTA_ACTIVE_LOOP",
     "checkpoint_read_blob": "929ef12f5c7cc030658ed847d48c62599188429e",
     "observed_main": "05f82331937e3f82d8719278c41280cbd435bd34",
     "candidate_head": "43fc79f6a577ccca41d5f4e2f48587c99b6d0bab",
@@ -324,13 +323,18 @@
         "result": "36 passed, 24 subtests passed in 0.08s"
       },
       {
-        "scope": "compileall and diff-check",
-        "result": "PASS"
+        "run_id": 34776772294,
+        "job_id": 103777665760,
+        "revision": "43fc79f6a577ccca41d5f4e2f48587c99b6d0bab",
+        "result": "SUCCESS: 41 Wordflow, 280 runtime, 42 subtests"
       },
       {
-        "run_id": 34776772294,
-        "revision": "43fc79f6a577ccca41d5f4e2f48587c99b6d0bab",
-        "result": "WAITING_FOR_CONCURRENCY; not declared PASS"
+        "run_id": 34779525870,
+        "job_id": 103783858832,
+        "revision": "d60d5efa3ae99d6b776329ff4a8451823f4f33e0",
+        "result": "SUCCESS: 41 Wordflow, 280 runtime, 42 subtests",
+        "benchmark": "2.7475x; meets_100x=false",
+        "platform_probe": "BLOCKED:no_verified_runtime_backend"
       }
     ],
     "simulations": [
@@ -339,16 +343,18 @@
       "Trusted lookup accepts only the exact historical run/job/revision."
     ],
     "refutations": [
-      "Semantic overlap alone was insufficient; the selected test directly exercises omitted implementation-artifact failure.",
-      "Local green tests do not authorize merge before exact head CI succeeds.",
-      "Three traces would be 1.80%, not full product coverage."
+      "Branch and post-merge success certify only the REQ-S3-054 binding.",
+      "Three certified traces are 1.80%, not full semantic or product coverage.",
+      "Post-merge benchmark measured 2.7475x, not 100x; the Linux host lacks a verified runtime backend.",
+      "A green loader suite does not supply the remaining 164 requirement bindings."
     ],
     "council12": "Single-agent evidence review covered objective, sources, restrictions, dependencies, architecture, reuse, risks, alternatives, proof, refutation, consolidation and decision; no external Council claimed.",
-    "decision": "Keep PR 60 open and N35 ACTIVE_LOOP until exact head CI succeeds; then merge and verify post-merge CI."
+    "decision": "Close REQ-S3-054 trace delta as VERIFIED_CLOSED. Keep N35 ACTIVE_LOOP at 3/167.",
+    "merge_commit": "d60d5efa3ae99d6b776329ff4a8451823f4f33e0"
   },
   "n35_next_trace_claim": {
     "requirement_id": "REQ-S3-054",
-    "state": "CLOSED_UNVERIFIED",
+    "state": "VERIFIED_CLOSED",
     "claimed_at_utc": "2026-09-13T19:05:20Z",
     "fresh_main_sha": "d79090bdf6b4bd303ebbb263d5a038c5cc227b94",
     "source_anchor": "§54 INTEGRATION CHECK",
@@ -370,7 +376,12 @@
     "pull_request": 60,
     "head_sha": "43fc79f6a577ccca41d5f4e2f48587c99b6d0bab",
     "ci_run": 34776772294,
-    "ci_status": "waiting_for_concurrency",
-    "certification_if_integrated": "3/167; 164 missing"
+    "ci_status": "success",
+    "certification_if_integrated": "3/167; 164 missing",
+    "merge_commit": "d60d5efa3ae99d6b776329ff4a8451823f4f33e0",
+    "ci_job": 103777665760,
+    "post_merge_ci_run": 34779525870,
+    "post_merge_ci_job": 103783858832,
+    "certification": "3/167; 164 missing"
   }
 }
