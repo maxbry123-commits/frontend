@@ -1,0 +1,20 @@
+{
+  "schema": "yaiwes.frontend.download-extract-queue.v1",
+  "node_id": "N07-VITE-ACQUIRE",
+  "strategy_delta": "official_previous_stable_ref_after_v8_source_special_file_gap",
+  "queue": [
+    {
+      "id": "N07:Vite:v7.1.7",
+      "source_repo": "vitejs/vite",
+      "source_ref": "v7.1.7",
+      "source_commit_expected": "693d25510aba3322e8e689764df8c3b18db04a98",
+      "slug": "vite",
+      "dest_repo": "maxbry123-commits/frontend",
+      "dest_branch": "main",
+      "dest_root": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor",
+      "publish": true,
+      "official_url": "https://github.com/vitejs/vite",
+      "license": "MIT"
+    }
+  ]
+}
