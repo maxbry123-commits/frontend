@@ -5,6 +5,9 @@
   "fresh_main_sha": "74ea925ef0ba117dfe94b9c55264803994597879",
   "write_scope": "runtime/src/recovery/**|runtime/tests/test_recovery*",
   "claimed_at": "2026-09-13T06:30:30Z",
-  "state": "CLAIMED",
-  "execution_state": "IN_PROGRESS"
+  "state": "RELEASED_COLLISION",
+  "execution_state": "STOPPED_BEFORE_NODE_EFFECTS",
+  "released_at": "2026-09-13T06:31:30Z",
+  "collision_with": "CLAIM-N16-SOL-GPT-11.json",
+  "node_effects_applied": false
 }
