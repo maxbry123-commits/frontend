@@ -23,6 +23,7 @@ jobs:
       HF_TOKEN_D: ${{ secrets.HUGGINGFACEHUB_API_TOKEN }}
       HF_TOKEN_E: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
       SPACE_REPO: COMAND-CENTER-1/yaiwes-ui-factory
+      HF_OIDC_RESOURCE: spaces/COMAND-CENTER-1/yaiwes-ui-factory
     defaults:
       run:
         working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
@@ -61,24 +62,35 @@ jobs:
           node --check _hf_live/src/hf-jobs-panel-v1.js
       - name: Install Hugging Face CLI
         run: python -m pip install --quiet --disable-pip-version-check 'huggingface_hub>=1.19.0,<2'
-      - name: Resolve HF auth
+      - name: Resolve HF auth without exposing credentials
         shell: bash
         run: |
           set -euo pipefail
           token=''
-          for candidate in "$HF_TOKEN_A" "$HF_TOKEN_B" "$HF_TOKEN_C" "$HF_TOKEN_D" "$HF_TOKEN_E"; do if [ -n "$candidate" ]; then token="$candidate"; break; fi; done
-          if [ -z "$token" ]; then echo 'NO_HF_WRITE_SECRET' >&2; exit 1; fi
-          echo "::add-mask::$token"
-          printf 'HF_PUBLISH_TOKEN=%s\n' "$token" >> "$GITHUB_ENV"
+          for candidate in "$HF_TOKEN_A" "$HF_TOKEN_B" "$HF_TOKEN_C" "$HF_TOKEN_D" "$HF_TOKEN_E"; do
+            if [ -n "$candidate" ]; then token="$candidate"; break; fi
+          done
+          if [ -n "$token" ]; then
+            echo "::add-mask::$token"
+            printf 'HF_PUBLISH_TOKEN=%s\n' "$token" >> "$GITHUB_ENV"
+            echo 'HF_AUTH_MODE=secret' >> "$GITHUB_ENV"
+          else
+            echo 'HF_AUTH_MODE=oidc' >> "$GITHUB_ENV"
+          fi
       - name: Publish exact candidate
         shell: bash
         run: |
-          python - <<'PY'
+          set -euo pipefail
+          if [ "$HF_AUTH_MODE" = secret ]; then
+            python - <<'PY'
           import os
           from huggingface_hub import HfApi
           api=HfApi(token=os.environ['HF_PUBLISH_TOKEN'])
           print(api.upload_folder(repo_id=os.environ['SPACE_REPO'],repo_type='space',folder_path='_hf_live',commit_message=f"F-UI-060 exact {os.environ['GITHUB_SHA']}"))
           PY
+          else
+            hf upload "$SPACE_REPO" _hf_live . --repo-type space --commit-message "F-UI-060 exact ${GITHUB_SHA}"
+          fi
       - name: Resolve host and exact SHA readback
         shell: bash
         run: |
