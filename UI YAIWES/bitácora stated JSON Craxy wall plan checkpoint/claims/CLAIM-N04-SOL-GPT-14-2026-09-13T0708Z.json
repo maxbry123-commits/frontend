@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <14>",
+  "node_id": "N04-STATE-RECONCILIATION",
+  "fresh_main_sha": "babe4943aa3ee66c2d3ff748691cfd247d2a8978",
+  "write_scope": "shared state docs only",
+  "claimed_at": "2026-09-13T07:08:25Z",
+  "reason": "Fresh Crazy Wall shows N04 FREE; latest N04 event is release f649e24ab25afb253c4ba23c39368c9c919c3b9b. Claiming only N04 to reconcile central row with already refreshed STATE/CHECKPOINT/Handoff."
+}
