@@ -1,0 +1,159 @@
+{
+  "schema": "yaiwes.node-report.v1",
+  "node_id": "N32-GUEST-INSTALLER-VERIFICATION",
+  "owner": "ASTRA_GPT",
+  "chat_id": "ASTRA_GPT_WATCHDOG",
+  "reported_at": "2026-09-13T10:30:00Z",
+  "status": "VERIFIED_CLOSED",
+  "report_state": "PASS",
+  "dependency_evidence": [
+    {
+      "node": "N20-SANDBOX-UEK-ROUTER",
+      "state": "VERIFIED_CLOSED"
+    }
+  ],
+  "scope": "runtime/src/install/**|runtime/tests/test_install*|Crazy Wall N32/report Astra only",
+  "provenance": {
+    "adopted_existing_commit": "240241a54e76a31c04bc017df26ea72566dc8885",
+    "repair_commit": "f057e8f03a53c8be635e855f8e16941d8a9fb479",
+    "test_commit": "84454c98f1fa3a2ab01e3c5f378f9d65f3fd9f96",
+    "certified_descendant_sha": "a5b3a2b385b1448edfd6decc95e75b1bd875098c",
+    "blobs": {
+      "runtime/src/install/guest_installer.py": "555f608a4751bf81de2d4d5ca72543b657f31292",
+      "runtime/tests/test_install_guest.py": "96d08d02a766ef896e4a9eb4b822eb1660f32f7d"
+    }
+  },
+  "repair": [
+    "Reject unsafe package filenames before any guest effect.",
+    "Reject non-byte payloads and malformed SHA-256 values.",
+    "Fail closed when the injected signature verifier raises.",
+    "Normalize explicit architecture aliases and reject mismatches.",
+    "Reject duplicate or unavailable dependencies before installation.",
+    "Distinguish successful rollback from rollback failure."
+  ],
+  "tests": {
+    "local": {
+      "kind": "REAL_LOCAL_UNIT_TESTS_WITH_GUEST_PORT_FIXTURE_NOT_REAL_OS_INSTALL",
+      "passed": 9,
+      "failed": 0
+    },
+    "ci": {
+      "run_id": 34743024813,
+      "job_id": 103686612626,
+      "conclusion": "success",
+      "sha": "a5b3a2b385b1448edfd6decc95e75b1bd875098c",
+      "exact_blobs_in_descendant": true,
+      "wordflow_passed": 41,
+      "runtime_passed": 256,
+      "subtests_passed": 42,
+      "warnings": 2,
+      "warning_scope": "Existing Python RuntimeWarning and GitHub Node.js action deprecation; neither is an N32 failure."
+    }
+  },
+  "five_passes": [
+    {
+      "pass": 1,
+      "result": "N32 requirement and N20 dependency checked against fresh authoritative queue."
+    },
+    {
+      "pass": 2,
+      "result": "Existing installer adopted; API and effect boundary inspected instead of duplicated."
+    },
+    {
+      "pass": 3,
+      "result": "Pre-effect validation and rollback gaps repaired; 9 focused tests passed locally."
+    },
+    {
+      "pass": 4,
+      "result": "Exact source/test blobs found in successful descendant CI; 41/256/42 passed."
+    },
+    {
+      "pass": 5,
+      "result": "Report and terminal queue transition use fresh blob CAS; platform-real limits remain explicit."
+    }
+  ],
+  "entry_goals_12": [
+    "PASS correct repository/branch",
+    "PASS fresh queue",
+    "PASS N32 exclusive claim",
+    "PASS N20 dependency",
+    "PASS existing code provenance",
+    "PASS exact write scope",
+    "PASS cause reproduced by inspection",
+    "PASS minimal repair plan",
+    "PASS negative cases defined",
+    "PASS local test environment",
+    "PASS CI evidence source",
+    "PASS global closure kept separate"
+  ],
+  "exit_goals_12": [
+    "PASS scoped code delta",
+    "PASS unsafe names rejected",
+    "PASS bytes/SHA validated",
+    "PASS signature exceptions fail closed",
+    "PASS architecture aliases",
+    "PASS dependencies validated",
+    "PASS rollback outcome explicit",
+    "PASS 9/9 local",
+    "PASS exact blobs read back",
+    "PASS descendant CI 41/256/42",
+    "PASS real/simulated boundary explicit",
+    "PASS N32 report and release prepared"
+  ],
+  "council_12": {
+    "method": "Single-agent analytical review; not twelve independent model calls.",
+    "steps": [
+      "Literal objective",
+      "Source authority",
+      "Ownership",
+      "Dependency",
+      "Existing code reuse",
+      "Root cause",
+      "Minimal repair",
+      "Negative cases",
+      "Compatibility",
+      "CI identity",
+      "Limitations",
+      "Coda verdict"
+    ],
+    "verdict": "N32_VERIFIED_CLOSED_PRODUCT_GLOBAL_OPEN"
+  },
+  "refutations_3": [
+    {
+      "claim": "The pre-existing source file meant N32 was already verified.",
+      "result": "REFUTED",
+      "reason": "It had no N32-focused tests or terminal evidence."
+    },
+    {
+      "claim": "Nine local fixture tests alone close N32.",
+      "result": "REFUTED",
+      "reason": "Closure also required exact blobs in successful descendant CI."
+    },
+    {
+      "claim": "The guest-port tests prove installation on every real OS.",
+      "result": "REFUTED",
+      "reason": "They prove the deterministic adapter contract only; platform-real E2E remains outside N32."
+    }
+  ],
+  "simulations": [
+    {
+      "scenario": "Malicious traversal filename",
+      "evidence_kind": "EXECUTED_LOCAL_TEST",
+      "result": "REJECTED_PRE_EFFECT"
+    },
+    {
+      "scenario": "Installer fails then rollback fails",
+      "evidence_kind": "EXECUTED_LOCAL_TEST",
+      "result": "ROLLBACK_FAILURE_EXPLICIT"
+    }
+  ],
+  "limitations": [
+    "No real package was installed on Android, Linux, Windows, or iOS.",
+    "Signature verification is an injected trusted-verifier contract.",
+    "Global UI-to-platform installation E2E remains a product-level gap."
+  ],
+  "remaining_gaps": [],
+  "global_state": "ACTIVE_LOOP_GAPS_OPEN",
+  "global_verified_closed": false,
+  "next_action": "Read the fresh queue; claim only an eligible dependency-satisfied FREE node."
+}

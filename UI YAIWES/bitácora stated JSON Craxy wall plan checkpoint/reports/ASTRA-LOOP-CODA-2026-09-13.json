@@ -666,9 +666,9 @@
     }
   ],
   "next": [
-    "Consume N30 residual IDs into existing production RequirementMatrix, bind exact code/test/evidence and trusted CI; obtain canonical claim/reassignment before runtime changes. Do not reopen N23 or N30 audit closure.",
-    "Re-read fresh dynamic V5 and roles; preserve active foreign claims regardless of age.",
-    "N04 shared reconciliation remains dependency-gated; no product VERIFIED_CLOSED."
+    "N31 is FREE after N17 closure but belongs to UI factory; do not claim from backend watchdog.",
+    "Wait for N07/N10/N11/N13/N21/N25 owners; preserve claims regardless of age.",
+    "When N07 closes, reconcile N12; product remains open until N31 and all acquisition/integration nodes close with final requirement certification."
   ],
   "iterations": [
     {
@@ -833,6 +833,278 @@
         "action": "Consume N30 residual IDs into existing production RequirementMatrix, bind exact code/test/evidence and trusted CI; obtain canonical claim/reassignment before runtime changes. Do not reopen N23 or N30 audit closure.",
         "parallel_nodes": "N21/N32/N33 remain FREE in dynamic queue but are outside this run's priority audit scope; no claims taken."
       }
+    },
+    {
+      "at": "2026-09-13T10:34:00Z",
+      "node": "N32-GUEST-INSTALLER-VERIFICATION",
+      "owner": "ASTRA_GPT",
+      "scope": "runtime/src/install/**|runtime/tests/test_install*|N32 report/queue fields",
+      "base_claim_commit": "575e74e1fe5a9bbd45d916134eff38810c5347a2",
+      "outcome": "VERIFIED_CLOSED_NODE_ONLY_PRODUCT_OPEN",
+      "five_passes": [
+        "Fresh queue and N20 dependency verified; exclusive ASTRA claim preserved.",
+        "Existing installer from 240241a54e76a31c04bc017df26ea72566dc8885 adopted and audited.",
+        "Pre-effect validation/rollback gaps repaired in f057e8f03a53c8be635e855f8e16941d8a9fb479.",
+        "Nine focused local tests passed from exact blobs committed by 84454c98f1fa3a2ab01e3c5f378f9d65f3fd9f96.",
+        "Certified descendant a5b3a2b385b1448edfd6decc95e75b1bd875098c passed CI; queue/report persisted with CAS."
+      ],
+      "code": {
+        "source": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/install/guest_installer.py",
+        "source_blob": "555f608a4751bf81de2d4d5ca72543b657f31292",
+        "test": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_install_guest.py",
+        "test_blob": "96d08d02a766ef896e4a9eb4b822eb1660f32f7d"
+      },
+      "tests": {
+        "local": "9/9 PASS; real unit execution with a guest-port fixture, not a real OS package install",
+        "ci": {
+          "run": 34743024813,
+          "job": 103686612626,
+          "sha": "a5b3a2b385b1448edfd6decc95e75b1bd875098c",
+          "conclusion": "success",
+          "wordflow": 41,
+          "runtime": 256,
+          "subtests": 42,
+          "warnings": 2
+        }
+      },
+      "entry_goals_12": [
+        "PASS repo/main",
+        "PASS fresh queue",
+        "PASS exclusive claim",
+        "PASS dependency",
+        "PASS provenance",
+        "PASS scope",
+        "PASS root cause",
+        "PASS repair plan",
+        "PASS negative cases",
+        "PASS local executor",
+        "PASS CI source",
+        "PASS closure boundary"
+      ],
+      "exit_goals_12": [
+        "PASS scoped delta",
+        "PASS pre-effect filename guard",
+        "PASS bytes/hash guard",
+        "PASS signature guard",
+        "PASS architecture guard",
+        "PASS dependency guard",
+        "PASS rollback status",
+        "PASS local 9/9",
+        "PASS exact blobs",
+        "PASS CI 41/256/42",
+        "PASS evidence boundary",
+        "PASS report/release"
+      ],
+      "council_12": {
+        "method": "Single-agent analytical review, not twelve independent models.",
+        "steps": [
+          "Objective",
+          "Authority",
+          "Ownership",
+          "Dependency",
+          "Reuse",
+          "Cause",
+          "Repair",
+          "Negative tests",
+          "Compatibility",
+          "CI identity",
+          "Limits",
+          "Verdict"
+        ],
+        "verdict": "N32_VERIFIED_CLOSED_GLOBAL_ACTIVE"
+      },
+      "refutations_3": [
+        "Existing source presence did not prove verification because focused tests/evidence were absent.",
+        "Local 9/9 did not alone close N32; exact-blob descendant CI was required.",
+        "Guest-port fixture tests do not prove real installation on Android/Linux/Windows/iOS."
+      ],
+      "evidence": {
+        "report_commit": "c8e87d22609c02e6cb1cf9fd7a52bd3192010171",
+        "queue_commit": "46e50a71ed257a52105391bb8e4fe0ca8ac0af99",
+        "queue_blob": "5e79e4ac7150c1541f76c8de728a011b6d0e199a"
+      },
+      "limitations": [
+        "No real platform installation E2E in N32.",
+        "No 100x performance claim or benchmark applies to this correctness node.",
+        "Global requirement certification and UI/product E2E remain open."
+      ],
+      "next": {
+        "eligible_at_release": [
+          "N17-FULL-PRODUCT-E2E",
+          "N27-CONTINUOUS-LOOP"
+        ],
+        "action": "Fresh read and exclusive CAS claim; do not assume availability."
+      }
+    },
+    {
+      "at": "2026-09-13T10:50:00Z",
+      "node": "N17-FULL-PRODUCT-E2E",
+      "status": "VERIFIED_CLOSED_BACKEND_ONLY_GLOBAL_OPEN",
+      "claim_commit": "5519bf8e4560bb6a089b87c40129fe2b146769cf",
+      "report_commit": "7dfed22c7a2b9efa9b476148c8a914df6b2612ff",
+      "queue_commit": "7575b8d1f6a44d519d90dc1cce6558e310bc3d19",
+      "strategy": "Reused prior E2E delta after its direct CI cancellation; certified with later exact-blob descendant run.",
+      "tests": {
+        "run": 34747264318,
+        "job": 103697357720,
+        "sha": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
+        "wordflow": 41,
+        "runtime": 272,
+        "subtests": 42,
+        "conclusion": "success"
+      },
+      "five_passes": [
+        "claim/dependencies",
+        "prior collision/provenance",
+        "backend path/negative cases",
+        "exact blobs/CI log",
+        "bounded closure/readback"
+      ],
+      "entry_goals_12": [
+        "PASS N17 entry 1",
+        "PASS N17 entry 2",
+        "PASS N17 entry 3",
+        "PASS N17 entry 4",
+        "PASS N17 entry 5",
+        "PASS N17 entry 6",
+        "PASS N17 entry 7",
+        "PASS N17 entry 8",
+        "PASS N17 entry 9",
+        "PASS N17 entry 10",
+        "PASS N17 entry 11",
+        "PASS N17 entry 12"
+      ],
+      "exit_goals_12": [
+        "PASS ASGI",
+        "PASS API",
+        "PASS Fables",
+        "PASS memory provenance",
+        "PASS recovery",
+        "PASS response",
+        "PASS tamper rejection",
+        "PASS idempotency",
+        "PASS cancellation support",
+        "PASS events",
+        "PASS exact blobs",
+        "PASS CI"
+      ],
+      "council_12": {
+        "method": "Single-agent analytical review, not 12 model calls",
+        "steps": [
+          "Objective",
+          "Authority",
+          "Ownership",
+          "Dependencies",
+          "Reuse",
+          "Cause",
+          "Composition",
+          "Negatives",
+          "Idempotency",
+          "CI",
+          "Limits",
+          "Verdict"
+        ]
+      },
+      "refutations_3": [
+        "Cancelled direct run was not a failure result.",
+        "Suite success was bound to ten exact blobs.",
+        "Backend ASGI E2E is not deployed browser/platform E2E."
+      ],
+      "limitations": [
+        "No deployed browser/DOM or real platform sandbox.",
+        "Deterministic ports used for product answer and memory."
+      ]
+    },
+    {
+      "at": "2026-09-13T11:01:00Z",
+      "node": "N27-CONTINUOUS-LOOP",
+      "status": "VERIFIED_CLOSED_GLOBAL_OPEN",
+      "claim_commit": "9f225e29c0e7050afa98aa9b07706e09f9da6801",
+      "source_commit": "7181ebadcd39769e739d508a56938a74b19bb976",
+      "test_commit": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
+      "report_commit": "c7006d9838dbe2cd0bc1a161a4b9df9d0d619274",
+      "queue_commit": "67a72b6c8ab902de9d95f1dedc5ae785d269d532",
+      "tests": {
+        "run": 34745090975,
+        "job": 103691474425,
+        "sha": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
+        "wordflow": 41,
+        "runtime": 268,
+        "subtests": 42,
+        "conclusion": "success"
+      },
+      "five_passes": [
+        "claim/dependencies",
+        "reuse existing loop",
+        "StrategyDelta/refusal audit",
+        "exact-head CI",
+        "bounded primitive closure"
+      ],
+      "entry_goals_12": [
+        "PASS repo",
+        "PASS queue",
+        "PASS claim",
+        "PASS N26",
+        "PASS N23",
+        "PASS provenance",
+        "PASS scope",
+        "PASS stages",
+        "PASS audit",
+        "PASS repair",
+        "PASS bounds",
+        "PASS CI"
+      ],
+      "exit_goals_12": [
+        "PASS delta",
+        "PASS audit order",
+        "PASS gap contract",
+        "PASS binding",
+        "PASS reinjection",
+        "PASS stage block",
+        "PASS terminal GAP",
+        "PASS evidence",
+        "PASS 5 cases",
+        "PASS blobs",
+        "PASS CI",
+        "PASS limits"
+      ],
+      "council_12": {
+        "method": "Single-agent analytical review, not 12 model calls",
+        "steps": [
+          "Objective",
+          "Authority",
+          "Ownership",
+          "Dependencies",
+          "Reuse",
+          "State",
+          "Audit",
+          "Repair",
+          "Tests",
+          "CI",
+          "Limits",
+          "Verdict"
+        ]
+      },
+      "refutations_3": [
+        "Generic retry is insufficient.",
+        "Exhaustion cannot advance.",
+        "The primitive is not a scheduler/watchdog."
+      ],
+      "limitations": [
+        "Injected deterministic callbacks.",
+        "No 100x claim."
+      ]
     }
-  ]
+  ],
+  "last_node": "N27-CONTINUOUS-LOOP",
+  "last_node_state": "VERIFIED_CLOSED",
+  "queue_readback": {
+    "blob": "1d7bff16329efdf7bf7d31a5b8883f01fb4a2e25",
+    "closed": 25,
+    "claimed": 6,
+    "blocked_after_n07": 1,
+    "free": [
+      "N31-UI-FINAL"
+    ]
+  }
 }

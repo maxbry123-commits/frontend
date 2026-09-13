@@ -648,8 +648,8 @@
     {
       "n": 17,
       "id": "N17-FULL-PRODUCT-E2E",
-      "state": "FREE",
-      "owner": null,
+      "state": "VERIFIED_CLOSED",
+      "owner": "ASTRA_GPT",
       "title": "UI→API/Fables→ejecución→memoria→recovery→respuesta",
       "scope": "runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*|E2E",
       "depends_on": [
@@ -665,7 +665,39 @@
         "Repetir/refutar y registrar run/log/result"
       ],
       "close": "E2E completo PASS con recovery y respuesta observable",
-      "reconciled_reason": "N18+N20+N26+N28+N29 dependencies VERIFIED_CLOSED"
+      "reconciled_reason": "N18+N20+N26+N28+N29 dependencies VERIFIED_CLOSED",
+      "chat_id": "ASTRA_GPT_WATCHDOG",
+      "node_id": "N17-FULL-PRODUCT-E2E",
+      "fresh_main_sha": "9113f9da82af1fd575882bee614eb5cf6500051f",
+      "write_scope": "runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*|E2E|Crazy Wall N17/report Astra only",
+      "claimed_at": "2026-09-13T10:38:00Z",
+      "report_state": "PASS_RECONCILED_FROM_DESCENDANT_CI",
+      "reported_at": "2026-09-13T10:50:00Z",
+      "paths_changed": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_integration_full_product_e2e.py",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-N17-FULL-PRODUCT-E2E-2026-09-13.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "3575498bb8e89501336358137c52d3c2f24ed7f7",
+      "report_commit_sha": "7dfed22c7a2b9efa9b476148c8a914df6b2612ff",
+      "certified_sha": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
+      "blob_sha": "test_integration_full_product_e2e.py=07adc1b939d97090a3ba36ef7ee7efa6f73dc649|api_control.py=ac81ca96f97663faddb03e9e712a498366eb543f|integration_state.py=511d4eabd0bb2d419bea4f707e87273d8ae1ccac",
+      "tests": "descendant CI run 34747264318 job 103697357720 SUCCESS: Wordflow 41 PASS; runtime 272 PASS + 42 subtests PASS; N17 test and nine supporting blobs exact-match current main",
+      "run_id": 34747264318,
+      "job_id": 103697357720,
+      "evidence": [
+        "existing N17 test reused; no duplicate runtime/orchestrator",
+        "ASGI API -> ControlPlane -> Fables -> memory provenance -> checkpoint recovery -> chat/window/file response",
+        "tamper rejects before answer effect; repeat run is idempotent",
+        "API suite covers cancellation and no duplicate effect",
+        "ten exact blobs at certified SHA match current main"
+      ],
+      "remaining_gaps": [],
+      "limitations": [
+        "Backend in-process E2E only; no deployed browser/DOM or real platform sandbox.",
+        "Global product closure remains open pending external UI/platform acceptance and full certification."
+      ],
+      "next_free_node": "N27-CONTINUOUS-LOOP"
     },
     {
       "n": 18,
@@ -1033,8 +1065,8 @@
     {
       "n": 27,
       "id": "N27-CONTINUOUS-LOOP",
-      "state": "FREE",
-      "owner": null,
+      "state": "VERIFIED_CLOSED",
+      "owner": "ASTRA_GPT",
       "title": "Continuous LOOP multi-stage",
       "scope": "runtime/src/integration/**|runtime/tests/test_integration*",
       "depends_on": [
@@ -1047,7 +1079,41 @@
         "Test estabilidad/reinyección hasta cierre"
       ],
       "close": "Loop real multi-stage PASS y gap reinjection probada",
-      "reconciled_reason": "N26+N23 dependencies VERIFIED_CLOSED"
+      "reconciled_reason": "N26+N23 dependencies VERIFIED_CLOSED",
+      "chat_id": "ASTRA_GPT_WATCHDOG",
+      "node_id": "N27-CONTINUOUS-LOOP",
+      "fresh_main_sha": "7575b8d1f6a44d519d90dc1cce6558e310bc3d19",
+      "write_scope": "runtime/src/integration/**|runtime/tests/test_integration*|Crazy Wall N27/report Astra only",
+      "claimed_at": "2026-09-13T10:53:00Z",
+      "report_state": "PASS_RECONCILED_FROM_EXACT_HEAD_CI",
+      "reported_at": "2026-09-13T11:01:00Z",
+      "paths_changed": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/continuous_loop.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_integration_continuous_loop.py",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-N27-CONTINUOUS-LOOP-2026-09-13.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
+      "source_commit_sha": "7181ebadcd39769e739d508a56938a74b19bb976",
+      "report_commit_sha": "c7006d9838dbe2cd0bc1a161a4b9df9d0d619274",
+      "certified_sha": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
+      "blob_sha": "continuous_loop.py=eacde29fa9fd9944d2915cff77ba774ebec45ad8|test_integration_continuous_loop.py=cd72f070772becb8a66f12d3055699691e9a15af",
+      "tests": "exact-head CI run 34745090975 job 103691474425 SUCCESS: Wordflow 41 PASS; runtime 268 PASS + 42 subtests PASS; 5 focal N27 cases",
+      "run_id": 34745090975,
+      "job_id": 103691474425,
+      "evidence": [
+        "audit occurs before stage advance",
+        "single explicit gap is bound to StrategyDelta and reinjected into same stage",
+        "later stages are blocked until PASS",
+        "bounded exhaustion returns explicit GAP",
+        "exact source/test blobs certified at workflow head"
+      ],
+      "remaining_gaps": [],
+      "limitations": [
+        "Deterministic injected loop primitive; not a scheduler/watchdog.",
+        "No 100x claim; product acceptance remains global."
+      ],
+      "next_free_node": null
     },
     {
       "n": 28,
@@ -1173,7 +1239,7 @@
     {
       "n": 31,
       "id": "N31-UI-FINAL",
-      "state": "BLOCKED_AFTER_N17",
+      "state": "FREE",
       "owner": null,
       "title": "UI final sobre runtime verificado",
       "scope": "UI factory only; no runtime ownership",
@@ -1185,12 +1251,14 @@
         "Probar ventanas/chat/files/control sin bypass",
         "E2E final + Final Judge"
       ],
-      "close": "Producto completo VERIFIED_CLOSED"
+      "close": "Producto completo VERIFIED_CLOSED",
+      "reconciled_reason": "N17-FULL-PRODUCT-E2E VERIFIED_CLOSED at queue commit 7575b8d1f6a44d519d90dc1cce6558e310bc3d19",
+      "unblocked_at": "2026-09-13T11:04:00Z"
     },
     {
       "n": 32,
       "id": "N32-GUEST-INSTALLER-VERIFICATION",
-      "state": "CLAIMED",
+      "state": "VERIFIED_CLOSED",
       "owner": "ASTRA_GPT",
       "title": "Guest installer + artifact verification + rollback",
       "scope": "runtime/src/install/**|runtime/tests/test_install*",
@@ -1209,7 +1277,36 @@
       "node_id": "N32-GUEST-INSTALLER-VERIFICATION",
       "fresh_main_sha": "1ee383669c573c1efed12c12cdd03e0a7b5f327f",
       "write_scope": "runtime/src/install/**|runtime/tests/test_install*|Crazy Wall N32/report Astra only",
-      "claimed_at": "2026-09-13T06:25:00Z"
+      "claimed_at": "2026-09-13T06:25:00Z",
+      "report_state": "PASS",
+      "reported_at": "2026-09-13T10:32:00Z",
+      "paths_changed": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/install/guest_installer.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_install_guest.py",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-N32-GUEST-INSTALLER-2026-09-13.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "84454c98f1fa3a2ab01e3c5f378f9d65f3fd9f96",
+      "repair_commit_sha": "f057e8f03a53c8be635e855f8e16941d8a9fb479",
+      "report_commit_sha": "c8e87d22609c02e6cb1cf9fd7a52bd3192010171",
+      "certified_sha": "a5b3a2b385b1448edfd6decc95e75b1bd875098c",
+      "blob_sha": "guest_installer.py=555f608a4751bf81de2d4d5ca72543b657f31292|test_install_guest.py=96d08d02a766ef896e4a9eb4b822eb1660f32f7d",
+      "tests": "focused local 9/9 PASS; descendant CI run 34743024813 job 103686612626 SUCCESS: Wordflow 41 PASS; runtime 256 PASS + 42 subtests PASS",
+      "run_id": 34743024813,
+      "job_id": 103686612626,
+      "evidence": [
+        "pre-existing installer provenance preserved from 240241a54e76a31c04bc017df26ea72566dc8885",
+        "unsafe names, non-bytes, malformed hash, signature exceptions, arch mismatch and dependency gaps reject before guest effect",
+        "install failure triggers rollback; rollback failure is explicit",
+        "exact source/test blobs present in certified descendant SHA",
+        "platform-real install is not claimed by fixture tests"
+      ],
+      "remaining_gaps": [],
+      "limitations": [
+        "No real Android/Linux/Windows/iOS package installation executed in N32.",
+        "Global UI-to-platform E2E remains outside this node."
+      ],
+      "next_free_node": "N17-FULL-PRODUCT-E2E"
     },
     {
       "n": 33,

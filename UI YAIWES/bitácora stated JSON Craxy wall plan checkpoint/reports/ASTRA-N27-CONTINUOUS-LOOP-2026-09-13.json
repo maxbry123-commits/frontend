@@ -1,0 +1,124 @@
+{
+  "schema": "yaiwes.node-report.v1",
+  "node_id": "N27-CONTINUOUS-LOOP",
+  "owner": "ASTRA_GPT",
+  "chat_id": "ASTRA_GPT_WATCHDOG",
+  "reported_at": "2026-09-13T10:59:00Z",
+  "status": "VERIFIED_CLOSED",
+  "report_state": "PASS_RECONCILED_FROM_EXACT_HEAD_CI",
+  "scope": "runtime/src/integration/**|runtime/tests/test_integration*|Crazy Wall N27/report Astra only",
+  "provenance": {
+    "prior_claim_blob": "36df599c32b1c461be0d3a10ebaad423b79d4ab9",
+    "source_commit": "7181ebadcd39769e739d508a56938a74b19bb976",
+    "test_commit": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
+    "source_blob": "eacde29fa9fd9944d2915cff77ba774ebec45ad8",
+    "test_blob": "cd72f070772becb8a66f12d3055699691e9a15af"
+  },
+  "behavior": [
+    "Runs a unique ordered stage list.",
+    "Audits each stage before advancing.",
+    "Binds one explicit gap to a StrategyDelta and reinjects only the failed stage.",
+    "Prevents later stages until the failed stage passes.",
+    "Returns terminal GAP after bounded exhaustion instead of claiming closure."
+  ],
+  "tests": {
+    "focal_cases": 5,
+    "cases": [
+      "gap reinjected into same stage then loop advances",
+      "unresolved gap stops before later stage",
+      "auditor cannot change lane identity",
+      "StrategyDelta binds exact failed attempt",
+      "PASS without evidence fails closed"
+    ],
+    "ci": {
+      "run_id": 34745090975,
+      "job_id": 103691474425,
+      "sha": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
+      "conclusion": "success",
+      "wordflow_passed": 41,
+      "runtime_passed": 268,
+      "subtests_passed": 42,
+      "warnings": 2,
+      "exact_head": true
+    }
+  },
+  "five_passes": [
+    "Fresh N27 claim and N26/N23 dependencies verified.",
+    "Existing integration-state and continuous-loop implementation reused; no scheduler duplicated.",
+    "State-delta/audit/gap/StrategyDelta/next path and five negative/recovery tests inspected.",
+    "Exact-head CI log verified: source/test blobs and 41/268/42 PASS.",
+    "Loop closure bounded to deterministic reinjection primitive; autonomous scheduling remains outside this node."
+  ],
+  "entry_goals_12": [
+    "PASS repo/main",
+    "PASS fresh claim",
+    "PASS N26",
+    "PASS N23",
+    "PASS prior provenance",
+    "PASS scope",
+    "PASS existing code reuse",
+    "PASS ordered stages",
+    "PASS audit callback",
+    "PASS repair callback",
+    "PASS bounded attempts",
+    "PASS CI source"
+  ],
+  "exit_goals_12": [
+    "PASS state delta",
+    "PASS audit before advance",
+    "PASS one-gap contract",
+    "PASS StrategyDelta binding",
+    "PASS same-stage reinjection",
+    "PASS later-stage blocking",
+    "PASS terminal GAP",
+    "PASS evidence dedupe",
+    "PASS five focal cases",
+    "PASS exact source/test blobs",
+    "PASS CI 41/268/42",
+    "PASS limitation boundary"
+  ],
+  "council_12": {
+    "method": "Single-agent analytical review, not twelve independent model calls.",
+    "steps": [
+      "Objective",
+      "Authority",
+      "Ownership",
+      "Dependencies",
+      "Reuse",
+      "State model",
+      "Audit order",
+      "Repair binding",
+      "Negative tests",
+      "CI identity",
+      "Limits",
+      "Verdict"
+    ],
+    "verdict": "N27_VERIFIED_CLOSED_GLOBAL_ACTIVE"
+  },
+  "refutations_3": [
+    {
+      "claim": "Any retry loop satisfies N27.",
+      "result": "REFUTED",
+      "reason": "This implementation audits before advance and binds a verified StrategyDelta to the exact failed attempt."
+    },
+    {
+      "claim": "Exhaustion can continue to later stages.",
+      "result": "REFUTED_BY_TEST",
+      "reason": "The unresolved stage returns terminal GAP and later stages do not run."
+    },
+    {
+      "claim": "N27 creates the persistent scheduler/watchdog.",
+      "result": "REFUTED",
+      "reason": "It is an injected deterministic loop primitive, explicitly not a scheduler or workflow owner."
+    }
+  ],
+  "limitations": [
+    "The test uses injected deterministic stage/audit/planner callbacks.",
+    "No 100x throughput claim or benchmark applies.",
+    "Global product/browser/platform acceptance remains open."
+  ],
+  "remaining_gaps": [],
+  "global_state": "ACTIVE_LOOP_GAPS_OPEN",
+  "global_verified_closed": false,
+  "next_action": "Read fresh queue; if no eligible FREE node, preserve checkpoint and await other owners."
+}

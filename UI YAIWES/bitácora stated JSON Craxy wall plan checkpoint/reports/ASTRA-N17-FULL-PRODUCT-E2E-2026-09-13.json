@@ -1,0 +1,137 @@
+{
+  "schema": "yaiwes.node-report.v1",
+  "node_id": "N17-FULL-PRODUCT-E2E",
+  "owner": "ASTRA_GPT",
+  "chat_id": "ASTRA_GPT_WATCHDOG",
+  "reported_at": "2026-09-13T10:48:00Z",
+  "status": "VERIFIED_CLOSED",
+  "report_state": "PASS_RECONCILED_FROM_DESCENDANT_CI",
+  "scope": "runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*|E2E|Crazy Wall N17/report Astra only",
+  "cause": "The existing N17 composition test was released after its direct run was cancelled before job allocation; it lacked authoritative execution evidence.",
+  "adopted_delta": {
+    "test_commit": "3575498bb8e89501336358137c52d3c2f24ed7f7",
+    "test_blob": "07adc1b939d97090a3ba36ef7ee7efa6f73dc649",
+    "prior_report_blob": "166a4abb17b041ff4223c6d2a40ca883064f4744",
+    "strategy": "Reuse the existing E2E test and bind it to a later successful exact-blob descendant CI; no duplicate orchestrator or test added."
+  },
+  "backend_path": [
+    "ASGI HTTP request",
+    "ControlPlane state machine",
+    "Fables plugin boundary",
+    "memory ContextPack with provenance",
+    "checkpoint hash verification",
+    "product session/chat/window/file restore",
+    "observable JSON response and NDJSON events"
+  ],
+  "exact_blobs": {
+    "tests/test_integration_full_product_e2e.py": "07adc1b939d97090a3ba36ef7ee7efa6f73dc649",
+    "tests/test_integration_api_control.py": "e21384df64a1bb6f18c043e526e54321586864fc",
+    "src/conn/api_control.py": "ac81ca96f97663faddb03e9e712a498366eb543f",
+    "src/integration/integration_state.py": "511d4eabd0bb2d419bea4f707e87273d8ae1ccac",
+    "src/memory/boundary.py": "6a3a438b328bc0c008c9a7cc7238aaa21c7b8545",
+    "src/memory/fabric.py": "255909eab5aa4d83c3bd14712533a97611e5da04",
+    "src/plugins/fables.py": "23f4e1b8b91301f2df396e7a0860fc65b977cfb3",
+    "src/plugins/registry.py": "c0715240ebb221664c72c0a4fb31883012d45a88",
+    "src/recovery/product_session.py": "955d11b7dcb67bf139cba85ffd017991f4f6c41d",
+    "src/storage/product_state.py": "8f00ff671b7c0a62c7572ceb5767b467b7c73cda"
+  },
+  "tests": {
+    "n17_cases": [
+      "UI-shaped ASGI request to API/Fables/memory/recovery/observable response",
+      "tampered checkpoint becomes GAP before answer effect",
+      "repeat run is idempotent and does not duplicate product effect"
+    ],
+    "api_cases": "Nine API-control cases include idempotent cancellation, repeat-run no duplicate effect, policy fail-closed and explicit runtime GAP.",
+    "ci": {
+      "run_id": 34747264318,
+      "job_id": 103697357720,
+      "sha": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
+      "conclusion": "success",
+      "wordflow_passed": 41,
+      "runtime_passed": 272,
+      "subtests_passed": 42,
+      "warnings": 2,
+      "exact_blobs_equal_current_main": true
+    }
+  },
+  "five_passes": [
+    "Fresh N17 claim and all five dependencies verified terminal.",
+    "Prior claims/releases/report and existing E2E code inspected; collision history preserved.",
+    "Top-down path and negative/idempotency cases inspected; no second runtime introduced.",
+    "Successful descendant CI log read and all ten relevant blobs matched current main exactly.",
+    "Backend E2E closure bounded from browser/deployment/platform-real claims."
+  ],
+  "entry_goals_12": [
+    "PASS repo/main",
+    "PASS fresh claim",
+    "PASS dependencies",
+    "PASS prior collision release",
+    "PASS existing test reuse",
+    "PASS API path",
+    "PASS Fables path",
+    "PASS memory provenance",
+    "PASS checkpoint recovery",
+    "PASS negative cases",
+    "PASS stable CI",
+    "PASS exact blobs"
+  ],
+  "exit_goals_12": [
+    "PASS HTTP-to-response path",
+    "PASS memory isolation contract",
+    "PASS chat/window/file recovery",
+    "PASS tamper pre-effect rejection",
+    "PASS repeat idempotency",
+    "PASS cancellation coverage",
+    "PASS observable events",
+    "PASS 41 Wordflow",
+    "PASS 272 runtime",
+    "PASS 42 subtests",
+    "PASS exact-blob readback",
+    "PASS limitation boundary"
+  ],
+  "council_12": {
+    "method": "Single-agent analytical review, not twelve independent model calls.",
+    "steps": [
+      "Objective",
+      "Authority",
+      "Ownership",
+      "Dependencies",
+      "Reuse",
+      "Cause",
+      "Path composition",
+      "Negative tests",
+      "Idempotency/cancel",
+      "CI identity",
+      "Limitations",
+      "Verdict"
+    ],
+    "verdict": "N17_BACKEND_E2E_VERIFIED_CLOSED_GLOBAL_PRODUCT_OPEN"
+  },
+  "refutations_3": [
+    {
+      "claim": "The cancelled direct N17 run proves failure.",
+      "result": "REFUTED",
+      "reason": "It allocated no job; a later exact-blob descendant completed successfully."
+    },
+    {
+      "claim": "A successful suite proves these exact N17 files.",
+      "result": "CONFIRMED_WITH_HASHES",
+      "reason": "Ten relevant blobs at certified SHA equal current main, including the N17 test."
+    },
+    {
+      "claim": "In-process ASGI proves a deployed browser and real mobile/desktop backends.",
+      "result": "REFUTED",
+      "reason": "It proves the backend composition only; browser/deployed/platform-real E2E remains a separate global acceptance gap."
+    }
+  ],
+  "evidence_kind": "REAL_GITHUB_ACTIONS_EXECUTION_WITH_IN_PROCESS_BACKEND_E2E_FIXTURES",
+  "limitations": [
+    "No browser DOM, deployed frontend, physical disconnection, or real Android/iOS/Windows/Linux sandbox was exercised.",
+    "The product-answer and durable-memory ports are deterministic test adapters.",
+    "Global VERIFIED_CLOSED still requires external UI/workspace and platform acceptance plus requirement certification."
+  ],
+  "remaining_gaps": [],
+  "global_state": "ACTIVE_LOOP_GAPS_OPEN",
+  "global_verified_closed": false,
+  "next_action": "Read the fresh queue; N27 was FREE at claim time but availability must be rechecked."
+}
