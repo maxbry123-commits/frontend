@@ -1,4 +1,4 @@
-name: SOL 3 GPT N30 Close Transaction
+name: SOL 3 GPT N21 Claim Transaction
 
 on:
   push:
@@ -10,110 +10,81 @@ permissions:
   contents: write
 
 concurrency:
-  group: sol-3-gpt-n30-close-transaction
+  group: sol-3-gpt-n21-claim-transaction
   cancel-in-progress: false
 
 jobs:
-  close-n30-claim-next:
+  claim-n21:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
-      - name: Close N30 from fresh main and claim first valid FREE
+      - name: Claim N21 from fresh main
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: maxbry123-commits/frontend
           CW_PATH: UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json
-          REPORT_PATH: UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N30-G12-GLOBAL-COVERAGE-SOL-3-GPT-2026-09-13.json
         run: |
           set -euo pipefail
           AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
           pushed=0
           for attempt in 1 2 3 4 5; do
-            WORK="$RUNNER_TEMP/n30-close-$attempt"
+            WORK="$RUNNER_TEMP/n21-claim-$attempt"
             rm -rf "$WORK" && mkdir -p "$WORK" && cd "$WORK"
             git init -q
             git remote add origin "https://github.com/$REPO.git"
             git sparse-checkout init --no-cone
-            cat > .git/info/sparse-checkout <<'EOF'
-          /UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json
-          /UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N30-G12-GLOBAL-COVERAGE-SOL-3-GPT-2026-09-13.json
-          EOF
+            printf '/%s\n' "$CW_PATH" > .git/info/sparse-checkout
             git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
             git checkout -q -B main FETCH_HEAD
             export FRESH_MAIN_SHA="$(git rev-parse HEAD)"
-            export REPORTED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            export CLAIMED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
             python - <<'PY'
           import json, os, pathlib
-          cw_path=pathlib.Path(os.environ['CW_PATH'])
-          report_path=pathlib.Path(os.environ['REPORT_PATH'])
-          report=json.loads(report_path.read_text())
-          assert report['schema']=='yaiwes.audit.n30.g12-global-coverage.v1'
-          assert report['node_id']=='N30-G12-GLOBAL-COVERAGE' and report['owner']=='sol 3 gpt'
-          assert report['source_denominator']['implementable_normative_requirements']==98
-          assert report['coverage_dimensions']['traceability_mapping']=={'mapped':98,'total':98,'percent':100.0,'result':'PASS'}
-          cert=report['coverage_dimensions']['canonical_five_pass_certification']
-          assert cert['verified_requirements']==0 and cert['total_requirements']==98 and cert['percent']==0.0 and cert['result']=='GAP'
-          assert report['residual_requirement_count']==98
-          assert sum(len(v) for v in report['residual_requirements_by_canonical_id'].values())==98
-          assert len(report['residual_requirements_by_canonical_id'])==34
-          assert report['tests']['run_id']==34738908302 and report['tests']['job_id']==103675124914 and report['tests']['conclusion']=='SUCCESS'
-          assert report['status']=='PASS_AUDIT_WITH_EXACT_RESIDUALS'
-          assert report['coverage_dimensions']['global_project_verified_closed'] is False
-
-          text=cw_path.read_text(); doc=json.loads(text); by_id={n['id']:n for n in doc['nodes']}
-          n30=by_id['N30-G12-GLOBAL-COVERAGE']
-          assert n30['state']=='CLAIMED' and n30['owner']=='sol 3 gpt' and n30['chat_id']=='sol 3 gpt', n30
-          claim_states=set(doc['coordination']['claim_states'])
-          candidates=sorted((n for n in doc['nodes'] if n['id']!=n30['id'] and n['state'] in claim_states), key=lambda n:n['n'])
-          nxt=candidates[0] if candidates else None; next_id=nxt['id'] if nxt else None
-          n30.update({
-            'state':'VERIFIED_CLOSED','report_state':'PASS_AUDIT_WITH_EXACT_RESIDUALS','reported_at':os.environ['REPORTED_AT'],
-            'paths_changed':[os.environ['REPORT_PATH'],os.environ['CW_PATH']],
-            'commit_sha':'70592e544573519847770d90dceaa34dae4a6225',
-            'blob_sha':'report=b8a7e46c98dc10502f8d9539cad2cefb21dbe966|five_pass=7be820cb3642438a22f36778ecb5c2b549ffce12|matrix=637b64161f67f6d2f8aaa0280555964385bef6e2',
-            'tests':'canonical N30 audit run 34738908302 job 103675124914 SUCCESS: 100 source rows; 98 implementable; 98/98 mapped; canonical five-pass persisted certification 0/98 with exactly 98 missing_trace residuals; 3 refutations PASS',
-            'run_id':34738908302,'job_id':103675124914,
-            'evidence':['N01/N02 denominator preserved: 100 source rows, 98 implementable, REQ-S2-011 and REQ-S3-062 non-implementable numbering gaps','N02 mapping remains complete: 98/98 requirements map across CAN-001..CAN-034','canonical audit_five_pass requires exact source/implementation/test/evidence hashes, Python symbols, revision and independent trusted CI','runtime/src/audit contains only evidence.py/five_pass.py/matrix.py and existing matrix tests are synthetic R1/R2; no persisted production RequirementTrace inventory for the 98 requirements','official runner 34738908302 job 103675124914 reproduced exactly 98 missing_trace gaps and rejected accidental product closure','N30 closes the audit task with an exact residual list; global product_verified remains false'],
-            'remaining_gaps':[],
-            'global_residual_requirement_count':98,
-            'global_project_verified_closed':False,
-            'next_free_node':next_id
+          p=pathlib.Path(os.environ['CW_PATH'])
+          text=p.read_text(); doc=json.loads(text); by_id={n['id']:n for n in doc['nodes']}
+          n20=by_id['N20-SANDBOX-UEK-ROUTER']; n21=by_id['N21-WORKER-ADAPTER']
+          assert n20['state']=='VERIFIED_CLOSED', n20
+          assert n21['state'] in set(doc['coordination']['claim_states']), n21
+          assert n21['state']=='FREE' and n21.get('owner') is None, n21
+          n21.update({
+            'state':'CLAIMED',
+            'owner':'sol 3 gpt',
+            'chat_id':'sol 3 gpt',
+            'node_id':'N21-WORKER-ADAPTER',
+            'fresh_main_sha':os.environ['FRESH_MAIN_SHA'],
+            'write_scope':n21['scope'],
+            'claimed_at':os.environ['CLAIMED_AT']
           })
-          if nxt:
-            assert nxt['state'] in claim_states
-            nxt.update({'state':'CLAIMED','owner':'sol 3 gpt','chat_id':'sol 3 gpt','node_id':nxt['id'],'fresh_main_sha':os.environ['FRESH_MAIN_SHA'],'write_scope':nxt['scope'],'claimed_at':os.environ['REPORTED_AT']})
-          replacements={n30['id']:n30}
-          if nxt: replacements[nxt['id']]=nxt
-          lines=text.splitlines(); seen=set()
+          lines=text.splitlines(); seen=False
           for i,line in enumerate(lines):
-            for node_id,node in replacements.items():
-              if f'"id":"{node_id}"' in line:
-                indent=line[:len(line)-len(line.lstrip())]; comma=',' if line.rstrip().endswith(',') else ''
-                lines[i]=indent+json.dumps(node,ensure_ascii=False,separators=(',',':'))+comma; seen.add(node_id); break
-          assert seen==set(replacements),(seen,set(replacements))
-          patched='\n'.join(lines)+'\n'; check=json.loads(patched); chk={n['id']:n for n in check['nodes']}
-          assert chk['N30-G12-GLOBAL-COVERAGE']['state']=='VERIFIED_CLOSED'
-          if next_id: assert chk[next_id]['state']=='CLAIMED' and chk[next_id]['owner']=='sol 3 gpt'
-          cw_path.write_text(patched)
-          print(json.dumps({'fresh_main_sha':os.environ['FRESH_MAIN_SHA'],'n30':'VERIFIED_CLOSED','next_node':next_id},sort_keys=True))
+            if '"id":"N21-WORKER-ADAPTER"' in line:
+              indent=line[:len(line)-len(line.lstrip())]
+              comma=',' if line.rstrip().endswith(',') else ''
+              lines[i]=indent+json.dumps(n21,ensure_ascii=False,separators=(',',':'))+comma
+              seen=True; break
+          assert seen
+          patched='\n'.join(lines)+'\n'; chk=json.loads(patched); x={n['id']:n for n in chk['nodes']}['N21-WORKER-ADAPTER']
+          assert x['state']=='CLAIMED' and x['owner']=='sol 3 gpt' and x['fresh_main_sha']==os.environ['FRESH_MAIN_SHA']
+          p.write_text(patched)
+          print(json.dumps({'fresh_main_sha':os.environ['FRESH_MAIN_SHA'],'node':'N21-WORKER-ADAPTER','state':'CLAIMED','claimed_at':os.environ['CLAIMED_AT']},sort_keys=True))
           PY
             git config user.name 'sol-3-gpt-yaiwes'
             git config user.email 'sol-3-gpt-yaiwes@users.noreply.github.com'
             git add -- "$CW_PATH"
             changed="$(git -c core.quotepath=false diff --cached --name-only)"
             test "$changed" = "$CW_PATH"
-            git commit -m 'report(n30): close exact G12 residual audit and claim next free node'
+            git commit -m 'claim(n21): sol 3 gpt worker adapter'
             if git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" push origin HEAD:main; then
               pushed=1
-              git rev-parse HEAD | tee "$RUNNER_TEMP/n30-close-commit.txt"
+              git rev-parse HEAD | tee "$RUNNER_TEMP/n21-claim-commit.txt"
               break
             fi
-            echo 'main moved; retrying from fresh main without force'
+            echo 'main moved; retrying fresh without force'
           done
           test "$pushed" = '1'
 
-      - name: Read back authoritative Crazy Wall
+      - name: Read back N21 claim
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -125,15 +96,11 @@ jobs:
           git init -q "$RUNNER_TEMP/rb" && cd "$RUNNER_TEMP/rb"
           git remote add origin "https://github.com/$REPO.git"
           git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 origin main
-          git show FETCH_HEAD:"$CW_PATH" > "$RUNNER_TEMP/crazy-readback.json"
+          git show FETCH_HEAD:"$CW_PATH" > "$RUNNER_TEMP/cw.json"
           export READBACK_MAIN_SHA="$(git rev-parse FETCH_HEAD)"
           python - <<'PY'
           import json,os,pathlib
-          doc=json.loads(pathlib.Path(os.environ['RUNNER_TEMP'],'crazy-readback.json').read_text()); by_id={n['id']:n for n in doc['nodes']}; n30=by_id['N30-G12-GLOBAL-COVERAGE']
-          assert n30['state']=='VERIFIED_CLOSED' and n30['report_state']=='PASS_AUDIT_WITH_EXACT_RESIDUALS'
-          assert n30['global_residual_requirement_count']==98 and n30['global_project_verified_closed'] is False and n30['remaining_gaps']==[]
-          next_id=n30.get('next_free_node')
-          if next_id:
-            nxt=by_id[next_id]; assert nxt['state']=='CLAIMED' and nxt['owner']=='sol 3 gpt' and nxt['chat_id']=='sol 3 gpt'
-          print(json.dumps({'main_sha':os.environ['READBACK_MAIN_SHA'],'n30':n30['state'],'report_state':n30['report_state'],'next_node':next_id},sort_keys=True))
+          doc=json.loads(pathlib.Path(os.environ['RUNNER_TEMP'],'cw.json').read_text()); n={x['id']:x for x in doc['nodes']}['N21-WORKER-ADAPTER']
+          assert n['state']=='CLAIMED' and n['owner']=='sol 3 gpt' and n['chat_id']=='sol 3 gpt'
+          print(json.dumps({'main_sha':os.environ['READBACK_MAIN_SHA'],'node':n['id'],'state':n['state'],'owner':n['owner'],'fresh_main_sha':n['fresh_main_sha']},sort_keys=True))
           PY
