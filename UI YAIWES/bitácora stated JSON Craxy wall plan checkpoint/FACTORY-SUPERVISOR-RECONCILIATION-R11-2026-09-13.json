@@ -1,0 +1,68 @@
+{
+  "schema": "yaiwes.factory.supervisor.reconciliation.v3",
+  "round": "R11",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "project": "FABRICA_UI_YAIWES_ONLY",
+  "audited_at_utc": "2026-09-13T12:37:02Z",
+  "observed_main_head": "df8fd51cb1a9119cd7ef9c1a9b312eeb9e362169",
+  "authority": "fresh GitHub main file readback plus repository commit search",
+  "current_gate": "T1_FACTORY_FRONTEND_ACTIVE_LOOP",
+  "t2": "BLOCKED",
+  "node_audit": {
+    "node": "F-MOD-033",
+    "owner": "SOL 7 GPT",
+    "claim_path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-MOD-033-SOL-7-GPT-CLAIM.json",
+    "claim_blob": "c22fb46c101a439414b99b515d15a7358d12a542",
+    "claim_state": "CLAIMED",
+    "claimed_at": "2026-09-12T22:29:10-05:00",
+    "expected_deliverables": [
+      "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-mod-033-composed-ui.spec.mjs",
+      ".github/workflows/factory-f-mod-033-composed-ui.yml",
+      "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-MOD-033-SOL-7-EVIDENCE.json"
+    ],
+    "fresh_readback": {
+      "test": "NOT_FOUND_404",
+      "workflow": "NOT_FOUND_404",
+      "evidence": "NOT_FOUND_404"
+    },
+    "commit_search": {
+      "implementation_commits_after_claim": 0,
+      "latest_matching_commit": "24297a813d00ad66eb5898ebcd0a5c5f022b36a4",
+      "latest_matching_kind": "supervisor_reconciliation_only",
+      "unrelated_head_delta": "Wordflow N35 requirement-trace evidence; outside factory scope"
+    },
+    "verdict": "CLAIMED_NONTERMINAL_NO_DELIVERABLE_EVIDENCE_CONFIRMED_R11",
+    "ownership_action": "PRESERVED_NO_TAKEOVER_NO_RELEASE_BY_SUPERVISOR"
+  },
+  "dependency_effect": {
+    "node": "F-INT-035",
+    "state": "BLOCKED_BY_F-MOD-033",
+    "reason": "entrypoint convergence remains unsafe until F-MOD-033 terminalizes or is explicitly released",
+    "forbidden": "do not claim or merge competing factory entrypoints"
+  },
+  "oss_decision": {
+    "node": "F-OSS-016",
+    "state": "BLOCKED_CONDITIONAL",
+    "reason": "no new missing-source capability was demonstrated; present blocker is execution evidence for already-claimed integration",
+    "action": "NO_NEW_DOWNLOAD"
+  },
+  "tests": [
+    "fresh claim blob read-back PASS",
+    "expected E2E test read-back 404",
+    "expected workflow read-back 404",
+    "expected evidence read-back 404",
+    "commit search found no F-MOD-033 implementation after claim"
+  ],
+  "refutations": [
+    "Elapsed claim time is not authorization to steal or release ownership.",
+    "Unrelated green commits on main do not advance factory T1.",
+    "Downloading more OSS cannot substitute for composed-UI execution evidence."
+  ],
+  "next": [
+    "SOL7 must implement, test and report F-MOD-033 or explicitly release it.",
+    "After terminal read-back, a FREE worker may atomically claim F-INT-035.",
+    "Then rerun F-UI-051 and the complete candidate/live gates against one converged entrypoint."
+  ],
+  "status": "ACTIVE_LOOP_EVIDENCE_GAP_CONFIRMED"
+}
