@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: sol-gpt10-n04-central-reconcile-once
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   reconcile:
@@ -19,7 +19,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
+          sparse-checkout: |
+            UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json
+          sparse-checkout-cone-mode: false
       - name: Reconcile verified stale rows fail closed
         shell: bash
         run: |
@@ -44,7 +47,6 @@ jobs:
               if actual != state:
                   raise SystemExit(f'FAIL_CLOSED stale precondition {node_id}: expected {state}, got {actual}')
 
-          # N16: exact current blobs + trusted descendant CI run 34739510224/job 103678337638.
           n16 = nodes['N16-CHECKPOINT-BYTES-HASH']
           n16.update({
               'state': 'VERIFIED_CLOSED',
@@ -57,7 +59,6 @@ jobs:
           })
           n16.setdefault('evidence', []).append('SOL GPT <10> R2 exact current blobs matched registered N16 hashes and implementation commit f7e9af7 is ancestor of successful CI head cf40e9c.')
 
-          # N26: SOL GPT <15> report is VERIFIED_CLOSED with exact blobs and trusted CI.
           n26 = nodes['N26-GLOBAL-INTEGRATION']
           n26.update({
               'state': 'VERIFIED_CLOSED',
@@ -72,7 +73,6 @@ jobs:
           })
           n26.setdefault('evidence', []).append('SOL GPT <15> report pass_percent=100; no N26 code/test drift after trusted CI revision cf40e9c.')
 
-          # N28: SOL GPT <16> report has all three refutations PASS and close_candidate VERIFIED_CLOSED.
           n28 = nodes['N28-API-CONTROL']
           n28.update({
               'state': 'VERIFIED_CLOSED',
@@ -87,7 +87,6 @@ jobs:
           })
           n28.setdefault('evidence', []).append('SOL GPT <16> report: schema_complete PASS, remaining_technical_gap PASS_NONE, evidence_100_pass PASS with exact current blobs.')
 
-          # N33: corrected descendant evidence from SOL GPT <17>; ownership remains prior SOL GPT <13>.
           n33 = nodes['N33-MIRROR-TRANSPORT-CONTROL']
           n33.update({
               'state': 'VERIFIED_CLOSED',
@@ -107,7 +106,6 @@ jobs:
               'SOL GPT <17> corrected the earlier invalid pre-N33 CI evidence and released its duplicate claim',
           ]
 
-          # Derived unlocks only after exact dependencies are closed.
           n27 = nodes['N27-CONTINUOUS-LOOP']
           if all(nodes[d]['state'] == 'VERIFIED_CLOSED' for d in n27['depends_on']):
               n27['state'] = 'FREE'
@@ -118,7 +116,6 @@ jobs:
               n17['state'] = 'FREE'
               n17['reconciled_reason'] = 'N18+N20+N26+N28+N29 dependencies VERIFIED_CLOSED'
 
-          # N04 closes only after all state reconciliation above is internally consistent.
           n04 = nodes['N04-STATE-RECONCILIATION']
           n04.update({
               'state': 'VERIFIED_CLOSED',
@@ -134,7 +131,7 @@ jobs:
                   'UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json',
                   'UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json',
                   'UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CHECKPOINT.json',
-                  'UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-DYNAMIC-NODES-UI-YAIWES-V8-2026-09-12.md',
+                  'UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-DYNAMIC-NODES-UI-YAIWES-V8-2026-09-12.md'
               ],
               'tests': 'JSON parse + strict stale-state preconditions + dependency unlock assertions; readback required after commit',
               'remaining_gaps': [],
@@ -144,17 +141,15 @@ jobs:
               'N02 and N03 VERIFIED_CLOSED',
               'STATE/CHECKPOINT/Handoff were refreshed by SOL GPT <10> and preserve history by Git blob SHA',
               'N16/N26/N28/N33 stale central rows reconciled only from independently verified reports/CI',
-              'N27/N17 unlocked only by dependency-state predicates, never by manual bypass',
+              'N27/N17 unlocked only by dependency-state predicates, never by manual bypass'
           ]
 
-          # Postconditions.
           for node_id in ('N04-STATE-RECONCILIATION','N16-CHECKPOINT-BYTES-HASH','N26-GLOBAL-INTEGRATION','N28-API-CONTROL','N33-MIRROR-TRANSPORT-CONTROL'):
               assert nodes[node_id]['state'] == 'VERIFIED_CLOSED', node_id
           assert nodes['N27-CONTINUOUS-LOOP']['state'] == 'FREE'
           assert nodes['N17-FULL-PRODUCT-E2E']['state'] == 'FREE'
 
           p.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-          # Parse the bytes we will commit one more time.
           json.loads(p.read_text(encoding='utf-8'))
           print('N04_RECONCILE_PASS', {k: nodes[k]['state'] for k in ('N04-STATE-RECONCILIATION','N16-CHECKPOINT-BYTES-HASH','N17-FULL-PRODUCT-E2E','N26-GLOBAL-INTEGRATION','N27-CONTINUOUS-LOOP','N28-API-CONTROL','N33-MIRROR-TRANSPORT-CONTROL')})
           PY
