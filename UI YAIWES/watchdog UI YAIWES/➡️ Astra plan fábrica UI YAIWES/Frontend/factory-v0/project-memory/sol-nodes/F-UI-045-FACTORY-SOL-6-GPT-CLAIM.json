@@ -1,0 +1,28 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "project":"FABRICA_UI_YAIWES_ONLY",
+  "chat_id":"FACTORY-SOL-6-GPT",
+  "agent_name":"SOL 6 GPT 🆘",
+  "node_id":"F-UI-045",
+  "repo":"maxbry123-commits/frontend",
+  "fresh_main_sha":"36c33750c51bc643483d4d625600ccbf3b440a7c",
+  "base_sha":"36c33750c51bc643483d4d625600ccbf3b440a7c",
+  "write_scope":"F-UI-045 only: responsive workspace/shell under src/ui/workspace-shell-*, *workspace*.css, dedicated workspace tests/workflow/evidence; excludes shared app/state unless a reproduced GAP requires scope revalidation; excludes Wordflow N*",
+  "paths":[
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/ui/workspace-shell-v1.js",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/workspace-shell-v1.css",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-045-workspace-shell.spec.mjs",
+    ".github/workflows/factory-f-ui-045-workspace-shell.yml",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-UI-045-FACTORY-SOL-6-EVIDENCE.json",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-UI-045-FACTORY-SOL-6-GPT-CLAIM.json"
+  ],
+  "claimed_at":"2026-09-12T22:41:57-05:00",
+  "state":"IN_PROGRESS",
+  "task":"Mejorar workspace/shell responsive de la Factory: canvas dominante, paneles dockeables/colapsables, resize estable y uso comodo desktop+mobile sin ocultar el canvas.",
+  "acceptance":"layout desktop/mobile reproducible; canvas siempre util; paneles no se superponen; resize/scroll/touch PASS con evidencia.",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "authority":"FACTORY-CRAZY-WALL-FRONTEND-SOL6-8-V1-2026-09-12.json + FACTORY-SUPERVISOR-RECONCILIATION-R02-2026-09-12.json",
+  "next":"VERIFY_RESEARCH current workspace layout/CSS/tests before product delta"
+}
