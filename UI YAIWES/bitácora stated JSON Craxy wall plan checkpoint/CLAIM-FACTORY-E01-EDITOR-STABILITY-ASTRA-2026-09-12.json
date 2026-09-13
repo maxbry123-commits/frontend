@@ -1,0 +1,12 @@
+{
+  "schema": "yaiwes.node.claim.v1",
+  "node_id": "FACTORY-E01-EDITOR-STABILITY",
+  "owner": "ASTRA_GPT",
+  "state": "CLAIMED",
+  "base_sha": "2d9ba8311f008a16e449930e61896fe6786d881f",
+  "write_scope": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v*/**",
+  "claimed_at": "2026-09-12T20:32:00-05:00",
+  "task": "Resolve or refute drag/drop, move, selection and state-loss regressions; keep canvas visible and one touch-scroll contextual panel.",
+  "required_evidence": ["code_diff", "interaction_tests", "reload_test", "mobile_touch_test"],
+  "collision_rule": "Do not write another owner's active scope; preserve factory-v0 and create next version for productive changes."
+}
