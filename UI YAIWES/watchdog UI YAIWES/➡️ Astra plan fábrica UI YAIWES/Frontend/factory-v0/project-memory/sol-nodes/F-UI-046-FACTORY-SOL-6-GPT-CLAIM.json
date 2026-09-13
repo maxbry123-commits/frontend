@@ -1,0 +1,27 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "project":"FABRICA_UI_YAIWES_ONLY",
+  "chat_id":"FACTORY-SOL-6-GPT",
+  "agent_name":"SOL 6 GPT 🆘",
+  "node_id":"F-UI-046",
+  "repo":"maxbry123-commits/frontend",
+  "fresh_main_sha":"af5cbb9c9d0a2157eb42490ea032bda0156065a4",
+  "base_sha":"af5cbb9c9d0a2157eb42490ea032bda0156065a4",
+  "write_scope":"F-UI-046 only: src/ui/component-browser-*, dedicated component-browser tests/workflow/evidence; shared runtime entrypoint/state read-only until a reproduced integration GAP requires scope revalidation; excludes Wordflow N*",
+  "paths":[
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/ui/component-browser-v1.js",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-046-component-browser.spec.mjs",
+    ".github/workflows/factory-f-ui-046-component-browser.yml",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-UI-046-FACTORY-SOL-6-EVIDENCE.json",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-UI-046-FACTORY-SOL-6-GPT-CLAIM.json"
+  ],
+  "claimed_at":"2026-09-12T22:50:58-05:00",
+  "state":"IN_PROGRESS",
+  "task":"Crear/mejorar browser de componentes de la interface: busqueda, categorias, filtros, favoritos/recientes y drag-preview antes de soltar en canvas usando componentes OSS ya presentes primero.",
+  "acceptance":"buscar->seleccionar->preview->insertar modifica proyecto real; cero catalogo decorativo; test de teclado y touch.",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "authority":"FACTORY-CRAZY-WALL-FRONTEND-SOL6-8-V1-2026-09-12.json",
+  "next":"VERIFY_RESEARCH current library, OSS registry and canonical insertion path before any product delta"
+}
