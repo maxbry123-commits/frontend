@@ -1,0 +1,31 @@
+name: factory-f-io-026-reload
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-io-026-reload.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reload-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: F-IO-026 reload recovery exact current SHA
+        run: npx playwright test tests/e2e/f-io-025-026-local-memory.spec.mjs --project=chromium-desktop --reporter=line
