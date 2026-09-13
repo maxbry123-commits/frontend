@@ -1,0 +1,11 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <16>",
+  "node_id": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+  "fresh_main_sha": "f69b7a1aac506285496d88a11cfae01ad367f842",
+  "write_scope": "runtime/src/audit/**|runtime/src/coverage/**|audit/coverage/reports|runtime/tests/test_audit*|runtime/tests/test_coverage*",
+  "claimed_at": "2026-09-13T07:12:00Z",
+  "dependency_evidence": "N34 report commit 48b22db7653eb3d25a0e58865cb0ef8d2994f606; release 53dee9a50ac47a1239b49b3b388f180d51c8d53b; final denominator 167",
+  "strategy": "REUSE RequirementMatrix + audit.five_pass + evidence verifier; persist only attestable production traces; fail closed on missing code/test/evidence."
+}
