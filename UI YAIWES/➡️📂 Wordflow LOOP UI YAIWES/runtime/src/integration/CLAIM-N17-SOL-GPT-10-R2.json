@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <10>",
+  "node_id": "N17-FULL-PRODUCT-E2E",
+  "fresh_main_sha": "6c05643fadeb9561be95554817519768b81d7a23",
+  "write_scope": "runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*|E2E",
+  "claimed_at": "2026-09-13T07:23:00Z",
+  "reason": "Prior SOL GPT <16> claim released; existing E2E test blob 07adc1b939d97090a3ba36ef7ee7efa6f73dc649 covers node schema but prior CI was cancelled. Certify exact existing delta before any code patch."
+}
