@@ -1,0 +1,26 @@
+{
+  "schema":"yaiwes.factory.oss-categories-variants.v1",
+  "node_id":"F-OSS-014",
+  "agent":"SOL 7 GPT 🆘",
+  "base_sha":"380fd178a34ee01138dc328ea31401d119fe76af",
+  "classification":"EVIDENCE_GAP",
+  "strategy":"REUSE_EXISTING_ONLY",
+  "sources":["src/donors/oss-registry.js","project-memory/F-OSS-013-SOL-7-OSS-MATRIX.json"],
+  "categories":[
+    {"category":"visual-canvas","variants":[{"component":"Excalidraw","state":"AVAILABLE_LOCAL"},{"component":"OpenPencil","state":"AVAILABLE_ZIP"},{"component":"Silex","state":"AVAILABLE_EXTRACTED"},{"component":"tldraw","state":"AVAILABLE_EXTRACTED"},{"component":"draw.io","state":"AVAILABLE_EXTRACTED"}],"reuse_rule":"source/canvas donors require adapter evidence before WIRED"},
+    {"category":"page-and-ui-builder","variants":[{"component":"Frappe Builder","state":"DONOR_ACTIVE"},{"component":"Craft.js","state":"DONOR_ACTIVE"},{"component":"Webstudio","state":"AVAILABLE_ZIP"},{"component":"Appsmith","state":"AVAILABLE_LOCAL"},{"component":"Builder.io","state":"AVAILABLE_LOCAL"}],"reuse_rule":"prefer existing Frappe/Craft donors before extracting/downloading alternatives"},
+    {"category":"workflow-node-canvas","variants":[{"component":"xyflow","state":"DONOR_ACTIVE"}],"reuse_rule":"existing minimap adapter is canonical donor candidate for F-OSS-015"},
+    {"category":"editor-code","variants":[{"component":"CodeMirror 6","state":"AVAILABLE_LOCAL"}],"reuse_rule":"reuse existing local source; no duplicate editor"},
+    {"category":"ai-interface","variants":[{"component":"assistant-ui","state":"AVAILABLE_EXTRACTED"},{"component":"Open WebUI","state":"AVAILABLE_LOCAL_REFERENCE"},{"component":"LibreChat","state":"AVAILABLE_LOCAL_REFERENCE"},{"component":"Jan","state":"AVAILABLE_LOCAL_REFERENCE"}],"reuse_rule":"reference UI is not runtime wiring"},
+    {"category":"panels-windows","variants":[{"component":"Dockview","state":"AVAILABLE_EXTRACTED"},{"component":"MaoMao Window Manager","state":"AVAILABLE_LOCAL_REFERENCE"}],"reuse_rule":"only adapt if a panel/window capability gap is reproduced"},
+    {"category":"runtime-ui-primitives","variants":[{"component":"Lucide","state":"RUNTIME_ACTIVE_TEST_PRESENT"},{"component":"Chart.js","state":"AVAILABLE_LOCAL"},{"component":"GSAP","state":"AVAILABLE_LOCAL"},{"component":"FullCalendar","state":"AVAILABLE_LOCAL"}],"reuse_rule":"Lucide has strongest current integration evidence; others remain capability candidates"},
+    {"category":"preview-and-render","variants":[{"component":"PDF.js","state":"AVAILABLE_LOCAL"},{"component":"Mammoth.js","state":"AVAILABLE_LOCAL"},{"component":"PixiJS","state":"AVAILABLE_LOCAL"}],"reuse_rule":"do not promote to integrated without adapter/runtime/test"}
+  ],
+  "dedup_decision":"No new OSS download justified. Existing inventory covers multiple variants for every identified Factory UI category.",
+  "recommended_runtime_candidate_for_F_OSS_015":{"component":"Frappe Builder","reason":"existing extracted donor plus concrete context-menu adapter already present; smallest delta path to SOURCE_PRESENT->WIRED->RUNTIME_TEST_PASS","alternate":"xyflow minimap adapter"},
+  "simulations":["S1 if Frappe donor satisfies context-menu capability, Webstudio download adds duplication not value","S2 if OpenPencil is ZIP_ONLY, it remains source candidate and cannot be counted as reusable runtime variant","S3 if Lucide test exists but is not freshly executed, category may list it but cannot claim TEST_PASS"],
+  "refutations":["R1 category membership does not imply runtime integration","R2 multiple variants do not justify extraction when an existing donor covers capability","R3 DONOR_ACTIVE label is insufficient for VERIFIED_CLOSED without wiring/test evidence"],
+  "council12":{"objective":"complete reusable OSS categories/variants","requirement":"categories tied to real source and capability","authority":"fresh registry plus F-OSS-013 matrix","prior_state":"broad flat registry","owner":"SOL 7 GPT 🆘","collision":"none on additive project-memory path","gap":"categories/variants were not explicitly normalized for reuse decisions","alternatives":"rewrite runtime registry rejected","strategy":"REUSE_EXISTING additive evidence","tests":"structural readback and cross-check only","refutations":"3 recorded","decision":"PASS_PENDING_REVIEW; next F-OSS-015 runtime donor integration"},
+  "goals12_output":{"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS additive evidence only","G08":"PASS source cross-check/readback pending publish readback","G09":"N/A evidence node","G10":"PASS 3 simulations + 3 refutations","G11":"PENDING final commit/blob readback","G12":"NEXT F-OSS-015"},
+  "state":"PASS_PENDING_REVIEW"
+}
