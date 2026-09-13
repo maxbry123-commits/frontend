@@ -1,0 +1,34 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N04-STATE-RECONCILIATION",
+  "chat_id": "SOL GPT <10>",
+  "result": "GAP_FAIL_CLOSED",
+  "reported_at": "2026-09-13T06:46:00Z",
+  "commits": {
+    "claim_merge": "e4d860f6d6fed9b744af5d43a63b813a522719a7",
+    "state": "ab0276dae9f09ed0488250772728e16c6184c2a3",
+    "checkpoint": "678f587289ac6f59a01f6d7034eec1bbf34a30ce",
+    "handoff": "4e720d9abe8d0d25e0ef402559936b883fcaab13"
+  },
+  "readback_blobs": {
+    "STATE.json": "8238a9f1f664e4ed88f11ae46f3aa8f9bffb5044",
+    "CHECKPOINT.json": "9c68b1bf641463ef2933c0b83e4173e85b67ed05",
+    "HANDOFF-V8": "fafc8eeed180fd9e37e631d66e0d155b20cd2f04",
+    "CRAZY-WALL": "0101749745fcbf9a6ab7ba299dcd7e78bbc59492"
+  },
+  "tests": [
+    "STATE readback PASS",
+    "CHECKPOINT readback PASS",
+    "HANDOFF readback PASS",
+    "Crazy Wall N04 row FAIL: still FREE/owner null"
+  ],
+  "refutations": {
+    "schema_complete": "PASS",
+    "no_real_gap_remaining": "FAIL",
+    "evidence_proves_100_pass": "FAIL"
+  },
+  "remaining_gaps": [
+    "N04 central row must be atomically reconciled from a fresh full Crazy Wall without dropping concurrent node evidence; unsafe whole-file overwrite was intentionally not performed."
+  ],
+  "project_verified_closed": false
+}
