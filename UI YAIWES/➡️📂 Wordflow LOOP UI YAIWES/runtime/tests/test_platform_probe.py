@@ -116,7 +116,7 @@ class PlatformProbeTests(unittest.TestCase):
             system_name="Linux",
             environ={"ANDROID_ROOT": "/system"},
             which=fake_which({"vm", "crosvm", "qemu-system-aarch64"}),
-            exists=fake_exists({"/dev/kvm", AVF_VM_PATH, AVF_CROSVM_PATH}),
+            exists=fake_exists({AVF_VM_PATH, AVF_CROSVM_PATH}),
             access=allow_paths({"/dev/kvm"}),
             run_command=android_queries(feature=False),
         )
@@ -143,6 +143,20 @@ class PlatformProbeTests(unittest.TestCase):
         self.assertFalse(snapshot.native_permission)
         self.assertEqual(row.state, SupportState.CONDITIONAL)
         self.assertEqual(row.selected_backend, "QEMU")
+
+    def test_unrelated_path_binaries_named_vm_and_crosvm_never_count_as_avf(self):
+        snapshot = probe_current_host(
+            system_name="Linux",
+            environ={"ANDROID_ROOT": "/system"},
+            which=fake_which({"vm", "crosvm"}),
+            exists=fake_exists(set()),
+            access=allow_paths(set()),
+            run_command=android_queries(),
+        )
+        self.assertEqual(snapshot.available_backends, frozenset())
+        self.assertFalse(snapshot.hardware_virtualization)
+        self.assertFalse(snapshot.native_permission)
+        self.assertEqual(assess_platform(snapshot).state, SupportState.BLOCKED)
 
     def test_cuttlefish_x86_64_is_identified_but_protected_vm_is_not_inferred(self):
         evidence = probe_android_avf_runtime(
