@@ -12,20 +12,17 @@
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-OSS-013-CAPABILITY-MATRIX-SOL-1.json"
   ],
   "claimed_at": "2026-09-12T21:43:55-05:00",
-  "state": "CLAIMED",
+  "state": "PASS_PENDING_REVIEW",
   "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
-  "goals12_input": {
-    "G01": "PASS literal F-OSS-013 preserved",
-    "G02": "PASS fresh main read",
-    "G03": "PASS Crazy Wall/STATE/CHECKPOINT read; dynamic V2 supersedes older queue decomposition",
-    "G04": "PASS no existing F-OSS-013 claim found; write paths unique",
-    "G05": "PENDING inventory dedup",
-    "G06": "PASS reuse-first policy",
-    "G07": "PENDING evidence-only minimum delta",
-    "G08": "PENDING matrix validation",
-    "G09": "N/A no runtime wiring in this node",
-    "G10": "PENDING 3 simulations + 3 refutations",
-    "G11": "PENDING SHA/readback",
-    "G12": "PENDING reconcile next node"
-  }
+  "claim_commit_sha": "9e3cfc8a880aeea8f05b08face76c2ff07880864",
+  "evidence_commit_sha": "b5f01d94b03c10c26efb954c907fe69808d6164c",
+  "evidence_blob_sha": "da5ebb9a0a45c50b7783a255775988ebd7f62e4c",
+  "tests": "repository static/readback validation only; runtime shell test not executed and no runtime PASS claimed",
+  "simulations": 3,
+  "refutations": 3,
+  "remaining_gaps": ["F-OSS-014 categories/variants", "F-OSS-015 donor adapter+wiring+fresh runtime test", "independent reviewer required"],
+  "review_required": true,
+  "next_free_node": "F-OSS-014 after fresh-read dependency reconciliation",
+  "goals12_input": {"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PENDING","G06":"PASS","G07":"PENDING","G08":"PENDING","G09":"N/A","G10":"PENDING","G11":"PENDING","G12":"PENDING"},
+  "goals12_output": {"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS","G08":"PASS_STATIC_READBACK","G09":"N/A","G10":"PASS","G11":"PASS","G12":"PASS"}
 }
