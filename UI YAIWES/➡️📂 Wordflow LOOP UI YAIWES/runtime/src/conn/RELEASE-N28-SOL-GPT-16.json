@@ -1,0 +1,12 @@
+{
+  "schema": "tel.workflow/v3.release",
+  "state": "RELEASED_VERIFIED_CLOSED_CANDIDATE",
+  "chat_id": "SOL GPT <16>",
+  "node_id": "N28-API-CONTROL",
+  "claim_commit": "f99b30725ce66d2fdf3e2004358e90d8af3cb0e0",
+  "report_commit": "0bda3cd116a3b30a71dea3a147179aaa620562c5",
+  "released_at": "2026-09-13T07:05:00Z",
+  "result": "PASS via exact current implementation/test blobs plus trusted descendant CI run 34739510224 job 103678337638",
+  "write_scope": "runtime/src/conn/**|runtime/src/integration/**|runtime/tests/test_integration*",
+  "remaining_gap": "Central Crazy Wall reconciliation belongs to shared-state owner; no N28 technical gap remains."
+}
