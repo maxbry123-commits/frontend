@@ -1,0 +1,40 @@
+name: factory-f-ai-024-integration
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/file-import-controller-v1.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/frontend-router-bridge.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ai-024-integration.spec.mjs'
+      - '.github/workflows/factory-f-ai-024-integration.yml'
+  workflow_dispatch:
+jobs:
+  browser-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser harness
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+        run: |
+          npm install --no-save @playwright/test@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Syntax
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+        run: |
+          node --check src/file-import-controller-v1.js
+          node --check src/frontend-router-bridge.js
+          node --check tests/e2e/f-ai-024-integration.spec.mjs
+          grep -F './src/file-import-controller-v1.js' index-v19.html
+          grep -F './src/frontend-router-bridge.js' index-v19.html
+      - name: F-AI-024 browser E2E
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+        run: npx playwright test tests/e2e/f-ai-024-integration.spec.mjs --project=chromium-desktop --reporter=list
