@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "chat_id": "SOL GPT <15>",
+  "node_id": "N03-AUTO-AUDITOR-EVIDENCE",
+  "fresh_main_sha": "54436297718fc33a64128002f96569250fe56579",
+  "write_scope": "runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*",
+  "claimed_at": "2026-09-13T06:27:30Z",
+  "state": "CLAIMED",
+  "execution_state": "IN_PROGRESS"
+}
