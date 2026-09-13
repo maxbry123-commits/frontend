@@ -1,0 +1,61 @@
+{
+  "schema": "yaiwes.factory.supervisor.reconciliation.v3",
+  "round": "R10",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "project": "FABRICA_UI_YAIWES_ONLY",
+  "audited_at_utc": "2026-09-13T11:34:43Z",
+  "observed_main_head": "0ec81bd58b9199b05c507828a4fff18ad8492fe3",
+  "authority": "fresh GitHub main source and path readback",
+  "current_gate": "T1_FACTORY_FRONTEND_ACTIVE_LOOP",
+  "t2": "BLOCKED",
+  "node_audit": {
+    "node": "F-MOD-033",
+    "owner": "SOL 7 GPT",
+    "claim_path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-MOD-033-SOL-7-GPT-CLAIM.json",
+    "claim_blob": "c22fb46c101a439414b99b515d15a7358d12a542",
+    "claim_state": "CLAIMED",
+    "claimed_at": "2026-09-12T22:29:10-05:00",
+    "expected_deliverables": [
+      "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-mod-033-composed-ui.spec.mjs",
+      ".github/workflows/factory-f-mod-033-composed-ui.yml",
+      "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-MOD-033-SOL-7-EVIDENCE.json"
+    ],
+    "fresh_readback": {
+      "test": "NOT_FOUND_404",
+      "workflow": "NOT_FOUND_404",
+      "evidence": "NOT_FOUND_404"
+    },
+    "verdict": "CLAIMED_NONTERMINAL_NO_DELIVERABLE_EVIDENCE",
+    "ownership_action": "PRESERVED_NO_TAKEOVER_NO_RELEASE_BY_SUPERVISOR"
+  },
+  "dependency_effect": {
+    "node": "F-INT-035",
+    "state": "BLOCKED_BY_F-MOD-033",
+    "reason": "entrypoint convergence cannot be claimed until F-MOD-033 owner terminalizes/releases and dependencies are fresh-read",
+    "forbidden": "do not merge index-v19/index-v192 while dependency ownership is nonterminal"
+  },
+  "oss_decision": {
+    "node": "F-OSS-016",
+    "state": "BLOCKED_CONDITIONAL",
+    "reason": "current critical gap is integration of already-present code, not a demonstrated missing-source capability",
+    "action": "NO_NEW_DOWNLOAD"
+  },
+  "tests": [
+    "fresh claim file readback PASS",
+    "expected F-MOD-033 E2E path readback 404",
+    "expected F-MOD-033 workflow path readback 404",
+    "expected F-MOD-033 evidence path readback 404"
+  ],
+  "refutations": [
+    "A CLAIMED file is not execution evidence.",
+    "Claim age does not authorize takeover or release.",
+    "New OSS acquisition cannot repair the current entrypoint convergence gap."
+  ],
+  "next": [
+    "SOL7 must implement/test/report or explicitly release F-MOD-033.",
+    "After terminal readback, first dependency-satisfied FREE worker may atomically claim F-INT-035.",
+    "Then rerun F-UI-051 against the single integrated candidate."
+  ],
+  "status": "ACTIVE_LOOP_EVIDENCE_GAP_REGISTERED"
+}
