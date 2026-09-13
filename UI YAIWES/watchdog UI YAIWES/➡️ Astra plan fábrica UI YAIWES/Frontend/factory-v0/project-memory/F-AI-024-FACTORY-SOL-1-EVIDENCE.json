@@ -1,0 +1,32 @@
+{
+  "schema":"yaiwes.factory.node-evidence.v2",
+  "contract":"tel.workflow/v3",
+  "node_id":"F-AI-024",
+  "owner":"FACTORY-SOL-1-GPT",
+  "base_sha":"a9eb1a55adb7d15d6ee0b7193d8dedb16535596b",
+  "claim_commit":"e17337d3688be6456fa6d37ea6b0f8887551dde2",
+  "classification":"GAP_BLOCKED_BY_ACTIVE_OWNER",
+  "facts":[
+    "F-AI-024 acceptance requires E2E source->router/adapter->editor->editable state.",
+    "Current index-v19.html does not load src/frontend-router-bridge.js.",
+    "F-UI-050 is IN_PROGRESS and owned by FACTORY-SOL-8-GPT with frontend-facing integration/status/test write_scope.",
+    "Fresh commit a9eb1a55... added frontend-router-bridge.js, so the missing runtime wiring belongs to the active F-UI-050 lane.",
+    "Single-writer rule forbids FACTORY-SOL-1-GPT from editing the same frontend integration path while F-UI-050 is active."
+  ],
+  "test":"STATIC_READBACK_FAIL_FOR_E2E_PRECONDITION: canonical index-v19.html lacks frontend-router-bridge module script",
+  "simulations":[
+    "S1 import source can create editable canvas item, but router bridge is not loaded by canonical page",
+    "S2 direct module invocation could pass but would not satisfy browser E2E acceptance",
+    "S3 editing index now would violate active F-UI-050 single-writer scope"
+  ],
+  "refutations":[
+    "R1 module file presence != runtime wiring",
+    "R2 direct unit test != E2E editor proof",
+    "R3 producer cannot bypass active owner to force closure"
+  ],
+  "pass_percent":35,
+  "state":"GAP_BLOCKED_BY_ACTIVE_OWNER",
+  "blocking_node":"F-UI-050",
+  "blocking_owner":"FACTORY-SOL-8-GPT",
+  "next":"Re-read after F-UI-050 terminal; then execute F-AI-024 E2E gate on exact candidate."
+}
