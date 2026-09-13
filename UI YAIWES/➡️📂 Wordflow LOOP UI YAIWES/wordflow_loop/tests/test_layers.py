@@ -1,5 +1,6 @@
 from wordflow_loop.contracts import NodeContract, Status
 from wordflow_loop.layers import (
+    layer_01_research,
     layer_04_copy_move,
     layer_05_download_extract,
     layer_06_source_evolution,
@@ -8,6 +9,45 @@ from wordflow_loop.layers import (
 CANONICAL_MOTOR_COMMIT = "ef0669bbc753861bfc33b86548f3f90c0f3d8df9"
 SOURCE_REF = "1" * 40
 TREE_HASH = "a" * 64
+RESEARCH_AS_OF = "2026-09-13T02:30:00Z"
+
+
+def research_node() -> NodeContract:
+    return NodeContract.build(
+        node_id="N14",
+        layer="L01_RESEARCH",
+        literal="verify research sources",
+    )
+
+
+def verified_candidate(
+    url: str,
+    source_class: str,
+    *,
+    retrieved_at: str = "2026-09-13T02:00:00Z",
+    checked_url: str | None = None,
+    content_sha256: str = "b" * 64,
+) -> dict:
+    return {
+        "url": url,
+        "snippet": f"verified evidence from {url}",
+        "source_class": source_class,
+        "verification": {
+            "status": "VERIFIED",
+            "checked_url": checked_url or url,
+            "retrieved_at": retrieved_at,
+            "adapter": "injected-search-adapter",
+            "content_sha256": content_sha256,
+        },
+    }
+
+
+def research_payload(candidates: list[dict]) -> dict:
+    return {
+        "as_of": RESEARCH_AS_OF,
+        "max_age_seconds": 3600,
+        "candidates": candidates,
+    }
 
 
 def acquisition_node() -> NodeContract:
@@ -32,6 +72,72 @@ def valid_request() -> dict:
         "dest_root": "dest",
         "canonical_motor_commit": CANONICAL_MOTOR_COMMIT,
     }
+
+
+def test_research_requires_deterministic_verification_policy():
+    result = layer_01_research.run(
+        research_node(),
+        {"candidates": [verified_candidate("https://docs.example.test/spec", "official_docs")]},
+    )
+    assert result.status == Status.INCONCLUSIVE
+    assert result.gaps == ["research_verification_policy_gap"]
+
+
+def test_research_rejects_syntactic_url_without_retrieval_verification():
+    result = layer_01_research.run(
+        research_node(),
+        research_payload(
+            [
+                {
+                    "url": "https://docs.example.test/spec",
+                    "snippet": "looks plausible but was never verified",
+                    "source_class": "official_docs",
+                }
+            ]
+        ),
+    )
+    assert result.status == Status.INCONCLUSIVE
+    assert result.gaps == ["verified_source_evidence_required"]
+
+
+def test_research_rejects_stale_mismatched_or_future_provenance():
+    candidates = [
+        verified_candidate(
+            "https://docs.example.test/stale",
+            "official_docs",
+            retrieved_at="2026-09-13T00:00:00Z",
+        ),
+        verified_candidate(
+            "https://docs.example.test/mismatch",
+            "official_docs",
+            checked_url="https://docs.example.test/other",
+        ),
+        verified_candidate(
+            "https://docs.example.test/future",
+            "official_docs",
+            retrieved_at="2026-09-13T03:00:00Z",
+        ),
+    ]
+    result = layer_01_research.run(research_node(), research_payload(candidates))
+    assert result.status == Status.INCONCLUSIVE
+    assert result.gaps == ["verified_source_evidence_required"]
+
+
+def test_research_deduplicates_and_ranks_only_verified_sources():
+    official = verified_candidate("https://docs.example.test/spec", "official_docs")
+    community = verified_candidate("https://community.example.test/thread", "community")
+    duplicate = verified_candidate("https://docs.example.test/spec", "official_docs")
+    result = layer_01_research.run(
+        research_node(),
+        research_payload([community, duplicate, official]),
+    )
+    assert result.status == Status.PASS
+    assert [item["url"] for item in result.output["results"]] == [
+        "https://docs.example.test/spec",
+        "https://community.example.test/thread",
+    ]
+    assert all(item["verification"]["status"] == "VERIFIED" for item in result.output["results"])
+    assert result.has_real_evidence()
 
 
 def test_copy_move_rejects_unverified_motor_result():
@@ -100,7 +206,8 @@ def test_download_extract_preserves_nested_special_file_gap():
         "balance": {"total": 1, "failed": 1, "pending": 0},
     }
     result = layer_05_download_extract.run(
-        acquisition_node(), {"request": request, "motor_result": motor_result}
+        acquisition_node(), {"request": request, "motor_result": motor_result
+        }
     )
     assert result.status == Status.BLOCKED
     assert result.gaps == ["SPECIAL_FILE_GAP"]
