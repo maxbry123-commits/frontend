@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.requirement-trace.v1",
+  "requirement_id": "REQ-S3-053",
+  "goal_id": "G12",
+  "task_id": "N24-CONSOLIDATOR",
+  "source": {
+    "path": "documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md",
+    "sha256": "aa9ea84565a9dfd250cc57ba465a7131a032b1e96c404d9dd21a349c8185c58c",
+    "symbol": "§53 CONSOLIDACIÓN EN EMBUDO"
+  },
+  "implementation": {
+    "path": "runtime/src/consolidation/consolidator.py",
+    "sha256": "3ad8994b38e2655a86ee056b0b3b5c2c92fabb20f9361dbcb18236512b1a3709",
+    "symbol": "consolidate_project"
+  },
+  "test": {
+    "path": "runtime/tests/test_consolidation.py",
+    "sha256": "3d6ef7b06666a405c6d55c2fcf7ea123bac875ffd240f14f44f1311a7b87ca5b",
+    "symbol": "ConsolidationTests.test_evidence_requires_provenance_and_survives_project_rollup"
+  },
+  "evidence": {
+    "path": "runtime/evidence/requirement_traces/REQ-S3-053.ci.json",
+    "sha256": "6eb0ddf68d38b5eb41ee61c9c0c9d3273df6c53cffafbcc5b1cd4b8dd9cbc0a9",
+    "symbol": ""
+  },
+  "revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e"
+}

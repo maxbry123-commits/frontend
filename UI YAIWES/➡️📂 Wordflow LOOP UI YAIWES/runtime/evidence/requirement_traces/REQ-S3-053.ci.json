@@ -1,0 +1,8 @@
+{
+  "schema": "yaiwes.ci-evidence.v1",
+  "run_id": 34739510224,
+  "job_id": 103678337638,
+  "revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+  "implementation_sha256": "3ad8994b38e2655a86ee056b0b3b5c2c92fabb20f9361dbcb18236512b1a3709",
+  "test_sha256": "3d6ef7b06666a405c6d55c2fcf7ea123bac875ffd240f14f44f1311a7b87ca5b"
+}
