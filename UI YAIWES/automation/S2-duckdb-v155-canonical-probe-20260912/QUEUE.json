@@ -1,0 +1,9 @@
+[
+  {
+    "id": "0056:DuckDB-v1.5.5-canonical",
+    "slug": "DuckDB",
+    "source_repo": "https://github.com/duckdb/duckdb",
+    "source_ref": "v1.5.5",
+    "publish": false
+  }
+]
