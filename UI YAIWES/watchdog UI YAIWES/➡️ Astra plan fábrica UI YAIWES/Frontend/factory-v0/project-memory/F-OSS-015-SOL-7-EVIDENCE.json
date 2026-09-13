@@ -1,0 +1,14 @@
+{
+  "schema":"yaiwes.factory.oss-donor-runtime.v1",
+  "node_id":"F-OSS-015",
+  "agent":"SOL 7 GPT 🆘",
+  "classification":"EVIDENCE_FAILURE_BEING_RESOLVED",
+  "donor":{"name":"Frappe Builder","source_path":"📂componentes open soure fromtend/Frappe-Builder/code/frontend/src/components/BlockContextMenu.vue","source_blob":"e3eb468b484a82c4749878b1933f58878fad8b12","license":"MIT","license_blob":"3c6d7966bdab0e166315768a64372586bc1237d2"},
+  "wiring":{"entrypoint":"Frontend/factory-v0/index-v19.html","adapter":"Frontend/factory-v0/src/donors/frappe-context-menu-adapter.js","adapter_blob":"c3c7a536829be41b3a16de3d27628e7e4e07532d","status":"WIRED_READBACK_PASS"},
+  "test":{"path":"Frontend/factory-v0/tests/e2e/f-oss-015-frappe-context-menu.spec.mjs","blob":"dff26be8f08f7cf06e25abffa89ef3cbf38b00f4","assertion":"context menu donor provenance + duplicate action + localStorage project state becomes 2 components"},
+  "runs":[{"run_id":34734618819,"job_id":103663661296,"sha":"e53617374d3ee5230b3d1753ed9ea7fbad40fb76","status":"IN_PROGRESS_INITIAL_FULL_CHECKOUT"},{"run_id":34734668182,"job_id":103663797335,"sha":"71f0f8ddf98ac9c50e7f9367ce76787cd7095e07","status":"IN_PROGRESS_SPARSE_CHECKOUT_STRATEGYDELTA"}],
+  "simulations":["S1 source donor present but no entrypoint script => SOURCE_PRESENT only; current readback disproves this because adapter is loaded","S2 adapter loaded but action decorative => runtime test must fail node-count/state assertion","S3 action changes DOM but not persisted project => runtime test must fail localStorage components assertion"],
+  "refutations":["R1 source blob/license alone cannot close F-OSS-015","R2 script tag alone cannot close F-OSS-015","R3 a green syntax step cannot close F-OSS-015; Playwright state assertion must pass"],
+  "state":"RUNNING",
+  "final_decision":"PENDING_ACTION_TERMINAL"
+}
