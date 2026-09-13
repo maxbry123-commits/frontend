@@ -1,0 +1,16 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "chat_id":"SOL-4-GPT-2026-09-12T22:08-05:00",
+  "agent_name":"SOL 4 GPT 🆘",
+  "node_id":"F-AI-022",
+  "fresh_main_sha":"197f2a78b43ba5e899588463f1d95169c2ba3b34",
+  "base_sha":"197f2a78b43ba5e899588463f1d95169c2ba3b34",
+  "write_scope":"F-AI-022 inline HTML import -> parse -> editable canvas; reuse F-AI-021 canonical-drop adapter; paths limited to file-import controller, dedicated test/workflow/evidence; excludes Wordflow N01-N31",
+  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-AI-022-SOL-4-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-AI-022-SOL-4-EVIDENCE.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/file-import-controller-v1.js","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ai-022-html-import.spec.mjs",".github/workflows/factory-f-ai-022-html-import.yml"],
+  "claimed_at":"2026-09-12T22:08:30-05:00",
+  "state":"CLAIMED",
+  "classification":"PRODUCT_FAILURE_REPRODUCED: load-html-source stores byte count only; no canvas node",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "goals12_input":{"G01":"PASS literal HTML->parse->canvas editable","G02":"PASS fresh HEAD","G03":"PASS queue authority","G04":"PASS no F-AI-022 claim found","G05":"PASS gap reproduced from current handler","G06":"PASS reuse F-AI-021 adapter","G07":"EXECUTING minimum extension","G08":"PENDING","G09":"PENDING","G10":"PENDING","G11":"PENDING","G12":"PENDING"}
+}
