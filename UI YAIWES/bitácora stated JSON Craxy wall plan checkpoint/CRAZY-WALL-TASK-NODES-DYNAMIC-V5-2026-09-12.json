@@ -648,8 +648,8 @@
     {
       "n": 17,
       "id": "N17-FULL-PRODUCT-E2E",
-      "state": "FREE",
-      "owner": null,
+      "state": "CLAIMED",
+      "owner": "ASTRA_GPT",
       "title": "UI→API/Fables→ejecución→memoria→recovery→respuesta",
       "scope": "runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*|E2E",
       "depends_on": [
@@ -665,7 +665,12 @@
         "Repetir/refutar y registrar run/log/result"
       ],
       "close": "E2E completo PASS con recovery y respuesta observable",
-      "reconciled_reason": "N18+N20+N26+N28+N29 dependencies VERIFIED_CLOSED"
+      "reconciled_reason": "N18+N20+N26+N28+N29 dependencies VERIFIED_CLOSED",
+      "chat_id": "ASTRA_GPT_WATCHDOG",
+      "node_id": "N17-FULL-PRODUCT-E2E",
+      "fresh_main_sha": "9113f9da82af1fd575882bee614eb5cf6500051f",
+      "write_scope": "runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*|E2E|Crazy Wall N17/report Astra only",
+      "claimed_at": "2026-09-13T10:38:00Z"
     },
     {
       "n": 18,
