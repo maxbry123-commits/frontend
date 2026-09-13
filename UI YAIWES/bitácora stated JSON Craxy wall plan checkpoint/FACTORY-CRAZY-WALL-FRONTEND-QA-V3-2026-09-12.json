@@ -1,0 +1,168 @@
+{
+  "schema": "yaiwes.factory.frontend-qa-swarm.v3",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "ACTIVE_ADDITIVE_QUEUE",
+  "observed_head_before_write": "90878e549a2700559f9b66f08693fcff130a77c0",
+  "observed_at": "2026-09-12T22:48:00-05:00",
+  "parent_queues": [
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-DYNAMIC-V2-2026-09-12.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-FRONTEND-SOL6-8-V1-2026-09-12.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-SUPERVISOR-RECONCILIATION-R02-2026-09-12.json"
+  ],
+  "objective": "Después de las mejoras primarias de SOL 6/7/8, probar exhaustivamente la interfaz Factory en web real con desktop+mobile, cada botón/control/navegación, capturas antes/después y criterio 0-fricción; corregir cualquier GAP reproducido y no declarar 100% sin evidencia completa.",
+  "reserved_workers": ["FACTORY-SOL-6-GPT","FACTORY-SOL-7-GPT","FACTORY-SOL-8-GPT"],
+  "global_rules": {
+    "one_chat_one_node": true,
+    "one_path_one_writer": true,
+    "fresh_head_before_every_write": true,
+    "producer_cannot_self_certify": true,
+    "source_authority": "code+runtime+test+Action/browser evidence > queue/state docs > architecture > inference",
+    "strategy": ["REUSE_EXISTING","PATCH","ADAPT","GENERATE","NEW_DOWNLOAD"],
+    "web_validation": "Published/live web URL required for WEB_PASS. Local Playwright does not substitute published-web validation.",
+    "screenshots": "Capture before/after and failure-state screenshots as CI/browser artifacts; persist artifact/run/job ids in evidence. Do not commit large binary screenshots unless explicitly required.",
+    "button_rule": "Every visible interactive control must map to a real effect, navigation, state mutation, modal/drawer action or explicit disabled reason. Decorative/dead controls are GAP.",
+    "zero_friction": "No dead ends, hidden essential controls, overlapping targets, unexplained state loss, forced refresh, duplicate steps, console exceptions or navigation traps in the canonical journey.",
+    "oss_rule": "If a capability is missing, dedup current OSS first; canonical download/extraction motor only after demonstrated capability GAP with official source+license+version+destination+readback+adapter+test."
+  },
+  "node_steps": ["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "nodes": [
+    {
+      "id": "F-UI-051",
+      "assigned_pool": ["FACTORY-SOL-6-GPT"],
+      "priority": 1,
+      "state": "BLOCKED_AFTER_F-UI-045",
+      "depends_on": ["F-UI-045"],
+      "task": "Inventario exhaustivo de botones/controles desktop: descubrir todos los elementos interactivos visibles de Factory y comprobar que cada uno produce el efecto canónico esperado.",
+      "write_scope_hint": ["Frontend/factory-v0/tests/e2e/*button-matrix-desktop*","Frontend/factory-v0/project-memory/*F-UI-051*","Frontend/factory-v0/src/ui/* only after reproduced product failure"],
+      "acceptance": "100% interactive controls enumerated; click/effect assertion per control; no dead button; before/after screenshots; console errors=0; evidence has tested SHA + run/job/artifact ids."
+    },
+    {
+      "id": "F-UI-052",
+      "assigned_pool": ["FACTORY-SOL-6-GPT"],
+      "priority": 2,
+      "state": "BLOCKED_AFTER_F-UI-045",
+      "depends_on": ["F-UI-045"],
+      "task": "Matriz móvil/touch de botones, drawers, paneles, close targets, resize y scroll; verificar targets visibles y accionables sin solapamientos.",
+      "write_scope_hint": ["Frontend/factory-v0/tests/e2e/*button-matrix-mobile*","Frontend/factory-v0/project-memory/*F-UI-052*","Frontend/factory-v0/src/ui/*touch* only after reproduced product failure"],
+      "acceptance": "Todos los controles esenciales accionables por touch; ningún target fuera de viewport/oculto/solapado; screenshots portrait+landscape; reload mantiene estado."
+    },
+    {
+      "id": "F-UI-053",
+      "assigned_pool": ["FACTORY-SOL-6-GPT"],
+      "priority": 3,
+      "state": "BLOCKED_AFTER_F-UI-046",
+      "depends_on": ["F-UI-046"],
+      "task": "Recorrido 0-fricción del navegador de componentes: buscar→filtrar→preview→insertar/drag-drop→seleccionar→editar→undo/redo sin abandonar el canvas.",
+      "write_scope_hint": ["Frontend/factory-v0/tests/e2e/*component-journey*","Frontend/factory-v0/project-memory/*F-UI-053*"],
+      "acceptance": "Journey desktop+touch PASS, sin pasos decorativos, sin pérdida de canvas/state, capturas por checkpoint y evidencia del state delta real."
+    },
+    {
+      "id": "F-UI-054",
+      "assigned_pool": ["FACTORY-SOL-6-GPT"],
+      "priority": 4,
+      "state": "BLOCKED_AFTER_F-UI-051_F-UI-052_F-UI-053",
+      "depends_on": ["F-UI-051","F-UI-052","F-UI-053"],
+      "task": "Refutación del shell y controles de SOL6: repetir journey completo tras reload y con viewport reducido; buscar regresiones, clipping, double-action y estado fantasma.",
+      "write_scope_hint": ["Frontend/factory-v0/tests/e2e/*sol6-refutation*","Frontend/factory-v0/project-memory/*F-UI-054*"],
+      "acceptance": "3 simulaciones + 3 refutaciones; 0 regresiones críticas; si falla, StrategyDelta materialmente distinto y re-test."
+    },
+    {
+      "id": "F-UI-055",
+      "assigned_pool": ["FACTORY-SOL-7-GPT"],
+      "priority": 1,
+      "state": "BLOCKED_AFTER_F-UI-047",
+      "depends_on": ["F-UI-047"],
+      "task": "Auditar command palette, quick actions y shortcuts: cada comando debe llamar la acción canónica y reflejar efecto visible/estado real.",
+      "write_scope_hint": ["Frontend/factory-v0/tests/e2e/*command-matrix*","Frontend/factory-v0/project-memory/*F-UI-055*"],
+      "acceptance": "100% comandos/shortcuts catalogados y ejecutados; no duplicar motores; screenshots antes/después; navegación teclado sin trap."
+    },
+    {
+      "id": "F-UI-056",
+      "assigned_pool": ["FACTORY-SOL-7-GPT"],
+      "priority": 2,
+      "state": "BLOCKED_AFTER_F-UI-048",
+      "depends_on": ["F-UI-048"],
+      "task": "Auditar accesibilidad funcional y ergonomía: focus order, Enter/Space/Escape, labels/ARIA, disabled/loading/error, touch targets y contraste operativo.",
+      "write_scope_hint": ["Frontend/factory-v0/tests/e2e/*a11y-functional*","Frontend/factory-v0/project-memory/*F-UI-056*"],
+      "acceptance": "Flujo principal completo por teclado y touch; focus visible; 0 controles sin nombre/estado; capturas de focus/error/loading; no bloqueo por modal/drawer."
+    },
+    {
+      "id": "F-UI-057",
+      "assigned_pool": ["FACTORY-SOL-7-GPT"],
+      "priority": 3,
+      "state": "BLOCKED_AFTER_F-UI-055_F-UI-056",
+      "depends_on": ["F-UI-055","F-UI-056"],
+      "task": "Navegación web real de Factory publicada: abrir URL desplegada, recorrer todos los pasos/paneles principales, registrar console/network errors y screenshots de cada checkpoint.",
+      "write_scope_hint": ["Frontend/factory-v0/tests/e2e/*published-web-navigation*","Frontend/factory-v0/project-memory/*F-UI-057*",".github/workflows/*factory-web-navigation*"],
+      "acceptance": "WEB_PASS sólo sobre URL publicada; HTTP/route/navigation PASS; console exceptions=0; errores network críticos=0; screenshots artifact completo; tested_sha coincide con served_sha."
+    },
+    {
+      "id": "F-UI-058",
+      "assigned_pool": ["FACTORY-SOL-7-GPT"],
+      "priority": 4,
+      "state": "BLOCKED_AFTER_F-UI-057",
+      "depends_on": ["F-UI-057"],
+      "task": "Revisión visual 0-fricción desktop/mobile: jerarquía, densidad, paneles, canvas dominante, modales, menús y estados; comparar capturas y corregir regresiones funcionales de UI.",
+      "write_scope_hint": ["Frontend/factory-v0/tests/e2e/*visual-friction*","Frontend/factory-v0/project-memory/*F-UI-058*","Frontend/factory-v0/*.css only after evidence"],
+      "acceptance": "Capturas desktop/mobile por estado; sin overlays involuntarios, clipping, texto ilegible ni canvas oculto; cualquier cambio CSS revalida funcionalidad."
+    },
+    {
+      "id": "F-UI-059",
+      "assigned_pool": ["FACTORY-SOL-8-GPT"],
+      "priority": 1,
+      "state": "BLOCKED_AFTER_F-UI-049",
+      "depends_on": ["F-UI-049"],
+      "task": "Revalidar panel Router Universal en web: health/modelos/ruta activa/latencia/error/reconnect/readback con screenshots y contrato real, sin tocar core si no hay GAP.",
+      "write_scope_hint": ["Frontend/factory-v0/tests/e2e/*router-panel-web*","Frontend/factory-v0/project-memory/*F-UI-059*","router repo frontend-facing status/test only after demonstrated GAP"],
+      "acceptance": "Estados healthy/degraded/error/reconnect demostrados; selección real visible; screenshots + respuesta readback; SHA de ambos repos si hubo cambio."
+    },
+    {
+      "id": "F-UI-060",
+      "assigned_pool": ["FACTORY-SOL-8-GPT"],
+      "priority": 2,
+      "state": "BLOCKED_AFTER_F-UI-050",
+      "depends_on": ["F-UI-050"],
+      "task": "Revalidar panel Hugging Face Jobs end-to-end: run→status→logs→complete/cancel y UI sincronizada, sin exponer secretos.",
+      "write_scope_hint": ["Frontend/factory-v0/tests/e2e/*hf-jobs-web*","Frontend/factory-v0/project-memory/*F-UI-060*"],
+      "acceptance": "Job real/sandbox autorizado con job_id y logs; screenshot de estados; cancel/complete idempotente; token ausente de browser/repo/log."
+    },
+    {
+      "id": "F-UI-061",
+      "assigned_pool": ["FACTORY-SOL-8-GPT"],
+      "priority": 3,
+      "state": "BLOCKED_AFTER_F-UI-059_F-UI-060",
+      "depends_on": ["F-UI-059","F-UI-060"],
+      "task": "Journey final de usuario: crear componente→componer UI→editar→guardar→reload/reopen→exportar→usar integración remota aplicable; todo desde interfaz, sin atajos internos.",
+      "write_scope_hint": ["Frontend/factory-v0/tests/e2e/*full-user-journey*","Frontend/factory-v0/project-memory/*F-UI-061*"],
+      "acceptance": "Journey completo desktop+mobile; state/output roundtrip íntegro; screenshots de hitos; no dead ends; tiempo/acciones medidos para detectar fricción."
+    },
+    {
+      "id": "F-UI-062",
+      "assigned_pool": ["FACTORY-SOL-6-GPT","FACTORY-SOL-7-GPT","FACTORY-SOL-8-GPT"],
+      "priority": 5,
+      "state": "BLOCKED_AFTER_F-UI-054_F-UI-058_F-UI-061",
+      "depends_on": ["F-UI-054","F-UI-058","F-UI-061"],
+      "task": "Cross-review independiente de la interfaz: cada SOL revisa artefactos y botones producidos por otro SOL; consolidar matriz BUTTON/CONTROL→EXPECTED_EFFECT→ACTUAL_EFFECT→PASS/GAP→SCREENSHOT.",
+      "write_scope_hint": ["Frontend/factory-v0/project-memory/*F-UI-062*","Frontend/factory-v0/tests/e2e/*cross-review*"],
+      "acceptance": "Cobertura 100% de controles descubiertos; reviewer != producer; toda fila con evidencia; cero PASS heredado sin reproducir; gaps generan nodo nuevo."
+    },
+    {
+      "id": "F-UI-063",
+      "assigned_pool": ["FACTORY-SOL-6-GPT","FACTORY-SOL-7-GPT","FACTORY-SOL-8-GPT"],
+      "priority": 6,
+      "state": "BLOCKED_AFTER_F-UI-062",
+      "depends_on": ["F-UI-062"],
+      "task": "FRONTEND 100 GATE: certificar o refutar que la interfaz Factory funciona al 100% en candidato exacto y web publicada exacta.",
+      "write_scope_hint": ["Frontend/factory-v0/project-memory/*F-UI-063*","Frontend/factory-v0/tests/e2e/*frontend-100-gate*",".github/workflows/*frontend-100-gate*"],
+      "acceptance": "TESTED_SHA==PUBLISHED_SHA; button/control matrix 100%; desktop+mobile+touch+keyboard; web live; reload/reopen; export; router/HF panels where applicable; console errors=0; screenshots complete; independent review; 3 simulations+3 refutations; otherwise state=GAP, never fake 100%."
+    }
+  ],
+  "deterministic_next": {
+    "FACTORY-SOL-6-GPT": ["finish F-UI-045","F-UI-046","F-UI-051","F-UI-052","F-UI-053","F-UI-054","then cross-review F-UI-062 when unblocked"],
+    "FACTORY-SOL-7-GPT": ["finish already-started F-MOD-033","F-UI-047","F-UI-048","F-UI-055","F-UI-056","F-UI-057","F-UI-058","then cross-review F-UI-062 when unblocked"],
+    "FACTORY-SOL-8-GPT": ["finish F-UI-050","F-UI-059","F-UI-060","F-UI-061","then cross-review F-UI-062 when unblocked"],
+    "selection_rule": "first dependency-satisfied FREE node in worker list; fresh-read claims and path scopes before claim"
+  },
+  "closure": "F-UI-063 is the only new frontend 100% gate. Earlier node PASS/PASS_PENDING_REVIEW cannot substitute this aggregate gate."
+}
