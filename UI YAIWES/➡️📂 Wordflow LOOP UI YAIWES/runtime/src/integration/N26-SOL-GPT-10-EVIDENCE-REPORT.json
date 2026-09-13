@@ -1,0 +1,43 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N26-GLOBAL-INTEGRATION",
+  "chat_id": "SOL GPT <10>",
+  "result": "PASS_TECHNICAL_GAP_EXACT_HEAD_CI_PENDING",
+  "reported_at": "2026-09-13T06:55:00Z",
+  "claim_commit": "dd92644d9365bdedebac7d28618f385e72bde116",
+  "implementation_commit": "fb0b862d475b827090f957256a9f444c59eeaeff",
+  "implementation_blob": "511d4eabd0bb2d419bea4f707e87273d8ae1ccac",
+  "test_blob": "bd6ff79d3b402be15c60ca219f53c5b3f36b0d30",
+  "trusted_descendant": {
+    "sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+    "ancestor_compare": "ahead_by=497, behind_by=0, merge_base=fb0b862d475b827090f957256a9f444c59eeaeff",
+    "run_id": 34739510224,
+    "job_id": 103678337638,
+    "conclusion": "success",
+    "wordflow": "41 passed",
+    "runtime": "206 passed, 2 warnings, 39 subtests passed"
+  },
+  "exact_head_ci": {
+    "run_id": 34743795904,
+    "head_sha": "dd92644d9365bdedebac7d28618f385e72bde116",
+    "status": "pending",
+    "jobs": 0,
+    "conclusion": null
+  },
+  "tests": [
+    "current integration_state.py blob exactly matches recorded N26 blob",
+    "current test_integration_state.py blob exactly matches recorded N26 blob",
+    "N26 implementation commit is ancestor of trusted successful full runtime CI",
+    "exact-head run exists but has not executed and is not counted as PASS"
+  ],
+  "refutations": {
+    "schema_complete": "PASS",
+    "technical_gap_remaining": "PASS_NONE",
+    "evidence_proves_authoritative_close": "FAIL_EXACT_HEAD_CI_PENDING_AND_CRAZY_WALL_STALE"
+  },
+  "remaining_gaps": [
+    "Exact-head CI run 34743795904 has not allocated a job yet.",
+    "Authoritative Crazy Wall still records historical global CI gap until reconciled."
+  ],
+  "project_verified_closed": false
+}
