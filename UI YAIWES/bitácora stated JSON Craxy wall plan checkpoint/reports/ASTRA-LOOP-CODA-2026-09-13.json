@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.loop-coda.checkpoint.v1",
   "contract": "tel.workflow/v3",
-  "updated_at": "2026-09-13T13:00:00Z",
+  "updated_at": "2026-09-13T16:25:00Z",
   "owner": "ASTRA_GPT",
   "status": "ACTIVE_LOOP_GAPS_OPEN",
   "global_closed": false,
@@ -1375,10 +1375,122 @@
         ],
         "blocked": "Requirements tied to open Vite/AVF/Vercel/UI/platform claims cannot be certified yet."
       }
+    },
+    {
+      "at": "2026-09-13T16:25:00Z",
+      "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+      "owner": "ASTRA_GPT",
+      "scope": "runtime/src/coverage/**|runtime/tests/test_coverage*|own checkpoint",
+      "status": "VERIFIED_CLOSED_DELTA_GLOBAL_1_OF_167",
+      "observed_main_head": "5d509093d8f07db25b2facbc86055280ba03a6dc",
+      "queue_readback": {
+        "blob": "1d7bff16329efdf7bf7d31a5b8883f01fb4a2e25",
+        "closed": 25,
+        "claimed": 6,
+        "blocked": 1,
+        "free_ui_only": [
+          "N31-UI-FINAL"
+        ]
+      },
+      "delta": {
+        "commit": "4413de2a2cdd100f1d196767b9c7ae1ecfb20353",
+        "defect": "Trace paths containing ':' passed the loader although five-pass cannot audit them portably.",
+        "repair": "Reject ':' at trace-load time, including Windows drive paths and alternate-stream-like paths.",
+        "files": [
+          "runtime/src/coverage/trace_inventory.py",
+          "runtime/tests/test_coverage_trace_inventory.py"
+        ]
+      },
+      "five_passes": [
+        "Fresh dynamic queue, N35 role state and own checkpoint read; no foreign claim was changed.",
+        "Loader path grammar compared with five-pass filesystem resolution; colon mismatch reproduced from patch evidence.",
+        "Negative tests cover C:/source.md and source:alternate.md.",
+        "Exact-head GitHub Actions run/job/log independently verified.",
+        "Coverage remains 1/167; this guard hardens evidence admission but certifies no additional requirement."
+      ],
+      "tests": {
+        "run": 34760071302,
+        "job": 103731237600,
+        "revision": "4413de2a2cdd100f1d196767b9c7ae1ecfb20353",
+        "conclusion": "success",
+        "wordflow": 41,
+        "runtime": 277,
+        "subtests": 42,
+        "warnings": 2,
+        "benchmark": {
+          "metric": "policy_lookup_latency",
+          "speedup_ratio": 2.5842,
+          "meets_100x": false
+        }
+      },
+      "entry_goals_12": [
+        "PASS repo/main",
+        "PASS fresh queue",
+        "PASS N35 ownership",
+        "PASS denominator 167",
+        "PASS previous 1/167 checkpoint",
+        "PASS scope",
+        "PASS path-contract comparison",
+        "PASS root cause",
+        "PASS negative cases",
+        "PASS exact revision",
+        "PASS real CI available",
+        "PASS global fail-closed"
+      ],
+      "exit_goals_12": [
+        "PASS colon path rejected",
+        "PASS Windows drive path rejected",
+        "PASS alternate-stream-like path rejected",
+        "PASS existing trace remains valid",
+        "PASS implementation diff reviewed",
+        "PASS test diff reviewed",
+        "PASS exact-head run",
+        "PASS 41 Wordflow",
+        "PASS 277 runtime",
+        "PASS 42 subtests",
+        "PASS benchmark truth preserved",
+        "GAP 166 traces remain"
+      ],
+      "council_12": {
+        "method": "Single-agent analytical review, not twelve independent model calls.",
+        "steps": [
+          "Objective",
+          "Authority",
+          "Ownership",
+          "Denominator",
+          "Contract mismatch",
+          "Threat model",
+          "Minimal repair",
+          "Negative tests",
+          "Compatibility",
+          "CI identity",
+          "Coverage boundary",
+          "Verdict"
+        ],
+        "verdict": "PATH_ADMISSION_GUARD_VERIFIED_N35_REMAINS_ACTIVE"
+      },
+      "refutations_3": [
+        "A green loader suite does not add a certified RequirementTrace; count remains 1/167.",
+        "Rejecting ':' is necessary because accepted-but-unauditable paths would defeat fail-closed coverage.",
+        "Measured 2.5842x is not 100x and no performance claim is promoted."
+      ],
+      "simulation_vs_execution": {
+        "analytical": "Threat cases were selected from path grammar mismatch.",
+        "real_execution": "GitHub Actions run 34760071302 executed the committed negative tests and full canonical suites."
+      },
+      "limitations": [
+        "166 production traces remain missing.",
+        "Six component/backend claims remain owned by other chats; N31 remains UI-only.",
+        "No deployed-browser or real multi-platform hardware proof was added."
+      ],
+      "next": {
+        "action": "Certify a second requirement only when its literal source, complete behavior, code symbol, test symbol and trusted CI revision all match.",
+        "fail_closed": "Do not use CAN-030 Final Judge while its complete terminal-state behavior remains only partial."
+      }
     }
   ],
   "last_node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
-  "last_node_state": "ACTIVE_LOOP_1_OF_167",
+  "last_node_state": "ACTIVE_LOOP_1_OF_167_PATH_GUARD_VERIFIED",
   "queue_readback": {
     "blob": "1d7bff16329efdf7bf7d31a5b8883f01fb4a2e25",
     "closed": 25,
@@ -1388,5 +1500,5 @@
       "N31-UI-FINAL"
     ]
   },
-  "last_audit_at": "2026-09-13T13:00:00Z"
+  "last_audit_at": "2026-09-13T16:25:00Z"
 }
