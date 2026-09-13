@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.loop-coda.checkpoint.v1",
   "contract": "tel.workflow/v3",
-  "updated_at": "2026-09-13T05:28:00Z",
+  "updated_at": "2026-09-13T13:00:00Z",
   "owner": "ASTRA_GPT",
   "status": "ACTIVE_LOOP_GAPS_OPEN",
   "global_closed": false,
@@ -1217,10 +1217,168 @@
         "When N07 closes, unblock N12 through fresh queue CAS.",
         "Do not claim N31 from backend; UI factory must execute deployed browser acceptance."
       ]
+    },
+    {
+      "at": "2026-09-13T13:00:00Z",
+      "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+      "owner": "ASTRA_GPT",
+      "scope": "runtime/requirement_traces/**|runtime/evidence/requirement_traces/**|runtime/tests/test_coverage*|canonical Wordflow CI sparse checkout|own checkpoint",
+      "status": "ACTIVE_LOOP_FIRST_REAL_TRACE_CI_VERIFIED",
+      "claim_authority": {
+        "extension": "CRAZY-WALL-EXTENSION-N34-N35-2026-09-13.json",
+        "role_state": "roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json",
+        "state": "IN_PROGRESS",
+        "denominator": 167
+      },
+      "coverage": {
+        "certified": 1,
+        "total": 167,
+        "certification_percent": 0.6,
+        "missing_trace": 166,
+        "requirement_id": "REQ-S3-057",
+        "product_verified": false
+      },
+      "delta": {
+        "evidence_commit": "7fcb349b19b29098f6d185926164bd0eab9ffde8",
+        "trace_commit": "766df853efad560a94e4f000e95ead9425351fd5",
+        "test_commit": "df8fd51cb1a9119cd7ef9c1a9b312eeb9e362169",
+        "ci_fix_commit": "9b65a79f7666d1288603bf0b535cd0d09950f98f",
+        "files": [
+          {
+            "path": "runtime/evidence/requirement_traces/REQ-S3-057.ci.json",
+            "blob": "d7236d232f52444d4540e4137fdaea655961582f",
+            "sha256": "ba9d44977d700ac42eb8ea589877d92ea0b6b576f648a5d72383b9a35167deb7"
+          },
+          {
+            "path": "runtime/requirement_traces/REQ-S3-057.json",
+            "blob": "e7bbaf98d2a2d1e779c9fa4cd6ac7578ba2bb903",
+            "sha256": "15a347c508401ca8deaac74fd3057e83aa27bf1e2c00f28f6b8afee1f96f14b6"
+          },
+          {
+            "path": "runtime/tests/test_coverage_production_trace.py",
+            "blob": "4c3bf622f64b2cd2cd7c22c59c769fd4dc9f4bac",
+            "sha256": "ecc8be61fd2c1ade2c88b8a9e6c49f11aa8608a72b33ad68d7a3db20b8ab0f74"
+          },
+          {
+            "path": ".github/workflows/yaiwes-wordflow-loop-pytest.yml",
+            "blob": "10cbac803839a86af15ab1f59ffdbf3828441294"
+          }
+        ]
+      },
+      "trace_binding": {
+        "source_path": "documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md",
+        "source_anchor": "§57 FINAL AUDIT",
+        "source_sha256": "aa9ea84565a9dfd250cc57ba465a7131a032b1e96c404d9dd21a349c8185c58c",
+        "implementation": "runtime/src/audit/five_pass.py#audit_five_pass",
+        "implementation_sha256": "b39b5974f36d37e8e6df7bd2464c6dafd1f5f5ba490e9612685ad8095273a26c",
+        "test": "runtime/tests/test_audit_five_pass.py#FivePassTests.test_complete_trace_is_not_product_certification",
+        "test_sha256": "00c695f5c898facdd5207b6703c86483996f596a4cca0c103a7a57d67d786df3",
+        "trusted_ci": {
+          "run": 34736273179,
+          "job": 103668162691,
+          "revision": "6223ed833be0fddf5023646f269089a7a3705e88",
+          "conclusion": "success"
+        }
+      },
+      "failure_repair": {
+        "failed_run": 34757382112,
+        "failed_job": 103723995253,
+        "result": "2 failed, 273 passed, 42 subtests",
+        "root_cause": "Canonical sparse checkout omitted runtime requirement_traces, runtime evidence and the source document, so the production trace could not be read.",
+        "different_strategy": "Expand exact sparse paths and workflow triggers instead of weakening the trace test or substituting fixtures.",
+        "patch": "9b65a79f7666d1288603bf0b535cd0d09950f98f",
+        "retest": {
+          "run": 34757999031,
+          "job": 103725634519,
+          "sha": "9b65a79f7666d1288603bf0b535cd0d09950f98f",
+          "conclusion": "success",
+          "wordflow": 41,
+          "runtime": 275,
+          "subtests": 42,
+          "warnings": 2,
+          "benchmark_speedup": 2.5141,
+          "meets_100x": false
+        }
+      },
+      "five_passes": [
+        "Fresh extension, dynamic queue, role state and N34 denominator read; foreign claims preserved.",
+        "REQ-S3-057 literal source anchor and exact source/code/test SHA-256 values verified.",
+        "Production evidence record bound to trusted run/job/revision and exact implementation/test bytes.",
+        "Initial CI failure diagnosed from raw log; canonical sparse checkout repaired and exact-head CI rerun.",
+        "Bidirectional audit verifies 1/1 selected trace while the full 167 inventory fails closed with 166 missing."
+      ],
+      "entry_goals_12": [
+        "PASS repo/main",
+        "PASS fresh N35 claim",
+        "PASS N34 denominator 167",
+        "PASS source literal",
+        "PASS N23 closed",
+        "PASS source bytes",
+        "PASS implementation symbol",
+        "PASS test symbol",
+        "PASS trusted CI run/job",
+        "PASS write scope",
+        "PASS no foreign claim collision",
+        "PASS global fail-closed"
+      ],
+      "exit_goals_12": [
+        "PASS one real trace persisted",
+        "PASS one CI evidence persisted",
+        "PASS source SHA-256",
+        "PASS code SHA-256",
+        "PASS test SHA-256",
+        "PASS evidence SHA-256",
+        "PASS revision binding",
+        "PASS read-back blobs",
+        "PASS failure root cause",
+        "PASS distinct CI patch",
+        "PASS CI 41/275/42",
+        "GAP global 1/167"
+      ],
+      "council_12": {
+        "method": "Single-agent analytical review, not twelve independent model calls.",
+        "steps": [
+          "Objective",
+          "Authority",
+          "Ownership",
+          "Denominator",
+          "Literal source",
+          "Implementation",
+          "Test",
+          "Trusted execution",
+          "Failure cause",
+          "Repair strategy",
+          "Inverse coverage",
+          "Verdict"
+        ],
+        "verdict": "REQ-S3-057_CERTIFIED_N35_ACTIVE_166_MISSING"
+      },
+      "refutations_3": [
+        "A mapped requirement is not certified until source, code, test, evidence and revision hashes all read back.",
+        "The first failed CI was not ignored: its sparse-checkout root cause was patched and a new exact-head run passed.",
+        "1/167 is 0.60% trace certification and cannot be presented as product completion; 100x remains refuted at 2.5141x."
+      ],
+      "simulation_vs_execution": {
+        "simulation": "TrustedCILookup is injected in the deterministic test using independently fetched real run/job metadata.",
+        "real_execution": "GitHub Actions run 34757999031 checked out the real source/trace/evidence bytes and passed 41 Wordflow + 275 runtime + 42 subtests."
+      },
+      "limitations": [
+        "N35 remains open with 166 missing production RequirementTrace rows.",
+        "Cross-platform hardware/browser proof remains outside this trace.",
+        "Dynamic queue stays 25/33; N31 remains UI-only and six backend/component claims remain with their owners."
+      ],
+      "next": {
+        "action": "Continue N35 only with requirements that have complete, independently attested bindings; do not synthesize rows for partial capabilities.",
+        "candidates": [
+          "REQ-S3-056 via Final Judge only if full PASS/FAIL/REPAIR/ESCALATE/HUMAN_REQUIRED behavior is evidenced",
+          "REQ-S3-054/055 via integration/cross-check only if complete symbols and CI are verified"
+        ],
+        "blocked": "Requirements tied to open Vite/AVF/Vercel/UI/platform claims cannot be certified yet."
+      }
     }
   ],
-  "last_node": "N27-CONTINUOUS-LOOP",
-  "last_node_state": "VERIFIED_CLOSED",
+  "last_node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+  "last_node_state": "ACTIVE_LOOP_1_OF_167",
   "queue_readback": {
     "blob": "1d7bff16329efdf7bf7d31a5b8883f01fb4a2e25",
     "closed": 25,
@@ -1230,5 +1388,5 @@
       "N31-UI-FINAL"
     ]
   },
-  "last_audit_at": "2026-09-13T11:28:00Z"
+  "last_audit_at": "2026-09-13T13:00:00Z"
 }
