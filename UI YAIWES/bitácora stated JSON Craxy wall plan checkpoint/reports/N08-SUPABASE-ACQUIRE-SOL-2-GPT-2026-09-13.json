@@ -1,0 +1,55 @@
+{
+  "schema": "yaiwes.audit.n08.supabase-acquire.v1",
+  "contract": "tel.workflow/v3",
+  "node_id": "N08-SUPABASE-ACQUIRE",
+  "chat_id": "SOL-2-GPT",
+  "claim_main_sha": "90878e549a2700559f9b66f08693fcff130a77c0",
+  "decision": "CLOSED_BY_EQUIVALENCE_NO_DOWNLOAD",
+  "requirement_analysis": {
+    "n01_denominator": "98 implementable normative requirements",
+    "supabase_specific_requirement_found": false,
+    "n02_mapping": "CAN-013 OSS reuse / provenance / dedup",
+    "source_requirement": "REQ-S2-014 requires mapping OSS to requirement, dedup before download, and verifiable provenance; it does not require Supabase by name",
+    "historical_gap": "G03_SUPABASE_DEST",
+    "historical_gap_finding": "Supabase has no literal/authorized physical acquisition destination; do not infer"
+  },
+  "dedup_and_destination": {
+    "destination_authorized": false,
+    "source_present_in_component_trees": false,
+    "todos_los_componentes_tree_sha": "9bd4de6934911f621f62d26e6f2e264b7a16691e",
+    "open_source_components_tree_sha": "2d25955c0d3f932ae14debe2f671883861698a4b",
+    "canonical_acquisition_manifest_tree_sha": "584030340dc75fc2f76a4ebc873b027f2726d74a",
+    "action": "NO_DOWNLOAD because requirement+capability_gap+destination are not jointly proven"
+  },
+  "official_provenance": {
+    "repository": "supabase/supabase",
+    "default_branch": "master",
+    "commit_sha": "26585dd4a4d6db8910a595214c9f6e8fdd206768",
+    "license": "Apache-2.0",
+    "description": "Postgres development platform for web, mobile and AI applications"
+  },
+  "equivalence": {
+    "capability": "CAN-013 OSS reuse / provenance / dedup",
+    "existing_code": [
+      "runtime/src/plugins/catalog.py",
+      "runtime/src/resource_brain/selector.py"
+    ],
+    "existing_blobs": {
+      "catalog.py": "5299d6c849a8cf68ca6bf4ced5ca7323b4621dd7",
+      "selector.py": "bc5c0f62118ff40e4fb2d32d7d991be5219f6bbd",
+      "test_resource_brain.py": "76d718097ee5c964dff17475001cc953e34d85da"
+    },
+    "reason": "The source obligation is provider-neutral OSS selection/dedup/provenance. Adding Supabase without a distinct requirement or destination would violate the canonical download rule rather than satisfy it."
+  },
+  "tests": {
+    "specific": "test_resource_brain.py reconstructed from exact GitHub blobs: 6/6 PASS",
+    "global_reference": "run 34735520028 / job 103666138630 SUCCESS; Wordflow 41/41 PASS; runtime 151/151 PASS + 27 subtests"
+  },
+  "three_refutations": [
+    "No Supabase-specific requirement exists in the N01 denominator or N02 capability matrix.",
+    "No authorized destination exists; G03 explicitly says not to infer one.",
+    "Downloading Supabase anyway would violate REQ-S2-014 and component_policy.download_rule because the generic CAN-013 selection/dedup/provenance capability is already implemented and tested."
+  ],
+  "remaining_gaps": [],
+  "result": "PASS_EQUIVALENCE_NO_PHYSICAL_ACQUISITION"
+}
