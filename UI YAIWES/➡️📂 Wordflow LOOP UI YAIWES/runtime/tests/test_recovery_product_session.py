@@ -247,3 +247,5 @@ class ProductRecoveryTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+# N05 isolated CI certification trigger; no functional change.
