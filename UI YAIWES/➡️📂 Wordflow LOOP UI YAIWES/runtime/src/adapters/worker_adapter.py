@@ -1,6 +1,6 @@
-"""YAIWES worker boundary over an injected Stabilize-compatible worker primitive.
+"""YAIWES worker boundary over the canonical Stabilize task primitive.
 
-This module is deliberately an adapter, not a scheduler.  Selection, retries,
+This module is deliberately an adapter, not a scheduler. Selection, retries,
 queues and lifecycle ownership remain outside this boundary.
 """
 from __future__ import annotations
@@ -10,9 +10,71 @@ from typing import Any, Mapping, Protocol, Sequence
 
 
 class WorkerPort(Protocol):
-    """Minimal port supplied by the canonical worker implementation."""
+    """Minimal one-shot port consumed by :class:`WorkerAdapter`."""
 
     def execute(self, *, task_id: str, payload: Mapping[str, Any]) -> Mapping[str, Any]: ...
+
+
+class StabilizeTaskPort(Protocol):
+    """Structural view of the vendored ``stabilize.tasks.interface.Task``."""
+
+    def execute(self, stage: Any) -> Any: ...
+
+
+class StabilizeTaskWorkerPort:
+    """Translate one YAIWES worker call to one canonical Stabilize ``Task``.
+
+    The adapter intentionally does not own scheduling, retries, queueing or
+    lifecycle. Stabilize remains the workflow owner; this shim only constructs
+    the stage-shaped input expected by the vendored Task interface and converts
+    a successful TaskResult into the narrow WorkerPort result contract.
+    """
+
+    def __init__(self, task: StabilizeTaskPort) -> None:
+        if not callable(getattr(task, "execute", None)):
+            raise TypeError("stabilize task must expose execute(stage)")
+        self._task = task
+
+    @staticmethod
+    def _stage_type() -> type:
+        import sys
+
+        from plugins.stabilize_adapter.factory import vendor_root
+
+        root = vendor_root()
+        if str(root) not in sys.path:
+            sys.path.insert(0, str(root))
+        from stabilize.models.stage import StageExecution
+
+        return StageExecution
+
+    def execute(self, *, task_id: str, payload: Mapping[str, Any]) -> Mapping[str, Any]:
+        StageExecution = self._stage_type()
+        # Pass explicit identifiers so this boundary does not generate workflow
+        # identity or take lifecycle ownership from Stabilize.
+        stage = StageExecution(
+            id=task_id,
+            ref_id=task_id,
+            type="yaiwes_worker",
+            name=task_id,
+            context=dict(payload),
+        )
+        result = self._task.execute(stage)
+        status_name = getattr(getattr(result, "status", None), "name", None)
+        if status_name != "SUCCEEDED":
+            raise ValueError(f"stabilize task did not succeed: {status_name or 'UNKNOWN'}")
+
+        outputs = getattr(result, "outputs", None)
+        if not isinstance(outputs, Mapping):
+            raise TypeError("stabilize task outputs must be a mapping")
+        if "output" not in outputs:
+            raise ValueError("stabilize task outputs missing output")
+
+        return {
+            "task_id": task_id,
+            "output": outputs["output"],
+            "evidence_refs": outputs.get("evidence_refs", ()),
+        }
 
 
 @dataclass(frozen=True)
