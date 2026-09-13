@@ -4,118 +4,53 @@
   "role": "SOL_GPT1_BACKEND",
   "name": "Sol ☀️ 🏈gpt 1 backend",
   "node_prefix": "S1",
-  "status": "XRS1_COMPLETE_TARGETED_VERIFIED_GLOBAL_CI_EXTERNAL_GATE_OPEN",
+  "status": "S1_09_CLAIMED_EXECUTING",
   "coordination": {
-    "source": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-STATE-HANDOFF-XRAY-2026-09-11.json",
-    "source_blob_sha": "a2683070871975a95ea4d16ac125125dcfb11649",
-    "gap_ledger": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/AUDIT-GAP-LEDGER-4AI-2026-09-11.json",
-    "gap_ledger_blob_sha_observed": "2e7c7e3c22cbca501d8fb9af52faf0278f7fc982",
-    "precedence": "repo/runtime real > current operational ledger/handoff > historical debate round > chat inference"
+    "source": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-QUEUE-4SOL-2026-09-12.json",
+    "source_blob_sha": "2313f8b519efd0d9118a97c59c4572c53382b9b9",
+    "precedence": "repo/runtime real > current operational queue/delta > role state > historical debate"
   },
+  "history_refs": [
+    {
+      "commit": "916eb6c27742d0947c56246377079f8928a9836d",
+      "state_blob": "98668b6274e0ef3a57ec41a0fdc9dbcae5257365",
+      "result": "XRS1 targeted agent boundary complete/released"
+    }
+  ],
   "claim": {
-    "node_id": "XRS1-MEMORY-AGENT-BOUNDARY",
-    "owner": "SOL_GPT1_BACKEND",
-    "claimed_at": "2026-09-12T16:45:28-05:00",
-    "released_at": "2026-09-12T17:01:59-05:00",
-    "status": "COMPLETE_RELEASED_TO_COORDINATOR",
+    "node_id": "S1-09-MEMORY-AGENT-BOUNDARY",
+    "owner": "SOL_GPT1",
+    "claimed_at": "2026-09-12T20:23:32-05:00",
+    "fresh_base_main_sha": "7da1a3a89210889d043864106b35657ac1567bbe",
+    "state": "CLAIMED",
     "write_scope": [
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/memory/**",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/**",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_memory*",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_agent*",
       "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT1-BACKEND-STATE.json",
-      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/**"
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S1-*.json"
     ],
-    "acceptance_literal": "Define minimal Agent↔own-memory↔Tools↔Workflow adapter and test isolation from chat memory without another ReAct loop.",
-    "acceptance_result": "SATISFIED_TARGETED"
+    "acceptance": "Minimal Agent↔Memory↔Tools↔Workflow boundary; keep agent memory isolated from chat/project; test GET_CONTEXT/GET_MEMORY/GET_EVIDENCE and canonical-write rejection."
   },
-  "research": {
-    "workflow_definition_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/core/workflow_definition.py",
+  "preflight": {
     "workflow_definition_blob": "ee7d708cd4dbcedee7ca65e9aa7f5db8e3cccde1",
-    "workflow_owner": "stabilize_core",
-    "workflow_contract": "tel.workflow/v3",
-    "workflow_order_boundary": "MemoryAdapter -> RouterAdapter -> AgentTask -> StateDeltaValidation -> AuditTask -> ConsolidatorTask -> MemoryUpdate",
-    "stabilize_tasks_blob": "3ea6817e23ca4b5b99780c81c7c737725f700284",
-    "stabilize_tools_blob": "ecd36cabd0619cc723ee13ef3270835ab7ea1bdc",
-    "reuse": ["LLMClient","LLMTask","AgentLoopTask","ToolRegistry"],
-    "finding": "No second ReAct loop, workflow owner, tool dispatcher or canonical-memory writer was created."
-  },
-  "implementation": {
-    "boundary_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/boundary.py",
-    "boundary_blob_sha": "cb69a7bd172f91e2117a567fa1b4195204fad434",
-    "boundary_commits": ["b576be5210d73e6818d132b1115a957178852fdd","26fa7311368a05af891e3dceda94b4e3e7ade01b"],
-    "init_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/__init__.py",
-    "init_blob_sha": "d53688f34f4508bb73fd3953814f44ce8954d3b1",
-    "init_commit": "ee5d50b59a402b0d19f28788af1743200a922f04",
-    "test_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/tests/test_boundary.py",
-    "test_blob_sha": "e662a6fcdcd7ce522763cfc5a390e56e1ae2cf31",
-    "test_commits": ["e579fcf3b414c86ffc4c4f7ff9ea0e864d1f47c6","d9d44658dae613012fa93da06fd5aa29bc4f5eee"],
-    "controls": [
-      "AGENT_PRIVATE memory distinct from CHAT and PROJECT",
-      "workflow owner locked to stabilize_core",
-      "workflow contract locked to tel.workflow/v3",
-      "unknown LLM context keys fail closed including memory_writer smuggling",
-      "ToolRegistry actual schemas must exactly match Policy-authorized allowed_tools",
-      "existing Stabilize AgentLoopTask composed by injection/lazy import",
-      "candidate output explicitly canonical_memory_write=false"
-    ]
-  },
-  "verification": {
-    "readback": "PASS_CURRENT_MAIN",
-    "boundary_blob": "cb69a7bd172f91e2117a567fa1b4195204fad434",
-    "test_blob": "e662a6fcdcd7ce522763cfc5a390e56e1ae2cf31",
-    "py_compile": "PASS",
-    "targeted_unittest": "PASS_8_OF_8",
-    "structural_duplicate_loop_check": "PASS_NO_WHILE_NO_QUEUE_NO_SCHEDULER_NO_PERSISTENCE_OWNER",
-    "global_regression_ci": {
-      "current_head_run_id": 34721174155,
-      "head_sha": "d9d44658dae613012fa93da06fd5aa29bc4f5eee",
-      "status": "in_progress",
-      "conclusion": null,
-      "wordflow_step": "SUCCESS",
-      "runtime_suite_step": "IN_PROGRESS",
-      "external_suite_note": "Complete runtime suite includes S3 Testcontainers real nginx lifecycle; this is not an S1-owned test."
-    },
-    "prior_global_ci_blocker": {
-      "run_id": 34721068373,
-      "head_sha": "b576be5210d73e6818d132b1115a957178852fdd",
-      "wordflow_step": "SUCCESS",
-      "runtime_suite_step": "CANCELLED_AT_JOB_TIMEOUT",
-      "job_conclusion": "cancelled",
-      "historical_same_pattern_run": 34656458039,
-      "historical_same_pattern_runtime_suite": "cancelled",
-      "classification": "GLOBAL_RUNTIME_SUITE_TIMEOUT_OR_EXTERNAL_TEST_BOTTLENECK_NOT_AGENT_BOUNDARY_ASSERTION_FAILURE"
-    },
-    "verdict": "S1_ACCEPTANCE_TESTED_TARGETED_PASS_GLOBAL_PROJECT_CI_NOT_PROMOTED"
-  },
-  "g09_four_pass_mapping": {
-    "status": "PARTIAL_PASS_GAPS_PRESERVED",
-    "source_contract_blob": "da109ae2d91e4563c01492ad365bbaa00fc6baa6",
-    "runtime": {
-      "agent_boundary": {"status":"IMPLEMENTED_TESTED_TARGETED","blob":"cb69a7bd172f91e2117a567fa1b4195204fad434"},
-      "recovery_control_plane": {"status":"IMPLEMENTED_TESTED","blob":"d3cc4d69b15e754389b88652e6ae07c0ebbf8162","test_blob":"7003876c11c963df1070cf230a1661a0c3744af8","tests":5},
-      "audit_five_pass": {"status":"IMPLEMENTED_TESTED","blob":"dbacb054cb837ef362032b95ee6da68809caf606","test_blob":"dfbd83cc4cf6928705fb9ef96dafc15a5794736e","tests":9},
-      "memory_adapter": "MISSING",
-      "storage": "PLACEHOLDER_ONLY",
-      "GET_MEMORY": "NO_IMPLEMENTATION_FOUND",
-      "SAVE_STATE_DELTA": "NO_IMPLEMENTATION_FOUND"
-    },
-    "remaining_gaps": ["MEMORY_ADAPTER_MISSING","PRODUCT_STORAGE_MISSING","GET_MEMORY_RUNTIME_MISSING","SAVE_STATE_DELTA_RUNTIME_MISSING","FULL_CHAT_PROJECT_AGENT_MEMORY_E2E_ISOLATION_NOT_VERIFIED"],
-    "ownership_boundary": {
-      "runtime_src_adapters": "SOL_GPT2_CURRENT_COORDINATION_DO_NOT_MUTATE",
-      "shared_gap_ledger": "SOL_ORQUESTADOR_CONSOLIDATES_DO_NOT_EDIT",
-      "storage_or_full_memory_adapter_mutation": "REQUIRES_NEW_COORDINATOR_CLAIM"
-    },
-    "verdict": "G09_PARTIAL_PASS_NOT_VERIFIED_CLOSED"
+    "agent_boundary_blob": "cb69a7bd172f91e2117a567fa1b4195204fad434",
+    "memory_source_contract_blob": "da109ae2d91e4563c01492ad365bbaa00fc6baa6",
+    "runtime_src_memory": "MISSING_404",
+    "agent_boundary_targeted_test": "PASS_8_OF_8_FROM_PRIOR_SUBGATE"
   },
   "owned_gaps": {
     "G02_VITE_DEST": "OPEN_DESTINATION_INPUT_GAP",
     "G03_SUPABASE_DEST": "OPEN_DESTINATION_INPUT_GAP",
-    "G09_MEMORY_BOUNDARY": "4PASS_COMPLETE_PARTIAL_PASS_GAPS_PRESERVED",
-    "G13_RUNTIME_AGENT_EMPTY": "TESTED_SUBGATE_SATISFIED_WAITING_COORDINATOR_CONSOLIDATION"
+    "G09_MEMORY_BOUNDARY": "EXECUTING_S1_09",
+    "G13_RUNTIME_AGENT_EMPTY": "TARGETED_SUBGATE_SATISFIED"
   },
   "acquisition": {
-    "Vite": "BLOCKED_NO_LITERAL_DESTINATION",
-    "Supabase": "BLOCKED_NO_LITERAL_DESTINATION",
-    "canonical_motor_commit": "ef0669bbc753861bfc33b86548f3f90c0f3d8df9",
-    "rule": "No motor dispatch until literal DEST_REPO/DEST_BRANCH/DEST_ROOT authority exists."
+    "motor_skill_blob": "b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54",
+    "Vite": "BLOCKED_NO_LITERAL_DEST_REPO_DEST_BRANCH_DEST_ROOT",
+    "Supabase": "BLOCKED_NO_LITERAL_DEST_REPO_DEST_BRANCH_DEST_ROOT",
+    "rule": "Do not dispatch canonical motor until literal destination authority exists."
   },
-  "next_action": "Re-read current coordination after claim release. Consume only a fresh S1 node/claim. Independently poll run 34721174155 as evidence; do not turn its result into G13 failure unless an S1 boundary assertion/import specifically fails.",
-  "closure_rule": "G13 targeted acceptance satisfied; G09/global project remain open until their independent gaps are closed"
+  "next_action": "Implement only runtime/src/memory/** plus test_memory* for read-only context operations and canonical-write rejection; then read-back/test/report."
 }
