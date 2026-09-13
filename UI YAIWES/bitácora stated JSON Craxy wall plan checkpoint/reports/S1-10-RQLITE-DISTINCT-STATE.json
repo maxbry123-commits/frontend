@@ -1,0 +1,46 @@
+{
+  "schema": "yaiwes.role-report.v1",
+  "contract": "tel.workflow/v3",
+  "role": "SOL_GPT1_BACKEND",
+  "node_id": "S1-10-RQLITE-DISTINCT-STATE",
+  "state": "REPORT_GAP",
+  "result": "DISTINCT_CAPABILITY_CONFIRMED_WIRING_BLOCKED_BY_MISSING_RUNTIME_WRITE_SCOPE",
+  "released_at": "2026-09-12T20:30:05-05:00",
+  "source_queue": {
+    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-QUEUE-4SOL-2026-09-12.json",
+    "blob": "2313f8b519efd0d9118a97c59c4572c53382b9b9"
+  },
+  "physical_component": {
+    "path": "UI YAIWES/componentes open soure UI YAIWES/rqlite/",
+    "manifest_blob": "2930e5240833cb2ded737c898ed311de4d89d7e5",
+    "source_repo": "https://github.com/rqlite/rqlite",
+    "source_commit": "4e92305e647b2c93a895b5b5a6c7eab55e9267b1",
+    "source_tree_sha256": "5cb137d63452364d62b7d705921caf9c1fa33e84d1545d68a6a4d4d622dfbb03",
+    "extraction_verified": true,
+    "reconstruction_verified": true,
+    "no_lfs": true
+  },
+  "dedup_crosscheck": {
+    "rqlite_readme_blob": "b2a866df37e22490741bba63600d897c4620ba4b",
+    "rqlite_capability": "fault-tolerant distributed relational database on SQLite; fully replicated HA; dynamic clustering; tunable consistency",
+    "local_ledger_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/ledger.py",
+    "local_ledger_blob": "79ae3da7f20188874ffdc9e5a6b5e9cd3fbc4c83",
+    "local_ledger_capability": "single-filesystem durable hash-chain ledger with process lock, fsync, atomic replace and integrity verification",
+    "recovery_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/recovery/control_plane.py",
+    "recovery_blob": "d3cc4d69b15e754389b88652e6ae07c0ebbf8162",
+    "runtime_storage": "PLACEHOLDER_ONLY",
+    "code_search_rqlite": "NO_RUNTIME_WIRING_FOUND"
+  },
+  "decision": {
+    "duplicate": false,
+    "reason": "Distributed replicated state/HA is not equivalent to local file durability and recovery gates.",
+    "wire_required_if_project_wants_distributed_state": true,
+    "wire_executed": false,
+    "blocker": "S1-10 backlog entry did not provide an exact runtime write_scope; prior S1-09 write_scope is not reused or inferred."
+  },
+  "gaps": [
+    "RQLITE_RUNTIME_WRITE_SCOPE_REQUIRED",
+    "RQLITE_RUNTIME_ADAPTER_AND_TEST_NOT_AUTHORIZED_BY_CURRENT_NODE_SCOPE"
+  ],
+  "next_free_node": "S1-11-LOCAL-FIRST-CHECKPOINT-MEMORY_IF_COORDINATION_TREATS_REPORT_GAP_AS_RELEASED"
+}
