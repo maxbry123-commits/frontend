@@ -1,0 +1,114 @@
+{
+  "schema": "yaiwes.factory.supervisor.reconciliation.v3",
+  "round": "R09",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "project": "FABRICA_UI_YAIWES_ONLY",
+  "policy": "NO_OVERENGINEERING__CONVERGE_EXISTING_CODE_BEFORE_NEW_FEATURES",
+  "observed_head_before_write": "dd92644d9365bdedebac7d28618f385e72bde116",
+  "authority": "fresh source + actual HTML entrypoints + E2E specs + workflow packaging + Actions evidence > producer reports > Crazy Wall seed > architecture/history",
+  "audit_scope": {
+    "source_tree": "Frontend/factory-v0/src including core state/actions, runtime adapters, imports/exports, remote/HF, touch, UI shell/browser and donor adapters",
+    "interface": ["index-v19.html", "index-v192.html"],
+    "tests": ["F-UI-045", "F-UI-046", "F-UI-051", "F-UI-061", "F-AI-019", "F-AI-021", "Playwright config/package scripts"],
+    "architecture": ["FACTORY-CRAZY-WALL-DYNAMIC-V2", "FACTORY-CRAZY-WALL-FRONTEND-QA-V3", "ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES"]
+  },
+  "metrics": {
+    "factory_nodes_total": 63,
+    "producer_or_technical_progress_nodes": 38,
+    "open_nonterminal_nodes": 25,
+    "node_work_progress_percent": 60.3,
+    "node_work_remaining_percent": 39.7,
+    "final_frontend_certification_gate": "0/1__F-UI-063_NOT_RUN",
+    "global_100_pass": false,
+    "metric_warning": "60.3% measures node work/report progress only. It is NOT the percentage of one integrated published product, because current evidence proves entrypoint divergence."
+  },
+  "source_xray": {
+    "positive_wiring": [
+      "Core state/reducer implements step, mode, select/add/move/update/remove, undo/redo, version increment and AI delta state.",
+      "app-v19 binds visible base controls: steps, modes, component insertion, selection/properties, breakpoint, zoom, undo/redo, save version, navigation, sources, models, remote config, exports and output-plan.",
+      "frontend-router-bridge provides real tel.workflow/v3 POST for #send-ai-job when loaded.",
+      "remote-control-v1 provides connect/reconnect/status/cancel readback with secret_ref.",
+      "hf-jobs-panel-v1 provides Run/Status/Logs/Cancel with secret sanitization when loaded.",
+      "layer-reorder-v1, Frappe context menu, resize-snap and xyflow minimap/fit-view have concrete state/UI effects.",
+      "workspace-shell-v1 and component-browser-v1 have concrete desktop/mobile controls and canonical insertion behavior.",
+      "json-roundtrip-v1 imports version-store, destination-roundtrip, enhanced HTML export and remote-control; skill-activation-v1 and touch-dnd-v192 are concrete adapters."
+    ],
+    "critical_gap": {
+      "id": "ENTRYPOINT_DIVERGENCE",
+      "covered_by_existing_node": "F-INT-035",
+      "classification": "INTEGRATION_GAP",
+      "evidence": [
+        "index-v192.html loads json-roundtrip/touch-v192/skill/workspace/component-browser, but does not load frontend-router-bridge, layer-reorder or hf-jobs-panel.",
+        "index-v19.html loads frontend-router-bridge/layer-reorder/remote-control/hf-jobs-panel, but does not load json-roundtrip/touch-v192/skill/workspace/component-browser.",
+        "F-UI-045 and F-UI-046 E2E explicitly test /index-v192.html.",
+        "F-UI-061 live workflow explicitly packages `cp index-v19.html _hf_live/index.html` and publishes/tests that different candidate.",
+        "Therefore producer PASS evidence is lane-valid but does not establish one candidate containing all approved capabilities."
+      ],
+      "minimal_fix": "Use F-INT-035 only: choose one existing entrypoint as canonical, merge the already-present script/css imports without new framework/engine, preserve single state owner app-v19, then run exact integration smoke/readback before downstream QA."
+    },
+    "button_audit": {
+      "status": "NOT_CERTIFIED_GLOBAL",
+      "static_result": "Visible control implementations exist across the two candidates, but no single current candidate exposes all of them.",
+      "exact_matrix_node": "F-UI-051",
+      "latest_run": 34737146887,
+      "latest_job": 103670480746,
+      "latest_result": "FAILURE",
+      "failure_class": "TEST_HARNESS_FAILURE",
+      "harness_defects": [
+        "F-UI-051 test targets /index-v192.html and loops data-step values from 0 although runtime steps are 1..5.",
+        "Breakpoint locator [data-breakpoint=...] is ambiguous because both the button and canvas carry data-breakpoint.",
+        "A corrected matrix run on index-v192 alone would still not cover Router/layer/HF controls that only exist in index-v19."
+      ],
+      "required_order": "Converge F-INT-035 candidate, point F-UI-051 to that candidate, fix harness selectors/indexing only, then run full inventory/effect matrix."
+    },
+    "semantic_gap": {
+      "control": "#run-kernel",
+      "classification": "NON_AUTHORITATIVE_LOCAL_CHECK",
+      "evidence": "app-v19 hardcodes evidence and queue1x1 checks to pass:true; this button may show a local diagnostic but cannot be used as Judge/100% certification.",
+      "handling": "Do not create a new engine. Keep it non-authoritative or wire it to existing real validation only if F-UI-051/F-UI-063 expected-effect testing proves the product requirement demands it."
+    }
+  },
+  "state_corrections": {
+    "F-UI-045": "PASS_PENDING_REVIEW__lane_valid_index_v192__must_revalidate_on_integrated_candidate",
+    "F-UI-046": "PASS_PENDING_REVIEW__lane_valid_index_v192__must_revalidate_on_integrated_candidate",
+    "F-UI-059": "PASS_PENDING_REVIEW__lane_valid_index_v19__must_revalidate_on_integrated_candidate",
+    "F-UI-060": "PASS_PENDING_REVIEW__lane_valid_index_v19__must_revalidate_on_integrated_candidate",
+    "F-UI-061": "TECHNICAL_PASS_AWAITING_PRODUCER_RELEASE__published_index_v19__not_global_closure",
+    "F-UI-051": "GAP_RESOLVABLE__HARNESS_PLUS_TARGET_CONVERGENCE",
+    "F-MOD-033": "CLAIMED_OLD_NO_TERMINAL_REPORT",
+    "F-INT-035": "BLOCKED_BY_F-MOD-033_THEN_GAP_RESOLVABLE_ENTRYPOINT_CONVERGENCE",
+    "F-UI-062": "BLOCKED",
+    "F-UI-063": "BLOCKED__SOLE_FRONTEND_100_GATE"
+  },
+  "orders": {
+    "SOL7": [
+      "Fresh-read and terminalize/release F-MOD-033; do not start unrelated legacy work.",
+      "Then continue its reserved F-UI-047 -> 048 -> 055 -> 056 -> 057 -> 058 lane."
+    ],
+    "NEXT_FREE_FACTORY_WORKER": [
+      "As soon as F-MOD-033 and all F-INT-035 dependencies are terminal, claim F-INT-035.",
+      "Converge index-v19/index-v192 existing imports into one candidate; no rewrite, no new framework, no duplicate state engine.",
+      "Run integration smoke proving workspace/browser + JSON/version/destination/skill/touch + router/layers/HF + existing controls coexist."
+    ],
+    "SOL6": [
+      "Prepare F-UI-051 harness-only correction now, but terminal PASS must be run against the integrated F-INT-035 candidate.",
+      "Use actual step ids 1..5/runtime discovery and scope breakpoint selectors to `.canvas-controls button[data-breakpoint]`.",
+      "Inventory all visible controls including dynamic workspace/browser/version/delivery/layers/remote/HF controls; preserve screenshots/inventory artifacts.",
+      "Then F-UI-052 -> 053 -> 054."
+    ],
+    "SOL8": [
+      "Write producer readback/release for existing F-UI-061 technical PASS only; mark evidence lane-specific to index-v19.",
+      "WAIT_JOIN after release; no new feature."
+    ],
+    "JOIN": [
+      "Reuse final integrated-candidate evidence to reconcile legacy F-INT/F-QA 035-044 instead of duplicating tests.",
+      "F-UI-062 only after 054 + 058 + 061 terminal and integrated candidate exists.",
+      "F-UI-063 only after independent cross-review; only this gate may assert FRONTEND_100."
+    ]
+  },
+  "open_nodes_count": 25,
+  "open_nodes": ["F-OSS-016","F-MOD-033","F-INT-035","F-QA-036","F-QA-037","F-QA-038","F-QA-039","F-QA-040","F-QA-041","F-QA-042","F-QA-043","F-FINAL-044","F-UI-047","F-UI-048","F-UI-051","F-UI-052","F-UI-053","F-UI-054","F-UI-055","F-UI-056","F-UI-057","F-UI-058","F-UI-061","F-UI-062","F-UI-063"],
+  "no_new_feature_nodes_created": true,
+  "closure_rule": "Do not report product 100% from lane PASS, source presence or individual green workflows. One integrated candidate + corrected exhaustive button matrix + live published evidence + independent review + F-UI-063 are mandatory."
+}
