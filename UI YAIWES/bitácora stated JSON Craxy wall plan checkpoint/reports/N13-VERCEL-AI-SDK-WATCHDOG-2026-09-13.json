@@ -1,0 +1,21 @@
+{
+  "schema": "yaiwes.node.report.v1",
+  "contract": "tel.workflow/v3",
+  "chat_id": "WATCHDOG-COMPONENT-CLOSURE",
+  "node_id": "N13-VERCEL-AI-SDK-SOURCE-INTEGRATION",
+  "report_state": "GAP_RESOLVABLE_RELEASED",
+  "source": {
+    "repo": "vercel/ai",
+    "ref": "ai@5.0.257",
+    "commit": "82137ec13283bb0f72d89f192403ab7378194a37",
+    "license": "Apache-2.0",
+    "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vercel_ai_sdk"
+  },
+  "ci": {"run_id": 34734135513, "job_id": 103662336769, "conclusion": "failure", "expected_fail_closed": true},
+  "failure": {"class": "SOURCE_SPECIAL_FILE_GAP", "paths": ["README.md"]},
+  "refutation": "Canonical motor and immutable engine correctly reject upstream symlink/special file. No sanitization, LFS, force, mirror, or motor mutation authorized.",
+  "result": "N13 not closed; source acquisition is released as GAP_RESOLVABLE. Integration cannot be promoted without SOURCE_PRESENT readback.",
+  "owner": null,
+  "state": "GAP_RESOLVABLE",
+  "next_component_node": "N11-BIG-AGI-SOURCE-INTEGRATION"
+}
