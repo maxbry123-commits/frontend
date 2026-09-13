@@ -34,7 +34,8 @@ def _file_ref(value: object) -> FileRef:
         raise ValueError("invalid_file_ref")
     path = _required_text(value["path"], "invalid_file_ref")
     pure = PurePosixPath(path)
-    if pure.is_absolute() or ".." in pure.parts or "\\" in path or "\x00" in path:
+    if (pure.is_absolute() or ".." in pure.parts or "\\" in path
+            or "\x00" in path or ":" in path):
         raise ValueError("unsafe_trace_path")
     digest = _required_text(value["sha256"], "invalid_file_ref")
     symbol = value["symbol"]
