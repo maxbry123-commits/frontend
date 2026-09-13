@@ -1,58 +1,27 @@
 {
-  "checkpoint_id": "UIYAIWES-V5-XRAY-ACTION124-0026",
-  "previous_checkpoint_id": "UIYAIWES-V5-XRAY-ACTION124-0025",
+  "checkpoint_id": "UIYAIWES-N04-RECONCILIATION-2026-09-13T0644Z",
+  "previous_checkpoint_id": "UIYAIWES-V5-XRAY-ACTION124-0026",
   "contract": "tel.workflow/v3",
-  "guide_revision": "v5",
   "mode": "FAIL_CLOSED_LOOP",
-  "status": "ACTIVE_LOOP_POST124_RECOVERY_FORENSIC",
-  "current_node": "P01_POST124_C1_INDEPENDENT_AUDIT",
-  "last_verified_closed": "P01 initial 14-component inventory/provenance baseline (historical; freshness now stale)",
+  "status": "ACTIVE_LOOP_NOT_CLOSED",
   "workflow_owner": "stabilize_core",
-  "live_handoff": "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-MAESTRO-OPERATIVO-UI-YAIWES-V5.md",
-  "head_observed_before_a03": "4ce6cc36daeed86003be4d8d8de7f03061e3ae8f",
-  "a03_queue_integrity": {
-    "status": "PASS_SPECIFICATION_AND_COVERAGE",
-    "source_queue_blob": "f8283c50395a63d5f8d5d3e127d86c2be75a0176",
-    "historical_queue_order_valid": false,
-    "historical_anomaly": "Hypothesis director_index 9 appears after 124",
-    "classification_primary_count": 124,
-    "classification_unique_count": 124,
-    "missing_indices": [],
-    "duplicate_indices": [],
-    "recovery_sort": "director_index ASC",
-    "evidence": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ACTION124-QUEUE-INTEGRITY-V5.json",
-    "historical_queue_preserved": true
+  "current_operational_node": "N04-STATE-RECONCILIATION",
+  "current_operational_authority": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json",
+  "n04_reconciliation": {
+    "chat_id": "SOL GPT <10>",
+    "claim_merge_sha": "e4d860f6d6fed9b744af5d43a63b813a522719a7",
+    "state_commit_sha": "ab0276dae9f09ed0488250772728e16c6184c2a3",
+    "dependencies": {
+      "N02-TRACEABILITY-BIDIRECTIONAL": "VERIFIED_CLOSED",
+      "N03-AUTO-AUDITOR-EVIDENCE": "VERIFIED_CLOSED"
+    },
+    "project_verified_closed": false,
+    "historical_action124_queue_is_current": false,
+    "next_node_selection_rule": "READ CRAZY WALL FRESH; claim only FREE or GAP_RESOLVABLE"
   },
-  "crosscheck_sources": {
-    "memory_wordflow_yaiwes": "AUDITED",
-    "max_system_100x": "AUDITED",
-    "block0_nct": "METHOD_ONLY_DO_NOT_MIX_FUNCTIONAL_ARCHITECTURE",
-    "virtual_computer_yaiwes": "AUDITED_FROM_REPO",
-    "command_center_yaiwes": "AUDITED_FROM_REPO"
+  "historical_checkpoint": {
+    "previous_blob_sha": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
+    "preservation": "Full V5/Action124 checkpoint is preserved by immutable Git blob/history and remains historical evidence only."
   },
-  "refutations": {
-    "r1_124_entries_equals_correct_execution_order": "REFUTED",
-    "r2_hypothesis_physical_presence_equals_action_attempt": "REFUTED",
-    "r3_writer_classification_equals_independent_124_verification": "REFUTED"
-  },
-  "blocked_claims": {
-    "P01_freshness": "BLOCKED_UNTIL_ACTION124_RECOVERY_AND_FULL_POST124_RECONCILIATION",
-    "P05_publication": "BLOCKED_UNTIL_P01_FRESH_OR_EXPLICIT_SAFE_INDEPENDENCE_REVALIDATED",
-    "action124_124_of_124": "FALSE_NO_FINAL_PASS",
-    "pytest_provenance": "BLOCKED_UNTIL_EXACT_PHYSICAL_SNAPSHOT_IDENTIFIED"
-  },
-  "queue_1x1": [
-    "A04 audit C1 complete/no-gap against current destination without redownload",
-    "A05 investigate C2 repair_rc",
-    "A06 resume C3 partial checkpoints",
-    "A07 use provider-specific acquisition for C4",
-    "A08 process C5 ordered by director_index including Hypothesis",
-    "A09 resolve C6 provenance conflicts",
-    "A10 alias/dedup",
-    "A11 writer verify-final always-produced",
-    "A12 independent 124/124 auditor",
-    "A13 refresh P01 closure"
-  ],
-  "recovery_anchor": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/RECOVERY-PATCH.md",
-  "closure_rule": "no VERIFIED_CLOSED without required real evidence and Judge"
+  "closure_rule": "No VERIFIED_CLOSED without current path/blob/SHA + test + run/job/log when applicable + readback; project remains open until downstream E2E/UI Final/Final Judge gates pass."
 }
