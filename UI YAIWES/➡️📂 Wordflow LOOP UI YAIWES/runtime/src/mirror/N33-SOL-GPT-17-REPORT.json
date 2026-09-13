@@ -1,0 +1,33 @@
+{
+  "schema": "tel.workflow/v3",
+  "node_id": "N33-MIRROR-TRANSPORT-CONTROL",
+  "owner": "SOL GPT <17>",
+  "state": "GAP_RESOLVABLE",
+  "fresh_main_sha_at_claim": "575e74e1fe5a9bbd45d916134eff38810c5347a2",
+  "claim_commit_sha": "dab28b6a1f7eab52c2d0f42ef8c296bccb918ddc",
+  "implementation_commit_sha": "f8477f0791b18aa249352085e2eaea910860ec9a",
+  "test_commit_sha": "26ec8170efe5573dcd88e54f18683b3900dc6aa1",
+  "paths": [
+    "runtime/src/mirror/transport.py",
+    "runtime/tests/test_mirror_transport.py"
+  ],
+  "blob_sha": {
+    "transport.py": "a7fb9e9b1584f403215e0976a81a137785fd68a6",
+    "test_mirror_transport.py": "dcb930555164e2f17f04aafd11494b9850062242"
+  },
+  "verify_research": "Existing N33 transport/test bytes were found on fresh main from prior commit fcf59da7bd49fb0cf2706a6ac1fe2567eab2b0d2; reused and patched rather than regenerated.",
+  "execute_delta": "Added literal IP LAN-boundary validation before session creation and before transport effects; preserved allowed display/audio/input/clipboard/control channels and fail-closed disk/RAM/filesystem prohibition.",
+  "test": "Reconstructed exact logic locally: 15/15 PASS. GitHub Actions run 34742833971 for test commit was cancelled by newer concurrent main pushes before authoritative completion.",
+  "run_id": 34742833971,
+  "evidence": [
+    "pairing secret + auth token fail closed",
+    "public peer 8.8.8.8 rejected before session",
+    "display/audio/input/clipboard/control accepted with transport evidence ref",
+    "disk/ram/memory/filesystem/unknown rejected pre-effect",
+    "metadata cannot smuggle disk/RAM sync",
+    "empty transport evidence ref rejected"
+  ],
+  "remaining_gaps": [
+    "authoritative global CI success still required because swarm concurrency cancelled the exact test-commit run"
+  ]
+}
