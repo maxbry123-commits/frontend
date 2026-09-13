@@ -1,0 +1,45 @@
+name: factory-f-ai-019-skills
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-ai-019-skills.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v192.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/skill-activation-v1.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ai-019-skills.spec.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-f-ai-019-skills
+  cancel-in-progress: false
+
+jobs:
+  skill-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Syntax F-AI-019
+        run: |
+          node --check src/skill-activation-v1.js
+          node --check tests/e2e/f-ai-019-skills.spec.mjs
+      - name: F-AI-019 browser gate
+        run: npx playwright test tests/e2e/f-ai-019-skills.spec.mjs --project=chromium-desktop --reporter=line
