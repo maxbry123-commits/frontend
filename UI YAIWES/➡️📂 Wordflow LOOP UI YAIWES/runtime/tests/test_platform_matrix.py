@@ -22,7 +22,18 @@ class PlatformMatrixTests(unittest.TestCase):
         rows = policies()
         self.assertEqual(len(rows), 5)
         self.assertEqual({row.platform for row in rows}, set(Platform))
-        self.assertEqual(len({row.source_anchor for row in rows}), 5)
+
+        anchors = {row.platform: row.source_anchor for row in rows}
+        self.assertTrue(
+            all(anchor.startswith("N02:CAN-") for anchor in anchors.values())
+        )
+        self.assertEqual(anchors[Platform.WEB], "N02:CAN-005")
+        self.assertEqual(anchors[Platform.WINDOWS], "N02:CAN-005")
+        self.assertIn("CAN-005", anchors[Platform.LINUX])
+        self.assertIn("CAN-007", anchors[Platform.LINUX])
+        self.assertIn("CAN-005", anchors[Platform.ANDROID])
+        self.assertIn("CAN-008", anchors[Platform.ANDROID])
+        self.assertEqual(anchors[Platform.IOS], "N02:CAN-005")
 
     def test_missing_probes_fail_closed(self):
         rows = {row.platform: row for row in assess_all(())}
