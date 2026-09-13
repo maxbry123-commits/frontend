@@ -2,6 +2,7 @@ import json
 import sys
 import time
 import unittest
+import warnings
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -55,7 +56,11 @@ class PlatformBenchmarkTests(unittest.TestCase):
             "speedup_ratio": round(ratio, 4),
             "meets_100x": ratio >= 100.0,
         }
-        print("N06_BENCHMARK=" + json.dumps(report, sort_keys=True))
+        payload = "N06_BENCHMARK=" + json.dumps(report, sort_keys=True)
+        print(payload)
+        # Pytest's default capture hides successful-test stdout. Warnings are
+        # included in its summary, making the measured value auditable in CI.
+        warnings.warn(payload, RuntimeWarning, stacklevel=1)
 
         # The test certifies measurement integrity, not a pre-decided 100x claim.
         self.assertEqual(report["meets_100x"], ratio >= 100.0)
