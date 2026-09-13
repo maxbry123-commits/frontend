@@ -1,0 +1,60 @@
+{
+  "schema": "yaiwes.factory.supervisor.reconciliation.v1",
+  "round": "R07",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "project": "FABRICA_UI_YAIWES_ONLY",
+  "policy": "NO_OVERENGINEERING__CLOSE_EXISTING_GATES_BEFORE_NEW_FEATURES",
+  "authority": "fresh Factory commits + claim/evidence files + GitHub Actions/HF artifacts > Crazy Wall seed > historical docs",
+  "confirmed_progress": {
+    "F-ED-001": "PASS_PENDING_REVIEW__producer_released",
+    "F-AI-024": "PASS_PENDING_REVIEW__producer_released",
+    "F-UI-045": "PASS_PENDING_REVIEW",
+    "F-UI-046": "PASS_PENDING_REVIEW",
+    "F-UI-049": "PASS_PENDING_REVIEW",
+    "F-UI-050": "PASS_PENDING_REVIEW",
+    "F-UI-059": "PASS_PENDING_REVIEW",
+    "F-UI-060": "PASS_PENDING_REVIEW",
+    "F-UI-061": {
+      "state": "TECHNICAL_PASS_AWAITING_PRODUCER_RELEASE",
+      "tested_sha": "60c21192381d9d2c66eeb3df61e21f0a06fc546b",
+      "run_id": 34738871893,
+      "job_id": 103675029219,
+      "result": "SUCCESS",
+      "artifact_id": 10312236608,
+      "artifact_digest": "sha256:78a12d9d1bf1b2c8a55a55cca4124619bffc2313ba2be5fed7df894216955d3d"
+    }
+  },
+  "current_blockers": {
+    "SOL6": {
+      "node": "F-UI-051",
+      "state": "GAP_RESOLVABLE",
+      "classification": "TEST_HARNESS_FAILURE",
+      "order": "Correct only the existing harness: actual step ids 1..5 or runtime discovery; breakpoint selector .canvas-controls button[data-breakpoint]; restore inventory/screenshots/failure artifact paths; rerun exact gate. No product mutation unless corrected harness reproduces real expected_effect failure.",
+      "next_after_pass": ["F-UI-052", "F-UI-053", "F-UI-054"]
+    },
+    "SOL7": {
+      "node": "F-MOD-033",
+      "state": "CLAIMED_OLD_NO_TERMINAL_REPORT",
+      "claim_commit": "3af96e40f4c7f5172acbdcb088e7352970f2010b",
+      "order": "Fresh-read current code and claim. Finish/report if work is valid and path-disjoint, otherwise release cleanly. Then switch Factory identity exclusively to F-UI-047.",
+      "next_after_terminal": ["F-UI-047", "F-UI-048", "F-UI-055", "F-UI-056", "F-UI-057", "F-UI-058"],
+      "project_separation": "Generic sol7 Wordflow N* activity is not Factory progress."
+    },
+    "SOL8": {
+      "node": "F-UI-061",
+      "state": "EVIDENCE_GREEN_AWAITING_RELEASE",
+      "order": "Write producer report/release only after readback of run/job/artifact. No new product patch. Then WAIT_JOIN."
+    }
+  },
+  "join_gates": {
+    "F-UI-062": "BLOCKED until F-UI-054 + F-UI-058 + F-UI-061 are terminal PASS_PENDING_REVIEW",
+    "F-UI-063": "BLOCKED until F-UI-062 independent cross-review passes; only gate allowed to claim FRONTEND_100"
+  },
+  "activation": {
+    "now": ["SOL6:F-UI-051", "SOL7:F-MOD-033 terminalization then F-UI-047", "SOL8:F-UI-061 terminalization"],
+    "queued_not_active": ["F-UI-052", "F-UI-053", "F-UI-054", "F-UI-048", "F-UI-055", "F-UI-056", "F-UI-057", "F-UI-058", "F-UI-062", "F-UI-063"],
+    "new_feature_nodes_created": 0
+  },
+  "closure_rule": "Do not add architecture/features while an existing node covers the gap. Producer PASS remains PASS_PENDING_REVIEW until independent review."
+}
