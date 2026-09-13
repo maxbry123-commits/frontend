@@ -114,8 +114,16 @@ if (library && host) {
         }
       }, true);
       card.addEventListener('dragstart', e => {
-        const ghost = card.cloneNode(true); ghost.style.cssText='position:fixed;left:-9999px;top:-9999px;width:180px;opacity:.9';
-        document.body.append(ghost); e.dataTransfer?.setDragImage?.(ghost, 20, 20); setTimeout(() => ghost.remove(), 0);
+        const ghost = card.cloneNode(true);
+        ghost.classList.remove('browser-hidden');
+        ghost.style.cssText='position:fixed;left:-9999px;top:-9999px;width:180px;opacity:.9;pointer-events:none';
+        document.body.append(ghost);
+        card.__yaiwesDragGhost = ghost;
+        e.dataTransfer?.setDragImage?.(ghost, 20, 20);
+      });
+      card.addEventListener('dragend', () => {
+        card.__yaiwesDragGhost?.remove();
+        card.__yaiwesDragGhost = null;
       });
     });
     applyFilters();
