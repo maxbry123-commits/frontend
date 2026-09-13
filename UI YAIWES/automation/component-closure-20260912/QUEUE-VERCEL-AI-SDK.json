@@ -1,0 +1,14 @@
+{
+  "queue": [
+    {
+      "id": "N13:Vercel-AI-SDK",
+      "source_repo": "vercel/ai",
+      "source_ref": "ai@5.0.257",
+      "slug": "vercel_ai_sdk",
+      "dest_repo": "maxbry123-commits/frontend",
+      "dest_branch": "main",
+      "dest_root": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor",
+      "publish": true
+    }
+  ]
+}
