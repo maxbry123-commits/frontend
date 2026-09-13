@@ -16,7 +16,7 @@ permissions:
 
 concurrency:
   group: astra-factory-v19-local-50-cycle
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   candidate-browser-gate:
@@ -26,11 +26,14 @@ jobs:
       run:
         working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
     steps:
-      - name: Checkout exact candidate
+      - name: Checkout exact candidate factory tree
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
           lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
 
       - name: Setup Node
         uses: actions/setup-node@v4
