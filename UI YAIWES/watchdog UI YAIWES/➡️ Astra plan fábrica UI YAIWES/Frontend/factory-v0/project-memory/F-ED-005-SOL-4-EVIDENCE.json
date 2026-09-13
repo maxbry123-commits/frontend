@@ -1,0 +1,17 @@
+{
+  "schema":"yaiwes.factory.sol.node-evidence.v1",
+  "contract":"tel.workflow/v3",
+  "agent_name":"SOL 4 GPT 🆘",
+  "node_id":"F-ED-005",
+  "base_sha":"6e1b73d07e26f67d25fea8a690fadb047371a0c4",
+  "fresh_head_before_report":"2da8ba5991882c99f0a73912b37d92d144f768fa",
+  "state":"PASS_PENDING_REVIEW",
+  "failure_class":"NONE_REPRODUCED_BY_SOURCE_AND_EXISTING_GATE",
+  "verify_research":{"acceptance":"canvas remains visible/stable desktop and mobile","source":"index-v192 contains canvas-stage>#canvas; styles.css gives canvas-pane min-height:0, canvas-stage min-height:0/overflow:auto, canvas min-height:620px desktop and mobile canvas-pane height:58vh min-height:440px with canvas min-height:100%","existing_gate":"factory-v192-local-50-cycle boot asserts #canvas visible each cycle; historical candidate run completed 50/50 desktop before unrelated mobile coordinate precondition failure"},
+  "execute_delta":{"strategy":"REUSE_EXISTING","product_paths_changed":[],"reason":"No product visibility failure reproduced; shared CSS/product mutation would be unjustified while other SOL nodes are active."},
+  "test_report":{"static_microtest":"PASS DOM has exactly one #canvas in candidate entrypoint and CSS supplies nonzero desktop/mobile height","functional_existing_gate":"PASS historical 50/50 desktop canvas boot/visibility on candidate 4f685e1, but does not certify current SHA","runtime_evidence_gap":"fresh exact-SHA browser gate required before VERIFIED_CLOSED","simulations":["desktop grid minmax(0,1fr)->canvas stage stretch->620px minimum canvas","mobile <=760px->canvas-pane 58vh/min440->canvas min-height 100%","breakpoint mobile changes width to 390/max100 without collapsing height"],"refutations":["historical 50/50 cannot certify changed HEAD","CSS presence alone cannot certify browser runtime","mobile touch failure is not reclassified as canvas failure because trace failure occurred at off-viewport synthetic coordinate"]},
+  "goals12_output":{"G01":"PASS","G02":"PASS fresh HEAD","G03":"PASS","G04":"PASS evidence-only scope","G05":"PASS dedup","G06":"PASS reuse","G07":"PASS no unjustified delta","G08":"PASS static microtest","G09":"GAP fresh exact-SHA E2E","G10":"PASS 3 simulations+3 refutations","G11":"PASS evidence persisted/readback pending","G12":"PASS release for review and next free read"},
+  "council12":["objective=canvas visible","requirement=desktop/mobile stable","authority=current source+fresh test precedence","prior=F-ED-005 claimed","owner=SOL4","collision=no product writes","gap=fresh runtime certification","alternatives=CSS patch rejected without failure","strategy=REUSE_EXISTING","tests=static+historical gate","refutations=3","decision=PASS_PENDING_REVIEW"],
+  "remaining_gaps":["fresh exact-SHA desktop/mobile browser gate","independent review"],
+  "review_required":true
+}
