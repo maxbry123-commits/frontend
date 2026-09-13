@@ -39,14 +39,14 @@ LLM sólo se admite de forma acotada en P09 Retrieval, P10 Context Fabric y P19 
 | P11 | SANDBOX_CONTRACT | 🟡 source-only | Firecracker/gVisor/nsjail/bwrap/QEMU/crosvm presentes; `runtime/src/uek` vacío |
 | P12 | WORKER_CONTRACT | 🟡 parcial | Stabilize aporta primitives; adapter YAIWES incompleto |
 | P13 | OUTPUT_SCHEMA | ✅ | LayerResult + Evidence fuerte + verifier |
-| P14 | AUDIT_ENGINE | 🟡 parcial | governance local; falta auditor global 5-pass sobre goals |
+| P14 | AUDIT_ENGINE | 🟡 implementado, integración pendiente | `runtime/src/audit/five_pass.py`; 13/13 tests locales; falta verificador CI conectado e inventario global completo |
 | P15 | CONSOLIDATOR | ❌ GAP | task→phase→project no materializado completo |
 | P16 | ROUTER | 🟡 parcial | registry/plugins existen; Resource/Capability Router global incompleto |
 | P17 | CONTINUOUS_LOOP | 🟡 parcial | runner nodo literal; loop multi-stage autónomo no probado E2E |
 | P18 | RECOVERY | 🟡 TESTED subgate | Stabilize-backed control-plane + SHA256/ledger gate PASS; workspace/multi-host sandbox failover E2E pendiente |
 | P19 | RESOURCE_BRAIN | ❌ GAP | selección dinámica de recursos/capacidades no completa |
 | P20 | GLOBAL_INTEGRATION | 🟡 parcial | OPA/OpenFGA sublane PASS; integration global abierta |
-| P21 | FIVE_PASS_BUILD_AUDITOR | ❌ GAP | cobertura documental existe; motor Python 5-pass falta |
+| P21 | FIVE_PASS_BUILD_AUDITOR | 🟡 motor Python probado localmente | Auditor cinco pasadas existente; cruce inverso exige inventario sin omisiones/duplicados; cobertura global/E2E pendientes |
 | P22 | API | ❌ GAP | `runtime/src/conn` vacío; falta API/control workflow |
 | P23 | UI | downstream | UI sólo después de runtime/API verificados |
 
@@ -89,3 +89,12 @@ Cada tarea = 1 nodo; máximo 3 pasos: `VERIFY_OR_RESEARCH → EXECUTE_AUTHORIZED
 
 `SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED`.
 El proyecto sigue `ACTIVE_LOOP`; no se cierra hasta que G12 y los límites Memory/Agent/Sandbox/Integration/Recovery/Platform tengan evidencia real.
+
+
+## Delta P14/P21 — 2026-09-13
+
+Commit `fc67c45840d3a121323e43179989424272b8f494`: `audit_five_pass` exige igualdad entre rutas de implementación de las trazas y el inventario de artefactos recibido. Rechaza artefactos huérfanos, implementaciones omitidas y duplicados del inventario. Varias exigencias pueden compartir un mismo archivo. El contador de trazas usa una pasada; no constituye benchmark 100x.
+
+13/13 tests locales, con tres fallos reproducidos antes de corregir. CI `34730134580` pendiente al registrar este delta. El callback independiente y la matriz exhaustiva de requisitos siguen pendientes: `TRACEABILITY_PASS` nunca certifica por sí solo el producto. No se introduce otro workflow owner.
+
+Reentrada y tareas por componente: `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-LOOP-CODA-2026-09-13.json`. Guarda claims con SHA/read-back, goals 12/12, Council analítico y refutaciones; watchdog bloqueado por límite 5/5, no activo.
