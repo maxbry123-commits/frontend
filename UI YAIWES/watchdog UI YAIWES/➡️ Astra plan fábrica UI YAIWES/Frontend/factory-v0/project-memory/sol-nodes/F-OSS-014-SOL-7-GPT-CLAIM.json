@@ -3,14 +3,13 @@
   "chat_id":"SOL-7-GPT-2026-09-12T21:46-05:00",
   "agent_name":"SOL 7 GPT 🆘",
   "node_id":"F-OSS-014",
-  "fresh_main_sha":"96032754b79774bad86f3132dde66195e8f54368",
-  "base_sha":"3ac39d3835a8f76b89e65fbebfff211e96789f5c",
-  "write_scope":"NONE — released; available to another Factory SOL chat",
-  "paths":[],
-  "claimed_at":"2026-09-12T21:48:05-05:00",
-  "released_at":"2026-09-13T02:53:00Z",
-  "state":"RELEASED_UNCLAIMED",
-  "release_reason":"User instructed SOL 7 GPT to work only on the node/task assigned to SOL 7 and to release any additional node claimed. No execution delta was made for F-OSS-014.",
-  "execution_delta":"NONE",
-  "next_owner":null
+  "fresh_main_sha":"4146b690ecd2c61f5b6d853e08a2ccefbb8f3523",
+  "base_sha":"4146b690ecd2c61f5b6d853e08a2ccefbb8f3523",
+  "write_scope":"F-OSS-014 only: additive categories/variants evidence derived from fresh local OSS inventory; no runtime source writes; excludes Wordflow N01-N31",
+  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-OSS-014-SOL-7-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-OSS-014-SOL-7-CATEGORIES-VARIANTS.json"],
+  "claimed_at":"2026-09-12T22:03:00-05:00",
+  "state":"CLAIMED",
+  "depends_on_evidence":"F-OSS-013 PASS_PENDING_REVIEW",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "goals12_input":{"G01":"PASS literal categories/variants reusable","G02":"PASS fresh main 4146b690","G03":"PASS Factory queue/state/checkpoint previously read; fresh owner recheck performed","G04":"PASS prior SOL7 claim was RELEASED_UNCLAIMED; unique additive paths","G05":"EXECUTING fresh dedup","G06":"PASS REUSE_EXISTING only","G07":"PENDING","G08":"PENDING structural readback","G09":"N/A evidence node","G10":"PENDING 3 simulations/refutations","G11":"PENDING","G12":"PENDING"}
 }
