@@ -13,7 +13,7 @@ test('published candidate serves exact SHA and Router panel state matrix', async
   expect((await shaResponse.text()).trim()).toBe(expectedSha);
 
   let mode='healthy';
-  await page.route('http://router.test/api/**', async route => {
+  await page.route('https://router.test/api/**', async route => {
     const url=new URL(route.request().url());
     if(url.pathname.endsWith('/connect')) return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({health:'healthy',models:['m1','m2'],active_route:'m2'})});
     if(url.pathname.endsWith('/status')){
@@ -25,7 +25,7 @@ test('published candidate serves exact SHA and Router panel state matrix', async
 
   await page.goto(`${live}/`);
   await expect(page.getByText('YAIWES UI Factory')).toBeVisible();
-  await page.evaluate(()=>localStorage.setItem('yaiwes-factory-config-v13',JSON.stringify({models:[{name:'m1',role:'coder',endpoint:'http://router.test/model',secretRef:'MODEL_TOKEN'}],teamMode:'single',remote:{protocol:'HTTP',url:'http://router.test/api',secretRef:'ROUTER_TOKEN'},skills:[],sources:[],destinations:[],references:[],pages:[],media:[]})));
+  await page.evaluate(()=>localStorage.setItem('yaiwes-factory-config-v13',JSON.stringify({models:[{name:'m1',role:'coder',endpoint:'https://router.test/model',secretRef:'MODEL_TOKEN'}],teamMode:'single',remote:{protocol:'HTTP',url:'https://router.test/api',secretRef:'ROUTER_TOKEN'},skills:[],sources:[],destinations:[],references:[],pages:[],media:[]})));
   await page.reload();
   await page.locator('#steps button[data-step="4"]').click();
   await expect(page.locator('#remote-control-v1')).toBeVisible();
