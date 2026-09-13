@@ -4,7 +4,7 @@
   "chat_id":"FACTORY-SOL-1-GPT",
   "agent_name":"SOL 1 GPT 🆘",
   "node_id":"F-AI-017",
-  "fresh_main_sha":"0ebc619aaed6dbf8e89b0ac9ae93f6c9c6023f12",
+  "fresh_main_sha":"af421b0a6c88d63a9a74aef0b564c179adaab356",
   "base_sha":"0ebc619aaed6dbf8e89b0ac9ae93f6c9c6023f12",
   "write_scope":"F-AI-017 only: add isolated Factory AI router contract + dedicated microtest; do not modify shared app/state/router UI paths owned by other nodes",
   "paths":[
@@ -14,7 +14,18 @@
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-AI-017-FACTORY-SOL-1-GPT-CLAIM.json"
   ],
   "claimed_at":"2026-09-12T23:21:00-05:00",
-  "state":"IN_PROGRESS",
+  "released_at":"2026-09-12T23:24:00-05:00",
+  "state":"PASS_100_RELEASED",
   "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "acceptance":"request->router->response traceable with explicit provider/model, fail-closed unknown provider/model, evidence and fresh readback"
+  "acceptance":"request->router->response traceable with explicit provider/model, fail-closed unknown provider/model, evidence and fresh readback",
+  "product_commits":["5cc987c21353ba7c3c625eebf7c6d8bd6f578f7e","241010253f68d2530233fb43ca18e974bc7da37b"],
+  "test_commits":["3d3b05a114b66b43fc75fd2fc61f174a76989494","da604a45aa6951b09cd7fae18c91e2ef972ab847"],
+  "evidence_commit":"24d84038a92e1b20ade98ce45311ff945cf67095",
+  "tests":"RESULT PASS 4/4",
+  "simulations":3,
+  "refutations":3,
+  "pass_percent":100,
+  "remaining_gaps":[],
+  "review_required":true,
+  "next_free_node":"READ_FRESH_REQUIRED"
 }
