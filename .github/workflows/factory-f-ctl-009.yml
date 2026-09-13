@@ -22,7 +22,14 @@ jobs:
       run:
         working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout exact Factory subtree
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
