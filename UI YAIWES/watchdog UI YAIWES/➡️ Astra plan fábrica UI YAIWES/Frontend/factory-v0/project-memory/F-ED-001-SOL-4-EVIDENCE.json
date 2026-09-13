@@ -1,43 +1,34 @@
 {
-  "schema":"yaiwes.factory.node-evidence.v1",
+  "schema":"yaiwes.factory.node-evidence.v2",
+  "contract":"tel.workflow/v3",
   "node_id":"F-ED-001",
   "agent_name":"SOL 4 GPT 🆘",
+  "state":"PASS_100_PENDING_GLOBAL_REVIEW",
   "base_sha":"b5f01d94b03c10c26efb954c907fe69808d6164c",
-  "claim_commit":"dcaa73978f8bd2a96b01d635606de8f574bc7baf",
-  "delta_commit":"bf9cbec840ff45a059e1679cb545a5f90e2172a3",
-  "step1_verify_research":{
-    "source_run":34732313529,
-    "job_id":103657241958,
-    "candidate_sha":"4f685e1ec129cca0171bdc43fc0f88eb67f502e5",
-    "artifact_id":10309427873,
-    "artifact_digest":"sha256:51207e1276823a4ea62f0666e560f41b1bc452e5a3018ddeaccebf2fd3f04ac4",
-    "trace_failure":"TOUCH_COORDINATE_MISS nodeId=button-* hit=null sx=237 sy=832 box={x:192,y:797.4375,width:220,height:120}",
-    "classification":"TEST_HARNESS_FAILURE",
-    "reason":"failure occurred at elementFromPoint precondition before dispatchSyntheticTouch and before touch-dnd-v192 adapter counters/commit assertions were exercised; therefore the historical run does not prove a product touch failure"
-  },
-  "step2_execute_delta":{
-    "strategy":"PATCH_EXISTING_HARNESS",
-    "product_code_changed":false,
-    "path":"Frontend/factory-v0/tests/e2e/factory-v192-local-50-cycle.spec.mjs",
-    "blob_sha":"454965b823a0593d3d5aa6aa10b0260fac2e99b0",
-    "delta":"scroll real node into viewport, compute synthetic start from visible node/viewport intersection, clamp destination to viewport; retain strict elementFromPoint, adapter event, commit, movement and reload assertions"
-  },
-  "step3_test_report":{
-    "static_readback":"PASS",
-    "runtime_rerun":"PENDING_NO_NEW_FACTORY_ACTION_ASSOCIATED_WITH_DELTA_SHA",
-    "decision":"GAP_PENDING_RUNTIME_RERUN",
-    "simulations":[
-      "S1 partially clipped node: visible intersection yields in-viewport start",
-      "S2 fully visible node: start remains inside real node",
-      "S3 destination near viewport edge: end coordinate is clamped while movement remains non-zero"
-    ],
-    "refutations":[
-      "R1 harness patch does not remove TOUCH_COORDINATE_MISS assertion",
-      "R2 harness patch does not bypass adapter receivedStart/receivedMove/commits assertions",
-      "R3 harness patch does not claim product PASS without a fresh runtime run on the delta SHA"
-    ],
-    "remaining_gaps":["fresh mobile-chromium runtime rerun on bf9cbec840ff45a059e1679cb545a5f90e2172a3 or descendant containing identical blob 454965b823a0593d3d5aa6aa10b0260fac2e99b0","if runtime then reaches PRODUCT_TOUCH_COMMIT_GAP or movement/reload failure, classify PRODUCT_FAILURE and patch touch runtime only with new evidence"]
-  },
-  "council12":["objective=resolve/refute mobile touch miss","requirement=real touch move+persistence","authority=trace over historical state","prior=V1.9.2 global failure","owner=SOL 4 GPT","collision=mobile harness only","gap=synthetic coordinate outside hittable viewport","alternatives=product patch rejected without product evidence","strategy=patch harness minimally","tests=static readback; runtime pending","refutations=3","decision=GAP_PENDING_RUNTIME_RERUN"],
-  "goals12_output":{"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS minimum harness delta","G08":"GAP runtime unavailable/not triggered","G09":"GAP pending fresh Action","G10":"PASS 3 simulations + 3 refutations","G11":"PASS delta commit+blob+readback persisted","G12":"PASS remain on F-ED-001 until runtime discrimination"}
+  "final_tested_sha":"67db47f1c74875eb6f8cfd53fdf8b7d2df28e425",
+  "final_spec_blob":"044c4160b1c73aed48f5563149ad8f3e15393b3d",
+  "historical_failure":{"run_id":34732313529,"job_id":103657241958,"candidate_sha":"4f685e1ec129cca0171bdc43fc0f88eb67f502e5","classification":"TEST_HARNESS_FAILURE","evidence":"TOUCH_COORDINATE_MISS hit=null before product touch adapter received input"},
+  "fresh_failure_analysis":[
+    {"run_id":34737816132,"job_id":103672232009,"classification":"TEST_HARNESS_FAILURE","cause":"mobile boot incorrectly required collapsed right drawer/context-scroll to be visible"},
+    {"run_id":34737882662,"job_id":103672397922,"classification":"TEST_HARNESS_FAILURE","cause":"mobile flow attempted hidden left-library card and ignored current two-step component browser insert flow"},
+    {"run_id":34737977919,"job_id":103672653099,"classification":"MIXED","result":"mobile PASS with touch metrics; desktop old locator.dragTo harness did not initiate HTML5 dragstart"}
+  ],
+  "desktop_dnd_refutation":[
+    {"run_id":34738071618,"job_id":103672915907,"strategy":"Playwright locator.dragTo","result":"dragstart=0 dragover=0 drop=0; product not reached"},
+    {"run_id":34738130269,"job_id":103673081192,"strategy":"physical page.mouse gesture","result":"source draggable=true but dragstart=0; product not reached"},
+    {"run_id":34738237228,"job_id":103673375400,"strategy":"padding start point with elementFromPoint verification","result":"actual BUTTON.component-card hit, pointerEvents=auto, webkitUserDrag=element, still dragstart=0; product not reached"},
+    {"run_id":34738295773,"job_id":103673527397,"strategy":"browser DataTransfer through actual source/canvas handlers","conclusion":"success","result":"dragstart=1 dragover=1 drop=1, text/yaiwes-kind=window, nodeCount=1, canonical localStorage persistence=1"}
+  ],
+  "final_tests":[
+    {"name":"astra-factory-v19-local-50-cycle","run_id":34738369040,"job_id":103673710189,"head_sha":"67db47f1c74875eb6f8cfd53fdf8b7d2df28e425","conclusion":"success","desktop_cycles":"50/50 PASS","playwright":"2 passed, 2 expected cross-project skips"},
+    {"name":"factory-f-ed-001-mobile-rerun","run_id":34738369025,"job_id":103673710042,"head_sha":"67db47f1c74875eb6f8cfd53fdf8b7d2df28e425","conclusion":"success"}
+  ],
+  "touch_metrics":{"receivedStart":2,"receivedMove":19,"commits":1,"hit":{"tag":"ARTICLE","class":"node selected"},"target":{"x":237,"y":542,"viewport":{"width":412,"height":839}},"movement":"PASS","reload_persistence":"PASS","contextual_touch_scroll":"PASS"},
+  "simulations":["mobile node partially/fully visible uses viewport intersection and hit-test before touch","canonical HTML5 add/move handlers exercised with browser DataTransfer and expected MIME","50 repeated desktop edit/control/reload cycles preserve state and controls"],
+  "refutations":["R1 coordinate miss refuted: elementFromPoint hit actual ARTICLE.node and receivedStart=2/receivedMove=19","R2 synthetic-event-only false positive refuted: adapter commits=1 and node position changed","R3 transient-only false positive refuted: moved position survived reload, contextual touch scroll passed, and desktop completed 50/50"],
+  "goals12_output":{"G01":"PASS literal requirement","G02":"PASS fresh HEAD","G03":"PASS queue/state read","G04":"PASS owner/write scope","G05":"PASS dedup and current code","G06":"PASS reuse existing product","G07":"PASS minimal harness deltas only","G08":"PASS specific touch/DnD tests","G09":"PASS full integration gate","G10":"PASS 3 simulations + 3 refutations","G11":"PASS SHA/run/job/log/evidence persisted","G12":"PASS release and fresh-read required"},
+  "pass_percent":100,
+  "remaining_gaps":[],
+  "review_required":true,
+  "global_closure":"NOT_CLAIMED"
 }
