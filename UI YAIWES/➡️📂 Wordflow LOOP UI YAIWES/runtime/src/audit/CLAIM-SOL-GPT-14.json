@@ -1,10 +1,20 @@
 {
   "schema": "tel.workflow/v3",
-  "state": "CLAIMED",
+  "state": "VERIFIED_CLOSED",
   "chat_id": "SOL GPT <14>",
   "node_id": "N03-AUTO-AUDITOR-EVIDENCE",
   "fresh_main_sha": "57cfe486d0d425d0eac838989a5428254696d63e",
   "write_scope": "runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*",
   "claimed_at": "2026-09-13T06:29:33Z",
-  "note": "Atomic in-scope claim marker; authoritative Crazy Wall was GAP_RESOLVABLE on fresh readback."
+  "report_commit_sha": "f201b5d706299a166df47deca9b4fe50d305c50c",
+  "authoritative_run_id": 34739510224,
+  "authoritative_job_id": 103678337638,
+  "tested_head_sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+  "evidence_py_blob": "ef1c9b753a2495f0488962a8e7f1160d1593e75b",
+  "matrix_py_blob": "637b64161f67f6d2f8aaa0280555964385bef6e2",
+  "test_blob": "bc19c1502da720673b92d248f9d8bdaedc0c3cb9",
+  "tests": "trusted CI completed/success; 41 Wordflow passed; 206 runtime passed; 39 subtests passed; 3 refutations PASS",
+  "remaining_gaps": [],
+  "product_global_verified": false,
+  "note": "N03 functional closure only; N30 global product trace residuals remain independent."
 }
