@@ -1,55 +1,123 @@
 {
-  "schema": "yaiwes.factory.supervisor.reconciliation.v1",
+  "schema": "yaiwes.factory.supervisor.reconciliation.v2",
   "round": "R03",
   "contract": "tel.workflow/v3",
   "mode": "FAIL_CLOSED_LOOP",
   "project": "FABRICA_UI_YAIWES_ONLY",
-  "observed_main_sha": "36c33750c51bc643483d4d625600ccbf3b440a7c",
+  "observed_at": "2026-09-12T22:50:50-05:00",
+  "observed_main_sha": "df92caa11b84c7de4eb380c57dafda9a00341124",
   "supervisor": "SOL_GPT_PLAN",
-  "authority": "fresh Factory code+tests+Actions/claim files > Factory Crazy Wall/STATE/CHECKPOINT > historical docs > chat/inference",
+  "authority": "fresh Factory code+tests+Actions/browser evidence > Factory claim/evidence files > Factory Crazy Wall/STATE/CHECKPOINT > historical docs > inference",
   "project_separation_rule": "Wordflow N01-N31 remains excluded from Factory state and supervision writes.",
+  "new_qa_queue": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-FRONTEND-QA-V3-2026-09-12.json",
+  "new_qa_dag": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/FACTORY-FRONTEND-QA-SOL6-8-DAG-V3-2026-09-12.json",
   "fresh_delta_since_r02": [
     {
-      "commit": "36c33750c51bc643483d4d625600ccbf3b440a7c",
-      "node": "F-UI-049",
-      "chat_id": "FACTORY-SOL-8-GPT",
-      "owner": "SOL 8 GPT",
-      "observed_state": "IN_PROGRESS",
-      "classification": "CLAIM_CONTRACT_GAP",
-      "valid_namespace": true,
-      "valid_node_assignment": true,
-      "missing_required_claim_fields": ["fresh_main_sha", "repo", "paths"],
-      "detail": "The claim uses the required Factory namespace and correct reserved node, but does not satisfy the frontend lane claim_fields contract because fresh_main_sha, repo, and exact paths are absent. Treat as fail-closed reservation only; do not promote evidence or accept product writes until corrected/read back against fresh HEAD."
+      "node":"F-UI-045",
+      "chat_id":"FACTORY-SOL-6-GPT",
+      "owner":"SOL 6 GPT",
+      "state":"PASS_PENDING_REVIEW",
+      "tested_sha":"3ac912316841980b62748fd5334a0ef4bdea2e22",
+      "report_commit":"df92caa11b84c7de4eb380c57dafda9a00341124",
+      "run_id":34736422396,
+      "job_id":103668558057,
+      "result":"canvas-first mobile shell, dock/collapse controls, in-drawer touch close, resize/scroll desktop+mobile PASS",
+      "warning":"green run emitted no screenshot/report artifact; new QA queue therefore mandates screenshot artifacts before aggregate frontend closure"
+    },
+    {
+      "node":"F-UI-049",
+      "chat_id":"FACTORY-SOL-8-GPT",
+      "owner":"SOL 8 GPT",
+      "state":"PASS_PENDING_REVIEW",
+      "tested_sha":"1dcbde26608fa6b8d8c40808516ed421958d9f7c",
+      "report_commit":"32ebf0d870074b3ab34fdf363c0732fff1589918",
+      "run_id":34736150743,
+      "job_id":103667839286,
+      "result":"frontend router contract/status boundary PASS without backend core mutation; independent review pending"
+    },
+    {
+      "node":"F-UI-050",
+      "chat_id":"FACTORY-SOL-8-GPT",
+      "owner":"SOL 8 GPT",
+      "state":"CLAIMED",
+      "claim_commit":"41ee81d522d7303578a821085c284b46ac4f8011",
+      "result":"Hugging Face Jobs UI lane active; secret_ref only"
+    },
+    {
+      "node":"F-MOD-033",
+      "owner":"SOL 7 GPT",
+      "state":"CLAIMED",
+      "claim_commit":"3af96e40f4c7f5172acbdcb088e7352970f2010b",
+      "result":"grandfathered already-started composed UI reopen/edit verification; terminate before F-UI-047"
+    },
+    {
+      "node":"F-AI-023",
+      "owner":"FACTORY-SOL-7-GPT",
+      "state":"PASS_PENDING_REVIEW",
+      "report_commit":"8b97dd61096ecb518aa2e879be1b744e745200db",
+      "result":"work is terminal; claim was outside reserved SOL7 frontend chain; do not reopen and do not repeat this lane deviation"
+    },
+    {
+      "front":"EDITOR",
+      "state":"PARTIAL_PASS_PENDING_REVIEW",
+      "producer_pass_nodes":["F-ED-002","F-ED-003","F-ED-004","F-ED-005","F-ED-006","F-UI-045"],
+      "remaining_critical":"F-ED-001 authoritative fresh mobile/touch closure unless superseded by exact later evidence"
+    },
+    {
+      "front":"AI_IMPORT",
+      "state":"ADVANCING",
+      "producer_pass_nodes":["F-AI-019","F-AI-020","F-AI-023"]
+    },
+    {
+      "front":"IO_SAVE_OUTPUT",
+      "state":"ADVANCING",
+      "producer_pass_nodes":["F-IO-027","F-IO-030"]
     }
   ],
-  "collision_audit": {
-    "cross_project": "NO_NEW_FACTORY_WRITE_TO_WORDFLOW_OBSERVED",
-    "one_chat_one_node": "NO_NEW_DUPLICATE_FACTORY_NODE_OBSERVED_IN_THIS_DELTA",
-    "one_path_one_writer": "INCONCLUSIVE_UNTIL_F_UI_049_EXACT_PATHS_ARE_DECLARED"
-  },
   "orders": {
-    "SOL 8 GPT": [
-      "Fresh-read main and R03 before any product write.",
-      "Repair/reissue F-UI-049 claim metadata with chat_id FACTORY-SOL-8-GPT, fresh_main_sha, repo, exact paths array and path-disjoint write_scope.",
-      "Do not touch Wordflow N*; do not persist or expose Hugging Face tokens; secret_ref only.",
-      "After valid readback continue F-UI-049 only; F-UI-050 remains next after producer terminal state."
+    "FACTORY-SOL-6-GPT": [
+      "F-UI-045 is producer PASS_PENDING_REVIEW; do not self-certify VERIFIED_CLOSED.",
+      "Fresh-read and claim F-UI-046 only if FREE and path-disjoint.",
+      "Then follow QA DAG: F-UI-051 desktop button matrix -> F-UI-052 mobile/touch button matrix -> F-UI-053 zero-friction component journey -> F-UI-054 refutation.",
+      "Every visible interactive control requires expected_effect vs actual_effect, state before/after and screenshot artifact; dead/decorative control = GAP."
     ],
-    "SOL 6 GPT": ["F-UI-045 remains first reserved node; fresh-read and claim only with full claim_fields contract."],
-    "SOL 7 GPT": ["Finish only grandfathered F-MOD-033; then F-UI-047 with Factory-scoped namespace and full claim_fields contract."],
-    "SOL 2 GPT": ["Fresh-read F-AI-021/F-AI-022/F-AI-023; preserve producer-closed F-AI-019/F-AI-020."],
-    "SOL 3 GPT": ["Fresh-read unclaimed F-CTL-007/F-CTL-008/F-CTL-010/F-CTL-012; preserve F-CTL-011."],
-    "SOL 4 GPT": ["Remain on F-ED-001 until fresh mobile discrimination; no speculative product patch."],
-    "SOL 5 GPT": ["Do not reopen F-IO-027/F-IO-030; take only fresh path-disjoint Factory FREE node."],
-    "SOL 1 GPT": ["Fresh-read Factory only; no Wordflow state imported as Factory evidence."]
+    "FACTORY-SOL-7-GPT": [
+      "Finish only already-started F-MOD-033; do not claim more legacy F-MOD/F-AI nodes afterward.",
+      "Then F-UI-047 -> F-UI-048.",
+      "Then QA DAG: F-UI-055 command/shortcut matrix -> F-UI-056 accessibility functional matrix -> F-UI-057 published-web navigation -> F-UI-058 visual friction review.",
+      "F-UI-057 WEB_PASS requires published URL, served SHA, console/network audit and screenshots; local-only Playwright is insufficient."
+    ],
+    "FACTORY-SOL-8-GPT": [
+      "Finish F-UI-050 with HF Job run/status/log/cancel-or-complete evidence; token must remain secret_ref and absent from browser/repo/logs.",
+      "Then QA DAG: F-UI-059 Router web revalidation -> F-UI-060 HF Jobs web revalidation -> F-UI-061 full user journey.",
+      "Capture screenshots for router healthy/degraded/error/reconnect and HF Job run/status/log/cancel-or-complete states."
+    ],
+    "JOIN": [
+      "When F-UI-054/F-UI-058/F-UI-061 are terminal, run F-UI-062 cross-review; reviewer must differ from producer.",
+      "Only F-UI-063 may assert FRONTEND 100%: TESTED_SHA==PUBLISHED_SHA, 100% button/control matrix, desktop/mobile/touch/keyboard/live-web/reload/reopen/export, screenshot artifact pack, console errors=0, independent review and 3 simulations+3 refutations. Otherwise GAP."
+    ],
+    "OTHER_FACTORY_WORKERS": [
+      "SOL4 stays on F-ED-001 until fresh mobile discrimination; no speculative patch.",
+      "SOL2/SOL3/SOL5/SOL1 may continue only fresh Factory FREE nodes outside SOL6-8 reserved scopes and must not reopen producer-closed nodes without independent-review purpose."
+    ]
   },
-  "pass_pending_review_hold": ["F-IO-030", "F-AI-019", "F-AI-020", "F-CTL-011", "F-MOD-032", "F-MOD-034", "F-ED-002", "F-ED-003", "F-ED-004", "F-ED-005", "F-ED-006"],
-  "next_supervisor_checks": [
-    "Verify corrected F-UI-049 claim fields and exact paths against fresh HEAD.",
-    "Verify no overlap with any newly active Factory writer before accepting SOL8 writes.",
-    "Verify F-MOD-033 terminal evidence and redirect SOL7 to F-UI-047.",
-    "Verify F-UI-045 claim by FACTORY-SOL-6-GPT.",
-    "Verify fresh F-ED-001 mobile rerun evidence.",
-    "Preserve PASS_PENDING_REVIEW until independent review."
+  "anti_collision": [
+    "Factory identities use FACTORY-SOL-{n}-GPT namespace.",
+    "Never treat Wordflow N01-N31 as Factory progress.",
+    "1 chat=1 active node; 1 path=1 writer; fresh HEAD before claim/write.",
+    "Reconciliation is additive; never overwrite active worker claim evidence."
   ],
-  "closure_rule": "No PASS or VERIFIED_CLOSED from malformed claim metadata, producer-only evidence, workflow green alone, or presence-only evidence."
+  "balance_without_fake_percent": {
+    "confirmed":"Editor, AI/import, IO and router integration have multiple producer PASS nodes with Action evidence.",
+    "not_closed":"Factory remains not 100%: F-ED-001 fresh mobile closure, F-UI-046/047/048/050 primary chain, QA nodes F-UI-051..063, screenshots/live-web evidence and independent reviews remain.",
+    "percentage_policy":"Do not infer global completion percentage from commit count; denominator must be reconciled from current authoritative queues plus newly added F-UI-051..063."
+  },
+  "next_supervisor_checks": [
+    "Verify SOL6 claims F-UI-046 after F-UI-045 producer release.",
+    "Verify SOL7 terminates F-MOD-033 and enters F-UI-047 instead of another legacy node.",
+    "Verify SOL8 produces terminal F-UI-050 evidence and moves to F-UI-059/F-UI-060.",
+    "Verify screenshot artifacts start appearing for QA V3 nodes.",
+    "Verify F-ED-001 fresh mobile/touch result and independent-review queue progress."
+  ],
+  "closure_rule": "No FRONTEND 100% before F-UI-063 aggregate gate; producer-only PASS, green workflow alone, presence-only evidence or local-only test cannot substitute final live-web cross-reviewed closure."
 }
