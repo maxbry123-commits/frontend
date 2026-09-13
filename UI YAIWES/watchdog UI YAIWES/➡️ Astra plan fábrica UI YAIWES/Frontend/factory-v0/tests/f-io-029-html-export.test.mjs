@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+const {serializeFactoryHtml}=await import('../src/html-export-v1.js');
+const state={version:9,components:[{id:'a&1',kind:'button',label:'Guardar <ahora>',x:12,y:34,w:140,h:60},{id:'p2',kind:'panel',label:'Panel',x:200,y:100,w:320,h:240}]};
+const config={theme:{bg:'#101010',text:'#eeeeee',accent:'#7c9cff',radius:18}};
+const html=serializeFactoryHtml(state,config);
+assert.match(html,/<!doctype html>/);
+assert.match(html,/data-yaiwes-version="9"/);
+assert.match(html,/data-id="a&amp;1"/);
+assert.match(html,/Guardar &lt;ahora&gt;/);
+assert.match(html,/left:12px;top:34px;width:140px;height:60px/);
+assert.match(html,/--accent:#7c9cff/);
+assert.equal((html.match(/class="yaiwes-node"/g)||[]).length,2);
+assert.ok(!html.includes('Guardar <ahora>'));
+console.log('F_IO_029_HTML_EXPORT=PASS');
