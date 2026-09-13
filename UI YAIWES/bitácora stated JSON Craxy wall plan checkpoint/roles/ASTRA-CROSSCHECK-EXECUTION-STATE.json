@@ -2,28 +2,29 @@
   "schema": "yaiwes.astra.crosscheck.v1",
   "contract": "tel.workflow/v3",
   "owner": "ASTRA_CROSSCHECK",
-  "node_id": "ASTRA-XRAY-PATH-001",
-  "status": "CLAIMED",
+  "node_id": "ASTRA-XRAY-SCANNER-002",
+  "status": "ACTIVE_LOOP",
   "base_sha": "eea36873646ba0f79fa9ed55a4cd7fd724a5110d",
-  "write_scope": [
-    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/layers/layer_02_xray_documents.py",
-    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/layers/layer_03_xray_code.py",
-    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_xray_regressions.py",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-XRAY-*",
-    "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-ASTRA-SOURCE-AUDIT-17-2026-09-12.md"
-  ],
-  "assertion": "El guard rechaza escapes de ruta lexicales.",
+  "write_scope": [],
+  "assertion": "Valida trazabilidad completa y CI real del auditor sin asumir cierre.",
   "evidence": {
-    "commit": "4a3a0ffe0eecaebb1ecfae904e08f3fd25560fcf",
-    "local": "15 pytest passed + 8 boundary assertions",
-    "ci_run": 34707983948,
-    "ci_status": "IN_PROGRESS",
-    "readback": true
+    "patch": "342d9c25aee96793f8566194c327c5b9d8ae561e",
+    "ci_run": 34711848316,
+    "ci_status": "cancelled",
+    "pure_regressions_20260913": "4 PASS",
+    "historical_local_suite": "19 PASS, previous turn"
   },
   "audit_status": "INCOMPLETE",
-  "watchdog_id": "6aa475753a40819197771ad1661a8ba0",
-  "current_node": "ASTRA-XRAY-SCANNER-002",
-  "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-XRAY-DELTA-2026-09-12.json",
-  "remaining": "Full 4+4 source audit, G12 matrix, additional document identity, shared consolidation.",
-  "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963"
+  "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
+  "current_node": "X17-11",
+  "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-XRAY-GAP-NODES-17-2026-09-12.json",
+  "remaining": [
+    "Mapeo semántico de candidatos",
+    "E2E 85 capacidades con propietarios",
+    "Integraciones Sol y evidencia por componente",
+    "Benchmark real 100x",
+    "Consolidación shared STATE/CHECKPOINT por Orquestador"
+  ],
+  "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
+  "updated_at_utc": "2026-09-13"
 }

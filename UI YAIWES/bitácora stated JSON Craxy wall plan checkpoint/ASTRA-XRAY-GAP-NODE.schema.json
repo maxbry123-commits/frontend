@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "YAIWES audited GAP node",
+  "type": "object",
+  "required": [
+    "node_id",
+    "assertion_to_validate",
+    "status",
+    "owner",
+    "evidence",
+    "steps"
+  ],
+  "properties": {
+    "node_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assertion_to_validate": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "GAP_SOURCE_EMPTY",
+        "TESTED_SUBGATE_PASS",
+        "OWNER_PENDING",
+        "OWNER_EXECUTING",
+        "CONTRACT_RECONCILIATION",
+        "PRODUCT_E2E_PENDING",
+        "CI_PENDING",
+        "BENCHMARK_PENDING"
+      ]
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,446 @@
+{
+  "code_base_sha": "eea36873646ba0f79fa9ed55a4cd7fd724a5110d",
+  "contract": "tel.workflow/v3",
+  "execution_rule": "Releer estado y claim exacto antes de escribir; sólo write_scope propio. Integrar por Fables/Universal Plugin Socket. No nuevos orquestadores ni motores alternativos.",
+  "nodes": [
+    {
+      "assertion_to_validate": "El documento Recovery Plan2 contiene información utilizable.",
+      "evidence": {
+        "bytes": 1,
+        "source_sha": "8b137891791fe96927ad78e64b0aad7bded08bdc"
+      },
+      "node_id": "X17-01",
+      "owner": "SOL_ORQUESTADOR",
+      "status": "GAP_SOURCE_EMPTY",
+      "steps": [
+        "VERIFY_RESEARCH: releer fuente/HEAD/owner y deduplicar capacidad",
+        "Registrar fuente vacía; localizar versión íntegra en historia sin inventar contenido.",
+        "TEST_REPORT: prueba real + SHA/run + readback; no promover presencia"
+      ]
+    },
+    {
+      "assertion_to_validate": "El auditor no promueve documentos vacíos a PASS.",
+      "evidence": {
+        "commit": "342d9c25aee96793f8566194c327c5b9d8ae561e",
+        "test": "test_blank_and_invalid_documents_cannot_pass; test_mixed_documents_preserve_valid_evidence_and_gap"
+      },
+      "node_id": "X17-02",
+      "owner": "ASTRA_CROSSCHECK",
+      "status": "TESTED_SUBGATE_PASS",
+      "steps": [
+        "VERIFY_RESEARCH: releer fuente/HEAD/owner y deduplicar capacidad",
+        "PATCH publicado; conservar caso de regresión.",
+        "TEST_REPORT: prueba real + SHA/run + readback; no promover presencia"
+      ]
+    },
+    {
+      "assertion_to_validate": "El inventario AST detecta cuerpos pass/ellipsis/docstring sin implementación.",
+      "evidence": {
+        "commit": "342d9c25aee96793f8566194c327c5b9d8ae561e",
+        "test": "test_stub_inventory_includes_async_docstrings_and_ellipsis"
+      },
+      "node_id": "X17-03",
+      "owner": "ASTRA_CROSSCHECK",
+      "status": "TESTED_SUBGATE_PASS",
+      "steps": [
+        "VERIFY_RESEARCH: releer fuente/HEAD/owner y deduplicar capacidad",
+        "PATCH publicado; un stub no implica GAP si es interfaz abstracta intencional.",
+        "TEST_REPORT: prueba real + SHA/run + readback; no promover presencia"
+      ]
+    },
+    {
+      "assertion_to_validate": "La frontera Memory↔Agent separa ámbitos y bloquea escritura canónica directa del LLM.",
+      "evidence": {
+        "runtime": "runtime/src/agent/.gitkeep; adapters/README.md",
+        "sections": [
+          "09",
+          "13",
+          "15"
+        ],
+        "source": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/CCEE_Wordflow_YAIWES_arquitectura_1a1_estrategia_programacion.md"
+      },
+      "node_id": "X17-04",
+      "owner": "SOL_GPT1",
+      "status": "OWNER_PENDING",
+      "steps": [
+        "VERIFY_RESEARCH: releer fuente/HEAD/owner y deduplicar capacidad",
+        "S1-09: ADAPT Stabilize LLMTask/AgentLoopTask/ToolRegistry; definir MemoryAdapter con contrato fuente, demostrar aislamiento.",
+        "TEST_REPORT: prueba real + SHA/run + readback; no promover presencia"
+      ]
+    },
+    {
+      "assertion_to_validate": "IntegrationState aplica StateDelta sólo tras validación y bloquea cierre con conflictos.",
+      "evidence": {
+        "lines": [
+          230,
+          416,
+          474
+        ],
+        "runtime": "runtime/src/integration/README.md; no implementación Python en esta carpeta",
+        "source": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md"
+      },
+      "node_id": "X17-05",
+      "owner": "SOL_GPT3",
+      "status": "OWNER_PENDING",
+      "steps": [
+        "VERIFY_RESEARCH: releer fuente/HEAD/owner y deduplicar capacidad",
+        "S3-10: REUSE Fables+Pydantic+rule-engine; cablear frontera StateDelta y probar rechazo/conflicto/E2E.",
+        "TEST_REPORT: prueba real + SHA/run + readback; no promover presencia"
+      ]
+    },
+    {
+      "assertion_to_validate": "UEK y selección de VM respetan capacidades reales del host.",
+      "evidence": {
+        "runtime": "runtime/src/uek/.gitkeep",
+        "source": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR Q grock tiene ventanas agente  linux iOS Android phyton 🤯🤯🤯🎯 14 objetivos💡💡💡✅✅✅🎯🎯🎯.md"
+      },
+      "node_id": "X17-06",
+      "owner": "SOL_GPT2",
+      "status": "OWNER_PENDING",
+      "steps": [
+        "VERIFY_RESEARCH: releer fuente/HEAD/owner y deduplicar capacidad",
+        "S2-08: ADAPT router de capacidades; probar matriz host; guest boot separado, sin PASS iOS/AVF sin hardware.",
+        "TEST_REPORT: prueba real + SHA/run + readback; no promover presencia"
+      ]
+    },
+    {
+      "assertion_to_validate": "Recovery restaura workspace/memory/artefactos tras caída real.",
+      "evidence": {
+        "lines": [
+          600,
+          613,
+          646
+        ],
+        "queue": "O-02 EXECUTING",
+        "runtime": "runtime/src/recovery/.gitkeep",
+        "source": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌MAX-SYSTEM-100X-FINAL-1.md"
+      },
+      "node_id": "X17-07",
+      "owner": "SOL_ORQUESTADOR",
+      "status": "OWNER_EXECUTING",
+      "steps": [
+        "VERIFY_RESEARCH: releer fuente/HEAD/owner y deduplicar capacidad",
+        "O-02: REUSE Stabilize recovery/ledger; demostrar restauración y failover, no sólo replay de ledger.",
+        "TEST_REPORT: prueba real + SHA/run + readback; no promover presencia"
+      ]
+    },
+    {
+      "assertion_to_validate": "OpenTelemetry dispone de factory y prueba antes de activarse.",
+      "evidence": {
+        "observed": "catalogado pero ausente de _ALLOWED_RUNTIME_ACTIVATIONS",
+        "runtime": "runtime/src/plugins/catalog.py + activation.py"
+      },
+      "node_id": "X17-08",
+      "owner": "SOL_GPT2",
+      "status": "OWNER_PENDING",
+      "steps": [
+        "VERIFY_RESEARCH: releer fuente/HEAD/owner y deduplicar capacidad",
+        "S2-09: implementar adapter/factory mínimo y test de correlación; no ampliar allowlist antes de prueba.",
+        "TEST_REPORT: prueba real + SHA/run + readback; no promover presencia"
+      ]
+    },
+    {
+      "assertion_to_validate": "El contrato conserva un único owner workflow pese a alternativas de los documentos.",
+      "evidence": {
+        "runtime": "registry.py stabilize_core workflow_owner=True",
+        "sources": [
+          {
+            "id": 1,
+            "lines": [
+              834,
+              838
+            ]
+          },
+          {
+            "id": 7,
+            "lines": [
+              212,
+              290,
+              443
+            ]
+          }
+        ]
+      },
+      "node_id": "X17-09",
+      "owner": "SOL_ORQUESTADOR",
+      "status": "CONTRACT_RECONCILIATION",
+      "steps": [
+        "VERIFY_RESEARCH: releer fuente/HEAD/owner y deduplicar capacidad",
+        "Mantener Stabilize owner actual; documentar Hatchet y demás como alternativas/donantes salvo cambio explícito de arquitectura.",
+        "TEST_REPORT: prueba real + SHA/run + readback; no promover presencia"
+      ]
+    },
+    {
+      "assertion_to_validate": "Cada una de las 85 capacidades del chat tiene prueba visible y backend cuando corresponda.",
+      "evidence": {
+        "features": 85,
+        "source": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻➡️TAREA comand Center Fase 1 2 3 de deepseck 🗂️📂✅✅✅✅✅✅✅✅✅✅✅✅✅✅.md",
+        "source_sha": "65b82b959986b9c174a68cf3a62fbb619280cd36"
+      },
+      "node_id": "X17-10",
+      "owner": "SOL_ORQUESTADOR",
+      "status": "PRODUCT_E2E_PENDING",
+      "steps": [
+        "VERIFY_RESEARCH: releer fuente/HEAD/owner y deduplicar capacidad",
+        "Asignar CHAT-001..085 al owner frontend/backend correcto con URL y E2E; no mapear éxito Factory a todo el chat.",
+        "TEST_REPORT: prueba real + SHA/run + readback; no promover presencia"
+      ]
+    },
+    {
+      "assertion_to_validate": "El CI actual prueba el cambio completo y termina con conclusión verificable.",
+      "evidence": {
+        "current_run": 34711848316,
+        "previous_conclusion": "cancelled",
+        "previous_run": 34707983948,
+        "current_conclusion": "cancelled"
+      },
+      "node_id": "X17-11",
+      "owner": "ASTRA_CROSSCHECK",
+      "status": "CI_PENDING",
+      "steps": [
+        "VERIFY_RESEARCH: releer fuente/HEAD/owner y deduplicar capacidad",
+        "Revisar run/job/log; mantener pendiente si se cancela o bloquea runtime; nunca inventar PASS.",
+        "TEST_REPORT: prueba real + SHA/run + readback; no promover presencia"
+      ]
+    },
+    {
+      "assertion_to_validate": "Cada mejora 100x tiene baseline y candidato comparables.",
+      "evidence": {
+        "section": "6 Benchmarks esperados; expectativas no medidas del proyecto",
+        "source": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌MAVIS-PARALLEL-100X.md"
+      },
+      "node_id": "X17-12",
+      "owner": "SOL_ORQUESTADOR",
+      "status": "BENCHMARK_PENDING",
+      "steps": [
+        "VERIFY_RESEARCH: releer fuente/HEAD/owner y deduplicar capacidad",
+        "Registrar throughput/p95/memoria/coste con fixture idéntico; reportar ratio medido por nodo.",
+        "TEST_REPORT: prueba real + SHA/run + readback; no promover presencia"
+      ]
+    }
+  ],
+  "patch_commit": "342d9c25aee96793f8566194c327c5b9d8ae561e",
+  "pending": [
+    "Mapeo semántico de candidatos",
+    "E2E 85 capacidades con propietarios",
+    "Integraciones Sol y evidencia por componente",
+    "Benchmark real 100x",
+    "Consolidación shared STATE/CHECKPOINT por Orquestador"
+  ],
+  "refutations": [
+    "659 coincidencias textuales NO equivalen a requisitos confirmados ni cobertura G12.",
+    "19 tests locales NO prueban runtime completo; CI anterior cancelado.",
+    "100x es objetivo: no existe benchmark comparativo que lo confirme."
+  ],
+  "schema": "yaiwes.gap-nodes.v1",
+  "simulations": [
+    "Documento vacío antes PASS, después INCONCLUSIVE.",
+    "Función pass/ellipsis antes no detectada, después inventariada.",
+    "Documento válido+vacío conserva evidencia válida y GAP; código válido+syntax error permanece INCONCLUSIVE."
+  ],
+  "sol_orders": [
+    {
+      "blob_sha": "3ea6817e23ca4b5b99780c81c7c737725f700284",
+      "capacity": "AgentLoopTask + Memory boundary",
+      "decision": "REUSE_ADAPT_EXISTING",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/",
+      "name": "Stabilize",
+      "owner": "SOL_GPT1",
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/llm/tasks.py",
+      "provenance_limit": "Blob del proyecto/catálogo, no SHA upstream; validar licencia y upstream lock antes de copiar. No se descargó ni se activó este componente en esta auditoría.",
+      "url": "https://github.com/rodmena-limited/stabilize"
+    },
+    {
+      "blob_sha": "637ac2086b80925f377f19cd4e74ea4d92f88f0c",
+      "capacity": "StateDelta validation",
+      "decision": "REUSE_ADAPT_EXISTING",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/",
+      "name": "Pydantic",
+      "owner": "SOL_GPT3",
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/pydantic_adapter/factory.py",
+      "provenance_limit": "Blob del proyecto/catálogo, no SHA upstream; validar licencia y upstream lock antes de copiar. No se descargó ni se activó este componente en esta auditoría.",
+      "url": "https://github.com/pydantic/pydantic"
+    },
+    {
+      "blob_sha": "02495b6993bf3fe9741176d4f0bcd39477d15447",
+      "capacity": "Final Judge deterministic rules",
+      "decision": "REUSE_ADAPT_EXISTING",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/",
+      "name": "rule-engine",
+      "owner": "SOL_GPT3",
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/rule_engine_adapter/factory.py",
+      "provenance_limit": "Blob del proyecto/catálogo, no SHA upstream; validar licencia y upstream lock antes de copiar. No se descargó ni se activó este componente en esta auditoría.",
+      "url": "https://github.com/zeroSteiner/rule-engine"
+    },
+    {
+      "blob_sha": "5299d6c849a8cf68ca6bf4ced5ca7323b4621dd7",
+      "capacity": "traces/metrics correlation; adapter missing",
+      "decision": "REUSE_ADAPT_EXISTING",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/telemetry/",
+      "name": "OpenTelemetry Python",
+      "owner": "SOL_GPT2",
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/catalog.py",
+      "provenance_limit": "Blob del proyecto/catálogo, no SHA upstream; validar licencia y upstream lock antes de copiar. No se descargó ni se activó este componente en esta auditoría.",
+      "url": "https://github.com/open-telemetry/opentelemetry-python"
+    },
+    {
+      "blob_sha": "8e50efb224f0af70631ce7e4336214f06ea84794",
+      "capacity": "MCP/API remote boundary",
+      "decision": "REUSE_ADAPT_EXISTING",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/",
+      "name": "HTTPX",
+      "owner": "SOL_GPT3",
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/httpx_adapter/factory.py",
+      "provenance_limit": "Blob del proyecto/catálogo, no SHA upstream; validar licencia y upstream lock antes de copiar. No se descargó ni se activó este componente en esta auditoría.",
+      "url": "https://github.com/encode/httpx"
+    },
+    {
+      "blob_sha": "9a26cb6774857ccab60787b9d3e6d22910aa27ad",
+      "capacity": "ASGI integration after business contract",
+      "decision": "REUSE_ADAPT_EXISTING",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/",
+      "name": "Starlette",
+      "owner": "SOL_GPT3",
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/starlette_adapter/factory.py",
+      "provenance_limit": "Blob del proyecto/catálogo, no SHA upstream; validar licencia y upstream lock antes de copiar. No se descargó ni se activó este componente en esta auditoría.",
+      "url": "https://github.com/encode/starlette"
+    },
+    {
+      "blob_sha": "2a77bfc1e2a9473977db9ecd06f8adc8f7ebcfa8",
+      "capacity": "workspace restoration beyond local ledger",
+      "decision": "REUSE_ADAPT_EXISTING",
+      "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/recovery/",
+      "name": "Stabilize recovery",
+      "owner": "SOL_ORQUESTADOR",
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/recovery.py",
+      "provenance_limit": "Blob del proyecto/catálogo, no SHA upstream; validar licencia y upstream lock antes de copiar. No se descargó ni se activó este componente en esta auditoría.",
+      "url": "https://github.com/rodmena-limited/stabilize"
+    }
+  ],
+  "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
+  "source_manifest": [
+    {
+      "bytes": 25568,
+      "id": 1,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/AUDITORIA_XRAY_6_PASADAS_STABILIZE_CORE_WORDflow_CHAT.md",
+      "sha": "33018196dd758ed495d65702e7555d3caa1958bd"
+    },
+    {
+      "bytes": 57876,
+      "id": 2,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/CCEE_Wordflow_YAIWES_arquitectura_1a1_estrategia_programacion.md",
+      "sha": "0d19420d1e81dde4f9290dde24e42a5793fad86e"
+    },
+    {
+      "bytes": 261,
+      "id": 3,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/README.md",
+      "sha": "e2a893786094cb7a39844795706840ad7549b6d4"
+    },
+    {
+      "bytes": 38200,
+      "id": 4,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/👨‍💻📌 code de Kimi k code para que la ui corra en Android de YAIWES_Runtime_MVP_Documento_Tecnico.md",
+      "sha": "d3479a4ebfca0c0cf7d714e0df8bf56b2a9532bc"
+    },
+    {
+      "bytes": 59882,
+      "id": 5,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/👨‍💻📌diseño para la ui en multi dispositivo MVP para YAIWES solo el código y el ui code de fromted se descarga como el de antropy.md",
+      "sha": "bb7d0f314637fff23049eef38d22bb539e831e09"
+    },
+    {
+      "bytes": 57079,
+      "id": 6,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌MAVIS-PARALLEL-100X.md",
+      "sha": "95cad7b996782f95b2f5b4a6c253224046eaec6f"
+    },
+    {
+      "bytes": 43453,
+      "id": 7,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌MAX-SYSTEM-100X-FINAL-1.md",
+      "sha": "b9bc9a7f56cf17607b863829213f7bcb0f8b8081"
+    },
+    {
+      "bytes": 1,
+      "id": 8,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌🎯📂 como hacer con gpt las descargas manual con el code y el disparador de los repos en github RECOVERY_PATCH_PLAN2_FINAL.md",
+      "sha": "8b137891791fe96927ad78e64b0aad7bded08bdc"
+    },
+    {
+      "bytes": 303451,
+      "id": 9,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR Q grock tiene ventanas agente  linux iOS Android phyton 🤯🤯🤯🎯 14 objetivos💡💡💡✅✅✅🎯🎯🎯.md",
+      "sha": "ecc8b3b1444ade0ca894789e149e881a08b999c0"
+    },
+    {
+      "bytes": 29244,
+      "id": 10,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻Ai dentro del la ui y Sistema de voz del agente ok.md",
+      "sha": "ff80517dd99554b844893e984b08b3a62bb7a01c"
+    },
+    {
+      "bytes": 57391,
+      "id": 11,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻Cómo integrar el agente MAXBRY YAIWES AGENTE TEAM a la ui y como descargarlo independiente.md",
+      "sha": "1e0ce62a291a1e409277f6177563c0a70c0ca42c"
+    },
+    {
+      "bytes": 17875,
+      "id": 12,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻Mejoras de la ui coneccion de almacenamiento y WhatsApp Gmail y telegram.md",
+      "sha": "eb416eed7493543bcb6008469fe94b23fdcb8f9b"
+    },
+    {
+      "bytes": 8558,
+      "id": 13,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻UI agente YAIWES. TEAM embebido parcial mantenimiento el código fuente del agente en secreto del agente team.md",
+      "sha": "74707b499287de9e47e2da95cfd4cab406c12b33"
+    },
+    {
+      "bytes": 29948,
+      "id": 14,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻sistema de navegador web para la UI INTERFACE Y EL AGENTE YAIWES.md",
+      "sha": "94f43f446a40cdf6eca3856a6e6446ce4133a455"
+    },
+    {
+      "bytes": 13660,
+      "id": 15,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻➡️TAREA comand Center Fase 1 2 3 de deepseck 🗂️📂✅✅✅✅✅✅✅✅✅✅✅✅✅✅.md",
+      "sha": "65b82b959986b9c174a68cf3a62fbb619280cd36"
+    },
+    {
+      "bytes": 245097,
+      "id": 16,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md",
+      "sha": "da109ae2d91e4563c01492ad365bbaa00fc6baa6"
+    },
+    {
+      "bytes": 25417,
+      "id": 17,
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🦐🦞🦞🦞🦞para que Claude prepare la ruta para que Open claw lo construya un UI para que los agentes usen mi móvil como procesador de computo.md",
+      "sha": "56a462b098fa0ca84a9fa47fb7da91ccd3eb712b"
+    }
+  ],
+  "status": "ACTIVE_LOOP",
+  "summary": {
+    "automated_code_passes": 4,
+    "automated_document_passes": 4,
+    "chat_features": 85,
+    "closed_project": false,
+    "documents": 17,
+    "global_runtime_coverage": null,
+    "python_files": 60,
+    "requirement_candidates": 659,
+    "tests_local": 19,
+    "verified_source_blobs": 17,
+    "tests_note": "19 tests on prior turn; four pure regression functions rechecked 2026-09-13, full pytest unavailable in current environment"
+  },
+  "watchdog": {
+    "id": "6aa6045af0748191b9560f6ffbad09e8",
+    "enabled": true,
+    "cadence": "hourly",
+    "source_scope_updated": true
+  },
+  "updated_at_utc": "2026-09-13"
+}
