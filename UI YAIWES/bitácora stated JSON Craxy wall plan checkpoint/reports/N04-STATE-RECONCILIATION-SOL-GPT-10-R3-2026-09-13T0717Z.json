@@ -1,0 +1,41 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N04-STATE-RECONCILIATION",
+  "chat_id": "SOL GPT <10>",
+  "state": "VERIFIED_CLOSED",
+  "reported_at": "2026-09-13T07:17:30Z",
+  "pass_percent": 100,
+  "claim_commit_sha": "f69b7a1aac506285496d88a11cfae01ad367f842",
+  "central_reconcile_commit": "23777501cb4a36695d5d9e5afb467837ef9574de",
+  "crazy_wall_blob_sha": "a1042e93592af31124239730dd199d18613c22ea",
+  "run_id": 34744788246,
+  "job_id": 103690581688,
+  "run_conclusion": "success",
+  "paths": [
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CHECKPOINT.json",
+    "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-DYNAMIC-NODES-UI-YAIWES-V8-2026-09-12.md"
+  ],
+  "commits": {
+    "state": "981b2691137f2a155129be82902ea81582b4f553",
+    "checkpoint": "66d8f052b7132dc41f3508235eeb1bbc28515d6d",
+    "handoff": "af7ae1118274c889ca0a76a4fb279020fbaadff3"
+  },
+  "evidence": [
+    "Crazy Wall N04 row read back VERIFIED_CLOSED from blob a1042e93592af31124239730dd199d18613c22ea",
+    "STATE and CHECKPOINT reference the same Crazy Wall blob and central reconcile commit",
+    "Handoff records the same node states and preserves project ACTIVE_LOOP_NOT_CLOSED",
+    "one-shot reconciliation run 34744788246 job 103690581688 completed success",
+    "N16/N26/N28/N33 were promoted only from independently verified exact-blob/trusted-CI evidence",
+    "N17/N27 were unlocked only by dependency predicates",
+    "historical STATE/CHECKPOINT/Handoff blobs remain preserved by Git history"
+  ],
+  "three_refutations": {
+    "schema_complete": "PASS",
+    "remaining_real_gap": "PASS_NONE",
+    "evidence_demonstrates_100_pass": "PASS"
+  },
+  "remaining_gaps": [],
+  "next_free_node": "READ_FRESH_REQUIRED"
+}
