@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <16>",
+  "node_id": "N34-FOUR-SOURCE-DENOMINATOR",
+  "fresh_main_sha": "46a013e8a735003b3b9908a790cb5e17946e0ddb",
+  "write_scope": "audit/coverage/reports only; no product implementation code",
+  "claimed_at": "2026-09-13T07:06:00Z",
+  "strategy": "VERIFY four functional sources -> dedup against N01/N02/N30 -> publish exact denominator delta; no product code mutation"
+}
