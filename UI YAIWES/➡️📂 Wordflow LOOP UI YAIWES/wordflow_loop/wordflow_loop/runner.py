@@ -92,7 +92,11 @@ class LayerRunner:
     ) -> LayerResult:
         payload = payload or {}
         self._refresh_from_disk()
-        pre_errors = sheriff.check(node) + validator.check(node, self.completed_nodes)
+        pre_errors = (
+            sheriff.check(node)
+            + validator.check(node, self.completed_nodes)
+            + supervisor.check_before_effects(node, payload)
+        )
         if pre_errors:
             result = LayerResult(
                 node_id=node.node_id,
