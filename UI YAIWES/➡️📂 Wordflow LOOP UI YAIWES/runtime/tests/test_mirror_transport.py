@@ -22,13 +22,14 @@ class FakeTransport:
 
 
 def paired():
-    expected = Pairing("peer-1", digest("pair-secret"), digest("auth-secret"))
+    expected = Pairing("peer-1", digest("pair-secret"), digest("auth-secret"), peer_host="192.168.10.8")
     return pair(peer_id="peer-1", pairing_secret="pair-secret", auth_token="auth-secret", expected=expected)
 
 
 def test_pairing_auth_and_lan_first_session():
     session = paired()
     assert session.peer_id == "peer-1"
+    assert session.peer_host == "192.168.10.8"
     assert session.lan_only is True
     assert len(session.session_id) == 24
 
@@ -38,6 +39,19 @@ def test_pairing_fails_closed_before_session(secret, token):
     expected = Pairing("peer-1", digest("pair-secret"), digest("auth-secret"))
     with pytest.raises(PermissionError):
         pair(peer_id="peer-1", pairing_secret=secret, auth_token=token, expected=expected)
+
+
+def test_public_peer_is_rejected_before_session():
+    expected = Pairing(
+        "peer-1", digest("pair-secret"), digest("auth-secret"), peer_host="8.8.8.8"
+    )
+    with pytest.raises(PermissionError, match="outside the LAN"):
+        pair(
+            peer_id="peer-1",
+            pairing_secret="pair-secret",
+            auth_token="auth-secret",
+            expected=expected,
+        )
 
 
 @pytest.mark.parametrize("channel", ["display", "audio", "input", "clipboard", "control"])
