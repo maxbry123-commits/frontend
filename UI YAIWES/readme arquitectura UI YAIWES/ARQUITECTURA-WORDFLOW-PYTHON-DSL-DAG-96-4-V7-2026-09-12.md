@@ -33,8 +33,8 @@ LLM sólo se admite de forma acotada en P09 Retrieval, P10 Context Fabric y P19 
 | P05 | STATE_MACHINE | ✅ base | `LayerRunner` + fail-closed + dependency/replay |
 | P06 | CHECKPOINT_ENGINE | 🟡 parcial | ledger durable/replay/fsync probado; workspace/project checkpoint global incompleto |
 | P07 | POLICY_ENGINE | ✅ sublane | governance + rule-engine + OPA/OpenFGA live policy lane |
-| P08 | MEMORY_CONTRACT | ❌ GAP | Memory/Audit runtime completo no materializado |
-| P09 | RETRIEVAL_CONTRACT | ❌ GAP | GET_CONTEXT/GET_MEMORY/GET_EVIDENCE no E2E |
+| P08 | MEMORY_CONTRACT | 🟡 TESTED subgate | Read boundary + canonical write gate implementados; storage/checkpoint/product E2E pendientes |
+| P09 | RETRIEVAL_CONTRACT | 🟡 boundary API | GET_CONTEXT/GET_MEMORY/GET_EVIDENCE validados contra puerto fake; retrieval real/provenance E2E pendiente |
 | P10 | CONTEXT_FABRIC | ❌ GAP | context packing/rerank/budget no E2E |
 | P11 | SANDBOX_CONTRACT | 🟡 source-only | Firecracker/gVisor/nsjail/bwrap/QEMU/crosvm presentes; `runtime/src/uek` vacío |
 | P12 | WORKER_CONTRACT | 🟡 parcial | Stabilize aporta primitives; adapter YAIWES incompleto |
@@ -59,7 +59,7 @@ LLM sólo se admite de forma acotada en P09 Retrieval, P10 Context Fabric y P19 
 - `src/core/workflow_definition.py` ✅ Python 19-step projection; Stabilize permanece único owner.
 - `src/plugins/**` ✅ Fables/catalog/loader/activation/adapters reales; sólo subgates probados.
 - `src/adapters/` ❌ README-only.
-- `src/agent/` ❌ `.gitkeep`.
+- `src/agent/` 🟡 boundary implementado y cubierto por regresión global.
 - `src/integration/` ❌ README-only.
 - `src/recovery/` 🟡 control-plane implementado y probado globalmente; `src/uek/`, `src/storage/`, `src/conn/`, `src/observability/`, `src/mission/`, `src/install/` siguen pendientes según readback. Recovery no prueba todavía failover multi-host/sandbox E2E.
 
@@ -73,7 +73,7 @@ Commit corrección cobertura: `baed8f07e9a205f28def181931d9eb7420e76fd7`.
 Antes: sparse-checkout sólo incluía core/plugins/governance.
 Ahora: trigger `runtime/src/**` + sparse-checkout completo `runtime/src`, además de `wordflow_loop` y `runtime/tests`.
 
-Gate fresco: run `34723669555`, job `103633952112`, `completed/success`, log leído: Wordflow 23 PASS; runtime 62 PASS + 9 subtests. Promoción limitada al regression gate y control-plane P18; no cierra G12 ni failover E2E.
+Gate fresco: run `34730513826`, job `103652482919`, `completed/success`, log leído: Wordflow 23 PASS; runtime 75 PASS + 9 subtests. Promoción limitada a regresión global y subgates P18 control-plane + P08 boundary; no cierra P08–P10/storage E2E, G12 ni failover E2E.
 
 ## Cola de ejecución
 
@@ -98,3 +98,10 @@ Commit `fc67c45840d3a121323e43179989424272b8f494`: `audit_five_pass` exige igual
 13/13 tests locales, con tres fallos reproducidos antes de corregir. CI `34730134580` pendiente al registrar este delta. El callback independiente y la matriz exhaustiva de requisitos siguen pendientes: `TRACEABILITY_PASS` nunca certifica por sí solo el producto. No se introduce otro workflow owner.
 
 Reentrada y tareas por componente: `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-LOOP-CODA-2026-09-13.json`. Guarda claims con SHA/read-back, goals 12/12, Council analítico y refutaciones; watchdog bloqueado por límite 5/5, no activo.
+
+
+## Delta P08 Memory boundary — 2026-09-13
+
+Commits `17d98a7e7f1a083108c96443d5bc10a05bb7024d` + `084debdb8acb102d9d41b9ca39b8ca88d8c29125`: boundary fail-closed para GET_CONTEXT/GET_MEMORY/GET_EVIDENCE, separación AGENT_PRIVATE/CHAT/PROJECT y rechazo de escritura canónica directa por LLM. Gate global `34730513826`, job `103652482919`: 23 Wordflow PASS; 75 runtime PASS + 9 subtests. Estado: `TESTED_BOUNDARY_SUBGATE`; storage, checkpoint binding, restart isolation y retrieval/context E2E siguen abiertos.
+
+La cola paralela de cierre del editor es downstream P23 y no sustituye Queue V2/Crazy Wall V4 ni habilita cierre runtime. La referencia a un watchdog horario separado en el role state S1 queda marcada como no autoritativa para este LOOP central.
