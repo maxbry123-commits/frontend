@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from ..contracts import NodeContract, sha256
+from .supervisor import _safe_path
 
 
 def check(node: NodeContract) -> list[str]:
@@ -15,4 +16,6 @@ def check(node: NodeContract) -> list[str]:
         errors.append("mutation_without_authorization")
     if node.mutation and not node.allowed_paths:
         errors.append("mutation_without_allowed_paths")
+    if any(not _safe_path(path) for path in node.allowed_paths):
+        errors.append("invalid_allowed_path")
     return errors

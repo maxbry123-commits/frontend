@@ -1,0 +1,49 @@
+{
+  "schema": "yaiwes.audit.node/v1",
+  "node_id": "ASTRA-PREFLIGHT-SCOPE-003",
+  "owner": "ASTRA_CROSSCHECK",
+  "status": "CLOSED_UNVERIFIED",
+  "local_gate": "PASS",
+  "ci": "NOT_VERIFIED",
+  "date": "2026-09-13",
+  "base_sha": "bd5a76e096f9a0a7253050235b37cef65b57743b",
+  "classification": "PATCH",
+  "requirement": "Validate declared scope before handler effects",
+  "before": {
+    "allowed_paths": [
+      "safe/../outside"
+    ],
+    "handler_calls": 1,
+    "status": "FAIL"
+  },
+  "after": {
+    "invalid_cases": 6,
+    "handler_calls": 0,
+    "status": "BLOCKED",
+    "valid_cases": 3
+  },
+  "test": {
+    "command": "python -m pytest -q",
+    "checkout": "audit-checkout",
+    "result": "28 passed in 0.04s",
+    "scope": "local Wordflow suite; not full repository or platform E2E"
+  },
+  "refutations": [
+    "Post-execution failure did not prevent invocation: reproduced.",
+    "Rejecting every contract would regress valid paths: 3 valid cases PASS.",
+    "Lexical scope validation is not an OS sandbox: full effect isolation remains GAP."
+  ],
+  "remaining": [
+    "CI for this commit",
+    "Pre-effect confinement of actual handler effects including symlinks",
+    "Semantic requirements matrix and product E2E",
+    "Shared state reconciliation by Orquestador"
+  ],
+  "handoff_sol": "Reuse existing guard; validate actual effect paths through universal adapter before execution. Do not mark complete sandbox closure from these tests. No new component download justified for this patch.",
+  "watchdog": {
+    "frequency": "hourly",
+    "mode": "resume_checkpoint",
+    "status": "enabled",
+    "next": "Verify CI then investigate effect confinement without colliding with Sol scopes"
+  }
+}

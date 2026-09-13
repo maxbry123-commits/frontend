@@ -1,27 +1,22 @@
 {
-  "schema": "yaiwes.astra.crosscheck.v1",
-  "contract": "tel.workflow/v3",
-  "owner": "ASTRA_CROSSCHECK",
-  "node_id": "ASTRA-PREFLIGHT-SCOPE-003",
-  "status": "ACTIVE_LOOP",
-  "base_sha": "66c25ccfc44d26c1b30c10c6c002a5c686c3f701",
-  "write_scope": [
-    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/governance/sheriff.py",
-    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_preflight_scope.py",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-PREFLIGHT-SCOPE-003.json"
-  ],
   "assertion": "Valida trazabilidad completa y CI real del auditor sin asumir cierre.",
+  "audit_status": "INCOMPLETE",
+  "base_sha": "66c25ccfc44d26c1b30c10c6c002a5c686c3f701",
+  "contract": "tel.workflow/v3",
+  "current_node": "X17-11",
   "evidence": {
-    "patch": "342d9c25aee96793f8566194c327c5b9d8ae561e",
     "ci_run": 34711848316,
     "ci_status": "cancelled",
+    "historical_local_suite": "19 PASS, previous turn",
+    "patch": "342d9c25aee96793f8566194c327c5b9d8ae561e",
     "pure_regressions_20260913": "4 PASS",
-    "historical_local_suite": "19 PASS, previous turn"
+    "preflight_scope": {
+      "local_tests": 28,
+      "ci": "NOT_VERIFIED"
+    }
   },
-  "audit_status": "INCOMPLETE",
-  "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
-  "current_node": "ASTRA-PREFLIGHT-SCOPE-003",
-  "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-XRAY-GAP-NODES-17-2026-09-12.json",
+  "node_id": "ASTRA-PREFLIGHT-SCOPE-003",
+  "owner": "ASTRA_CROSSCHECK",
   "remaining": [
     "Mapeo semántico de candidatos",
     "E2E 85 capacidades con propietarios",
@@ -29,6 +24,11 @@
     "Benchmark real 100x",
     "Consolidación shared STATE/CHECKPOINT por Orquestador"
   ],
+  "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-PREFLIGHT-SCOPE-003.json",
+  "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
-  "updated_at_utc": "2026-09-13"
+  "status": "ACTIVE_LOOP",
+  "updated_at_utc": "2026-09-13",
+  "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
+  "write_scope": []
 }
