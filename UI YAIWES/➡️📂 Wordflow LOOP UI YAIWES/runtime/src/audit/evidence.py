@@ -41,6 +41,8 @@ def verify_ci_evidence(
     lookup: TrustedCILookup,
 ) -> bool:
     """Verify untrusted evidence against an independent CI lookup, fail closed."""
+    if type(evidence) is not bytes:
+        return False
     try:
         payload = json.loads(evidence.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError):
