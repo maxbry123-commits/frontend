@@ -1,0 +1,93 @@
+name: UI YAIWES Vercel AI SDK Canonical Motor2 N13
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ui-yaiwes-vercel-ai-sdk-canonical-motor2-20260913.yml'
+      - 'UI YAIWES/automation/component-closure-20260912/QUEUE-VERCEL-AI-SDK.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ui-yaiwes-vercel-ai-sdk-canonical-motor2-n13
+  cancel-in-progress: false
+
+jobs:
+  download-extract-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Sparse bootstrap main
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git init -q
+          git remote add origin 'https://github.com/maxbry123-commits/frontend.git'
+          git sparse-checkout init --no-cone
+          cat > .git/info/sparse-checkout <<'EOF'
+          /➡️📂motores de descarga extracción copiado movimiento archivos fromtend/
+          /UI YAIWES/automation/component-closure-20260912/QUEUE-VERCEL-AI-SDK.json
+          EOF
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
+          git checkout -q -B main FETCH_HEAD
+
+      - name: Verify immutable canonical motor blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py")" = '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py")" = '91e6e4486692eab314be5c7130d8310d3c855397'
+
+      - name: Execute exact canonical Motor2 for Vercel AI SDK
+        shell: bash
+        env:
+          QUEUE_FILE: ${{ github.workspace }}/UI YAIWES/automation/component-closure-20260912/QUEUE-VERCEL-AI-SDK.json
+          STATE_FILE: ${{ runner.temp }}/motor2-vercel-ai-sdk-state.json
+          INDEX_PATH: ${{ runner.temp }}/motor2-vercel-ai-sdk-index.md
+          ENGINE_PATH: ${{ github.workspace }}/➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_RETRIES: '2'
+          LOOP_SLEEP_SECONDS: '0'
+        run: |
+          set -uo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend'
+          set +e
+          python "$ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py" | tee "$RUNNER_TEMP/motor2-vercel-ai-sdk-final.json"
+          rc=${PIPESTATUS[0]}
+          set -e
+          cat "$STATE_FILE" || true
+          cat "$INDEX_PATH" || true
+          test "$rc" -eq 0
+          python - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'motor2-vercel-ai-sdk-final.json'
+          obj=json.loads([x for x in p.read_text().splitlines() if x.strip()][-1]); b=obj.get('balance',{})
+          assert obj.get('verdict') == 'VERIFIED_CLOSED', obj
+          assert b.get('total') == 1, b
+          assert b.get('download_verified') == 1 and b.get('extraction_verified') == 1 and b.get('published_readback_verified') == 1, b
+          assert b.get('failed') == 0 and b.get('pending') == 0, b
+          PY
+
+      - name: Independent Vercel AI SDK readback
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch origin main
+          FINAL='UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vercel_ai_sdk'
+          files="$(git ls-tree -r --name-only origin/main -- "$FINAL/code" | wc -l | tr -d ' ')"
+          manifest="$(git ls-tree -r --name-only origin/main -- "$FINAL/DOWNLOAD_EXTRACT_MANIFEST.json" | wc -l | tr -d ' ')"
+          test "$files" -gt 0
+          test "$manifest" -eq 1
+          echo "SOURCE_PRESENT_READBACK_VERIFIED component=vercel_ai_sdk files=$files final_sha=$(git rev-parse origin/main)"
