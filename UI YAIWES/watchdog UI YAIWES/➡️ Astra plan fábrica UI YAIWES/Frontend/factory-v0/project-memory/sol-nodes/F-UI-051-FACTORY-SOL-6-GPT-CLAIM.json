@@ -1,0 +1,26 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "project":"FABRICA_UI_YAIWES_ONLY",
+  "chat_id":"FACTORY-SOL-6-GPT",
+  "agent_name":"SOL 6 GPT 🆘",
+  "node_id":"F-UI-051",
+  "repo":"maxbry123-commits/frontend",
+  "fresh_main_sha":"4535638180c685b3f60c1ec9d70437671132f81d",
+  "base_sha":"4535638180c685b3f60c1ec9d70437671132f81d",
+  "write_scope":"F-UI-051 desktop interactive-control matrix: dedicated tests/workflow/evidence only; Factory product source read-only until a dead/decorative control is reproduced and scope is revalidated; excludes Wordflow N*",
+  "paths":[
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-051-button-matrix-desktop.spec.mjs",
+    ".github/workflows/factory-f-ui-051-button-matrix-desktop.yml",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-UI-051-FACTORY-SOL-6-EVIDENCE.json",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-UI-051-FACTORY-SOL-6-GPT-CLAIM.json"
+  ],
+  "claimed_at":"2026-09-12T23:06:10-05:00",
+  "state":"IN_PROGRESS",
+  "task":"Inventario exhaustivo de botones/controles desktop: descubrir todos los elementos interactivos visibles de Factory y comprobar que cada uno produce el efecto canónico esperado.",
+  "acceptance":"100% interactive controls enumerated; click/effect assertion per control; no dead button; before/after screenshots; console errors=0; evidence has tested SHA + run/job/artifact ids.",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "authority":"FACTORY-CRAZY-WALL-FRONTEND-QA-V3-2026-09-12.json + FACTORY-SUPERVISOR-RECONCILIATION-R03-2026-09-12.json",
+  "next":"VERIFY_RESEARCH enumerate rendered desktop controls and map each control to canonical effect before writing assertions"
+}
