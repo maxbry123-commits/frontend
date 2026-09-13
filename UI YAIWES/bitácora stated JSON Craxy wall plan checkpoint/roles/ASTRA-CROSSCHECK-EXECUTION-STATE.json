@@ -82,38 +82,38 @@
       "code_commit": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
       "implementation_blob": "79399322f92e20ea08f77d0c8c0f4f278c3dc977",
       "test_blob": "e1b2a065dff7e48831cc37006b6daf2942d3b718",
-      "ci_run": 34747264318,
-      "ci_job": 103697357720,
+      "ci_run": 34788527235,
+      "ci_job": 103808343026,
       "ci_status": "success",
-      "wordflow": "41 passed in 0.16s",
-      "runtime": "272 passed, 2 warnings",
+      "wordflow": "41 passed in 0.14s",
+      "runtime": "281 passed, 2 warnings",
       "subtests": "42 passed",
-      "benchmark_speedup": "2.5167x, meets_100x=false",
+      "benchmark_speedup": "2.486x, meets_100x=false",
       "platform_probe": "BLOCKED: no_verified_runtime_backend",
       "local_targeted": "32 passed, 24 subtests passed in 0.09s",
       "local_full": "270 passed, 42 subtests; 2 environment failures: local Pydantic version mismatch and Docker socket PermissionError",
-      "trace_certification": "3/167 independently certified; 164 missing"
+      "trace_certification": "4/167 independently certified; 163 missing"
     }
   },
   "node_id": "X17-11",
   "owner": "ASTRA_CROSSCHECK",
   "remaining": [
-    "Persist and independently attest 164 missing RequirementTrace rows",
-    "Implement and test executable FinalJudge behavior before considering REQ-S3-056",
+    "Persist and independently attest 163 missing RequirementTrace rows",
+    "Claim N36 and implement/test executable FinalJudge behavior before considering REQ-S3-056",
     "Web/Windows/Linux/Android/iOS evidence remains incomplete; merge CI reports no verified runtime backend",
-    "Benchmark 100x remains refuted: post-merge CI measured 2.7475x",
+    "Benchmark 100x remains refuted: post-merge CI measured 2.486x",
     "Original scanner run 34711848316 remains CANCELLED"
   ],
   "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-PREFLIGHT-SCOPE-003.json",
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T22:12:00Z",
+  "updated_at_utc": "2026-09-13T23:15:00Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
   ],
-  "last_observed_head": "a3856f6a8943138f2df1fdd61826a8d699fda724",
+  "last_observed_head": "ffe41f84d2bb46053047ef37403092f4bfc352ce",
   "last_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "status": "ACTIVE_LOOP",
@@ -268,21 +268,24 @@
       "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
     ],
     "bounded_strategy": "Consume only independently verifiable RequirementTrace bindings; do not synthesize traces or CI attestations.",
-    "code_commit": "574931077ed42046ef0cec0c5ddda4752cef6666",
-    "next_action": "Load only genuine per-requirement records after exact source/code/test/evidence hashes and independent successful CI exist."
+    "code_commit": "ffe41f84d2bb46053047ef37403092f4bfc352ce",
+    "next_action": "Continue with genuine per-requirement records; 4/167 are certified and 163 remain."
   },
   "current_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "requirement_id": "REQ-S3-053",
-    "status": "CLOSED_UNVERIFIED_DELTA",
+    "status": "VERIFIED_CLOSED_DELTA",
     "checkpoint_read_blob": "b9eaf89b18545ecfd3ca0dc9f72fff4f8523021d",
-    "observed_main": "a3856f6a8943138f2df1fdd61826a8d699fda724",
+    "observed_main": "ffe41f84d2bb46053047ef37403092f4bfc352ce",
     "claim_commit": "78e8a859093d1479243f1b0e04e798889b26313a",
     "verify_research": [
       "§53 CONSOLIDACIÓN EN EMBUDO requires Work Unit→Task Result→Task Consolidation→Phase→Project→Final Consolidation.",
       "consolidation/consolidator.py and test_consolidation.py are byte-identical at trusted revision cf40e9c and current main.",
       "CI 34739510224/job 103678337638 checked out cf40e9c and passed 41 Wordflow plus 206 runtime plus 39 subtests.",
-      "N24 is VERIFIED_CLOSED; its deterministic consolidator preserves evidence provenance and fails closed on partial rollups."
+      "N24 is VERIFIED_CLOSED; its deterministic consolidator preserves evidence provenance and fails closed on partial rollups.",
+      "Exact branch CI 34785964688/job 103803284933 succeeded on adc79775cdaed33cefed8d6cc2d8540b8add870e.",
+      "PR 61 merged as ffe41f84d2bb46053047ef37403092f4bfc352ce.",
+      "Post-merge CI 34788527235/job 103808343026 succeeded on the merge revision."
     ],
     "defect_reproduced": "Empty-inventory loader probe failed with missing_requirement_traces:REQ-S3-053.",
     "delta": "Added one source/code/test/evidence trace, one trusted CI evidence record and one production regression; no consolidator code changed.",
@@ -318,6 +321,24 @@
         "job_id": 103678337638,
         "revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
         "result": "SUCCESS historical unchanged bytes: 41 Wordflow, 206 runtime, 39 subtests"
+      },
+      {
+        "run_id": 34785964688,
+        "job_id": 103803284933,
+        "revision": "adc79775cdaed33cefed8d6cc2d8540b8add870e",
+        "result": "SUCCESS",
+        "wordflow": "41 passed",
+        "runtime": "281 passed",
+        "subtests": "42 passed"
+      },
+      {
+        "run_id": 34788527235,
+        "job_id": 103808343026,
+        "revision": "ffe41f84d2bb46053047ef37403092f4bfc352ce",
+        "result": "SUCCESS",
+        "wordflow": "41 passed in 0.14s",
+        "runtime": "281 passed, 2 warnings in 716.98s",
+        "subtests": "42 passed"
       }
     ],
     "simulations": [
@@ -326,19 +347,26 @@
       "Full inventory remains fail-closed with 163 missing traces."
     ],
     "refutations": [
-      "Local green tests do not verify PR head in CI.",
+      "Exact-head and post-merge CI certify only REQ-S3-053 and its trace regression, not the remaining product requirements.",
       "Four certified traces are 2.40%, not full product coverage.",
-      "Factory commits advanced main after the claim; they do not authorize or certify this audit delta."
+      "Post-merge benchmark measured 2.486x, refuting 100x.",
+      "Linux CI reported BLOCKED:no_verified_runtime_backend; it does not prove Windows, Android, iOS or platform E2E."
     ],
-    "decision": "Keep PR 61 open until exact-head CI exists; do not merge or declare VERIFIED_CLOSED.",
+    "decision": "Close only REQ-S3-053 as VERIFIED_CLOSED_DELTA after exact-head and post-merge CI; keep N35 ACTIVE_LOOP.",
     "pull_request": 61,
     "branch": "astra-n35-req-s3-053-20260913",
     "candidate_head": "adc79775cdaed33cefed8d6cc2d8540b8add870e",
-    "limits": "No PR-head CI was generated yet; FinalJudge, 163 traces, platforms, E2E and 100x remain open."
+    "limits": "FinalJudge, 163 traces, scanner recovery, platforms, global E2E and 100x remain open.",
+    "merge_commit": "ffe41f84d2bb46053047ef37403092f4bfc352ce",
+    "post_merge_ci": {
+      "run_id": 34788527235,
+      "job_id": 103808343026,
+      "status": "SUCCESS"
+    }
   },
   "n35_next_trace_claim": {
     "requirement_id": "REQ-S3-053",
-    "state": "CLOSED_UNVERIFIED",
+    "state": "VERIFIED_CLOSED",
     "claimed_at_utc": "2026-09-13T22:08:00Z",
     "fresh_main_sha": "bc8fc54145cf9ad744165b6291a233e882beea5f",
     "source_anchor": "§53 CONSOLIDACIÓN EN EMBUDO",
@@ -358,13 +386,22 @@
       "revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e"
     },
     "semantic_basis": "§53 requires Work Unit→Task Result→Task Consolidation→Phase→Project→Final Consolidation; the selected test executes task→phase→project while preserving evidence provenance.",
-    "next_step": "Reproduce missing trace, add exactly one trace/evidence pair plus one fail-closed production regression; no consolidator mutation.",
+    "next_step": "Select the next requirement only when source, executable code, named test and exact CI evidence are independently verifiable; N36 remains separately claimable.",
     "branch": "astra-n35-req-s3-053-20260913",
     "pull_request": 61,
     "head_sha": "adc79775cdaed33cefed8d6cc2d8540b8add870e",
     "local_tests": "37 passed, 24 subtests",
-    "ci_status": "not_generated",
-    "certification_if_integrated": "4/167; 163 missing"
+    "ci_status": "success",
+    "certification_if_integrated": "4/167; 163 missing",
+    "merge_commit": "ffe41f84d2bb46053047ef37403092f4bfc352ce",
+    "branch_ci": {
+      "run_id": 34785964688,
+      "job_id": 103803284933
+    },
+    "post_merge_ci": {
+      "run_id": 34788527235,
+      "job_id": 103808343026
+    }
   },
   "final_judge_gap_order": {
     "state": "CLAIMABLE_NOT_CLAIMED",
