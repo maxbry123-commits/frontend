@@ -42,7 +42,7 @@ Autoridad: `code/runtime/test/log real > Crazy Wall/STATE/checkpoint > arquitect
 ## GAPs first-party confirmados por read-back fresco
 
 - `runtime/src/adapters`: README-only.
-- `runtime/src/agent`: `.gitkeep`.
+- `runtime/src/agent`: boundary implementado y cubierto por regresión global; no equivale a cierre completo de memoria.
 - `runtime/src/integration`: README-only.
 - `runtime/src/recovery`: control-plane Stabilize-backed implementado y globalmente probado; failover E2E pendiente.
 - `runtime/src/uek`, `storage`, `conn`, `observability`, `mission`, `install`: pendientes según readback.
@@ -75,7 +75,7 @@ Blind spot corregido en commit `baed8f07e9a205f28def181931d9eb7420e76fd7`:
 - trigger ahora incluye `runtime/src/**`;
 - sparse-checkout ahora incluye `runtime/src` completo.
 
-Gate fresco: run `34723669555`, job `103633952112`, `completed/success`; log: Wordflow 23 PASS y runtime 62 PASS + 9 subtests. P18 recovery control-plane queda TESTED, pero workspace/multi-host sandbox failover E2E y G12 siguen abiertos.
+Gate fresco: run `34730513826`, job `103652482919`, `completed/success`; log: Wordflow 23 PASS y runtime 75 PASS + 9 subtests. P18 recovery control-plane y P08 memory boundary quedan como subgates TESTED; storage/checkpoint/retrieval/context, workspace/multi-host failover E2E y G12 siguen abiertos.
 
 ## Regla de mejora / componentes
 
@@ -86,3 +86,8 @@ No añadir otro gran orquestador. Componentes nuevos sólo por capability gap ú
 
 `SPECIFIED != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED`.
 Final Judge sólo puede cerrar con G12 100% y Memory/Audit + Agent + Sandbox/UEK + Integration/Consolidator + Recovery + platform routing evidenciados.
+
+
+## Reentrada P08/P23 — 2026-09-13
+
+S1-09 publicó boundary de memoria fail-closed y run global `34730513826` terminó success (23 Wordflow; 75 runtime + 9 subtests). No promover P08–P10 completos: `runtime/src/storage` continúa placeholder y faltan memory checkpoint binding, restart isolation y retrieval/context E2E. La cola separada del editor sólo gobierna trabajo downstream P23; no reemplaza Queue V2/Crazy Wall V4 y P23 permanece bloqueado hasta runtime/API verificadas. El watchdog central conserva la autoridad única de este LOOP Wordflow.
