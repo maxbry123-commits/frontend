@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 import unittest
 
+# Retest trigger only: semantics unchanged; preserves the S2-10 platform test contract.
 SRC = Path(__file__).resolve().parents[1] / "src"
 if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
