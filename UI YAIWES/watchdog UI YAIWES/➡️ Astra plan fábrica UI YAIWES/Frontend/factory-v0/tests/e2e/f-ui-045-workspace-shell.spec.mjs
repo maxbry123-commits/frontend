@@ -79,3 +79,32 @@ test('workspace controls keep minimum touch target and panel scrolling', async (
   }
   await expect(page.locator('#canvas')).toBeVisible();
 });
+
+test('workspace survives mobile desktop mobile resize transitions', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop', 'single-project deterministic resize gate');
+  await page.setViewportSize({ width: 412, height: 839 });
+  await boot(page);
+  const app = page.locator('.app-shell');
+  const studio = page.locator('.studio');
+  const canvas = page.locator('#canvas');
+  await expect(app).toHaveAttribute('data-workspace-mode', 'mobile');
+  await expect(studio).toHaveClass(/workspace-left-collapsed/);
+  await expect(studio).toHaveClass(/workspace-right-collapsed/);
+  await expect(canvas).toBeVisible();
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(app).toHaveAttribute('data-workspace-mode', 'desktop');
+  await expect(studio).not.toHaveClass(/workspace-left-collapsed/);
+  await expect(studio).not.toHaveClass(/workspace-right-collapsed/);
+  await expect(canvas).toBeVisible();
+  const desktopBox = await canvas.boundingBox();
+  expect(desktopBox?.width || 0).toBeGreaterThan(300);
+
+  await page.setViewportSize({ width: 412, height: 839 });
+  await expect(app).toHaveAttribute('data-workspace-mode', 'mobile');
+  await expect(studio).toHaveClass(/workspace-left-collapsed/);
+  await expect(studio).toHaveClass(/workspace-right-collapsed/);
+  await expect(canvas).toBeVisible();
+  const mobileBox = await canvas.boundingBox();
+  expect(mobileBox?.height || 0).toBeGreaterThan(200);
+});
