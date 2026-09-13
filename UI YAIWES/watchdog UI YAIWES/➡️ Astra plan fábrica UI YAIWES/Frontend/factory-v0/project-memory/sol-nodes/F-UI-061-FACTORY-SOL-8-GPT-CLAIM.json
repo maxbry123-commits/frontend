@@ -1,0 +1,18 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "project":"FABRICA_UI_YAIWES_ONLY",
+  "chat_id":"FACTORY-SOL-8-GPT",
+  "agent_name":"SOL 8 GPT 🆘",
+  "node_id":"F-UI-061",
+  "state":"IN_PROGRESS",
+  "task":"Journey final de usuario: crear componente→componer UI→editar→guardar→reload/reopen→exportar→usar integración remota aplicable; todo desde interfaz, sin atajos internos.",
+  "depends_on":["F-UI-059 PASS_PENDING_REVIEW","F-UI-060 PASS_PENDING_REVIEW"],
+  "authority":"FACTORY-SUPERVISOR-RECONCILIATION-R05-2026-09-12.json + FACTORY-CRAZY-WALL-FRONTEND-QA-V3-2026-09-12.json",
+  "write_scope":"F-UI-061 only; final journey e2e/tests/project-memory evidence; product paths only after reproduced GAP",
+  "acceptance":"Journey completo desktop+mobile; state/output roundtrip íntegro; screenshots de hitos; no dead ends; tiempo/acciones medidos para detectar fricción.",
+  "claimed_at":"2026-09-13T04:49:00Z",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "next":"audit existing create/edit/save/reload/export/remote journey and build browser probe before product writes"
+}
