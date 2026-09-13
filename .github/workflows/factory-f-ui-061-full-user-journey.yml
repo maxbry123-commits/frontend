@@ -1,0 +1,50 @@
+name: Factory F-UI-061 Full User Journey
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-061-full-user-journey.spec.mjs'
+      - '.github/workflows/factory-f-ui-061-full-user-journey.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: factory-f-ui-061-full-user-journey
+  cancel-in-progress: true
+jobs:
+  journey:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Syntax
+        run: node --check tests/e2e/f-ui-061-full-user-journey.spec.mjs
+      - name: Desktop journey
+        run: npx playwright test tests/e2e/f-ui-061-full-user-journey.spec.mjs --project=chromium-desktop
+      - name: Mobile journey
+        run: npx playwright test tests/e2e/f-ui-061-full-user-journey.spec.mjs --project=pixel-7
+      - name: Upload F-UI-061 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: f-ui-061-full-user-journey-${{ github.sha }}
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/f-ui-061/*.png
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/**/attachments/**
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report/**
+          if-no-files-found: warn
+          retention-days: 14
