@@ -1,0 +1,12 @@
+{
+  "schema":"yaiwes.crazy-wall.claim.v2",
+  "contract":"tel.workflow/v3",
+  "role":"SOL_GPT2",
+  "chat_id":"SOL-2-GPT-2026-09-12T22:41-05:00",
+  "node_id":"S2-09-OTEL-COLLECTOR-BOUNDARY",
+  "fresh_base_main_sha":"1db146e8c3dad1ab59b39ecfd771a794663cd7df",
+  "write_scope":["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/telemetry/**","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/**","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_telemetry*","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S2-*.json"],
+  "claimed_at":"2026-09-12T22:44:16-05:00",
+  "state":"CLAIMED",
+  "steps":["VERIFY_OR_RESEARCH","EXECUTE_AUTHORIZED_DELTA","TEST_AND_REPORT"]
+}
