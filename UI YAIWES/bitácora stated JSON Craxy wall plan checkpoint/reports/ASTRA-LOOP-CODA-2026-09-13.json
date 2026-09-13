@@ -1,0 +1,659 @@
+{
+  "schema": "yaiwes.loop-coda.checkpoint.v1",
+  "contract": "tel.workflow/v3",
+  "updated_at": "2026-09-13T01:18:25.447Z",
+  "owner": "ASTRA_GPT",
+  "status": "ACTIVE_LOOP_GAPS_OPEN",
+  "global_closed": false,
+  "base_main_sha": "fc67c45840d3a121323e43179989424272b8f494",
+  "director_instruction": "2026-09-13: registrar pendientes como nodos reclamables, corregir código crítico, loop horario desde checkpoint hasta cobertura total verificada.",
+  "authority": "Operational addendum linking existing nodes; does not reset existing claims or supersede V7/V4 ownership.",
+  "watchdog": {
+    "status": "BLOCKED_PLAN_LIMIT",
+    "enabled": false,
+    "error_code": "too_many_active_automations",
+    "current_count": 5,
+    "plan_limit": 5,
+    "schedule": "BEGIN:VEVENT\nRRULE:FREQ=HOURLY;INTERVAL=1\nEND:VEVENT",
+    "default_timezone": "America/Bogota",
+    "prompt": "Continúa la auditoría y reparación de UI YAIWES backend exclusivamente en maxbry123-commits/frontend/main. Objetivo: completar los requisitos del proyecto con evidencia y alcanzar VERIFIED_CLOSED, no detenerse por terminar un lote. Recupera primero el último checkpoint del Crazy Wall en \"UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/\": README, cola vigente CRAZY-WALL-TASK-QUEUE-MULTI-AI-V2-2026-09-12.json y sus revisiones explícitas, reports/ASTRA-LOOP-CODA-2026-09-13.json si existe, estados de roles, STATE, CHECKPOINT, BITACORA y handoff vigente. Cruza instrucciones de este chat y tres fuentes prioritarias MAX-SYSTEM-100X-FINAL-1, Virtual Computer/14 objetivos y Memoria Wordflow contra código de \"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/\". No confundir este proyecto con agentes ni fábrica frontend. Ciclo: LOAD_STATE → auditar X-Ray cinco pasadas y cobertura bidireccional → planificar → CLAIM exclusivo mediante SHA fresco/compare-and-swap → ejecutar reparación mínima → tests reales → VERIFY/CODA → guardar checkpoint, hashes, run/log y read-back → liberar → siguiente nodo elegible. Si falla: causa raíz, estrategia distinta, parche y nueva prueba; no repetir ciclos sin avance. Una tarea por nodo con id, owner, scope, dependencias, estado, evidencia y próxima acción; respetar claims ajenos y no tomar locks por simple antigüedad. Registrar tareas de adquisición e integración para Sol1/Sol2/Sol3/Sol Plan sin duplicar; usar exclusivamente skill research-download-chain y motores/GitHub Actions canónicos para transferencias, sin LFS ni alterar guards. Priorizar reparar código crítico propio, conectar componentes existentes, completar auditor/verificador CI y consolidación; memoria/agente, plataforma y API conservan responsables. Cada iteración aplica 12 objetivos de entrada, 12 de salida, revisión Council de 12 pasos y tres refutaciones explícitas registradas, diferenciando simulación de ejecución real. Actualiza arquitectura existente cuando cambie comportamiento, Crazy Wall y estado JSON sin pisar trabajo ajeno. Mejoras 100x requieren benchmark comparable, nunca prometer ni inventar porcentaje. Cierre solo con inventario completo requisito→código→prueba→evidencia y cruce inverso, recuperación UI/workspace, aislamiento de memoria, cancelación/reinicio sin duplicados e integración por plataformas con limitaciones explícitas. Reporta avance, pruebas, gaps y próximo nodo; ante bloqueo real conserva checkpoint y explica causa. Al demostrar el cierre completo, registra VERIFIED_CLOSED y desactiva únicamente este watchdog.",
+    "resolution": "User must select active automation to replace; no unrelated watchdog changed."
+  },
+  "claim_protocol": {
+    "one_task_one_node": true,
+    "one_active_node_per_worker": true,
+    "registry_path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-LOOP-CODA-2026-09-13.json",
+    "scope": "For added child nodes only; existing canonical node and role report retain ownership authority.",
+    "steps": [
+      "Read fresh HEAD, this registry, canonical parent node and all role states; check overlapping paths and active claims.",
+      "Mark READY/FREE only after blockers/dependencies are verified, declare exact write_scope. Any Sol may claim an unowned node if its canonical lane permits; otherwise request recorded coordinator reassignment.",
+      "Update this registry with GitHub contents SHA compare-and-swap: set owner, claimed_at, fresh_base_main_sha, status CLAIMED and checkpoint.before. A conflict requires fresh reread; no force/reuse stale content.",
+      "Read back winning claim and recheck parent scope before mutation. Two workers competing for a node use the same registry file, not separate uncoordinated claims.",
+      "Execute only own scope; append tests/hashes/read-back/checkpoint.after; set PASS or GAP and release owner. Do not steal stale claims or re-open verified nodes."
+    ],
+    "claim_fields": [
+      "id",
+      "owner",
+      "state",
+      "claimed_at",
+      "fresh_base_main_sha",
+      "write_scope",
+      "dependencies",
+      "checkpoint.before",
+      "evidence",
+      "next_action"
+    ]
+  },
+  "component_nodes": [
+    {
+      "id": "S1-01",
+      "task_kind": "ACQUIRE_EXISTING_COMPONENT",
+      "canonical_node_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json",
+      "component": "Vite",
+      "preferred_role": "SOL_GPT1_BACKEND",
+      "owner": null,
+      "state": "MISSING_PHYSICAL",
+      "claimable": false,
+      "claim_blocker": "Reconcile existing role/node claim and pin valid source/destination before FREE; latest four paths independently NOT_FOUND.",
+      "source_url": "https://github.com/vitejs/vite",
+      "destination": "UI YAIWES/componentes open soure UI YAIWES/Vite",
+      "write_scope": [
+        "UI YAIWES/componentes open soure UI YAIWES/Vite/**"
+      ],
+      "dependencies": [],
+      "steps": [
+        "Revalidate absence, existing claim, source pin and exact canonical motor support.",
+        "Acquire/extract using authorized immutable motors and GitHub Actions only; preserve provenance.",
+        "Verify tree/hash/license/read-back; handoff separate integration node."
+      ],
+      "acceptance": [
+        "Source revision and provenance recorded",
+        "Final source tree read-back and hashes verified",
+        "No unsafe filtering or motor guard bypass",
+        "Acquisition PASS does not imply integration"
+      ],
+      "evidence": [],
+      "next_action": "Read owner findings and resolve destination/engine blocker before dispatch."
+    },
+    {
+      "id": "S1-02",
+      "task_kind": "ACQUIRE_EXISTING_COMPONENT",
+      "canonical_node_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json",
+      "component": "Supabase",
+      "preferred_role": "SOL_GPT1_BACKEND",
+      "owner": null,
+      "state": "MISSING_PHYSICAL",
+      "claimable": false,
+      "claim_blocker": "Reconcile existing role/node claim and pin valid source/destination before FREE; latest four paths independently NOT_FOUND.",
+      "source_url": "https://github.com/supabase/supabase",
+      "destination": "UI YAIWES/componentes open soure UI YAIWES/Supabase",
+      "write_scope": [
+        "UI YAIWES/componentes open soure UI YAIWES/Supabase/**"
+      ],
+      "dependencies": [],
+      "steps": [
+        "Revalidate absence, existing claim, source pin and exact canonical motor support.",
+        "Acquire/extract using authorized immutable motors and GitHub Actions only; preserve provenance.",
+        "Verify tree/hash/license/read-back; handoff separate integration node."
+      ],
+      "acceptance": [
+        "Source revision and provenance recorded",
+        "Final source tree read-back and hashes verified",
+        "No unsafe filtering or motor guard bypass",
+        "Acquisition PASS does not imply integration"
+      ],
+      "evidence": [],
+      "next_action": "Read owner findings and resolve destination/engine blocker before dispatch."
+    },
+    {
+      "id": "S2-01",
+      "task_kind": "ACQUIRE_EXISTING_COMPONENT",
+      "canonical_node_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json",
+      "component": "DuckDB",
+      "preferred_role": "SOL_GPT2_BACKEND",
+      "owner": null,
+      "state": "BLOCKED_SOURCE_SPECIAL_FILE",
+      "claimable": false,
+      "claim_blocker": "Reconcile existing role/node claim and pin valid source/destination before FREE; latest four paths independently NOT_FOUND.",
+      "source_url": "https://github.com/duckdb/duckdb",
+      "destination": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
+      "write_scope": [
+        "UI YAIWES/componentes open soure UI YAIWES/DuckDB/**"
+      ],
+      "dependencies": [],
+      "steps": [
+        "Revalidate absence, existing claim, source pin and exact canonical motor support.",
+        "Acquire/extract using authorized immutable motors and GitHub Actions only; preserve provenance.",
+        "Verify tree/hash/license/read-back; handoff separate integration node."
+      ],
+      "acceptance": [
+        "Source revision and provenance recorded",
+        "Final source tree read-back and hashes verified",
+        "No unsafe filtering or motor guard bypass",
+        "Acquisition PASS does not imply integration"
+      ],
+      "evidence": [],
+      "next_action": "Resolve special-file incompatibility through coordinator; no repeat of same rejected refs."
+    },
+    {
+      "id": "S2-02",
+      "task_kind": "ACQUIRE_EXISTING_COMPONENT",
+      "canonical_node_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-ROLES-5-2026-09-10.json",
+      "component": "AVF",
+      "preferred_role": "SOL_GPT2_BACKEND",
+      "owner": null,
+      "state": "BLOCKED_PROVIDER_CAPABILITY",
+      "claimable": false,
+      "claim_blocker": "Reconcile existing role/node claim and pin valid source/destination before FREE; latest four paths independently NOT_FOUND.",
+      "source_url": "https://android.googlesource.com/platform/packages/modules/Virtualization/",
+      "destination": "UI YAIWES/componentes open soure UI YAIWES/AVF",
+      "write_scope": [
+        "UI YAIWES/componentes open soure UI YAIWES/AVF/**"
+      ],
+      "dependencies": [],
+      "steps": [
+        "Revalidate absence, existing claim, source pin and exact canonical motor support.",
+        "Acquire/extract using authorized immutable motors and GitHub Actions only; preserve provenance.",
+        "Verify tree/hash/license/read-back; handoff separate integration node."
+      ],
+      "acceptance": [
+        "Source revision and provenance recorded",
+        "Final source tree read-back and hashes verified",
+        "No unsafe filtering or motor guard bypass",
+        "Acquisition PASS does not imply integration"
+      ],
+      "evidence": [],
+      "next_action": "Coordinator resolves provider compatibility; native Android permission/guest boot remains separate."
+    },
+    {
+      "id": "S3-11-BIGAGI",
+      "task_kind": "INTEGRATE_EXISTING_COMPONENT",
+      "canonical_parent": "S3-11-INTEGRATION-01-20",
+      "preferred_role": "SOL_GPT3_BACKEND",
+      "owner": null,
+      "state": "PENDING_RECONCILIATION",
+      "claimable": false,
+      "component": "big-AGI",
+      "dependencies": [],
+      "source_path": "UI YAIWES/componentes open soure UI YAIWES/big-AGI/code",
+      "write_scope": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/**"
+      ],
+      "destination_policy": "Use verified source in place when supported. Resolve literal runtime destination with coordinator before any transfer; historical vendor paths are not new destination authorization.",
+      "steps": [
+        "Read current S3 ownership and vendor/Fables evidence; avoid repeating valid tests.",
+        "Wire existing Fables/runtime API for this component with minimum adapter delta.",
+        "Run real integration and update component evidence; never infer WIRED from vendor build."
+      ],
+      "acceptance": [
+        "Source→adapter→runtime→evidence path executed",
+        "Correct errors/cancel/disconnect where applicable",
+        "Exact source/test revisions and read-back"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "S3-11-VITE",
+      "task_kind": "INTEGRATE_EXISTING_COMPONENT",
+      "canonical_parent": "S3-11-INTEGRATION-01-20",
+      "preferred_role": "SOL_GPT3_BACKEND",
+      "owner": null,
+      "state": "PENDING_RECONCILIATION",
+      "claimable": false,
+      "component": "Vite",
+      "dependencies": [
+        "S1-01"
+      ],
+      "source_path": "UI YAIWES/componentes open soure UI YAIWES/Vite/code",
+      "write_scope": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/**"
+      ],
+      "destination_policy": "Use verified source in place when supported. Resolve literal runtime destination with coordinator before any transfer; historical vendor paths are not new destination authorization.",
+      "steps": [
+        "Read current S3 ownership and vendor/Fables evidence; avoid repeating valid tests.",
+        "Wire existing Fables/runtime API for this component with minimum adapter delta.",
+        "Run real integration and update component evidence; never infer WIRED from vendor build."
+      ],
+      "acceptance": [
+        "Source→adapter→runtime→evidence path executed",
+        "Correct errors/cancel/disconnect where applicable",
+        "Exact source/test revisions and read-back"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "S3-11-VERCEL-AI",
+      "task_kind": "INTEGRATE_EXISTING_COMPONENT",
+      "canonical_parent": "S3-11-INTEGRATION-01-20",
+      "preferred_role": "SOL_GPT3_BACKEND",
+      "owner": null,
+      "state": "PENDING_RECONCILIATION",
+      "claimable": false,
+      "component": "Vercel AI SDK",
+      "dependencies": [],
+      "source_path": "UI YAIWES/componentes open soure UI YAIWES/Vercel AI SDK/code",
+      "write_scope": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/**"
+      ],
+      "destination_policy": "Use verified source in place when supported. Resolve literal runtime destination with coordinator before any transfer; historical vendor paths are not new destination authorization.",
+      "steps": [
+        "Read current S3 ownership and vendor/Fables evidence; avoid repeating valid tests.",
+        "Wire existing Fables/runtime API for this component with minimum adapter delta.",
+        "Run real integration and update component evidence; never infer WIRED from vendor build."
+      ],
+      "acceptance": [
+        "Source→adapter→runtime→evidence path executed",
+        "Correct errors/cancel/disconnect where applicable",
+        "Exact source/test revisions and read-back"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "O-03-LITESTREAM",
+      "canonical_parent": "O-03-OSS5-REUSE-OR-PROVIDER",
+      "preferred_role": "SOL_ORQUESTADOR",
+      "owner": null,
+      "state": "DEFERRED_CAPABILITY_DECISION",
+      "claimable": false,
+      "task_kind": "REUSE_OR_ACQUIRE_DECISION",
+      "component": "Litestream",
+      "required_capability": "SQLite continuous replication",
+      "dependencies": [
+        "O-02-MULTI-SANDBOX-RECOVERY-E2E"
+      ],
+      "write_scope": [
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-*.json"
+      ],
+      "steps": [
+        "Prove requirement and compare existing implementation.",
+        "Select REUSE with equivalence test or pin official source/license/destination and compatible motor.",
+        "Publish evidence and only then dispatch justified acquisition/integration."
+      ],
+      "acceptance": [
+        "Evidence for requirement and nonduplication",
+        "No automatic download",
+        "Decision is not product closure"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "O-03-GRAFANA-TEMPO",
+      "canonical_parent": "O-03-OSS5-REUSE-OR-PROVIDER",
+      "preferred_role": "SOL_ORQUESTADOR",
+      "owner": null,
+      "state": "DEFERRED_CAPABILITY_DECISION",
+      "claimable": false,
+      "task_kind": "REUSE_OR_ACQUIRE_DECISION",
+      "component": "Grafana Tempo",
+      "required_capability": "Trace retention and query",
+      "dependencies": [
+        "O-02-MULTI-SANDBOX-RECOVERY-E2E"
+      ],
+      "write_scope": [
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-*.json"
+      ],
+      "steps": [
+        "Prove requirement and compare existing implementation.",
+        "Select REUSE with equivalence test or pin official source/license/destination and compatible motor.",
+        "Publish evidence and only then dispatch justified acquisition/integration."
+      ],
+      "acceptance": [
+        "Evidence for requirement and nonduplication",
+        "No automatic download",
+        "Decision is not product closure"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "O-03-SCHEMATHESIS",
+      "canonical_parent": "O-03-OSS5-REUSE-OR-PROVIDER",
+      "preferred_role": "SOL_ORQUESTADOR",
+      "owner": null,
+      "state": "DEFERRED_CAPABILITY_DECISION",
+      "claimable": false,
+      "task_kind": "REUSE_OR_ACQUIRE_DECISION",
+      "component": "Schemathesis",
+      "required_capability": "API contract testing against executable OpenAPI",
+      "dependencies": [
+        "O-02-MULTI-SANDBOX-RECOVERY-E2E"
+      ],
+      "write_scope": [
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-*.json"
+      ],
+      "steps": [
+        "Prove requirement and compare existing implementation.",
+        "Select REUSE with equivalence test or pin official source/license/destination and compatible motor.",
+        "Publish evidence and only then dispatch justified acquisition/integration."
+      ],
+      "acceptance": [
+        "Evidence for requirement and nonduplication",
+        "No automatic download",
+        "Decision is not product closure"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "O-03-KATA-CONTAINERS",
+      "canonical_parent": "O-03-OSS5-REUSE-OR-PROVIDER",
+      "preferred_role": "SOL_ORQUESTADOR",
+      "owner": null,
+      "state": "DEFERRED_CAPABILITY_DECISION",
+      "claimable": false,
+      "task_kind": "REUSE_OR_ACQUIRE_DECISION",
+      "component": "Kata Containers",
+      "required_capability": "Isolation unmet by existing sandbox backends",
+      "dependencies": [
+        "O-02-MULTI-SANDBOX-RECOVERY-E2E"
+      ],
+      "write_scope": [
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-*.json"
+      ],
+      "steps": [
+        "Prove requirement and compare existing implementation.",
+        "Select REUSE with equivalence test or pin official source/license/destination and compatible motor.",
+        "Publish evidence and only then dispatch justified acquisition/integration."
+      ],
+      "acceptance": [
+        "Evidence for requirement and nonduplication",
+        "No automatic download",
+        "Decision is not product closure"
+      ],
+      "evidence": []
+    },
+    {
+      "id": "O-03-GRYPE",
+      "canonical_parent": "O-03-OSS5-REUSE-OR-PROVIDER",
+      "preferred_role": "SOL_ORQUESTADOR",
+      "owner": null,
+      "state": "DEFERRED_CAPABILITY_DECISION",
+      "claimable": false,
+      "task_kind": "REUSE_OR_ACQUIRE_DECISION",
+      "component": "Grype",
+      "required_capability": "Vulnerability coverage unmet by Trivy/Syft",
+      "dependencies": [
+        "O-02-MULTI-SANDBOX-RECOVERY-E2E"
+      ],
+      "write_scope": [
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/O-*.json"
+      ],
+      "steps": [
+        "Prove requirement and compare existing implementation.",
+        "Select REUSE with equivalence test or pin official source/license/destination and compatible motor.",
+        "Publish evidence and only then dispatch justified acquisition/integration."
+      ],
+      "acceptance": [
+        "Evidence for requirement and nonduplication",
+        "No automatic download",
+        "Decision is not product closure"
+      ],
+      "evidence": []
+    }
+  ],
+  "existing_product_nodes": [
+    {
+      "id": "WF-G08-MEMORY",
+      "owner_lane": "SOL_GPT1",
+      "task": "Memory/Audit contract + canonical write gate; direct LLM canonical writes forbidden.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G09-RETRIEVAL",
+      "owner_lane": "SOL_GPT1",
+      "task": "GET_CONTEXT/GET_MEMORY/GET_EVIDENCE + provenance retrieval E2E.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G10-CONTEXT-FABRIC",
+      "owner_lane": "SOL_GPT1",
+      "task": "Minimal sufficient context, budget, filter/rerank, source retention.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-GSTORAGE-LOCAL-FIRST",
+      "owner_lane": "SOL_GPT1",
+      "task": "Local-first storage/checkpoint boundary; dedup Stabilize/rqlite before code.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G11-SANDBOX-UEK",
+      "owner_lane": "SOL_GPT2",
+      "task": "Sandbox/VM backend capability router and lifecycle; unsupported hosts fail closed.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G12-WORKER",
+      "owner_lane": "SOL_GPT2",
+      "task": "Reuse Stabilize workers; add only missing YAIWES adapter contract.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G16-ROUTER",
+      "owner_lane": "SOL_GPT2",
+      "task": "Resource/capability routing with explicit supported/conditional/blocked matrix.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-GOBS-OTEL-RUNTIME",
+      "owner_lane": "SOL_GPT2",
+      "task": "Wire acquired OTel Collector only if distinct from plugin instrumentation; prove runtime telemetry.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G14-AUDITOR5",
+      "owner_lane": "ASTRA_GPT",
+      "task": "Executable deterministic five-pass audit/coverage; docs↔code↔tests↔evidence.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G15-CONSOLIDATOR",
+      "owner_lane": "ASTRA_GPT",
+      "task": "Task→phase→project deterministic consolidation with evidence links.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G19-RESOURCE-BRAIN",
+      "owner_lane": "ASTRA_GPT_RESEARCH",
+      "task": "Research/dedup resource brain; REUSE>PATCH>ADAPT>GENERATE>NEW_DOWNLOAD.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-GMISSION-MAP",
+      "owner_lane": "ASTRA_GPT",
+      "task": "Prove whether empty mission/ needs code or existing goals/requirements are equivalent; do not generate by directory name.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-GINSTALL-MAP",
+      "owner_lane": "ASTRA_GPT",
+      "task": "Map install/package capability to truth docs; keep outside Wordflow core unless requirement proves ownership.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G20-GLOBAL-INTEGRATION",
+      "owner_lane": "SOL_GPT3",
+      "task": "Fables-backed global integration state/consolidation boundary with runtime E2E.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G17-LOOP",
+      "owner_lane": "SOL_GPT3",
+      "task": "Continuous multi-stage loop using state delta/audit/repair/next, deterministic E2E.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G22-API",
+      "owner_lane": "SOL_GPT3",
+      "task": "Minimal Python API/control boundary after runtime contracts exist.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G18-RECOVERY",
+      "owner_lane": "SOL_ORQUESTADOR",
+      "task": "Recovery control-plane reused Stabilize and passed global regression; continue workspace/multi-host sandbox failover/reconstruction E2E.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G12-GLOBAL-COVERAGE",
+      "owner_lane": "SOL_ORQUESTADOR",
+      "task": "GOAL→REQUIREMENT→FILE/FUNCTION→TEST→EVIDENCE and inverse to 100%.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    },
+    {
+      "id": "WF-G23-UI",
+      "owner_lane": "UI_FACTORY",
+      "task": "Consume verified API/runtime only; UI cannot close runtime gaps.",
+      "canonical_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-WORDFLOW-XRAY-V4-2026-09-12.json",
+      "state": "READ_CANONICAL_AND_REPORT_BEFORE_CLAIM",
+      "not_a_duplicate": true
+    }
+  ],
+  "code_delta": {
+    "node_id": "WF-G14-AUDITOR5",
+    "commit": "fc67c45840d3a121323e43179989424272b8f494",
+    "fix": "Bidirectional artifact inventory: reject unlisted implementation and duplicate artifact entries.",
+    "performance_change": "Replace repeated requirement scans with Counter; linear counting stage, no measured 100x claim.",
+    "local_test": {
+      "total": 13,
+      "pass": 13,
+      "fail": 0,
+      "prepatch_regression_failures": 3
+    },
+    "ci": {
+      "run": 34730134580,
+      "state": "IN_PROGRESS"
+    },
+    "readback": true
+  },
+  "loop": [
+    "LOAD_STATE",
+    "X_RAY_CROSSCHECK",
+    "PLAN_CLAIM",
+    "EXECUTE",
+    "TEST",
+    "VERIFY_CODA",
+    "SAVE_CHECKPOINT_READBACK",
+    "RELEASE_NEXT"
+  ],
+  "entry_goals_12": [
+    "Correct repo and branch",
+    "Fresh HEAD",
+    "V7/V4 and latest director instructions",
+    "Three original source identities",
+    "Complete requirement inventory",
+    "Fresh ownership and scopes",
+    "Dependency status",
+    "Source provenance",
+    "Real CI evidence",
+    "Platform capabilities",
+    "Prior checkpoint",
+    "Concrete priority gap"
+  ],
+  "exit_goals_12": [
+    "Scoped tested code delta",
+    "Requirements linked to symbols",
+    "Tests linked to exact revisions",
+    "Bytes/hashes verified",
+    "Bidirectional coverage",
+    "Claims/history preserved",
+    "OSS tasks deduplicated",
+    "State persisted/read-back",
+    "Real and simulated evidence separated",
+    "Platform limitations explicit",
+    "Benchmark evidence or unmeasured label",
+    "Next task or real blocker recorded"
+  ],
+  "council_12": {
+    "method": "Analytical review by this agent; not a claim of twelve independent model calls.",
+    "steps": [
+      "Literal objective",
+      "Source authority",
+      "Ownership",
+      "Requirement completeness",
+      "Existing code reuse",
+      "Cause reproduction",
+      "Minimal repair",
+      "Negative cases",
+      "Positive compatibility",
+      "Evidence and concurrency",
+      "Remaining gaps",
+      "Coda verdict"
+    ],
+    "verdict": "REPAIR_SUBGATE_VERIFIED_LOCALLY_GLOBAL_OPEN"
+  },
+  "refutations_3": [
+    {
+      "claim": "13 unit tests prove complete YAIWES",
+      "result": "REFUTED",
+      "reason": "Only auditor tests; product E2E and full requirement inventory remain pending."
+    },
+    {
+      "claim": "A programmed watchdog is active because prompt is saved",
+      "result": "REFUTED",
+      "reason": "Automation creation returned plan limit 5/5; no new task created."
+    },
+    {
+      "claim": "An empty reverse inventory proves no orphan code",
+      "result": "REFUTED_BY_REGRESSION",
+      "reason": "Old auditor passed; patch rejects omitted mapped implementation."
+    }
+  ],
+  "simulations": [
+    {
+      "scenario": "Two chats claim same new node",
+      "expected": "Only SHA-winning registry update may execute; loser rereads.",
+      "evidence_kind": "DESIGN_REVIEW_NOT_LIVE_CONCURRENCY_TEST"
+    },
+    {
+      "scenario": "Restart scheduled iteration",
+      "expected": "Read this checkpoint then canonical claims; continue eligible own node.",
+      "evidence_kind": "DESIGN_REVIEW_WATCHDOG_BLOCKED"
+    },
+    {
+      "scenario": "Omitted artifact list",
+      "expected": "GAP",
+      "evidence_kind": "EXECUTED_LOCAL_REGRESSION"
+    }
+  ],
+  "next": [
+    "Read terminal CI run 34730134580 and record outcome.",
+    "Wire independent execution verifier; complete authoritative requirement matrix in WF-G14.",
+    "Coordinator reconciles source acquisition blockers and shared summaries; Sol lanes execute eligible nodes.",
+    "After WF-G14 evidence complete claim WF-G15-CONSOLIDATOR."
+  ]
+}
