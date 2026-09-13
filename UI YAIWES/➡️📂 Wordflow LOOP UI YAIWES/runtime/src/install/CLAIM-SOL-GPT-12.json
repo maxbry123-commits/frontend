@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3",
+  "state": "CLAIMED",
+  "chat_id": "SOL GPT <12>",
+  "node_id": "N32-GUEST-INSTALLER-VERIFICATION",
+  "fresh_main_sha": "6ec8262be4125e8eaa7d2de97358662299c5ed72",
+  "write_scope": "runtime/src/install/**|runtime/tests/test_install*",
+  "claimed_at": "2026-09-13T05:50:30Z",
+  "note": "Atomic in-scope claim marker; authoritative Crazy Wall was FREE on fresh readback."
+}
