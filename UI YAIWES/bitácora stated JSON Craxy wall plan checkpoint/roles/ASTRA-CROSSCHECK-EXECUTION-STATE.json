@@ -100,41 +100,43 @@
   "remaining": [
     "Persist and independently attest exactly one real RequirementTrace per final requirement; current certification remains 0/167",
     "Map still-missing Command Center/UI obligations to real implementation and tests before trace creation",
-    "N17 full-product E2E owner must publish a non-cancelled exact-revision result and must not be treated as platform E2E",
-    "Web/Windows/Linux/Android/iOS evidence remains incomplete; current CI host reports no verified runtime backend",
-    "Benchmark 100x remains refuted: latest canonical CI measured 2.5167x",
+    "N17 backend product E2E is VERIFIED_CLOSED, but it must not be treated as cross-platform E2E",
+    "Web/Windows/Linux/Android/iOS evidence remains incomplete; merge CI still reports no verified runtime backend",
+    "Benchmark 100x remains refuted: merge CI measured 2.489x",
     "Original scanner run 34711848316 remains CANCELLED"
   ],
   "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-PREFLIGHT-SCOPE-003.json",
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T10:15:22Z",
+  "updated_at_utc": "2026-09-13T11:22:00Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
   ],
-  "last_observed_head": "edcbd013bafe766f26c9e1758a0f2c89067e1ec3",
+  "last_observed_head": "574931077ed42046ef0cec0c5ddda4752cef6666",
   "last_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "status": "ACTIVE_LOOP",
-    "checkpoint_read": "b815aab2d750a711c75de19d65ba84ae5ae81dfa",
-    "observed_head": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
+    "checkpoint_read": "574931077ed42046ef0cec0c5ddda4752cef6666",
+    "observed_head": "574931077ed42046ef0cec0c5ddda4752cef6666",
     "verify_research": [
       "N34 final denominator is 167 and VERIFIED_CLOSED.",
       "Prior N35 owner released GAP_RESOLVABLE with 0/167 valid production RequirementTrace rows.",
       "No later N35 claim existed before ASTRA claim; N17 and N27 were left to their active sidecar owners.",
-      "Fresh HEAD CI 34745090975 passed but did not provide a production trace loader or 167 attestations."
+      "Fresh HEAD CI 34745090975 passed but did not provide a production trace loader or 167 attestations.",
+      "PR 55 code CI 34751336489 and test CI 34751342145 both succeeded on the exact changed revisions.",
+      "Post-merge CI 34753763545 succeeded at revision 574931077ed42046ef0cec0c5ddda4752cef6666."
     ],
-    "delta": "Added a strict JSON RequirementTrace inventory loader. It validates exact schema, hashes, revision, relative paths, expected IDs and uniqueness; it never creates evidence or grants PASS.",
+    "delta": "Integrated the strict RequirementTrace loader and its incomplete-inventory guard. It validates exact schema, hashes, revision, safe paths, expected IDs, uniqueness and full expected-ID coverage; it never creates evidence or grants PASS.",
     "files": [
       {
         "path": "runtime/src/coverage/trace_inventory.py",
-        "blob": "79399322f92e20ea08f77d0c8c0f4f278c3dc977"
+        "blob": "c601448e7c283311120fc6c6d2eff38904c87c65"
       },
       {
         "path": "runtime/tests/test_coverage_trace_inventory.py",
-        "blob": "e1b2a065dff7e48831cc37006b6daf2942d3b718"
+        "blob": "bf4b1038591f80a8f92c7a97fb709b26b64c40df"
       }
     ],
     "tests": [
@@ -154,17 +156,27 @@
         "wordflow": "41 passed",
         "runtime": "272 passed",
         "subtests": "42 passed"
+      },
+      {
+        "run_id": 34753763545,
+        "job_id": 103714563772,
+        "revision": "574931077ed42046ef0cec0c5ddda4752cef6666",
+        "result": "SUCCESS",
+        "wordflow": "41 passed",
+        "runtime": "273 passed",
+        "subtests": "42 passed"
       }
     ],
     "simulations": [
       "Malformed schema rejected with invalid_trace_fields.",
       "Unknown requirement ID rejected with unexpected_requirement.",
-      "Duplicate trace identity rejected with duplicate_requirement_trace."
+      "Duplicate trace identity rejected with duplicate_requirement_trace.",
+      "Incomplete expected-ID inventory rejected with deterministic missing_requirement_traces."
     ],
     "refutations": [
       "A loader plus green CI does not certify any of the 167 requirements.",
       "The successful Linux-host suite does not prove Windows, Android, iOS or a real virtualization backend.",
-      "Measured 2.5167x policy lookup improvement refutes a 100x claim."
+      "Merge CI measured 2.489x policy lookup improvement, refuting a 100x claim."
     ],
     "goals_input": {
       "source_integrity": "PASS",
@@ -195,7 +207,7 @@
       "global_closure": "FAIL_CLOSED_0_OF_167"
     },
     "council12": "Evidence review completed across objective, sources, restrictions, dependencies, architecture, reuse, risks, alternatives, proof, refutation, consolidation and decision; no external Council claimed.",
-    "decision": "Keep N35 ACTIVE_LOOP. Next activation must consume only real source/code/test/evidence bindings; do not generate synthetic traces or claim global closure.",
+    "decision": "Close only the incomplete-inventory code defect as VERIFIED_CLOSED. Keep N35 ACTIVE_LOOP at 0/167 and consume only real source/code/test/evidence bindings.",
     "limits": "No product/UI/platform implementation, full four-source semantic trace population, external Council, or 100x benchmark proof was produced."
   },
   "previous_activation": {
@@ -242,25 +254,25 @@
   },
   "candidate_patch": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
-    "status": "CLOSED_UNVERIFIED",
+    "status": "VERIFIED_CLOSED_DELTA",
     "base_sha": "edcbd013bafe766f26c9e1758a0f2c89067e1ec3",
     "branch": "astra-crosscheck-n35-incomplete-inventory",
     "pull_request": 55,
-    "head_sha": "c47ca6e75dfcd79c21f26608817132d27fcf775e",
+    "head_sha": "574931077ed42046ef0cec0c5ddda4752cef6666",
     "defect_reproduced": "A one-row inventory was accepted when three requirement IDs were expected: 1 failed, 4 passed.",
     "delta": "Reject incomplete inventories with a deterministic missing_requirement_traces error; 3 production lines and 13 test lines.",
-    "tests": "5 passed in 0.02s; compileall PASS; git diff --check PASS",
+    "tests": "Local 33 passed plus 24 subtests; CI 34751336489, 34751342145 and post-merge 34753763545 SUCCESS; merge CI 41 Wordflow plus 273 runtime plus 42 subtests",
     "refutations": [
-      "Local targeted tests do not certify PR CI or main.",
+      "The exact changed revisions and merged main are CI-verified, but that certifies only the loader delta.",
       "Completeness enforcement does not create or certify any RequirementTrace.",
       "N35 remains 0/167 and global closure remains fail-closed."
     ],
-    "next_action": "Merge PR 55 only after exact-revision CI succeeds, then continue with genuine source/code/test/evidence bindings."
+    "next_action": "Create RequirementTrace rows only from genuine source/code/test/evidence bindings; current certified trace count remains 0/167."
   },
   "active_claim": {
     "state": "IN_PROGRESS",
     "claimed_at_utc": "2026-09-13T08:11:08Z",
-    "fresh_main_sha": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
+    "fresh_main_sha": "574931077ed42046ef0cec0c5ddda4752cef6666",
     "dependency_evidence": "N34 VERIFIED_CLOSED at 53dee9a50a; prior N35 released GAP_RESOLVABLE at e00b2e6e08; no later N35 claim observed",
     "write_scope": [
       "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/audit/**",
@@ -269,8 +281,8 @@
       "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage*",
       "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
     ],
-    "bounded_strategy": "Add and test one strict fail-closed production RequirementTrace loader; do not synthesize traces or CI attestations.",
-    "code_commit": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
+    "bounded_strategy": "Consume only independently verifiable RequirementTrace bindings; do not synthesize traces or CI attestations.",
+    "code_commit": "574931077ed42046ef0cec0c5ddda4752cef6666",
     "next_action": "Load only genuine per-requirement records after exact source/code/test/evidence hashes and independent successful CI exist."
   }
 }
