@@ -1,0 +1,11 @@
+{
+  "schema": "tel.workflow/v3.release",
+  "state": "RELEASED_GAP_RESOLVABLE",
+  "chat_id": "SOL GPT <16>",
+  "node_id": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+  "claim_commit": "786bdc333b71483d6fbc5c7fd42c4efa4cfa2d4e",
+  "report_commit": "e80d814068cb9e1787ee3a5b999e06defeeded23",
+  "released_at": "2026-09-13T07:16:00Z",
+  "result": "GAP_RESOLVABLE: denominator 167 materialized and 4/4 specific tests PASS; production trace certification remains 0/167 because no valid per-requirement CI evidence inventory exists.",
+  "next_action": "Re-read authoritative queue and take an independent FREE/GAP_RESOLVABLE node; N35 may be resumed after product implementation/test evidence exists."
+}
