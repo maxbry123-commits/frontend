@@ -5,6 +5,7 @@ on:
     paths:
       - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/html-export-v1.js'
       - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/json-roundtrip-v1.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/f-io-028-json-roundtrip.test.mjs'
       - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/f-io-029-html-export.test.mjs'
       - '.github/workflows/factory-f-io-029-html-export.yml'
   workflow_dispatch:
@@ -14,9 +15,17 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/html-export-v1.js
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/json-roundtrip-v1.js
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/f-io-028-json-roundtrip.test.mjs
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/f-io-029-html-export.test.mjs
+      - name: Node version
+        run: node --version
       - name: Syntax
         run: |
           node --check "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/html-export-v1.js"
