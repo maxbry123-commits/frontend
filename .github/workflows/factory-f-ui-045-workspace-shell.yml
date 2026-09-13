@@ -1,0 +1,48 @@
+name: Factory F-UI-045 Workspace Shell
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v192.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/workspace-shell-v1.css'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/ui/workspace-shell-v1.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-045-workspace-shell.spec.mjs'
+      - '.github/workflows/factory-f-ui-045-workspace-shell.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  workspace-shell-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Syntax
+        run: node --check src/ui/workspace-shell-v1.js && node --check tests/e2e/f-ui-045-workspace-shell.spec.mjs
+      - name: Workspace shell browser gate
+        run: npx playwright test tests/e2e/f-ui-045-workspace-shell.spec.mjs --reporter=line
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: f-ui-045-workspace-shell-evidence
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+          if-no-files-found: warn
+          retention-days: 14
