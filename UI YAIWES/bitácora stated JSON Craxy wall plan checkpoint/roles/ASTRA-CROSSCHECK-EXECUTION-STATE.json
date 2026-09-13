@@ -92,13 +92,13 @@
       "platform_probe": "BLOCKED: no_verified_runtime_backend",
       "local_targeted": "32 passed, 24 subtests passed in 0.09s",
       "local_full": "270 passed, 42 subtests; 2 environment failures: local Pydantic version mismatch and Docker socket PermissionError",
-      "trace_certification": "0/167; loader is plumbing only and does not synthesize evidence"
+      "trace_certification": "1/167 independently certified; 166 missing"
     }
   },
   "node_id": "X17-11",
   "owner": "ASTRA_CROSSCHECK",
   "remaining": [
-    "Persist and independently attest exactly one real RequirementTrace per final requirement; current certification remains 0/167",
+    "Persist and independently attest 166 missing RequirementTrace rows; current certification is 1/167",
     "Map still-missing Command Center/UI obligations to real implementation and tests before trace creation",
     "N17 backend product E2E is VERIFIED_CLOSED, but it must not be treated as cross-platform E2E",
     "Web/Windows/Linux/Android/iOS evidence remains incomplete; merge CI still reports no verified runtime backend",
@@ -109,12 +109,12 @@
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T11:22:00Z",
+  "updated_at_utc": "2026-09-13T15:10:00Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
   ],
-  "last_observed_head": "574931077ed42046ef0cec0c5ddda4752cef6666",
+  "last_observed_head": "bf5e1eab4724c96a7db1a7a466c038f781507803",
   "last_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "status": "ACTIVE_LOOP",
@@ -284,5 +284,64 @@
     "bounded_strategy": "Consume only independently verifiable RequirementTrace bindings; do not synthesize traces or CI attestations.",
     "code_commit": "574931077ed42046ef0cec0c5ddda4752cef6666",
     "next_action": "Load only genuine per-requirement records after exact source/code/test/evidence hashes and independent successful CI exist."
+  },
+  "current_activation": {
+    "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+    "status": "CLOSED_UNVERIFIED_DELTA_ACTIVE_LOOP",
+    "checkpoint_read_blob": "afa50922cf0ea3e9f1d9ae91c38a4eccf38c2da3",
+    "observed_main": "4413de2a2cdd100f1d196767b9c7ae1ecfb20353",
+    "verify_research": [
+      "PR 56 is closed without merge, but its exact code/test delta is present on main as 4413de2a.",
+      "Main CI 34760071302 completed success: 41 Wordflow, 277 runtime, 42 subtests.",
+      "Production trace inventory is 1/167; prior 0/167 checkpoint text was stale."
+    ],
+    "defect_reproduced": "REQ-S3-999.json with internal requirement_id REQ-S3-057 was accepted.",
+    "delta": "Require JSON filename stem to equal the internal requirement_id; one production guard and one regression.",
+    "files": [
+      {
+        "path": "runtime/src/coverage/trace_inventory.py",
+        "blob": "c09e3100c6a2d1d1adc7a5dd313808fc96fc640c"
+      },
+      {
+        "path": "runtime/tests/test_coverage_trace_inventory.py",
+        "blob": "d05ba429da8a45b32dca82e3b2ddec19f02899d5"
+      }
+    ],
+    "tests": [
+      {
+        "scope": "pre-delta reproduction",
+        "result": "FAIL: mismatched filename accepted"
+      },
+      {
+        "scope": "post-delta direct regression",
+        "result": "2 PASS; compileall PASS"
+      },
+      {
+        "run_id": 34764726841,
+        "revision": "bf5e1eab4724c96a7db1a7a466c038f781507803",
+        "result": "PENDING"
+      }
+    ],
+    "refutations": [
+      "Local direct checks do not replace exact-head CI.",
+      "One certified trace is 0.60%, not full product coverage.",
+      "Main CI benchmark measured 2.5842x, not 100x."
+    ],
+    "council12": "Single-agent evidence review covered objective, sources, restrictions, dependencies, architecture, reuse, risks, alternatives, proof, refutation, consolidation and decision; no external Council claimed.",
+    "goals_output": {
+      "source_integrity": "PASS",
+      "literal_preserved": "PASS",
+      "requirements_enumerated": "PASS_167",
+      "ownership_valid": "PASS",
+      "scope_respected": "PASS",
+      "reuse_evaluated": "PASS",
+      "code_real": "PASS_DELTA",
+      "tests_real": "PASS_LOCAL_DIRECT",
+      "evidence_sha_bound": "PENDING_EXACT_HEAD_CI",
+      "states_coherent": "PARTIAL_UPDATED_1_OF_167",
+      "regressions_refuted": "PARTIAL",
+      "global_closure": "FAIL_CLOSED"
+    },
+    "decision": "Keep N35 ACTIVE_LOOP. Merge only after exact-head CI succeeds; then continue genuine bindings, never synthetic rows."
   }
 }
