@@ -1,0 +1,32 @@
+{
+  "schema":"yaiwes.crazy-wall.report.v2",
+  "contract":"tel.workflow/v3",
+  "role":"SOL_GPT2",
+  "chat_id":"SOL-2-GPT-2026-09-12T22:41-05:00",
+  "node_id":"S2-08-PLATFORM-SANDBOX-ROUTER",
+  "status":"PASS",
+  "pass_percent":100,
+  "classification":"REUSE_EXISTING_NO_PRODUCT_DELTA_REQUIRED",
+  "fresh_claim_sha":"9a6f63a6b7aab789fb32e0a7b3e8a60d76e5b8ae",
+  "tested_sha":"162a1b5d56a825ce5bdf9df0e7c3b2ee45e3f47b",
+  "fresh_head_at_verify":"3d3b05a114b66b43fc75fd2fc61f174a76989494",
+  "paths":[
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/platform_matrix.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/probe.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/sandbox_router.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform_matrix.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_sandbox_router.py"
+  ],
+  "source_blobs":{"sandbox_router":"27fc0b6c7fc6e0a1844f47941ddecdcd06834be0","test_platform_matrix":"0e6691b99034f5c66df8c497fa3069f970d2cc95","test_sandbox_router":"85d6d6acf060113b0545494de5e0302ba311e311"},
+  "test":{"run_id":34735844744,"job_id":103667777897,"conclusion":"success","wordflow":"41 passed","runtime":"192 passed + 32 subtests","warnings":["100x benchmark truthfully reports 2.5799x, not 100x","real CI host probe BLOCKED with no verified runtime backend"]},
+  "freshness_refutation":{"compare_base":"162a1b5d56a825ce5bdf9df0e7c3b2ee45e3f47b","compare_head":"3d3b05a114b66b43fc75fd2fc61f174a76989494","ahead_by":76,"relevant_scope_files_changed":[]},
+  "refutations":[
+    {"id":"R1","result":"PASS","assertion":"source-only backend names do not promote runtime support"},
+    {"id":"R2","result":"PASS","assertion":"unavailable preferred backend fails closed instead of silently falling back"},
+    {"id":"R3","result":"PASS","assertion":"sandbox lifecycle create/start/stop/destroy is idempotent and avoids duplicate effects"}
+  ],
+  "gaps":[],
+  "remaining_gaps":["N06 benchmark separately refutes 100x speedup; not a S2-08 functional failure","real CI host lacks verified virtualization backend; router correctly remains BLOCKED"],
+  "next_free_node":"S2-09-OTEL-COLLECTOR-BOUNDARY",
+  "project_verified_closed":false
+}
