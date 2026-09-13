@@ -65,7 +65,17 @@ class EvidenceMatrixTests(unittest.TestCase):
         result = audit_matrix(self.root, matrix, self.lookup)
         self.assertEqual(result.status, "TRACEABILITY_PASS")
         self.assertEqual(result.coverage_percent, 100)
+        self.assertEqual(result.contradictions, ())
         self.assertFalse(result.product_verified)
+
+    def test_matrix_surfaces_contradictory_requirement_traces(self):
+        conflicting = replace(self.trace, task_id="T2")
+        matrix = RequirementMatrix(("R1",), (self.trace, conflicting), ("code.py",))
+        result = audit_matrix(self.root, matrix, self.lookup)
+        self.assertEqual(result.status, "GAP")
+        self.assertEqual(result.coverage_percent, 0)
+        self.assertEqual(result.contradictions, ("R1",))
+        self.assertIn("R1:contradiction", result.gaps)
 
     def test_untrusted_evidence_cannot_self_assert_success(self):
         payload = json.loads(self.evidence_bytes)

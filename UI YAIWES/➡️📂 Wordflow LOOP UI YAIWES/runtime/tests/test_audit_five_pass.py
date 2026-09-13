@@ -36,6 +36,7 @@ class FivePassTests(unittest.TestCase):
         self.assertEqual(result.status, "TRACEABILITY_PASS")
         self.assertEqual(result.coverage_percent, 100)
         self.assertFalse(result.product_verified)
+        self.assertEqual(result.contradictions, ())
         self.assertEqual(result.inverse, (("code.py", "T1", "R1", "G1"),))
 
     def test_missing_requirement_uses_full_denominator(self):
@@ -53,6 +54,16 @@ class FivePassTests(unittest.TestCase):
     def test_duplicate_trace_cannot_inflate_coverage(self):
         result = self.run_audit(traces=[self.trace, self.trace])
         self.assertEqual(result.verified_requirements, 0)
+        self.assertEqual(result.contradictions, ())
+
+    def test_conflicting_duplicate_trace_is_explicit_contradiction(self):
+        conflicting = replace(self.trace, task_id="T2")
+        result = self.run_audit(traces=[self.trace, conflicting])
+        self.assertEqual(result.status, "GAP")
+        self.assertEqual(result.verified_requirements, 0)
+        self.assertEqual(result.coverage_percent, 0)
+        self.assertEqual(result.contradictions, ("R1",))
+        self.assertIn("R1:contradiction", result.gaps)
 
     def test_orphan_artifact_blocks_pass(self):
         self.assertIn("orphan_artifact:other.py", self.run_audit(
