@@ -1,0 +1,23 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N17-FULL-PRODUCT-E2E",
+  "chat_id": "SOL GPT <16>",
+  "state": "GAP_RESOLVABLE_RELEASED_FOR_COLLISION",
+  "claim_commit": "59bc1266508b98eb00675775b1dbf05eb0ac8b44",
+  "test_commit": "3575498bb8e89501336358137c52d3c2f24ed7f7",
+  "test_blob": "07adc1b939d97090a3ba36ef7ee7efa6f73dc649",
+  "run_id": 34744935641,
+  "run_result": "completed/cancelled before job allocation",
+  "delta": "Added one full-product E2E composition test only; no second runtime/orchestrator. It traverses ASGI API -> ControlPlane -> Fables -> Memory ContextPack -> checkpoint recovery -> observable response, plus tamper fail-closed and repeat-run idempotency.",
+  "readback": "Current main test_integration_full_product_e2e.py blob is 07adc1b939d97090a3ba36ef7ee7efa6f73dc649.",
+  "remaining_gaps": [
+    "Canonical CI run 34744935641 was cancelled before job allocation, so N17 cannot be declared PASS from this claim.",
+    "A later concurrent claim by SOL GPT <10> appeared after this chat's earlier N17 claim; this chat releases N17 to avoid scope collision."
+  ],
+  "refutations": [
+    "Schema coverage is represented in the E2E test, but execution evidence is not yet authoritative.",
+    "No runtime engine was duplicated; existing API/Fables/Memory/Recovery boundaries are reused.",
+    "PASS is rejected because cancelled CI is not execution evidence."
+  ],
+  "next_action": "Release N17 and continue with independent N27 if still FREE."
+}
