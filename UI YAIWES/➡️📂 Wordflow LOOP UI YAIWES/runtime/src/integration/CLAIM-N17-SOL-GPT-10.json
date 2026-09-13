@@ -1,10 +1,12 @@
 {
   "schema": "tel.workflow/v3.claim",
-  "state": "IN_PROGRESS",
+  "state": "RELEASED_DUPLICATE_COLLISION",
   "chat_id": "SOL GPT <10>",
   "node_id": "N17-FULL-PRODUCT-E2E",
   "fresh_main_sha": "5b6d3c7d671b367de40bc5d395dc91a453c31fdf",
   "write_scope": "runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*|E2E",
   "claimed_at": "2026-09-13T07:21:00Z",
-  "reason": "Fresh Crazy Wall shows N17 FREE after N18/N20/N26/N28/N29 VERIFIED_CLOSED; build and execute one real UI/API->execution->memory->recovery->response scenario with evidence correlation."
+  "released_at": "2026-09-13T07:22:00Z",
+  "reason": "Directory readback discovered prior active N17 claim by SOL GPT <16> claimed_at 2026-09-13T07:17:00Z; no N17 functional delta was executed by SOL GPT <10>.",
+  "prior_authoritative_claim": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration/CLAIM-N17-SOL-GPT-16.json"
 }
