@@ -8,6 +8,8 @@ Policy is grounded in the YAIWES platform requirement: Android prefers
 AVF/crosvm with QEMU fallback; Windows prefers WHPX with QEMU fallback; Linux
 prefers KVM with QEMU fallback; iOS is secondary/conditional; Web cannot host
 the local native hypervisor and is therefore blocked for local VM execution.
+N02 canonical anchors are retained so requirement-to-code traceability does not
+depend on descriptive labels invented by this module.
 """
 from __future__ import annotations
 
@@ -65,7 +67,11 @@ class CapabilitySnapshot:
         native_permission: bool = False,
     ) -> "CapabilitySnapshot":
         parsed = Platform(platform)
-        normalized = frozenset(str(item).strip().upper() for item in available_backends if str(item).strip())
+        normalized = frozenset(
+            str(item).strip().upper()
+            for item in available_backends
+            if str(item).strip()
+        )
         return cls(parsed, normalized, hardware_virtualization, native_permission)
 
 
@@ -84,35 +90,35 @@ _POLICIES = (
         Platform.WEB,
         (),
         (),
-        "REQ-S2-platform-web",
+        "N02:CAN-005",
         "Browser UI may control/mirror a machine, but Web is not a local native hypervisor host.",
     ),
     PlatformPolicy(
         Platform.WINDOWS,
         ("WHPX",),
         ("QEMU",),
-        "REQ-S2-windows-whpx-qemu",
+        "N02:CAN-005",
         "Prefer WHPX acceleration; QEMU software execution is fallback only.",
     ),
     PlatformPolicy(
         Platform.LINUX,
         ("KVM",),
         ("QEMU",),
-        "REQ-S2-linux-kvm-qemu",
+        "N02:CAN-005|CAN-007",
         "Prefer KVM acceleration with QEMU; software QEMU is fallback only.",
     ),
     PlatformPolicy(
         Platform.ANDROID,
         ("AVF", "CROSVM"),
         ("QEMU",),
-        "REQ-S2-android-avf-crosvm-qemu",
+        "N02:CAN-005|CAN-008",
         "AVF/crosvm is primary when hardware virtualization and permission exist; QEMU is fallback.",
     ),
     PlatformPolicy(
         Platform.IOS,
         (),
         ("QEMU",),
-        "REQ-S2-ios-qemu-utm-style",
+        "N02:CAN-005",
         "Secondary platform: QEMU/UTM-style execution remains conditional because iOS lacks the same hypervisor path.",
     ),
 )
@@ -210,7 +216,10 @@ def assess_platform(snapshot: CapabilitySnapshot) -> PlatformAssessment:
             policy.source_anchor,
         )
 
-    primary = next((name for name in policy.primary if name in snapshot.available_backends), None)
+    primary = next(
+        (name for name in policy.primary if name in snapshot.available_backends),
+        None,
+    )
     has_qemu = "QEMU" in snapshot.available_backends
     if primary and has_qemu and snapshot.hardware_virtualization:
         return PlatformAssessment(
@@ -240,7 +249,9 @@ def assess_platform(snapshot: CapabilitySnapshot) -> PlatformAssessment:
     )
 
 
-def assess_all(snapshots: Iterable[CapabilitySnapshot]) -> tuple[PlatformAssessment, ...]:
+def assess_all(
+    snapshots: Iterable[CapabilitySnapshot],
+) -> tuple[PlatformAssessment, ...]:
     """Return one deterministic row for every platform; missing probes fail closed."""
 
     supplied: dict[Platform, CapabilitySnapshot] = {}
