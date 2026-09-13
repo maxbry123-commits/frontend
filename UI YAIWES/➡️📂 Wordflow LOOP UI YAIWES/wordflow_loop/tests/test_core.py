@@ -8,22 +8,36 @@ from wordflow_loop.layers import layer_01_research
 from wordflow_loop.runner import LayerRunner
 
 
+RESEARCH_URL = "https://github.com/example/project"
+RESEARCH_AS_OF = "2026-09-13T03:00:00Z"
+
+
+def verified_research_payload() -> dict:
+    return {
+        "as_of": RESEARCH_AS_OF,
+        "max_age_seconds": 3600,
+        "candidates": [
+            {
+                "url": RESEARCH_URL,
+                "snippet": "official code",
+                "source_class": "code_official",
+                "verification": {
+                    "status": "VERIFIED",
+                    "checked_url": RESEARCH_URL,
+                    "retrieved_at": "2026-09-13T02:30:00Z",
+                    "adapter": "test-search-adapter",
+                    "content_sha256": "b" * 64,
+                },
+            }
+        ],
+    }
+
+
 def test_runner_persists_and_recovers_completed_node(tmp_path: Path):
     ledger_path = tmp_path / "state" / "ledger.jsonl"
     runner = LayerRunner({"L01_RESEARCH": layer_01_research.run}, ledger_path=ledger_path)
     node = NodeContract.build(node_id="N1", layer="L01_RESEARCH", literal="research")
-    result = runner.run(
-        node,
-        {
-            "candidates": [
-                {
-                    "url": "https://github.com/example/project",
-                    "snippet": "official code",
-                    "source_class": "code_official",
-                }
-            ]
-        },
-    )
+    result = runner.run(node, verified_research_payload())
     assert result.status == Status.PASS
     assert ledger_path.exists()
 
@@ -76,18 +90,7 @@ def test_tampered_ledger_fails_closed_on_recovery(tmp_path: Path):
     ledger_path = tmp_path / "tamper" / "ledger.jsonl"
     runner = LayerRunner({"L01_RESEARCH": layer_01_research.run}, ledger_path=ledger_path)
     node = NodeContract.build(node_id="N1", layer="L01_RESEARCH", literal="research")
-    result = runner.run(
-        node,
-        {
-            "candidates": [
-                {
-                    "url": "https://github.com/example/project",
-                    "snippet": "official code",
-                    "source_class": "code_official",
-                }
-            ]
-        },
-    )
+    result = runner.run(node, verified_research_payload())
     assert result.status == Status.PASS
 
     row = json.loads(ledger_path.read_text(encoding="utf-8").strip())
