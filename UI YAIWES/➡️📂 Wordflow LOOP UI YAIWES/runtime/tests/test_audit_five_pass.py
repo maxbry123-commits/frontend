@@ -86,6 +86,28 @@ class FivePassTests(unittest.TestCase):
         self.assertEqual(result.status, "GAP")
         self.assertEqual(result.coverage_percent, 0)
 
+    def test_omitted_artifact_inventory_cannot_pass(self):
+        result = self.run_audit(artifacts=[])
+        self.assertEqual(result.status, "GAP")
+        self.assertIn("unlisted_implementation:code.py", result.gaps)
+
+    def test_reverse_inventory_requires_both_directions(self):
+        result = self.run_audit(artifacts=["other.py"])
+        self.assertIn("orphan_artifact:other.py", result.gaps)
+        self.assertIn("unlisted_implementation:code.py", result.gaps)
+
+    def test_duplicate_artifact_inventory_is_rejected(self):
+        result = self.run_audit(artifacts=["code.py", "code.py"])
+        self.assertEqual(result.status, "GAP")
+        self.assertIn("duplicate_artifact:code.py", result.gaps)
+
+    def test_shared_implementation_and_generator_inventory_pass(self):
+        second = replace(self.trace, requirement_id="R2", task_id="T2")
+        result = self.run_audit(traces=[self.trace, second], expected=["R1", "R2"],
+                                artifacts=(p for p in ["code.py"]))
+        self.assertEqual(result.status, "TRACEABILITY_PASS")
+        self.assertEqual(result.verified_requirements, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

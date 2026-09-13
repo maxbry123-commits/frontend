@@ -6,6 +6,7 @@ requirements and an independent CI verifier; declarations alone cannot pass.
 from __future__ import annotations
 
 import ast
+from collections import Counter
 from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path, PurePosixPath
@@ -87,6 +88,8 @@ verify_execution must validate the evidence against trusted run/job data and
 bind it to trace.revision and the exact implementation/test hashes. A callback
 returning True unconditionally is not an independent verifier. This module
 does not fetch URLs, execute untrusted code, or authorize canonical writes.
+artifacts must list each in-scope implementation path exactly once. Both sides
+of the reverse inventory are checked; multiple requirements may share a file.
 """
     root = Path(root).resolve(strict=True)
     expected_list = list(expected_requirements)
@@ -97,7 +100,7 @@ does not fetch URLs, execute untrusted code, or authorize canonical writes.
         gaps.append("invalid_requirement_inventory")
     if len(expected_list) != len(expected):
         gaps.append("duplicate_expected_requirement")
-    counts = {key: sum(r.requirement_id == key for r in rows) for key in expected}
+    counts = Counter(r.requirement_id for r in rows)
     passed: set[str] = set()
     inverse: list[tuple[str, str, str, str]] = []
     for row in rows:
@@ -130,10 +133,17 @@ does not fetch URLs, execute untrusted code, or authorize canonical writes.
         if len(gaps) == start:
             passed.add(key)
         inverse.append((row.implementation.path, row.task_id, key, row.goal_id))
-    # 4: reverse coverage includes every artifact from the caller's inventory.
+    # 4: reconcile both sides; an omitted inventory must not certify coverage.
     mapped = {entry[0] for entry in inverse}
-    for path in sorted(set(artifacts) - mapped):
+    artifact_counts = Counter(artifacts)
+    inventory = set(artifact_counts)
+    for path in sorted(inventory):
+        if artifact_counts[path] != 1:
+            gaps.append(f"duplicate_artifact:{path}")
+    for path in sorted(inventory - mapped):
         gaps.append(f"orphan_artifact:{path}")
+    for path in sorted(mapped - inventory):
+        gaps.append(f"unlisted_implementation:{path}")
     for key in sorted(expected):
         if counts[key] == 0:
             gaps.append(f"{key}:missing_trace")
