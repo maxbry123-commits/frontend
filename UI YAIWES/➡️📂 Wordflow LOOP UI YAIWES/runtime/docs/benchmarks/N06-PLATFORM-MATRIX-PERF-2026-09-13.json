@@ -2,7 +2,7 @@
   "schema": "yaiwes.n06.platform-matrix-benchmark.v1",
   "node_id": "N06-PLATFORM-MATRIX-PERF-100X",
   "owner": "sol 8 gpt",
-  "status": "TESTING_CI_PENDING",
+  "status": "PASS_N06_SCOPE",
   "authority_note": "SOURCE_PRESENT is not runtime support. SUPPORTED requires executable backend facts from the read-only probe and passing tests.",
   "source_requirement": {
     "android": "AVF/crosvm primary with QEMU fallback; hardware virtualization when available",
@@ -40,12 +40,47 @@
       "speedup_ratio": 4.6815,
       "meets_100x": false
     },
-    "authoritative_ci_observation": null,
-    "100x_claim": "NOT_DEMONSTRATED; preliminary measurement refutes 100x for this metric. CI result must replace preliminary value before closure."
+    "authoritative_ci_observation": {
+      "run_id": 34735844744,
+      "job_id": 103667777897,
+      "runner": "ubuntu-24.04 / Python 3.11.16",
+      "baseline_ns": 16450178,
+      "candidate_ns": 6376241,
+      "speedup_ratio": 2.5799,
+      "meets_100x": false
+    },
+    "100x_claim": "REFUTED_FOR_POLICY_LOOKUP_LATENCY: authoritative CI measured 2.5799x, not 100x. No broader VM/runtime 100x claim is made."
+  },
+  "real_host_observation": {
+    "run_id": 34735844744,
+    "job_id": 103667777897,
+    "platform": "linux",
+    "available_backends": [],
+    "hardware_virtualization": false,
+    "native_permission": false,
+    "state": "BLOCKED",
+    "selected_backend": null,
+    "accelerated": false,
+    "reason": "no_verified_runtime_backend",
+    "interpretation": "The CI runner correctly fails closed instead of converting OS identity or repository source presence into runtime support."
+  },
+  "ci": {
+    "head_sha": "162a1b5d56a825ce5bdf9df0e7c3b2ee45e3f47b",
+    "run_id": 34735844744,
+    "job_id": 103667777897,
+    "conclusion": "success",
+    "wordflow": "41 passed",
+    "runtime": "192 passed, 2 warnings, 32 subtests passed",
+    "runtime_seconds": 733.86,
+    "warnings_expected_evidence": ["N06_BENCHMARK", "N06_REAL_HOST"]
   },
   "refutations": [
-    "Repository/vendor source presence alone cannot produce SUPPORTED.",
-    "Operating-system identity alone cannot invent WHPX/AVF/KVM permission.",
-    "100x is never inferred: benchmark computes the ratio and records meets_100x from the measured value."
+    {"question": "cumplio_todo_el_schema_n06", "result": "PASS", "evidence": "5-platform matrix, read-only real capability probe, tests, and reproducible benchmark are present and passed CI."},
+    {"question": "queda_gap_real_dentro_n06", "result": "PASS_NO_INTERNAL_GAP", "evidence": "No known N06-scope gap remains. Missing VM lifecycle/provider capabilities remain explicitly owned by N20/N10."},
+    {"question": "evidencia_demuestra_100_pass_n06", "result": "PASS", "evidence": "Run 34735844744 job 103667777897 succeeded: 41 Wordflow + 192 runtime + 32 subtests; benchmark truthfully refuted 100x at 2.5799x and real host probe failed closed."}
+  ],
+  "remaining_gaps_outside_n06": [
+    "N20-SANDBOX-UEK-ROUTER owns sandbox/VM lifecycle and supported/conditional/blocked execution routing.",
+    "N10-AVF-PROVIDER-CAPABILITY owns Android AVF provider/acquisition and real Android ARM64/Cuttlefish capability proof."
   ]
 }
