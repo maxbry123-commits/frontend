@@ -109,13 +109,68 @@
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T11:22:00Z",
+  "updated_at_utc": "2026-09-13T12:08:13Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
   ],
-  "last_observed_head": "574931077ed42046ef0cec0c5ddda4752cef6666",
+  "last_observed_head": "24297a813d00ad66eb5898ebcd0a5c5f022b36a4",
   "last_activation": {
+    "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+    "status": "CLOSED_UNVERIFIED_DELTA",
+    "checkpoint_read": "0ec81bd58b9199b05c507828a4fff18ad8492fe3",
+    "observed_head": "24297a813d00ad66eb5898ebcd0a5c5f022b36a4",
+    "verify_research": [
+      "N34 remains VERIFIED_CLOSED at a 167-requirement denominator; N35 remains 0/167 certified traces.",
+      "The N35 trace loader accepted colon-bearing paths even though five_pass rejects every such path as unsafe_path.",
+      "Fresh origin/main did not change after the defect reproduction; no foreign N35 scope collision was observed."
+    ],
+    "delta": "Aligned the trace loader path guard with five_pass so Windows-drive and alternate-stream-style paths cannot enter an inventory that the auditor cannot read.",
+    "files": [
+      {
+        "path": "runtime/src/coverage/trace_inventory.py",
+        "blob": "f7e1a389427fec419cc5753f60a464f540b18656"
+      },
+      {
+        "path": "runtime/tests/test_coverage_trace_inventory.py",
+        "blob": "074490c189b3dba1629dad33cdfc643546f7c066"
+      }
+    ],
+    "tests": [
+      "Red: 2 failed and 5 passed before the guard; C:/source.md and source:alternate.md were incorrectly accepted.",
+      "Green scoped regression: 35 passed plus 24 subtests in 0.06s.",
+      "python -m compileall -q src/audit src/coverage PASS; git diff --check PASS."
+    ],
+    "simulations": [
+      "Windows drive-style path is rejected before inventory materialization.",
+      "Colon-bearing alternate-stream-style path is rejected before inventory materialization.",
+      "Existing valid relative trace inventory remains accepted."
+    ],
+    "refutations": [
+      "Local scoped PASS does not certify CI or merged main.",
+      "The path guard does not create or certify any of the 167 required traces.",
+      "No web, Windows, Linux guest, Android or iOS product E2E was executed."
+    ],
+    "goals_output": {
+      "source_integrity": "PASS",
+      "literal_preserved": "PASS",
+      "requirements_enumerated": "PASS_167",
+      "ownership_valid": "PASS",
+      "scope_respected": "PASS",
+      "reuse_evaluated": "PASS_EXISTING_GUARD",
+      "code_real": "PASS_DELTA_ONLY",
+      "tests_real": "PASS_LOCAL_SCOPED",
+      "evidence_sha_bound": "PENDING_CI",
+      "states_coherent": "PARTIAL",
+      "regressions_refuted": "PASS_SCOPED_ONLY",
+      "global_closure": "FAIL_CLOSED_0_OF_167"
+    },
+    "council12": "Reviewed objective, sources, restrictions, dependencies, architecture, reuse, risks, alternatives, proof, refutation, consolidation and decision locally; no external Council claimed.",
+    "decision": "Publish the minimal N35 path-consistency delta for exact-revision CI; keep N35 ACTIVE_LOOP at 0/167.",
+    "code_commit": "e9a8b805a707c176bb818a2a66e49d41a262869c",
+    "limits": "No production RequirementTrace, cross-platform E2E, real virtualization backend or 100x benchmark proof was produced."
+  },
+  "prior_activation_20260913T1122Z": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "status": "ACTIVE_LOOP",
     "checkpoint_read": "574931077ed42046ef0cec0c5ddda4752cef6666",
