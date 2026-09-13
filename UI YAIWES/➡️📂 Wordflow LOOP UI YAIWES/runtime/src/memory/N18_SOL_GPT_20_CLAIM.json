@@ -1,0 +1,11 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "chat_id": "SOL GPT <20>",
+  "node_id": "N18-MEMORY-RETRIEVAL-CONTEXT",
+  "fresh_main_sha": "f1a435ae3a2cffc93548639ea2d7a66d8d086c9a",
+  "write_scope": "runtime/src/memory/**|runtime/src/agent/**|runtime/tests/test_memory*|runtime/tests/test_agent*",
+  "claimed_at": "2026-09-13T06:31:15Z",
+  "state": "CLAIMED",
+  "execution_state": "IN_PROGRESS",
+  "note": "Reentry from authoritative GAP_RESOLVABLE; no N18 claim marker found in memory/agent scopes on fresh readback."
+}
