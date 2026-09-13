@@ -92,30 +92,28 @@
       "platform_probe": "BLOCKED: no_verified_runtime_backend",
       "local_targeted": "32 passed, 24 subtests passed in 0.09s",
       "local_full": "270 passed, 42 subtests; 2 environment failures: local Pydantic version mismatch and Docker socket PermissionError",
-      "trace_certification": "1/167 independently certified; 166 missing"
+      "trace_certification": "2/167 independently certified; 165 missing"
     }
   },
   "node_id": "X17-11",
   "owner": "ASTRA_CROSSCHECK",
   "remaining": [
-    "Wait for exact PR 59 head CI 34773642113; merge only on SUCCESS and verify post-merge CI",
-    "Persist and independently attest 165 further RequirementTrace rows after REQ-S3-055 is integrated",
-    "Implement and test the missing executable FinalJudge behavior before considering REQ-S3-056",
-    "N17 backend product E2E is VERIFIED_CLOSED, but it must not be treated as cross-platform E2E",
-    "Web/Windows/Linux/Android/iOS evidence remains incomplete; merge CI still reports no verified runtime backend",
-    "Benchmark 100x remains refuted: merge CI measured 2.489x",
+    "Persist and independently attest 165 missing RequirementTrace rows",
+    "Implement and test executable FinalJudge behavior before considering REQ-S3-056",
+    "Web/Windows/Linux/Android/iOS evidence remains incomplete; merge CI reports no verified runtime backend",
+    "Benchmark 100x remains refuted: post-merge CI measured 2.8972x",
     "Original scanner run 34711848316 remains CANCELLED"
   ],
   "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-PREFLIGHT-SCOPE-003.json",
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T18:30:22Z",
+  "updated_at_utc": "2026-09-13T19:01:05Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
   ],
-  "last_observed_head": "5ec61adc86770b6295c78e0e533b7a32292608f3",
+  "last_observed_head": "c480fcd8445d2d00501b01de4b0b45c37b6a6029",
   "last_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "status": "ACTIVE_LOOP",
@@ -289,7 +287,7 @@
   "current_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "requirement_id": "REQ-S3-055",
-    "status": "CLOSED_UNVERIFIED_DELTA_ACTIVE_LOOP",
+    "status": "VERIFIED_CLOSED_DELTA_ACTIVE_LOOP",
     "checkpoint_read_blob": "06a8e8344825302f15d1b21c5497039ffcf5b9d3",
     "observed_main": "5ec61adc86770b6295c78e0e533b7a32292608f3",
     "candidate_head": "8d67425bb786fd052cd1a524b12d110e75fad16a",
@@ -326,19 +324,25 @@
         "result": "35 passed, 24 subtests passed in 0.08s"
       },
       {
-        "scope": "compileall and diff-check",
-        "result": "PASS"
+        "run_id": 34773642113,
+        "job_id": 103771168287,
+        "revision": "8d67425bb786fd052cd1a524b12d110e75fad16a",
+        "result": "SUCCESS: 41 Wordflow, 279 runtime, 42 subtests"
       },
       {
-        "run_id": 34773642113,
-        "revision": "8d67425bb786fd052cd1a524b12d110e75fad16a",
-        "result": "WAITING_FOR_CONCURRENCY; not declared PASS"
+        "run_id": 34775560166,
+        "job_id": 103772919055,
+        "revision": "c480fcd8445d2d00501b01de4b0b45c37b6a6029",
+        "result": "SUCCESS: 41 Wordflow, 279 runtime, 42 subtests",
+        "benchmark": "2.8972x; meets_100x=false",
+        "platform_probe": "BLOCKED:no_verified_runtime_backend"
       }
     ],
     "refutations": [
-      "Local green tests do not authorize merge before exact branch CI succeeds.",
-      "Two independently bound traces would be 1.20%, not full coverage.",
-      "REQ-S3-056 cannot be certified from workflow metadata alone."
+      "Successful branch and post-merge CI certify only REQ-S3-055 and its trace binding.",
+      "Two certified traces are 1.20%, not complete product coverage.",
+      "Post-merge benchmark measured 2.8972x, not 100x; the Linux host reported no verified runtime backend.",
+      "REQ-S3-056 remains uncertifiable until executable FinalJudge behavior and terminal-state tests exist."
     ],
     "simulations": [
       "Missing trace file reproduces a deterministic FileNotFoundError in the direct binding test.",
@@ -346,12 +350,13 @@
       "Trusted lookup is constrained to the exact historical run/job/revision."
     ],
     "council12": "Single-agent evidence review covered objective, sources, restrictions, dependencies, architecture, reuse, risks, alternatives, proof, refutation, consolidation and decision; no external Council claimed.",
-    "decision": "Keep PR 59 open and N35 ACTIVE_LOOP until exact branch CI succeeds; then merge and verify post-merge CI. Certification remains 1/167 on main.",
-    "pull_request": 59
+    "decision": "Close REQ-S3-055 trace delta as VERIFIED_CLOSED. Keep N35 ACTIVE_LOOP at 2/167 and continue only genuine independently attested bindings.",
+    "pull_request": 59,
+    "merge_commit": "c480fcd8445d2d00501b01de4b0b45c37b6a6029"
   },
   "n35_next_trace_claim": {
     "requirement_id": "REQ-S3-055",
-    "state": "CLOSED_UNVERIFIED",
+    "state": "VERIFIED_CLOSED",
     "claimed_at_utc": "2026-09-13T18:08:00Z",
     "fresh_main_sha": "0a66a50c78ecfbcbaadad5c4716d685d7eee7de0",
     "source_anchor": "§55 CROSS-CHECK",
@@ -375,7 +380,12 @@
     "branch": "astra-n35-req-s3-055-20260913",
     "head_sha": "8d67425bb786fd052cd1a524b12d110e75fad16a",
     "ci_run": 34773642113,
-    "ci_status": "waiting_for_concurrency",
-    "certification_if_integrated": "2/167; 165 missing"
+    "ci_status": "success",
+    "certification_if_integrated": "2/167; 165 missing",
+    "merge_commit": "c480fcd8445d2d00501b01de4b0b45c37b6a6029",
+    "ci_job": 103771168287,
+    "post_merge_ci_run": 34775560166,
+    "post_merge_ci_job": 103772919055,
+    "certification": "2/167; 165 missing"
   }
 }
