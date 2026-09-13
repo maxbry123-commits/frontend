@@ -1,0 +1,90 @@
+{
+  "schema": "yaiwes.factory.editor.stability.evidence.v1",
+  "node": "FACTORY-E01-EDITOR-STABILITY",
+  "owner": "ASTRA_GPT",
+  "status": "TEST_RUNNING",
+  "baseline": {
+    "version": "V1.8",
+    "published": true,
+    "live_50_cycle_run": 34721912175,
+    "live_50_cycle_result": "FAIL",
+    "classification": {
+      "PRODUCT_FAILURE": [
+        "context scrollTop remained 0 on mouse/touch",
+        "editor project state was not persisted across reload"
+      ],
+      "TEST_HARNESS_FAILURE": [
+        "unscoped [data-breakpoint=desktop] matched button and canvas"
+      ],
+      "NOT_PROVEN_PRODUCT_FAILURE": [
+        "desktop/tablet/mobile breakpoint behavior after selector collision"
+      ]
+    }
+  },
+  "candidate": {
+    "version": "V1.9",
+    "entrypoint": "index-v19.html",
+    "runtime": "src/app-v19.js",
+    "css": "stability-v19.css",
+    "previous_v18_files_modified": false,
+    "changes": [
+      "persist state/components/selection/history/version + zoom + breakpoint to yaiwes-factory-project-v19",
+      "restore project on reload with structural validation and bounds",
+      "remove render-time forced context-scroll scrollTop=0 behavior",
+      "remove nested OSS grid scroll in V1.9 so context panel is the single vertical scroll surface",
+      "add touch/pen Pointer Events movement while preserving HTML5 mouse drag/drop",
+      "scope breakpoint controls to .canvas-controls"
+    ]
+  },
+  "goals12": [
+    ["G01","Preserve approved V1.8","PASS_SOURCE: additive V1.9 files only"],
+    ["G02","Reproduce/classify regressions","PASS: product vs harness split recorded"],
+    ["G03","Drag/drop mouse remains functional","TEST_PENDING_V19"],
+    ["G04","Touch/pen movement functional","TEST_PENDING_V19"],
+    ["G05","Selection/layers stay coherent","TEST_PENDING_V19"],
+    ["G06","Project survives reload","TEST_PENDING_V19"],
+    ["G07","Canvas remains visible","TEST_PENDING_V19"],
+    ["G08","One contextual touch-scroll panel","TEST_PENDING_V19"],
+    ["G09","Undo/redo/version controls observable","TEST_PENDING_V19"],
+    ["G10","No unnecessary OSS download","PASS: native patch first"],
+    ["G11","Evidence tied to exact candidate SHA","RUNNING"],
+    ["G12","No publish before local candidate PASS","PASS_POLICY"]
+  ],
+  "council12": [
+    "Objective: close editor stability before broader integration",
+    "Authority: live run/log/source outrank historical handoff",
+    "Preservation: V1.8 remains rollback baseline",
+    "Failure split: test harness failure is not product failure",
+    "State: reload loss is a real product defect",
+    "Scroll: forced reset and nested scroll violate single-panel requirement",
+    "Input: HTML5 DnD remains for mouse",
+    "Mobile: Pointer Events is smallest native delta for touch/pen",
+    "Reuse: existing Frappe/Craft/xyflow donors remain; no new dependency yet",
+    "Test: 50 local cycles + mobile touch before publication",
+    "Promotion: exact candidate only after local PASS",
+    "Closure: independent live browser review still required after publication"
+  ],
+  "simulations3": [
+    {"id":"SIM-1-RELOAD","before":"V1.8 initializes state from initialState every load","candidate":"V1.9 restores validated PROJECT_KEY envelope","result":"AWAITING_BROWSER_TEST"},
+    {"id":"SIM-2-SCROLL","before":"V1.8 render resets context scrollTop and OSS grid is nested scroll","candidate":"V1.9 removes forced reset and nested vertical scroll","result":"AWAITING_BROWSER_TEST"},
+    {"id":"SIM-3-TOUCH-MOVE","before":"V1.8 movement path is HTML5 drag/drop; resize alone uses Pointer Events","candidate":"V1.9 node movement adds touch/pen pointer capture and commits MOVE_COMPONENT","result":"AWAITING_MOBILE_TEST"}
+  ],
+  "refutations3": [
+    "REFUTED: HF publish/readback PASS proves editor closure. It proves deployment/readback only.",
+    "REFUTED: failed 50-cycle run proves every tested feature is broken. One failure was a strict selector collision in the harness.",
+    "REFUTED: OSS repository presence proves integration. Only donor/runtime/test statuses plus executable evidence count as wired."
+  ],
+  "oss_decision": {
+    "new_download": "NONE_FOR_E01",
+    "conditional_candidate": "dnd-kit only if native Pointer Events candidate fails reproducibly",
+    "reason": "REUSE/PATCH before new dependency"
+  },
+  "test": {
+    "spec": "tests/e2e/factory-v19-local-50-cycle.spec.mjs",
+    "workflow": ".github/workflows/astra-factory-v19-local-50-cycle.yml",
+    "run": 34731651016,
+    "candidate_head": "b20fed0213b5f853009a28e6dcf3c54ee2b65633",
+    "result": "IN_PROGRESS"
+  },
+  "next_gate": "LOCAL_50X_AND_MOBILE_TOUCH_PASS"
+}
