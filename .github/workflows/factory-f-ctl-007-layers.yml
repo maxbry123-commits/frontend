@@ -1,0 +1,36 @@
+name: factory-f-ctl-007-layers
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/layer-reorder-v1.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ctl-007-layers.spec.mjs'
+      - '.github/workflows/factory-f-ctl-007-layers.yml'
+  workflow_dispatch:
+jobs:
+  layers-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Syntax
+        run: |
+          node --check src/layer-reorder-v1.js
+          node --check tests/e2e/f-ctl-007-layers.spec.mjs
+      - name: F-CTL-007 browser gate
+        run: npx playwright test tests/e2e/f-ctl-007-layers.spec.mjs --project=chromium-desktop --reporter=line
