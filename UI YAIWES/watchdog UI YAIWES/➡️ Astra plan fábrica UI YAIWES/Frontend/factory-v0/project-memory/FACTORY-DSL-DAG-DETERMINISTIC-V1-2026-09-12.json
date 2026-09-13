@@ -1,0 +1,85 @@
+{
+  "schema": "yaiwes.factory.dsl-dag.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "queue": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-DYNAMIC-V2-2026-09-12.json",
+  "queue_seed_commit": "037ce6b915fe939f72d56ee0387478522a7a1909",
+  "fresh_head_before_write": "9e3cfc8a880aeea8f05b08face76c2ff07880864",
+  "determinism": {
+    "scheduler": "100_PERCENT_RULE_BASED",
+    "llm_scheduler_share": 0,
+    "max_parallel_workers": 8,
+    "selection_order": ["priority ASC","node_id ASC"],
+    "claim_atomicity": "EXPECTED_FRESH_QUEUE_BLOB_SHA",
+    "single_writer_per_path": true
+  },
+  "states": ["FREE","FREE_VERIFY","GAP_RESOLVABLE","CLAIMED","EXECUTING","PASS_PENDING_REVIEW","PASS","GAP","BLOCKED","BLOCKED_CONDITIONAL","VERIFIED_CLOSED"],
+  "transitions": {
+    "FREE": ["CLAIMED"],
+    "FREE_VERIFY": ["CLAIMED"],
+    "GAP_RESOLVABLE": ["CLAIMED"],
+    "CLAIMED": ["EXECUTING","GAP"],
+    "EXECUTING": ["PASS_PENDING_REVIEW","PASS","GAP"],
+    "PASS_PENDING_REVIEW": ["PASS","GAP"],
+    "PASS": ["VERIFIED_CLOSED","GAP"],
+    "GAP": ["GAP_RESOLVABLE","BLOCKED"],
+    "BLOCKED": ["FREE","FREE_VERIFY","GAP_RESOLVABLE"],
+    "BLOCKED_CONDITIONAL": ["FREE","GAP_RESOLVABLE"]
+  },
+  "claim_predicate": [
+    "node.state in {FREE,FREE_VERIFY,GAP_RESOLVABLE}",
+    "all dependencies are PASS or VERIFIED_CLOSED",
+    "no active node has overlapping resolved write_scope",
+    "fresh_main_sha equals HEAD observed immediately before claim",
+    "queue_blob_sha equals blob read immediately before claim"
+  ],
+  "claim_algorithm": [
+    "READ main HEAD",
+    "READ queue fresh including blob SHA",
+    "FILTER claim_predicate",
+    "SORT priority ASC then node_id ASC",
+    "SELECT first candidate",
+    "RESOLVE exact paths/write_scope from fresh code",
+    "RECHECK path overlap against CLAIMED/EXECUTING nodes",
+    "WRITE claim using fresh queue blob SHA",
+    "READBACK claim",
+    "IF stale/conflict THEN restart from READ main HEAD"
+  ],
+  "node_microflow": {
+    "step_1": {"name":"VERIFY_RESEARCH","required":["literal requirement","fresh code","existing tests","existing OSS/components","recent commits/runs/logs","reproduce/classify gap","dedup"],"output":["gap_class","evidence_before","resolved_write_scope","strategy"]},
+    "step_2": {"name":"EXECUTE_DELTA","strategy_order":["REUSE_EXISTING","PATCH","ADAPT","GENERATE","NEW_DOWNLOAD"],"constraints":["minimum delta","no second editor/state engine/downloader","preserve rollback","download only after demonstrated capability gap"]},
+    "step_3": {"name":"TEST_REPORT","required":["specific test","integration test when applicable","readback","commit SHA","blob SHA","run/job/log when applicable","3 simulations","3 refutations","remaining gaps","dependency effect"]}
+  },
+  "unblock_algorithm": [
+    "FOR each BLOCKED node sorted by node_id",
+    "IF all depends_on are PASS or VERIFIED_CLOSED THEN state=FREE",
+    "IF any dependency is GAP/BLOCKED THEN keep BLOCKED",
+    "F-OSS-016 unlocks only when F-OSS-013/014/015 prove an unmet capability needing external source"
+  ],
+  "failure_router": {
+    "PRODUCT_FAILURE": "same node -> materially distinct StrategyDelta -> retest",
+    "TEST_HARNESS_FAILURE": "repair harness without product PASS -> rerun assertion",
+    "INFRA_FAILURE": "record infra evidence -> retry after infra recovery",
+    "EVIDENCE_FAILURE": "no PASS promotion -> obtain missing readback/SHA/run/log",
+    "INCONCLUSIVE": "remain GAP -> gather discriminating evidence"
+  },
+  "oss_acquisition_gate": {
+    "preconditions": ["requirement exists","capability gap demonstrated","local OSS deduplicated","official source verified","license recorded","destination literal recorded"],
+    "motor": "CANONICAL_ONLY",
+    "forbidden": ["alternate downloader","Git LFS","force push","unverified mirror","presence-only PASS"],
+    "postconditions": ["readback","adapter/wiring","test","evidence"]
+  },
+  "qa_gate": {
+    "sequence": ["F-INT-035","F-QA-036","F-QA-037","F-QA-038 + F-QA-039 + F-QA-040","F-QA-041","F-QA-042","F-STATE-043","F-FINAL-044"],
+    "publish_invariant": "TESTED_SHA == PUBLISHED_SHA",
+    "closure_invariant": "local_50==PASS && web_50==PASS && mobile==PASS && real_effects==PASS && readback==PASS && independent_review==PASS && remaining_closure_gaps==0"
+  },
+  "supervisor": {
+    "identity": "SOL_GPT_PLAN",
+    "may_claim_product_nodes": false,
+    "write_scope": ["Crazy Wall/queue reconciliation","supervision evidence","DAG/plan metadata"],
+    "loop": ["READ_HEAD","READ_QUEUE","READ_STATE_CHECKPOINT","AUDIT_CLAIMS","DETECT_COLLISIONS","AUDIT_TEST_EVIDENCE","UNBLOCK_DEPS","CHECK_OSS_GAPS","UPDATE_QUEUE","REPORT"],
+    "window_end": "2026-09-13T02:41:00-05:00"
+  },
+  "worker_report_minimum": "NODE_ID | CLAIMED/PASS/GAP | BASE_SHA->FINAL_SHA | TEST/RUN | EVIDENCE | REMAINING_GAP | NEXT_NODE"
+}
