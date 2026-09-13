@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3",
+  "state": "CLAIMED",
+  "chat_id": "SOL GPT 9",
+  "node_id": "N21-WORKER-ADAPTER",
+  "fresh_main_sha": "f64fa18022e74002771c8a00f10f21ab16a668e1",
+  "write_scope": "runtime/src/adapters/**|runtime/tests/test_worker*|runtime/tests/test_platform*",
+  "claimed_at": "2026-09-13T05:49:00Z",
+  "note": "Collision marker inside N21 write_scope; authoritative Crazy Wall was read fresh immediately before claim."
+}
