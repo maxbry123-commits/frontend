@@ -1,0 +1,82 @@
+{
+  "schema": "yaiwes.role-report.v1",
+  "contract": "tel.workflow/v3",
+  "role": "SOL_GPT1_BACKEND",
+  "node_id": "S1-11-LOCAL-FIRST-CHECKPOINT-MEMORY",
+  "state": "REPORT_GAP",
+  "result": "PARTIAL_PASS_LOCAL_WORKFLOW_RECOVERY_IMPLEMENTED_PRODUCT_MEMORY_STORAGE_E2E_MISSING",
+  "source_queue": {
+    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-QUEUE-4SOL-2026-09-12.json",
+    "blob": "2313f8b519efd0d9118a97c59c4572c53382b9b9"
+  },
+  "source_contract": {
+    "virtual_computer_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR Q grock tiene ventanas agente  linux iOS Android phyton 🤯🤯🤯🎯 14 objetivos💡💡💡✅✅✅🎯🎯🎯.md",
+    "virtual_computer_blob": "ecc8b3b1444ade0ca894789e149e881a08b999c0",
+    "requirements": [
+      "VirtualComputer local computation/RAM/storage",
+      "VirtualComputer/machine.json + disk.qcow2 + snapshots + shared + packages + metadata",
+      "LOCAL first; no server dependency",
+      "storage 100 percent local by default; cloud optional",
+      "snapshot -> transfer -> restore is distinct from mirror"
+    ],
+    "memory_contract_blob": "da109ae2d91e4563c01492ad365bbaa00fc6baa6"
+  },
+  "implemented_evidence": {
+    "memory_boundary": {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/memory/boundary.py",
+      "blob": "6a3a438b328bc0c008c9a7cc7238aaa21c7b8545",
+      "status": "READ_BOUNDARY_AND_CANONICAL_WRITE_GATE_IMPLEMENTED",
+      "targeted_test": "PASS_9_OF_9"
+    },
+    "durable_ledger": {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/ledger.py",
+      "blob": "79ae3da7f20188874ffdc9e5a6b5e9cd3fbc4c83",
+      "status": "LOCAL_HASH_CHAIN_LOCK_FSYNC_ATOMIC_REPLACE_IMPLEMENTED"
+    },
+    "runner_restart": {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/runner.py",
+      "blob": "4fd01eb441cf3c10638d1a6f80924fc3fc8533a5",
+      "status": "RELOADS_DURABLE_LEDGER_AND_REBUILDS_REPLAY_STATE"
+    },
+    "restart_tests": {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_core.py",
+      "blob": "66af6aff97a889c41ee3e8e85653d57ea1cf2bd4",
+      "coverage": [
+        "persist_and_recover_completed_node",
+        "stale_runners_refresh_shared_ledger",
+        "tampered_ledger_fails_closed"
+      ]
+    },
+    "recovery_control_plane": {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/recovery/control_plane.py",
+      "blob": "d3cc4d69b15e754389b88652e6ae07c0ebbf8162",
+      "status": "STRONG_CHECKPOINT_AND_LEDGER_INTEGRITY_GATE_DELEGATING_TO_STABILIZE"
+    }
+  },
+  "missing_evidence": {
+    "product_storage": {
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/storage/.gitkeep",
+      "blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "status": "PLACEHOLDER_ONLY"
+    },
+    "local_project_memory_persistence": "NO_END_TO_END_IMPLEMENTATION_VERIFIED",
+    "checkpoint_memory_binding": "NO_PRODUCT_MEMORY_CHECKPOINT_STORE_VERIFIED",
+    "restart_isolation_chat_project_agent": "NO_END_TO_END_PRODUCT_MEMORY_RESTART_TEST_VERIFIED"
+  },
+  "github_ci_reference": {
+    "run_id": 34730513826,
+    "head_sha": "084debdb8acb102d9d41b9ca39b8ca88d8c29125",
+    "wordflow_step": "SUCCESS",
+    "runtime_suite": "IN_PROGRESS_AT_S1_11_REPORT",
+    "scope_note": "This run validates S1-09 memory tests in the complete runtime suite; S1-11 adds no runtime mutation."
+  },
+  "gaps": [
+    "PRODUCT_STORAGE_PLACEHOLDER_ONLY",
+    "LOCAL_PROJECT_MEMORY_PERSISTENCE_E2E_MISSING",
+    "MEMORY_CHECKPOINT_BINDING_E2E_MISSING",
+    "CHAT_PROJECT_AGENT_RESTART_ISOLATION_E2E_MISSING",
+    "RUNTIME_WRITE_SCOPE_REQUIRED_BEFORE_IMPLEMENTATION"
+  ],
+  "verdict": "S1_11_PARTIAL_PASS_GAPS_PRESERVED",
+  "next_free_node": "S1-12-VITE-SUPABASE-DEST-AUTHORITY_BLOCKED_INPUT"
+}
