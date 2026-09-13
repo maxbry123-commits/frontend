@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3",
+  "state": "CLAIMED",
+  "owner": "SOL GPT <17>",
+  "chat_id": "SOL GPT <17>",
+  "node_id": "N33-MIRROR-TRANSPORT-CONTROL",
+  "fresh_main_sha": "575e74e1fe5a9bbd45d916134eff38810c5347a2",
+  "write_scope": "runtime/src/mirror/**|runtime/tests/test_mirror*",
+  "claimed_at": "2026-09-13T06:26:00Z"
+}
