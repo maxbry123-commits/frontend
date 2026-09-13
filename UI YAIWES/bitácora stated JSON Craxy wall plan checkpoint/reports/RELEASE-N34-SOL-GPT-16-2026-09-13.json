@@ -1,0 +1,12 @@
+{
+  "schema": "tel.workflow/v3.release",
+  "state": "RELEASED_VERIFIED_CLOSED_CANDIDATE",
+  "chat_id": "SOL GPT <16>",
+  "node_id": "N34-FOUR-SOURCE-DENOMINATOR",
+  "claim_commit": "a597e15cf29e659331696e55afe03cd0c0780e47",
+  "report_commit": "48b22db7653eb3d25a0e58865cb0ef8d2994f606",
+  "report_blob": "0a76681aa2386fc1e0d384d8f3876937ff9ed829",
+  "result": "PASS: 185 source anchors; 85/85 S4 classified; 69 new/effective unique S4 requirements; final unique implementable denominator 167",
+  "released_at": "2026-09-13T07:08:00Z",
+  "next_if_pass": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION"
+}
