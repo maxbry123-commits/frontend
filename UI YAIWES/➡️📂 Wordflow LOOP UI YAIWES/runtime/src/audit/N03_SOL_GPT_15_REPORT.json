@@ -1,0 +1,31 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N03-AUTO-AUDITOR-EVIDENCE",
+  "chat_id": "SOL GPT <15>",
+  "state": "VERIFIED_CLOSED",
+  "report_state": "PASS",
+  "claim_commit": "bc6ba4855ea83aa0f523583a3486ab9d9cfe6e7e",
+  "tested_sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+  "run_id": 34739510224,
+  "job_id": 103678337638,
+  "tests": {
+    "wordflow": "41/41 PASS",
+    "runtime": "206/206 PASS",
+    "subtests": "39 PASS",
+    "warnings": 2
+  },
+  "evidence": [
+    "workflow job checked out cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+    "audit/evidence.py unchanged between tested SHA and claim head",
+    "audit/matrix.py unchanged between tested SHA and claim head",
+    "N03 audit tests unchanged between tested SHA and claim head",
+    "trusted CI completed successfully"
+  ],
+  "refutations": [
+    "schema: auditor consumes RequirementMatrix + independent trusted CI verifier through existing five-pass engine; PASS",
+    "gap: historical cancelled run superseded by trusted successful descendant gate with unchanged N03 blobs; no remaining N03 CI gap",
+    "evidence: exact tested revision, job log, code parity and readback establish N03 close condition; PASS"
+  ],
+  "remaining_gaps": [],
+  "scope_note": "No new governance, scheduler, workflow owner or consolidation engine introduced."
+}
