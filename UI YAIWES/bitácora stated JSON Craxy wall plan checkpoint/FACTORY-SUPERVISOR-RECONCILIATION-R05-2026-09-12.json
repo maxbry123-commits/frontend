@@ -1,0 +1,67 @@
+{
+  "schema": "yaiwes.factory.supervisor.reconciliation.v1",
+  "round": "R05",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "project": "FABRICA_UI_YAIWES_ONLY",
+  "observed_main_sha": "37cdefb5a6e826f28cb04ecea5927bf31beb8e13",
+  "supervisor": "SOL_GPT_PLAN",
+  "authority": "fresh Factory code+tests+Actions/HF Jobs/claim files > Factory Crazy Wall/STATE/CHECKPOINT > historical docs > chat/inference",
+  "visible_reporting": "NODO | ACCION | RESULTADO | GAP | FIX | TEST | PASS% | SIGUIENTE",
+  "fresh_state": {
+    "F-UI-045": {"state":"PASS_PENDING_REVIEW","owner":"FACTORY-SOL-6-GPT","tested_sha":"3ac912316841980b62748fd5334a0ef4bdea2e22","run_id":34736422396,"job_id":103668558057,"next":"F-UI-046 already producer-closed"},
+    "F-UI-046": {"state":"PASS_PENDING_REVIEW","owner":"FACTORY-SOL-6-GPT","report_commit":"4535638180c685b3f60c1ec9d70437671132f81d","next":"F-UI-051"},
+    "F-UI-051": {"state":"GAP_RESOLVABLE","owner":"FACTORY-SOL-6-GPT","classification":"TEST_HARNESS_FAILURE","evidence":"no corrected terminal rerun observed after R04","required_fix":["steps must use actual one-based 1..5 values or discovered #steps button[data-step] values","breakpoint selector must target .canvas-controls button[data-breakpoint]","artifact paths must upload inventory/screenshots/failure evidence"],"product_write_allowed":false},
+    "F-MOD-033": {"state":"CLAIMED_STALE_RELATIVE_TO_FACTORY_LANE","owner":"SOL-7-GPT","claim_commit":"3af96e40f4c7f5172acbdcb088e7352970f2010b","gap":"no terminal Factory evidence observed; generic sol 7 gpt later appears on Wordflow N10 and cannot count as Factory progress"},
+    "F-UI-047": {"state":"NOT_CLAIMED","reserved_owner":"FACTORY-SOL-7-GPT"},
+    "F-UI-050": {"state":"PASS_PENDING_REVIEW","owner":"FACTORY-SOL-8-GPT","tested_sha":"f333cc799dbda66d4d3d98df8d79fcf86c09789b","github_action":{"run_id":34737922623,"job_id":103672501481,"result":"SUCCESS"},"hugging_face_job":{"job_id":"6aa6269421047bf1b0380d7e","owner":"COMAND-CENTER-1","stage":"COMPLETED","secret_names":[],"evidence_commit":"154b635b2b69b074e80a45b8c4e1c4a964fef946"},"next":"F-UI-059"},
+    "F-UI-059": {"state":"IN_PROGRESS","owner":"FACTORY-SOL-8-GPT","claim_commit":"b18832fdd2209fa6fdbcf883ac2b5192a5eae888","latest_fix_commit":"c1bea4bbe45f52e3fd2031d3ec9dc310acee04c7","classification":"TEST_HARNESS_HTTPS_FIX_PENDING_TERMINAL_RERUN","next":"rerun exact published Router panel gate; no PASS before terminal action/live evidence"},
+    "F-ED-001": {"state":"GAP_RESOLVABLE_ACTIVE_DIAGNOSTIC","owner":"SOL-4-GPT","latest_evidence_commits":["67db47f1c74875eb6f8cfd53fdf8b7d2df28e425","1e242abc0c309af3d04b925a4afa1c2c797a7faa"],"next":"finish fresh desktop/mobile/touch discrimination before product patch"},
+    "F-AI-024": {"state":"IN_PROGRESS","owner":"FACTORY-SOL-1-GPT","latest_commit":"37cdefb5a6e826f28cb04ecea5927bf31beb8e13","note":"separate integration node; must not consume SOL6-8 UI paths"}
+  },
+  "orders": {
+    "FACTORY-SOL-6-GPT": [
+      "Remain on F-UI-051 only until corrected harness produces terminal evidence.",
+      "Patch test/harness only. Do not modify product unless corrected harness reproduces a real expected_effect failure.",
+      "If a real dead control appears, create exactly one child GAP node for that control/capability with selector, expected_effect, actual_effect, screenshot, fresh SHA and non-overlapping paths.",
+      "After F-UI-051 PASS_PENDING_REVIEW continue F-UI-052 -> F-UI-053 -> F-UI-054."
+    ],
+    "FACTORY-SOL-7-GPT": [
+      "Factory identity must be separated from generic Wordflow sol 7 gpt/N10 activity.",
+      "Fresh-read F-MOD-033 claim. If unfinished and paths remain uncontested, finish/release it; otherwise classify collision/stale and release without new product writes.",
+      "Then claim F-UI-047 -> F-UI-048 -> F-UI-055 -> F-UI-056 -> F-UI-057 -> F-UI-058 only.",
+      "Do not take new Wordflow, F-AI, F-MOD or generic Factory nodes from this Factory chat."
+    ],
+    "FACTORY-SOL-8-GPT": [
+      "Preserve F-UI-050 as PASS_PENDING_REVIEW; do not reopen it.",
+      "Stay on F-UI-059. Rerun after HTTPS harness correction against exact published SHA and collect live screenshot, console/network evidence and terminal Action result.",
+      "Only after terminal F-UI-059 continue F-UI-060 -> F-UI-061."
+    ],
+    "SOL-4-GPT": [
+      "Stay on F-ED-001 until desktop/mobile/touch diagnosis is terminal; classify PRODUCT_FAILURE vs TEST_HARNESS_FAILURE before patching product."
+    ],
+    "FACTORY-SOL-1-GPT": [
+      "Continue F-AI-024 only inside declared integration scope; no SOL6-8 frontend QA paths."
+    ]
+  },
+  "join_gate": {
+    "F-UI-062":"blocked until F-UI-054 + F-UI-058 + F-UI-061 are PASS_PENDING_REVIEW or independently VERIFIED_CLOSED",
+    "F-UI-063":"blocked until F-UI-062 independent cross-review PASS; only gate allowed to state FRONTEND_100"
+  },
+  "anti_collision": [
+    "1 chat = 1 active node",
+    "1 path = 1 writer",
+    "Factory identity FACTORY-SOL-n-GPT is distinct from Wordflow sol n gpt",
+    "producer PASS remains PASS_PENDING_REVIEW until independent review",
+    "no task duplication; add child nodes only from reproduced distinct capability gaps"
+  ],
+  "next_supervisor_checks": [
+    "F-UI-051 corrected terminal rerun and artifact upload",
+    "FACTORY-SOL-7-GPT re-entry and F-MOD-033 release/terminal state",
+    "F-UI-059 terminal live published gate after HTTPS harness fix",
+    "F-ED-001 terminal mobile/touch classification",
+    "path overlap between F-AI-024 and active UI nodes",
+    "progress toward F-UI-062/F-UI-063 without premature 100 percent claim"
+  ],
+  "closure_rule": "No FRONTEND_100 until F-UI-063 proves tested_sha == published_sha, complete control matrix, live web navigation, desktop/mobile/touch/keyboard, zero dead controls, reload/reopen/export, Router/HF panels, screenshots/artifacts, zero critical console/network errors, independent reviewer, three simulations and three refutations."
+}
