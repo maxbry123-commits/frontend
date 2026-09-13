@@ -5,10 +5,11 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/astra-factory-v19-local-50-cycle.yml'
-      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v191.html'
       - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/stability-v19.css'
       - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/app-v19.js'
-      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/factory-v19-local-50-cycle.spec.mjs'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/touch-dnd-v191.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/factory-v191-local-50-cycle.spec.mjs'
   workflow_dispatch:
 
 permissions:
@@ -46,17 +47,19 @@ jobs:
       - name: Install Chromium runtime
         run: npx playwright install --with-deps chromium
 
-      - name: Syntax check V1.9 runtime
-        run: node --check src/app-v19.js
+      - name: Syntax check V1.9.1 runtime
+        run: |
+          node --check src/app-v19.js
+          node --check src/touch-dnd-v191.js
 
-      - name: Verify V1.9 candidate with 50 cycles and mobile touch
-        run: npx playwright test tests/e2e/factory-v19-local-50-cycle.spec.mjs --reporter=line
+      - name: Verify V1.9.1 candidate with 50 cycles and mobile touch
+        run: npx playwright test tests/e2e/factory-v191-local-50-cycle.spec.mjs --reporter=line
 
-      - name: Preserve V1.9 evidence
+      - name: Preserve V1.9.1 evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: astra-factory-v19-local-50-cycle-evidence
+          name: astra-factory-v191-local-50-cycle-evidence
           path: |
             UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
             UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
