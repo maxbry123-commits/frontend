@@ -1,0 +1,31 @@
+{
+  "schema": "yaiwes.factory.sol.claim.v1",
+  "contract": "tel.workflow/v3",
+  "chat_id": "SOL-3-GPT-2026-09-12T21:44-05:00",
+  "agent_name": "SOL 3 GPT 🆘",
+  "node_id": "F-ED-002",
+  "fresh_main_sha": "9e3cfc8a880aeea8f05b08face76c2ff07880864",
+  "base_sha": "9e3cfc8a880aeea8f05b08face76c2ff07880864",
+  "write_scope": "Factory F-ED-002 only: desktop drag/drop movement verification and minimum delta; excludes mobile touch E01/F-ED-001 and Wordflow N01-N31",
+  "paths": [
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-ED-002-SOL-3-GPT-CLAIM.json",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-ED-002-SOL-3-EVIDENCE.json"
+  ],
+  "claimed_at": "2026-09-12T21:44:30-05:00",
+  "state": "CLAIMED",
+  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+  "goals12_input": {
+    "G01": "PASS literal F-ED-002 preserved",
+    "G02": "PASS fresh main 9e3cfc8 read",
+    "G03": "PASS dynamic Crazy Wall + historical STATE/CHECKPOINT/HANDOFF read and precedence reconciled",
+    "G04": "PASS F-OSS-013 is claimed by SOL 1; F-ED-002 has no materialized claim and evidence-only paths are unique",
+    "G05": "PENDING inspect current drag/drop implementation/tests",
+    "G06": "PASS reuse-first; no OSS download",
+    "G07": "PENDING minimum delta only if product failure reproduced",
+    "G08": "PENDING desktop movement microtest",
+    "G09": "PENDING integration/E2E evidence",
+    "G10": "PENDING 3 simulations + 3 refutations",
+    "G11": "PENDING evidence SHA/readback",
+    "G12": "PENDING reconcile next free node"
+  }
+}
