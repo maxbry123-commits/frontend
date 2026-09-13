@@ -1,0 +1,131 @@
+{
+  "schema": "yaiwes.audit.n30.g12-global-coverage.v1",
+  "contract": "tel.workflow/v3",
+  "node_id": "N30-G12-GLOBAL-COVERAGE",
+  "owner": "sol 3 gpt",
+  "audit_base_main_sha": "60c21192381d9d2c66eeb3df61e21f0a06fc546b",
+  "authority": "code + tests + fresh GitHub Action/log > Crazy Wall/state > architecture/handoff > docs > inference",
+  "source_denominator": {
+    "source_anchor_rows": 100,
+    "implementable_normative_requirements": 98,
+    "non_implementable_source_numbering_gaps": ["REQ-S2-011", "REQ-S3-062"],
+    "additional_source_structure_gap": "S1 index/body numbering mismatch",
+    "n01_report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N01-DOC-REVIEW-COMPLETE-SOL-8-GPT-2026-09-13.md",
+    "n01_report_blob_from_n02": "217caa8bfba2edd71c6bc505e89122759ac9573c",
+    "n02_report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N02-TRACEABILITY-BIDIRECTIONAL-SOL-8-GPT-2026-09-13.json",
+    "n02_report_blob": "2b8e6ce64c488a9a012c1ef56cabf5d3963a66ad"
+  },
+  "coverage_dimensions": {
+    "traceability_mapping": {"mapped": 98, "total": 98, "percent": 100.0, "result": "PASS"},
+    "canonical_five_pass_certification": {
+      "verified_requirements": 0,
+      "total_requirements": 98,
+      "percent": 0.0,
+      "result": "GAP",
+      "meaning": "This is certification coverage, not a claim that zero product code exists. No persisted production RequirementTrace inventory currently binds the 98 N02 requirements to exact source/implementation/test/evidence hashes, Python symbols, revision and independently verified CI as required by audit_five_pass."
+    },
+    "global_project_verified_closed": false
+  },
+  "canonical_auditor_readback": {
+    "five_pass_blob": "7be820cb3642438a22f36778ecb5c2b549ffce12",
+    "matrix_blob": "637b64161f67f6d2f8aaa0280555964385bef6e2",
+    "evidence_blob": "73c33495d3910f8d5a1f504fe7b19547fd9d4519",
+    "matrix_test_blob": "3903e0d497776e504edce2b843246935d6567268",
+    "audit_package_files": ["evidence.py", "five_pass.py", "matrix.py"],
+    "production_requirement_trace_inventory": "ABSENT",
+    "existing_matrix_tests": "SYNTHETIC_R1_R2_ONLY",
+    "five_pass_rule": "A requirement passes only with literal identity plus exact source/implementation/test/evidence readback, implementation+test symbols, independent execution attestation bound to revision and exact code/test hashes, and inverse artifact reconciliation."
+  },
+  "residual_requirement_count": 98,
+  "residual_reason": "MISSING_PRODUCTION_REQUIREMENT_TRACE_ATTESTATION",
+  "residual_requirements_by_canonical_id": {
+    "CAN-001": ["REQ-S1-001","REQ-S1-002","REQ-S1-004","REQ-S1-005","REQ-S1-006","REQ-S1-007","REQ-S1-009","REQ-S1-018"],
+    "CAN-002": ["REQ-S1-008","REQ-S3-016","REQ-S3-049","REQ-S3-050"],
+    "CAN-003": ["REQ-S1-010","REQ-S3-021"],
+    "CAN-004": ["REQ-S1-012","REQ-S1-013","REQ-S1-014","REQ-S3-019","REQ-S3-020"],
+    "CAN-005": ["REQ-S2-000","REQ-S2-001","REQ-S2-009","REQ-S2-010"],
+    "CAN-006": ["REQ-S1-011","REQ-S2-002"],
+    "CAN-007": ["REQ-S2-003","REQ-S2-007"],
+    "CAN-008": ["REQ-S2-004","REQ-S2-006"],
+    "CAN-009": ["REQ-S2-005"],
+    "CAN-010": ["REQ-S2-008"],
+    "CAN-011": ["REQ-S2-012"],
+    "CAN-012": ["REQ-S2-013"],
+    "CAN-013": ["REQ-S1-003","REQ-S2-014"],
+    "CAN-014": ["REQ-S3-002"],
+    "CAN-015": ["REQ-S3-003","REQ-S3-004","REQ-S3-005","REQ-S3-006"],
+    "CAN-016": ["REQ-S3-007","REQ-S3-008","REQ-S3-009"],
+    "CAN-017": ["REQ-S3-010","REQ-S3-011","REQ-S3-012","REQ-S3-013"],
+    "CAN-018": ["REQ-S3-014","REQ-S3-015"],
+    "CAN-019": ["REQ-S3-017","REQ-S3-018","REQ-S3-022","REQ-S3-023"],
+    "CAN-020": ["REQ-S3-024","REQ-S3-025","REQ-S3-026","REQ-S3-027"],
+    "CAN-021": ["REQ-S3-028","REQ-S3-029","REQ-S3-030"],
+    "CAN-022": ["REQ-S3-031","REQ-S3-032","REQ-S3-033"],
+    "CAN-023": ["REQ-S3-035","REQ-S3-036","REQ-S3-037"],
+    "CAN-024": ["REQ-S3-038","REQ-S3-039","REQ-S3-040"],
+    "CAN-025": ["REQ-S1-015","REQ-S1-016","REQ-S1-017","REQ-S1-019","REQ-S3-041","REQ-S3-042"],
+    "CAN-026": ["REQ-S3-043","REQ-S3-044","REQ-S3-045","REQ-S3-046","REQ-S3-047","REQ-S3-048"],
+    "CAN-027": ["REQ-S3-051","REQ-S3-052"],
+    "CAN-028": ["REQ-S3-034","REQ-S3-053","REQ-S3-060"],
+    "CAN-029": ["REQ-S3-054","REQ-S3-055","REQ-S3-061"],
+    "CAN-030": ["REQ-S3-056","REQ-S3-057"],
+    "CAN-031": ["REQ-S1-020","REQ-S3-058"],
+    "CAN-032": ["REQ-S3-059","REQ-S3-065"],
+    "CAN-033": ["REQ-S3-001","REQ-S3-063"],
+    "CAN-034": ["REQ-S3-064"]
+  },
+  "node_state_snapshot": {
+    "counts": {"BLOCKED_AFTER_CORE_RUNTIME":1,"BLOCKED_AFTER_N02_N03":1,"BLOCKED_AFTER_N07":1,"BLOCKED_AFTER_N17":1,"BLOCKED_AFTER_N20":3,"BLOCKED_AFTER_N26_N23":1,"CLAIMED":7,"GAP":8,"VERIFIED_CLOSED":10},
+    "non_closed_nodes": {
+      "N03-AUTO-AUDITOR-EVIDENCE":{"state":"GAP","owner":"SOL-2-GPT"},
+      "N04-STATE-RECONCILIATION":{"state":"BLOCKED_AFTER_N02_N03","owner":null},
+      "N07-VITE-ACQUIRE":{"state":"CLAIMED","owner":"SOL GPT 🆘1"},
+      "N10-AVF-PROVIDER-CAPABILITY":{"state":"CLAIMED","owner":"sol 7 gpt"},
+      "N11-BIG-AGI-SOURCE-INTEGRATION":{"state":"CLAIMED","owner":"sol 8 gpt"},
+      "N12-VITE-INTEGRATION":{"state":"BLOCKED_AFTER_N07","owner":null},
+      "N13-VERCEL-AI-SDK-SOURCE-INTEGRATION":{"state":"CLAIMED","owner":"SOL-2-GPT"},
+      "N14-RESEARCH-SOURCE-VERIFICATION":{"state":"GAP","owner":"SOL GPT 🆘1"},
+      "N16-CHECKPOINT-BYTES-HASH":{"state":"GAP","owner":"SOL GPT 🆘1"},
+      "N17-FULL-PRODUCT-E2E":{"state":"BLOCKED_AFTER_CORE_RUNTIME","owner":null},
+      "N18-MEMORY-RETRIEVAL-CONTEXT":{"state":"GAP","owner":"sol 7 gpt"},
+      "N21-WORKER-ADAPTER":{"state":"BLOCKED_AFTER_N20","owner":null},
+      "N22-OTEL-RUNTIME":{"state":"GAP","owner":"sol-5-gpt"},
+      "N24-CONSOLIDATOR":{"state":"GAP","owner":"sol 7 gpt"},
+      "N25-RESOURCE-BRAIN":{"state":"CLAIMED","owner":"sol-5-gpt"},
+      "N26-GLOBAL-INTEGRATION":{"state":"GAP","owner":"sol 3 gpt"},
+      "N27-CONTINUOUS-LOOP":{"state":"BLOCKED_AFTER_N26_N23","owner":null},
+      "N28-API-CONTROL":{"state":"GAP","owner":"sol 3 gpt"},
+      "N29-GLOBAL-RECOVERY-FAILOVER":{"state":"CLAIMED","owner":"sol 4 gpt 🆘"},
+      "N30-G12-GLOBAL-COVERAGE":{"state":"CLAIMED","owner":"sol 3 gpt"},
+      "N31-UI-FINAL":{"state":"BLOCKED_AFTER_N17","owner":null},
+      "N32-GUEST-INSTALLER-VERIFICATION":{"state":"BLOCKED_AFTER_N20","owner":null},
+      "N33-MIRROR-TRANSPORT-CONTROL":{"state":"BLOCKED_AFTER_N20","owner":null}
+    }
+  },
+  "tests": {
+    "run_id": 34738908302,
+    "job_id": 103675124914,
+    "conclusion": "SUCCESS",
+    "checks": [
+      "100 unique source rows",
+      "98 implementable requirements",
+      "2 non-implementable numbering gaps preserved",
+      "98/98 canonical mappings present across CAN-001..CAN-034",
+      "canonical audit_five_pass over expected=98 and persisted production traces=0 returns exactly 98 missing_trace gaps, verified=0, coverage=0.0",
+      "audit package contains only evidence.py/five_pass.py/matrix.py",
+      "matrix test uses synthetic R1/R2 and no REQ-S1/REQ-S2/REQ-S3 production IDs"
+    ]
+  },
+  "refutations": [
+    {"question":"¿cumplió N30 el denominador completo?","result":"PASS","evidence":"100 source rows / 98 implementable / 2 non-implementable gaps; 98/98 mapped."},
+    {"question":"¿puede promoverse implementación/test sin trace+CI exacto?","result":"REJECTED","evidence":"Canonical five-pass fails closed; 98/98 are missing production RequirementTrace attestation."},
+    {"question":"¿la evidencia permite declarar producto 100%?","result":"REJECTED","evidence":"Global project remains open; 23 nodes are non-VERIFIED_CLOSED in the audited snapshot and five-pass certification is 0/98."}
+  ],
+  "status": "PASS_AUDIT_WITH_EXACT_RESIDUALS",
+  "closure_meaning": "N30 audit task is complete because it calculated the full denominator, cross-checked canonical verification semantics, and emitted an exact residual list. This does NOT close the product or G12 implementation coverage.",
+  "required_followup": [
+    "Persist a production RequirementTrace row for each of the 98 implementable requirements with exact source/code/test/evidence hashes, required symbols and revision.",
+    "Bind every trace to independent trusted completed/success CI using audit.evidence.",
+    "Resolve/close the current GAP/CLAIMED/BLOCKED product nodes, then rerun N30/G12; only evidence-bound rows may increase verified coverage."
+  ]
+}
