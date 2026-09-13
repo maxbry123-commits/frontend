@@ -5,6 +5,11 @@
   "fresh_main_sha": "e3d86ac3accd8520efcb52ebcd1e1d295a6a21b6",
   "write_scope": "runtime/src/integration/**|runtime/tests/test_integration*",
   "claimed_at": "2026-09-13T07:03:00Z",
-  "state": "CLAIMED",
-  "execution_state": "IN_PROGRESS"
+  "state": "VERIFIED_CLOSED",
+  "execution_state": "DONE",
+  "reported_at": "2026-09-13T07:04:00Z",
+  "report_commit": "b645e2b714d05bdcc0b6046c65dd9449e08b9524",
+  "run_id": 34739510224,
+  "job_id": 103678337638,
+  "pass_percent": 100
 }
