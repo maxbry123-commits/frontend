@@ -3,10 +3,10 @@
   "contract": "tel.workflow/v3",
   "node_id": "O-02-MULTI-SANDBOX-RECOVERY-E2E",
   "owner": "SOL_ORQUESTADOR",
-  "base_main_sha": "fce6b6480c697c07131ca06d52716087d7b0400b",
+  "base_main_sha": "f48e9ec875c2f6cad03bd474914fbf937c4a7795",
   "status": "TESTED_RECOVERY_CONTROL_PLANE_O02_EXECUTING",
   "claimed_at": "2026-09-12T06:40:00Z",
-  "claim_refreshed_at": "2026-09-12T22:46:49.119Z",
+  "claim_refreshed_at": "2026-09-13T01:44:10Z",
   "write_scope": [
     "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/recovery/**",
     "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_recovery_control_plane.py",
@@ -69,5 +69,21 @@
   ],
   "next_step": "Continue O-02 with one real workspace/sandbox failover-reconstruction test; do not treat the control-plane unit/global regression PASS as failover E2E.",
   "closure_rule": "SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
-  "updated_at_utc": "2026-09-12T23:01:09.459Z"
+  "updated_at_utc": "2026-09-13T01:44:10Z",
+  "coordination_observation": {
+    "checked_at_utc": "2026-09-13T01:44:10Z",
+    "s1_memory_boundary": {
+      "status": "TARGETED_ACCEPTANCE_PLUS_GLOBAL_REGRESSION_PASS",
+      "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S1-09-MEMORY-AGENT-BOUNDARY.json",
+      "implementation_commit": "17d98a7e7f1a083108c96443d5bc10a05bb7024d",
+      "test_commit": "084debdb8acb102d9d41b9ca39b8ca88d8c29125",
+      "run": 34730513826,
+      "job": 103652482919,
+      "wordflow": "23 passed",
+      "runtime": "75 passed + 9 subtests",
+      "log_readback": true,
+      "promotion": "P08_MEMORY_BOUNDARY_SUBGATE_TESTED_NOT_P08_P10_OR_STORAGE_E2E_CLOSED"
+    },
+    "collision_flag": "ROLE_STATE_REFERENCES_SEPARATE_S1_HOURLY_WATCHDOG_AND_EDITOR_QUEUE_EXISTS; CENTRAL_WORDflow_QUEUE_V2_REMAINS_AUTHORITATIVE_FOR_THIS_LOOP"
+  }
 }
