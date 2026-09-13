@@ -40,6 +40,7 @@ class AuditResult:
     coverage_percent: float
     gaps: tuple[str, ...]
     inverse: tuple[tuple[str, str, str, str], ...]
+    contradictions: tuple[str, ...] = ()
     product_verified: bool = False
 
 
@@ -75,6 +76,23 @@ def _symbol(data: bytes, name: str) -> bool:
     return True
 
 
+def _trace_fingerprint(row: RequirementTrace) -> tuple[str, ...]:
+    """Canonical fields that must not disagree for one requirement identity."""
+    return (
+        row.goal_id,
+        row.task_id,
+        row.source.path,
+        row.source.sha256,
+        row.implementation.path,
+        row.implementation.sha256,
+        row.test.path,
+        row.test.sha256,
+        row.evidence.path,
+        row.evidence.sha256,
+        row.revision,
+    )
+
+
 def audit_five_pass(
     root: str | Path,
     expected_requirements: Iterable[str],
@@ -82,7 +100,7 @@ def audit_five_pass(
     artifacts: Iterable[str],
     verify_execution: Callable[[RequirementTrace, bytes], bool],
 ) -> AuditResult:
-    """Read/hash sources, inspect symbols, verify CI, reverse-map, then count.
+    """Run requirements, evidence, contradictions, coverage and traceability.
 
 verify_execution must validate the evidence against trusted run/job data and
 bind it to trace.revision and the exact implementation/test hashes. A callback
@@ -101,6 +119,19 @@ of the reverse inventory are checked; multiple requirements may share a file.
     if len(expected_list) != len(expected):
         gaps.append("duplicate_expected_requirement")
     counts = Counter(r.requirement_id for r in rows)
+
+    # Contradiction audit: one requirement identity cannot map to divergent
+    # goal/task/source/code/test/evidence/revision tuples. Identical duplicate
+    # rows remain a duplicate error, but are not mislabeled as contradictions.
+    variants: dict[str, set[tuple[str, ...]]] = {}
+    for row in rows:
+        variants.setdefault(row.requirement_id, set()).add(_trace_fingerprint(row))
+    contradictions = tuple(sorted(
+        key for key, fingerprints in variants.items() if len(fingerprints) > 1
+    ))
+    contradiction_set = set(contradictions)
+    gaps.extend(f"{key}:contradiction" for key in contradictions)
+
     passed: set[str] = set()
     inverse: list[tuple[str, str, str, str]] = []
     for row in rows:
@@ -130,7 +161,7 @@ of the reverse inventory are checked; multiple requirements may share a file.
                     gaps.append(f"{key}:execution_not_verified")
             except Exception as exc:
                 gaps.append(f"{key}:verifier_error:{type(exc).__name__}")
-        if len(gaps) == start:
+        if len(gaps) == start and key not in contradiction_set:
             passed.add(key)
         inverse.append((row.implementation.path, row.task_id, key, row.goal_id))
     # 4: reconcile both sides; an omitted inventory must not certify coverage.
@@ -150,6 +181,11 @@ of the reverse inventory are checked; multiple requirements may share a file.
     # 5: denominator is the full supplied requirement inventory, never rows.
     percent = round(100 * len(passed) / len(expected), 2) if expected else 0.0
     return AuditResult(
-        "TRACEABILITY_PASS" if not gaps else "GAP", len(passed), len(expected),
-        percent, tuple(gaps), tuple(sorted(inverse)),
+        status="TRACEABILITY_PASS" if not gaps else "GAP",
+        verified_requirements=len(passed),
+        total_requirements=len(expected),
+        coverage_percent=percent,
+        gaps=tuple(gaps),
+        inverse=tuple(sorted(inverse)),
+        contradictions=contradictions,
     )
