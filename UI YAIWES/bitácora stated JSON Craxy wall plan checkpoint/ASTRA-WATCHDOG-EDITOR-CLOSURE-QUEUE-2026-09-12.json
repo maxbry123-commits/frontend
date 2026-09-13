@@ -1,0 +1,74 @@
+{
+  "schema": "yaiwes.watchdog.editor.closure.v1",
+  "contract": "tel.workflow/v3",
+  "date": "2026-09-12",
+  "status": "ACTIVE_LOOP",
+  "objective": "Cerrar UI YAIWES con evidencia reproducible: editor estable -> integraciones funcionales -> validacion -> publicacion exacta.",
+  "authority": "repo/runtime evidence > STATE/CHECKPOINT > contracts > reports > inference",
+  "closure_claim": "NOT_ACCREDITED",
+  "anti_collision": {
+    "claim_required": true,
+    "rule": "Cada agente reclama un unico nodo PENDING con owner+base_sha+paths antes de escribir. No modificar paths de otro nodo ACTIVE. Releer main antes del commit; si cambia, marcar STALE_LOCK_GAP y reconstruir delta.",
+    "versioning": "No sobrescribir versiones aprobadas; crear version adicional y conservar rollback."
+  },
+  "priority_order": [
+    "EDITOR_STABLE",
+    "FUNCTIONAL_INTEGRATIONS",
+    "VALIDATION_AND_EXACT_PUBLICATION"
+  ],
+  "nodes": [
+    {
+      "id": "ASTRA-ED-01",
+      "owner": "UNCLAIMED",
+      "status": "PENDING",
+      "scope": "Editor visual",
+      "tasks": ["reproducir drag/drop y movimiento", "verificar seleccion", "verificar persistencia de estado", "mantener canvas visible", "validar panel unico con scroll tactil"],
+      "acceptance": "fallo real separado de fallo de test; pruebas reproducibles y evidencia"
+    },
+    {
+      "id": "SOL-ED-02",
+      "owner": "UNCLAIMED",
+      "status": "PENDING",
+      "scope": "Controles utiles",
+      "tasks": ["capas", "propiedades", "zoom", "undo/redo", "versiones", "menu contextual"],
+      "acceptance": "cada control cambia estado/proyecto real; cero boton muerto"
+    },
+    {
+      "id": "SOL-OSS-03",
+      "owner": "UNCLAIMED",
+      "status": "PENDING",
+      "scope": "Biblioteca OSS integrada",
+      "tasks": ["mapear componente->capacidad->ruta->adapter->test", "completar categorias y variantes", "registrar nuevos candidatos OSS solo para GAP demostrado", "usar motores canonicos para descarga/extraccion/copiado/movimiento"],
+      "acceptance": "presencia fisica no cuenta como integracion; requiere cableado y test"
+    },
+    {
+      "id": "SOL-AI-04",
+      "owner": "UNCLAIMED",
+      "status": "PENDING",
+      "scope": "IA e importacion",
+      "tasks": ["router", "modelos", "equipo IA", "skills", "conexiones remotas", "importar archivo/HTML/referencia hasta resultado editable"],
+      "acceptance": "E2E source->adapter/router->editor->estado editable->evidence"
+    },
+    {
+      "id": "SOL-IO-05",
+      "owner": "UNCLAIMED",
+      "status": "PENDING",
+      "scope": "Guardado y salida",
+      "tasks": ["memoria local", "reload recovery", "reapertura", "export JSON", "export HTML", "destinos configurados"],
+      "acceptance": "round-trip reproducible sin perdida de estado"
+    },
+    {
+      "id": "ASTRA-QA-06",
+      "owner": "UNCLAIMED",
+      "status": "PENDING",
+      "scope": "Pruebas y publicacion",
+      "tasks": ["50 ciclos candidato", "publicar exactamente el commit probado", "50 ciclos web sobre ese commit", "pruebas moviles", "efectos reales", "capturas", "revision independiente"],
+      "acceptance": "mismo SHA candidato/publicado + 50/50 local + 50/50 web + evidencia; HANDOFF y STATE reconciliados"
+    }
+  ],
+  "loop_contract": ["reconstruir checkpoint", "claim 1x1", "12 GOALS entrada/salida", "Council12", "ejecutar code/integracion", "test", "3 simulaciones", "3 refutaciones", "cross-check", "persistir evidence/state/checkpoint", "repetir"],
+  "known_conflict": "HANDOFF/cierre historico no prevalece sobre STATE o pruebas fallidas. Clasificar cada failure por logs: TEST_HARNESS_FAILURE | PRODUCT_FAILURE | INFRA_FAILURE | INCONCLUSIVE.",
+  "oss_policy": "REUSE/PATCH/ADAPT antes de escribir desde cero. Motores canonicos: COPY_ONLY_IMMUTABLE; no downloader alternativo, no force, no LFS.",
+  "next": "Reclamar ASTRA-ED-01 y reproducir primero las regresiones del editor; en paralelo otros chats pueden reclamar SOL-ED-02, SOL-OSS-03, SOL-AI-04 o SOL-IO-05 sin colision.",
+  "done_rule": "No declarar 100% por documento, carpeta o workflow verde. Solo evidencia de code+run/test+readback+SHA y cero GAP de cierre abierto."
+}
