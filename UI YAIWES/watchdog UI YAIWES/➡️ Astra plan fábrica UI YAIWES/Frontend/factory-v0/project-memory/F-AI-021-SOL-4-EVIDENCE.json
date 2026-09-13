@@ -1,0 +1,20 @@
+{
+  "schema":"yaiwes.factory.sol.node-evidence.v1",
+  "contract":"tel.workflow/v3",
+  "agent_name":"SOL 4 GPT 🆘",
+  "node_id":"F-AI-021",
+  "base_sha":"6d2edb26ec4fa47eb795933847d8fa5e72415bd8",
+  "final_tested_sha":"de1721965e8fa7edce34a17e948cb305685196a3",
+  "state":"PASS_PENDING_REVIEW",
+  "failure_class":"PRODUCT_FAILURE_RESOLVED",
+  "gap_original":"#file-input only recorded file name/size/mime in config.sources; it did not read content, parse it, or create an editable canvas node.",
+  "strategy_delta":"ADAPT: added file-import-v1 parser + file-import-controller-v1 adapter. Adapter reuses canonical canvas drop -> ADD_COMPONENT -> reducer -> persistProject; no second state engine.",
+  "commits":{"parser":"63e0f4d4ef1904d02010dc45573a27f47ab8fc18","controller":"bd405d1bd8b9ba66bbe6ee0915cf7935e7879d9f","entrypoint":"c73ab2b21b71b99fd7d69689072aa5e11310f17f","e2e_test":"314bda9d878df2c26c9cb47864005704227ae6a7","workflow":"de1721965e8fa7edce34a17e948cb305685196a3"},
+  "tests":{"run_id":34734680224,"job_id":103663832303,"conclusion":"SUCCESS","syntax":"PASS","browser_e2e":"PASS file->parse->canvas editable->reload","projects":"chromium-desktop"},
+  "simulations":["S1 HTML file parses as page and is inserted through canonical drop","S2 JSON file parses as JSON/panel and becomes a second editable node","S3 edited imported label survives reload through existing persistence"],
+  "refutations":["R1 metadata-only import rejected by initial source inspection","R2 parser-file presence alone rejected; browser E2E required and obtained","R3 direct localStorage/state mutation rejected; controller uses existing drop/reducer path"],
+  "goals12_output":{"G01":"PASS","G02":"PASS fresh rereads","G03":"PASS","G04":"PASS no collision; stale 409 rebuilt on fresh HEAD","G05":"PASS dedup current importer path","G06":"PASS reuse canonical editor path","G07":"PASS minimum adapter delta","G08":"PASS syntax+browser microgate","G09":"PASS E2E+reload","G10":"PASS 3 simulations+3 refutations","G11":"PASS run/job/commits persisted","G12":"PASS release then read fresh next free node"},
+  "council12":["objective=file import editable","requirement=file->parse->canvas editable","authority=fresh code+Action","prior=metadata only","owner=SOL4","collision=STALE_LOCK handled","gap=product importer missing","alternatives=direct state engine rejected","strategy=ADAPT canonical drop","tests=syntax+Playwright E2E","refutations=3","decision=PASS_PENDING_REVIEW"],
+  "remaining_gaps":["independent reviewer before VERIFIED_CLOSED","aggregate candidate QA downstream"],
+  "review_required":true
+}
