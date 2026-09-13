@@ -1,0 +1,11 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "chat_id": "SOL GPT <20>",
+  "node_id": "N24-CONSOLIDATOR",
+  "fresh_main_sha": "5dcc89a75ff2ee1c2cf73dc55781b73316dc9745",
+  "write_scope": "runtime/src/consolidation/**|runtime/tests/test_consolidation*",
+  "claimed_at": "2026-09-13T06:32:15Z",
+  "state": "CLAIMED",
+  "execution_state": "IN_PROGRESS",
+  "note": "Reentry from authoritative GAP_RESOLVABLE; no N24 claim marker found in consolidation scope on fresh readback."
+}
