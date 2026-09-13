@@ -1,3 +1,5 @@
+import { serializeFactoryHtml } from './html-export-v1.js';
+
 const PROJECT_KEY='yaiwes-factory-project-v19';
 const CONFIG_KEY='yaiwes-factory-config-v13';
 
@@ -20,6 +22,13 @@ export function restoreFactoryExport(text,storage=globalThis.localStorage){
   return restored;
 }
 
+function downloadHtml(name,content){
+  const blob=new Blob([content],{type:'text/html'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
 function bindJsonRoundtrip(){
   const input=document.getElementById('file-input');
   if(!input||input.dataset.jsonRoundtripBound)return;
@@ -36,7 +45,24 @@ function bindJsonRoundtrip(){
   },true);
 }
 
-document.addEventListener('click',()=>queueMicrotask(bindJsonRoundtrip),true);
-queueMicrotask(bindJsonRoundtrip);
+function bindHtmlExport(){
+  const button=document.getElementById('export-html');
+  if(!button||button.dataset.htmlExportV1Bound)return;
+  button.dataset.htmlExportV1Bound='1';
+  button.addEventListener('click',event=>{
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const runtime=globalThis.__YAIWES_FACTORY_V19__;
+    const state=runtime?.getState?.();
+    const config=JSON.parse(globalThis.localStorage?.getItem(CONFIG_KEY)||'{}');
+    if(!state||!Array.isArray(state.components)) throw new Error('YAIWES_HTML_EXPORT_STATE_UNAVAILABLE');
+    const html=serializeFactoryHtml(state,config);
+    downloadHtml(`yaiwes-ui-v${state.version??0}.html`,html);
+  },true);
+}
+
+function bindAdapters(){bindJsonRoundtrip();bindHtmlExport()}
+document.addEventListener('click',()=>queueMicrotask(bindAdapters),true);
+queueMicrotask(bindAdapters);
 
 globalThis.__YAIWES_JSON_ROUNDTRIP_V1__=Object.freeze({parseFactoryExport,restoreFactoryExport,projectKey:PROJECT_KEY,configKey:CONFIG_KEY});
