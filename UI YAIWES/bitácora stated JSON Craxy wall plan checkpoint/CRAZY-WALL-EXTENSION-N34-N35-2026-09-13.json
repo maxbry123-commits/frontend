@@ -1,0 +1,53 @@
+{
+  "schema": "yaiwes.crazy-wall.extension.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "extends": "CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json",
+  "authority_rule": "code/test/run/log/readback > current Crazy Wall + this extension > architecture/handoff > history",
+  "reason": "Forensic cross-check found that N01/N02/N30 certify only S1 MAX-SYSTEM, S2 Virtual Computer, S3 Memory/Workflow, while ARQUITECTURA-PROGRAMACION-CONSOLIDADA and CONTRATO-MAESTRO-FORENSE declare a fourth effective functional source: Command Center. Therefore the current 98-requirement denominator cannot yet be treated as the complete product denominator.",
+  "evidence": {
+    "n01_three_source_report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N01-DOC-REVIEW-COMPLETE-SOL-8-GPT-2026-09-13.md",
+    "n02_denominator_report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N02-TRACEABILITY-BIDIRECTIONAL-SOL-8-GPT-2026-09-13.json",
+    "n30_denominator_report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N30-G12-GLOBAL-COVERAGE-SOL-3-GPT-2026-09-13.json",
+    "architecture_four_sources": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md",
+    "master_forensic_four_sources": "UI YAIWES/readme arquitectura UI YAIWES/CONTRATO-MAESTRO-FORENSE-XRAY-50-GOALS-UI-YAIWES.md",
+    "command_center_source": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻➡️TAREA comand Center Fase 1 2 3 de deepseck 🗂️📂✅✅✅✅✅✅✅✅✅✅✅✅✅✅.md",
+    "command_center_blob": "65b82b959986b9c174a68cf3a62fbb619280cd36"
+  },
+  "nodes": [
+    {
+      "n": 34,
+      "id": "N34-FOUR-SOURCE-DENOMINATOR",
+      "state": "FREE",
+      "owner": null,
+      "title": "Recalcular denominador completo incluyendo Command Center",
+      "scope": "audit/coverage/reports only; no product implementation code",
+      "depends_on": ["N01-DOC-REVIEW-COMPLETE", "N02-TRACEABILITY-BIDIRECTIONAL", "N30-G12-GLOBAL-COVERAGE"],
+      "steps": [
+        "1_VERIFY_RESEARCH: leer completos S1/S2/S3 + Command Center y las arquitecturas/README vigentes; demostrar qué requisitos de Command Center ya están deduplicados y cuáles faltan del denominador actual",
+        "2_EXECUTE_DELTA: producir denominador autoritativo de cuatro fuentes con source anchors, IDs estables, dedup semántico sin pérdida y mapeo requirement→capability→node; crear nuevos nodos sólo para capabilities realmente huérfanas",
+        "3_TEST_REPORT: ejecutar no-drop/dedup/top-down/bottom-up/refutation; readback y CI si aplica; publicar total final implementable y diferencias exactas contra los 98 actuales"
+      ],
+      "close": "Las cuatro fuentes funcionales efectivas están exhaustivamente incluidas, deduplicadas y auditables; el denominador final reemplaza de forma explícita al provisional 98 cuando corresponda",
+      "claim_rule": "one chat = one node; fresh HEAD; no product code mutation",
+      "next_if_pass": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+      "next_if_gap": "registrar capability huérfana como nodo literal nuevo con scope propio; no inflar N34"
+    },
+    {
+      "n": 35,
+      "id": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+      "state": "BLOCKED_AFTER_N34",
+      "owner": null,
+      "title": "Persistir y certificar RequirementTrace del denominador final",
+      "scope": "runtime/src/audit/**|runtime/src/coverage/**|audit/coverage/reports|runtime/tests/test_audit*|runtime/tests/test_coverage*",
+      "depends_on": ["N34-FOUR-SOURCE-DENOMINATOR"],
+      "steps": [
+        "1_VERIFY_RESEARCH: consumir denominador final N34 y reutilizar RequirementMatrix + audit.five_pass + evidence verifier existentes; no crear segundo auditor",
+        "2_EXECUTE_DELTA: persistir exactamente una RequirementTrace válida por requisito implementable con source/code/test/evidence hashes, symbols, revision, node/task y attestation de CI independiente",
+        "3_TEST_REPORT: ejecutar five-pass sobre el inventario productivo completo, reconciliación inversa artifact→requirement, contradicciones/huérfanos y trusted CI; cero missing_trace para PASS"
+      ],
+      "close": "100% del denominador final tiene RequirementTrace de producción verificable y five-pass no reporta missing_trace/contradiction/orphan",
+      "global_gate": "N31/Final Judge no puede declarar PRODUCT VERIFIED_CLOSED sin N17 + N35 + demás dependencias de producto cerradas"
+    }
+  ]
+}
