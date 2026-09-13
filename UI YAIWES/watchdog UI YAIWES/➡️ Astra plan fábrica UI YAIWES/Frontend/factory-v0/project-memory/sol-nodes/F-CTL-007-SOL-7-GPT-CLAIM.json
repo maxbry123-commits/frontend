@@ -1,16 +1,1 @@
-{
-  "schema":"tel.workflow/v3",
-  "chat_id":"SOL-7-GPT-2026-09-12T21:46-05:00",
-  "agent_name":"SOL 7 GPT 🆘",
-  "node_id":"F-CTL-007",
-  "fresh_main_sha":"FRESH_READ_AT_UPDATE",
-  "base_sha":"e01e2395252e987114d7cad8e0c94abe7a97f069",
-  "write_scope":"F-CTL-007 only: isolated layer-reorder adapter over canonical persisted project + index-v19 wiring + dedicated E2E/workflow/evidence; app-v19/actions.js remain read-only; excludes F-CTL-009 and Wordflow N01-N31",
-  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-CTL-007-SOL-7-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/layer-reorder-v1.js","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ctl-007-layers.spec.mjs",".github/workflows/factory-f-ctl-007-layers.yml","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-CTL-007-SOL-7-EVIDENCE.json"],
-  "claimed_at":"2026-09-12T22:09:00-05:00",
-  "state":"EXECUTING",
-  "classification":"PRODUCT_FAILURE",
-  "gap":"Layer selection exists, but no reorder capability exists. StrategyDelta isolates reorder into an adapter that mutates only the canonical yaiwes-factory-project-v19 persisted state and reloads through the canonical app normalizer; no second editor/state store.",
-  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "goals12_input":{"G01":"PASS","G02":"PASS fresh read at update","G03":"PASS","G04":"PASS isolated unique adapter/test/workflow paths; index-v19 fresh read required before update","G05":"PASS current app/reducer deduped","G06":"PASS no OSS/new engine","G07":"EXECUTING minimal adapter+wiring","G08":"PENDING","G09":"PENDING browser","G10":"PENDING 3+3","G11":"PENDING","G12":"PENDING"}
-}
+{"schema":"tel.workflow/v3","chat_id":"SOL-7-GPT-2026-09-12T21:46-05:00","agent_name":"SOL 7 GPT 🆘","node_id":"F-CTL-007","base_sha":"e01e2395252e987114d7cad8e0c94abe7a97f069","final_evidence_commit":"366eb258823bc6eaa5e16c4010113321fd843f04","state":"PASS_PENDING_REVIEW","classification":"PRODUCT_FAILURE_RESOLVED","paths_changed":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/layer-reorder-v1.js","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ctl-007-layers.spec.mjs",".github/workflows/factory-f-ctl-007-layers.yml","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-CTL-007-SOL-7-EVIDENCE.json"],"commits":{"adapter":"4493f84176419df6e46a3c1a52a5fdde22ad7579","wiring":"32c84824ad758cfbaeef36a9a5043367c75b3db6","test":"eb81936773690b2c2ed63ef1252ee0e96e749046","workflow":"d94ba598f329e33fbc29c6ead66d779ff7691bcf","evidence":"366eb258823bc6eaa5e16c4010113321fd843f04"},"run_id":34734929428,"job_id":103664527749,"tests":"syntax PASS; Chromium E2E 1/1 PASS; select+reorder+persist+selectedId+history+undo","simulations":3,"refutations":3,"review_required":true,"remaining_gaps":["independent review/global candidate integration downstream"],"next_free_node":"READ_FRESH_QUEUE"}
