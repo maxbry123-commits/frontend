@@ -1,0 +1,18 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "chat_id":"SOL-6-GPT-2026-09-12T21:45-05:00",
+  "agent_name":"SOL 6 GPT 🆘",
+  "node_id":"F-ED-004",
+  "fresh_main_sha":"bf9cbec840ff45a059e1679cb545a5f90e2172a3",
+  "base_sha":"bf9cbec840ff45a059e1679cb545a5f90e2172a3",
+  "write_scope":"Factory F-ED-004 only: verify project persistence after reload; evidence/test-only first, minimum persistence delta only if product failure is proven; excludes active F-ED-001/F-ED-003 and Wordflow N01-N31",
+  "paths":[
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-ED-004-SOL-6-GPT-CLAIM.json",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-ED-004-SOL-6-EVIDENCE.json"
+  ],
+  "claimed_at":"2026-09-12T21:46:21-05:00",
+  "state":"CLAIMED",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "goals12_input":{"G01":"PASS","G02":"PASS fresh bf9cbec8 after stale-lock retry","G03":"PASS","G04":"PASS unique claim/evidence paths; no F-ED-004 owner observed","G05":"PENDING inspect persistence code/tests","G06":"PASS reuse-first","G07":"PENDING classification","G08":"PENDING reload microtest","G09":"PENDING integration/E2E","G10":"PENDING 3 simulations/refutations","G11":"PENDING evidence SHA/readback","G12":"PENDING reconcile next"}
+}
