@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3.release",
+  "state": "RELEASED_GAP_RESOLVABLE_COLLISION",
+  "chat_id": "SOL GPT <16>",
+  "node_id": "N17-FULL-PRODUCT-E2E",
+  "claim_commit": "59bc1266508b98eb00675775b1dbf05eb0ac8b44",
+  "report_commit": "40aae002380b2fa2e3d082713cf32c80967124bb",
+  "released_at": "2026-09-13T07:22:00Z",
+  "reason": "Exact-head CI 34744935641 cancelled before jobs and later SOL GPT <10> claimed N17; release avoids concurrent writes while preserving E2E test delta."
+}
