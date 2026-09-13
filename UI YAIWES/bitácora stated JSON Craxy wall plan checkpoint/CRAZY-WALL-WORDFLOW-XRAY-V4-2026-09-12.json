@@ -15,14 +15,14 @@
     "workflow": ".github/workflows/yaiwes-wordflow-loop-pytest.yml",
     "workflow_fix_commit": "baed8f07e9a205f28def181931d9eb7420e76fd7",
     "timeout_strategy_commit": "84678c4cd81394bdb2712a6a18a2b7ea8fab6fe3",
-    "run": 34723669555,
-    "job": 103633952112,
+    "run": 34730513826,
+    "job": 103652482919,
     "state": "COMPLETED_SUCCESS",
     "wordflow_tests": 23,
-    "runtime_tests": 62,
+    "runtime_tests": 75,
     "runtime_subtests": 9,
     "log_readback": true,
-    "promotion_rule": "PASS applies to current global regression and P18 recovery control-plane subgate; not workspace/multi-host sandbox failover E2E"
+    "promotion_rule": "PASS covers current global regression, P18 recovery control-plane, and S1 memory boundary subgates; not P08-P10/storage E2E or workspace/multi-host failover."
   },
   "rules": {
     "one_task_one_node": true,
@@ -54,15 +54,15 @@
     {
       "id": "WF-G08-MEMORY",
       "process": "P08",
-      "state": "FREE",
+      "state": "TESTED_BOUNDARY_SUBGATE_STORAGE_E2E_PENDING",
       "owner_lane": "SOL_GPT1",
       "scope": "runtime/src/memory/**|runtime/src/agent/**|runtime/tests/test_memory*|runtime/tests/test_agent*",
-      "task": "Memory/Audit contract + canonical write gate; direct LLM canonical writes forbidden."
+      "task": "Memory read boundary + canonical write authorization gate implemented and globally regression-tested; persistence/checkpoint product E2E remains open."
     },
     {
       "id": "WF-G09-RETRIEVAL",
       "process": "P09",
-      "state": "AFTER_WF-G08",
+      "state": "BOUNDARY_API_PRESENT_E2E_PENDING",
       "owner_lane": "SOL_GPT1",
       "scope": "runtime/src/memory/**|runtime/tests/test_memory*",
       "task": "GET_CONTEXT/GET_MEMORY/GET_EVIDENCE + provenance retrieval E2E."
@@ -206,7 +206,7 @@
   ],
   "fresh_physical_gaps": {
     "adapters": "README_ONLY",
-    "agent": "GITKEEP_ONLY",
+    "agent": "IMPLEMENTED_TESTED_BOUNDARY",
     "integration": "README_ONLY",
     "recovery": "IMPLEMENTED_TESTED_SUBGATE_FAILOVER_E2E_PENDING",
     "uek": "GITKEEP_ONLY",
@@ -214,8 +214,13 @@
     "conn": "GITKEEP_ONLY",
     "observability": "GITKEEP_ONLY",
     "mission": "GITKEEP_ONLY",
-    "install": "GITKEEP_ONLY"
+    "install": "GITKEEP_ONLY",
+    "memory": "IMPLEMENTED_TESTED_BOUNDARY_PRODUCT_PERSISTENCE_E2E_PENDING"
   },
   "closure": "SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
-  "updated_at_utc": "2026-09-12T23:01:09.459Z"
+  "updated_at_utc": "2026-09-13T01:44:10Z",
+  "coordination_flags": [
+    "Separate S1 hourly watchdog reference is non-authoritative for this unified central loop.",
+    "Editor closure queue is downstream P23 only; P23 remains BLOCKED_UNTIL_RUNTIME."
+  ]
 }
