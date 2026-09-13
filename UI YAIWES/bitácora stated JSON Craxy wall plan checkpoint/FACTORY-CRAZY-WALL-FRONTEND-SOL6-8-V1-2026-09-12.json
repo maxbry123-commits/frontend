@@ -1,0 +1,139 @@
+{
+  "schema": "yaiwes.factory.crazywall.frontend-swarm.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "ACTIVE_RESERVED_FRONTEND_LANE",
+  "base_queue": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-DYNAMIC-V2-2026-09-12.json",
+  "base_queue_blob_sha_observed": "97ccc529246a6a1845a9205acca929e530234f8e",
+  "objective": "Reservar SOL GPT 6, SOL GPT 7 y SOL GPT 8 exclusivamente para mejoras de frontend/interface de Fabrica UI YAIWES con seis nodos distintos, soporte de Hugging Face Jobs y adaptacion frontend-facing del Router Universal Inteligente sin colisionar con backend/Wordflow.",
+  "authority": "fresh code+test+Action/HF Job log > Crazy Wall/STATE/CHECKPOINT > HANDOFF/architecture > historical docs > inference",
+  "supervisor": "SOL_GPT_PLAN",
+  "lane": "FRONTEND_INTERFACE_ONLY",
+  "reserved_workers": {
+    "SOL 6 GPT": {
+      "exclusive_lane": "FRONTEND_INTERFACE_ONLY",
+      "primary_nodes": ["F-UI-045","F-UI-046"],
+      "may_claim_other_lanes": false
+    },
+    "SOL 7 GPT": {
+      "exclusive_lane": "FRONTEND_INTERFACE_ONLY",
+      "primary_nodes": ["F-UI-047","F-UI-048"],
+      "may_claim_other_lanes": false
+    },
+    "SOL 8 GPT": {
+      "exclusive_lane": "FRONTEND_INTERFACE_ONLY",
+      "primary_nodes": ["F-UI-049","F-UI-050"],
+      "may_claim_other_lanes": false
+    }
+  },
+  "repositories": {
+    "factory_frontend": {
+      "repo": "maxbry123-commits/frontend",
+      "branch": "main",
+      "allowed_roots": [
+        "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/"
+      ]
+    },
+    "router_universal_inteligente": {
+      "repo": "maxbry123-commits/router-universal-router-inteligente-",
+      "branch": "main",
+      "purpose": "Solo contratos/adapters/status/tests necesarios para la interface Factory; fresh-read y claim de paths exactos antes de escribir.",
+      "forbidden": ["reescritura global del router", "cambio de algoritmo de routing no requerido por la UI", "persistir secretos"]
+    }
+  },
+  "hugging_face": {
+    "account_verified": "COMAND-CENTER-1",
+    "current_connector_verified_scopes": ["jobs","openid","profile","read-mcp","read-repos"],
+    "jobs_allowed": true,
+    "job_operations": ["run","uv","ps","logs","inspect","cancel"],
+    "full_access_secret": "USER_DECLARED_SECRET_REF_ONLY__VALIDATE_SCOPE_AT_RUNTIME",
+    "rule": "Nunca imprimir ni persistir token. No incrustar token en frontend/browser. Si una operacion requiere write scope no presente en la sesion OAuth actual, usar un secret_ref autorizado en entorno/Job y validar permiso antes del efecto."
+  },
+  "claim_contract": {
+    "one_chat_one_active_node": true,
+    "one_node_one_task": true,
+    "single_writer_per_path": true,
+    "fresh_head_before_write": true,
+    "claim_fields": ["chat_id","agent_name","node_id","repo","fresh_main_sha","base_sha","write_scope","paths","claimed_at","state"],
+    "on_collision": "READ_FRESH_AND_SELECT_NEXT_ALLOWED_FRONTEND_NODE",
+    "on_main_change": "STALE_LOCK_GAP_REBUILD_DELTA"
+  },
+  "node_steps": ["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "strategy_order": ["REUSE_EXISTING","PATCH","ADAPT","GENERATE","NEW_DOWNLOAD"],
+  "nodes": [
+    {
+      "id": "F-UI-045",
+      "assigned_pool": ["SOL 6 GPT"],
+      "state": "FREE",
+      "priority": 1,
+      "task": "Mejorar workspace/shell responsive de la Factory: canvas dominante, paneles dockeables/colapsables, resize estable y uso comodo desktop+mobile sin ocultar el canvas.",
+      "depends_on": [],
+      "write_scope_hint": ["Frontend/factory-v0/src/ui/workspace-shell-*", "Frontend/factory-v0/*workspace*.css", "Frontend/factory-v0/tests/*workspace*"],
+      "acceptance": "layout desktop/mobile reproducible; canvas siempre util; paneles no se superponen; resize/scroll/touch PASS con evidencia."
+    },
+    {
+      "id": "F-UI-046",
+      "assigned_pool": ["SOL 6 GPT"],
+      "state": "FREE",
+      "priority": 2,
+      "task": "Crear/mejorar browser de componentes de la interface: busqueda, categorias, filtros, favoritos/recientes y drag-preview antes de soltar en canvas usando componentes OSS ya presentes primero.",
+      "depends_on": [],
+      "write_scope_hint": ["Frontend/factory-v0/src/ui/component-browser-*", "Frontend/factory-v0/tests/*component-browser*"],
+      "acceptance": "buscar->seleccionar->preview->insertar modifica proyecto real; cero catalogo decorativo; test de teclado y touch."
+    },
+    {
+      "id": "F-UI-047",
+      "assigned_pool": ["SOL 7 GPT"],
+      "state": "FREE",
+      "priority": 1,
+      "task": "Agregar command palette/quick actions y atajos de teclado para insertar, buscar, guardar, undo/redo, zoom/Fit View y navegar paneles sin duplicar motores de estado.",
+      "depends_on": [],
+      "write_scope_hint": ["Frontend/factory-v0/src/ui/command-palette-*", "Frontend/factory-v0/tests/*command-palette*"],
+      "acceptance": "acciones rapidas invocan controles canonicos existentes; shortcuts verificables; ninguna accion paralela o decorativa."
+    },
+    {
+      "id": "F-UI-048",
+      "assigned_pool": ["SOL 7 GPT"],
+      "state": "FREE",
+      "priority": 2,
+      "task": "Mejorar accesibilidad y ergonomia de la interface: focus visible, navegacion teclado, ARIA, touch targets, estados disabled/loading/error, contraste y feedback de accion.",
+      "depends_on": [],
+      "write_scope_hint": ["Frontend/factory-v0/src/ui/accessibility-*", "Frontend/factory-v0/tests/*accessibility*", "Frontend/factory-v0/*.css"],
+      "acceptance": "flujo principal operable por teclado/touch; roles/labels correctos; estados visibles; regresion visual/funcional sin ruptura."
+    },
+    {
+      "id": "F-UI-049",
+      "assigned_pool": ["SOL 8 GPT"],
+      "state": "FREE",
+      "priority": 1,
+      "task": "Construir panel frontend de Router Universal Inteligente para Factory: estado de conexion, modelos/rutas disponibles, seleccion activa, health/error/latencia y readback de respuesta; adaptar contrato/status endpoint en repo router solo si el GAP se demuestra.",
+      "depends_on": [],
+      "write_scope_hint": ["Frontend/factory-v0/src/ui/router-status-*", "Frontend/factory-v0/tests/*router-status*", "router-universal-router-inteligente-: frontend-facing adapter/status/test paths exactos tras fresh read"],
+      "acceptance": "Factory muestra estado real del router y seleccion usada; error/reconnect trazables; si se modifica router, contrato+test+SHA en ambos repos; no reescribir core."
+    },
+    {
+      "id": "F-UI-050",
+      "assigned_pool": ["SOL 8 GPT"],
+      "state": "FREE",
+      "priority": 2,
+      "task": "Crear panel/flujo operativo de Hugging Face Jobs para desarrollo y validacion de Factory: lanzar Job seguro, listar/inspeccionar estado, ver logs, cancelar y registrar evidencia; usar Jobs para pruebas/build/preview sin exponer secretos al navegador.",
+      "depends_on": [],
+      "write_scope_hint": ["Frontend/factory-v0/src/ui/hf-jobs-*", "Frontend/factory-v0/tests/*hf-jobs*", "Frontend/factory-v0/project-memory/*HF-JOB*"],
+      "acceptance": "Job real o sandbox validado: run->status/log->cancel/complete; UI refleja estado; secret_ref solamente; job_id/log/evidence persistidos sin token."
+    }
+  ],
+  "deterministic_assignment": [
+    "SOL 6 GPT may claim only F-UI-045 or F-UI-046",
+    "SOL 7 GPT may claim only F-UI-047 or F-UI-048",
+    "SOL 8 GPT may claim only F-UI-049 or F-UI-050",
+    "Within each worker: sort FREE nodes by priority ASC then node_id ASC",
+    "After own primary nodes finish: worker may assist another F-UI-045..050 node only if explicitly FREE and path-disjoint; never leave FRONTEND_INTERFACE_ONLY lane"
+  ],
+  "forbidden_roots": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/",
+    "backend productivo no requerido por contrato frontend",
+    "secret/token files"
+  ],
+  "done_rule": "Cada nodo termina PASS_PENDING_REVIEW con code+test+readback+SHA y Job/run cuando aplique; producer no autocertifica VERIFIED_CLOSED."
+}
