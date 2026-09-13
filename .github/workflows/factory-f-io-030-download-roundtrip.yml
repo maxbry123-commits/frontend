@@ -1,0 +1,38 @@
+name: factory-f-io-030-download-roundtrip
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/destination-roundtrip-v1.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/json-roundtrip-v1.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-io-030-download-roundtrip.spec.mjs'
+      - '.github/workflows/factory-f-io-030-download-roundtrip.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  download-roundtrip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Syntax
+        run: |
+          node --check src/destination-roundtrip-v1.js
+          node --check tests/e2e/f-io-030-download-roundtrip.spec.mjs
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: F-IO-030 browser download/readback/reopen gate
+        run: npx playwright test tests/e2e/f-io-030-download-roundtrip.spec.mjs --project=chromium-desktop --reporter=line
