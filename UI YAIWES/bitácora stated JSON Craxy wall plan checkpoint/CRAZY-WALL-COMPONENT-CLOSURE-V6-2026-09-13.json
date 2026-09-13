@@ -1,0 +1,25 @@
+{
+  "schema": "yaiwes.crazy-wall.component-closure.v6",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "base": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json",
+  "component_state": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/COMPONENT-CLOSURE-STATE-2026-09-13.json",
+  "effective_policy": {
+    "one_task_one_node": true,
+    "stale_reopen_hours": 4,
+    "priority": "REUSE_EXISTING > PATCH > ADAPT > GENERATE > NEW_DOWNLOAD",
+    "canonical_motors_only": true,
+    "no_false_pass": true
+  },
+  "node_overrides": [
+    {"id":"N07-VITE-ACQUIRE","state":"GAP_RESOLVABLE","owner":null,"reason":"canonical Motor2 run 34732661919/job 103658218081 rejected official Vite v8.3.0 source with SOURCE_SPECIAL_FILE_GAP","next":"official compatible StrategyDelta/equivalence"},
+    {"id":"N08-SUPABASE-ACQUIRE","state":"GAP_RESOLVABLE","owner":null,"reason":"mandatory requirement/destination not proven; download denied fail-closed","next":"prove requirement+capability gap+destination or close by equivalence"},
+    {"id":"N09-DUCKDB-ACQUIRE-SPECIAL","state":"GAP_RESOLVABLE","owner":null,"reason":"Gap Ledger G04 special-file incompatibility with immutable motor","next":"official compatible StrategyDelta only"},
+    {"id":"N10-AVF-PROVIDER-CAPABILITY","state":"GAP_RESOLVABLE","owner":null,"reason":"android.googlesource provider incompatible with GitHub-only motor plus runtime capability unverified","next":"authorized provider/equivalence + Android capability probe"},
+    {"id":"N11-BIG-AGI-SOURCE-INTEGRATION","state":"GAP_RESOLVABLE","owner":null,"reason":"run 34734227288/job 103662591732 rejected AGENTS.md as SOURCE_SPECIAL_FILE_GAP","next":"official compatible StrategyDelta/equivalence"},
+    {"id":"N12-VITE-INTEGRATION","state":"BLOCKED_AFTER_N07","owner":null,"reason":"Vite SOURCE_PRESENT not achieved"},
+    {"id":"N13-VERCEL-AI-SDK-SOURCE-INTEGRATION","state":"GAP_RESOLVABLE","owner":null,"reason":"run 34734135513/job 103662336769 rejected README.md as SOURCE_SPECIAL_FILE_GAP","next":"official compatible StrategyDelta/equivalence"}
+  ],
+  "claim_rule": "Before claim read base+overlay+fresh HEAD; a CLAIMED/EXECUTING node with no verifiable evidence delta for >4h becomes STALE_REOPENED then FREE.",
+  "closure": "SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+}
