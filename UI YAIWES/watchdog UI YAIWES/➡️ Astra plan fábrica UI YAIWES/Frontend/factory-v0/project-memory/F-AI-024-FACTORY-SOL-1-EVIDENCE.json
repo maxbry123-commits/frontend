@@ -3,30 +3,41 @@
   "contract":"tel.workflow/v3",
   "node_id":"F-AI-024",
   "owner":"FACTORY-SOL-1-GPT",
-  "base_sha":"a9eb1a55adb7d15d6ee0b7193d8dedb16535596b",
-  "claim_commit":"e17337d3688be6456fa6d37ea6b0f8887551dde2",
-  "classification":"GAP_BLOCKED_BY_ACTIVE_OWNER",
-  "facts":[
-    "F-AI-024 acceptance requires E2E source->router/adapter->editor->editable state.",
-    "Current index-v19.html does not load src/frontend-router-bridge.js.",
-    "F-UI-050 is IN_PROGRESS and owned by FACTORY-SOL-8-GPT with frontend-facing integration/status/test write_scope.",
-    "Fresh commit a9eb1a55... added frontend-router-bridge.js, so the missing runtime wiring belongs to the active F-UI-050 lane.",
-    "Single-writer rule forbids FACTORY-SOL-1-GPT from editing the same frontend integration path while F-UI-050 is active."
-  ],
-  "test":"STATIC_READBACK_FAIL_FOR_E2E_PRECONDITION: canonical index-v19.html lacks frontend-router-bridge module script",
+  "base_sha":"23f08cc76d994cebda366efdbb491119b6ecea6e",
+  "tested_sha":"37cdefb5a6e826f28cb04ecea5927bf31beb8e13",
+  "fresh_main_readback_sha":"afad288e5816501e6ec7858f3cd349c9ef26be1f",
+  "classification":"PRODUCT_FAILURE_FIXED",
+  "gap":"Canonical index-v19.html loaded the router bridge but omitted file-import-controller-v1.js, so file/HTML/reference adapters were not active on the canonical entrypoint.",
+  "fix":{
+    "product_commit":"45ba0849a2b21f7b20648a344316e34aa107c765",
+    "test_commit":"766c3be142955c5342b33566d2a9c7b05912ad7f",
+    "workflow_commit":"37cdefb5a6e826f28cb04ecea5927bf31beb8e13",
+    "index_blob_readback":"e2d0fa28eb2432b44f0822e954bf1de2ecc0cc42",
+    "test_blob_readback":"17d541868f8642b429e2ff85013eadf7d1593e8f"
+  },
+  "tests":{
+    "run_id":34738399707,
+    "job_id":103673790605,
+    "conclusion":"SUCCESS",
+    "syntax":"PASS",
+    "browser_e2e":"PASS 1/1",
+    "log_result":"1 passed (1.9s)",
+    "chain":["canonical index-v19 HTTP 200","file-import-controller HTTP 200","frontend-router-bridge HTTP 200","backend-adapter HTTP 200","reference source imported to canvas","tel.workflow/v3 RUN_TASK request captured","router response ACCEPTED displayed","component edited and persisted","reload preserved editable component"]
+  },
   "simulations":[
-    "S1 import source can create editable canvas item, but router bridge is not loaded by canonical page",
-    "S2 direct module invocation could pass but would not satisfy browser E2E acceptance",
-    "S3 editing index now would violate active F-UI-050 single-writer scope"
+    "S1 reference source enters canonical page through file-import-controller and creates one selected page node",
+    "S2 configured HTTP router receives tel.workflow/v3 RUN_TASK with selected model and goal and returns normalized TASK_EVENT",
+    "S3 imported node remains editable after router round-trip and survives reload from canonical project storage"
   ],
   "refutations":[
-    "R1 module file presence != runtime wiring",
-    "R2 direct unit test != E2E editor proof",
-    "R3 producer cannot bypass active owner to force closure"
+    "R1 Presence-only refutation PASS: workflow greps both module scripts and browser logs show both modules served HTTP 200 from canonical index-v19.",
+    "R2 Unit-only refutation PASS: acceptance is exercised by Playwright browser E2E rather than direct module invocation; source import, router request/response, editor edit and reload all execute in one test.",
+    "R3 Stale-main refutation PASS: main advanced concurrently, but fresh readback shows index-v19 blob e2d0fa28... and test blob 17d54186... unchanged from the tested implementation; concurrent F-UI-059 release touched its own claim/evidence lane."
   ],
-  "pass_percent":35,
-  "state":"GAP_BLOCKED_BY_ACTIVE_OWNER",
-  "blocking_node":"F-UI-050",
-  "blocking_owner":"FACTORY-SOL-8-GPT",
-  "next":"Re-read after F-UI-050 terminal; then execute F-AI-024 E2E gate on exact candidate."
+  "goals12_output":{"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS reuse existing import/router adapters","G07":"PASS one-line canonical wiring delta","G08":"PASS dedicated E2E","G09":"PASS browser integration","G10":"PASS 3 simulations + 3 refutations","G11":"PASS run/job/log + blobs + readback","G12":"PASS release then READ_FRESH"},
+  "pass_percent":100,
+  "state":"PASS_PENDING_REVIEW",
+  "review_required":true,
+  "remaining_gaps":["independent review/global candidate integration downstream"],
+  "next":"READ_CRAZY_WALL_FRESH"
 }
