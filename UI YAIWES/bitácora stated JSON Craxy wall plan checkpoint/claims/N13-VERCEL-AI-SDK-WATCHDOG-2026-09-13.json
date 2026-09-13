@@ -1,0 +1,16 @@
+{
+  "schema": "yaiwes.node.claim.v1",
+  "contract": "tel.workflow/v3",
+  "chat_id": "WATCHDOG-COMPONENT-CLOSURE",
+  "node_id": "N13-VERCEL-AI-SDK-SOURCE-INTEGRATION",
+  "fresh_main_sha": "0185a959af975a932580c657204226b6c288be86",
+  "write_scope": "component acquisition|streaming provider UI boundary",
+  "claimed_at": "2026-09-13T02:53:00Z",
+  "state": "CLAIMED",
+  "official_source": "vercel/ai",
+  "source_ref": "ai@5.0.257",
+  "source_commit": "82137ec13283bb0f72d89f192403ab7378194a37",
+  "license": "Apache-2.0",
+  "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vercel_ai_sdk",
+  "stale_reopen_after_hours": 4
+}
