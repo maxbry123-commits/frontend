@@ -1,0 +1,11 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <16>",
+  "node_id": "N27-CONTINUOUS-LOOP",
+  "fresh_main_sha": "6c05643fadeb9561be95554817519768b81d7a23",
+  "write_scope": "runtime/src/integration/**|runtime/tests/test_integration*",
+  "claimed_at": "2026-09-13T07:22:30Z",
+  "authority": "Crazy Wall fresh read shows N27 FREE after N26+N23 VERIFIED_CLOSED",
+  "strategy": "REUSE existing integration state + audit boundaries; implement only missing deterministic StrategyDelta/reinjection loop and tests."
+}
