@@ -1,0 +1,12 @@
+{
+  "schema":"yaiwes.crazy-wall.claim.v2",
+  "contract":"tel.workflow/v3",
+  "role":"SOL_GPT2",
+  "chat_id":"SOL-2-GPT-2026-09-12T22:41-05:00",
+  "node_id":"S2-10-VM-MANAGER-CAPABILITY",
+  "fresh_base_main_sha":"17f191f4cb55fdb32cf99fdbd3dd3647d4e51a80",
+  "write_scope":["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/**","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/**","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform*","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_sandbox*","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S2-*.json"],
+  "claimed_at":"2026-09-12T22:46:10-05:00",
+  "state":"CLAIMED",
+  "steps":["VERIFY_OR_RESEARCH","EXECUTE_AUTHORIZED_DELTA","TEST_AND_REPORT"]
+}
