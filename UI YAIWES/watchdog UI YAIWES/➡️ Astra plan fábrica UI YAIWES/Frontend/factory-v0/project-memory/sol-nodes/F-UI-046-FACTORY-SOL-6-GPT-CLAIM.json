@@ -7,11 +7,12 @@
   "agent_name":"SOL 6 GPT 🆘",
   "node_id":"F-UI-046",
   "repo":"maxbry123-commits/frontend",
-  "fresh_main_sha":"af5cbb9c9d0a2157eb42490ea032bda0156065a4",
+  "fresh_main_sha":"dee909736174cdef2982855cd7a82381475e3622",
   "base_sha":"af5cbb9c9d0a2157eb42490ea032bda0156065a4",
-  "write_scope":"F-UI-046 only: src/ui/component-browser-*, dedicated component-browser tests/workflow/evidence; shared runtime entrypoint/state read-only until a reproduced integration GAP requires scope revalidation; excludes Wordflow N*",
+  "write_scope":"F-UI-046 only: src/ui/component-browser-*, dedicated component-browser tests/workflow/evidence plus index-v192.html import-only integration; app/state/oss-registry remain read-only; excludes Wordflow N*",
   "paths":[
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/ui/component-browser-v1.js",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v192.html",
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-046-component-browser.spec.mjs",
     ".github/workflows/factory-f-ui-046-component-browser.yml",
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-UI-046-FACTORY-SOL-6-EVIDENCE.json",
@@ -19,9 +20,13 @@
   ],
   "claimed_at":"2026-09-12T22:50:58-05:00",
   "state":"IN_PROGRESS",
+  "classification":"PRODUCT_FAILURE + INTEGRATION_GAP",
+  "gap":"COMPONENT_BROWSER_CAPABILITIES_MISSING + MODULE_NOT_RUNTIME_ACTIVE_WITHOUT_ENTRYPOINT_IMPORT",
   "task":"Crear/mejorar browser de componentes de la interface: busqueda, categorias, filtros, favoritos/recientes y drag-preview antes de soltar en canvas usando componentes OSS ya presentes primero.",
   "acceptance":"buscar->seleccionar->preview->insertar modifica proyecto real; cero catalogo decorativo; test de teclado y touch.",
   "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "authority":"FACTORY-CRAZY-WALL-FRONTEND-SOL6-8-V1-2026-09-12.json",
-  "next":"VERIFY_RESEARCH current library, OSS registry and canonical insertion path before any product delta"
+  "authority":"FACTORY-CRAZY-WALL-FRONTEND-SOL6-8-V1-2026-09-12.json + FACTORY-SUPERVISOR-RECONCILIATION-R03-2026-09-12.json",
+  "scope_revalidation":"index-v192.html added import-only because component-browser module otherwise would not be runtime-active; current sol-nodes listing contained no competing index-v192.html claim path at fresh read",
+  "strategy":"Enhance canonical #component-library cards; derive categories from existing DOM; invoke existing canonical card click/drag path; UI metadata only for favorites/recents; no second catalog/state engine.",
+  "next":"EXECUTE_DELTA component-browser enhancer + import-only runtime wiring + screenshot E2E"
 }
