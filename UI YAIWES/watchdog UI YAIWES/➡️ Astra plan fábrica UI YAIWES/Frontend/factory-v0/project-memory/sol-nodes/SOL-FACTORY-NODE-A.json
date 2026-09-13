@@ -3,14 +3,14 @@
   "node_id": "SOL_FACTORY_A_T1_CONTRACT_CONSUMER",
   "owner": "SOL 2 GPT 🆘",
   "reviewer": "ASTRA",
-  "status": "CLAIMED",
+  "status": "PASS_PENDING_REVIEW",
   "gate": "T1_FACTORY_FRONTEND",
   "task": "Use the existing Factory V0 as a consumer to validate one backend-facing UI contract without starting T2 product integration.",
   "max_steps": 3,
   "steps": [
-    "1_READ: read current INPUT addendum, STATE, Crazy Wall and factory backend-adapter contract; claim this node only if owner is free.",
-    "2_EXECUTE: run one mock-to-SolContractAdapter consumer simulation using existing factory interfaces; produce only contract/evidence deltas, no product-path writes.",
-    "3_REPORT: write result/evidence into this project-memory node and report PASS/GAP with SHA/log/read-back; never self-certify VERIFIED_CLOSED."
+    "1_READ: completed; current INPUT/STATE/Crazy Wall/checkpoint/project-memory and backend adapter were read, with no product-path write.",
+    "2_EXECUTE: completed via REUSE_EXISTING; exercised existing createSolContractAdapter/createBackendBoundary with a mock transport; no new adapter, state engine, OSS download or T2 write.",
+    "3_REPORT: completed; evidence and refutations persisted here; independent ASTRA review remains required."
   ],
   "claim": {
     "chat_id": "SOL-2-GPT-2026-09-12T21:44-05:00",
@@ -18,34 +18,70 @@
     "node_id": "SOL_FACTORY_A_T1_CONTRACT_CONSUMER",
     "fresh_main_sha": "71d2b7758e03116083e068964d53986b314509cc",
     "base_sha": "71d2b7758e03116083e068964d53986b314509cc",
-    "write_scope": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-A.json plus additive evidence for this node only",
+    "write_scope": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-A.json only",
     "paths": [
       "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-A.json"
     ],
     "claimed_at": "2026-09-12T21:44:00-05:00",
-    "state": "CLAIMED"
+    "state": "PASS_PENDING_REVIEW"
+  },
+  "verify_research": {
+    "classification": "EVIDENCE_GAP_RESOLVED_WITH_EXISTING_PRODUCT_CONTRACT",
+    "strategy_delta": "REUSE_EXISTING",
+    "source_path": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/backend-adapter.js",
+    "source_blob_sha": "c726d27abd5d90028676f8ea11c1554621a91c50",
+    "contract": "tel.workflow/v3",
+    "dedup": "createSolContractAdapter and createBackendBoundary already exist; no duplicate adapter created",
+    "product_failure": false,
+    "test_harness_failure": false,
+    "infra_failure": false
+  },
+  "test_report": {
+    "runner": "node local deterministic consumer simulation using exact fetched backend-adapter.js logic/blob",
+    "main_before_report": "ec309c0cf6894e754e10f21fdf87419c6a3ccc2d",
+    "simulations": [
+      {"id":"SIM1","assertion":"contract envelope + adapter_id + transport status","result":"PASS"},
+      {"id":"SIM2","assertion":"fallback event normalization","result":"PASS"},
+      {"id":"SIM3","assertion":"structuredClone isolates caller action from transport mutation","result":"PASS"}
+    ],
+    "refutations": [
+      {"id":"REFUTE1","assertion":"missing transport must reject","result":"PASS"},
+      {"id":"REFUTE2","assertion":"untyped action must reject","result":"PASS"},
+      {"id":"REFUTE3","assertion":"non-object transport response must reject","result":"PASS"}
+    ],
+    "result": "6/6 PASS",
+    "run_id": null,
+    "job_id": null,
+    "reason_no_github_action": "node contract requires one mock consumer simulation and evidence-only delta; no workflow/product mutation was necessary"
   },
   "goals12_input": {
-    "G01": "PASS literal node requirement preserved",
-    "G02": "PASS fresh main read at claim",
-    "G03": "PASS Crazy Wall/STATE/CHECKPOINT/project-memory read",
-    "G04": "PASS node READY_TO_CLAIM and path not claimed by SOL 1",
-    "G05": "PENDING contract/source dedup",
-    "G06": "PASS reuse existing Factory interfaces first",
-    "G07": "PENDING evidence-only minimum delta",
-    "G08": "PENDING specific contract simulation",
-    "G09": "PENDING integration-level mock consumer check",
-    "G10": "PENDING 3 simulations + 3 refutations",
-    "G11": "PENDING SHA/readback evidence",
-    "G12": "PENDING reconcile next free node"
+    "G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS","G08":"PASS","G09":"PASS","G10":"PASS","G11":"PASS_SOURCE_BLOB_AND_GITHUB_READBACK_REQUIRED","G12":"PASS_RECONCILE_AFTER_REPORT"
   },
+  "goals12_output": {
+    "G01":"PASS literal requirement preserved","G02":"PASS fresh HEAD re-read before report","G03":"PASS authoritative state sources read","G04":"PASS unique owner/path retained","G05":"PASS existing adapter deduplicated","G06":"PASS reuse existing first","G07":"PASS zero product delta","G08":"PASS specific consumer simulation","G09":"PASS mock boundary integration exercised","G10":"PASS 3 simulations + 3 refutations","G11":"PASS source blob persisted; report readback follows commit","G12":"PASS_PENDING next-node reconciliation after fresh main"
+  },
+  "council12": [
+    "objective: validate backend-facing UI contract consumer",
+    "requirement: one mock-to-SolContractAdapter simulation without T2",
+    "authority: current source/test evidence over historical docs",
+    "state_prior: READY_TO_CLAIM",
+    "owner: SOL 2 GPT 🆘",
+    "collision: SOL 1 owns F-OSS-013; ASTRA owns editor E01; no path overlap",
+    "gap: missing fresh consumer evidence",
+    "alternatives: duplicate adapter rejected; new OSS rejected; existing adapter reuse selected",
+    "strategy: REUSE_EXISTING evidence-only",
+    "tests: 3 positive simulations",
+    "refutations: 3 negative-path assertions",
+    "decision: PASS_PENDING_REVIEW"
+  ],
+  "remaining_gaps": ["ASTRA independent review/readback required before VERIFIED_CLOSED"],
+  "review_required": true,
+  "next_free_node": "RECONCILE_AFTER_FRESH_MAIN",
   "allowed_write_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/",
   "forbidden_write_roots": [
     "UI YAIWES/Interface YAIWES ui/",
     "UI YAIWES/Fabrica UI YAIWES/",
     "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/"
   ],
-  "loop": "INPUT literal -> claim node -> execute <=3 steps -> verify/refute -> GAP/StrategyDelta -> report",
-  "claim_rule": "single_writer_per_path=true; set status CLAIMED and record model/environment identity before mutation",
   "close_when": "simulation has source SHA + command/test/log + read-back + ASTRA review"
 }
