@@ -1,0 +1,59 @@
+{
+  "schema":"yaiwes.factory.supervisor.reconciliation.v2",
+  "round":"R04",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "project":"FABRICA_UI_YAIWES_ONLY",
+  "authority":"fresh Factory code+tests+Actions/browser evidence > claims/evidence > Crazy Wall/STATE/CHECKPOINT > historical docs > inference",
+  "observed_head":"7db4d1629664d8419d759d553c9d6240449a64ba",
+  "fresh_factory_state":{
+    "F-UI-045":{"state":"PASS_PENDING_REVIEW","tested_sha":"3ac912316841980b62748fd5334a0ef4bdea2e22","run_id":34736422396,"job_id":103668558057},
+    "F-UI-046":{"state":"PASS_PENDING_REVIEW","report_commit":"4535638180c685b3f60c1ec9d70437671132f81d"},
+    "F-UI-049":{"state":"PASS_PENDING_REVIEW","tested_sha":"1dcbde26608fa6b8d8c40808516ed421958d9f7c","run_id":34736150743,"job_id":103667839286},
+    "F-UI-050":{"state":"CLAIMED","owner":"FACTORY-SOL-8-GPT","claim_commit":"41ee81d522d7303578a821085c284b46ac4f8011"},
+    "F-MOD-033":{"state":"CLAIMED","owner":"SOL 7 GPT","claim_commit":"3af96e40f4c7f5172acbdcb088e7352970f2010b"},
+    "F-ED-001":{"state":"GAP_RESOLVABLE","latest_commit":"96599433c7d2bb231a949fc289d23f8d490ee80b","gap":"fresh mobile/touch rerun still absent"},
+    "F-UI-051":{"state":"GAP_RESOLVABLE","owner":"FACTORY-SOL-6-GPT","run_id":34737146887,"job_id":103670480746,"conclusion":"FAILURE","classification":"TEST_HARNESS_FAILURE"}
+  },
+  "F-UI-051_failure_analysis":{
+    "evidence":[
+      "App renderSteps uses STEPS.map and data-step=s.id; current state is one-based step=1..5.",
+      "Test loops i=0..steps-1 and clicks #steps [data-step=i], so data-step=0 times out.",
+      "Test locator [data-breakpoint=desktop] is ambiguous because it matches both breakpoint button and #canvas.",
+      "Workflow uploaded no custom evidence artifact because configured artifact paths did not resolve after failure."
+    ],
+    "strategy_delta":[
+      "Patch test only: enumerate actual #steps button[data-step] values or iterate 1..5; do not mutate product for this failure.",
+      "Scope breakpoint locators to .canvas-controls button[data-breakpoint] or button[data-breakpoint=...].",
+      "Preserve screenshots/inventory under a path definitely uploaded by workflow, including failure artifacts.",
+      "Rerun exact F-UI-051 gate; only after harness-correct run may any remaining failed expected_effect become PRODUCT_FAILURE."
+    ]
+  },
+  "orders":{
+    "FACTORY-SOL-6-GPT":[
+      "Stay on F-UI-051 until corrected rerun is terminal; do not claim F-UI-052 yet.",
+      "Apply harness-only StrategyDelta above, rerun, persist run/job/artifact ids and discovered control count.",
+      "If corrected run finds dead controls, create one child GAP node per distinct control/capability with exact selector, expected_effect, actual_effect, screenshot and write_scope.",
+      "After F-UI-051 PASS_PENDING_REVIEW proceed F-UI-052 -> F-UI-053 -> F-UI-054."
+    ],
+    "FACTORY-SOL-7-GPT":[
+      "F-MOD-033 remains the only grandfathered legacy node; finish/report/release it now.",
+      "Next claim must be F-UI-047, then F-UI-048 -> F-UI-055 -> F-UI-056 -> F-UI-057 -> F-UI-058.",
+      "No further F-MOD/F-AI claim after F-MOD-033."
+    ],
+    "FACTORY-SOL-8-GPT":[
+      "Finish F-UI-050 with Hugging Face Job run/status/log/complete-or-cancel evidence; secret_ref only.",
+      "Then F-UI-059 -> F-UI-060 -> F-UI-061; screenshots mandatory for Router/HF states.",
+      "Do not touch Wordflow N* under Factory identity."
+    ],
+    "SOL-4-GPT":[
+      "Re-run F-ED-001 mobile/touch on fresh candidate; classify PRODUCT_FAILURE vs TEST_HARNESS_FAILURE before any new patch."
+    ],
+    "JOIN":[
+      "F-UI-062 only after F-UI-054/F-UI-058/F-UI-061 terminal.",
+      "F-UI-063 is the only aggregate FRONTEND 100 gate; no earlier producer PASS equals project closure."
+    ]
+  },
+  "visible_supervision_contract":"Report NODO | ACCION | RESULTADO | GAP | FIX | TEST | PASS% | SIGUIENTE. Do not expose private chain-of-thought; expose only operational actions/evidence.",
+  "closure_rule":"No VERIFIED_CLOSED from producer-only PASS, malformed harness, local-only evidence or workflow green alone."
+}
