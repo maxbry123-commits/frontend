@@ -1,0 +1,27 @@
+{
+  "schema":"yaiwes.factory.sol.node-evidence.v2",
+  "contract":"tel.workflow/v3",
+  "agent_name":"SOL 4 GPT 🆘",
+  "node_id":"F-AI-023",
+  "state":"PASS_100_PENDING_GLOBAL_REVIEW",
+  "base_sha":"c09d651004d2a6d065b28e95e104bf350bce5358",
+  "product_delta_sha":"a1d72ea54754bfc9c687a131318aa37b033956d3",
+  "test_sha":"cfeead5c94fb17b3878da2f3209f223c1915ec47",
+  "workflow_sha":"5233f5d76a40c4e65efd56011af0f50c562aee76",
+  "fresh_head_before_close":"b56a4c2aa75f14ebd7a4bb69159b29a968a78a5b",
+  "acceptance":"reference->adapter->canvas editable",
+  "classification":"PRODUCT_FAILURE_FIXED",
+  "verify_research":{"failure":"reference URL was stored as metadata only and did not create editable canvas state","authority":"current code + browser Actions + authoritative dynamic Crazy Wall"},
+  "execute_delta":{"strategy":"ADAPT","shared_adapter":"src/file-import-controller-v1.js","result":"reference URL is normalized through the canonical import/drop path into editable canvas state"},
+  "tests":[
+    {"name":"F-AI-023 reference import browser gate","run_id":34734933472,"job_id":103664538732,"head_sha":"5233f5d76a40c4e65efd56011af0f50c562aee76","conclusion":"success"},
+    {"name":"F-AI-021 file import regression after F-AI-023 adapter change","run_id":34734919082,"head_sha":"a1d72ea54754bfc9c687a131318aa37b033956d3","conclusion":"success"},
+    {"name":"F-AI-022 html import regression after F-AI-023 adapter change","run_id":34734919077,"head_sha":"a1d72ea54754bfc9c687a131318aa37b033956d3","conclusion":"success"}
+  ],
+  "simulations":["reference URL -> adapter -> canonical drop -> ADD_COMPONENT","editable state survives render path","shared adapter preserves file and HTML import paths"],
+  "refutations":["own 023 E2E passes on dedicated workflow","021 regression passes after shared adapter mutation","022 regression passes after shared adapter mutation"],
+  "pass_percent":100,
+  "remaining_gaps":[],
+  "global_closure":"NOT_CLAIMED",
+  "review_required":true
+}
