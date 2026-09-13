@@ -1,0 +1,46 @@
+name: factory-f-ctl-008-properties
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-ctl-008-properties.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ctl-008-properties.spec.mjs'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/app-v19.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/actions.js'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-f-ctl-008-properties
+  cancel-in-progress: false
+
+jobs:
+  properties-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Syntax F-CTL-008
+        run: |
+          node --check src/app-v19.js
+          node --check src/actions.js
+          node --check tests/e2e/f-ctl-008-properties.spec.mjs
+      - name: F-CTL-008 browser gate
+        run: npx playwright test tests/e2e/f-ctl-008-properties.spec.mjs --project=chromium-desktop --reporter=line
