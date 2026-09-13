@@ -1,0 +1,11 @@
+{
+  "schema": "tel.workflow/v3",
+  "state": "CLAIMED",
+  "owner": "SOL GPT <20>",
+  "chat_id": "SOL GPT <20>",
+  "node_id": "N14-RESEARCH-SOURCE-VERIFICATION",
+  "fresh_main_sha": "3d4da6838547c11094bfb223a7b3771932e028a7",
+  "write_scope": "wordflow research layer/tests",
+  "claimed_at": "2026-09-13T06:29:30Z",
+  "note": "Reentry claim from authoritative GAP_RESOLVABLE state; no N14 claim marker existed in research layer at fresh readback."
+}
