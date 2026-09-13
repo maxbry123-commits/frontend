@@ -1,0 +1,44 @@
+name: factory-f-ai-018-model-team-selector
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-ai-018-model-team-selector.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ai-018-model-team-selector.spec.mjs'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/app-v19.js'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-f-ai-018-model-team-selector
+  cancel-in-progress: false
+
+jobs:
+  selector-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Syntax F-AI-018
+        run: |
+          node --check src/app-v19.js
+          node --check tests/e2e/f-ai-018-model-team-selector.spec.mjs
+      - name: F-AI-018 browser gate
+        run: npx playwright test tests/e2e/f-ai-018-model-team-selector.spec.mjs --project=chromium-desktop --reporter=line
