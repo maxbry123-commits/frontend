@@ -193,3 +193,16 @@ La cifra histórica de 14 gaps físicos se conserva como evento previo. Read-bac
 - Watchdog solicitado: `6aa237226ad48191b4dc2b1eb07c0400`; el alcance persistido es estos 4 gaps + Tarea 2, motores canónicos únicamente. Su reactivación está condicionada al límite de tareas activas de la cuenta.
 
 **Verdict:** `ACTIVE_LOOP`; este delta de ledger está documentado, pero el proyecto NO está `VERIFIED_CLOSED`.
+
+
+## ASTRA-LOOP-CODA — 2026-09-13 — orden del Director y checkpoint
+
+Orden vigente: auditar fuentes/documentos/código, registrar gaps por nodo con claim exclusivo, corregir código crítico, probar y guardar checkpoint; reanudar cada hora hasta cierre global por evidencia.
+
+- Registro operativo y reentrada: [ASTRA-LOOP-CODA-2026-09-13.json](reports/ASTRA-LOOP-CODA-2026-09-13.json). Contiene 12 nodos de componentes: cuatro adquisiciones existentes, tres integraciones y cinco decisiones REUSE/proveedor; enlaza los 19 nodos de producto V4 sin duplicarlos ni liberar claims ajenos.
+- Sol1: Vite/Supabase; Sol2: DuckDB/AVF; Sol3: big-AGI/Vite/Vercel AI SDK; Sol Plan: cinco decisiones de capacidad y reconciliación. Los cuatro destinos siguen NOT_FOUND en read-back de esta iteración. Los bloqueos de motores no autorizan modificar guards ni repetir el mismo intento.
+- Reclamación: SHA fresco y actualización CAS del mismo registro para nodos hijos, owner/scope/checkpoint, read-back antes de ejecutar; claims canónicos y scopes existentes prevalecen. No existe ejecución autónoma de otro chat por el mero registro de una tarea.
+- WF-G14-AUDITOR5: parche `fc67c45840d3a121323e43179989424272b8f494`; rechaza inventario inverso omitido/duplicado. 13/13 pruebas locales; tres regresiones fallaban antes del cambio. CI `34730134580` en curso al registrar esta entrada.
+- Watchdog: creación rechazada `too_many_active_automations`, límite 5/5. **NO ACTIVADO**; prompt y horario preservados en checkpoint. Ningún watchdog de otro proyecto fue alterado.
+- Council analítico 12 pasos, 12 goals de entrada/salida y tres refutaciones registrados; no se presentan como consenso de modelos externos. Mejora de conteo con Counter, sin afirmar 100x medido.
+- Estado: `ACTIVE_LOOP_GAPS_OPEN`; el porcentaje global y VERIFIED_CLOSED siguen sin acreditar.
