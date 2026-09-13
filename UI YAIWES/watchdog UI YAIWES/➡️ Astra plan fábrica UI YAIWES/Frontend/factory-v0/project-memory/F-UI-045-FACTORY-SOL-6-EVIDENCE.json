@@ -1,0 +1,23 @@
+{
+  "schema":"yaiwes.factory.node-evidence.v1",
+  "contract":"tel.workflow/v3",
+  "node_id":"F-UI-045",
+  "chat_id":"FACTORY-SOL-6-GPT",
+  "agent_name":"SOL 6 GPT 🆘",
+  "decision":"PASS_PENDING_REVIEW",
+  "producer_acceptance_percent":100,
+  "tested_sha":"3ac912316841980b62748fd5334a0ef4bdea2e22",
+  "run_id":34736422396,
+  "job_id":103668558057,
+  "workflow":"Factory F-UI-045 Workspace Shell",
+  "conclusion":"success",
+  "tests":{"syntax":"PASS","browser":"4 PASS / 4 SKIP expected by project","desktop":"collapse left/right preserves visible canvas and expands usable canvas","mobile":"canvas-first default; drawers overlay instead of replacing canvas; touch open/close PASS","scroll":"panel scroll state verified when overflow exists","resize":"mobile->desktop->mobile mode/classes/canvas visibility PASS"},
+  "readback":{"workspace_js":"runtime-loaded HTTP 200 in Action","workspace_css":"runtime-loaded HTTP 200 in Action","test_blob_sha":"8a4db61ef8bea8891d6743a504c6a0753d12011a"},
+  "failures_resolved":[{"classification":"TEST_HARNESS_FAILURE","gap":"desktop tests used tap without touch context","fix":"project-specific skips; desktop and mobile assertions run only where applicable"},{"classification":"PRODUCT_FAILURE","gap":"open mobile drawer intercepted toolbar toggle used to close it","fix":"canonical setCollapsed function plus 44px in-drawer close controls"},{"classification":"EVIDENCE_FAILURE","gap":"resize transition not proven by first green run","fix":"added deterministic mobile-desktop-mobile resize E2E and reran exact SHA"}],
+  "simulations":["S1 desktop both side panels collapse while canvas stays visible and usable","S2 mobile drawers start closed, open as overlays, close from inside with touch and keep canvas mounted","S3 resize mobile->desktop->mobile reconciles mode, collapsed classes and canvas dimensions"],
+  "refutations":["R1 rejected first green run because resize acceptance was unproven; second exact-SHA run proves resize","R2 rejected test-only workaround for blocked close control; product received an actual touch-accessible close path before harness correction","R3 runtime load, syntax and browser behavior are all demonstrated on tested SHA; file presence alone was not treated as integration"],
+  "artifact_warning":"upload-artifact step succeeded but reported no playwright-report/test-results files on green run; no artifact ID is claimed. Terminal run/job/log are the authoritative evidence.",
+  "remaining_gaps":["independent reviewer required before VERIFIED_CLOSED by Factory contract"],
+  "review_required":true,
+  "next_node":"F-UI-046 after producer release and fresh free-state validation"
+}
