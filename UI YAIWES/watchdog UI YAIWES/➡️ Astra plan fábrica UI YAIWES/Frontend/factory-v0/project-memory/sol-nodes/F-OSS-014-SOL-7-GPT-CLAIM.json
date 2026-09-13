@@ -1,0 +1,14 @@
+{
+  "schema":"tel.workflow/v3",
+  "chat_id":"SOL-7-GPT-2026-09-12T21:46-05:00",
+  "agent_name":"SOL 7 GPT 🆘",
+  "node_id":"F-OSS-014",
+  "fresh_main_sha":"3ac39d3835a8f76b89e65fbebfff211e96789f5c",
+  "base_sha":"3ac39d3835a8f76b89e65fbebfff211e96789f5c",
+  "write_scope":"F-OSS-014 only: additive categories/variants evidence derived from F-OSS-013 and fresh local OSS inventory; no runtime source writes; excludes Wordflow N01-N31",
+  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-OSS-014-SOL-7-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-OSS-014-SOL-7-CATEGORIES-VARIANTS.json"],
+  "claimed_at":"2026-09-12T21:48:05-05:00",
+  "state":"CLAIMED",
+  "depends_on_evidence":"F-OSS-013 PASS_PENDING_REVIEW at 3ac39d3835a8f76b89e65fbebfff211e96789f5c",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"]
+}
