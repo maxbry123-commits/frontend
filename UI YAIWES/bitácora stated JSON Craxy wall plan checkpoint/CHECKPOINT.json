@@ -1,30 +1,44 @@
 {
-  "checkpoint_id": "UIYAIWES-N04-RECONCILIATION-2026-09-13T0703Z",
-  "previous_checkpoint_id": "UIYAIWES-N04-RECONCILIATION-2026-09-13T0644Z",
+  "checkpoint_id": "UIYAIWES-N04-RECONCILIATION-2026-09-13T0717Z",
+  "previous_checkpoint_id": "UIYAIWES-N04-RECONCILIATION-2026-09-13T0703Z",
   "contract": "tel.workflow/v3",
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_LOOP_NOT_CLOSED",
   "workflow_owner": "stabilize_core",
   "current_operational_node": "N04-STATE-RECONCILIATION",
   "current_operational_authority": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json",
+  "crazy_wall_blob_sha": "a1042e93592af31124239730dd199d18613c22ea",
+  "central_reconcile_commit": "23777501cb4a36695d5d9e5afb467837ef9574de",
   "n04_reconciliation": {
     "chat_id": "SOL GPT <10>",
-    "claim_commit_sha": "8db8457ece8bdeca0d2cf1e63671f7e1137c48f1",
-    "state_commit_sha": "73ea812f35a8d8a8ede7f9e89f174e31a711de03",
-    "fresh_main_sha_at_claim": "31d1531f07c0c3c377901dc2b21a8d404cf204ed",
+    "claim_commit_sha": "f69b7a1aac506285496d88a11cfae01ad367f842",
+    "state_commit_sha": "981b2691137f2a155129be82902ea81582b4f553",
+    "fresh_main_sha_at_claim": "48b22db7653eb3d25a0e58865cb0ef8d2994f606",
+    "run_id": 34744788246,
+    "job_id": 103690581688,
+    "run_conclusion": "success",
     "dependencies": {
       "N02-TRACEABILITY-BIDIRECTIONAL": "VERIFIED_CLOSED",
       "N03-AUTO-AUDITOR-EVIDENCE": "VERIFIED_CLOSED"
     },
-    "recent_runtime_state": {
-      "N33-MIRROR-TRANSPORT-CONTROL": "VERIFIED_CLOSED_AT_HEAD_31d1531f",
-      "project_verified_closed": false
+    "current_node_state": {
+      "N04-STATE-RECONCILIATION": "VERIFIED_CLOSED",
+      "N16-CHECKPOINT-BYTES-HASH": "VERIFIED_CLOSED",
+      "N17-FULL-PRODUCT-E2E": "FREE",
+      "N26-GLOBAL-INTEGRATION": "VERIFIED_CLOSED",
+      "N27-CONTINUOUS-LOOP": "FREE",
+      "N28-API-CONTROL": "VERIFIED_CLOSED",
+      "N31-UI-FINAL": "BLOCKED_AFTER_N17",
+      "N32-GUEST-INSTALLER-VERIFICATION": "CLAIMED",
+      "N33-MIRROR-TRANSPORT-CONTROL": "VERIFIED_CLOSED"
     },
+    "project_verified_closed": false,
     "historical_action124_queue_is_current": false,
-    "next_node_selection_rule": "READ CRAZY WALL FRESH; claim only FREE or GAP_RESOLVABLE"
+    "next_node_selection_rule": "READ CRAZY WALL FRESH; claim only FREE or GAP_RESOLVABLE and verify lateral claims before writing"
   },
   "historical_checkpoint": {
-    "previous_blob_sha": "9c68b1bf641463ef2933c0b83e4173e85b67ed05",
+    "previous_blob_sha": "c35fd299a242d0949e13820ca32f971641a435d4",
+    "earlier_n04_checkpoint_blob_sha": "9c68b1bf641463ef2933c0b83e4173e85b67ed05",
     "pre_n04_v5_checkpoint_blob_sha": "99f09dca8cb5bd3415506a9cadfc5152606eee41",
     "preservation": "Prior checkpoint revisions remain preserved by immutable Git blob/history and remain historical evidence only."
   },
