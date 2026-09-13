@@ -1,0 +1,24 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N22-OTEL-RUNTIME",
+  "chat_id": "SOL GPT <15>",
+  "state": "VERIFIED_CLOSED",
+  "report_state": "PASS",
+  "claim_commit": "f1a435ae3a2cffc93548639ea2d7a66d8d086c9a",
+  "tested_sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+  "run_id": 34739510224,
+  "job_id": 103678337638,
+  "tests": "41/41 Wordflow PASS; 206/206 runtime PASS; 39 subtests PASS",
+  "evidence": [
+    "trusted GitHub Actions job completed success",
+    "runtime/src/observability files unchanged from tested SHA to claim head",
+    "runtime/tests/test_observability* unchanged from tested SHA to claim head",
+    "existing deterministic telemetry adapter remains reused; no duplicate runtime owner"
+  ],
+  "refutations": [
+    "schema: telemetry correlation implementation remains present and globally exercised; PASS",
+    "gap: historical CI-not-executed condition is superseded by trusted successful CI over unchanged blobs; PASS",
+    "evidence: exact descendant parity plus successful job log is sufficient for node close condition; PASS"
+  ],
+  "remaining_gaps": []
+}
