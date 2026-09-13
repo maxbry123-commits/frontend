@@ -1,0 +1,12 @@
+{
+  "schema": "yaiwes.node.claim.v1",
+  "contract": "tel.workflow/v3",
+  "chat_id": "WATCHDOG-COMPONENT-CLOSURE",
+  "node_id": "N07-VITE-ACQUIRE",
+  "fresh_main_sha": "c34092fb04debe20fbb414177ee6c619c00c306f",
+  "write_scope": "component acquisition + registry only",
+  "claimed_at": "2026-09-13T02:49:00Z",
+  "state": "CLAIMED",
+  "source_of_truth": "CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json",
+  "stale_reopen_after_hours": 4
+}
