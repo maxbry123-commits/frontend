@@ -6,15 +6,42 @@
   "chat_id":"FACTORY-SOL-8-GPT",
   "agent_name":"SOL 8 GPT 🆘",
   "node_id":"F-UI-059",
-  "fresh_main_sha":"154b635b2b69b074e80a45b8c4e1c4a964fef946",
-  "base_sha":"154b635b2b69b074e80a45b8c4e1c4a964fef946",
-  "state":"IN_PROGRESS",
+  "state":"PASS_PENDING_REVIEW",
   "task":"Revalidar panel Router Universal en web: health/modelos/ruta activa/latencia/error/reconnect/readback con screenshots y contrato real, sin tocar core si no hay GAP.",
-  "depends_on":["F-UI-049 PASS_PENDING_REVIEW"],
-  "write_scope":"F-UI-059 only; tests/e2e router-panel-web + project-memory evidence; frontend-facing router status/test only after demonstrated product GAP",
-  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-059-router-panel-web.spec.mjs","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-UI-059-FACTORY-SOL-8-GPT-CLAIM.json"],
-  "claimed_at":"2026-09-13T04:30:00Z",
-  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "acceptance":"healthy/degraded/error/reconnect states demonstrated; real selection visible; screenshots/readback evidence; no core edit unless GAP reproduced",
-  "next":"inspect canonical Router Universal panel implementation and published-web/runtime evidence before any product delta"
+  "classification":"ROUTER_PANEL_OBSERVABILITY_GAP_FIXED_AND_PUBLISHED_WEB_VERIFIED",
+  "gap":"Existing remote transport exposed connect/status/cancel but the visible Router panel lacked latency, normalized model list, active-route readback and reconnect state.",
+  "product_fix_commit":"9237bf84d870458ff28b630616ae34e077ebcccc",
+  "test_commits":["aad5e332142287194b990a32293f61c31f587680","ac4e0ed8373cb537d77041c87a50b7121ce17ed3","e9763ade7ef8854e7ab208ef8002a76c5ab5ee98","cade528507d724e3785f37482a0a63740ca2cefd","d5b42a5474e002596002a3f2ab3dc8cad31d2f62","e3be669156f5ece800a4e1148e169dc49d8c12b8","a6624480965ce83849cba73334b9726ac4474a19","c1bea4bbe45f52e3fd2031d3ec9dc310acee04c7"],
+  "failed_runs_preserved":[
+    {"run_id":34738129109,"classification":"TEST_HARNESS_SLOW_FULL_CHECKOUT","strategy_delta":"sparse checkout"},
+    {"run_id":34738179352,"classification":"TEST_HARNESS_FAILURE_NPM_CI_WITHOUT_LOCKFILE","strategy_delta":"npm install --no-audit --no-fund"},
+    {"run_id":34738311664,"job_id":103673566336,"classification":"TEST_HARNESS_MIXED_CONTENT_HTTP_ON_HTTPS_LIVE_PAGE","strategy_delta":"live router test endpoint changed to HTTPS","deployment_readback":"PASS"}
+  ],
+  "local_browser_evidence":{
+    "tested_sha":"d5b42a5474e002596002a3f2ab3dc8cad31d2f62",
+    "run_id":34738203148,
+    "job_id":103673284151,
+    "result":"SUCCESS",
+    "artifact_id":10311611954,
+    "artifact_digest":"sha256:6be116b6b4af01a8397fded464f4261da1d71ea3e6e29b02827077ff9878798e"
+  },
+  "published_web_evidence":{
+    "tested_and_published_sha":"c1bea4bbe45f52e3fd2031d3ec9dc310acee04c7",
+    "run_id":34738377631,
+    "job_id":103673732286,
+    "result":"SUCCESS",
+    "host":"https://comand-center-1-yaiwes-ui-factory.static.hf.space",
+    "source_sha_readback":"PASS",
+    "artifact_id":10311601996,
+    "artifact_digest":"sha256:42fc81af0ac288d31b655724a49fe63d7194b29056a4afc93e57f44920fbcf58",
+    "matrix":["healthy","degraded","HTTP_503 error","reconnect"],
+    "screenshots":"uploaded in live artifact"
+  },
+  "acceptance_results":["health visible PASS","models visible PASS","active route visible PASS","latency visible PASS","error state PASS","reconnect state PASS","readback PASS","screenshots PASS","contract real browser flow PASS","published WEB_PASS exact SHA PASS","secret_ref preserved PASS"],
+  "refutations":["All VERIFY_RESEARCH/EXECUTE_DELTA/TEST_REPORT requirements were executed and live URL tested.","Known harness failures were classified and corrected; no reproduced Router panel GAP remains in node scope.","Exact source SHA readback plus successful published browser matrix and screenshot artifact support 100 percent producer PASS."],
+  "pass_percent":100,
+  "review_required":true,
+  "remaining_gaps":["independent review/global candidate integration downstream"],
+  "released_at":"2026-09-13T04:40:00Z",
+  "next":"READ_R04_FRESH_THEN_F-UI-060"
 }
