@@ -1,0 +1,34 @@
+{
+  "schema":"yaiwes.factory.node-evidence.v1",
+  "node_id":"F-AI-017",
+  "agent_name":"SOL 1 GPT 🆘",
+  "base_sha":"dcaa73978f8bd2a96b01d635606de8f574bc7baf",
+  "fresh_head_observed":"09d5e63ea679b18e5dc2ef03bd5edb490f83627e",
+  "step1_verify_research":{
+    "classification":"PRODUCT_FAILURE",
+    "facts":[
+      "Factory exposes an AI step and proposal/apply semantics in factory.test.mjs.",
+      "backend-adapter.js provides a generic tel.workflow/v3 boundary and mock/Sol transport adapter.",
+      "backend-adapter.test.mjs proves contract-shape swapping only with an in-memory transport.",
+      "No dedicated AI router implementation was found by repository code search for router, and no provider/model routing module is present in the current factory-v0 src listing evidence.",
+      "Therefore generic transport boundary must not be promoted to a working AI/model router."
+    ],
+    "gap":"F-AI-017_AI_ROUTER_NOT_IMPLEMENTED_IN_FACTORY_RUNTIME",
+    "dedup":"No second router will be created until existing frontend/backend inventories outside factory-v0 are mapped for reuse."
+  },
+  "step2_execute_delta":{
+    "strategy":"REUSE_EXISTING_FIRST",
+    "product_code_changed":false,
+    "reason":"Current claim write_scope is evidence-only until a proven gap and collision-safe product path are established. Gap is now proven; next delta must map an existing router donor before runtime write."
+  },
+  "step3_test_report":{
+    "static_checks":["backend boundary requires typed action","Sol adapter wraps tel.workflow/v3","tests use in-memory transport","AI proposal/apply state is separate from provider routing"],
+    "runtime_test":"NOT_EXECUTED: GitHub connector has no shell; no runtime PASS claimed.",
+    "simulations":["S1 mock adapter accepts task but cannot select provider/model","S2 Sol adapter preserves action shape but delegates all routing to supplied transport","S3 AI proposal can apply canonical delta without proving remote inference occurred"],
+    "refutations":["R1 generic backend adapter != AI router","R2 in-memory adapter test != remote/provider E2E","R3 AI UI/state step != model/team/skills connectivity"],
+    "decision":"GAP",
+    "remaining":["map reusable router donor already in repository","wire minimum provider/model selection contract","add fail-closed router microtest","execute runtime/CI before PASS"]
+  },
+  "goals12_output":{"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS evidence-only","G08":"PASS static inspection; runtime unavailable","G09":"GAP no router integration","G10":"PASS 3 simulations + 3 refutations","G11":"PASS evidence persisted; readback required","G12":"PASS continue F-AI-017 until runtime delta/test"},
+  "state":"GAP"
+}
