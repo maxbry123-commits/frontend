@@ -26,7 +26,7 @@ def _trace(requirement_id: str = "REQ-S3-057") -> dict[str, object]:
 
 
 def test_loads_one_strict_trace_per_expected_requirement(tmp_path):
-    (tmp_path / "trace.json").write_text(json.dumps(_trace()), encoding="utf-8")
+    (tmp_path / "REQ-S3-057.json").write_text(json.dumps(_trace()), encoding="utf-8")
 
     traces = load_trace_inventory(tmp_path, ("REQ-S3-057",))
 
@@ -36,7 +36,7 @@ def test_loads_one_strict_trace_per_expected_requirement(tmp_path):
 
 
 def test_incomplete_inventory_fails_closed_with_missing_ids(tmp_path):
-    (tmp_path / "trace.json").write_text(json.dumps(_trace()), encoding="utf-8")
+    (tmp_path / "REQ-S3-057.json").write_text(json.dumps(_trace()), encoding="utf-8")
 
     with pytest.raises(
         ValueError,
@@ -59,18 +59,27 @@ def test_loader_rejects_paths_that_five_pass_cannot_audit(tmp_path, unsafe_path)
 
 
 @pytest.mark.parametrize(
-    "rows, error",
+    "filename, rows, error",
     [
-        ([{"schema": "wrong"}], "invalid_trace_fields"),
-        ([_trace("REQ-UNKNOWN-001")], "unexpected_requirement"),
-        ([_trace(), _trace()], "duplicate_requirement_trace"),
+        ("invalid.json", [{"schema": "wrong"}], "invalid_trace_fields"),
+        ("REQ-UNKNOWN-001.json", [_trace("REQ-UNKNOWN-001")], "unexpected_requirement"),
     ],
 )
-def test_malformed_unknown_and_duplicate_traces_fail_closed(tmp_path, rows, error):
+def test_malformed_and_unknown_traces_fail_closed(tmp_path, filename, rows, error):
     for index, row in enumerate(rows):
-        (tmp_path / f"{index}.json").write_text(json.dumps(row), encoding="utf-8")
+        path = filename if len(rows) == 1 else f"{index}-{filename}"
+        (tmp_path / path).write_text(json.dumps(row), encoding="utf-8")
 
     with pytest.raises(ValueError, match=error):
+        load_trace_inventory(tmp_path, ("REQ-S3-057",))
+
+
+def test_duplicate_trace_cannot_bypass_canonical_filename(tmp_path):
+    row = json.dumps(_trace())
+    (tmp_path / "REQ-S3-057.json").write_text(row, encoding="utf-8")
+    (tmp_path / "REQ-S3-057.copy.json").write_text(row, encoding="utf-8")
+
+    with pytest.raises(ValueError, match="trace_filename_mismatch"):
         load_trace_inventory(tmp_path, ("REQ-S3-057",))
 
 
