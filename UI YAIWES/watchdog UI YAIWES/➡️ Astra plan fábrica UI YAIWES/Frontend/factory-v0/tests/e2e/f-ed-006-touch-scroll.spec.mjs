@@ -15,12 +15,32 @@ async function dispatchSyntheticTouch(page, sx, sy, ex, ey) {
   await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
 }
 
-test('F-ED-006 mobile context panel touch scroll uses visible viewport coordinates', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'mobile-chromium', 'F-ED-006 is a mobile touch gate');
+async function openTransform(page, useTap = false) {
   await page.goto(URL, { waitUntil: 'domcontentloaded' });
-  await page.locator('[data-step="3"]').tap();
+  const step = page.locator('[data-step="3"]');
+  useTap ? await step.tap() : await step.click();
+  await expect(page.locator('#context-scroll')).toHaveCount(1);
+  await expect(page.locator('#context-scroll')).toBeVisible();
+}
+
+test('F-ED-006 desktop has one scroll owner and mouse wheel changes it', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop', 'desktop mouse gate');
+  await openTransform(page, false);
   const panel = page.locator('#context-scroll');
-  await expect(panel).toBeVisible();
+  const nested = page.locator('.oss-grid');
+  await expect(nested).toHaveCSS('overflow-y', 'visible');
+  const before = await panel.evaluate(el => ({ top: el.scrollTop, height: el.scrollHeight, client: el.clientHeight }));
+  expect(before.height).toBeGreaterThan(before.client);
+  await panel.hover();
+  await page.mouse.wheel(0, 900);
+  await expect.poll(() => panel.evaluate(el => el.scrollTop), { timeout: 7000 }).toBeGreaterThan(before.top);
+  console.log(`F_ED_006_MOUSE_SCROLL_PASS=${JSON.stringify({before:before.top,after:await panel.evaluate(el=>el.scrollTop)})}`);
+});
+
+test('F-ED-006 mobile context panel touch scroll uses visible viewport coordinates', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile-chromium', 'mobile touch gate');
+  await openTransform(page, true);
+  const panel = page.locator('#context-scroll');
   await panel.scrollIntoViewIfNeeded();
 
   const target = await panel.evaluate(el => {
@@ -51,5 +71,5 @@ test('F-ED-006 mobile context panel touch scroll uses visible viewport coordinat
   expect(metrics.height).toBeGreaterThan(metrics.client);
   await dispatchSyntheticTouch(page, target.x, target.sy, target.x, target.ey);
   await expect.poll(() => panel.evaluate(el => el.scrollTop), { timeout:7000 }).toBeGreaterThan(metrics.top);
-  console.log(`F_ED_006_SCROLL_PASS=${JSON.stringify({before:metrics.top,after:await panel.evaluate(el=>el.scrollTop)})}`);
+  console.log(`F_ED_006_TOUCH_SCROLL_PASS=${JSON.stringify({before:metrics.top,after:await panel.evaluate(el=>el.scrollTop)})}`);
 });
