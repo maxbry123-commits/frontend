@@ -1,0 +1,18 @@
+{
+  "schema": "yaiwes.factory.sol.claim.v1",
+  "contract": "tel.workflow/v3",
+  "chat_id": "SOL-1-GPT-2026-09-12T21:43-05:00",
+  "agent_name": "SOL 1 GPT 🆘",
+  "node_id": "F-AI-017",
+  "fresh_main_sha": "dcaa73978f8bd2a96b01d635606de8f574bc7baf",
+  "base_sha": "dcaa73978f8bd2a96b01d635606de8f574bc7baf",
+  "write_scope": "F-AI-017 router verification first; evidence path unique. Product delta only after fresh read + proven gap + collision check.",
+  "paths": [
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-AI-017-SOL-1-GPT-CLAIM.json",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-AI-017-SOL-1-EVIDENCE.json"
+  ],
+  "claimed_at": "2026-09-12T21:45:30-05:00",
+  "state": "CLAIMED",
+  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+  "preflight": "F-OSS-013 released as PASS_PENDING_REVIEW; F-ED-001 is owned by SOL 4; F-ED-002 is reported owned by SOL 3; no F-AI-017 claim found before write."
+}
