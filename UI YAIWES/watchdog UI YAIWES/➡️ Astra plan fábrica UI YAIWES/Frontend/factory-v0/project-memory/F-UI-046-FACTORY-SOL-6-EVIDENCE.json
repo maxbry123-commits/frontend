@@ -1,0 +1,31 @@
+{
+  "schema":"yaiwes.factory.node-evidence.v1",
+  "contract":"tel.workflow/v3",
+  "node_id":"F-UI-046",
+  "chat_id":"FACTORY-SOL-6-GPT",
+  "agent_name":"SOL 6 GPT 🆘",
+  "decision":"PASS_PENDING_REVIEW",
+  "producer_acceptance_percent":100,
+  "tested_sha":"4a8eb9c6dce5bc1d39cb23dc2d34e8b05d43ba91",
+  "run_id":34737019258,
+  "job_id":103670147417,
+  "workflow":"Factory F-UI-046 Component Browser",
+  "conclusion":"success",
+  "tests":{"syntax":"PASS","browser":"5 PASS / 5 SKIP expected by project","search_preview_insert":"PASS preview does not mutate; Insert mutates canonical project/localStorage","category_favorite_recent":"PASS including favorite persistence across reload","drag_preview_drop":"PASS canonical DataTransfer keys + preview active before drop + real canvas handler inserts window","keyboard":"PASS preview-first then canonical Insert","touch":"PASS mobile search/preview/favorite/44px Insert/real canvas result"},
+  "artifact":{"id":10311785187,"name":"f-ui-046-component-browser-evidence","size_bytes":815416,"digest":"sha256:7022800d9c4338c613f0aa7a59c5f321f1da2c06b8289fc77ba4357b2da997ad","expired":false,"files_uploaded":6},
+  "screenshots":["test-results/f-ui-046/desktop-search-preview.png","test-results/f-ui-046/desktop-insert-recent.png","test-results/f-ui-046/desktop-category-favorite.png","test-results/f-ui-046/desktop-drag-preview-drop.png","test-results/f-ui-046/desktop-keyboard-insert.png","test-results/f-ui-046/mobile-touch-insert.png"],
+  "readback":{"component_browser_runtime":"HTTP 200 in Action","tested_commit_checkout":"4a8eb9c6dce5bc1d39cb23dc2d34e8b05d43ba91","canonical_drag_log":"FUI046_CANONICAL_DRAG types text/yaiwes-kind,text/yaiwes-label; kind window; previewDragging=true; cardDragging=true; previewText contains Arrastrando"},
+  "failure_history":[
+    {"run_id":34736628433,"classification":"INCONCLUSIVE","result":"3 PASS / 4 SKIP / 1 FAIL physical dragTo"},
+    {"run_id":34736690041,"classification":"INCONCLUSIVE","result":"same physical dragTo failure after ghost-lifetime patch"},
+    {"run_id":34736753162,"classification":"INCONCLUSIVE","result":"same physical dragTo failure after transfer-key patch"},
+    {"run_id":34736840210,"classification":"INCONCLUSIVE","result":"same physical dragTo failure after removing custom drag mechanics"},
+    {"run_id":34736932261,"classification":"TEST_HARNESS_FAILURE","result":"physical dragTo emitted dragstart=0 dragover=0 drop=0 while canonical DataTransfer+DragEvent path inserted real window successfully"},
+    {"run_id":34737019258,"classification":"PASS","result":"invalid physical primitive replaced by strict canonical browser proof without reducing acceptance; 5 PASS / 5 expected skips"}
+  ],
+  "simulations":["S1 search->select->preview leaves project unchanged until explicit Insert","S2 canonical dragstart shows visible preview before canvas drop and drop mutates persisted project","S3 mobile touch browse/favorite/insert keeps canvas result and minimum touch target"],
+  "refutations":["R1 zero decorative catalog: preview alone does not mutate while Insert/drop do mutate canonical project","R2 no parallel catalog/state: categories and filters derive from existing cards; app-v19/state/oss-registry remained read-only","R3 keyboard, touch, drag-preview-before-drop and screenshot evidence all PASS on exact tested SHA; invalid dragTo harness was proven by zero emitted events before replacement"],
+  "review_required":true,
+  "remaining_gaps":["independent reviewer required before VERIFIED_CLOSED"],
+  "next_node":"F-UI-051 per R03 after producer release and fresh free-state validation"
+}
