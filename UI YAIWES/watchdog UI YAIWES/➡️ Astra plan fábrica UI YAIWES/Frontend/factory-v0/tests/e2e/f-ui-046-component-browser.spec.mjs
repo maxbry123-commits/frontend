@@ -60,8 +60,8 @@ test('search select preview insert changes canonical project and recent filter',
   await page.screenshot({ path: `${SHOTS}/desktop-insert-recent.png`, fullPage: true });
 });
 
-test('category favorite persistence and canonical drag insertion work', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'chromium-desktop', 'desktop category/favorite/drag gate');
+test('category favorite persistence and physical drag instrumentation', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop', 'desktop category/favorite/physical drag diagnostic');
   await boot(page);
   const category = page.locator('[data-component-category]');
   await category.selectOption({ label: 'Media' });
@@ -78,14 +78,55 @@ test('category favorite persistence and canonical drag insertion work', async ({
   await page.reload({ waitUntil: 'domcontentloaded' });
   await page.locator('[data-component-filter="favorites"]').click();
   await expect(page.locator('.component-card[data-kind="image"]')).toBeVisible();
-
   await page.locator('[data-component-filter="all"]').click();
+
+  await page.evaluate(() => {
+    const card = document.querySelector('.component-card[data-kind="window"]');
+    const canvas = document.querySelector('#canvas');
+    window.__FUI046_DRAG_DIAG__ = { dragstart: 0, dragover: 0, drop: 0, types: [], kindAtStart: '', kindAtDrop: '' };
+    card.addEventListener('dragstart', e => {
+      const d = window.__FUI046_DRAG_DIAG__; d.dragstart += 1; d.types = [...(e.dataTransfer?.types || [])]; d.kindAtStart = e.dataTransfer?.getData('text/yaiwes-kind') || '';
+    });
+    canvas.addEventListener('dragover', () => { window.__FUI046_DRAG_DIAG__.dragover += 1; });
+    canvas.addEventListener('drop', e => { const d=window.__FUI046_DRAG_DIAG__; d.drop += 1; d.kindAtDrop = e.dataTransfer?.getData('text/yaiwes-kind') || ''; });
+  });
   const beforeCount = await page.locator('[data-node]').count();
   await page.locator('.component-card[data-kind="window"]').dragTo(page.locator('#canvas'), { targetPosition: { x: 250, y: 180 } });
+  const diag = await page.evaluate(() => window.__FUI046_DRAG_DIAG__);
+  console.log(`FUI046_PHYSICAL_DRAG_DIAG=${JSON.stringify(diag)}`);
+  expect(diag.dragstart).toBeGreaterThan(0);
+  expect(diag.kindAtStart).toBe('window');
   await expect(page.locator('[data-node]')).toHaveCount(beforeCount + 1);
   const components = await projectComponents(page);
   expect(components.some(x => x.kind === 'window')).toBeTruthy();
   await page.screenshot({ path: `${SHOTS}/desktop-favorite-drag.png`, fullPage: true });
+});
+
+test('canonical browser DragEvent drop inserts through real canvas handler', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop', 'desktop DOM drag/drop diagnostic');
+  await boot(page);
+  await resetProject(page);
+  await boot(page);
+  const result = await page.evaluate(() => {
+    const card = document.querySelector('.component-card[data-kind="window"]');
+    const canvas = document.querySelector('#canvas');
+    const dt = new DataTransfer();
+    const rect = canvas.getBoundingClientRect();
+    card.dispatchEvent(new DragEvent('dragstart', { bubbles: true, cancelable: true, dataTransfer: dt, clientX: 20, clientY: 20 }));
+    const typesAfterStart = [...dt.types];
+    const kindAfterStart = dt.getData('text/yaiwes-kind');
+    canvas.dispatchEvent(new DragEvent('dragover', { bubbles: true, cancelable: true, dataTransfer: dt, clientX: rect.left + 250, clientY: rect.top + 180 }));
+    canvas.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer: dt, clientX: rect.left + 250, clientY: rect.top + 180 }));
+    card.dispatchEvent(new DragEvent('dragend', { bubbles: true, cancelable: true, dataTransfer: dt }));
+    return { typesAfterStart, kindAfterStart };
+  });
+  console.log(`FUI046_DOM_DRAG_DIAG=${JSON.stringify(result)}`);
+  expect(result.kindAfterStart).toBe('window');
+  await expect(page.locator('[data-node]')).toHaveCount(1);
+  const components = await projectComponents(page);
+  expect(components).toHaveLength(1);
+  expect(components[0].kind).toBe('window');
+  await page.screenshot({ path: `${SHOTS}/desktop-dom-drag-drop.png`, fullPage: true });
 });
 
 test('keyboard selection previews first and canonical insert happens only from action', async ({ page }, testInfo) => {
