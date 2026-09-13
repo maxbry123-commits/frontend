@@ -1,0 +1,38 @@
+{
+  "schema":"yaiwes.factory.sol.node-evidence.v1",
+  "contract":"tel.workflow/v3",
+  "agent_name":"SOL 3 GPT 🆘",
+  "node_id":"F-ED-003",
+  "base_sha":"8848549b3b0e5df0586406d6fa915ea8a660a941",
+  "fresh_head_before_report":"2c181c5c6eeb0403141d3e25f8973df36bbd5865",
+  "state":"PASS_PENDING_REVIEW",
+  "failure_class":"NONE_FOR_SINGLE_SELECTION_CONTRACT",
+  "verify_research":{
+    "acceptance":"seleccion unica/multiple segun contrato y readback",
+    "contract_observed":"Current state schema exposes one selectedId, so current implemented contract is single-selection, not multi-selection.",
+    "source_evidence":[
+      "state.js initialState.selectedId=null",
+      "actions.js SELECT returns state with selectedId=action.id",
+      "ADD_COMPONENT selects the new component",
+      "REMOVE_COMPONENT clears selectedId when removing selected component",
+      "renderLayers applies active only when state.selectedId===layer id and layer click dispatches SELECT",
+      "renderCanvas applies selected only when state.selectedId===node id and node click dispatches SELECT",
+      "selectedEditor resolves exactly state.components.find(c=>c.id===state.selectedId)",
+      "touch pointer begin sets selectedId to moved item and persists it"
+    ],
+    "blobs":{"state.js":"32c6b9e619e146a1571766b2dcd9055c3a86d16d","actions.js":"5d5617507b3cd2e02e397f6e973e79adfb8297b1","app-v19.js":"1aab6ebec09a8e6a14f221b83226cf92552b4526"},
+    "dedup":"No evidence of a multi-select requirement or second selection engine. A product patch to introduce selectedIds would violate minimum-delta policy without a demonstrated requirement."
+  },
+  "execute_delta":{"strategy":"REUSE_EXISTING","product_paths_changed":[],"reason":"Single-selection state is internally consistent across reducer, layers, canvas, editor and touch selection; no reproduced product failure justifies source mutation."},
+  "test_report":{
+    "static_microtest":"PASS reducer/readback invariant: SELECT replaces the sole selectedId; therefore selecting B after A cannot retain A in selection state.",
+    "functional_readback":"PASS layers, canvas and property editor all derive selection from the same selectedId.",
+    "runtime_evidence_gap":"No dedicated fresh browser assertion for switching A->B was found; independent reviewer should add/execute it before VERIFIED_CLOSED.",
+    "simulations":["S1 add A -> selectedId=A -> A layer/node active","S2 add/select B -> selectedId=B -> A no longer satisfies active predicate","S3 remove selected B -> selectedId=null -> editor returns no-selection state"],
+    "refutations":["R1 searched for selectedIds/multi-selection and found no parallel contract","R2 checked both layer and canvas selectors to reject a UI-only selection illusion","R3 checked REMOVE_COMPONENT and touch pointer path to reject stale selectedId on deletion/touch" ]
+  },
+  "goals12_output":{"G01":"PASS","G02":"PASS fresh 2c181c5c","G03":"PASS","G04":"PASS evidence-only scope","G05":"PASS","G06":"PASS reuse","G07":"PASS no unjustified patch","G08":"PASS static microtest","G09":"GAP dedicated browser switch-selection assertion absent","G10":"PASS 3+3","G11":"PASS evidence persisted with source blobs","G12":"PASS release to review then fresh next-node selection"},
+  "council12":["objective=selection","requirement=single/multiple according to contract","authority=fresh source","prior=FREE_VERIFY","owner=SOL 3","collision=evidence-only","gap=no product gap reproduced","alternatives=selectedIds rejected without requirement","strategy=REUSE_EXISTING","tests=static/readback","refutations=3","decision=PASS_PENDING_REVIEW"],
+  "remaining_gaps":["independent browser assertion select A then B recommended before VERIFIED_CLOSED"],
+  "review_required":true
+}
