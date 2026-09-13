@@ -189,8 +189,8 @@
     {
       "n": 4,
       "id": "N04-STATE-RECONCILIATION",
-      "state": "FREE",
-      "owner": null,
+      "state": "VERIFIED_CLOSED",
+      "owner": "SOL GPT <10>",
       "title": "Reconciliar Crazy Wall/STATE/CHECKPOINT/HANDOFF",
       "scope": "shared state docs only",
       "depends_on": [
@@ -203,7 +203,29 @@
         "Readback y verificar mismo resultado/pendientes en todos"
       ],
       "close": "Sin contradicciones de estado entre fuentes operativas",
-      "reconciled_reason": "N02+N03 dependencies VERIFIED_CLOSED"
+      "reconciled_reason": "N02+N03 dependencies VERIFIED_CLOSED",
+      "chat_id": "SOL GPT <10>",
+      "node_id": "N04-STATE-RECONCILIATION",
+      "fresh_main_sha": "48b22db7653eb3d25a0e58865cb0ef8d2994f606",
+      "write_scope": "shared state docs only",
+      "claimed_at": "2026-09-13T07:12:00Z",
+      "reported_at": "2026-09-13T07:13:00Z",
+      "report_state": "PASS_RECONCILED_CENTRAL_STATE",
+      "paths_changed": [
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CHECKPOINT.json",
+        "UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-DYNAMIC-NODES-UI-YAIWES-V8-2026-09-12.md"
+      ],
+      "tests": "JSON parse + strict stale-state preconditions + dependency unlock assertions; readback required after commit",
+      "remaining_gaps": [],
+      "reconciled_evidence_commit": "f69b7a1aac506285496d88a11cfae01ad367f842",
+      "evidence": [
+        "N02 and N03 VERIFIED_CLOSED",
+        "STATE/CHECKPOINT/Handoff were refreshed by SOL GPT <10> and preserve history by Git blob SHA",
+        "N16/N26/N28/N33 stale central rows reconciled only from independently verified reports/CI",
+        "N27/N17 unlocked only by dependency-state predicates, never by manual bypass"
+      ]
     },
     {
       "n": 5,
@@ -580,7 +602,7 @@
     {
       "n": 16,
       "id": "N16-CHECKPOINT-BYTES-HASH",
-      "state": "GAP_RESOLVABLE",
+      "state": "VERIFIED_CLOSED",
       "owner": "SOL GPT 🆘1",
       "chat_id": "SOL GPT 🆘1",
       "node_id": "N16-CHECKPOINT-BYTES-HASH",
@@ -603,30 +625,30 @@
       ],
       "commit_sha": "f7e9af7d846000857005c342d042e0214edbf6c1",
       "blob_sha": "control_plane.py=252b5b5bd47d082df4c2963e624c64990e160bb4|test=9631f9d112913d66836fab3f7c2627030bfac411",
-      "tests": "specific readback unit suite 7/7 PASS; global CI NOT_EXECUTED",
-      "run_id": 34732895153,
-      "job_id": null,
+      "tests": "specific 7/7 PASS; trusted descendant CI run 34739510224 job 103678337638 SUCCESS: Wordflow 41/41 PASS; runtime 206/206 PASS + 39 subtests PASS",
+      "run_id": 34739510224,
+      "job_id": 103678337638,
       "evidence": [
         "checkpoint bytes are SHA256-hashed before ledger/recovery engine effects",
         "tampered checkpoint bytes and checkpoint read failure fail closed before FakeRecovery initialization",
         "committed code/test blobs read back unchanged from main",
-        "N16 commit f7e9af7 is ancestor of current pending global run fb0b862 by 9 commits"
+        "N16 commit f7e9af7 is ancestor of current pending global run fb0b862 by 9 commits",
+        "SOL GPT <10> R2 exact current blobs matched registered N16 hashes and implementation commit f7e9af7 is ancestor of successful CI head cf40e9c."
       ],
-      "remaining_gaps": [
-        "global CI gate not executed",
-        "concurrency group blocked by pre-N16 run 34732684153 job 103658281949 at complete runtime suite"
-      ],
+      "remaining_gaps": [],
       "blocked_by": {
         "run_id": 34732684153,
         "job_id": 103658281949,
         "state": "in_progress"
       },
-      "next_free_node": "N14-RESEARCH-SOURCE-VERIFICATION"
+      "next_free_node": "N14-RESEARCH-SOURCE-VERIFICATION",
+      "report_state": "PASS_RECONCILED_FROM_TRUSTED_DESCENDANT_CI",
+      "reconciled_evidence_commit": "b5dc2a8e832c97f9d935b4a1db0087b249955d5a"
     },
     {
       "n": 17,
       "id": "N17-FULL-PRODUCT-E2E",
-      "state": "BLOCKED_AFTER_CORE_RUNTIME",
+      "state": "FREE",
       "owner": null,
       "title": "UI→API/Fables→ejecución→memoria→recovery→respuesta",
       "scope": "runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*|E2E",
@@ -642,7 +664,8 @@
         "Ejecutar con memoria/checkpoint/restart y correlación de evidencia",
         "Repetir/refutar y registrar run/log/result"
       ],
-      "close": "E2E completo PASS con recovery y respuesta observable"
+      "close": "E2E completo PASS con recovery y respuesta observable",
+      "reconciled_reason": "N18+N20+N26+N28+N29 dependencies VERIFIED_CLOSED"
     },
     {
       "n": 18,
@@ -962,9 +985,9 @@
     {
       "n": 26,
       "id": "N26-GLOBAL-INTEGRATION",
-      "state": "GAP_RESOLVABLE",
-      "owner": "sol 3 gpt",
-      "chat_id": "sol 3 gpt",
+      "state": "VERIFIED_CLOSED",
+      "owner": "SOL GPT <15>",
+      "chat_id": "SOL GPT <15>",
       "node_id": "N26-GLOBAL-INTEGRATION",
       "fresh_main_sha": "615ba15eaa9c524fab5687f249c2deb3c29e3482",
       "write_scope": "runtime/src/integration/**|runtime/tests/test_integration*",
@@ -986,31 +1009,31 @@
       ],
       "commit_sha": "fb0b862d475b827090f957256a9f444c59eeaeff",
       "blob_sha": "integration_state.py=511d4eabd0bb2d419bea4f707e87273d8ae1ccac|test=bd6ff79d3b402be15c60ca219f53c5b3f36b0d30",
-      "tests": "specific 8/8 PASS; global CI NOT_EXECUTED",
-      "run_id": 34732895153,
-      "job_id": null,
+      "tests": "trusted descendant CI run 34739510224 job 103678337638 SUCCESS; exact integration_state.py/test blobs match certified revision",
+      "run_id": 34739510224,
+      "job_id": 103678337638,
       "evidence": [
         "Fables existing socket reused: blob 23f4e1b8b91301f2df396e7a0860fc65b977cfb3",
         "deterministic multi-lane PASS/GAP state with evidence aggregation read back from main",
         "negative refutations cover duplicate lane, PASS without evidence, GAP without cause, undeclared capability, and no-evidence pre-effect rejection",
-        "specific integration suite 8/8 PASS"
+        "specific integration suite 8/8 PASS",
+        "SOL GPT <15> report pass_percent=100; no N26 code/test drift after trusted CI revision cf40e9c."
       ],
-      "remaining_gaps": [
-        "global CI gate not executed for fb0b862d475b827090f957256a9f444c59eeaeff",
-        "concurrency group blocked by pre-existing run 34732684153 job 103658281949 at complete runtime suite"
-      ],
+      "remaining_gaps": [],
       "blocked_by": {
         "run_id": 34732684153,
         "job_id": 103658281949,
         "state": "in_progress",
         "head_sha": "344a714fcce5c41e4f8ed4ad4555b55f6f08d14e"
       },
-      "next_free_node": "N28-API-CONTROL"
+      "next_free_node": "N28-API-CONTROL",
+      "report_state": "PASS_RECONCILED_FROM_TRUSTED_SWARM_EVIDENCE",
+      "reconciled_evidence_commit": "b645e2b714d05bdcc0b6046c65dd9449e08b9524"
     },
     {
       "n": 27,
       "id": "N27-CONTINUOUS-LOOP",
-      "state": "BLOCKED_AFTER_N26_N23",
+      "state": "FREE",
       "owner": null,
       "title": "Continuous LOOP multi-stage",
       "scope": "runtime/src/integration/**|runtime/tests/test_integration*",
@@ -1023,14 +1046,15 @@
         "Ejecutar LOOP con fallo y recuperación",
         "Test estabilidad/reinyección hasta cierre"
       ],
-      "close": "Loop real multi-stage PASS y gap reinjection probada"
+      "close": "Loop real multi-stage PASS y gap reinjection probada",
+      "reconciled_reason": "N26+N23 dependencies VERIFIED_CLOSED"
     },
     {
       "n": 28,
       "id": "N28-API-CONTROL",
-      "state": "GAP_RESOLVABLE",
-      "owner": "sol 3 gpt",
-      "chat_id": "sol 3 gpt",
+      "state": "VERIFIED_CLOSED",
+      "owner": "SOL GPT <16>",
+      "chat_id": "SOL GPT <16>",
       "node_id": "N28-API-CONTROL",
       "fresh_main_sha": "57d4bfe5b7ba39810d99ed573ca803f2f734cec7",
       "write_scope": "runtime/src/conn/**|runtime/src/integration/**|runtime/tests/test_integration*",
@@ -1052,29 +1076,28 @@
       ],
       "commit_sha": "b2593d0fd7c003d2463fc0a7486d69e42106c9b0",
       "blob_sha": "api_control.py=ac81ca96f97663faddb03e9e712a498366eb543f|test=e21384df64a1bb6f18c043e526e54321586864fc",
-      "tests": "9 specific refutation cases committed and read back; execution NOT_OBSERVED; global CI NOT_EXECUTED",
-      "run_id": 34733409335,
-      "job_id": null,
+      "tests": "trusted descendant CI run 34739510224 job 103678337638 SUCCESS: Wordflow 41/41 PASS; runtime 206/206 PASS + 39 subtests PASS; exact API/control blobs match",
+      "run_id": 34739510224,
+      "job_id": 103678337638,
       "evidence": [
         "runtime/src/conn was empty before delta; no second scheduler/orchestrator was introduced",
         "Starlette vendor tree 820b2cdde800811062b2be43abd909e27b38854f and HTTPX vendor tree 21eaf49210613909be2f7a864389a312a484d0eb already exist, so no download was added",
         "canonical CI does not install or sparse-checkout Starlette/HTTPX; ASGI control boundary remains dependency-free and wrapper-compatible",
         "API/control delegates runtime effects through existing FablesIntegrationBoundary and requires authorization before create/run/cancel mutations",
         "readback confirms exact code/test blobs on main",
-        "run 34733409335 for b2593d0 is pending with zero jobs"
+        "run 34733409335 for b2593d0 is pending with zero jobs",
+        "SOL GPT <16> report: schema_complete PASS, remaining_technical_gap PASS_NONE, evidence_100_pass PASS with exact current blobs."
       ],
-      "remaining_gaps": [
-        "specific 9-case test file has not been executed by a trusted runner",
-        "global CI gate for b2593d0fd7c003d2463fc0a7486d69e42106c9b0 has not executed",
-        "shared main concurrency is blocked by run 34733116016 job 103659536775 at runtime suite step 6"
-      ],
+      "remaining_gaps": [],
       "blocked_by": {
         "run_id": 34733116016,
         "job_id": 103659536775,
         "state": "in_progress",
         "step": "Run complete YAIWES runtime test suite"
       },
-      "next_free_node": "N29-GLOBAL-RECOVERY-FAILOVER"
+      "next_free_node": "N29-GLOBAL-RECOVERY-FAILOVER",
+      "report_state": "PASS_RECONCILED_FROM_TRUSTED_SWARM_EVIDENCE",
+      "reconciled_evidence_commit": "0bda3cd116a3b30a71dea3a147179aaa620562c5"
     },
     {
       "n": 29,
@@ -1191,8 +1214,8 @@
     {
       "n": 33,
       "id": "N33-MIRROR-TRANSPORT-CONTROL",
-      "state": "GAP_RESOLVABLE",
-      "owner": null,
+      "state": "VERIFIED_CLOSED",
+      "owner": "SOL GPT <13>",
       "title": "Mirror display/audio/input/clipboard/control transport",
       "scope": "runtime/src/mirror/**|runtime/tests/test_mirror*",
       "depends_on": [
@@ -1206,11 +1229,18 @@
         "Test pairing/auth/session/display-input-control/clipboard plus prohibition of disk/RAM mirroring"
       ],
       "close": "CAN-010 runtime mirror transport WIRED + TESTED; UI remains N31",
-      "report_state": "GAP_CI_CANCELLED_RETRY_REQUIRED",
-      "reconciled_evidence_commit": "74ea925ef0ba117dfe94b9c55264803994597879",
-      "run_id": 34742833971,
-      "remaining_gaps": [
-        "authoritative global CI success required; exact prior run cancelled by concurrent main pushes"
+      "report_state": "PASS_RECONCILED_FROM_CORRECTED_DESCENDANT_CI",
+      "reconciled_evidence_commit": "31d1531f07c0c3c377901dc2b21a8d404cf204ed",
+      "run_id": 34743651221,
+      "remaining_gaps": [],
+      "chat_id": "SOL GPT <13>",
+      "tests": "authoritative descendant CI run 34743651221 job 103687583217 SUCCESS: Wordflow 41/41 PASS; runtime 256/256 PASS + 42 subtests PASS",
+      "job_id": 103687583217,
+      "evidence": [
+        "implementation f8477f0791b18aa249352085e2eaea910860ec9a + tests 26ec8170efe5573dcd88e54f18683b3900dc6aa1 certified by descendant 13418e0dd9d73d2070497b9485757d098cbed0e8",
+        "transport.py blob a7fb9e9b1584f403215e0976a81a137785fd68a6 and test blob dcb930555164e2f17f04aafd11494b9850062242 exact",
+        "pairing/auth/LAN boundary fail closed; display/audio/input/clipboard/control allowed; disk/ram/memory/filesystem rejected",
+        "SOL GPT <17> corrected the earlier invalid pre-N33 CI evidence and released its duplicate claim"
       ]
     }
   ],
