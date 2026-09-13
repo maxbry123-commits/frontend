@@ -1,0 +1,11 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <10>",
+  "node_id": "N33-MIRROR-TRANSPORT-CONTROL",
+  "fresh_main_sha": "a5b3a2b385b1448edfd6decc95e75b1bd875098c",
+  "write_scope": "runtime/src/mirror/**|runtime/tests/test_mirror*",
+  "claimed_at": "2026-09-13T06:34:30Z",
+  "claim_source": "additive-sidecar",
+  "note": "Authoritative Crazy Wall row was FREE at fresh read; sidecar preserves auditable claim without replacing concurrent shared-state JSON. Runtime writes require subsequent fresh collision check."
+}
