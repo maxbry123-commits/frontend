@@ -6,7 +6,7 @@ on:
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/**'
-      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/orchestrator.py'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/**'
       - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/rule_engine/**'
       - '.github/workflows/yaiwes-wordflow-loop-pytest.yml'
   workflow_dispatch:
@@ -26,7 +26,7 @@ jobs:
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests
-            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize/orchestrator.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/stabilize
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/rule_engine
           sparse-checkout-cone-mode: false
       - uses: actions/setup-python@v5
