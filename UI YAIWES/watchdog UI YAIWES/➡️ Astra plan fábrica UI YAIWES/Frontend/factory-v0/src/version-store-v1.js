@@ -52,11 +52,6 @@ function decorateRestoreControl(){
 
 function bindVersionStore(){
   document.addEventListener('click',event=>{
-    const save=event.target?.closest?.('#save-version');
-    if(save){
-      queueMicrotask(()=>{captureVersionSnapshot();decorateRestoreControl()});
-      return;
-    }
     const restore=event.target?.closest?.('#restore-version');
     if(!restore)return;
     event.preventDefault();
@@ -65,6 +60,13 @@ function bindVersionStore(){
     globalThis.__YAIWES_VERSION_RESTORE_LAST__=Object.freeze(result);
     if(result.restored)globalThis.location.reload();
   },true);
+
+  document.addEventListener('click',event=>{
+    const save=event.target?.closest?.('#save-version');
+    if(!save)return;
+    queueMicrotask(()=>{captureVersionSnapshot();decorateRestoreControl()});
+  });
+
   new MutationObserver(decorateRestoreControl).observe(document.documentElement,{subtree:true,childList:true});
   queueMicrotask(decorateRestoreControl);
 }
