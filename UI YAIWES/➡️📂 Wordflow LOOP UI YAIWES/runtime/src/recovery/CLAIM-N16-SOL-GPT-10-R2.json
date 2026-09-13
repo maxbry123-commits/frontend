@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <10>",
+  "node_id": "N16-CHECKPOINT-BYTES-HASH",
+  "fresh_main_sha": "892b3d0a377d420e4eb4095284e56be9cc3fce63",
+  "write_scope": "runtime/src/recovery/**|runtime/tests/test_recovery*",
+  "claimed_at": "2026-09-13T07:07:00Z",
+  "reason": "Fresh Crazy Wall state GAP_RESOLVABLE; reverify exact checkpoint hash implementation/test blobs against current successful descendant CI before any code delta."
+}
