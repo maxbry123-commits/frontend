@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.requirement-trace.v1",
+  "requirement_id": "REQ-S3-054",
+  "goal_id": "G12",
+  "task_id": "N23-FIVE-PASS-AUDITOR",
+  "source": {
+    "path": "documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md",
+    "sha256": "aa9ea84565a9dfd250cc57ba465a7131a032b1e96c404d9dd21a349c8185c58c",
+    "symbol": "§54 INTEGRATION CHECK"
+  },
+  "implementation": {
+    "path": "runtime/src/audit/five_pass.py",
+    "sha256": "b39b5974f36d37e8e6df7bd2464c6dafd1f5f5ba490e9612685ad8095273a26c",
+    "symbol": "audit_five_pass"
+  },
+  "test": {
+    "path": "runtime/tests/test_audit_five_pass.py",
+    "sha256": "00c695f5c898facdd5207b6703c86483996f596a4cca0c103a7a57d67d786df3",
+    "symbol": "FivePassTests.test_omitted_artifact_inventory_cannot_pass"
+  },
+  "evidence": {
+    "path": "runtime/evidence/requirement_traces/REQ-S3-054.ci.json",
+    "sha256": "037191f307f23690b99b319c2a0e8c70bbf2d3ff58fce7a208cc7d2c6cfa4a0a",
+    "symbol": ""
+  },
+  "revision": "c480fcd8445d2d00501b01de4b0b45c37b6a6029"
+}
