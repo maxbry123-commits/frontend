@@ -1,0 +1,86 @@
+{
+  "schema": "yaiwes.factory.supervisor.reconciliation.v2",
+  "round": "R08",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "project": "FABRICA_UI_YAIWES_ONLY",
+  "policy": "NO_OVERENGINEERING__CLOSE_EXISTING_GATES_BEFORE_NEW_FEATURES",
+  "observed_main_sha": "a11821de62d05e5b537101245c57505e3e1b4270",
+  "authority": "fresh code + current architecture + Crazy Wall + claim/release commits + GitHub Actions/browser evidence > historical state docs > inference",
+  "architecture_crosscheck": {
+    "source": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-PROGRAMACION-CONSOLIDADA-UI-YAIWES.md",
+    "required_ui_principles": [
+      "UI is interaction surface, not canonical state",
+      "real controls must produce state/effect evidence",
+      "save/reload/reopen/export must round-trip",
+      "router/remote actions use secret_ref instead of raw secrets",
+      "PASS requires evidence, not presence"
+    ],
+    "canonical_factory_entrypoint": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html",
+    "observed_wiring": "index-v19 loads app-v19, import controller, router bridge, layer reorder, interaction fix, scroll preserver, context menu, resize, minimap, remote control and HF Jobs panel; app-v19 wires step/mode/library/layer/breakpoint state and persistent project state.",
+    "result": "ARCHITECTURE_PRESENT_AND_MATERIALLY_WIRED__FINAL_CLOSURE_NOT_CERTIFIED"
+  },
+  "button_interface_audit": {
+    "status": "NOT_100_CERTIFIED",
+    "known_real_wiring": [
+      "5 step navigation buttons generated from STEPS",
+      "Manual/IA/Auto mode buttons",
+      "component library buttons and drag/drop",
+      "layer selection buttons",
+      "Desktop/Tablet/Mobile breakpoint buttons",
+      "zoom/history/navigation/context actions exist in canonical UI"
+    ],
+    "blocking_node": "F-UI-051",
+    "last_run_id": 34737146887,
+    "last_job_id": 103670480746,
+    "last_result": "FAILURE",
+    "classification": "TEST_HARNESS_FAILURE",
+    "failure_summary": "button matrix used data-step 0 although app steps are 1..5; breakpoint selector was ambiguous; failure artifact paths were incomplete",
+    "required_fix": "patch harness only, rerun exact matrix, then classify any remaining dead control as PRODUCT_FAILURE",
+    "conclusion": "Source wiring is substantial but every visible button/control cannot be certified 100% until corrected F-UI-051 plus mobile/keyboard/live-web cross-review gates pass."
+  },
+  "node_accounting": {
+    "total_factory_nodes": 63,
+    "producer_pass_or_terminal_progress_nodes": 38,
+    "open_or_nonterminal_nodes": 25,
+    "progress_percent_by_terminal_node_count": 60.3,
+    "progress_formula": "38/63",
+    "warning": "This is auditable node-progress percentage, not final product certification; PASS_PENDING_REVIEW is not VERIFIED_CLOSED."
+  },
+  "open_nodes": [
+    "F-OSS-016",
+    "F-MOD-033",
+    "F-INT-035",
+    "F-QA-036",
+    "F-QA-037",
+    "F-QA-038",
+    "F-QA-039",
+    "F-QA-040",
+    "F-QA-041",
+    "F-QA-042",
+    "F-QA-043",
+    "F-FINAL-044",
+    "F-UI-047",
+    "F-UI-048",
+    "F-UI-051",
+    "F-UI-052",
+    "F-UI-053",
+    "F-UI-054",
+    "F-UI-055",
+    "F-UI-056",
+    "F-UI-057",
+    "F-UI-058",
+    "F-UI-061",
+    "F-UI-062",
+    "F-UI-063"
+  ],
+  "minimal_next_orders": {
+    "SOL6": "F-UI-051 harness-only fix/rerun -> 052 -> 053 -> 054",
+    "SOL7": "terminalize/release F-MOD-033 -> 047 -> 048 -> 055 -> 056 -> 057 -> 058",
+    "SOL8": "terminalize F-UI-061 from already-green run/artifact -> WAIT_JOIN",
+    "JOIN": "062 independent cross-review -> 063 frontend-100 gate",
+    "legacy_closure": "Reuse evidence from 045-063 to close 035-044 where acceptance is already satisfied; do not duplicate 50-cycle/web/button work unnecessarily.",
+    "F-OSS-016": "Resolve explicitly as NOT_REQUIRED if no demonstrated capability gap; acquire nothing by default."
+  },
+  "final_gate": "100% requires F-UI-063 PASS with TESTED_SHA==PUBLISHED_SHA, 100% button/control matrix, desktop+mobile+touch+keyboard, reload/reopen/export, Router/HF where applicable, zero critical console/network errors, screenshots/artifacts, independent reviewer, 3 simulations and 3 refutations."
+}
