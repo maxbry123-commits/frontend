@@ -4,7 +4,7 @@
   "role": "SOL_GPT1_BACKEND",
   "name": "Sol ☀️ 🏈gpt 1 backend",
   "node_prefix": "S1",
-  "status": "S1_10_CLAIMED_RESEARCH",
+  "status": "S1_11_CLAIMED_RESEARCH",
   "coordination": {
     "source": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-QUEUE-4SOL-2026-09-12.json",
     "source_blob_sha": "2313f8b519efd0d9118a97c59c4572c53382b9b9",
@@ -12,50 +12,44 @@
   },
   "history_refs": [
     {
-      "node_id": "XRS1-MEMORY-AGENT-BOUNDARY",
-      "commit": "916eb6c27742d0947c56246377079f8928a9836d",
-      "state_blob": "98668b6274e0ef3a57ec41a0fdc9dbcae5257365",
-      "result": "TARGETED_SUBGATE_COMPLETE"
-    },
-    {
       "node_id": "S1-09-MEMORY-AGENT-BOUNDARY",
       "report_commit": "8f61c6b914099df8e9b845ddcacaf8ae52f2dd31",
       "report_blob": "fa042a10d8407170d973509fb6c5a6a885587e57",
-      "released_at": "2026-09-12T20:28:55-05:00",
       "result": "PASS_TARGETED_ACCEPTANCE"
+    },
+    {
+      "node_id": "S1-10-RQLITE-DISTINCT-STATE",
+      "report_commit": "6a9bd3e4f1342c2e9f6837a336f3ca0861d953ec",
+      "released_at": "2026-09-12T20:30:05-05:00",
+      "result": "DISTINCT_CAPABILITY_CONFIRMED_WIRING_SCOPE_GAP"
     }
   ],
   "claim": {
-    "node_id": "S1-10-RQLITE-DISTINCT-STATE",
+    "node_id": "S1-11-LOCAL-FIRST-CHECKPOINT-MEMORY",
     "owner": "SOL_GPT1",
-    "claimed_at": "2026-09-12T20:29:18-05:00",
-    "fresh_base_main_sha": "8f61c6b914099df8e9b845ddcacaf8ae52f2dd31",
+    "claimed_at": "2026-09-12T20:30:42-05:00",
+    "fresh_base_main_sha": "6a9bd3e4f1342c2e9f6837a336f3ca0861d953ec",
     "state": "CLAIMED",
     "write_scope": [
       "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT1-BACKEND-STATE.json",
-      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S1-10-RQLITE-DISTINCT-STATE.json"
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S1-11-LOCAL-FIRST-CHECKPOINT-MEMORY.json"
     ],
-    "goal": "Prove rqlite distinct need vs existing local durability; wire only if non-duplicate and exact runtime write-scope is authorized."
+    "goal": "Local-first project memory/checkpoint contract and restart isolation. Runtime mutation requires explicit path scope before code changes."
   },
-  "s1_09_evidence": {
+  "evidence": {
     "memory_boundary_blob": "6a3a438b328bc0c008c9a7cc7238aaa21c7b8545",
-    "test_blob": "d4f00a40480eb61b84bdd1fbca04233d8f7fafc4",
-    "targeted_test": "PASS_9_OF_9",
-    "github_ci_run": 34730513826,
-    "github_ci_state_at_release": "WORDLOW_PASS_RUNTIME_IN_PROGRESS"
-  },
-  "s1_10_preflight": {
-    "rqlite_manifest_blob": "2930e5240833cb2ded737c898ed311de4d89d7e5",
-    "rqlite_source_commit": "4e92305e647b2c93a895b5b5a6c7eab55e9267b1",
-    "rqlite_tree_sha256": "5cb137d63452364d62b7d705921caf9c1fa33e84d1545d68a6a4d4d622dfbb03",
-    "rqlite_readme_blob": "b2a866df37e22490741bba63600d897c4620ba4b",
-    "local_ledger_blob": "79ae3da7f20188874ffdc9e5a6b5e9cd3fbc4c83"
+    "memory_test_blob": "d4f00a40480eb61b84bdd1fbca04233d8f7fafc4",
+    "memory_targeted_test": "PASS_9_OF_9",
+    "rqlite_distinct_report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S1-10-RQLITE-DISTINCT-STATE.json",
+    "local_ledger_blob": "79ae3da7f20188874ffdc9e5a6b5e9cd3fbc4c83",
+    "recovery_control_plane_blob": "d3cc4d69b15e754389b88652e6ae07c0ebbf8162"
   },
   "owned_gaps": {
     "G02_VITE_DEST": "OPEN_DESTINATION_INPUT_GAP",
     "G03_SUPABASE_DEST": "OPEN_DESTINATION_INPUT_GAP",
-    "G09_MEMORY_BOUNDARY": "S1_09_TARGETED_PASS_S1_10_RESEARCHING_DISTINCT_DURABILITY",
-    "G13_RUNTIME_AGENT_EMPTY": "TARGETED_SUBGATE_SATISFIED"
+    "G09_MEMORY_BOUNDARY": "S1_09_TARGETED_PASS_S1_11_RESEARCHING_LOCAL_FIRST_CHECKPOINT",
+    "G13_RUNTIME_AGENT_EMPTY": "TARGETED_SUBGATE_SATISFIED",
+    "RQLITE_WIRING": "DISTINCT_BUT_RUNTIME_WRITE_SCOPE_REQUIRED"
   },
   "acquisition": {
     "motor_skill_blob": "b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54",
@@ -63,5 +57,5 @@
     "Supabase": "BLOCKED_NO_LITERAL_DEST_REPO_DEST_BRANCH_DEST_ROOT",
     "rule": "Do not dispatch canonical motor until literal destination authority exists."
   },
-  "next_action": "Compare rqlite distributed HA/replication semantics with local ledger/recovery. Publish dedup verdict. Do not wire runtime without exact S1-10 runtime write-scope."
+  "next_action": "Cross-check local-first VirtualComputer/storage requirements against current memory boundary, ledger and recovery. Publish exact implemented/missing/isolation verdict."
 }
