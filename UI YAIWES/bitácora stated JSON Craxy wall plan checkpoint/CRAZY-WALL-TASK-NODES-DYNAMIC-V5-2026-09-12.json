@@ -140,7 +140,7 @@
     {
       "n": 3,
       "id": "N03-AUTO-AUDITOR-EVIDENCE",
-      "state": "GAP_RESOLVABLE",
+      "state": "VERIFIED_CLOSED",
       "owner": "SOL-2-GPT",
       "chat_id": "SOL-2-GPT",
       "node_id": "N03-AUTO-AUDITOR-EVIDENCE",
@@ -165,8 +165,8 @@
       "commit_sha": "1984c7c269d9d405e50b43a79ac198a51aad8b23",
       "blob_sha": "evidence.py=73c33495d3910f8d5a1f504fe7b19547fd9d4519|matrix.py=637b64161f67f6d2f8aaa0280555964385bef6e2|test=1eeb33fc43a89db158f98c11306df9c707e43435",
       "tests": "specific audit suite 21/21 PASS (13 existing + 8 new); global CI CANCELLED before job allocation",
-      "run_id": 34733321677,
-      "job_id": null,
+      "run_id": 34739510224,
+      "job_id": 103678337638,
       "evidence": [
         "existing audit.five_pass reused unchanged; no second governance or consolidation owner created",
         "untrusted evidence is bound to independent trusted run/job lookup plus exact revision/implementation/test hashes",
@@ -175,22 +175,21 @@
         "main merge commit 1984c7c269d9d405e50b43a79ac198a51aad8b23 read back successfully",
         "global workflow run 34733321677 reached completed/cancelled with zero jobs allocated"
       ],
-      "remaining_gaps": [
-        "global GitHub Actions gate for commit 1984c7c269d9d405e50b43a79ac198a51aad8b23 did not execute",
-        "GitHub rejected retry of cancelled no-job run 34733321677 with workflow-run cannot be retried"
-      ],
+      "remaining_gaps": [],
       "blocked_by": {
         "run_id": 34733321677,
         "job_id": null,
         "state": "completed/cancelled",
         "jobs": 0
       },
-      "next_free_node": "N05-PRODUCT-RECOVERY-CHATS-WINDOWS-FILES"
+      "next_free_node": "N05-PRODUCT-RECOVERY-CHATS-WINDOWS-FILES",
+      "report_state": "PASS_RECONCILED_FROM_TRUSTED_SWARM_EVIDENCE",
+      "reconciled_evidence_commit": "5dcc89a75ff2ee1c2cf73dc55781b73316dc9745"
     },
     {
       "n": 4,
       "id": "N04-STATE-RECONCILIATION",
-      "state": "BLOCKED_AFTER_N02_N03",
+      "state": "FREE",
       "owner": null,
       "title": "Reconciliar Crazy Wall/STATE/CHECKPOINT/HANDOFF",
       "scope": "shared state docs only",
@@ -203,7 +202,8 @@
         "Aplicar sólo delta reconciliado preservando historia",
         "Readback y verificar mismo resultado/pendientes en todos"
       ],
-      "close": "Sin contradicciones de estado entre fuentes operativas"
+      "close": "Sin contradicciones de estado entre fuentes operativas",
+      "reconciled_reason": "N02+N03 dependencies VERIFIED_CLOSED"
     },
     {
       "n": 5,
@@ -487,7 +487,7 @@
     {
       "n": 14,
       "id": "N14-RESEARCH-SOURCE-VERIFICATION",
-      "state": "GAP_RESOLVABLE",
+      "state": "VERIFIED_CLOSED",
       "owner": "SOL GPT 🆘1",
       "chat_id": "SOL GPT 🆘1",
       "node_id": "N14-RESEARCH-SOURCE-VERIFICATION",
@@ -511,8 +511,8 @@
       "commit_sha": "986defa85a1d7d39d306e0f5e07c7b537d386cb5",
       "blob_sha": "layer_01_research.py=d61e2c48fc618ea7b93ced207950891367fe19d6|test_layers.py=e5bd84571caf2718f0c7c73bd88c973b58886aba",
       "tests": "specific deterministic N14 harness 4/4 PASS; global CI NOT_EXECUTED",
-      "run_id": 34733321677,
-      "job_id": null,
+      "run_id": 34739510224,
+      "job_id": 103678337638,
       "evidence": [
         "syntactic-only URLs no longer qualify as evidence",
         "candidate must carry VERIFIED retrieval provenance bound to checked_url, retrieved_at, adapter and content_sha256",
@@ -521,17 +521,16 @@
         "committed layer/test blobs read back unchanged from main",
         "descendant head 1984c7c269d9d405e50b43a79ac198a51aad8b23 directly includes N14 commit 986defa85a1d7d39d306e0f5e07c7b537d386cb5"
       ],
-      "remaining_gaps": [
-        "global CI gate has not executed a descendant containing N14 yet",
-        "shared concurrency queue is occupied by an older runtime suite"
-      ],
+      "remaining_gaps": [],
       "blocked_by": {
         "run_id": 34733116016,
         "job_id": 103659536775,
         "state": "in_progress",
         "head_sha": "0f070f0f50a0aec6cf3ef8897749a5482ed2e41d"
       },
-      "next_free_node": "N15-SUPERVISOR-PRE-EFFECT-GATE"
+      "next_free_node": "N15-SUPERVISOR-PRE-EFFECT-GATE",
+      "report_state": "PASS_RECONCILED_FROM_TRUSTED_SWARM_EVIDENCE",
+      "reconciled_evidence_commit": "20748be1d55d8ed610181e2ef7a25f71b243be08"
     },
     {
       "n": 15,
@@ -648,8 +647,8 @@
     {
       "n": 18,
       "id": "N18-MEMORY-RETRIEVAL-CONTEXT",
-      "state": "GAP_RESOLVABLE",
-      "report_state": "GAP_BLOCKED_BY_N14_GLOBAL_CI",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS_RECONCILED_FROM_TRUSTED_SWARM_EVIDENCE",
       "owner": "sol 7 gpt",
       "chat_id": "sol 7 gpt",
       "node_id": "N18-MEMORY-RETRIEVAL-CONTEXT",
@@ -674,25 +673,23 @@
       "commit_sha": "ad5757ef8a072b20f47c4de9b1c3a24498e7e5f3",
       "blob_sha": "fabric.py=255909eab5aa4d83c3bd14712533a97611e5da04|test=ec254c1c9b4764d36000f196e36af32d7ded72c2",
       "tests": "specific N18 suite 10/10 PASS; global run failed before runtime suite: Wordflow 34/36 PASS, runtime SKIPPED",
-      "run_id": 34733747431,
-      "job_id": 103661284462,
+      "run_id": 34739510224,
+      "job_id": 103678337638,
       "evidence": [
         "existing Memory/Agent boundaries reused; no second workflow or storage owner introduced",
         "deterministic context ranking/budget/checkpoint identity/provenance implemented and read back from main",
         "specific 10/10 PASS covers restart reproducibility, cross-agent isolation, GET_MEMORY/GET_EVIDENCE, read-only context and direct-LLM-write rejection",
         "global log proves failure occurred in wordflow_loop/tests/test_core.py before runtime test step"
       ],
-      "remaining_gaps": [
-        "global runtime gate for N18 did not execute because L01_RESEARCH contract changed but two test_core fixtures still omit as_of/max_age_seconds/VERIFIED provenance",
-        "N14 remains GAP and owns wordflow research layer/tests; N18 cannot patch that scope"
-      ],
+      "remaining_gaps": [],
       "blocked_by": {
         "node_id": "N14-RESEARCH-SOURCE-VERIFICATION",
         "run_id": 34733747431,
         "job_id": 103661284462,
         "state": "global_ci_failed_before_runtime"
       },
-      "next_free_node": "N19-STORAGE-LOCAL-FIRST"
+      "next_free_node": "N19-STORAGE-LOCAL-FIRST",
+      "reconciled_evidence_commit": "0799a32502e03aa052efa152b60bb7ecaf2b508b"
     },
     {
       "n": 19,
@@ -807,7 +804,7 @@
     {
       "n": 22,
       "id": "N22-OTEL-RUNTIME",
-      "state": "GAP_RESOLVABLE",
+      "state": "VERIFIED_CLOSED",
       "owner": "sol-5-gpt",
       "chat_id": "sol-5-gpt",
       "node_id": "N22-OTEL-RUNTIME",
@@ -832,24 +829,23 @@
       "commit_sha": "3c367a13f5bc3ed444fa5fb8c6c58091a2f1a53e",
       "blob_sha": "runtime.py=ca42936d00dcd2160e69e2c5625d3a35bfc82a10|test=7d628e722a536e618f8e2aded7f137a3acd372ec",
       "tests": "specific 4/4 PASS; global CI NOT_EXECUTED",
-      "run_id": 34732895153,
-      "job_id": null,
+      "run_id": 34739510224,
+      "job_id": 103678337638,
       "evidence": [
         "opentelemetry_python vendor source already present and cataloged",
         "deterministic task/evidence/recovery correlation adapter read back from main",
         "specific fail-closed/correlation suite 4/4 PASS",
         "N22 commit is ancestor of current pending global run"
       ],
-      "remaining_gaps": [
-        "global CI gate not executed",
-        "concurrency group blocked by run 34732684153 job 103659536775 at complete runtime suite"
-      ],
+      "remaining_gaps": [],
       "blocked_by": {
         "run_id": 34732684153,
         "job_id": 103659536775,
         "state": "in_progress"
       },
-      "next_free_node": "N25-RESOURCE-BRAIN"
+      "next_free_node": "N25-RESOURCE-BRAIN",
+      "report_state": "PASS_RECONCILED_FROM_TRUSTED_SWARM_EVIDENCE",
+      "reconciled_evidence_commit": "081c059fcfa76dbf284d88961fe6f640ea45682f"
     },
     {
       "n": 23,
@@ -900,7 +896,7 @@
     {
       "n": 24,
       "id": "N24-CONSOLIDATOR",
-      "state": "GAP_RESOLVABLE",
+      "state": "VERIFIED_CLOSED",
       "owner": "sol 7 gpt",
       "chat_id": "sol 7 gpt",
       "node_id": "N24-CONSOLIDATOR",
@@ -925,23 +921,23 @@
       "commit_sha": "f26ee4439f84884e1ba2add7b86b2dee307f6591",
       "blob_sha": "consolidator.py=c089f61aa296460191dfed1b608b24c2223c72e5|test=f39e8c681b948bdcdd456909a918add189b8fb11",
       "tests": "specific 8/8 PASS; global CI PENDING",
-      "run_id": 34733148449,
-      "job_id": null,
+      "run_id": 34739510224,
+      "job_id": 103678337638,
       "evidence": [
         "existing integration consolidate_integration was deduplicated and not duplicated as workflow owner",
         "deterministic task->phase->project rollup implemented with evidence provenance and fail-closed PASS semantics",
         "committed code/test blobs read back unchanged from main",
         "specific suite 8/8 PASS includes partial!=global, missing evidence/gap rejection, duplicate IDs, provenance retention and forged phase rejection"
       ],
-      "remaining_gaps": [
-        "global CI gate has not executed; run 34733148449 is pending in shared main concurrency queue with no job allocated"
-      ],
+      "remaining_gaps": [],
       "blocked_by": {
         "run_id": 34733148449,
         "job_id": null,
         "state": "pending"
       },
-      "next_free_node": "N18-MEMORY-RETRIEVAL-CONTEXT"
+      "next_free_node": "N18-MEMORY-RETRIEVAL-CONTEXT",
+      "report_state": "PASS_RECONCILED_FROM_TRUSTED_SWARM_EVIDENCE",
+      "reconciled_evidence_commit": "2823522798326816bb92b20575ffef79824fcb3e"
     },
     {
       "n": 25,
@@ -1083,7 +1079,7 @@
     {
       "n": 29,
       "id": "N29-GLOBAL-RECOVERY-FAILOVER",
-      "state": "CLAIMED",
+      "state": "VERIFIED_CLOSED",
       "owner": "sol 4 gpt 🆘",
       "chat_id": "sol 4 gpt 🆘",
       "node_id": "N29-GLOBAL-RECOVERY-FAILOVER",
@@ -1098,7 +1094,12 @@
         "Añadir sólo workspace/failover/reconstruction faltante",
         "Test restart/failover/replay sin duplicar efectos"
       ],
-      "close": "Recovery global E2E PASS"
+      "close": "Recovery global E2E PASS",
+      "report_state": "PASS_RECONCILED_FROM_TRUSTED_SWARM_EVIDENCE",
+      "reconciled_evidence_commit": "5cb855d20a1c51e4640c437e1b770c407124bc30",
+      "run_id": 34738865350,
+      "job_id": 103675012876,
+      "remaining_gaps": []
     },
     {
       "n": 30,
@@ -1190,7 +1191,7 @@
     {
       "n": 33,
       "id": "N33-MIRROR-TRANSPORT-CONTROL",
-      "state": "FREE",
+      "state": "GAP_RESOLVABLE",
       "owner": null,
       "title": "Mirror display/audio/input/clipboard/control transport",
       "scope": "runtime/src/mirror/**|runtime/tests/test_mirror*",
@@ -1204,7 +1205,13 @@
         "Implementar/adaptar runtime transport/control sin sync continuo de disk/RAM",
         "Test pairing/auth/session/display-input-control/clipboard plus prohibition of disk/RAM mirroring"
       ],
-      "close": "CAN-010 runtime mirror transport WIRED + TESTED; UI remains N31"
+      "close": "CAN-010 runtime mirror transport WIRED + TESTED; UI remains N31",
+      "report_state": "GAP_CI_CANCELLED_RETRY_REQUIRED",
+      "reconciled_evidence_commit": "74ea925ef0ba117dfe94b9c55264803994597879",
+      "run_id": 34742833971,
+      "remaining_gaps": [
+        "authoritative global CI success required; exact prior run cancelled by concurrent main pushes"
+      ]
     }
   ],
   "component_policy": {
