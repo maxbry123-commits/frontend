@@ -1,0 +1,43 @@
+{
+  "schema": "yaiwes.factory.sol.report.v1",
+  "contract": "tel.workflow/v3",
+  "chat_id": "SOL-8-GPT-2026-09-12T21:55-05:00",
+  "agent_name": "SOL 8 GPT 🆘",
+  "node_id": "F-CTL-009",
+  "state": "GAP",
+  "base_sha": "d39503b37cdd1e435022fea782d2068259a15738",
+  "test_commit_sha": "08b774a93c28c95b9e1d8fe2384761db9bf62109",
+  "classification": "EVIDENCE_FAILURE",
+  "verify_research": {
+    "product": "src/app-v19.js provides persistent zoom controls; src/donors/xyflow-minimap-adapter.js provides minimap, node navigation and fit-view; index-v192.html loads the adapter",
+    "existing_gate_gap": "factory-v192-local-50-cycle.spec.mjs checks zoom reset/in/out only and does not exercise fit-view/minimap",
+    "product_patch_required": false
+  },
+  "execute_delta": {
+    "strategy": "REUSE_EXISTING",
+    "created_test": "tests/e2e/f-ctl-009-zoom-fit-minimap.spec.mjs",
+    "product_source_changed": false
+  },
+  "test_report": {
+    "syntax_static": "NOT_EXECUTED_REMOTE_RUN_UNAVAILABLE_IN_CURRENT_CONNECTOR",
+    "runtime_e2e": "PENDING_ACTION_TRIGGER",
+    "reason": "existing V1.9.2 workflow paths/run command do not include the new isolated F-CTL-009 spec; no workflow-dispatch create action is exposed in the current GitHub connector",
+    "pass_promoted": false
+  },
+  "simulations": [
+    "zoom-reset -> zoom-in -> CSS --canvas-zoom and label must change 1.0 -> 1.1",
+    "minimap node click -> corresponding canvas node selected",
+    "far node geometry -> fit-view -> canvas scroll/viewport must change"
+  ],
+  "refutations": [
+    "adapter/source presence is not accepted as runtime PASS",
+    "historical V1.9.2 desktop 50/50 does not certify the new F-CTL-009 spec",
+    "test creation alone is not accepted as PASS"
+  ],
+  "goals12_output": {
+    "G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS isolated scope","G05":"PASS","G06":"PASS reuse existing xyflow donor","G07":"PASS test-only delta","G08":"GAP runtime not executed","G09":"GAP dedicated E2E pending","G10":"PASS 3 simulations + 3 refutations","G11":"PARTIAL commit/evidence persisted; run/job absent","G12":"GAP keep F-CTL-009 active; do not claim next node"
+  },
+  "remaining_gaps": ["DEDICATED_F_CTL_009_ACTION_RUN_AND_LOG_REQUIRED"],
+  "next_free_node": null,
+  "review_required": true
+}
