@@ -120,6 +120,14 @@ class EvidenceMatrixTests(unittest.TestCase):
                     self.trace, self.evidence_bytes, lambda *_: trusted
                 ))
 
+    def test_non_bytes_evidence_fails_closed_without_lookup(self):
+        def forbidden_lookup(*_):
+            self.fail("lookup must not run for malformed evidence")
+
+        for value in (None, "{}", bytearray(self.evidence_bytes), memoryview(self.evidence_bytes), object()):
+            with self.subTest(value_type=type(value).__name__):
+                self.assertFalse(verify_ci_evidence(self.trace, value, forbidden_lookup))
+
     def test_lookup_error_and_wrong_type_fail_closed(self):
         def broken(*_):
             raise RuntimeError("CI unavailable")
