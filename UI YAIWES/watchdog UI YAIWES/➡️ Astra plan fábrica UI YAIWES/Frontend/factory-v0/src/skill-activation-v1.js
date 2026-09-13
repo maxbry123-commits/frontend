@@ -24,8 +24,10 @@ function decorate(){
       card.appendChild(button);
     }
     const active=Boolean(skills[index]?.active);
-    button.textContent=active?'Activo':'Inactivo';
-    button.setAttribute('aria-pressed',String(active));
+    const label=active?'Activo':'Inactivo';
+    const pressed=String(active);
+    if(button.textContent!==label)button.textContent=label;
+    if(button.getAttribute('aria-pressed')!==pressed)button.setAttribute('aria-pressed',pressed);
   });
 }
 function activeSkills(){
@@ -61,7 +63,8 @@ document.addEventListener('click',event=>{
   }
 });
 
-new MutationObserver(decorate).observe(document.documentElement,{subtree:true,childList:true});
+const observerRoot=document.getElementById('context-content')||document.documentElement;
+new MutationObserver(decorate).observe(observerRoot,{subtree:true,childList:true});
 queueMicrotask(decorate);
 
 globalThis.__YAIWES_SKILL_ACTIVATION_V1__=Object.freeze({activeSkills,decorate});
