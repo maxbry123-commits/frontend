@@ -12,20 +12,18 @@
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-ED-002-SOL-3-EVIDENCE.json"
   ],
   "claimed_at": "2026-09-12T21:44:30-05:00",
-  "state": "CLAIMED",
+  "state": "PASS_PENDING_REVIEW",
+  "claim_commit_sha": "1e370dd89c3cd94043896665e77e7383b95ad204",
+  "evidence_commit_sha": "a045332796dbaacce9f88129867f0c86d397cf39",
+  "evidence_blob_sha": "f277d1f391bbcf312ae6962dd1156c4ae4c1edce",
+  "tests": "desktop drag before/after assertion + exact-candidate 50/50 desktop cycles + reload recovery; global workflow fails mobile outside this node",
+  "run_id": 34732313529,
+  "job_id": 103657241958,
+  "simulations": 3,
+  "refutations": 3,
+  "remaining_gaps": ["F-ED-001 mobile TOUCH_COORDINATE_MISS", "independent review of F-ED-002 evidence"],
+  "review_required": true,
+  "next_free_node": "F-ED-003 after fresh owner/path reconciliation",
   "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
-  "goals12_input": {
-    "G01": "PASS literal F-ED-002 preserved",
-    "G02": "PASS fresh main 9e3cfc8 read",
-    "G03": "PASS dynamic Crazy Wall + historical STATE/CHECKPOINT/HANDOFF read and precedence reconciled",
-    "G04": "PASS F-OSS-013 is claimed by SOL 1; F-ED-002 has no materialized claim and evidence-only paths are unique",
-    "G05": "PENDING inspect current drag/drop implementation/tests",
-    "G06": "PASS reuse-first; no OSS download",
-    "G07": "PENDING minimum delta only if product failure reproduced",
-    "G08": "PENDING desktop movement microtest",
-    "G09": "PENDING integration/E2E evidence",
-    "G10": "PENDING 3 simulations + 3 refutations",
-    "G11": "PENDING evidence SHA/readback",
-    "G12": "PENDING reconcile next free node"
-  }
+  "goals12_output": {"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS_REUSE_NO_PRODUCT_PATCH","G08":"PASS","G09":"PASS","G10":"PASS","G11":"PASS","G12":"PASS"}
 }
