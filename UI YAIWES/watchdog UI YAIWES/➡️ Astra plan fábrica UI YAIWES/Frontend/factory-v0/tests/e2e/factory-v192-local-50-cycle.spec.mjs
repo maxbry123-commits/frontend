@@ -88,18 +88,37 @@ async function touchDragNode(page) {
   await expect(page.locator('[data-node]')).toHaveCount(1);
   const node = page.locator('[data-node]').first();
   const nodeId = await node.getAttribute('data-node');
-  const box = await node.boundingBox();
-  if (!box) throw new Error('touch node bounding box unavailable');
-  const sx = Math.round(box.x + Math.min(45, box.width / 3));
-  const sy = Math.round(box.y + Math.min(35, box.height / 3));
-  const ex = sx + 90;
-  const ey = sy + 70;
+
+  // V1.9.2 trace 34732313529 proved the old synthetic start point could be
+  // below the visible Pixel 7 viewport (elementFromPoint=null) before the
+  // product adapter received any event. Scroll the real node into view and
+  // choose a point from the visible node/viewport intersection; this keeps
+  // the product assertion strict instead of masking a touch failure.
+  await node.scrollIntoViewIfNeeded();
+  const target = await node.evaluate(el => {
+    const r = el.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const left = Math.max(0, r.left);
+    const right = Math.min(vw, r.right);
+    const top = Math.max(0, r.top);
+    const bottom = Math.min(vh, r.bottom);
+    if (right <= left || bottom <= top) return null;
+    const x = Math.round(left + Math.min(45, Math.max(1, (right - left) / 3)));
+    const y = Math.round(top + Math.min(35, Math.max(1, (bottom - top) / 3)));
+    return { x, y, rect:{x:r.x,y:r.y,width:r.width,height:r.height}, viewport:{width:vw,height:vh} };
+  });
+  expect(target, 'TEST_INPUT_HARNESS_GAP node has no visible viewport intersection').not.toBeNull();
+  const sx = target.x;
+  const sy = target.y;
+  const ex = Math.min(target.viewport.width - 2, sx + 90);
+  const ey = Math.min(target.viewport.height - 2, sy + 70);
   const hit = await page.evaluate(({x,y}) => {
     const el = document.elementFromPoint(x,y);
     const node = el?.closest?.('[data-node]');
     return node ? { id: node.dataset.node, tag: el.tagName, cls: el.className } : null;
   }, {x:sx,y:sy});
-  expect(hit?.id, `TOUCH_COORDINATE_MISS ${JSON.stringify({nodeId,hit,sx,sy,box})}`).toBe(nodeId);
+  expect(hit?.id, `TOUCH_COORDINATE_MISS ${JSON.stringify({nodeId,hit,sx,sy,target})}`).toBe(nodeId);
 
   const before = await node.evaluate(el => ({ left: el.style.left, top: el.style.top }));
   const statsBefore = await page.evaluate(() => window.__YAIWES_TOUCH_DND_V192__?.getStats?.() || null);
@@ -112,7 +131,7 @@ async function touchDragNode(page) {
   const receivedStart = (statsAfter.pointerDown + statsAfter.touchStart) - (statsBefore.pointerDown + statsBefore.touchStart);
   const receivedMove = (statsAfter.pointerMove + statsAfter.touchMove) - (statsBefore.pointerMove + statsBefore.touchMove);
   const commits = statsAfter.commits - statsBefore.commits;
-  console.log(`V192_TOUCH_STATS=${JSON.stringify({before:statsBefore,after:statsAfter,receivedStart,receivedMove,commits,hit})}`);
+  console.log(`V192_TOUCH_STATS=${JSON.stringify({before:statsBefore,after:statsAfter,receivedStart,receivedMove,commits,hit,target})}`);
   expect(receivedStart, `TEST_INPUT_HARNESS_GAP no DOM start event ${JSON.stringify(statsAfter)}`).toBeGreaterThan(0);
   expect(receivedMove, `TEST_INPUT_HARNESS_GAP no DOM move event ${JSON.stringify(statsAfter)}`).toBeGreaterThan(0);
   expect(commits, `PRODUCT_TOUCH_COMMIT_GAP ${JSON.stringify(statsAfter)}`).toBeGreaterThan(0);
