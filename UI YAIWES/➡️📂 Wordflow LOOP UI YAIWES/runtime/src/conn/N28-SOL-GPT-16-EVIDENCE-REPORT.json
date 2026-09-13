@@ -1,0 +1,30 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N28-API-CONTROL",
+  "chat_id": "SOL GPT <16>",
+  "result": "PASS_TECHNICAL_VERIFIED_TRUSTED_DESCENDANT",
+  "claim_commit": "f99b30725ce66d2fdf3e2004358e90d8af3cb0e0",
+  "implementation_commit": "b2593d0fd7c003d2463fc0a7486d69e42106c9b0",
+  "implementation_blob": "ac81ca96f97663faddb03e9e712a498366eb543f",
+  "test_blob": "e21384df64a1bb6f18c043e526e54321586864fc",
+  "trusted_descendant_sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+  "run_id": 34739510224,
+  "job_id": 103678337638,
+  "tests": "Wordflow 41/41 PASS; runtime 206/206 PASS + 39 subtests PASS",
+  "evidence": [
+    "Current main api_control.py blob equals ac81ca96f97663faddb03e9e712a498366eb543f.",
+    "Current main test_integration_api_control.py blob equals e21384df64a1bb6f18c043e526e54321586864fc.",
+    "Trusted descendant CI checked out cf40e9cbde77fb663aa58c06701b9dedab46d43e and completed success.",
+    "API suite covers create/run/status/events streaming, cancel idempotency, repeat-run idempotency, pre-effect policy denial, authorizer failure, unknown operation, runtime GAP, undeclared capability and HTTP 403 no-effect.",
+    "Exact-head run 34743870595 was cancelled by swarm concurrency; no test failure was observed."
+  ],
+  "refutations": {
+    "schema_complete": "PASS",
+    "remaining_technical_gap": "PASS_NONE",
+    "evidence_100_pass": "PASS_TRUSTED_DESCENDANT_WITH_EXACT_CURRENT_BLOBS"
+  },
+  "remaining_gaps": [
+    "Central Crazy Wall reconciliation is outside N28 write_scope and must be performed by shared-state owner."
+  ],
+  "close_candidate": "VERIFIED_CLOSED"
+}
