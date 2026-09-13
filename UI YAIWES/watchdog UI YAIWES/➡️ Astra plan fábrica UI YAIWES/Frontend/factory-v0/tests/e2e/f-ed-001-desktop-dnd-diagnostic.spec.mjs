@@ -36,30 +36,46 @@ test('F-ED-001 desktop DnD diagnostic preserves real HTML5 contract', async ({ p
 
   const source = page.locator('[data-kind="window"]');
   const canvas = page.locator('#canvas');
-  const sourceInfo = await source.evaluate(el => ({ draggable: el.draggable, attr: el.getAttribute('draggable'), cls: el.className }));
+  const sourceInfo = await source.evaluate(el => {
+    const cs = getComputedStyle(el);
+    return { draggable: el.draggable, attr: el.getAttribute('draggable'), cls: el.className, pointerEvents: cs.pointerEvents, userSelect: cs.userSelect, webkitUserDrag: cs.webkitUserDrag || '' };
+  });
   const sourceBox = await source.boundingBox();
   const canvasBox = await canvas.boundingBox();
   expect(sourceInfo.draggable, `SOURCE_NOT_DRAGGABLE ${JSON.stringify(sourceInfo)}`).toBe(true);
   expect(sourceBox, 'SOURCE_BOX_MISSING').not.toBeNull();
   expect(canvasBox, 'CANVAS_BOX_MISSING').not.toBeNull();
 
-  const sx = sourceBox.x + sourceBox.width / 2;
-  const sy = sourceBox.y + sourceBox.height / 2;
-  const tx = canvasBox.x + Math.min(180, canvasBox.width * 0.35);
-  const ty = canvasBox.y + Math.min(160, canvasBox.height * 0.35);
+  // Strategy 3: begin inside card padding instead of its child-content center.
+  const sx = Math.round(sourceBox.x + Math.min(10, Math.max(3, sourceBox.width * 0.04)));
+  const sy = Math.round(sourceBox.y + Math.min(10, Math.max(3, sourceBox.height * 0.12)));
+  const tx = Math.round(canvasBox.x + Math.min(180, canvasBox.width * 0.35));
+  const ty = Math.round(canvasBox.y + Math.min(160, canvasBox.height * 0.35));
+  const startHit = await page.evaluate(({ x, y }) => {
+    const el = document.elementFromPoint(x, y);
+    const card = el?.closest?.('[data-kind]');
+    const cs = el ? getComputedStyle(el) : null;
+    return el ? { tag: el.tagName, cls: el.className, kind: card?.dataset?.kind || null, pointerEvents: cs?.pointerEvents || null } : null;
+  }, { x: sx, y: sy });
+  expect(startHit?.kind, `START_HIT_MISS ${JSON.stringify({ sx, sy, startHit, sourceInfo })}`).toBe('window');
+
   await page.mouse.move(sx, sy);
   await page.mouse.down();
-  await page.mouse.move(sx + 12, sy + 8, { steps: 4 });
-  await page.mouse.move(tx, ty, { steps: 24 });
+  await page.mouse.move(sx + 8, sy + 6, { steps: 8 });
+  await page.waitForTimeout(80);
+  await page.mouse.move(tx, ty, { steps: 36 });
+  await page.waitForTimeout(80);
   await page.mouse.up();
   await page.waitForTimeout(250);
 
-  const diag = await page.evaluate(source => ({
+  const diag = await page.evaluate(({ source, startHit, sx, sy, tx, ty }) => ({
     ...window.__F_ED_001_DND_DIAG__,
     source,
+    startHit,
+    gesture: { sx, sy, tx, ty },
     nodeCount: document.querySelectorAll('[data-node]').length,
     project: JSON.parse(localStorage.getItem('yaiwes-factory-project-v19') || 'null')
-  }), sourceInfo);
+  }), { source: sourceInfo, startHit, sx, sy, tx, ty });
   console.log(`F_ED_001_DESKTOP_DND_DIAG=${JSON.stringify(diag)}`);
 
   expect(diag.dragstart, `NO_DRAGSTART ${JSON.stringify(diag)}`).toBeGreaterThan(0);
