@@ -1,0 +1,33 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N16-CHECKPOINT-BYTES-HASH",
+  "chat_id": "SOL GPT <10>",
+  "result": "PASS_EVIDENCE_RECONCILIATION_NO_CODE_DELTA",
+  "reported_at": "2026-09-13T06:50:00Z",
+  "fresh_claim_commit": "13418e0dd9d73d2070497b9485757d098cbed0e8",
+  "implementation_commit": "f7e9af7d846000857005c342d042e0214edbf6c1",
+  "implementation_blob": "252b5b5bd47d082df4c2963e624c64990e160bb4",
+  "test_blob": "9631f9d112913d66836fab3f7c2627030bfac411",
+  "trusted_descendant": {
+    "sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+    "ancestor_compare": "ahead_by=506, behind_by=0, merge_base=f7e9af7d846000857005c342d042e0214edbf6c1",
+    "run_id": 34739510224,
+    "job_id": 103678337638,
+    "conclusion": "success",
+    "wordflow": "41 passed",
+    "runtime": "206 passed, 2 warnings, 39 subtests passed"
+  },
+  "tests": [
+    "checkpoint SHA256 validated before recovery effects",
+    "tampered checkpoint bytes rejected before FakeRecovery initialization",
+    "checkpoint read failure rejected before recovery",
+    "full trusted descendant runtime suite executed current unchanged N16 blobs"
+  ],
+  "refutations": {
+    "schema_complete": "PASS",
+    "gap_remaining": "PASS_NONE_FOR_N16",
+    "evidence_proves_close": "PASS"
+  },
+  "remaining_gaps": [],
+  "project_verified_closed": false
+}
