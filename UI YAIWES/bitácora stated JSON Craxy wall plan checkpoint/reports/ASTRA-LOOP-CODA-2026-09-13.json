@@ -666,9 +666,9 @@
     }
   ],
   "next": [
-    "N31 is FREE after N17 closure but belongs to UI factory; do not claim from backend watchdog.",
-    "Wait for N07/N10/N11/N13/N21/N25 owners; preserve claims regardless of age.",
-    "When N07 closes, reconcile N12; product remains open until N31 and all acquisition/integration nodes close with final requirement certification."
+    "N11/N21/N25 have exact-blob green CI evidence; their existing owners must report and close them.",
+    "N07/N10/N13 remain acquisition/integration claims; preserve ownership.",
+    "N31 is UI-only and FREE; N12 remains blocked on N07. No eligible backend node is currently FREE."
   ],
   "iterations": [
     {
@@ -1094,6 +1094,129 @@
         "Injected deterministic callbacks.",
         "No 100x claim."
       ]
+    },
+    {
+      "at": "2026-09-13T11:28:00Z",
+      "node": "WATCHDOG-FOREIGN-CLAIM-EVIDENCE-AUDIT",
+      "scope": "Read-only verification plus own checkpoint; no foreign node mutation",
+      "status": "PASS_EVIDENCE_FOUND_OWNERS_MUST_RECONCILE",
+      "queue": {
+        "blob": "1d7bff16329efdf7bf7d31a5b8883f01fb4a2e25",
+        "verified_closed": 25,
+        "claimed": 6,
+        "blocked": 1,
+        "free_ui_only": [
+          "N31-UI-FINAL"
+        ]
+      },
+      "certified_ci": {
+        "run": 34747264318,
+        "job": 103697357720,
+        "sha": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
+        "conclusion": "success",
+        "wordflow": 41,
+        "runtime": 272,
+        "subtests": 42,
+        "warnings": 2
+      },
+      "foreign_claim_evidence": [
+        {
+          "node": "N11-BIG-AGI-SOURCE-INTEGRATION",
+          "owner": "sol 8 gpt",
+          "code_blob": "9d20caab288ad00fa429288e82a39caabc0c1ab3",
+          "test_blob": "61d7263b27462396fb3c5f94a933d41eeb85db99",
+          "test_cases": 5,
+          "exact_in_certified_ci": true,
+          "next": "Owner must persist report/terminal CAS; Astra does not close foreign claim."
+        },
+        {
+          "node": "N21-WORKER-ADAPTER",
+          "owner": "sol 3 gpt",
+          "code_blob": "f509a1380b3ba099e0ff5079ce94bd89b05db34c",
+          "test_blob": "32a7e0a5bae0c6383c5d04a91bbcb7c26fed1705",
+          "test_cases": 4,
+          "exact_in_certified_ci": true,
+          "next": "Owner must persist report/terminal CAS; Astra does not close foreign claim."
+        },
+        {
+          "node": "N25-RESOURCE-BRAIN",
+          "owner": "sol-5-gpt",
+          "code_blob": "bc5c0f62118ff40e4fb2d32d7d991be5219f6bbd",
+          "test_blob": "76d718097ee5c964dff17475001cc953e34d85da",
+          "test_cases": 6,
+          "exact_in_certified_ci": true,
+          "next": "Owner must persist report/terminal CAS; Astra does not close foreign claim."
+        }
+      ],
+      "five_passes": [
+        "Fresh queue and own checkpoint read.",
+        "Recent commits for all six foreign claims searched.",
+        "N11/N21/N25 implementation and tests inspected by path/test method.",
+        "Exact current blobs compared to successful CI revision.",
+        "Foreign ownership preserved; evidence recorded without terminal mutation."
+      ],
+      "entry_goals_12": [
+        "PASS repo/main",
+        "PASS queue",
+        "PASS checkpoint",
+        "PASS roles",
+        "PASS node scopes",
+        "PASS claim states",
+        "PASS commit search",
+        "PASS code paths",
+        "PASS tests",
+        "PASS CI run",
+        "PASS blob identity",
+        "PASS no stale-lock assumption"
+      ],
+      "exit_goals_12": [
+        "PASS no foreign writes",
+        "PASS N11 evidence",
+        "PASS N21 evidence",
+        "PASS N25 evidence",
+        "PASS exact blobs",
+        "PASS CI counts",
+        "PASS owners retained",
+        "PASS N31 not claimed",
+        "PASS N12 dependency retained",
+        "PASS real/simulated separated",
+        "PASS no 100x claim",
+        "PASS checkpoint CAS"
+      ],
+      "council_12": {
+        "method": "Single-agent analytical review, not twelve independent model calls.",
+        "steps": [
+          "Objective",
+          "Authority",
+          "Ownership",
+          "Freshness",
+          "Commit evidence",
+          "Code evidence",
+          "Test evidence",
+          "CI evidence",
+          "Hash identity",
+          "Collision safety",
+          "Remaining gaps",
+          "Verdict"
+        ],
+        "verdict": "EVIDENCE_READY_BUT_FOREIGN_CLAIMS_STILL_OPEN"
+      },
+      "refutations_3": [
+        "Merged code plus green CI does not authorize Astra to close another owner's active claim.",
+        "Claim age does not permit takeover.",
+        "N31 FREE is not eligible for this backend watchdog because its scope is UI factory only."
+      ],
+      "gaps": [
+        "N07 Vite, N10 AVF and N13 Vercel AI SDK still lack newer terminal commits in the searched evidence.",
+        "N11/N21/N25 need owner report, remaining-gap declaration and terminal CAS.",
+        "N12 remains blocked by N07; N31 awaits UI factory.",
+        "Global requirement certification must be rerun after terminal reconciliation."
+      ],
+      "next": [
+        "Wait for owners to close N07/N10/N11/N13/N21/N25.",
+        "When N07 closes, unblock N12 through fresh queue CAS.",
+        "Do not claim N31 from backend; UI factory must execute deployed browser acceptance."
+      ]
     }
   ],
   "last_node": "N27-CONTINUOUS-LOOP",
@@ -1106,5 +1229,6 @@
     "free": [
       "N31-UI-FINAL"
     ]
-  }
+  },
+  "last_audit_at": "2026-09-13T11:28:00Z"
 }
