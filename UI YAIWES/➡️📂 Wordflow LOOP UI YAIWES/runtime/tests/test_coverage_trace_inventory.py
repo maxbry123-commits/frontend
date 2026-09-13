@@ -72,3 +72,13 @@ def test_malformed_unknown_and_duplicate_traces_fail_closed(tmp_path, rows, erro
 
     with pytest.raises(ValueError, match=error):
         load_trace_inventory(tmp_path, ("REQ-S3-057",))
+
+
+def test_trace_filename_must_match_requirement_identity(tmp_path):
+    (tmp_path / "REQ-S3-999.json").write_text(
+        json.dumps(_trace("REQ-S3-057")),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="trace_filename_mismatch"):
+        load_trace_inventory(tmp_path, ("REQ-S3-057",))
