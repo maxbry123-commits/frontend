@@ -1,0 +1,39 @@
+{
+  "schema": "yaiwes.node.report.v1",
+  "contract": "tel.workflow/v3",
+  "chat_id": "WATCHDOG-COMPONENT-CLOSURE",
+  "node_id": "N07-VITE-ACQUIRE",
+  "report_state": "GAP_RESOLVABLE_RELEASED",
+  "source": {
+    "repo": "vitejs/vite",
+    "ref": "v8.3.0",
+    "commit": "434e8e9495436a60789f2b588a04a6a24a3d1661",
+    "destination": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/vendor/vite"
+  },
+  "canonical_motor": {
+    "motor2_blob": "84d566e2ee4e98e42eb3a864026d067d48caabd9",
+    "engine_blob": "91e6e4486692eab314be5c7130d8310d3c855397",
+    "immutability_verified": true
+  },
+  "ci": {
+    "run_id": 34732661919,
+    "job_id": 103658218081,
+    "conclusion": "failure",
+    "expected_fail_closed": true
+  },
+  "failure": {
+    "class": "SOURCE_SPECIAL_FILE_GAP",
+    "paths": [
+      "packages/vite/src/node/__tests__/fixtures/config/root-resolution/link",
+      "playground/preserve-symlinks/module-a/linked.js",
+      "playground/ssr-wasm/src/add.wasm",
+      "playground/ssr-wasm/src/imports.js",
+      "playground/ssr-wasm/src/light-with-imports.wasm"
+    ]
+  },
+  "refutation": "No sanitization, mirror, LFS, force, alternate motor or mutation of canonical motor is authorized. Current official full source cannot be promoted to SOURCE_PRESENT through the canonical motor.",
+  "result": "N07 not closed; released as GAP_RESOLVABLE for a materially different official-source/equivalence StrategyDelta.",
+  "owner": null,
+  "state": "GAP_RESOLVABLE",
+  "next_component_node": "N13-VERCEL-AI-SDK-SOURCE-INTEGRATION"
+}
