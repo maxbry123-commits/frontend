@@ -32,10 +32,24 @@
   "nodes": [
     {
       "id": "FACTORY-E01-EDITOR-STABILITY",
-      "state": "FREE",
+      "state": "ACTIVE_TEST",
+      "owner": "ASTRA_GPT",
       "preferred_lane": "ASTRA_GPT",
       "task": "Resolve or refute drag/drop, move, selection and state-loss regressions; keep canvas visible and one touch-scroll contextual panel.",
-      "write_scope": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v*/**",
+      "write_scope": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v*/** + exact V1.9 test workflow claim extension",
+      "candidate": {
+        "version": "V1.9",
+        "entrypoint": "factory-v0/index-v19.html",
+        "runtime": "factory-v0/src/app-v19.js",
+        "test": "factory-v0/tests/e2e/factory-v19-local-50-cycle.spec.mjs",
+        "workflow_head": "b20fed0213b5f853009a28e6dcf3c54ee2b65633",
+        "workflow_run": 34731651016,
+        "status": "IN_PROGRESS"
+      },
+      "classified_v18_failures": {
+        "product": ["context scroll forced/reset and nested scroll surface", "project state not restored after reload", "no touch/pen movement path for nodes"],
+        "test_harness": ["unscoped breakpoint selector matched button and canvas"]
+      },
       "done_evidence": ["code_diff", "interaction_tests", "reload_test", "mobile_touch_test"]
     },
     {
@@ -80,7 +94,7 @@
     }
   ],
   "known_gaps": [
-    "EDITOR_STABILITY_NOT_PROVEN",
+    "EDITOR_STABILITY_V19_TEST_RUNNING",
     "CONTROL_EFFECTS_NOT_FULLY_PROVEN",
     "OSS_PRESENT_VS_WIRED_NOT_RECONCILED",
     "AI_IMPORT_FULL_E2E_PENDING",
@@ -88,6 +102,16 @@
     "EXACT_COMMIT_50X_LOCAL_AND_WEB_PENDING",
     "PREVIOUS_HANDOFF_STATE_CLOSURE_CONTRADICTION"
   ],
+  "oss_candidates": [
+    {
+      "name": "dnd-kit",
+      "state": "CONDITIONAL_RESEARCH_CANDIDATE_NO_DOWNLOAD",
+      "trigger": "only if V1.9 native Pointer Events touch-move fails reproducibly",
+      "owner_if_triggered": "SOL_GPT",
+      "policy": "dedup + license + source/ref + canonical motor only"
+    }
+  ],
   "component_download_policy": "Sol nodes may add missing OSS candidates only after dedup and requirement proof; Astra records candidate/gap, source and target; canonical motors perform acquisition/extraction/copy/move; integration still requires adapter/plugin plus runtime evidence.",
-  "updated_at": "2026-09-12T20:32:00-05:00"
+  "evidence": "factory-v0/project-memory/FACTORY-E01-V19-STABILITY-DELTA-2026-09-12.json",
+  "updated_at": "2026-09-12T20:57:00-05:00"
 }
