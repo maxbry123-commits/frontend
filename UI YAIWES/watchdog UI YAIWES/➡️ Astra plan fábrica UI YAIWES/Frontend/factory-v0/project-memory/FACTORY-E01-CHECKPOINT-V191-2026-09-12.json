@@ -1,0 +1,44 @@
+{
+  "schema": "yaiwes.factory.e01.checkpoint.v1",
+  "node": "FACTORY-E01-EDITOR-STABILITY",
+  "owner": "ASTRA_GPT",
+  "status": "ACTIVE_TEST_V1_9_1",
+  "resume_rule": "Read this checkpoint, then read current main and Crazy Wall before any write.",
+  "versions": {
+    "V1.8": "published baseline; 50x live failure classified",
+    "V1.9": "preserved failed candidate; desktop reached 31 complete cycles before harness timeout; touch move failed",
+    "V1.9.1": "active candidate; additive touch adapter + corrected test timeout"
+  },
+  "v19_run": {
+    "run_id": 34731843180,
+    "head_sha": "f081c41586eb018dfeea7615240964564d2f9132",
+    "conclusion": "failure",
+    "classification": {
+      "TEST_HARNESS_TIMEOUT": "desktop loop produced cycles 1..31 PASS then exceeded 30s global Playwright timeout while waiting on #undo; does not prove undo failure",
+      "PRODUCT_OR_INPUT_GAP": "mobile synthetic touch sequence left node position unchanged; requires product fallback/refutation"
+    },
+    "artifact_id": 10310185962,
+    "artifact_sha256": "52d51447921c288a1a1564bd55cb75409ab7f64c307c30ee1c7df1470afc3f21"
+  },
+  "v191_delta": {
+    "touch_adapter_commit": "564709e269680f3977d0dbe8e93bbb5e26f95c77",
+    "entrypoint_commit": "1f3489e1422f0344b15470ef379431cc4934d29d",
+    "test_commit": "19c6903357513cf3ce0ea64644b78f9600adc1e9",
+    "gate_commit": "8e345e29efa255ffd511d3badfedeeae61f467cb",
+    "entrypoint": "index-v191.html",
+    "touch_adapter": "src/touch-dnd-v191.js",
+    "test": "tests/e2e/factory-v191-local-50-cycle.spec.mjs",
+    "design": "adapter reuses existing canvas drop contract; no second state engine; no new OSS dependency"
+  },
+  "active_gate": {
+    "run_id": 34732062528,
+    "head_sha": "8e345e29efa255ffd511d3badfedeeae61f467cb",
+    "required": ["50/50 desktop", "mobile touch move", "mobile move survives reload", "single contextual scroll"],
+    "publish_allowed": false
+  },
+  "oss": {
+    "new_download": "NONE",
+    "dnd-kit": "CONDITIONAL_ONLY_IF_NATIVE_V191_FAILS_AFTER_TRACE_REVIEW"
+  },
+  "next": "Read run 34732062528. PASS -> persist evidence and prepare exact-candidate publish gate. FAIL -> classify log/trace as harness/product and apply StrategyDelta inside E01 only."
+}
