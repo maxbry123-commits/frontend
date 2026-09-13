@@ -2,10 +2,14 @@
   "schema": "yaiwes.astra.crosscheck.v1",
   "contract": "tel.workflow/v3",
   "owner": "ASTRA_CROSSCHECK",
-  "node_id": "ASTRA-XRAY-SCANNER-002",
+  "node_id": "ASTRA-PREFLIGHT-SCOPE-003",
   "status": "ACTIVE_LOOP",
-  "base_sha": "eea36873646ba0f79fa9ed55a4cd7fd724a5110d",
-  "write_scope": [],
+  "base_sha": "66c25ccfc44d26c1b30c10c6c002a5c686c3f701",
+  "write_scope": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/governance/sheriff.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_preflight_scope.py",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-PREFLIGHT-SCOPE-003.json"
+  ],
   "assertion": "Valida trazabilidad completa y CI real del auditor sin asumir cierre.",
   "evidence": {
     "patch": "342d9c25aee96793f8566194c327c5b9d8ae561e",
@@ -16,7 +20,7 @@
   },
   "audit_status": "INCOMPLETE",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
-  "current_node": "X17-11",
+  "current_node": "ASTRA-PREFLIGHT-SCOPE-003",
   "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-XRAY-GAP-NODES-17-2026-09-12.json",
   "remaining": [
     "Mapeo semántico de candidatos",
