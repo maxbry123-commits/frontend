@@ -648,7 +648,7 @@
     {
       "n": 17,
       "id": "N17-FULL-PRODUCT-E2E",
-      "state": "CLAIMED",
+      "state": "VERIFIED_CLOSED",
       "owner": "ASTRA_GPT",
       "title": "UI→API/Fables→ejecución→memoria→recovery→respuesta",
       "scope": "runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*|E2E",
@@ -670,7 +670,34 @@
       "node_id": "N17-FULL-PRODUCT-E2E",
       "fresh_main_sha": "9113f9da82af1fd575882bee614eb5cf6500051f",
       "write_scope": "runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*|E2E|Crazy Wall N17/report Astra only",
-      "claimed_at": "2026-09-13T10:38:00Z"
+      "claimed_at": "2026-09-13T10:38:00Z",
+      "report_state": "PASS_RECONCILED_FROM_DESCENDANT_CI",
+      "reported_at": "2026-09-13T10:50:00Z",
+      "paths_changed": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_integration_full_product_e2e.py",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-N17-FULL-PRODUCT-E2E-2026-09-13.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "3575498bb8e89501336358137c52d3c2f24ed7f7",
+      "report_commit_sha": "7dfed22c7a2b9efa9b476148c8a914df6b2612ff",
+      "certified_sha": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
+      "blob_sha": "test_integration_full_product_e2e.py=07adc1b939d97090a3ba36ef7ee7efa6f73dc649|api_control.py=ac81ca96f97663faddb03e9e712a498366eb543f|integration_state.py=511d4eabd0bb2d419bea4f707e87273d8ae1ccac",
+      "tests": "descendant CI run 34747264318 job 103697357720 SUCCESS: Wordflow 41 PASS; runtime 272 PASS + 42 subtests PASS; N17 test and nine supporting blobs exact-match current main",
+      "run_id": 34747264318,
+      "job_id": 103697357720,
+      "evidence": [
+        "existing N17 test reused; no duplicate runtime/orchestrator",
+        "ASGI API -> ControlPlane -> Fables -> memory provenance -> checkpoint recovery -> chat/window/file response",
+        "tamper rejects before answer effect; repeat run is idempotent",
+        "API suite covers cancellation and no duplicate effect",
+        "ten exact blobs at certified SHA match current main"
+      ],
+      "remaining_gaps": [],
+      "limitations": [
+        "Backend in-process E2E only; no deployed browser/DOM or real platform sandbox.",
+        "Global product closure remains open pending external UI/platform acceptance and full certification."
+      ],
+      "next_free_node": "N27-CONTINUOUS-LOOP"
     },
     {
       "n": 18,
