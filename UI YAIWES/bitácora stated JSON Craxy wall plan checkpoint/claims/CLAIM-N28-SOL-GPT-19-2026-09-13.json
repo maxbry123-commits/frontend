@@ -1,12 +1,38 @@
 {
   "schema": "tel.workflow/v3.claim",
-  "state": "IN_PROGRESS",
+  "state": "VERIFIED_CLOSED_SIDEcar",
   "chat_id": "SOL GPT <19>",
   "node_id": "N28-API-CONTROL",
   "fresh_main_sha": "e3d86ac3accd8520efcb52ebcd1e1d295a6a21b6",
   "write_scope": "runtime/src/conn/**|runtime/src/integration/**|runtime/tests/test_integration*",
   "claimed_at": "2026-09-13T07:00:00Z",
-  "authority": "Crazy Wall fresh read at e3d86ac3accd8520efcb52ebcd1e1d295a6a21b6: N28 GAP_RESOLVABLE; repository search found no active N28 claim sidecar.",
+  "reported_at": "2026-09-13T07:00:00Z",
+  "authority": "Crazy Wall fresh read: N28 GAP_RESOLVABLE; claim acquired collision-safe after a 409 retry on advancing main.",
   "strategy": "RECONCILE_CODE_AND_TRUSTED_CI_BEFORE_PATCH",
-  "collision_guard": "No writes outside N28 scope; fresh read before every write."
+  "paths_verified": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/conn/api_control.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_integration_api_control.py"
+  ],
+  "blob_sha": {
+    "api_control.py": "ac81ca96f97663faddb03e9e712a498366eb543f",
+    "test_integration_api_control.py": "e21384df64a1bb6f18c043e526e54321586864fc"
+  },
+  "trusted_ci": {
+    "run_id": 34742769854,
+    "job_id": 103685181927,
+    "head_sha": "54436297718fc33a64128002f96569250fe56579",
+    "status": "completed",
+    "conclusion": "success",
+    "wordflow": "41 passed",
+    "runtime": "238 passed",
+    "subtests": "39 passed"
+  },
+  "refutations": [
+    "schema steps satisfied: existing donor/runtime boundary verified before patch; no duplicate scheduler/orchestrator introduced",
+    "no remaining N28 runtime gap: current blobs equal Crazy Wall registered blobs and were included by sparse-checkout runtime/src + runtime/tests in trusted successful CI",
+    "evidence proves pass: exact checkout SHA logged; pytest runtime suite completed 238 passed + 39 subtests; only N06 warnings"
+  ],
+  "remaining_gaps": [],
+  "result": "N28 technical close PASS by trusted descendant CI with exact N28 blob identity; central Crazy Wall readback still required before treating queue state as reconciled.",
+  "collision_guard": "No runtime patch was necessary; reuse existing implementation and trusted CI evidence."
 }
