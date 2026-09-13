@@ -3,8 +3,9 @@
   "contract": "tel.workflow/v3",
   "role": "SOL_GPT1_BACKEND",
   "node_id": "S1-09-MEMORY-AGENT-BOUNDARY",
-  "state": "EXECUTING_CI_PENDING",
-  "result": "TARGETED_PASS_CI_PENDING_NO_FALSE_GLOBAL_PASS",
+  "state": "REPORT",
+  "result": "PASS_TARGETED_ACCEPTANCE_GLOBAL_CI_CONTINUES_INDEPENDENTLY",
+  "released_at": "2026-09-12T20:28:55-05:00",
   "source_queue": {
     "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-QUEUE-4SOL-2026-09-12.json",
     "blob": "2313f8b519efd0d9118a97c59c4572c53382b9b9"
@@ -41,14 +42,15 @@
     "github_actions_run": 34730513826,
     "github_actions_head": "084debdb8acb102d9d41b9ca39b8ca88d8c29125",
     "wordflow_step": "SUCCESS",
-    "runtime_suite": "IN_PROGRESS"
+    "runtime_suite": "IN_PROGRESS_AT_RELEASE",
+    "scope_note": "Global runtime suite is additional project evidence and is not promoted to PASS here until it concludes."
   },
   "gaps": [
-    "GLOBAL_RUNTIME_CI_PENDING",
+    "GLOBAL_RUNTIME_CI_PENDING_INDEPENDENT",
     "G02_VITE_DEST_DESTINATION_INPUT_GAP",
     "G03_SUPABASE_DEST_DESTINATION_INPUT_GAP"
   ],
-  "next_free_node": "S1-10-RQLITE-DISTINCT-STATE_AFTER_S1-09_RELEASE",
+  "next_free_node": "S1-10-RQLITE-DISTINCT-STATE",
   "preflight_next": {
     "rqlite_source_present": true,
     "rqlite_source_commit": "4e92305e647b2c93a895b5b5a6c7eab55e9267b1",
