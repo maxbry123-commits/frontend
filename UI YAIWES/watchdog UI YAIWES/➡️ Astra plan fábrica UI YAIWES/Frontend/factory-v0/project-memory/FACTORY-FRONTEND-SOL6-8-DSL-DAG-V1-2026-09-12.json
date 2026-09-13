@@ -1,0 +1,95 @@
+{
+  "schema": "yaiwes.factory.frontend-sol6-8.dsl-dag.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "queue": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-FRONTEND-SOL6-8-V1-2026-09-12.json",
+  "base_queue": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-DYNAMIC-V2-2026-09-12.json",
+  "scheduler": "100_PERCENT_RULE_BASED",
+  "llm_scheduler_share": 0,
+  "lane": "FRONTEND_INTERFACE_ONLY",
+  "workers": ["SOL 6 GPT","SOL 7 GPT","SOL 8 GPT"],
+  "max_parallel_workers": 3,
+  "selection_rule": {
+    "SOL 6 GPT": ["F-UI-045","F-UI-046"],
+    "SOL 7 GPT": ["F-UI-047","F-UI-048"],
+    "SOL 8 GPT": ["F-UI-049","F-UI-050"]
+  },
+  "sort": ["priority ASC","node_id ASC"],
+  "claim_predicate": [
+    "worker is one of SOL 6 GPT, SOL 7 GPT, SOL 8 GPT",
+    "node is in worker selection_rule or explicitly reassigned within F-UI-045..050",
+    "node.state in {FREE,FREE_VERIFY,GAP_RESOLVABLE}",
+    "all dependencies are PASS or VERIFIED_CLOSED",
+    "fresh main HEAD observed immediately before claim",
+    "queue blob SHA fresh immediately before claim",
+    "no active node overlaps resolved write_scope"
+  ],
+  "claim_algorithm": [
+    "READ frontend main HEAD",
+    "READ frontend lane Crazy Wall + base Crazy Wall",
+    "READ active claims from SOL 1..8",
+    "FILTER by worker reservation and allowed state",
+    "SORT priority ASC then node_id ASC",
+    "RESOLVE exact write paths in frontend and optional router repo",
+    "RECHECK cross-repo path collision",
+    "WRITE CLAIM with worker+node+repo+fresh SHA+paths",
+    "READBACK CLAIM",
+    "IF stale/conflict THEN restart"
+  ],
+  "microflow": {
+    "step_1_VERIFY_RESEARCH": [
+      "read literal node requirement",
+      "read fresh frontend Factory code/tests",
+      "read base Crazy Wall/STATE/CHECKPOINT",
+      "audit existing OSS/components before new dependency",
+      "for F-UI-049 read Router Universal repo fresh",
+      "for F-UI-050 verify Hugging Face identity/scopes and Jobs capability",
+      "reproduce/classify current gap",
+      "resolve exact non-overlapping write_scope"
+    ],
+    "step_2_EXECUTE_DELTA": {
+      "strategy": ["REUSE_EXISTING","PATCH","ADAPT","GENERATE","NEW_DOWNLOAD"],
+      "constraints": [
+        "frontend/interface only",
+        "no second state engine",
+        "no second editor",
+        "no secret in browser/repo/log",
+        "router writes only for demonstrated frontend contract/status gap",
+        "HF write/token use only by secret_ref after runtime scope validation"
+      ]
+    },
+    "step_3_TEST_REPORT": [
+      "specific test",
+      "integration/browser test when applicable",
+      "desktop+mobile/touch for visual interaction",
+      "readback",
+      "commit/blob SHA",
+      "GitHub Action run/job or HF Job id/log when applicable",
+      "3 simulations",
+      "3 refutations",
+      "PASS_PENDING_REVIEW or GAP",
+      "update lane Crazy Wall"
+    ]
+  },
+  "repos": {
+    "frontend": "maxbry123-commits/frontend",
+    "router": "maxbry123-commits/router-universal-router-inteligente-",
+    "hugging_face_account": "COMAND-CENTER-1"
+  },
+  "hf_gate": {
+    "connector_current_verified": ["jobs","read-repos"],
+    "user_declared_full_access_secret": "SECRET_REF_ONLY__NOT_EXPOSED",
+    "before_write_or_publish": "validate effective scope at runtime",
+    "jobs_allowed": ["run","uv","ps","logs","inspect","cancel"],
+    "forbidden": ["raw token in source", "token in browser bundle", "token in logs", "claiming unverified scope"]
+  },
+  "node_edges": [
+    ["F-UI-045","F-INT-035"],
+    ["F-UI-046","F-INT-035"],
+    ["F-UI-047","F-INT-035"],
+    ["F-UI-048","F-INT-035"],
+    ["F-UI-049","F-AI-024"],
+    ["F-UI-050","F-QA-041"]
+  ],
+  "completion": "No node is VERIFIED_CLOSED by its producer. Minimum worker terminal state is PASS_PENDING_REVIEW with reproducible evidence."
+}
