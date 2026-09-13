@@ -1,9 +1,9 @@
 {
   "schema": "yaiwes.factory.sol.loop-node.v1",
   "node_id": "SOL_FACTORY_B_T1_OSS_BACKEND_DONOR_REVIEW",
-  "owner": "SOL_GPT_ENV_B",
+  "owner": "SOL 2 GPT 🆘",
   "reviewer": "ASTRA",
-  "status": "READY_TO_CLAIM",
+  "status": "CLAIMED",
   "gate": "T1_FACTORY_FRONTEND",
   "task": "Review one existing OSS component as a backend donor candidate for the factory/interface boundary, without starting T2 or writing Sol production backend.",
   "max_steps": 3,
@@ -12,6 +12,20 @@
     "2_EXECUTE: classify the minimum reusable backend capability, source/ref/license and adapter boundary; stage only evidence/spec under project-memory.",
     "3_REPORT: record frontend/backend destination recommendation, test needed, GAPs and provenance; no presence-only PASS and no production backend write."
   ],
+  "claim": {
+    "chat_id": "SOL-2-GPT-2026-09-12T21:44-05:00",
+    "agent_name": "SOL 2 GPT 🆘",
+    "node_id": "SOL_FACTORY_B_T1_OSS_BACKEND_DONOR_REVIEW",
+    "fresh_main_sha": "f8c75ae5d182f0074408db38ec80b85c37db0a94",
+    "base_sha": "f8c75ae5d182f0074408db38ec80b85c37db0a94",
+    "write_scope": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-B.json only",
+    "paths": ["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-B.json"],
+    "claimed_at": "2026-09-12T21:46:30-05:00",
+    "state": "CLAIMED"
+  },
+  "goals12_input": {
+    "G01":"PASS literal node preserved","G02":"PASS fresh main read","G03":"PASS Crazy Wall/STATE/CHECKPOINT/project-memory read","G04":"PASS node READY_TO_CLAIM; distinct path from SOL1/SOL3/SOL6","G05":"PENDING donor dedup","G06":"PASS reuse-first","G07":"PENDING evidence-only delta","G08":"PENDING provenance validation","G09":"N/A no production integration in this node","G10":"PENDING 3 simulations/refutations","G11":"PENDING SHA/readback","G12":"PENDING reconcile after report"
+  },
   "allowed_write_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/",
   "backend_destination_after_handoff": "UI YAIWES interface/Backend/",
   "frontend_destination_after_handoff": "UI YAIWES interface/Fromtend/",
