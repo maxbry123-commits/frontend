@@ -1,0 +1,30 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N04-STATE-RECONCILIATION",
+  "chat_id": "SOL GPT <20>",
+  "state": "GAP",
+  "report_state": "GAP_CRAZY_WALL_DELTA_REQUIRED",
+  "claim_commit": "4a3615bf63c34f3e6ab9e40cd3a1dd26c8594b43",
+  "verified_head": "4d614d18cfa7dff6c0d6248c05855f66a42b3aec",
+  "evidence": {
+    "state_blob": "8238a9f1f664e4ed88f11ae46f3aa8f9bffb5044",
+    "checkpoint_blob": "9c68b1bf641463ef2933c0b83e4173e85b67ed05",
+    "handoff_blob": "fafc8eeed180fd9e37e631d66e0d155b20cd2f04",
+    "crazy_wall_blob": "0101749745fcbf9a6ab7ba299dcd7e78bbc59492"
+  },
+  "tests": [
+    "STATE readback: N04 reconciliation present; N02/N03 VERIFIED_CLOSED; project remains open",
+    "CHECKPOINT readback: same authority/dependencies/project-open semantics",
+    "HANDOFF readback: same authority/dependencies/project-open semantics and explicit N04 closure rule",
+    "Crazy Wall readback: N04 remains FREE, therefore four-way reconciliation is not yet identical"
+  ],
+  "refutations": [
+    "schema complete? NO: Crazy Wall still disagrees with the other three sources",
+    "remaining GAP? YES: authoritative N04 state field requires synchronized delta",
+    "100 PASS evidence? NO: fail-closed because one of four required sources differs"
+  ],
+  "remaining_gaps": [
+    "Update only N04 entry in Crazy Wall to VERIFIED_CLOSED with reconciled evidence while preserving all concurrent node state."
+  ],
+  "next_action": "release N04 as unresolved reconciliation GAP; do not fabricate 100 PASS"
+}
