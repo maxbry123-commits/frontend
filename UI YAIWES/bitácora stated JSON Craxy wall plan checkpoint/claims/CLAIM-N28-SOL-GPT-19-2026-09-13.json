@@ -1,13 +1,12 @@
 {
   "schema": "tel.workflow/v3.claim",
-  "state": "VERIFIED_CLOSED_SIDEcar",
+  "state": "GAP_RELEASED_FAIL_CLOSED",
   "chat_id": "SOL GPT <19>",
   "node_id": "N28-API-CONTROL",
   "fresh_main_sha": "e3d86ac3accd8520efcb52ebcd1e1d295a6a21b6",
   "write_scope": "runtime/src/conn/**|runtime/src/integration/**|runtime/tests/test_integration*",
   "claimed_at": "2026-09-13T07:00:00Z",
-  "reported_at": "2026-09-13T07:00:00Z",
-  "authority": "Crazy Wall fresh read: N28 GAP_RESOLVABLE; claim acquired collision-safe after a 409 retry on advancing main.",
+  "released_at": "2026-09-13T07:00:00Z",
   "strategy": "RECONCILE_CODE_AND_TRUSTED_CI_BEFORE_PATCH",
   "paths_verified": [
     "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/conn/api_control.py",
@@ -28,11 +27,13 @@
     "subtests": "39 passed"
   },
   "refutations": [
-    "schema steps satisfied: existing donor/runtime boundary verified before patch; no duplicate scheduler/orchestrator introduced",
-    "no remaining N28 runtime gap: current blobs equal Crazy Wall registered blobs and were included by sparse-checkout runtime/src + runtime/tests in trusted successful CI",
-    "evidence proves pass: exact checkout SHA logged; pytest runtime suite completed 238 passed + 39 subtests; only N06 warnings"
+    "schema implementation and auth/stream/cancel/status behavior covered by current exact test blob",
+    "technical gaps resolved by trusted successful descendant CI with exact N28 blob identity",
+    "authoritative central Crazy Wall still says GAP_RESOLVABLE with obsolete CI gaps, so global closure is refused fail-closed"
   ],
-  "remaining_gaps": [],
-  "result": "N28 technical close PASS by trusted descendant CI with exact N28 blob identity; central Crazy Wall readback still required before treating queue state as reconciled.",
-  "collision_guard": "No runtime patch was necessary; reuse existing implementation and trusted CI evidence."
+  "remaining_gaps": [
+    "central Crazy Wall N28 row must be reconciled by shared-state owner/CAS-safe writer"
+  ],
+  "result": "TECHNICAL_PASS_CENTRAL_STATE_GAP",
+  "next_action": "released for shared-state reconciliation; SOL GPT <19> proceeds to next independent FREE/GAP_RESOLVABLE node"
 }
