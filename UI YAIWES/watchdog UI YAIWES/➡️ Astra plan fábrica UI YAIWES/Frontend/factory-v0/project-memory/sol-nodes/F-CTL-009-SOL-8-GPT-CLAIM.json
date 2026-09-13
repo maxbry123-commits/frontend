@@ -1,18 +1,21 @@
 {
-  "schema": "yaiwes.factory.sol.claim.v1",
-  "contract": "tel.workflow/v3",
-  "chat_id": "SOL-8-GPT-2026-09-12T21:55-05:00",
-  "agent_name": "SOL 8 GPT 🆘",
-  "node_id": "F-CTL-009",
-  "fresh_main_sha": "d39503b37cdd1e435022fea782d2068259a15738",
-  "base_sha": "d39503b37cdd1e435022fea782d2068259a15738",
-  "write_scope": "Frontend/factory-v0/tests/e2e/f-ctl-009-zoom-fit-minimap.spec.mjs + this claim/report only unless a product GAP is proven and scope is revalidated against fresh main",
-  "paths": [
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ctl-009-zoom-fit-minimap.spec.mjs",
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-CTL-009-SOL-8-GPT-CLAIM.json"
-  ],
-  "claimed_at": "2026-09-13T02:55:20Z",
-  "state": "CLAIMED",
-  "assertion_to_validate": "Zoom/Fit View/minimap controls produce reproducible real viewport effects; no decorative/dead controls.",
-  "acceptance": "viewport changes reproducibly and evidence distinguishes product failure from harness failure"
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "chat_id":"SOL-8-GPT-2026-09-12T21:55-05:00",
+  "agent_name":"SOL 8 GPT 🆘",
+  "node_id":"F-CTL-009",
+  "fresh_main_sha":"37bbc063f41cba6ca7c0480c54a2c67dd9f20390",
+  "base_sha":"d39503b37cdd1e435022fea782d2068259a15738",
+  "write_scope":"RELEASED after exact-SHA test completion; no active writer lock remains",
+  "paths":[],
+  "claimed_at":"2026-09-13T02:55:20Z",
+  "released_at":"2026-09-13T03:23:22Z",
+  "state":"PASS_RELEASED",
+  "assertion_to_validate":"Zoom/Fit View/minimap controls produce reproducible real viewport effects; no decorative/dead controls.",
+  "acceptance":"PASS",
+  "tested_sha":"d30270d78318320068a2de35c7e680d3762ab8d3",
+  "run_id":34735254160,
+  "job_id":103665418340,
+  "report_commit":"37bbc063f41cba6ca7c0480c54a2c67dd9f20390",
+  "result":"100_PASS_NODE_LEVEL"
 }
