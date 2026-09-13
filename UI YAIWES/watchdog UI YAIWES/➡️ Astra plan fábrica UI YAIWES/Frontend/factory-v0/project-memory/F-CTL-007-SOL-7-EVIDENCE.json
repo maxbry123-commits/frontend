@@ -1,0 +1,16 @@
+{
+  "schema":"yaiwes.factory.control-layers.v1",
+  "node_id":"F-CTL-007",
+  "agent":"SOL 7 GPT 🆘",
+  "classification":"PRODUCT_FAILURE_RESOLVED",
+  "gap_reproduced":"renderLayers selected components but exposed no reorder control; canonical product had no reorder capability.",
+  "strategy_delta":"isolated layer-reorder-v1 adapter over canonical persisted project; preserves canonical snapshot/history format and rehydrates through app-v19 normalizer; no second editor/store",
+  "delta":{"adapter":"src/layer-reorder-v1.js","adapter_commit":"4493f84176419df6e46a3c1a52a5fdde22ad7579","wiring":"index-v19.html","wiring_commit":"32c84824ad758cfbaeef36a9a5043367c75b3db6","test":"tests/e2e/f-ctl-007-layers.spec.mjs","test_commit":"eb81936773690b2c2ed63ef1252ee0e96e749046","workflow":".github/workflows/factory-f-ctl-007-layers.yml","workflow_commit":"d94ba598f329e33fbc29c6ead66d779ff7691bcf"},
+  "run":{"run_id":34734929428,"job_id":103664527749,"sha":"d94ba598f329e33fbc29c6ead66d779ff7691bcf","status":"SUCCESS","syntax":"PASS","browser":"PASS_1_OF_1","log":"selection + reorder + persisted component order + selectedId + history + undo all passed"},
+  "simulations":["S1 layer click only selects => fails reorder acceptance; reproduced before delta","S2 reorder DOM only without localStorage => reload restores old order; E2E persisted-order assertion passed","S3 reorder persisted without history => undo fails; E2E undo assertion passed"],
+  "refutations":["R1 arrow controls alone are not PASS; persisted order changed","R2 persisted order alone is insufficient; selectedId followed moved layer","R3 reorder without undo compatibility is rejected; history/undo passed"],
+  "council12":{"objective":"layers select/reorder reflect real project state","requirement":"selection+reordering+state readback","authority":"fresh source + run 34734929428","prior_state":"selection existed, reorder missing","owner":"SOL 7 GPT 🆘","collision":"isolated adapter/test/workflow; index-v19 fresh-read update","gap":"missing reorder capability","alternatives":"rewrite app/reducer rejected after safer adapter StrategyDelta","strategy":"PATCH/ADAPT canonical persistence","tests":"syntax + Chromium E2E","refutations":"3 recorded","decision":"PASS_PENDING_REVIEW"},
+  "goals12_output":{"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS no OSS","G07":"PASS minimal adapter+wiring","G08":"PASS","G09":"PASS browser E2E","G10":"PASS 3+3","G11":"PASS run/job/log/readback","G12":"READ_FRESH_NEXT"},
+  "state":"PASS_PENDING_REVIEW",
+  "review_required":true
+}
