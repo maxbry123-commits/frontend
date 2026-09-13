@@ -1,7 +1,7 @@
 # HANDOFF DINÁMICO DE NODOS — UI YAIWES — V8
 
 Fecha base: 2026-09-12  
-Reconciliación N04 refrescada: 2026-09-13 07:03Z  
+Reconciliación N04 final: 2026-09-13 07:17Z  
 Repo: `maxbry123-commits/frontend`  
 Branch: `main`  
 Contrato: `tel.workflow/v3`  
@@ -10,11 +10,12 @@ Estado: `ACTIVE_LOOP_NOT_CLOSED`
 
 ## Autoridad operativa vigente
 
-1. Cola autoritativa: `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json`.
-2. Estado operativo: `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json`.
-3. Checkpoint operativo: `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CHECKPOINT.json`.
-4. Arquitectura: `UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-WORDFLOW-PYTHON-DSL-DAG-96-4-V7-2026-09-12.md`.
-5. Código, tests y logs actuales tienen mayor autoridad que documentación histórica.
+1. Cola autoritativa: `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json`, blob `a1042e93592af31124239730dd199d18613c22ea`.
+2. Reconciliación central: commit `23777501cb4a36695d5d9e5afb467837ef9574de`.
+3. Estado operativo: `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/STATE.json`.
+4. Checkpoint operativo: `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CHECKPOINT.json`.
+5. Arquitectura: `UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-WORDFLOW-PYTHON-DSL-DAG-96-4-V7-2026-09-12.md`.
+6. Código, tests y logs actuales tienen mayor autoridad que documentación histórica.
 
 ## Coordinación
 
@@ -34,29 +35,46 @@ Prioridad: `REUSE_EXISTING > PATCH > ADAPT > GENERATE > NEW_DOWNLOAD`.
 
 `stabilize_core` continúa como único workflow owner. Prohibidos Git LFS, force y motor alternativo.
 
-## Reconciliación N04 — vigente
+## Reconciliación N04 — FINAL
 
-N02 `N02-TRACEABILITY-BIDIRECTIONAL` y N03 `N03-AUTO-AUDITOR-EVIDENCE` están `VERIFIED_CLOSED` en la Crazy Wall fresca. N04 fue reclamado nuevamente por `SOL GPT <10>` sobre `main` `31d1531f07c0c3c377901dc2b21a8d404cf204ed` mediante claim commit `8db8457ece8bdeca0d2cf1e63671f7e1137c48f1`.
+N04 fue reclamado por `SOL GPT <10>` sobre `main` `48b22db7653eb3d25a0e58865cb0ef8d2994f606`, claim commit `f69b7a1aac506285496d88a11cfae01ad367f842`.
 
-`STATE.json` y `CHECKPOINT.json` expresan ahora el mismo snapshot operativo y preservan por blob Git las revisiones anteriores. La reconciliación no reescribe historia y no presenta el contexto V5/Action124 como verdad operativa vigente.
+La reconciliación central se ejecutó con un workflow **one-shot**, no watchdog ni tarea recurrente. El run `34744788246`, job `103690581688`, terminó `success`. El patch usó precondiciones fail-closed sobre los estados antiguos, validó JSON, aplicó únicamente cierres respaldados por evidencia independiente y desbloqueó nodos sólo mediante sus dependencias declaradas.
 
-Desde el HEAD observado al reclamar N04, `N33-MIRROR-TRANSPORT-CONTROL` ya está certificado como cerrado por commit `31d1531f07c0c3c377901dc2b21a8d404cf204ed`; no debe seguir tratándose como GAP operativo.
+Resultado central en commit `23777501cb4a36695d5d9e5afb467837ef9574de`:
 
-No se publican conteos históricos de nodos como porcentaje funcional del producto. La cola dinámica es la fuente para el estado individual de cada nodo y debe releerse antes de cada claim o cierre. Un estado `FREE` desfasado no autoriza sobrescribir evidencia de un claim real.
+- `N04-STATE-RECONCILIATION`: `VERIFIED_CLOSED`.
+- `N16-CHECKPOINT-BYTES-HASH`: `VERIFIED_CLOSED` mediante exact blobs + trusted descendant CI `34739510224/103678337638`.
+- `N26-GLOBAL-INTEGRATION`: `VERIFIED_CLOSED` mediante reporte 100% de `SOL GPT <15>` + exact blobs + trusted descendant CI.
+- `N28-API-CONTROL`: `VERIFIED_CLOSED` mediante las tres refutaciones PASS de `SOL GPT <16>` + exact blobs + trusted descendant CI.
+- `N33-MIRROR-TRANSPORT-CONTROL`: `VERIFIED_CLOSED` usando evidencia descendiente corregida `34743651221/103687583217`; el claim duplicado de SOL GPT <17> fue liberado y se preservó el owner previo SOL GPT <13>.
+- `N17-FULL-PRODUCT-E2E`: `FREE` porque N18, N20, N26, N28 y N29 están `VERIFIED_CLOSED`.
+- `N27-CONTINUOUS-LOOP`: `FREE` porque N26 y N23 están `VERIFIED_CLOSED`.
+- `N32-GUEST-INSTALLER-VERIFICATION`: sigue `CLAIMED` por ASTRA; no fue tocado.
+- `N31-UI-FINAL`: sigue `BLOCKED_AFTER_N17`.
 
-El proyecto **no** está cerrado. `SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED`. N17 E2E, N31 UI FINAL y Final Judge siguen siendo gates downstream según sus dependencias actuales.
+## Estado global
 
-## Evidencia de reconciliación
+El proyecto **NO** está cerrado. `SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED`.
 
-- Claim N04 actual: `8db8457ece8bdeca0d2cf1e63671f7e1137c48f1`.
-- HEAD fresco al claim: `31d1531f07c0c3c377901dc2b21a8d404cf204ed`.
-- STATE refrescado: commit `73ea812f35a8d8a8ede7f9e89f174e31a711de03`.
-- CHECKPOINT refrescado: commit `2d33fc130818d79a49ab5337527966484c377378`.
-- Snapshot Handoff inmediatamente anterior: blob `fafc8eeed180fd9e37e631d66e0d155b20cd2f04`.
-- Snapshot STATE inmediatamente anterior: blob `8238a9f1f664e4ed88f11ae46f3aa8f9bffb5044`.
-- Snapshot CHECKPOINT inmediatamente anterior: blob `9c68b1bf641463ef2933c0b83e4173e85b67ed05`.
-- Snapshots V5 históricos previos siguen preservados por Git: STATE `6e9ba8cd30279fab0fca79381af31e2d55f64f54`; CHECKPOINT `99f09dca8cb5bd3415506a9cadfc5152606eee41`; Handoff pre-N04 `060062ab78a9f29839f6de2f7a356b637e61f696`.
+N17 E2E, N27 Continuous LOOP, N31 UI Final, N32 Guest Installer y cualquier nodo todavía `CLAIMED|FREE|BLOCKED` deben continuar bajo la Crazy Wall fresca. Final Judge permanece downstream.
 
-## Cierre operativo
+No se debe derivar un porcentaje global a partir del cierre de N04 o de la trazabilidad. La autoridad para el siguiente trabajo es la Crazy Wall fresca más claims/reportes laterales actuales.
 
-N04 sólo puede marcarse `VERIFIED_CLOSED` después de readback de Crazy Wall + STATE + CHECKPOINT + Handoff y de demostrar que los cuatro expresan la misma autoridad operativa, dependencias N02/N03 cerradas y proyecto global todavía abierto. La propia fila N04 de Crazy Wall debe dejar de estar `FREE`; si no se puede actualizar de forma segura por concurrencia, N04 permanece fail-closed y debe repetirse el LOOP.
+## Evidencia N04
+
+- Claim R3: `f69b7a1aac506285496d88a11cfae01ad367f842`.
+- HEAD fresco al claim: `48b22db7653eb3d25a0e58865cb0ef8d2994f606`.
+- One-shot workflow run/job: `34744788246 / 103690581688`, `success`.
+- Crazy Wall reconcile commit: `23777501cb4a36695d5d9e5afb467837ef9574de`.
+- Crazy Wall blob final: `a1042e93592af31124239730dd199d18613c22ea`.
+- STATE final alignment: commit `981b2691137f2a155129be82902ea81582b4f553`.
+- CHECKPOINT final alignment: commit `66d8f052b7132dc41f3508235eeb1bbc28515d6d`.
+- Snapshot HANDOFF inmediatamente anterior: blob `e07ccd058e6f562c9ed1fa7a368cdce9b58e3e69`.
+- Snapshot STATE inmediatamente anterior: blob `9f42dee6d97761d3d028fa8df684c2d3b2a65122`.
+- Snapshot CHECKPOINT inmediatamente anterior: blob `c35fd299a242d0949e13820ca32f971641a435d4`.
+- Revisiones anteriores siguen preservadas por el historial Git; no se borró historia operativa.
+
+## Cierre operativo de N04
+
+N04 sólo se considera 100 PASS después del readback final de Crazy Wall + STATE + CHECKPOINT + HANDOFF y tres refutaciones: schema completo, cero GAP real de reconciliación y evidencia suficiente. Tras ese gate, el siguiente nodo debe seleccionarse con `READ CRAZY WALL FRESH` y collision check lateral antes del claim.
