@@ -40,9 +40,20 @@ test.describe('F-CTL-009 zoom / fit view / minimap', () => {
       el.style.left = '1400px';
       el.style.top = '900px';
     });
-    const before = await page.locator('#canvas').evaluate(el => ({ left: el.scrollLeft, top: el.scrollTop }));
+    const before = await page.locator('#canvas').evaluate(el => ({
+      left: el.scrollLeft,
+      top: el.scrollTop,
+      zoom: getComputedStyle(el).getPropertyValue('--canvas-zoom').trim()
+    }));
     await page.locator('#fit-view').click();
-    await expect.poll(() => page.locator('#canvas').evaluate(el => ({ left: el.scrollLeft, top: el.scrollTop }))).not.toEqual(before);
+    await expect.poll(async () => {
+      const after = await page.locator('#canvas').evaluate(el => ({
+        left: el.scrollLeft,
+        top: el.scrollTop,
+        zoom: getComputedStyle(el).getPropertyValue('--canvas-zoom').trim()
+      }));
+      return after.zoom !== before.zoom || after.left !== before.left || after.top !== before.top;
+    }).toBe(true);
 
     const viewportRect = page.locator('#yaiwes-minimap .yaiwes-minimap__viewport');
     await expect(viewportRect).toBeVisible();
