@@ -7,6 +7,16 @@
   "fresh_base_main_sha":"ddad0998e0f87c6faedeb9f440d8e86d4c9a4e27",
   "write_scope":["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/**","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/**","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/telemetry/**","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform*","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_sandbox*","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S2-*.json"],
   "claimed_at":"2026-09-12T22:42:48-05:00",
-  "state":"CLAIMED",
-  "steps":["VERIFY_OR_RESEARCH","EXECUTE_AUTHORIZED_DELTA","TEST_AND_REPORT"]
+  "state":"PASS",
+  "released":true,
+  "pass_percent":100,
+  "steps":["VERIFY_OR_RESEARCH=PASS","EXECUTE_AUTHORIZED_DELTA=REUSE_EXISTING_NO_PRODUCT_DELTA","TEST_AND_REPORT=PASS"],
+  "run_id":34735844744,
+  "job_id":103667777897,
+  "tested_sha":"162a1b5d56a825ce5bdf9df0e7c3b2ee45e3f47b",
+  "freshness_compare_head":"3d3b05a114b66b43fc75fd2fc61f174a76989494",
+  "relevant_scope_files_changed_since_test":[],
+  "report_path":"UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S2-08-PLATFORM-SANDBOX-ROUTER-SOL-2-REPORT.json",
+  "remaining_gaps":[],
+  "next_free_node":"S2-09-OTEL-COLLECTOR-BOUNDARY"
 }
