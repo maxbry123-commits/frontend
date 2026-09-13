@@ -1,0 +1,26 @@
+{
+  "schema":"yaiwes.factory.node-evidence.v2",
+  "contract":"tel.workflow/v3",
+  "node_id":"F-AI-017",
+  "owner":"FACTORY-SOL-1-GPT",
+  "base_sha":"0ebc619aaed6dbf8e89b0ac9ae93f6c9c6023f12",
+  "claim_commit":"b56a4c2aa75f14ebd7a4bb69159b29a968a78a5b",
+  "product_commits":["5cc987c21353ba7c3c625eebf7c6d8bd6f578f7e","241010253f68d2530233fb43ca18e974bc7da37b"],
+  "test_commits":["3d3b05a114b66b43fc75fd2fc61f174a76989494","da604a45aa6951b09cd7fae18c91e2ef972ab847"],
+  "fresh_head_before_report":"af421b0a6c88d63a9a74aef0b564c179adaab356",
+  "classification":"PRODUCT_FAILURE_FIXED",
+  "acceptance":"request->router->response traceable with explicit provider/model and fail-closed invalid routing",
+  "verification":{
+    "source_readback_blob":"f7535ef1c4b6b059591ce977fd156f64dc67cefc",
+    "test_readback_blob":"a6ac7b74e065c3b837dd5b4e33b371d88f8005d5",
+    "runtime_result":"RESULT PASS 4/4",
+    "cases":["explicit provider/model routes and returns traceable AI_RESULT","missing/unknown provider/model fail closed","RUN_AI traverses createBackendBoundary and yields normalized TASK_EVENT carrying AI_RESULT","non-AI action rejected by adapter"]
+  },
+  "simulations":["S1 valid provider local + model-a -> AI_RESULT with trace","S2 invalid provider/model paths -> deterministic rejection","S3 editor boundary RUN_AI -> router -> provider -> normalized TASK_EVENT"],
+  "refutations":["R1 isolated-router-only PASS refuted by adding boundary integration test","R2 unknown provider could silently fall back refuted: explicit fail-closed error","R3 arbitrary non-AI actions could enter router refuted: adapter requires RUN_AI"],
+  "pass_percent":100,
+  "state":"PASS_PENDING_REVIEW",
+  "remaining_gaps":[],
+  "review_required":true,
+  "note":"Producer evidence only; whole Factory remains NOT_ACCREDITED."
+}
