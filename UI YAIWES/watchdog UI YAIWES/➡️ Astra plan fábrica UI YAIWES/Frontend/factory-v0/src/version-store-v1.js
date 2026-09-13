@@ -38,14 +38,16 @@ function decorateRestoreControl(){
   const snapshots=listVersionSnapshots();
   const latest=snapshots.at(-1);
   let restore=document.getElementById('restore-version');
-  if(!latest){restore?.remove();return;}
+  if(!latest){if(restore)restore.remove();return;}
   if(!restore){
     restore=document.createElement('button');
     restore.id='restore-version';
     save.insertAdjacentElement('afterend',restore);
   }
-  restore.dataset.version=String(latest.version);
-  restore.textContent=`Restaurar V${latest.version}`;
+  const version=String(latest.version);
+  const label=`Restaurar V${latest.version}`;
+  if(restore.dataset.version!==version)restore.dataset.version=version;
+  if(restore.textContent!==label)restore.textContent=label;
 }
 
 function bindVersionStore(){
