@@ -1,0 +1,77 @@
+{
+  "schema": "yaiwes.factory.sol.node-evidence.v1",
+  "contract": "tel.workflow/v3",
+  "agent_name": "SOL 3 GPT 🆘",
+  "chat_id": "SOL-3-GPT-2026-09-12T21:44-05:00",
+  "node_id": "F-ED-002",
+  "base_sha": "9e3cfc8a880aeea8f05b08face76c2ff07880864",
+  "fresh_head_before_report": "71d2b7758e03116083e068964d53986b314509cc",
+  "state": "PASS_PENDING_REVIEW",
+  "failure_class": "NONE_FOR_DESKTOP_SCOPE",
+  "verify_research": {
+    "requirement": "Verificar y corregir drag/drop y movimiento desktop; movimiento real y estado actualizado.",
+    "source": {
+      "app_v19_blob": "1aab6ebec09a8e6a14f221b83226cf92552b4526",
+      "actions_blob": "5d5617507b3cd2e02e397f6e973e79adfb8297b1",
+      "v192_test_blob": "d818085d2884985c1c17642410f069cf8fa6c36c"
+    },
+    "implementation_readback": [
+      "library dragstart writes text/yaiwes-kind + label",
+      "canvas drop converts client coordinates through canvas rect/scroll/zoom and dispatches ADD_COMPONENT or MOVE_COMPONENT",
+      "desktop node dragstart writes text/yaiwes-node",
+      "MOVE_COMPONENT reducer mutates x/y through withHistory",
+      "dispatch persists project before render"
+    ],
+    "fresh_run": {
+      "run_id": 34732313529,
+      "job_id": 103657241958,
+      "candidate_sha": "4f685e1ec129cca0171bdc43fc0f88eb67f502e5",
+      "global": "FAILURE",
+      "desktop_50_cycle": "PASS_50_OF_50 per authoritative dynamic queue + test loop evidence",
+      "failed_scope": "mobile touch, outside F-ED-002",
+      "artifact_id": 10309427873,
+      "artifact_digest": "sha256:51207e1276823a4ea62f0666e560f41b1bc452e5a3018ddeaccebf2fd3f04ac4"
+    },
+    "dedup": "F-ED-001 owns mobile TOUCH_COORDINATE_MISS; no desktop product failure reproduced; no product patch justified."
+  },
+  "execute_delta": {
+    "strategy": "REUSE_EXISTING",
+    "product_paths_changed": [],
+    "reason": "Fresh desktop evidence already satisfies F-ED-002 acceptance; changing runtime would invalidate evidence and collide with editor/touch work without a reproduced desktop gap."
+  },
+  "test_report": {
+    "static": "PASS by source inspection: drag/drop wiring -> MOVE_COMPONENT -> persistProject",
+    "microtest": "PASS in factory-v192-local-50-cycle addAndMoveWithMouse assertion: post-drag inline left/top must differ from pre-drag",
+    "integration": "PASS desktop 50/50 candidate cycles on exact candidate SHA 4f685e1e; same loop also verifies reload recovery",
+    "workflow_global": "FAIL due mobile gate; this node does not promote global Factory closure",
+    "simulations": [
+      "S1 library window -> canvas creates one node",
+      "S2 existing desktop node -> canvas updates rendered left/top",
+      "S3 moved node -> localStorage -> reload restores same position"
+    ],
+    "refutations": [
+      "R1 global workflow failure does not refute desktop because failing scope is mobile and desktop loop reached 50/50",
+      "R2 source presence alone is insufficient; runtime test asserts before/after coordinates differ",
+      "R3 movement alone is insufficient; same candidate loop checks stored component and reload-restored position"
+    ]
+  },
+  "goals12_output": {
+    "G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS no product delta required","G08":"PASS","G09":"PASS","G10":"PASS 3 simulations + 3 refutations","G11":"PASS evidence committed; readback pending immediate post-write","G12":"PASS next-node selection requires fresh swarm reread"
+  },
+  "council12": [
+    "objective=desktop drag/move",
+    "requirement=real movement+state",
+    "authority=fresh code/test/run",
+    "prior=global V1.9.2 failure",
+    "owner=SOL 3 GPT",
+    "collision=avoid F-ED-001 mobile",
+    "gap=no desktop gap reproduced",
+    "alternatives=patch rejected without failure",
+    "strategy=REUSE_EXISTING",
+    "tests=before/after+50 cycles+reload",
+    "refutations=3 recorded",
+    "decision=PASS_PENDING_REVIEW"
+  ],
+  "remaining_gaps": ["F-ED-001 mobile TOUCH_COORDINATE_MISS remains independent", "global candidate closure remains NOT_ACCREDITED"],
+  "review_required": true
+}
