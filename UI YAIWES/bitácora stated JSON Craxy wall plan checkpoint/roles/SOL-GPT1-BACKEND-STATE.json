@@ -4,7 +4,7 @@
   "role": "SOL_GPT1_BACKEND",
   "name": "Sol ☀️ 🏈gpt 1 backend",
   "node_prefix": "S1",
-  "status": "S1_11_CLAIMED_RESEARCH",
+  "status": "S1_QUEUE_ONLY_BLOCKED_INPUT_OR_COORDINATOR_SCOPE",
   "coordination": {
     "source": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-QUEUE-4SOL-2026-09-12.json",
     "source_blob_sha": "2313f8b519efd0d9118a97c59c4572c53382b9b9",
@@ -20,42 +20,58 @@
     {
       "node_id": "S1-10-RQLITE-DISTINCT-STATE",
       "report_commit": "6a9bd3e4f1342c2e9f6837a336f3ca0861d953ec",
-      "released_at": "2026-09-12T20:30:05-05:00",
       "result": "DISTINCT_CAPABILITY_CONFIRMED_WIRING_SCOPE_GAP"
+    },
+    {
+      "node_id": "S1-11-LOCAL-FIRST-CHECKPOINT-MEMORY",
+      "report_commit": "8a5c9e9cdcca62df01bf522a740839425bcb5932",
+      "released_at": "2026-09-12T20:33:00-05:00",
+      "result": "PARTIAL_PASS_LOCAL_WORKFLOW_RECOVERY_IMPLEMENTED_PRODUCT_MEMORY_STORAGE_E2E_MISSING"
     }
   ],
   "claim": {
-    "node_id": "S1-11-LOCAL-FIRST-CHECKPOINT-MEMORY",
+    "node_id": null,
     "owner": "SOL_GPT1",
-    "claimed_at": "2026-09-12T20:30:42-05:00",
-    "fresh_base_main_sha": "6a9bd3e4f1342c2e9f6837a336f3ca0861d953ec",
-    "state": "CLAIMED",
-    "write_scope": [
-      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/SOL-GPT1-BACKEND-STATE.json",
-      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S1-11-LOCAL-FIRST-CHECKPOINT-MEMORY.json"
-    ],
-    "goal": "Local-first project memory/checkpoint contract and restart isolation. Runtime mutation requires explicit path scope before code changes."
+    "state": "RELEASED_NO_FREE_EXECUTABLE_S1_NODE"
   },
   "evidence": {
     "memory_boundary_blob": "6a3a438b328bc0c008c9a7cc7238aaa21c7b8545",
     "memory_test_blob": "d4f00a40480eb61b84bdd1fbca04233d8f7fafc4",
     "memory_targeted_test": "PASS_9_OF_9",
-    "rqlite_distinct_report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S1-10-RQLITE-DISTINCT-STATE.json",
     "local_ledger_blob": "79ae3da7f20188874ffdc9e5a6b5e9cd3fbc4c83",
-    "recovery_control_plane_blob": "d3cc4d69b15e754389b88652e6ae07c0ebbf8162"
+    "runner_blob": "4fd01eb441cf3c10638d1a6f80924fc3fc8533a5",
+    "restart_test_blob": "66af6aff97a889c41ee3e8e85653d57ea1cf2bd4",
+    "recovery_control_plane_blob": "d3cc4d69b15e754389b88652e6ae07c0ebbf8162",
+    "virtual_computer_source_blob": "ecc8b3b1444ade0ca894789e149e881a08b999c0",
+    "product_storage": "PLACEHOLDER_ONLY"
   },
   "owned_gaps": {
     "G02_VITE_DEST": "OPEN_DESTINATION_INPUT_GAP",
     "G03_SUPABASE_DEST": "OPEN_DESTINATION_INPUT_GAP",
-    "G09_MEMORY_BOUNDARY": "S1_09_TARGETED_PASS_S1_11_RESEARCHING_LOCAL_FIRST_CHECKPOINT",
+    "G09_MEMORY_BOUNDARY": "PARTIAL_PASS_PRODUCT_STORAGE_AND_MEMORY_CHECKPOINT_E2E_MISSING",
     "G13_RUNTIME_AGENT_EMPTY": "TARGETED_SUBGATE_SATISFIED",
     "RQLITE_WIRING": "DISTINCT_BUT_RUNTIME_WRITE_SCOPE_REQUIRED"
   },
   "acquisition": {
     "motor_skill_blob": "b06e5c2e1a18eb92c57bc864fdff03e52aaa1a54",
+    "motor_root": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/",
     "Vite": "BLOCKED_NO_LITERAL_DEST_REPO_DEST_BRANCH_DEST_ROOT",
     "Supabase": "BLOCKED_NO_LITERAL_DEST_REPO_DEST_BRANCH_DEST_ROOT",
     "rule": "Do not dispatch canonical motor until literal destination authority exists."
   },
-  "next_action": "Cross-check local-first VirtualComputer/storage requirements against current memory boundary, ledger and recovery. Publish exact implemented/missing/isolation verdict."
+  "watchdog": {
+    "automation_id": "6aa3065afd048191a6a4c720d4ba97e7",
+    "title": "SOL GPT1 backend YAIWES",
+    "enabled": true,
+    "cadence": "HOURLY",
+    "behavior": "Re-read fresh Crazy Wall/state/ledger and execute only S1-owned pending/free/claimed tasks."
+  },
+  "github_ci": {
+    "run_id": 34730513826,
+    "head_sha": "084debdb8acb102d9d41b9ca39b8ca88d8c29125",
+    "wordflow_step": "SUCCESS",
+    "runtime_suite": "IN_PROGRESS_LAST_OBSERVED",
+    "note": "Independent global evidence; no false PASS or failure promoted."
+  },
+  "next_action": "On next watchdog activation re-read the latest Crazy Wall/bitácora/state JSON. Execute only newly FREE/PENDING S1 work. S1-12 Vite/Supabase remains BLOCKED_INPUT until literal destination authority appears; rqlite wiring requires explicit runtime write_scope."
 }
