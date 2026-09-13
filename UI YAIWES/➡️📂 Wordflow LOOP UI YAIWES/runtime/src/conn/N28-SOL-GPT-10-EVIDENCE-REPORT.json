@@ -1,0 +1,43 @@
+{
+  "schema": "tel.workflow/v3.report",
+  "node_id": "N28-API-CONTROL",
+  "chat_id": "SOL GPT <10>",
+  "result": "PASS_TECHNICAL_GAP_EXACT_HEAD_CI_PENDING",
+  "reported_at": "2026-09-13T06:59:00Z",
+  "claim_commit": "bd96f325f2af42df1c68da7ef8ba90083737ee62",
+  "implementation_commit": "b2593d0fd7c003d2463fc0a7486d69e42106c9b0",
+  "implementation_blob": "ac81ca96f97663faddb03e9e712a498366eb543f",
+  "test_blob": "e21384df64a1bb6f18c043e526e54321586864fc",
+  "trusted_descendant": {
+    "sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+    "ancestor_compare": "ahead_by=468, behind_by=0, merge_base=b2593d0fd7c003d2463fc0a7486d69e42106c9b0",
+    "run_id": 34739510224,
+    "job_id": 103678337638,
+    "conclusion": "success",
+    "wordflow": "41 passed",
+    "runtime": "206 passed, 2 warnings, 39 subtests passed"
+  },
+  "exact_head_ci": {
+    "run_id": 34743870595,
+    "head_sha": "bd96f325f2af42df1c68da7ef8ba90083737ee62",
+    "status": "pending",
+    "conclusion": null
+  },
+  "tests": [
+    "current api_control.py blob exactly matches recorded N28 implementation blob",
+    "current test_integration_api_control.py blob exactly matches recorded N28 test blob",
+    "9 committed cases cover streaming/status, cancel idempotency, repeat-run idempotency, policy denial before effect, authorizer failure, unknown operation, runtime GAP, undeclared Fables capability and HTTP 403 no-effect",
+    "N28 implementation commit is ancestor of trusted successful full runtime CI",
+    "exact-head run exists but has not executed and is not counted as PASS"
+  ],
+  "refutations": {
+    "schema_complete": "PASS",
+    "technical_gap_remaining": "PASS_NONE",
+    "evidence_proves_authoritative_close": "FAIL_EXACT_HEAD_CI_PENDING_AND_CRAZY_WALL_STALE"
+  },
+  "remaining_gaps": [
+    "Exact-head CI run 34743870595 remains pending.",
+    "Authoritative Crazy Wall still records historical NOT_OBSERVED/NOT_EXECUTED gaps until reconciled."
+  ],
+  "project_verified_closed": false
+}
