@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3",
+  "state": "CLAIMED",
+  "chat_id": "SOL GPT <14>",
+  "node_id": "N03-AUTO-AUDITOR-EVIDENCE",
+  "fresh_main_sha": "57cfe486d0d425d0eac838989a5428254696d63e",
+  "write_scope": "runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*",
+  "claimed_at": "2026-09-13T06:29:33Z",
+  "note": "Atomic in-scope claim marker; authoritative Crazy Wall was GAP_RESOLVABLE on fresh readback."
+}
