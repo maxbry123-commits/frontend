@@ -7,12 +7,13 @@
   "agent_name":"SOL 6 GPT 🆘",
   "node_id":"F-UI-045",
   "repo":"maxbry123-commits/frontend",
-  "fresh_main_sha":"36c33750c51bc643483d4d625600ccbf3b440a7c",
+  "fresh_main_sha":"1dcbde26608fa6b8d8c40808516ed421958d9f7c",
   "base_sha":"36c33750c51bc643483d4d625600ccbf3b440a7c",
-  "write_scope":"F-UI-045 only: responsive workspace/shell under src/ui/workspace-shell-*, *workspace*.css, dedicated workspace tests/workflow/evidence; excludes shared app/state unless a reproduced GAP requires scope revalidation; excludes Wordflow N*",
+  "write_scope":"F-UI-045 only: responsive workspace/shell under src/ui/workspace-shell-*, *workspace*.css, dedicated workspace tests/workflow/evidence plus index-v192.html import-only integration; app/state remain read-only; excludes Wordflow N*",
   "paths":[
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/ui/workspace-shell-v1.js",
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/workspace-shell-v1.css",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v192.html",
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-045-workspace-shell.spec.mjs",
     ".github/workflows/factory-f-ui-045-workspace-shell.yml",
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-UI-045-FACTORY-SOL-6-EVIDENCE.json",
@@ -20,9 +21,12 @@
   ],
   "claimed_at":"2026-09-12T22:41:57-05:00",
   "state":"IN_PROGRESS",
+  "classification":"PRODUCT_FAILURE",
+  "gap":"MOBILE_CANVAS_NOT_PERSISTENT + NO_DOCK_COLLAPSE_CONTROLS",
   "task":"Mejorar workspace/shell responsive de la Factory: canvas dominante, paneles dockeables/colapsables, resize estable y uso comodo desktop+mobile sin ocultar el canvas.",
   "acceptance":"layout desktop/mobile reproducible; canvas siempre util; paneles no se superponen; resize/scroll/touch PASS con evidencia.",
   "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
   "authority":"FACTORY-CRAZY-WALL-FRONTEND-SOL6-8-V1-2026-09-12.json + FACTORY-SUPERVISOR-RECONCILIATION-R02-2026-09-12.json",
-  "next":"VERIFY_RESEARCH current workspace layout/CSS/tests before product delta"
+  "scope_revalidation":"index-v192.html added import-only because an isolated workspace module/CSS would not be runtime-active; no competing claim containing index-v192.html observed in current sol-nodes listing",
+  "next":"EXECUTE_DELTA minimal workspace layer, then E2E desktop/mobile/touch"
 }
