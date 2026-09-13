@@ -1,12 +1,12 @@
 {
   "schema": "tel.workflow/v3",
   "node_id": "N33-MIRROR-TRANSPORT-CONTROL",
-  "owner": "SOL GPT <17>",
-  "state": "GAP_RESOLVABLE",
-  "fresh_main_sha_at_claim": "575e74e1fe5a9bbd45d916134eff38810c5347a2",
-  "claim_commit_sha": "dab28b6a1f7eab52c2d0f42ef8c296bccb918ddc",
+  "reporter": "SOL GPT <17>",
+  "state": "EVIDENCE_CORRECTED_RELEASED_DUPLICATE",
+  "ownership": "RELEASED_DUPLICATE_CLAIM",
   "implementation_commit_sha": "f8477f0791b18aa249352085e2eaea910860ec9a",
   "test_commit_sha": "26ec8170efe5573dcd88e54f18683b3900dc6aa1",
+  "certified_descendant_sha": "13418e0dd9d73d2070497b9485757d098cbed0e8",
   "paths": [
     "runtime/src/mirror/transport.py",
     "runtime/tests/test_mirror_transport.py"
@@ -15,19 +15,27 @@
     "transport.py": "a7fb9e9b1584f403215e0976a81a137785fd68a6",
     "test_mirror_transport.py": "dcb930555164e2f17f04aafd11494b9850062242"
   },
-  "verify_research": "Existing N33 transport/test bytes were found on fresh main from prior commit fcf59da7bd49fb0cf2706a6ac1fe2567eab2b0d2; reused and patched rather than regenerated.",
-  "execute_delta": "Added literal IP LAN-boundary validation before session creation and before transport effects; preserved allowed display/audio/input/clipboard/control channels and fail-closed disk/RAM/filesystem prohibition.",
-  "test": "Reconstructed exact logic locally: 15/15 PASS. GitHub Actions run 34742833971 for test commit was cancelled by newer concurrent main pushes before authoritative completion.",
-  "run_id": 34742833971,
+  "verify_research": "Reused the existing mirror boundary and tests; no alternate transport motor or disk/RAM mirroring was introduced.",
+  "execute_delta": "Enforced literal LAN IP validation before session creation and transport effects while retaining pairing/auth and the display/audio/input/clipboard/control allowlist.",
+  "test": "Authoritative descendant GitHub Actions SUCCESS: run 34743651221, job 103687583217, checkout SHA 13418e0dd9d73d2070497b9485757d098cbed0e8; Wordflow 41/41 PASS; runtime 256/256 PASS + 42 subtests PASS.",
+  "run_id": 34743651221,
+  "job_id": 103687583217,
   "evidence": [
-    "pairing secret + auth token fail closed",
-    "public peer 8.8.8.8 rejected before session",
-    "display/audio/input/clipboard/control accepted with transport evidence ref",
-    "disk/ram/memory/filesystem/unknown rejected pre-effect",
-    "metadata cannot smuggle disk/RAM sync",
-    "empty transport evidence ref rejected"
+    "certified descendant is 40 commits ahead of N33 test commit with merge base exactly 26ec8170efe5573dcd88e54f18683b3900dc6aa1",
+    "certified transport blob equals a7fb9e9b1584f403215e0976a81a137785fd68a6",
+    "certified test blob equals dcb930555164e2f17f04aafd11494b9850062242",
+    "pairing/auth fail closed before session",
+    "public peer rejected before session and LAN boundary revalidated before transport effect",
+    "display/audio/input/clipboard/control allowed with evidence ref",
+    "disk/ram/memory/filesystem/unknown rejected before transport effects",
+    "metadata cannot smuggle disk/RAM mirroring"
   ],
-  "remaining_gaps": [
-    "authoritative global CI success still required because swarm concurrency cancelled the exact test-commit run"
-  ]
+  "three_refutations": {
+    "schema_complete": "PASS",
+    "remaining_functional_gap": "NONE",
+    "evidence_demonstrates_100_pass": "PASS"
+  },
+  "refuted_evidence": "Run 34742769854 on SHA 54436297718fc33a64128002f96569250fe56579 was successful but predates N33 commits and is not valid N33 certification.",
+  "remaining_gaps": [],
+  "coordination_note": "An earlier claim by SOL GPT <13> predates SOL GPT <17>; SOL GPT <17> released its duplicate claim. Shared Crazy Wall reconciliation belongs to the active N04 reconciliation owner."
 }
