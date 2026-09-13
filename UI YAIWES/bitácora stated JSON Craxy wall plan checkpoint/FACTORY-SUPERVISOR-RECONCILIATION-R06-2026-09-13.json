@@ -1,0 +1,47 @@
+{
+  "schema": "yaiwes.factory.supervisor.reconciliation.v1",
+  "round": "R06",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "project": "FABRICA_UI_YAIWES_ONLY",
+  "observed_main_sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+  "supervisor": "SOL_GPT_PLAN",
+  "principle": "NO_OVERENGINEERING__CLOSE_EXISTING_GATES_BEFORE_NEW_FEATURES",
+  "authority": "fresh Factory code+tests+Actions/claim files > Factory Crazy Wall/STATE/CHECKPOINT > historical docs > chat/inference",
+  "verified_progress": {
+    "F-ED-001": {"state": "PASS_PENDING_REVIEW", "evidence_commit": "73ac1285b7b6e0cc4c168fe8d10aaad3a8afd1ff", "note": "desktop/mobile exact-SHA producer closure observed"},
+    "F-AI-024": {"state": "PASS_PENDING_REVIEW", "evidence_commit": "9d3da4f57719b9ac001aa8833516fd373702789f"},
+    "F-UI-045": {"state": "PASS_PENDING_REVIEW"},
+    "F-UI-046": {"state": "PASS_PENDING_REVIEW", "report_commit": "4535638180c685b3f60c1ec9d70437671132f81d"},
+    "F-UI-049": {"state": "PASS_PENDING_REVIEW"},
+    "F-UI-050": {"state": "PASS_PENDING_REVIEW", "github_action_run": 34737922623, "github_action_job": 103672501481, "hf_job": "6aa6269421047bf1b0380d7e"},
+    "F-UI-059": {"state": "PASS_PENDING_REVIEW", "report_commit": "afad288e5816501e6ec7858f3cd349c9ef26be1f"},
+    "F-UI-060": {"state": "PASS_PENDING_REVIEW", "report_commit": "4b6771e8505d0d91a0a7a3257195d746a9c93cf4"},
+    "F-UI-061": {"state": "EVIDENCE_SUCCESS_PENDING_PRODUCER_REPORT", "tested_sha": "60c21192381d9d2c66eeb3df61e21f0a06fc546b", "run_id": 34738871893, "job_id": 103675029219, "run_conclusion": "success", "desktop_published_journey": "success", "mobile_published_journey": "success", "artifact_id": 10312236608, "artifact_digest": "sha256:78a12d9d1bf1b2c8a55a55cca4124619bffc2313ba2be5fed7df894216955d3d"}
+  },
+  "blocking_gaps": {
+    "SOL6_BRANCH": {"node": "F-UI-051", "state": "GAP_RESOLVABLE", "classification": "TEST_HARNESS_FAILURE", "no_new_feature": true, "required_delta": ["enumerate actual #steps button[data-step] values / one-based 1..5", "scope breakpoint selector to .canvas-controls button[data-breakpoint]", "upload inventory/screenshots/failure artifact paths", "rerun exact gate", "only mutate product if corrected harness reproduces real expected_effect failure"]},
+    "SOL7_BRANCH": {"node": "F-MOD-033", "state": "STALE_FACTORY_CLAIM_NEEDS_RESOLUTION", "latest_factory_claim_commit": "3af96e40f4c7f5172acbdcb088e7352970f2010b", "next_required": "finish_or_release_F-MOD-033_then_claim_F-UI-047", "forbid": "new Wordflow/legacy node from FACTORY-SOL-7-GPT identity"},
+    "SOL8_BRANCH": {"node": "F-UI-061", "state": "TECHNICALLY_GREEN_PENDING_REPORT", "required_delta": ["fresh-read exact run/job/artifact", "write producer report/release PASS_PENDING_REVIEW", "do not change product", "then WAIT_JOIN; do not create new feature"]}
+  },
+  "activated_next_tasks": {
+    "FACTORY-SOL-6-GPT": ["F-UI-051 FIX_AND_RERUN", "then F-UI-052", "then F-UI-053", "then F-UI-054"],
+    "FACTORY-SOL-7-GPT": ["resolve F-MOD-033", "F-UI-047", "F-UI-048", "F-UI-055", "F-UI-056", "F-UI-057", "F-UI-058"],
+    "FACTORY-SOL-8-GPT": ["terminalize F-UI-061 only", "WAIT_JOIN_AFTER_PASS_PENDING_REVIEW"]
+  },
+  "join": {
+    "F-UI-062": {"state": "BLOCKED", "depends_on": ["F-UI-054", "F-UI-058", "F-UI-061"]},
+    "F-UI-063": {"state": "BLOCKED", "depends_on": ["F-UI-062"], "role": "ONLY_FRONTEND_100_GATE"}
+  },
+  "progress_balance": {
+    "frontend_closure_nodes_total": 19,
+    "producer_terminal_pass_pending_review": 6,
+    "additional_green_evidence_pending_report": 1,
+    "terminal_percent_strict": 31.6,
+    "evidence_complete_or_terminal_percent": 36.8,
+    "critical_editor_touch_gap_F_ED_001": "producer_closed_pending_independent_review",
+    "remaining_priority": "SOL6 branch + SOL7 branch + producer report F-UI-061 + join/cross-review/final gate"
+  },
+  "review_rule": "PASS_PENDING_REVIEW remains non-final until independent review. Do not claim FRONTEND_100 until F-UI-063 passes against exact published SHA.",
+  "next_supervisor_checks": ["F-UI-051 corrected rerun", "SOL7 Factory re-entry and F-MOD-033 resolution", "F-UI-061 producer release", "open F-UI-062 only when all three dependencies terminal", "open F-UI-063 only after F-UI-062"]
+}
