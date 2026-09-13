@@ -1,0 +1,18 @@
+{
+  "schema":"yaiwes.factory.atomic-node.evidence.v1",
+  "contract":"tel.workflow/v3",
+  "node_id":"F-AI-020",
+  "agent_name":"SOL 2 GPT 🆘",
+  "requirement":"Conexiones remotas MCP/API desde Factory; connect/status/cancel con evidencia sin secretos",
+  "base_sha":"1a401ca0e608e6b15fd88e1d223f61cb31293fd8",
+  "source":{"remote_control_blob":"69efb78dae6c7f2830cf45cced236b4654fbf71d","entrypoint_before_blob":"97ae9addb1c31f81c4057a3dc4cfad886bbd780c","entrypoint_after_blob":"c1fd54c4145101c7d5977ae6f3f06c19177e64cb","classification":"PRODUCT_FAILURE_INTEGRATION_GAP_RESOLVED","finding":"remote-control-v1 existed but current entrypoint did not load it"},
+  "delta":{"wiring_commit":"577ab8704ca8ef949c10ab5d15d1cdee05e3b7d5","test_commit":"6edde2ed26465c16573087064ea9451d864ce005","workflow_commit":"2d9c1e05e62d1683738ec89e3913059f6e8842e0","strategy":"REUSE_EXISTING + one-line entrypoint wiring + deterministic gate"},
+  "github_action":{"run_id":34735643947,"job_id":103666467938,"tested_sha":"2d9c1e05e62d1683738ec89e3913059f6e8842e0","run_conclusion":"success","job_conclusion":"success","result_marker":"F_AI_020_RESULT=PASS_6_OF_6"},
+  "simulations":[{"id":"SIM1","result":"PASS","assertion":"MCP_HTTP connect POST carries secret_ref only"},{"id":"SIM2","result":"PASS","assertion":"HTTP status uses GET with no body"},{"id":"SIM3","result":"PASS","assertion":"API cancel POST normalizes non-2xx state"}],
+  "refutations":[{"id":"REFUTE1","result":"PASS","assertion":"missing config fails closed without network"},{"id":"REFUTE2","result":"PASS","assertion":"unsupported protocol fails closed without network"},{"id":"REFUTE3","result":"PASS","assertion":"network failure becomes UNREACHABLE and entrypoint wiring exists"}],
+  "closure_refutations":["schema VERIFY_RESEARCH/EXECUTE_DELTA/TEST_REPORT = PASS","remaining F-AI-020 functional gap = NONE","exact SHA + terminal run/job/log + 6/6 assertions = PASS"],
+  "secret_policy":"SECRET_REF_ONLY; no raw token/api_key persisted or asserted",
+  "pass_percent":100,
+  "atomic_node_result":"PASS",
+  "project_verified_closed":false
+}
