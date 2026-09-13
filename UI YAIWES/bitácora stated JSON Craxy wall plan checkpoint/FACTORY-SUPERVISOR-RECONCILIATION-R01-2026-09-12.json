@@ -1,0 +1,88 @@
+{
+  "schema": "yaiwes.factory.supervisor.reconciliation.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "supervisor": "SOL_GPT_PLAN",
+  "round": "R01",
+  "observed_main_sha": "cbef0b2a9ff2f2d1b5687e152bd547efa9d17237",
+  "authority": "fresh code+test+Action/HF Job log > Crazy Wall/STATE/CHECKPOINT > HANDOFF/architecture > historical docs > inference",
+  "base_queue": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-DYNAMIC-V2-2026-09-12.json",
+  "frontend_reserved_queue": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-FRONTEND-SOL6-8-V1-2026-09-12.json",
+  "status": "ACTIVE_RECONCILIATION",
+  "observed_deltas": [
+    {
+      "node_id": "F-IO-027",
+      "owner": "SOL 5 GPT",
+      "state": "PASS_PENDING_REVIEW",
+      "evidence_commit": "f9d24121e556084cfa84e9035996ea8aab33a4fa",
+      "run_id": 34735214282,
+      "job_id": 103665310539,
+      "conclusion": "SUCCESS",
+      "instruction": "Do not reopen unless reviewer/refutation creates a real GAP."
+    },
+    {
+      "node_id": "F-IO-030",
+      "owner": "SOL 5 GPT",
+      "state": "EXECUTING_OBSERVED",
+      "latest_evidence": "ci(factory): execute F-IO-030 DOWNLOAD roundtrip gate",
+      "latest_commit": "cbef0b2a9ff2f2d1b5687e152bd547efa9d17237",
+      "instruction": "Finish TEST_REPORT; require round-trip evidence before PASS_PENDING_REVIEW."
+    },
+    {
+      "node_id": "F-FLOW-031",
+      "owner": "SOL 7 GPT",
+      "state": "PASS_PENDING_REVIEW",
+      "evidence_commit": "f112c8eb7e18f78c892aede599bdfaef36d71268",
+      "run_id": 34735211229,
+      "job_id": 103665302216,
+      "instruction": "Preserve result; no duplicate work."
+    },
+    {
+      "node_id": "F-MOD-032",
+      "owner": "SOL 7 GPT",
+      "state": "EXECUTING_OBSERVED",
+      "claim_commit": "21bf6c25dc41d3330c182415ec302d25d707f325",
+      "test_commit": "39f935108cd6d8246dd4ca8dd6bc4fee1ec057cc",
+      "classification": "RESERVATION_DRIFT_NOT_BACKEND_VIOLATION",
+      "instruction": "One-time grandfathered frontend node: finish current <=3-step node if paths remain disjoint, then release and move strictly to F-UI-047. Do not claim another non-F-UI node."
+    },
+    {
+      "node_id": "F-AI-019",
+      "owner": "UNVERIFIED_FROM_COMMIT_MESSAGE",
+      "state": "EXECUTING_CI_OBSERVED",
+      "latest_commit": "d92de69290f6e385ecdd614e765243a5c48b5423",
+      "instruction": "Owner must preserve claim/write_scope and attach run/job evidence before PASS."
+    }
+  ],
+  "queue_consistency_gap": {
+    "state": "GAP",
+    "reason": "Base queue still contains seed states that lag fresh claim/evidence commits.",
+    "rule": "Do not overwrite active workers. Reconcile additively from claim files and fresh logs; code/test/log wins over seed state."
+  },
+  "worker_directives": {
+    "SOL 1 GPT": "Continue only currently CLAIMED base-queue node. After release, fresh-read queue and select a path-disjoint FREE/GAP_RESOLVABLE base node. Do not claim F-UI-045..050 reserved lane.",
+    "SOL 2 GPT": "Continue only currently CLAIMED base-queue node. Verify evidence before PASS. Do not claim F-UI-045..050 reserved lane.",
+    "SOL 3 GPT": "Continue only currently CLAIMED base-queue node. Prefer editor/control GAPs with exact disjoint paths. Do not claim F-UI-045..050 reserved lane.",
+    "SOL 4 GPT": "Prioritize unresolved editor/mobile-touch evidence if still your active scope; materially distinct StrategyDelta only. Do not claim F-UI-045..050 reserved lane.",
+    "SOL 5 GPT": "Finish F-IO-030 TEST_REPORT and release. Do not reopen F-IO-027 without reviewer-generated GAP. Then fresh-read base queue for next independent IO node.",
+    "SOL 6 GPT": "Reserved FRONTEND_INTERFACE_ONLY. Claim F-UI-045 first after fresh-read and exact path resolution; after PASS_PENDING_REVIEW move to F-UI-046. No Wordflow/backend productive writes.",
+    "SOL 7 GPT": "Finish already-started F-MOD-032 only as one-time grandfathered frontend work, then release and claim F-UI-047; next F-UI-048. No further base-queue claims outside reserved frontend lane.",
+    "SOL 8 GPT": "Reserved FRONTEND_INTERFACE_ONLY. Claim F-UI-049 first; verify Router Universal contract/status read-only before any router patch. Then F-UI-050 using Hugging Face Jobs with secret_ref only and real job_id/log evidence."
+  },
+  "collision_rules": [
+    "1 chat = 1 active node",
+    "1 path = 1 active writer",
+    "fresh HEAD + queue/claim read before every write",
+    "if overlap or stale HEAD -> COLLISION_GAP/STALE_LOCK_GAP and rebuild delta",
+    "never force or delete another worker claim"
+  ],
+  "supervisor_next": [
+    "Re-read main HEAD and recent claim files",
+    "Audit F-IO-030 terminal run",
+    "Audit F-MOD-032 terminal run then enforce SOL7 redirect to F-UI-047",
+    "Check whether SOL6 has claimed F-UI-045 and SOL8 F-UI-049",
+    "Verify F-AI-019 owner/run/job before any PASS promotion",
+    "Reconcile base queue states additively when active writes settle"
+  ],
+  "closure_rule": "No global PASS. Worker PASS_PENDING_REVIEW requires code+test+readback+SHA and Action/HF Job evidence when applicable."
+}
