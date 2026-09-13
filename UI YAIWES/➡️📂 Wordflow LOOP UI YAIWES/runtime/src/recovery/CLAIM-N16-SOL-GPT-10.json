@@ -1,12 +1,12 @@
 {
   "schema": "tel.workflow/v3.claim",
-  "state": "PASS_RELEASED_PENDING_CRAZY_WALL_READBACK",
+  "state": "GAP_RELEASED_CENTRAL_QUEUE_STALE",
   "chat_id": "SOL GPT <10>",
   "node_id": "N16-CHECKPOINT-BYTES-HASH",
   "fresh_main_sha": "e34cc9be8b3b6a0295f89cdfd5b463652bd0f516",
   "write_scope": "runtime/src/recovery/**|runtime/tests/test_recovery*",
   "claimed_at": "2026-09-13T06:48:00Z",
-  "released_at": "2026-09-13T06:51:00Z",
-  "result": "No code delta required; current exact blobs are unchanged and trusted descendant CI 34739510224 job 103678337638 passed 41 Wordflow + 206 runtime + 39 subtests.",
+  "released_at": "2026-09-13T06:52:00Z",
+  "result": "Technical gate PASS: exact N16 blobs unchanged and trusted descendant CI 34739510224 job 103678337638 passed 41 Wordflow + 206 runtime + 39 subtests. Authoritative closure refused because central Crazy Wall remains stale GAP_RESOLVABLE with historical CI gap.",
   "report": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/recovery/N16-SOL-GPT-10-EVIDENCE-REPORT.json"
 }
