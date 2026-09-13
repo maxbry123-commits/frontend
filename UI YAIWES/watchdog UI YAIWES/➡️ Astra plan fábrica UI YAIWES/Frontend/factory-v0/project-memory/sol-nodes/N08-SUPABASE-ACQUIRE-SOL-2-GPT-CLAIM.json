@@ -7,6 +7,8 @@
   "fresh_main_sha":"36c33750c51bc643483d4d625600ccbf3b440a7c",
   "write_scope":"component acquisition + evidence only",
   "claimed_at":"2026-09-12T22:41:57-05:00",
-  "state":"CLAIMED",
-  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"]
+  "state":"RELEASED_INVALID_CLAIM",
+  "released":true,
+  "reason":"Fresh authority crosscheck found unified Wordflow Queue V2 role lane for SOL_GPT2; N08 component acquisition conflicts with role/write-scope coordination and G03 still lacks literal authorized destination. No product/component mutation performed.",
+  "steps":["VERIFY_RESEARCH=FAIL_CLOSED","EXECUTE_DELTA=NOT_RUN","TEST_REPORT=RELEASE"]
 }
