@@ -1,0 +1,93 @@
+{
+  "schema": "yaiwes.factory.editor.multiai.v1",
+  "contract": "tel.workflow/v3",
+  "status": "ACTIVE_LOOP_NOT_CLOSED",
+  "objective": "Editor estable -> integraciones funcionales -> validacion/publicacion exacta -> VERIFIED_CLOSED",
+  "closure_rule": "SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
+  "rules": {
+    "one_task_one_node": true,
+    "claim_before_write": true,
+    "claim_requires": ["fresh_head", "owner", "node_id", "write_scope", "base_sha", "claimed_at"],
+    "preserve_previous_versions": true,
+    "new_change_is_new_version": true,
+    "backend_monolith_forbidden": true,
+    "backend_contract": "blocks + plugins + universal plug",
+    "reuse_order": ["REUSE", "PATCH", "ADAPT", "GENERATE", "NEW_DOWNLOAD"],
+    "canonical_motors_only_for_acquire_extract_copy_move": true,
+    "no_pass_by_presence": true
+  },
+  "decision_loop": [
+    "INPUT_LITERAL",
+    "XRAY_CODE_DOCS_TESTS_EVIDENCE",
+    "GOALS12_INPUT_OUTPUT",
+    "COUNCIL12",
+    "PLAN_QUEUE_1X1",
+    "EXECUTE",
+    "TEST",
+    "SIMULATE_3",
+    "REFUTE_3",
+    "UPDATE_STATE_CHECKPOINT_HANDOFF",
+    "CODA_RESTART_IF_GAP"
+  ],
+  "nodes": [
+    {
+      "id": "FACTORY-E01-EDITOR-STABILITY",
+      "state": "FREE",
+      "preferred_lane": "ASTRA_GPT",
+      "task": "Resolve or refute drag/drop, move, selection and state-loss regressions; keep canvas visible and one touch-scroll contextual panel.",
+      "write_scope": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v*/**",
+      "done_evidence": ["code_diff", "interaction_tests", "reload_test", "mobile_touch_test"]
+    },
+    {
+      "id": "FACTORY-E02-CONTROLS",
+      "state": "AFTER_FACTORY-E01",
+      "preferred_lane": "GROK",
+      "task": "Prove layers, properties, zoom, undo/redo, versions and context menu mutate real project state.",
+      "write_scope": "factory frontend next-version only",
+      "done_evidence": ["state_before_after", "e2e", "visual_readback"]
+    },
+    {
+      "id": "FACTORY-E03-OSS-LIBRARY",
+      "state": "FREE_FOR_AUDIT",
+      "preferred_lane": "SOL_GPT",
+      "task": "Inventory actually wired OSS capabilities, classify missing categories/variants, then acquire only proven missing components using canonical motors and integrate through adapters/plugins.",
+      "write_scope": "component integration node claimed by owner",
+      "done_evidence": ["source_url", "ref_or_commit", "license", "destination", "adapter", "runtime_test"]
+    },
+    {
+      "id": "FACTORY-E04-AI-IMPORT-E2E",
+      "state": "AFTER_FACTORY-E01",
+      "preferred_lane": "SOL_GPT",
+      "task": "Validate router, models, AI team, skills, remote connections and file/HTML/reference import through editable result.",
+      "write_scope": "modular adapters/plugins only",
+      "done_evidence": ["input_fixture", "runtime_trace", "editable_output", "failure_path"]
+    },
+    {
+      "id": "FACTORY-E05-SAVE-EXPORT",
+      "state": "AFTER_FACTORY-E01",
+      "preferred_lane": "ASTRA_GPT",
+      "task": "Prove local memory, reload/reopen recovery, JSON/HTML export and configured destinations.",
+      "write_scope": "factory next-version persistence/export modules",
+      "done_evidence": ["save", "reload", "reopen", "json_export", "html_export"]
+    },
+    {
+      "id": "FACTORY-E06-50X-PUBLISH",
+      "state": "BLOCKED_UNTIL_E01_E05",
+      "preferred_lane": "CLAUDE_REVIEW",
+      "task": "Run 50 candidate cycles, publish exact tested commit, run 50 web/mobile cycles, capture evidence and independent review; separate harness failures from editor failures.",
+      "write_scope": "tests/evidence/reviewer report",
+      "done_evidence": ["candidate_sha", "50_local", "published_same_sha", "http_readback", "50_web", "mobile", "screenshots", "independent_review"]
+    }
+  ],
+  "known_gaps": [
+    "EDITOR_STABILITY_NOT_PROVEN",
+    "CONTROL_EFFECTS_NOT_FULLY_PROVEN",
+    "OSS_PRESENT_VS_WIRED_NOT_RECONCILED",
+    "AI_IMPORT_FULL_E2E_PENDING",
+    "SAVE_RELOAD_EXPORT_DESTINATIONS_PENDING",
+    "EXACT_COMMIT_50X_LOCAL_AND_WEB_PENDING",
+    "PREVIOUS_HANDOFF_STATE_CLOSURE_CONTRADICTION"
+  ],
+  "component_download_policy": "Sol nodes may add missing OSS candidates only after dedup and requirement proof; Astra records candidate/gap, source and target; canonical motors perform acquisition/extraction/copy/move; integration still requires adapter/plugin plus runtime evidence.",
+  "updated_at": "2026-09-12T20:32:00-05:00"
+}
