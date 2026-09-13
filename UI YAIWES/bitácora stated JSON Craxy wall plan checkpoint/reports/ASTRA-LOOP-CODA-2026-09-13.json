@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.loop-coda.checkpoint.v1",
   "contract": "tel.workflow/v3",
-  "updated_at": "2026-09-13T01:18:25.447Z",
+  "updated_at": "2026-09-13T01:24:56.014962+00:00",
   "owner": "ASTRA_GPT",
   "status": "ACTIVE_LOOP_GAPS_OPEN",
   "global_closed": false,
@@ -9,15 +9,25 @@
   "director_instruction": "2026-09-13: registrar pendientes como nodos reclamables, corregir código crítico, loop horario desde checkpoint hasta cobertura total verificada.",
   "authority": "Operational addendum linking existing nodes; does not reset existing claims or supersede V7/V4 ownership.",
   "watchdog": {
-    "status": "BLOCKED_PLAN_LIMIT",
-    "enabled": false,
-    "error_code": "too_many_active_automations",
+    "status": "ACTIVE",
+    "enabled": true,
+    "error_code": null,
     "current_count": 5,
     "plan_limit": 5,
-    "schedule": "BEGIN:VEVENT\nRRULE:FREQ=HOURLY;INTERVAL=1\nEND:VEVENT",
+    "schedule": "BEGIN:VEVENT\nDTSTART:20260913T012455Z\nRRULE:FREQ=HOURLY;INTERVAL=1\nEND:VEVENT",
     "default_timezone": "America/Bogota",
     "prompt": "Continúa la auditoría y reparación de UI YAIWES backend exclusivamente en maxbry123-commits/frontend/main. Objetivo: completar los requisitos del proyecto con evidencia y alcanzar VERIFIED_CLOSED, no detenerse por terminar un lote. Recupera primero el último checkpoint del Crazy Wall en \"UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/\": README, cola vigente CRAZY-WALL-TASK-QUEUE-MULTI-AI-V2-2026-09-12.json y sus revisiones explícitas, reports/ASTRA-LOOP-CODA-2026-09-13.json si existe, estados de roles, STATE, CHECKPOINT, BITACORA y handoff vigente. Cruza instrucciones de este chat y tres fuentes prioritarias MAX-SYSTEM-100X-FINAL-1, Virtual Computer/14 objetivos y Memoria Wordflow contra código de \"UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/\". No confundir este proyecto con agentes ni fábrica frontend. Ciclo: LOAD_STATE → auditar X-Ray cinco pasadas y cobertura bidireccional → planificar → CLAIM exclusivo mediante SHA fresco/compare-and-swap → ejecutar reparación mínima → tests reales → VERIFY/CODA → guardar checkpoint, hashes, run/log y read-back → liberar → siguiente nodo elegible. Si falla: causa raíz, estrategia distinta, parche y nueva prueba; no repetir ciclos sin avance. Una tarea por nodo con id, owner, scope, dependencias, estado, evidencia y próxima acción; respetar claims ajenos y no tomar locks por simple antigüedad. Registrar tareas de adquisición e integración para Sol1/Sol2/Sol3/Sol Plan sin duplicar; usar exclusivamente skill research-download-chain y motores/GitHub Actions canónicos para transferencias, sin LFS ni alterar guards. Priorizar reparar código crítico propio, conectar componentes existentes, completar auditor/verificador CI y consolidación; memoria/agente, plataforma y API conservan responsables. Cada iteración aplica 12 objetivos de entrada, 12 de salida, revisión Council de 12 pasos y tres refutaciones explícitas registradas, diferenciando simulación de ejecución real. Actualiza arquitectura existente cuando cambie comportamiento, Crazy Wall y estado JSON sin pisar trabajo ajeno. Mejoras 100x requieren benchmark comparable, nunca prometer ni inventar porcentaje. Cierre solo con inventario completo requisito→código→prueba→evidencia y cruce inverso, recuperación UI/workspace, aislamiento de memoria, cancelación/reinicio sin duplicados e integración por plataformas con limitaciones explícitas. Reporta avance, pruebas, gaps y próximo nodo; ante bloqueo real conserva checkpoint y explica causa. Al demostrar el cierre completo, registra VERIFIED_CLOSED y desactiva únicamente este watchdog.",
-    "resolution": "User must select active automation to replace; no unrelated watchdog changed."
+    "resolution": "User freed scheduled-task capacity; automation creation confirmed successful.",
+    "history": [
+      {
+        "status": "BLOCKED_PLAN_LIMIT",
+        "enabled": false,
+        "error_code": "too_many_active_automations",
+        "resolved_at": "2026-09-13T01:24:56.014962+00:00"
+      }
+    ],
+    "automation_id": "6aa5fb67c5388191bf6a10fb7e0c0665",
+    "activated_at": "2026-09-13T01:24:56.014962+00:00"
   },
   "claim_protocol": {
     "one_task_one_node": true,
