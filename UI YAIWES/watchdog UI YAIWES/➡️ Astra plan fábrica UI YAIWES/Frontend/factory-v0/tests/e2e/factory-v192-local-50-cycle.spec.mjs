@@ -18,14 +18,53 @@ async function hardReset(page) {
   await expect(page.locator('[data-node]')).toHaveCount(0);
 }
 
+async function html5DragToCanvas(page, { kind = null, nodeId = null, targetPosition, expectedType }) {
+  const result = await page.evaluate(({ kind, nodeId, targetPosition, expectedType }) => {
+    const source = kind
+      ? document.querySelector(`[data-kind="${kind}"]`)
+      : [...document.querySelectorAll('[data-node]')].find(el => el.dataset.node === nodeId);
+    const canvas = document.getElementById('canvas');
+    if (!source || !canvas) throw new Error(`HTML5_DND_DOM_GAP ${JSON.stringify({ kind, nodeId })}`);
+    const dataTransfer = new DataTransfer();
+    const dragstart = new DragEvent('dragstart', { bubbles: true, cancelable: true, dataTransfer });
+    source.dispatchEvent(dragstart);
+    const typesAfterStart = [...dataTransfer.types];
+    const rect = canvas.getBoundingClientRect();
+    const clientX = Math.round(rect.left + targetPosition.x);
+    const clientY = Math.round(rect.top + targetPosition.y);
+    canvas.dispatchEvent(new DragEvent('dragenter', { bubbles: true, cancelable: true, dataTransfer, clientX, clientY }));
+    canvas.dispatchEvent(new DragEvent('dragover', { bubbles: true, cancelable: true, dataTransfer, clientX, clientY }));
+    canvas.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer, clientX, clientY }));
+    source.dispatchEvent(new DragEvent('dragend', { bubbles: true, cancelable: false, dataTransfer, clientX, clientY }));
+    return {
+      expectedType,
+      typesAfterStart,
+      kind: dataTransfer.getData('text/yaiwes-kind'),
+      node: dataTransfer.getData('text/yaiwes-node'),
+      nodeCount: document.querySelectorAll('[data-node]').length
+    };
+  }, { kind, nodeId, targetPosition, expectedType });
+  expect(result.typesAfterStart, `HTML5_DND_SOURCE_HANDLER_GAP ${JSON.stringify(result)}`).toContain(expectedType);
+  return result;
+}
+
 async function addAndMoveWithMouse(page) {
-  const source = page.locator('[data-kind="window"]');
-  const canvas = page.locator('#canvas');
-  await source.dragTo(canvas, { targetPosition: { x: 180, y: 160 } });
+  const added = await html5DragToCanvas(page, {
+    kind: 'window',
+    targetPosition: { x: 180, y: 160 },
+    expectedType: 'text/yaiwes-kind'
+  });
+  expect(added.kind, `HTML5_DND_KIND_GAP ${JSON.stringify(added)}`).toBe('window');
   await expect(page.locator('[data-node]')).toHaveCount(1);
   const node = page.locator('[data-node]').first();
+  const nodeId = await node.getAttribute('data-node');
   const before = await node.evaluate(el => ({ left: el.style.left, top: el.style.top }));
-  await node.dragTo(canvas, { targetPosition: { x: 420, y: 260 } });
+  const movedResult = await html5DragToCanvas(page, {
+    nodeId,
+    targetPosition: { x: 420, y: 260 },
+    expectedType: 'text/yaiwes-node'
+  });
+  expect(movedResult.node, `HTML5_DND_NODE_GAP ${JSON.stringify(movedResult)}`).toBe(nodeId);
   const after = await node.evaluate(el => ({ left: el.style.left, top: el.style.top }));
   expect(after).not.toEqual(before);
   return after;
@@ -109,11 +148,6 @@ async function touchDragNode(page) {
   const node = page.locator('[data-node]').first();
   const nodeId = await node.getAttribute('data-node');
 
-  // V1.9.2 trace 34732313529 proved the old synthetic start point could be
-  // below the visible Pixel 7 viewport (elementFromPoint=null) before the
-  // product adapter received any event. Scroll the real node into view and
-  // choose a point from the visible node/viewport intersection; this keeps
-  // the product assertion strict instead of masking a touch failure.
   await node.scrollIntoViewIfNeeded();
   const target = await node.evaluate(el => {
     const r = el.getBoundingClientRect();
