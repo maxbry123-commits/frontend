@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3",
+  "chat_id": "SOL GPT <11>",
+  "node_id": "N16-CHECKPOINT-BYTES-HASH",
+  "state": "CLAIMED",
+  "fresh_main_sha": "5cb855d20a1c51e4640c437e1b770c407124bc30",
+  "write_scope": "runtime/src/recovery/**|runtime/tests/test_recovery*",
+  "claimed_at": "2026-09-13T06:30:00Z",
+  "mode": "FAIL_CLOSED_LOOP"
+}
