@@ -3,7 +3,7 @@
   "audit_status": "INCOMPLETE",
   "base_sha": "a29290b02cf4aa655b85581d0ba134d3ac3f04d6",
   "contract": "tel.workflow/v3",
-  "current_node": "ASTRA-EVIDENCE-INPUT-004",
+  "current_node": "X17-11",
   "evidence": {
     "ci_run": 34711848316,
     "ci_status": "cancelled",
@@ -56,26 +56,92 @@
         ],
         "current_code_test_blobs_unchanged": true
       }
+    },
+    "x17_11": {
+      "checked_at_utc": "2026-09-13T07:07:00Z",
+      "n16": {
+        "run_id": 34742769854,
+        "job_id": 103685181927,
+        "conclusion": "success",
+        "runtime": "238 passed",
+        "subtests": "39 passed"
+      },
+      "n33": {
+        "run_id": 34743651221,
+        "job_id": 103687583217,
+        "conclusion": "success",
+        "runtime": "256 passed",
+        "subtests": "42 passed"
+      },
+      "n34_claim_commit": "a597e15cf29e659331696e55afe03cd0c0780e47",
+      "claim_collision_prevented": true,
+      "scanner_run_34711848316": "cancelled"
     }
   },
-  "node_id": "ASTRA-EVIDENCE-INPUT-004",
+  "node_id": "X17-11",
   "owner": "ASTRA_CROSSCHECK",
   "remaining": [
-    "Mapeo semántico de candidatos",
-    "E2E 85 capacidades con propietarios",
-    "Integraciones Sol y evidencia por componente",
-    "Benchmark real 100x",
-    "Consolidación shared STATE/CHECKPOINT por Orquestador"
+    "N34 four-source denominator is claimed by SOL GPT <16>; wait for its tested report before N35",
+    "N35 production RequirementTrace for the final denominator",
+    "N17 complete product E2E after truthful central reconciliation",
+    "E2E ownership/evidence for CHAT-001..CHAT-085",
+    "Platform/backend proof remains blocked where host reports no verified runtime backend",
+    "Benchmark 100x remains refuted: latest observed policy lookup 2.408x",
+    "Atomic Crazy Wall/STATE/CHECKPOINT/Handoff reconciliation by shared-state owner"
   ],
   "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-PREFLIGHT-SCOPE-003.json",
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T06:08:00Z",
+  "updated_at_utc": "2026-09-13T07:07:00Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
-  "write_scope": [],
-  "last_observed_head": "c007818f318895b3911b5e7d0391109ac6891a79",
+  "write_scope": [
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
+  ],
+  "last_observed_head": "892b3d0a377d420e4eb4095284e56be9cc3fce63",
   "last_activation": {
+    "node": "X17-11",
+    "status": "ACTIVE_LOOP",
+    "checkpoint_read": "f36fc9632843cb62911a7bb12503363450d592e7",
+    "observed_head": "892b3d0a377d420e4eb4095284e56be9cc3fce63",
+    "verify_research": [
+      "Fresh central Crazy Wall still exposes stale GAP/FREE rows after sidecar closures.",
+      "N34 apparent FREE state was refuted by valid claim sidecar a597e15 from SOL GPT <16>; ASTRA claim attempt was rejected with HTTP 409 and no overwrite was made.",
+      "No unowned FREE product-code node was safe to patch; existing critical scopes are claimed or blocked."
+    ],
+    "delta": "No product code or shared queue mutation. Re-read authoritative CI logs and persisted this owner-scoped checkpoint only.",
+    "tests": [
+      {
+        "run_id": 34742769854,
+        "job_id": 103685181927,
+        "result": "SUCCESS",
+        "wordflow": "41 passed",
+        "runtime": "238 passed",
+        "subtests": "39 passed",
+        "scope": "N16/current descendant blobs only"
+      },
+      {
+        "run_id": 34743651221,
+        "job_id": 103687583217,
+        "result": "SUCCESS",
+        "wordflow": "41 passed",
+        "runtime": "256 passed",
+        "subtests": "42 passed",
+        "scope": "N33 certified descendant and exact blobs only"
+      }
+    ],
+    "refutations": [
+      "Successful descendant CI does not certify latest HEAD or complete product E2E.",
+      "Scanner run 34711848316 remains CANCELLED.",
+      "Crazy Wall FREE/GAP labels are not safe claim authority when a newer sidecar claim/report proves ownership.",
+      "Latest benchmark observed in CI is 2.408x, not 100x."
+    ],
+    "council12": "Performed as evidence review across objective, sources, restrictions, dependencies, architecture, reuse, risks, alternatives, proof, refutation, consolidation and decision; no external Council claimed.",
+    "simulations": "No new product simulation executed; prior simulations not re-counted.",
+    "decision": "Keep X17-11 ACTIVE; do not collide with N34 or any product-code owner. Next activation must read N34 report, central reconciliation and latest CI before considering N35/N17.",
+    "limits": "No local test runner, new code patch, full four-source semantic audit, platform E2E or benchmark executed this activation."
+  },
+  "previous_activation": {
     "node": "ASTRA-EVIDENCE-INPUT-004",
     "status": "VERIFIED_CLOSED",
     "delta": "Verified completed CI and exact unchanged evidence guard/test blobs; no new code patch or local test execution.",
