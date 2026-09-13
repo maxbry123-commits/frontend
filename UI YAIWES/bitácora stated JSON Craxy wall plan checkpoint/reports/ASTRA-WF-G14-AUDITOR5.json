@@ -10,11 +10,13 @@
       "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/audit/**",
       "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_audit*",
       "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-WF-G14-AUDITOR5.json"
-    ]
+    ],
+    "status": "RELEASED_PATCH_CI_PENDING",
+    "released_at": "2026-09-13T01:19:33.977Z"
   },
   "claimed_at": "2026-09-12T20:28:40.971Z",
-  "code_blob": "dbacb054cb837ef362032b95ee6da68809caf606",
-  "code_commit": "ecb51bd654ebe2ce09af72620b47958e227c4db9",
+  "code_blob": "fc17eea236d96fdc09b18b81ad362cd9f6137db7",
+  "code_commit": "fc67c45840d3a121323e43179989424272b8f494",
   "completed_at": "2026-09-12T20:32:25.284Z",
   "component_decisions": {
     "conditional_existing_backlog": [
@@ -194,7 +196,7 @@
     "Immutable checkout required; filesystem reader is not a sandbox or TOCTOU guard",
     "Product verified always false; semantic completeness and E2E not inferred"
   ],
-  "next": "Wire independent CI verifier and complete requirement matrix; then WF-G15-CONSOLIDATOR under fresh claim.",
+  "next": "Read terminal CI; wire independent execution verifier and full requirement inventory.",
   "node_id": "WF-G14-AUDITOR5",
   "owner": "ASTRA_GPT",
   "prior_active_state": "ASTRA-CROSSCHECK state retains historical scanner claim; new V7 node uses disjoint audit paths; preserve it.",
@@ -237,20 +239,21 @@
     "current_user_instruction": "Auditoría forense X-Ray con verificación cruzada del plan, este chat, las instrucciones y Crazy Wall; informe detallado, porcentajes con denominador y plan de tres pasos.",
     "scope": "Complete blobs retrieved and current identities matched; requirements/sections and implementation boundaries reviewed. Full four-pass every-line audit not completed."
   },
-  "status": "CLAIMED",
+  "status": "LOCAL_REGRESSION_PASS_CI_PENDING",
   "steps": [
     "VERIFY_OR_RESEARCH",
     "EXECUTE_AUTHORIZED_DELTA",
     "TEST_AND_REPORT"
   ],
-  "test_blob": "dfbd83cc4cf6928705fb9ef96dafc15a5794736e",
-  "test_commit": "389ee3f9da4e84a89c70a2ed00cb222332419b3a",
+  "test_blob": "2cb967c5566b805b392d136c4a6d5debe24ea739",
+  "test_commit": "fc67c45840d3a121323e43179989424272b8f494",
   "test_run_or_log": {
     "command": "python -m unittest discover -s runtime/tests -p test_audit_five_pass.py -v",
+    "tests": 13,
     "failures": 0,
     "result": "OK",
-    "scope": "Local standard-library unittest; fixture execution verifier; not live CI or product E2E",
-    "tests": 9
+    "prepatch_failures": 3,
+    "scope": "Local auditor suite, not complete product E2E"
   },
   "three_step_plan": [
     {
@@ -314,5 +317,24 @@
   "write_scope": [
     "runtime/src/audit/five_pass.py",
     "runtime/tests/test_audit_five_pass.py"
-  ]
+  ],
+  "current_iteration": {
+    "started_at": "2026-09-13T01:14:41.043Z",
+    "updated_at": "2026-09-13T01:19:33.977Z",
+    "commit": "fc67c45840d3a121323e43179989424272b8f494",
+    "regression": "Empty/omitted/duplicate artifact inventory could falsely pass or omit inverse discrepancy.",
+    "result": "Both directions checked; duplicate inventory rejected; shared implementation and generator input supported.",
+    "ci": {
+      "run": 34730134580,
+      "job": 103651276537,
+      "head_sha": "fc67c45840d3a121323e43179989424272b8f494",
+      "status": "IN_PROGRESS",
+      "wordflow_step": "SUCCESS",
+      "runtime_step": "IN_PROGRESS"
+    },
+    "readback": "Exact code/test bytes matched tested files",
+    "claim_release": "PATCH_PUBLISHED; release execution lock, keep WF-G14 integration pending",
+    "next": "Read terminal CI; wire independent execution verifier and full requirement inventory.",
+    "loop_checkpoint": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-LOOP-CODA-2026-09-13.json"
+  }
 }
