@@ -4,22 +4,24 @@
   "chat_id":"FACTORY-SOL-1-GPT",
   "agent_name":"SOL 1 GPT 🆘",
   "node_id":"F-AI-024",
-  "fresh_main_sha":"23f08cc76d994cebda366efdbb491119b6ecea6e",
+  "fresh_main_sha":"45ba0849a2b21f7b20648a344316e34aa107c765",
   "base_sha":"23f08cc76d994cebda366efdbb491119b6ecea6e",
-  "write_scope":"F-AI-024 E2E integration; canonical index-v19 import-controller wiring only after reproduced gap; dedicated E2E/evidence; no F-UI-059 paths and no Wordflow paths",
+  "write_scope":"F-AI-024 canonical integration only: index-v19 import-controller wiring + dedicated E2E/workflow/evidence; no F-UI-059 paths and no Wordflow paths",
   "paths":[
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html",
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ai-024-integration.spec.mjs",
+    ".github/workflows/factory-f-ai-024-integration.yml",
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-AI-024-FACTORY-SOL-1-EVIDENCE.json",
     "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-AI-024-FACTORY-SOL-1-GPT-CLAIM.json"
   ],
   "claimed_at":"2026-09-12T23:36:00-05:00",
-  "state":"IN_PROGRESS_PRODUCT_FAILURE_REPRODUCED",
-  "classification":"PRODUCT_FAILURE: canonical index-v19 wires router bridge but omits file-import-controller-v1, so file/HTML/reference adapters cannot reach editable canvas on canonical entrypoint",
+  "state":"IN_PROGRESS_PRODUCT_FAILURE_FIXED_PENDING_E2E",
+  "classification":"PRODUCT_FAILURE: canonical index-v19 omitted file-import-controller-v1; fixed by loading canonical import controller",
+  "product_delta_sha":"45ba0849a2b21f7b20648a344316e34aa107c765",
   "dependencies":{"F-AI-017":"PASS_100_RELEASED","F-AI-018":"PASS_PENDING_REVIEW","F-AI-019":"PASS_PENDING_REVIEW","F-AI-020":"PASS_PENDING_REVIEW","F-AI-021":"PASS_PENDING_REVIEW","F-AI-022":"PASS_PENDING_REVIEW","F-AI-023":"PASS_100_RELEASED","F-UI-050":"PASS_PENDING_REVIEW_100"},
   "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
   "acceptance":"E2E source->router/adapter->editor->editable state with evidence",
-  "pass_percent":60,
-  "remaining_gaps":["canonical import-controller wiring","fresh browser E2E"],
-  "next":"patch canonical script load and run E2E"
+  "pass_percent":70,
+  "remaining_gaps":["fresh browser E2E on canonical entrypoint"],
+  "next":"add spec+workflow and read run/job/log"
 }
