@@ -5,6 +5,11 @@
   "fresh_main_sha": "54436297718fc33a64128002f96569250fe56579",
   "write_scope": "runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*",
   "claimed_at": "2026-09-13T06:27:30Z",
-  "state": "CLAIMED",
-  "execution_state": "IN_PROGRESS"
+  "state": "VERIFIED_CLOSED",
+  "execution_state": "DONE",
+  "reported_at": "2026-09-13T06:31:00Z",
+  "report_commit": "3d4da6838547c11094bfb223a7b3771932e028a7",
+  "run_id": 34739510224,
+  "job_id": 103678337638,
+  "pass_percent": 100
 }
