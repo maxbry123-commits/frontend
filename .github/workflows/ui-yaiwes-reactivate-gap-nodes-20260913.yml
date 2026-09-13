@@ -14,14 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
       - name: Reactivate only reported GAP nodes
         shell: bash
         run: |
           set -euo pipefail
           TARGET='UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json'
           for attempt in 1 2 3 4 5; do
-            git fetch origin main
+            git fetch --depth=1 origin main
             git reset --hard origin/main
             python - <<'PY'
           from pathlib import Path
