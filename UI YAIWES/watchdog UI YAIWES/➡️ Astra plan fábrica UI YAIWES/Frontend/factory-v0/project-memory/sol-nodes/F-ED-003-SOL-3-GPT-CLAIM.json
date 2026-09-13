@@ -1,15 +1,6 @@
 {
-  "schema":"yaiwes.factory.sol.claim.v1",
-  "contract":"tel.workflow/v3",
-  "chat_id":"SOL-3-GPT-2026-09-12T21:44-05:00",
-  "agent_name":"SOL 3 GPT 🆘",
-  "node_id":"F-ED-003",
-  "fresh_main_sha":"8848549b3b0e5df0586406d6fa915ea8a660a941",
-  "base_sha":"8848549b3b0e5df0586406d6fa915ea8a660a941",
-  "write_scope":"Factory F-ED-003 selection verification/evidence only until a product failure is reproduced; excludes F-ED-001 mobile and all Wordflow N01-N31",
+  "schema":"yaiwes.factory.sol.claim.v1","contract":"tel.workflow/v3","chat_id":"SOL-3-GPT-2026-09-12T21:44-05:00","agent_name":"SOL 3 GPT 🆘","node_id":"F-ED-003",
+  "fresh_main_sha":"8848549b3b0e5df0586406d6fa915ea8a660a941","base_sha":"8848549b3b0e5df0586406d6fa915ea8a660a941","write_scope":"Factory F-ED-003 selection verification/evidence only; excludes F-ED-001 mobile and Wordflow N01-N31",
   "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-ED-003-SOL-3-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-ED-003-SOL-3-EVIDENCE.json"],
-  "claimed_at":"2026-09-12T21:45:30-05:00",
-  "state":"CLAIMED",
-  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "goals12_input":{"G01":"PASS literal selection requirement","G02":"PASS fresh HEAD","G03":"PASS authority sources reconciled","G04":"PASS unique evidence paths after sol-nodes reread","G05":"PENDING","G06":"PASS reuse-first","G07":"PENDING","G08":"PENDING","G09":"PENDING","G10":"PENDING","G11":"PENDING","G12":"PENDING"}
+  "claimed_at":"2026-09-12T21:45:30-05:00","state":"PASS_PENDING_REVIEW","evidence_commit_sha":"2da8ba5991882c99f0a73912b37d92d144f768fa","evidence_blob_sha":"9624d1184093f5426f09ca5a9e2c87b327efa9a8","tests":"static reducer + layers/canvas/editor readback; browser switch-selection assertion remains review evidence gap","simulations":3,"refutations":3,"review_required":true,"remaining_gaps":["independent browser A->B selection assertion before VERIFIED_CLOSED"],"next_free_node":"READ_FRESH_REQUIRED","steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],"goals12_output":{"G01":"PASS","G02":"PASS","G03":"PASS","G04":"PASS","G05":"PASS","G06":"PASS","G07":"PASS_REUSE","G08":"PASS_STATIC","G09":"GAP_BROWSER_ASSERTION","G10":"PASS","G11":"PASS","G12":"PASS"}
 }
