@@ -34,7 +34,7 @@
       "code_blob": "ef1c9b753a2495f0488962a8e7f1160d1593e75b",
       "test_blob": "bc19c1502da720673b92d248f9d8bdaedc0c3cb9",
       "ci_run": 34739510224,
-      "ci_status": "pending",
+      "ci_status": "success",
       "regression_cases": [
         "None",
         "str",
@@ -42,7 +42,20 @@
         "memoryview",
         "object"
       ],
-      "claim": "Malformed non-bytes evidence returns False before trusted lookup"
+      "claim": "Malformed non-bytes evidence returns False before trusted lookup",
+      "ci_evidence": {
+        "run_id": 34739510224,
+        "job_id": 103678337638,
+        "sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+        "completed_at_utc": "2026-09-13T05:33:39Z",
+        "wordflow": "41 passed in 0.15s",
+        "runtime": "206 passed, 2 warnings, 39 subtests passed in 663.12s",
+        "commands": [
+          "python -m pytest -q",
+          "python -m pytest -q tests"
+        ],
+        "current_code_test_blobs_unchanged": true
+      }
     }
   },
   "node_id": "ASTRA-EVIDENCE-INPUT-004",
@@ -58,20 +71,39 @@
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T05:08:00Z",
+  "updated_at_utc": "2026-09-13T06:08:00Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [],
-  "last_observed_head": "ac91c4812f3bac30ed6d91e0033ea0e723ab693b",
+  "last_observed_head": "c007818f318895b3911b5e7d0391109ac6891a79",
   "last_activation": {
     "node": "ASTRA-EVIDENCE-INPUT-004",
-    "status": "CLOSED_UNVERIFIED",
-    "delta": "Strict bytes gate added before decoding untrusted CI evidence; five malformed input types covered.",
-    "tests": "CI run 34739510224 pending; no local suite claimed",
+    "status": "VERIFIED_CLOSED",
+    "delta": "Verified completed CI and exact unchanged evidence guard/test blobs; no new code patch or local test execution.",
+    "tests": {
+      "run_id": 34739510224,
+      "job_id": 103678337638,
+      "sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+      "completed_at_utc": "2026-09-13T05:33:39Z",
+      "wordflow": "41 passed in 0.15s",
+      "runtime": "206 passed, 2 warnings, 39 subtests passed in 663.12s",
+      "commands": [
+        "python -m pytest -q",
+        "python -m pytest -q tests"
+      ],
+      "current_code_test_blobs_unchanged": true
+    },
     "refutations": [
-      "Bytes type gate does not prove CI lookup authenticity.",
-      "Pending CI is not PASS.",
-      "This subgate does not establish product E2E or global closure."
+      "Successful CI applies to the recorded SHA/suites, not complete product closure.",
+      "Original scanner run 34711848316 remains cancelled.",
+      "N16 implementation/test hashes match this successful CI; stale queue state is not proof of missing code."
     ],
-    "next": "Verify exact CI job/logs; if success promote only this subgate, then continue semantic/effect isolation queue."
+    "next": "N16 owner SOL GPT 🆘1 can reconcile its stale CI GAP against run 34739510224; N03 owner retains 98 production traces. Continue semantic mapping and E2E without overlapping claims.",
+    "n16_readback": {
+      "implementation_blob": "252b5b5bd47d082df4c2963e624c64990e160bb4",
+      "test_blob": "9631f9d112913d66836fab3f7c2627030bfac411",
+      "same_at_current_main_and_tested_sha": true,
+      "owner_unchanged": true
+    },
+    "limits": "No new simulations, external Council, full 17-document semantic audit, benchmark or global E2E executed."
   }
 }
