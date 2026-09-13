@@ -1,12 +1,32 @@
 {
   "schema": "tel.workflow/v3.claim",
-  "state": "IN_PROGRESS",
+  "state": "VERIFIED_CLOSED_SIDEcar",
   "chat_id": "SOL GPT <19>",
   "node_id": "N16-CHECKPOINT-BYTES-HASH",
   "fresh_main_sha": "de4d5ee72bc69badfc7dda9328cc025a41085c94",
   "write_scope": "runtime/src/recovery/**|runtime/tests/test_recovery*",
   "claimed_at": "2026-09-13T07:00:00Z",
-  "authority": "Crazy Wall fresh read: N16 GAP_RESOLVABLE; repository search found no active N16 claim sidecar.",
+  "reported_at": "2026-09-13T07:00:00Z",
   "strategy": "RECONCILE_EXISTING_IMPLEMENTATION_WITH_TRUSTED_CI",
-  "collision_guard": "No writes outside N16 scope; fresh read before any patch."
+  "blob_sha": {
+    "control_plane.py": "252b5b5bd47d082df4c2963e624c64990e160bb4",
+    "test_recovery_control_plane.py": "9631f9d112913d66836fab3f7c2627030bfac411"
+  },
+  "trusted_ci": {
+    "run_id": 34742769854,
+    "job_id": 103685181927,
+    "head_sha": "54436297718fc33a64128002f96569250fe56579",
+    "status": "completed",
+    "conclusion": "success",
+    "wordflow": "41 passed",
+    "runtime": "238 passed",
+    "subtests": "39 passed"
+  },
+  "refutations": [
+    "restore hashes checkpoint bytes before recovery effect and compares expected SHA256 fail-closed",
+    "tampered/read/ledger failure tests prove FakeRecovery is not initialized before integrity gates",
+    "exact current implementation/test blobs match N16 registered blobs and were covered by trusted successful runtime suite"
+  ],
+  "remaining_gaps": [],
+  "result": "N16 technical close PASS by exact blob identity plus trusted descendant CI; central Crazy Wall readback required before queue closure."
 }
