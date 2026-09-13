@@ -4,18 +4,18 @@
   "chat_id":"SOL-8-GPT-2026-09-12T22:23-05:00",
   "agent_name":"SOL 8 GPT 🆘",
   "node_id":"F-CTL-011",
-  "fresh_main_sha":"bb91ea2d7cc2a4c7cc4a6275f399bfccef282431",
+  "fresh_main_sha":"3af96e40f4c7f5172acbdcb088e7352970f2010b",
   "base_sha":"bb91ea2d7cc2a4c7cc4a6275f399bfccef282431",
-  "write_scope":"F-CTL-011 only: versions/rollback verification; initial scope limited to dedicated test/workflow/claim/report until a product GAP is proven against fresh HEAD",
-  "paths":[
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ctl-011-version-rollback.spec.mjs",
-    ".github/workflows/factory-f-ctl-011-version-rollback.yml",
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-CTL-011-SOL-8-GPT-CLAIM.json",
-    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-CTL-011-SOL-8-GPT-REPORT.json"
-  ],
+  "write_scope":"RELEASED after exact-SHA runtime verification; no active writer lock remains",
+  "paths":[],
   "claimed_at":"2026-09-13T03:23:50Z",
-  "state":"CLAIMED",
+  "released_at":"2026-09-13T03:29:30Z",
+  "state":"PASS_RELEASED",
   "assertion_to_validate":"Versiones/rollback de proyecto restauran el estado guardado sin pérdida.",
-  "acceptance":"version guardada/restaurada sin perdida",
-  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"]
+  "acceptance":"PASS",
+  "tested_sha":"34a5ae2ae65d0ff85e82a49291883b7c3dfa8a46",
+  "run_id":34735522782,
+  "job_id":103666146106,
+  "report_commit":"f4f3d4bc781ec9aa2e60294ac919ca914d7f3c46",
+  "result":"100_PASS_NODE_LEVEL"
 }
