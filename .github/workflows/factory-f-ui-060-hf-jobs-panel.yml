@@ -1,0 +1,54 @@
+name: Factory F-UI-060 Hugging Face Jobs Panel
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v19.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/hf-jobs-panel-v1.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/f-ui-060-hf-jobs.test.mjs'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-060-hf-jobs-web.spec.mjs'
+      - '.github/workflows/factory-f-ui-060-hf-jobs-panel.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: factory-f-ui-060-hf-jobs-panel
+  cancel-in-progress: true
+jobs:
+  hf-jobs-panel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Contract and secret-sanitization gate
+        run: |
+          node --check src/hf-jobs-panel-v1.js
+          node --check tests/f-ui-060-hf-jobs.test.mjs
+          grep -F './src/hf-jobs-panel-v1.js' index-v19.html
+          node tests/f-ui-060-hf-jobs.test.mjs
+      - name: Browser HF Jobs state matrix
+        run: npx playwright test tests/e2e/f-ui-060-hf-jobs-web.spec.mjs --project=chromium-desktop
+      - name: Upload F-UI-060 screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: f-ui-060-hf-jobs-evidence-${{ github.sha }}
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/f-ui-060/*.png
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report/**
+          if-no-files-found: warn
+          retention-days: 14
