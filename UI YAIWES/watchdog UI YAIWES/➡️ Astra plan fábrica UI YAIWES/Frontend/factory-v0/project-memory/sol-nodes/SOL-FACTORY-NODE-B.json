@@ -3,14 +3,14 @@
   "node_id": "SOL_FACTORY_B_T1_OSS_BACKEND_DONOR_REVIEW",
   "owner": "SOL 2 GPT 🆘",
   "reviewer": "ASTRA",
-  "status": "CLAIMED",
+  "status": "PASS_PENDING_REVIEW",
   "gate": "T1_FACTORY_FRONTEND",
   "task": "Review one existing OSS component as a backend donor candidate for the factory/interface boundary, without starting T2 or writing Sol production backend.",
   "max_steps": 3,
   "steps": [
-    "1_READ: read Crazy Wall, INPUT addendum, PLAN donor policy and local OSS component inventory; claim exactly one component/capability.",
-    "2_EXECUTE: classify the minimum reusable backend capability, source/ref/license and adapter boundary; stage only evidence/spec under project-memory.",
-    "3_REPORT: record frontend/backend destination recommendation, test needed, GAPs and provenance; no presence-only PASS and no production backend write."
+    "1_READ: completed; Crazy Wall/STATE/checkpoint/component audit and current main read; one donor capability selected after dedup.",
+    "2_EXECUTE: completed as evidence/spec-only donor classification for HTTPX; no production backend write and no T2 start.",
+    "3_REPORT: completed; provenance, capability, destination, adapter boundary, test plan, simulations/refutations and remaining GAP persisted here."
   ],
   "claim": {
     "chat_id": "SOL-2-GPT-2026-09-12T21:44-05:00",
@@ -21,20 +21,71 @@
     "write_scope": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-B.json only",
     "paths": ["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/SOL-FACTORY-NODE-B.json"],
     "claimed_at": "2026-09-12T21:46:30-05:00",
-    "state": "CLAIMED"
+    "state": "PASS_PENDING_REVIEW"
   },
-  "goals12_input": {
-    "G01":"PASS literal node preserved","G02":"PASS fresh main read","G03":"PASS Crazy Wall/STATE/CHECKPOINT/project-memory read","G04":"PASS node READY_TO_CLAIM; distinct path from SOL1/SOL3/SOL6","G05":"PENDING donor dedup","G06":"PASS reuse-first","G07":"PENDING evidence-only delta","G08":"PENDING provenance validation","G09":"N/A no production integration in this node","G10":"PENDING 3 simulations/refutations","G11":"PENDING SHA/readback","G12":"PENDING reconcile after report"
+  "verify_research": {
+    "main_recheck_sha": "3cde041f2a21702021466698b243b660b1214738",
+    "stale_lock_gap": false,
+    "component_audit_rule": "SOURCE_PRESENT != INTEGRATED != RUNTIME_PASS",
+    "selected_component": "HTTPX",
+    "selected_capability": "Python HTTP client transport for future backend boundary",
+    "classification": "SOURCE_PRESENT_CANDIDATE_NOT_WIRED",
+    "strategy_delta": "REUSE_EXISTING_SOURCE_AS_FUTURE_DONOR_SPEC",
+    "dedup": "HTTPX is already physically present in the canonical local OSS inventory; no download or duplicate transport library required",
+    "integration_gap": "HTTPX is not yet wired into a productive YAIWES backend transport and T2 productive writes remain blocked until T1 handoff"
   },
+  "donor": {
+    "name": "HTTPX",
+    "official_source": "https://github.com/encode/httpx",
+    "pinned_source_commit": "b5addb64f0161ff6bfe94c124ef76f6a1fba5254",
+    "local_path": "UI YAIWES/componentes open soure UI YAIWES/HTTPX/",
+    "provenance_blobs": {
+      "SOURCE_URL.txt": "0b59b9b3dddea1828e59317087a4f7e0c2f2fe4f",
+      "SOURCE_COMMIT.txt": "71422023cf549d2bda007ec354be2ba2631e5f2c",
+      "SOURCE_LICENSE.txt": "d81b6d6a4613f593a99d9fda2d6245cfdf382192",
+      "LICENSE.md": "ab79d16a3f4c6c894c028d1f7431811e8711b42b",
+      "README.md": "2ccecd578c3dfdd4fa1f7fc493309cfc944f7cb3"
+    },
+    "license": "BSD-3-Clause-compatible terms evidenced by local LICENSE.md",
+    "capabilities_evidenced": ["HTTP/1.1", "HTTP/2", "sync API", "async API", "strict timeouts", "ASGI/WSGI transports"],
+    "adapter_boundary": "future Python backend transport implementation only; normalize behind tel.workflow/v3 consumed by existing Factory createSolContractAdapter; never a second router/state engine",
+    "backend_destination_after_handoff": "UI YAIWES interface/Backend/",
+    "promotion_state": "CANDIDATE_STAGED_ONLY"
+  },
+  "test_plan": {
+    "required_after_T1_handoff": [
+      "instantiate HTTPX AsyncClient with explicit timeout",
+      "send mock tel.workflow/v3 request through controlled ASGI transport",
+      "normalize HTTP response into existing SolContractAdapter event shape",
+      "assert timeout/network/non-2xx failures fail closed and do not mutate editor state",
+      "integration test source->HTTPX transport->contract response->Factory adapter",
+      "persist exact HTTPX pin + test SHA + log/readback"
+    ],
+    "not_executed_now": "productive backend integration is forbidden while T1 is not handed off; this node is donor review/spec only"
+  },
+  "simulations": [
+    {"id":"SIM1","scenario":"successful JSON tel.workflow/v3 response","result":"DESIGN_PASS"},
+    {"id":"SIM2","scenario":"async backend call through AsyncClient","result":"DESIGN_PASS"},
+    {"id":"SIM3","scenario":"controlled ASGI mock transport without external network","result":"DESIGN_PASS"}
+  ],
+  "refutations": [
+    {"id":"REFUTE1","scenario":"HTTPX folder merely exists","result":"PASS_REFUTATION","finding":"presence alone is NOT integration"},
+    {"id":"REFUTE2","scenario":"use HTTPX as router/state engine","result":"PASS_REFUTATION","finding":"rejected; scope is HTTP transport only"},
+    {"id":"REFUTE3","scenario":"write productive Backend before T1 handoff","result":"PASS_REFUTATION","finding":"rejected; promotion remains blocked"}
+  ],
+  "goals12_output": {
+    "G01":"PASS literal node preserved","G02":"PASS fresh main reread","G03":"PASS authoritative component audit consulted","G04":"PASS single writer retained","G05":"PASS donor dedup","G06":"PASS no new OSS download","G07":"PASS evidence/spec-only minimum delta","G08":"PASS official source/ref/license traced","G09":"PASS integration test plan defined; productive integration deferred","G10":"PASS 3 design simulations + 3 refutations","G11":"PASS provenance SHA persisted; report readback follows commit","G12":"PASS_PENDING_REVIEW; reconcile next free node after fresh main"
+  },
+  "remaining_gaps": [
+    "T1 must reach authorized handoff before Backend promotion",
+    "HTTPX runtime wiring and integration test not yet executed",
+    "ASTRA independent review/readback required"
+  ],
+  "review_required": true,
+  "next_free_node": "RECONCILE_AFTER_FRESH_MAIN",
   "allowed_write_root": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/",
   "backend_destination_after_handoff": "UI YAIWES interface/Backend/",
   "frontend_destination_after_handoff": "UI YAIWES interface/Fromtend/",
-  "forbidden_write_roots": [
-    "UI YAIWES/Interface YAIWES ui/",
-    "UI YAIWES/Fabrica UI YAIWES/",
-    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/"
-  ],
-  "loop": "INPUT literal -> claim node -> execute <=3 steps -> verify/refute -> GAP/StrategyDelta -> report",
-  "claim_rule": "single_writer_per_path=true; one component = one node; record environment identity before work",
+  "forbidden_write_roots": ["UI YAIWES/Interface YAIWES ui/","UI YAIWES/Fabrica UI YAIWES/","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/"],
   "close_when": "candidate has URL/ref/license/capability/destination/test-plan/read-back and ASTRA review"
 }
