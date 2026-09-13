@@ -51,8 +51,10 @@ def test_adapter_deduplicates_evidence_without_scheduling_or_retrying():
     ],
 )
 def test_fail_closed_on_invalid_worker_result(raw, error):
+    worker = FakeStabilizeWorker(raw)
     with pytest.raises(error):
-        WorkerAdapter(FakeStabilizeWorker(raw)).execute(WorkerTask("t-3", {}))
+        WorkerAdapter(worker).execute(WorkerTask("t-3", {}))
+    assert len(worker.calls) == 1
 
 
 def test_task_id_required_before_worker_effect():
