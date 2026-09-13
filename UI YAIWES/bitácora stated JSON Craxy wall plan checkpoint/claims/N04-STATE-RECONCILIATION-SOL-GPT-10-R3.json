@@ -1,0 +1,11 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <10>",
+  "node_id": "N04-STATE-RECONCILIATION",
+  "fresh_main_sha": "48b22db7653eb3d25a0e58865cb0ef8d2994f606",
+  "crazy_wall_source_blob": "0101749745fcbf9a6ab7ba299dcd7e78bbc59492",
+  "write_scope": "shared state docs only",
+  "claimed_at": "2026-09-13T07:12:00Z",
+  "reason": "N04 remains FREE while verified lateral evidence proves stale central states; perform full-file JSON reconciliation guarded by source blob SHA."
+}
