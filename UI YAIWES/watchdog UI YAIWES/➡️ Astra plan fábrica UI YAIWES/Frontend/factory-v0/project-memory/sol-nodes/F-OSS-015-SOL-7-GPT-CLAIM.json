@@ -1,0 +1,16 @@
+{
+  "schema":"tel.workflow/v3",
+  "chat_id":"SOL-7-GPT-2026-09-12T21:46-05:00",
+  "agent_name":"SOL 7 GPT 🆘",
+  "node_id":"F-OSS-015",
+  "fresh_main_sha":"a8165b19df34436d1590c0364f80b81d718d19b9",
+  "base_sha":"a8165b19df34436d1590c0364f80b81d718d19b9",
+  "write_scope":"F-OSS-015 only: dedicated Frappe donor runtime test + isolated workflow + additive evidence; existing adapter/index wiring read-only unless product failure reproduced; excludes Wordflow N01-N31",
+  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-OSS-015-SOL-7-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-oss-015-frappe-context-menu.spec.mjs",".github/workflows/factory-f-oss-015-frappe-donor.yml","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-OSS-015-SOL-7-EVIDENCE.json"],
+  "claimed_at":"2026-09-12T22:05:30-05:00",
+  "state":"CLAIMED",
+  "classification":"EVIDENCE_FAILURE",
+  "gap":"Frappe donor is physically present and index-v19 wires adapter+CSS, but no dedicated runtime test was found proving context-menu actions affect project state.",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "goals12_input":{"G01":"PASS SOURCE_PRESENT->WIRED->RUNTIME_TEST_PASS","G02":"PASS fresh main a8165b19","G03":"PASS dynamic queue read F-OSS-015 FREE","G04":"PASS no F-OSS-015 competing claim found; unique paths","G05":"PASS existing adapter/index wiring deduped","G06":"PASS reuse Frappe donor; no download","G07":"EXECUTING test-only delta","G08":"PENDING","G09":"PENDING Playwright runtime test","G10":"PENDING 3+3","G11":"PENDING","G12":"PENDING"}
+}
