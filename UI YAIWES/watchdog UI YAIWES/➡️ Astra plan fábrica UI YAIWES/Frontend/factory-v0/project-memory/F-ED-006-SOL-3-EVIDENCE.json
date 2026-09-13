@@ -1,0 +1,46 @@
+{
+  "schema":"yaiwes.factory.sol.node-evidence.v1",
+  "contract":"tel.workflow/v3",
+  "agent_name":"SOL 3 GPT 🆘",
+  "node_id":"F-ED-006",
+  "base_sha":"4146b690ecd2c61f5b6d853e08a2ccefbb8f3523",
+  "tested_sha":"287a51814806bfe06a311a195f99d5fb91e82df9",
+  "state":"PASS_PENDING_REVIEW",
+  "classification":["PRODUCT_FAILURE_PATCHED","TEST_HARNESS_FAILURE_IDENTIFIED_AND_ISOLATED","EVIDENCE_FAILURE_RESOLVED"],
+  "deltas":{
+    "scroll_product_commit":"fdfec70894ca18d225004b0f484c4fb1ec5939fa",
+    "shared_ci_trigger_commit":"688f6d40830737d148d10d23a3db924ce1096727",
+    "viewport_safe_microtest_create":"22316abf4db7740dec7324ae8da5495cbb99d559",
+    "viewport_safe_mouse_touch_test":"9cfb6031f3e77a59d8bf7ace5dd89d3d2461414f",
+    "isolated_workflow_commit":"287a51814806bfe06a311a195f99d5fb91e82df9"
+  },
+  "runs":{
+    "pre_patch_failure":{"run_id":34733865710,"job_id":103662574511,"result":"FAIL_TOUCH_SCROLL_ZERO_AFTER_DESKTOP_50_AND_TOUCH_MOVE_RELOAD_PASS"},
+    "isolated_first":{"run_id":34734689476,"job_id":103663860407,"result":"FAIL_SHARED_TEST_COORDINATE_PATH","artifact_id":10310716310,"artifact_digest":"sha256:2a9dd1fd828e8bacd0389c995ac17bb7a3dd6fbd8c187ddf45d2111b5e93fb48"},
+    "isolated_final":{"run_id":34734838713,"job_id":103664278104,"result":"SUCCESS","tested_sha":"287a51814806bfe06a311a195f99d5fb91e82df9"}
+  },
+  "final_tests":[
+    "syntax scroll-preserver PASS",
+    "syntax dedicated F-ED-006 Playwright PASS",
+    "single #context-scroll owner count=1",
+    "nested .oss-grid overflow-y visible",
+    "desktop mouse wheel: scrollTop 0 -> 900 PASS",
+    "mobile visible target elementFromPoint inside #context-scroll PASS",
+    "mobile touch scroll: scrollTop 0 -> 472 PASS",
+    "2 applicable tests passed; 2 cross-project skips expected"
+  ],
+  "simulations":[
+    "S1 desktop step3 -> one scroll owner -> mouse wheel changes owner scrollTop",
+    "S2 mobile step3 -> visible viewport intersection -> hit belongs to context scroll owner -> touchmove changes scrollTop",
+    "S3 concurrent swarm commits do not cancel isolated F-ED-006 gate because dedicated concurrency has cancel-in-progress=false"
+  ],
+  "refutations":[
+    "R1 original raw bounding-box mobile test was refuted as discriminating evidence because its coordinates were not clipped to viewport",
+    "R2 product presence was not accepted as PASS; exact SHA browser runtime was required",
+    "R3 desktop historical PASS was not inherited after scroll-preserver source change; current SHA mouse gate was rerun"
+  ],
+  "goals12_output":{"G01":"PASS","G02":"PASS fresh source/run","G03":"PASS","G04":"PASS unique writer","G05":"PASS reuse existing scroll owner","G06":"PASS no OSS download","G07":"PASS minimum patch+isolated harness delta","G08":"PASS specific browser gate","G09":"PASS desktop+mobile integration","G10":"PASS 3 simulations + 3 refutations","G11":"PASS exact run/job/SHA/log persisted; success produced no artifact files","G12":"PASS release node then fresh queue reconciliation"},
+  "council12":["objective=single contextual panel mouse/touch scroll","requirement=real mouse+touch scrolling","authority=fresh browser run","prior=touch scroll zero","owner=SOL 3","collision=dedicated files and isolated gate","gap=product/harness discriminated","alternatives=second panel rejected","strategy=patch existing scroll owner + viewport-safe test","tests=exact-SHA desktop/mobile","refutations=3","decision=PASS_PENDING_REVIEW"],
+  "remaining_gaps":["independent reviewer required before VERIFIED_CLOSED","global Factory closure remains downstream"],
+  "review_required":true
+}
