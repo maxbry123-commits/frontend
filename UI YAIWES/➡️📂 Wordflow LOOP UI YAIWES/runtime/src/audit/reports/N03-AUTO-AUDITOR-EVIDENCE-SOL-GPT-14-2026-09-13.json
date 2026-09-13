@@ -1,0 +1,53 @@
+{
+  "schema": "tel.workflow/v3",
+  "node_id": "N03-AUTO-AUDITOR-EVIDENCE",
+  "chat_id": "SOL GPT <14>",
+  "result": "PASS_RECONCILED_EXISTING_IMPLEMENTATION",
+  "strategy": "REUSE_EXISTING",
+  "claim_commit": "86351bc460ceb8d5620291cdba56997d94a022cd",
+  "verified_main_before_report": "a7f85c23fe3600425c9cbb71d365773dee48d102",
+  "implementation": {
+    "evidence_py_blob": "ef1c9b753a2495f0488962a8e7f1160d1593e75b",
+    "matrix_py_blob": "637b64161f67f6d2f8aaa0280555964385bef6e2",
+    "test_audit_evidence_matrix_blob": "bc19c1502da720673b92d248f9d8bdaedc0c3cb9",
+    "evidence_verifier": "fail-closed trusted run/job lookup + revision/implementation/test hash binding",
+    "matrix_wiring": "RequirementMatrix delegates to existing audit_five_pass; no second governance/consolidation owner"
+  },
+  "authoritative_ci": {
+    "run_id": 34739510224,
+    "job_id": 103678337638,
+    "head_sha": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+    "status": "completed",
+    "conclusion": "success",
+    "wordflow": "41 passed",
+    "runtime": "206 passed, 39 subtests passed, 2 warnings",
+    "exact_evidence_blob": "ef1c9b753a2495f0488962a8e7f1160d1593e75b",
+    "exact_test_blob": "bc19c1502da720673b92d248f9d8bdaedc0c3cb9"
+  },
+  "claim_push_ci": {
+    "run_id": 34742876123,
+    "head_sha": "86351bc460ceb8d5620291cdba56997d94a022cd",
+    "conclusion": "cancelled",
+    "counted_as_pass": false
+  },
+  "refutations": [
+    {
+      "question": "cumplio_todo_schema_n03",
+      "result": "PASS",
+      "evidence": "current verifier+matrix+tests exist, are wired to five-pass, and exact current critical blobs were exercised by trusted successful CI"
+    },
+    {
+      "question": "queda_gap_real_del_nodo",
+      "result": "PASS_NO_NODE_GAP",
+      "evidence": "historic missing-global-CI gap is superseded by successful run 34739510224/job 103678337638; production 98-trace inventory remains a global N30/product residual, not a defect in N03 verifier execution"
+    },
+    {
+      "question": "evidencia_demuestra_100_pass_del_nodo",
+      "result": "PASS",
+      "evidence": "exact evidence/test blob parity plus completed/success full runtime CI; cancelled claim run is explicitly excluded"
+    }
+  ],
+  "remaining_gaps": [],
+  "product_global_verified": false,
+  "note": "N03 closure is functional/evidence-verifier scope only; it does not convert N30 global product residuals into PASS."
+}
