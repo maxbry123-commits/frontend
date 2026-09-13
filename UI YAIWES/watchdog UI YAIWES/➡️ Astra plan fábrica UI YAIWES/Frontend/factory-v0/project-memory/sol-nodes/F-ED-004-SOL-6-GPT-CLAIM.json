@@ -1,22 +1,35 @@
 {
   "schema":"yaiwes.factory.sol.claim.v1",
   "contract":"tel.workflow/v3",
-  "chat_id":"SOL-6-GPT-2026-09-12T21:45-05:00",
+  "chat_id":"SOL-6-GPT-2026-09-12T21:54-05:00",
   "agent_name":"SOL 6 GPT 🆘",
   "node_id":"F-ED-004",
-  "fresh_main_sha":"20a9f144fbea6f941e2ad85a1f117387793f8a3a",
+  "fresh_main_sha":"a7c0942ddf398197791fc85ccada308efbea382b",
   "base_sha":"bf9cbec840ff45a059e1679cb545a5f90e2172a3",
-  "write_scope":"Factory F-ED-004 reload persistence verification/evidence only; app-v19.js is now actively owned by SOL 5 F-IO-028 and is excluded from SOL 6 writes; excludes Wordflow N01-N31",
-  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-ED-004-SOL-6-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-ED-004-SOL-6-EVIDENCE.json"],
-  "claimed_at":"2026-09-12T21:46:21-05:00",
-  "state":"GAP",
+  "write_scope":"Factory F-ED-004 reload persistence verification/evidence only; no product-source writes while shared source paths are owned by other SOL nodes; excludes Wordflow N01-N31",
+  "paths":[
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-ED-004-SOL-6-GPT-CLAIM.json",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-ED-004-SOL-6-EVIDENCE.json"
+  ],
+  "claimed_at":"2026-09-12T21:54:00-05:00",
+  "state":"CLAIMED",
   "classification":"EVIDENCE_FAILURE",
-  "gap":"Current source has normalizeProject/loadProject/persistProject and dispatch persists every reducer action; current V1.9.2 E2E contains verifyReloadRecovery comparing stored component count and exact moved left/top after page.reload. However the latest relevant V1.9.2 run evidence is not a terminal PASS for this exact post-touch-harness SHA, so F-ED-004 cannot be promoted from code inspection/historical desktop PASS alone.",
-  "collision_reconciliation":"HEAD changed after claim: SOL 5 expanded F-IO-028 to app-v19.js. SOL 6 did not write app-v19.js and remains evidence-only, satisfying single-writer rule.",
+  "assertion_to_validate":"A moved component survives page reload with exact persisted left/top and component count on the current V1.9.2 candidate path.",
+  "preflight":{
+    "current_product":"src/app-v19.js contains normalizeProject/loadProject/persistProject and dispatch persists reducer actions",
+    "current_test":"tests/e2e/factory-v192-local-50-cycle.spec.mjs contains verifyReloadRecovery and mobile moved-position reload assertion",
+    "latest_candidate_commit":"bf9cbec840ff45a059e1679cb545a5f90e2172a3",
+    "latest_candidate_run":34733865710,
+    "latest_candidate_run_previous_conclusion":"cancelled",
+    "latest_candidate_run_attempt":2,
+    "latest_candidate_job":103662574511,
+    "rerun_reason":"terminal exact-SHA runtime evidence was missing; previous attempt was cancelled during E2E, not a demonstrated product failure"
+  },
   "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "strategy_delta":"NO_PRODUCT_DELTA: reuse existing persistence path; require fresh candidate run/readback before any product patch.",
-  "simulations":["move->dispatch MOVE_COMPONENT->persistProject->reload->loadProject","selected/state component normalization preserves valid moved x/y","malformed/missing storage falls back to initialState instead of false recovery"],
-  "refutations":["historical 50/50 desktop cannot certify changed SHA","presence of persistProject does not itself prove runtime reload","shared app-v19 write intentionally refused after SOL 5 ownership appeared"],
-  "goals12_output":{"G01":"PASS","G02":"PASS 20a9f144 fresh reread","G03":"PASS","G04":"PASS collision reconciled","G05":"PASS current app/test inspected","G06":"PASS no OSS/new engine","G07":"PASS no unjustified delta","G08":"GAP fresh runtime run required","G09":"GAP exact-SHA E2E required","G10":"PASS 3 simulations+3 refutations","G11":"PARTIAL claim/readback SHA persisted; run evidence pending","G12":"PASS remain GAP; do not claim dependent F-IO-026"},
-  "next_free_node":"READ_FRESH_REQUIRED"
+  "strategy_delta":"NO_PRODUCT_DELTA: reuse existing persistence implementation and rerun exact candidate job to close/refute the evidence gap before any patch.",
+  "goals12_input":{"G01":"PASS literal F-ED-004 preserved","G02":"PASS fresh main a7c0942d read","G03":"PASS authoritative atomic queue read","G04":"PASS evidence-only scope avoids active product writers","G05":"PASS existing persistence code/test deduplicated","G06":"PASS no OSS/new engine needed","G07":"PENDING evidence delta only","G08":"PENDING exact-SHA rerun","G09":"PENDING browser E2E","G10":"PENDING 3 simulations+3 refutations final","G11":"PENDING evidence+run+SHA persistence","G12":"LOCKED to F-ED-004 only per user instruction"},
+  "history":[
+    {"at":"2026-09-12T21:46:21-05:00","state":"GAP","reason":"exact post-harness terminal run evidence missing"},
+    {"at":"2026-09-12T21:54:00-05:00","state":"CLAIMED","reason":"SOL 6 resumed only assigned node F-ED-004 and reran exact candidate job"}
+  ]
 }
