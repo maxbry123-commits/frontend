@@ -1,0 +1,29 @@
+{
+  "schema":"yaiwes.crazy-wall.report.v2",
+  "contract":"tel.workflow/v3",
+  "role":"SOL_GPT2",
+  "node_id":"S2-10-VM-MANAGER-CAPABILITY",
+  "status":"PASS",
+  "pass_percent":100,
+  "strategy":"ADAPT_EXISTING",
+  "paths":[
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/virtual_machine_manager.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform_vm_manager.py"
+  ],
+  "implementation_commit":"dc35e8e892a615858eb99705fc3dbbefc1912a20",
+  "tested_sha":"eeb91492c15cbfe6423e58ea2891c65ea4f78886",
+  "run_id":34738345663,
+  "job_id":103673787320,
+  "tests":{"wordflow":"41 passed","runtime":"205 passed","runtime_subtests":34,"warnings":2,"conclusion":"success"},
+  "evidence":[
+    "VirtualMachineManager is a thin facade over canonical SandboxLifecycle and route_sandbox; no second VM engine was introduced.",
+    "Refutation 1 PASS: repeated lifecycle calls do not duplicate driver effects.",
+    "Refutation 2 PASS: absent verified backend remains fail-closed/BLOCKED.",
+    "Refutation 3 PASS: invalid lifecycle is rejected and registered_backends reflects canonical lifecycle drivers.",
+    "Compare tested_sha to fresh main found no later changes under runtime/src/uek/** or test_platform_vm_manager.py."
+  ],
+  "gaps":[],
+  "remaining_project_gaps":"outside_literal_node",
+  "next_free_node":"READ_CRAZY_WALL_FRESH",
+  "review_required":false
+}
