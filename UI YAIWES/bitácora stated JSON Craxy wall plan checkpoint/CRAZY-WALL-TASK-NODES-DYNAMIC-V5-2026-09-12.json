@@ -7,11 +7,32 @@
     "one_active_node_per_chat": true,
     "dynamic_claim_only": true,
     "fixed_chat_assignment": false,
-    "claim_states": ["FREE", "GAP_RESOLVABLE"],
+    "claim_states": [
+      "FREE",
+      "GAP_RESOLVABLE"
+    ],
     "lifecycle": "FREE -> CLAIMED -> EXECUTING -> PASS|GAP -> REPORT -> VERIFIED_CLOSED|FREE_NEXT",
-    "claim_requires": ["fresh_main_sha", "chat_id", "node_id", "write_scope", "claimed_at"],
-    "report_requires": ["paths", "commit_sha_or_blob", "test", "run_job_log_if_applicable", "evidence", "remaining_gaps", "next_free_node"],
-    "three_steps": ["1_VERIFY_RESEARCH", "2_EXECUTE_DELTA", "3_TEST_REPORT"],
+    "claim_requires": [
+      "fresh_main_sha",
+      "chat_id",
+      "node_id",
+      "write_scope",
+      "claimed_at"
+    ],
+    "report_requires": [
+      "paths",
+      "commit_sha_or_blob",
+      "test",
+      "run_job_log_if_applicable",
+      "evidence",
+      "remaining_gaps",
+      "next_free_node"
+    ],
+    "three_steps": [
+      "1_VERIFY_RESEARCH",
+      "2_EXECUTE_DELTA",
+      "3_TEST_REPORT"
+    ],
     "collision_rule": "A chat must not claim a node already CLAIMED/EXECUTING and must not write outside that node write_scope.",
     "shared_files_rule": "Architecture/Handoff/Crazy Wall reconciliation is additive; fresh readback before write."
   },
@@ -26,39 +47,1165 @@
   ],
   "metric_policy": "N01/N02 established 98 implementable normative requirements plus explicit source-structure gaps. Do not publish global product completion from traceability alone; N30 must calculate verified implementation/test/evidence coverage.",
   "nodes": [
-    {"n":1,"id":"N01-DOC-REVIEW-COMPLETE","state":"VERIFIED_CLOSED","report_state":"PASS","owner":"sol 8 gpt","chat_id":"sol 8 gpt","node_id":"N01-DOC-REVIEW-COMPLETE","fresh_main_sha":"3c367a13f5bc3ed444fa5fb8c6c58091a2f1a53e","write_scope":"audit/reports/Crazy-Wall only","claimed_at":"2026-09-13T02:22:00Z","reported_at":"2026-09-13T02:33:00Z","title":"Revisión documental exhaustiva de las 3 fuentes","scope":"audit/reports/Crazy-Wall only","depends_on":[],"steps":["Leer 100% de las tres fuentes y extraer requisitos literales con source anchor","Deduplicar requisitos y construir denominador único sin reinterpretar","Testear cobertura de extracción y reportar requisito_id + fuente + evidencia"],"close":"100% de requisitos de las 3 fuentes enumerados y auditables","paths_changed":["UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N01-DOC-REVIEW-COMPLETE-SOL-8-GPT-2026-09-13.md","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"],"commit_sha":"26af52357550e040de9fa79416bafa3d6e5d6258","blob_sha":"217caa8bfba2edd71c6bc505e89122759ac9573c","tests":"TEST-N01-01 source identity PASS; TEST-N01-02 numbered-anchor coverage PASS_FAIL_CLOSED; TEST-N01-03 no-drop dedup PASS; TEST-N01-04 authority/refutation PASS","run_id":null,"job_id":null,"evidence":["3/3 full source blobs read and pinned by SHA","98 normative source packages registered","35 canonical groups after dedup with source anchors preserved","0 dropped source packages","source numbering gaps preserved rather than inferred"],"remaining_gaps":["S1 index/body numbering mismatch remains source defect","S2 Objective 11 absent from source","S3 section 62 absent as numbered heading"],"next_free_node":"N02-TRACEABILITY-BIDIRECTIONAL"},
-    {"n":2,"id":"N02-TRACEABILITY-BIDIRECTIONAL","state":"VERIFIED_CLOSED","report_state":"PASS_AUDIT_NODE_WITH_NEW_GAPS","owner":"sol 8 gpt","chat_id":"sol 8 gpt","node_id":"N02-TRACEABILITY-BIDIRECTIONAL","fresh_main_sha":"ec1ced7852dd6b81a72aea19748461f8ad6a90b6","write_scope":"audit/coverage/reports","claimed_at":"2026-09-13T02:34:00Z","reported_at":"2026-09-13T02:46:00Z","title":"Matriz requisito↔tarea↔código↔test↔evidencia","scope":"audit/coverage/reports","depends_on":["N01-DOC-REVIEW-COMPLETE"],"steps":["Cruzar cada requirement_id con task/node y código actual","Agregar test/evidencia y detectar código sin requisito","Refutar top-down y bottom-up y reportar cobertura exacta"],"close":"G12 bidireccional 100% con huérfanos explícitos","paths_changed":["UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N02-TRACEABILITY-BIDIRECTIONAL-SOL-8-GPT-2026-09-13.json","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"],"commit_sha":"995658a50dfc45b5045e08983933e54dcf0bb2a0","tests":"TEST-N02-01 denominator 98/98 PASS; TEST-N02-02 100 unique source anchors PASS; TEST-N02-03 top-down unmapped=[] PASS; TEST-N02-04 bottom-up orphan implementation domains=[] with placeholders explicit; TEST-N02-05 found two unowned implementable capabilities; TEST-N02-06 global closure refutation PASS_FAIL_CLOSED","run_id":null,"job_id":null,"evidence":["N01 report blob 217caa8bfba2edd71c6bc505e89122759ac9573c consumed","runtime source tree 450971a891534ab711f2873bef4880ef265133b7 inventoried","runtime test tree fe89f6af726a013a52310c174d697b87de9eeb7d inventoried","100 source-anchor rows / 98 implementable requirements mapped","35 canonical capability groups mapped to nodes/code/tests/status"],"remaining_gaps":["Product implementation/test/evidence coverage is not globally closed","CAN-009 guest installer had no N01-N31 runtime owner; registered as N32","CAN-010 mirror transport/control had no N01-N31 runtime owner; registered as N33","placeholder boundaries remain explicit"],"next_free_node":"N06-PLATFORM-MATRIX-PERF-100X"},
-    {"n":3,"id":"N03-AUTO-AUDITOR-EVIDENCE","state":"GAP_RESOLVABLE","owner":"SOL-2-GPT","chat_id":"SOL-2-GPT","node_id":"N03-AUTO-AUDITOR-EVIDENCE","fresh_main_sha":"644bbe1154526682efed9bca1fb46ce801ce9e90","write_scope":"runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*","claimed_at":"2026-09-13T02:24:00Z","reported_at":"2026-09-13T02:36:00Z","title":"Auditor automático + verificador de evidencias","scope":"runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*","depends_on":[],"steps":["Verificar código/pruebas existentes y CI del auditor","Conectar evidence verifier + matriz + consolidación mínima sin duplicar governance","Correr tests locales/globales y registrar run/log"],"close":"Auditor ejecutable consume matriz/evidencia y CI PASS","paths_changed":["runtime/src/audit/evidence.py","runtime/src/audit/matrix.py","runtime/tests/test_audit_evidence_matrix.py"],"commit_sha":"1984c7c269d9d405e50b43a79ac198a51aad8b23","blob_sha":"evidence.py=73c33495d3910f8d5a1f504fe7b19547fd9d4519|matrix.py=637b64161f67f6d2f8aaa0280555964385bef6e2|test=1eeb33fc43a89db158f98c11306df9c707e43435","tests":"specific audit suite 21/21 PASS (13 existing + 8 new); global CI CANCELLED before job allocation","run_id":34733321677,"job_id":null,"evidence":["existing audit.five_pass reused unchanged; no second governance or consolidation owner created","untrusted evidence is bound to independent trusted run/job lookup plus exact revision/implementation/test hashes","immutable RequirementMatrix delegates to existing audit_five_pass and preserves the complete requirement denominator","specific audit suite reconstructed from exact GitHub readback blobs: 21/21 PASS","main merge commit 1984c7c269d9d405e50b43a79ac198a51aad8b23 read back successfully","global workflow run 34733321677 reached completed/cancelled with zero jobs allocated"],"remaining_gaps":["global GitHub Actions gate for commit 1984c7c269d9d405e50b43a79ac198a51aad8b23 did not execute","GitHub rejected retry of cancelled no-job run 34733321677 with workflow-run cannot be retried"],"blocked_by":{"run_id":34733321677,"job_id":null,"state":"completed/cancelled","jobs":0},"next_free_node":"N05-PRODUCT-RECOVERY-CHATS-WINDOWS-FILES"},
-    {"n":4,"id":"N04-STATE-RECONCILIATION","state":"BLOCKED_AFTER_N02_N03","owner":null,"title":"Reconciliar Crazy Wall/STATE/CHECKPOINT/HANDOFF","scope":"shared state docs only","depends_on":["N02-TRACEABILITY-BIDIRECTIONAL","N03-AUTO-AUDITOR-EVIDENCE"],"steps":["Leer versiones frescas de todos los estados","Aplicar sólo delta reconciliado preservando historia","Readback y verificar mismo resultado/pendientes en todos"],"close":"Sin contradicciones de estado entre fuentes operativas"},
-    {"n":5,"id":"N05-PRODUCT-RECOVERY-CHATS-WINDOWS-FILES","state":"VERIFIED_CLOSED","report_state":"PASS","owner":"SOL-2-GPT","chat_id":"SOL-2-GPT","node_id":"N05-PRODUCT-RECOVERY-CHATS-WINDOWS-FILES","fresh_main_sha":"7afd3c638ebd2acb9f080117ccff69181ad69c76","write_scope":"runtime/src/recovery/**|runtime/src/storage/**|runtime/tests/test_recovery*|runtime/tests/test_storage*","claimed_at":"2026-09-13T02:38:00Z","reported_at":"2026-09-13T03:46:00Z","title":"Recuperación real de chats, ventanas y archivos","scope":"runtime/src/recovery/**|runtime/src/storage/**|runtime/tests/test_recovery*|runtime/tests/test_storage*","depends_on":[],"steps":["Mapear requisitos y reutilizar checkpoint/recovery existente","Implementar sólo glue faltante para chats/ventanas/archivos y separación de memoria","Probar cancelación, desconexión, restart e idempotencia sin duplicar efectos"],"close":"Recovery E2E de producto con hash/readback e idempotencia","paths_changed":["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/recovery/product_session.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/storage/product_state.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_recovery_product_session.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_storage_product_state.py","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"],"commit_sha":"ab30c42ef35bf758e7afe930d5fc0d11e1ac081e","certified_sha":"4b32a3228627e9709edbdd6cd403f01a6656492c","blob_sha":"product_session.py=955d11b7dcb67bf139cba85ffd017991f4f6c41d|product_state.py=8f00ff671b7c0a62c7572ceb5767b467b7c73cda|test_recovery_product_session.py=4f089dcd5f09b32bf4274eead18d6c87fab6d137|test_storage_product_state.py=397966f3669103ce42f17ac7b57aa7f815c002b6","tests":"specific reconstructed N05 suite 18/18 PASS; authoritative full CI run 34735520028 job 103666138630: Wordflow 41/41 PASS; runtime 151/151 PASS + 27 subtests PASS","run_id":34735520028,"job_id":103666138630,"evidence":["existing recovery.control_plane SHA256 gate reused; no second workflow recovery engine introduced","deterministic canonical product snapshot restores chats/windows/files while storing only opaque agent_memory_ref","checkpoint SHA256 plus canonical byte-for-byte readback fail closed before product restore","effect idempotency binds effect_id to payload_sha256 with pending/committed readback; payload mismatch is rejected before delivery","disconnect after physical side effect leaves pending; restart reuses the same stable effect_id and idempotent sink produces one physical effect","three refutations PASS: tampered/noncanonical restore rejected; same effect_id with different payload rejected pre-effect; disconnect+restart produces no duplicate physical effect","certified branch inherited main commit ab30c42ef35bf758e7afe930d5fc0d11e1ac081e and exact N05 blobs were read back","authoritative workflow log: Wordflow 41 passed; runtime 151 passed and 27 subtests passed"],"remaining_gaps":[],"next_free_node":"N08-SUPABASE-ACQUIRE"},
-    {"n":6,"id":"N06-PLATFORM-MATRIX-PERF-100X","state":"VERIFIED_CLOSED","report_state":"PASS","owner":"sol 8 gpt","chat_id":"sol 8 gpt","node_id":"N06-PLATFORM-MATRIX-PERF-100X","fresh_main_sha":"37bbc063f41cba6ca7c0480c54a2c67dd9f20390","write_scope":"runtime/src/uek/**|runtime/src/adapters/**|runtime/tests/test_platform*|benchmark reports","claimed_at":"2026-09-13T03:23:30Z","reported_at":"2026-09-13T03:55:19Z","title":"Plataformas + medición mejora 100x","scope":"runtime/src/uek/**|runtime/src/adapters/**|runtime/tests/test_platform*|benchmark reports","depends_on":[],"steps":["Construir matriz Web/Windows/Linux/Android/iOS supported|conditional|blocked","Cablear/probar capabilities reales sin prometer backends ausentes","Medir baseline vs candidate y demostrar o refutar 100x por métrica"],"close":"Matriz por plataforma + benchmarks reproducibles; 100x sólo si medido","paths_changed":["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/__init__.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/platform_matrix.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/probe.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform_matrix.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform_probe.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform_benchmark.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/docs/benchmarks/N06-PLATFORM-MATRIX-PERF-2026-09-13.json","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"],"commit_sha":"162a1b5d56a825ce5bdf9df0e7c3b2ee45e3f47b","report_commit_sha":"0c239c3dde7808067721a25a09169e664eee77db","blob_sha":"__init__.py=7fa563c15f9427b6c06824e356d95efde041bff2|platform_matrix.py=e470aa343f93184004b09585830c1a5b9547844f|probe.py=cbeccbcd4275d5225fa911dfc751a8cfeadfc19a|test_platform_matrix.py=0e6691b99034f5c66df8c497fa3069f970d2cc95|test_platform_probe.py=0435d5bd5b369bf6e3ebdcb17f68afe144cd2cbb|test_platform_benchmark.py=28e3ebc894c02132a37f10f7807c10c100b56a3a|report=424a69d20049a0542da3b20302c52a7dc80b4a11","tests":"authoritative run 34735844744 job 103667777897 SUCCESS: Wordflow 41/41 PASS; runtime 192/192 PASS + 32 subtests PASS; benchmark policy_lookup_latency 2.5799x and meets_100x=false; real Ubuntu CI host probe BLOCKED with no verified backend","run_id":34735844744,"job_id":103667777897,"evidence":["5-platform deterministic supported|conditional|blocked matrix implemented","read-only real host capability probe cannot launch VMs or invent support","CI runner observed Linux with no verified QEMU/KVM and correctly returned BLOCKED","authoritative benchmark baseline_ns=16450178 candidate_ns=6376241 speedup=2.5799x; 100x refuted rather than fabricated","three refutations PASS and exact implementation/test/report blobs read back"],"remaining_gaps":["N20 owns VM/sandbox lifecycle and runtime routing","N10 owns Android AVF provider/real ARM64 capability proof"],"next_free_node":"N09-DUCKDB-ACQUIRE-SPECIAL"},
-    {"n":7,"id":"N07-VITE-ACQUIRE","state":"CLAIMED","owner":"SOL GPT 🆘1","chat_id":"SOL GPT 🆘1","node_id":"N07-VITE-ACQUIRE","fresh_main_sha":"e30d3513c4b4fb7d71e31f7de9a2e3e494e93396","write_scope":"component acquisition + registry only","claimed_at":"2026-09-13T03:33:00Z","title":"Resolver Vite PENDING_SOURCE/destino","scope":"component acquisition + registry only","depends_on":[],"steps":["Confirmar requisito, destino literal y fuente oficial","Adquirir con motor canónico o cerrar por equivalencia probada","Readback de source y actualizar registry/evidencia"],"close":"Vite SOURCE_PRESENT_READBACK_VERIFIED o equivalencia cerrada"},
-    {"n":8,"id":"N08-SUPABASE-ACQUIRE","state":"VERIFIED_CLOSED","report_state":"PASS_EQUIVALENCE_NO_DOWNLOAD","owner":"SOL-2-GPT","chat_id":"SOL-2-GPT","node_id":"N08-SUPABASE-ACQUIRE","fresh_main_sha":"90878e549a2700559f9b66f08693fcff130a77c0","write_scope":"component acquisition + evidence only","claimed_at":"2026-09-13T03:49:00Z","reported_at":"2026-09-13T03:56:00Z","title":"Resolver Supabase destino/adquisición","scope":"component acquisition + evidence only","depends_on":[],"steps":["Confirmar capability requerida y destino literal","Dedup; adquirir con motor canónico sólo si sigue necesario","Readback + provenance + estado"],"close":"Supabase adquirido/verificado o requisito cerrado por equivalencia","paths_changed":["UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N08-SUPABASE-ACQUIRE-SOL-2-GPT-2026-09-13.json","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"],"commit_sha":"e70383c0a6c0e47ae9d7ac70a1ea170bf30395f4","blob_sha":"catalog.py=5299d6c849a8cf68ca6bf4ced5ca7323b4621dd7|selector.py=bc5c0f62118ff40e4fb2d32d7d991be5219f6bbd|test_resource_brain.py=76d718097ee5c964dff17475001cc953e34d85da|upstream_supabase_master=26585dd4a4d6db8910a595214c9f6e8fdd206768","tests":"specific ResourceBrain suite reconstructed from exact GitHub blobs 6/6 PASS; reference full CI run 34735520028 job 103666138630 SUCCESS: Wordflow 41/41 PASS, runtime 151/151 PASS + 27 subtests","run_id":34735520028,"job_id":103666138630,"evidence":["N01 denominator contains no Supabase-specific normative requirement","N02 maps N08 only under provider-neutral CAN-013 OSS reuse/provenance/dedup","G03_SUPABASE_DEST explicitly states no literal/authorized physical acquisition destination and says not to infer","component trees todos-los-componentes 9bd4de6934911f621f62d26e6f2e264b7a16691e and componentes-open-source 2d25955c0d3f932ae14debe2f671883861698a4b contain no Supabase path","official provenance verified: supabase/supabase, master 26585dd4a4d6db8910a595214c9f6e8fdd206768, Apache-2.0","existing ResourceBrain + PluginRegistry implement provider-neutral capability selection, exact identity/provenance checks and duplicate rejection","three refutations PASS: no distinct requirement; no authorized destination; downloading anyway would violate REQ-S2-014 and component_policy.download_rule"],"remaining_gaps":[],"next_free_node":"N09-DUCKDB-ACQUIRE-SPECIAL"},
-    {"n":9,"id":"N09-DUCKDB-ACQUIRE-SPECIAL","state":"VERIFIED_CLOSED","owner":"sol 3 gpt","chat_id":"sol 3 gpt","node_id":"N09-DUCKDB-ACQUIRE-SPECIAL","fresh_main_sha":"82d90d7634770b8dbe00ad41006e849d6cdad6f2","write_scope":"component acquisition/research only","claimed_at":"2026-09-13T04:01:30Z","title":"Resolver DuckDB special-files sin alterar motor","scope":"component acquisition/research only","depends_on":[],"steps":["Investigar fuente/ref oficial compatible con política del motor","Probar StrategyDelta permitido sin sanitizar/LFS/force","Readback exacto o GAP proveedor documentado con equivalente funcional"],"close":"DuckDB source verificable o equivalencia funcional probada","report_state":"PASS","reported_at":"2026-09-13T04:45:48Z","paths_changed":[".github/workflows/sol-gpt2-s2-01-duckdb-materialize-20260911.yml","UI YAIWES/componentes open soure UI YAIWES/DuckDB","UI YAIWES/automation/S2-duckdb-materialize-20260911/staging/DuckDB/DOWNLOAD_EXTRACT_MANIFEST.json","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"],"commit_sha":"01e9817ed2159e6fe1706545197d9e6498d971c5","blob_sha":"workflow=85a5cb7239d28a63e7bcc2b67e386543945d841c|tree_sha256=203b13970343ee05276d6992dc42fd81c7b09b4fc3b3b27c3689edf27286f52b","tests":"materialization run 34738075968 job 103672927926 SUCCESS; idempotence branch run 34738315538 job 103673575865 SUCCESS; integrated main run 34738359677 job 103673688209 SUCCESS; final readback 4122 files / 37127481 bytes / sha256 203b13970343ee05276d6992dc42fd81c7b09b4fc3b3b27c3689edf27286f52b","run_id":34738359677,"job_id":103673688209,"evidence":["source duckdb/duckdb-r pinned to commit fdef8b2325d49774c990e59f127b90e4d54d3065","canonical acquisition/move motors remained immutable; no sanitizer, LFS, force or alternate motor","canonical final DuckDB root matches verified staging manifest exactly","branch idempotence run verified existing final and no-op Motor4/publish with exact readback","integrated main run 34738359677 repeated VERIFIED_EXISTING + exact independent readback with failed=0 pending=0","three refutations PASS: schema complete, no residual N09 GAP, exact source/tree/run evidence proves closure"],"remaining_gaps":[],"next_free_node":"N30-G12-GLOBAL-COVERAGE"},
-    {"n":10,"id":"N10-AVF-PROVIDER-CAPABILITY","state":"CLAIMED","owner":"sol 7 gpt","chat_id":"sol 7 gpt","node_id":"N10-AVF-PROVIDER-CAPABILITY","fresh_main_sha":"f629a052bc4351dd34cebadacc23da8ca7caa2a0","write_scope":"component research/acquisition|runtime/src/uek/**|runtime/tests/test_platform*","claimed_at":"2026-09-13T04:06:07Z","title":"Resolver AVF proveedor + capability Android","scope":"component research/acquisition|runtime/src/uek/**|runtime/tests/test_platform*","depends_on":[],"steps":["Separar adquisición AVF de capability runtime y comprobar fuente oficial","Resolver transporte autorizado o equivalencia; implementar capability probe fail-closed","Probar Android ARM64/Cuttlefish y bloquear hosts no soportados"],"close":"AVF/equivalente con provenance + capability test real"},
-    {"n":11,"id":"N11-BIG-AGI-SOURCE-INTEGRATION","state":"CLAIMED","owner":"sol 8 gpt","chat_id":"sol 8 gpt","node_id":"N11-BIG-AGI-SOURCE-INTEGRATION","fresh_main_sha":"7db4d1629664d8419d759d553c9d6240449a64ba","write_scope":"component acquisition|runtime integration/UI donor evidence","claimed_at":"2026-09-13T04:10:00Z","title":"big-AGI PENDING_SOURCE + integración","scope":"component acquisition|runtime integration/UI donor evidence","depends_on":[],"steps":["Confirmar fuente oficial/licencia/capability y destino","Adquirir si sigue necesario y montar por Fables/adaptador sin nuevo owner","Probar integración y registrar evidence"],"close":"SOURCE_PRESENT + adapter/Fables + integration test"},
-    {"n":12,"id":"N12-VITE-INTEGRATION","state":"BLOCKED_AFTER_N07","owner":null,"title":"Integrar Vite","scope":"runtime/vendor/integration or UI build boundary as truth docs require","depends_on":["N07-VITE-ACQUIRE"],"steps":["Readback de Vite source + contrato de build","Cablear sólo al boundary requerido","Test build/runtime y evidencia"],"close":"Vite WIRED + TESTED en boundary correcto"},
-    {"n":13,"id":"N13-VERCEL-AI-SDK-SOURCE-INTEGRATION","state":"CLAIMED","owner":"SOL-2-GPT","chat_id":"SOL-2-GPT","node_id":"N13-VERCEL-AI-SDK-SOURCE-INTEGRATION","fresh_main_sha":"6b6e50eb00af65cd0449e4eeca22652e0e13ef76","write_scope":"component acquisition|streaming provider UI boundary","claimed_at":"2026-09-13T04:27:40Z","title":"Vercel AI SDK PENDING_SOURCE + integración","scope":"component acquisition|streaming provider UI boundary","depends_on":[],"steps":["Confirmar fuente oficial/licencia y requisito streaming","Adquirir/dedup y cablear por boundary existente","Test streaming/cancel/status y evidence"],"close":"SOURCE_PRESENT + WIRED + TESTED"},
-    {"n":14,"id":"N14-RESEARCH-SOURCE-VERIFICATION","state":"GAP_RESOLVABLE","owner":"SOL GPT 🆘1","chat_id":"SOL GPT 🆘1","node_id":"N14-RESEARCH-SOURCE-VERIFICATION","fresh_main_sha":"0f070f0f50a0aec6cf3ef8897749a5482ed2e41d","write_scope":"wordflow research layer/tests","claimed_at":"2026-09-13T02:28:00Z","reported_at":"2026-09-13T02:37:00Z","title":"Research debe consultar/comprobar fuentes","scope":"wordflow research layer/tests","depends_on":[],"steps":["Revisar layer research actual contra contrato 6 pasos","Añadir validación de URL/frescura/provenance sólo si falta","Testear filtro/dedup/ranking/fail-closed sin fuentes"],"close":"Research prueba fuentes reales y nunca inventa URL","paths_changed":["wordflow_loop/wordflow_loop/layers/layer_01_research.py","wordflow_loop/tests/test_layers.py"],"commit_sha":"986defa85a1d7d39d306e0f5e07c7b537d386cb5","blob_sha":"layer_01_research.py=d61e2c48fc618ea7b93ced207950891367fe19d6|test_layers.py=e5bd84571caf2718f0c7c73bd88c973b58886aba","tests":"specific deterministic N14 harness 4/4 PASS; global CI NOT_EXECUTED","run_id":34733321677,"job_id":null,"evidence":["syntactic-only URLs no longer qualify as evidence","candidate must carry VERIFIED retrieval provenance bound to checked_url, retrieved_at, adapter and content_sha256","freshness is deterministic from injected as_of + max_age_seconds; stale/future/mismatched provenance fails closed","verified official source ranks before community and duplicate URL is removed","committed layer/test blobs read back unchanged from main","descendant head 1984c7c269d9d405e50b43a79ac198a51aad8b23 directly includes N14 commit 986defa85a1d7d39d306e0f5e07c7b537d386cb5"],"remaining_gaps":["global CI gate has not executed a descendant containing N14 yet","shared concurrency queue is occupied by an older runtime suite"],"blocked_by":{"run_id":34733116016,"job_id":103659536775,"state":"in_progress","head_sha":"0f070f0f50a0aec6cf3ef8897749a5482ed2e41d"},"next_free_node":"N15-SUPERVISOR-PRE-EFFECT-GATE"},
-    {"n":15,"id":"N15-SUPERVISOR-PRE-EFFECT-GATE","state":"VERIFIED_CLOSED","report_state":"PASS","owner":"SOL GPT 🆘1","chat_id":"SOL GPT 🆘1","node_id":"N15-SUPERVISOR-PRE-EFFECT-GATE","fresh_main_sha":"b8e972cbeb1e79273365205dd587982eecd1f43c","write_scope":"wordflow governance/runner/tests","claimed_at":"2026-09-13T02:39:00Z","reported_at":"2026-09-13T03:29:27Z","title":"Supervisor valida antes de efectos","scope":"wordflow governance/runner/tests","depends_on":[],"steps":["Auditar orden Sheriff/Validator/Supervisor antes de mutaciones","Parche mínimo si algún efecto puede ocurrir antes de aprobación","Test negativo demuestra que efecto no autorizado no ocurre"],"close":"Pre-effect gate determinista probado","paths_changed":["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/governance/supervisor.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/runner.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_preflight_scope.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_core.py"],"commit_sha":"1cd45a7e4d67af788552af9b61789f5020b008a8","blob_sha":"supervisor.py=bb953cfcab6d2528253009566fcdf584bdbefa0f|runner.py=f74d79b52e58f634c16a33ce8189c00c2fcc5354|test_preflight_scope.py=fa3e98d5d58e51f486065fb33841feaa27a494df|test_core.py=aa5175e539926aded7a2ce4cf37b5e5c379b9b6e","tests":"initial global run 34735121142: 39 PASS / 2 FAIL from stale N14 research fixtures; repaired without relaxing runtime. Final run 34735161080 job 103665162605: Wordflow 41/41 PASS; runtime 133 PASS + 25 subtests PASS","run_id":34735161080,"job_id":103665162605,"evidence":["runner invokes Sheriff + Validator + Supervisor.check_before_effects before handler execution","mutation without effect_plan is BLOCKED before handler and handler side-effect sentinel remains untouched","unauthorized planned action/path/traversal are BLOCKED before handler","post-effect Supervisor still rejects actual action outside allowlist","three refutations PASS: no-plan/action/path pre-effect rejection; verified ordering before handler; post-effect forged action rejection","exact code/test blobs read back unchanged from main","GitHub Actions job checked out exact N15 repair commit 1cd45a7e4d67af788552af9b61789f5020b008a8","authoritative workflow log: 41 passed in 0.13s; runtime 133 passed, 25 subtests passed in 639.58s"],"remaining_gaps":[],"next_free_node":"N07-VITE-ACQUIRE"},
-    {"n":16,"id":"N16-CHECKPOINT-BYTES-HASH","state":"GAP_RESOLVABLE","owner":"SOL GPT 🆘1","chat_id":"SOL GPT 🆘1","node_id":"N16-CHECKPOINT-BYTES-HASH","fresh_main_sha":"344a714fcce5c41e4f8ed4ad4555b55f6f08d14e","write_scope":"runtime/src/recovery/**|runtime/tests/test_recovery*","claimed_at":"2026-09-13T02:17:00Z","reported_at":"2026-09-13T02:27:00Z","title":"Recovery verifica bytes de checkpoint contra hash","scope":"runtime/src/recovery/**|runtime/tests/test_recovery*","depends_on":[],"steps":["Auditar control_plane/checkpoint actual y formato hash","Implementar verificación byte-for-byte SHA256 antes de restore si falta","Test tamper/corruption + global regression"],"close":"Restore rechaza bytes cuyo hash no coincide","paths_changed":["runtime/src/recovery/control_plane.py","runtime/tests/test_recovery_control_plane.py"],"commit_sha":"f7e9af7d846000857005c342d042e0214edbf6c1","blob_sha":"control_plane.py=252b5b5bd47d082df4c2963e624c64990e160bb4|test=9631f9d112913d66836fab3f7c2627030bfac411","tests":"specific readback unit suite 7/7 PASS; global CI NOT_EXECUTED","run_id":34732895153,"job_id":null,"evidence":["checkpoint bytes are SHA256-hashed before ledger/recovery engine effects","tampered checkpoint bytes and checkpoint read failure fail closed before FakeRecovery initialization","committed code/test blobs read back unchanged from main","N16 commit f7e9af7 is ancestor of current pending global run fb0b862 by 9 commits"],"remaining_gaps":["global CI gate not executed","concurrency group blocked by pre-N16 run 34732684153 job 103658281949 at complete runtime suite"],"blocked_by":{"run_id":34732684153,"job_id":103658281949,"state":"in_progress"},"next_free_node":"N14-RESEARCH-SOURCE-VERIFICATION"},
-    {"n":17,"id":"N17-FULL-PRODUCT-E2E","state":"BLOCKED_AFTER_CORE_RUNTIME","owner":null,"title":"UI→API/Fables→ejecución→memoria→recovery→respuesta","scope":"runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*|E2E","depends_on":["N18-MEMORY-RETRIEVAL-CONTEXT","N20-SANDBOX-UEK-ROUTER","N26-GLOBAL-INTEGRATION","N28-API-CONTROL","N29-GLOBAL-RECOVERY-FAILOVER"],"steps":["Construir escenario real único desde UI/API hasta respuesta","Ejecutar con memoria/checkpoint/restart y correlación de evidencia","Repetir/refutar y registrar run/log/result"],"close":"E2E completo PASS con recovery y respuesta observable"},
-    {"n":18,"id":"N18-MEMORY-RETRIEVAL-CONTEXT","state":"GAP_RESOLVABLE","report_state":"GAP_BLOCKED_BY_N14_GLOBAL_CI","owner":"sol 7 gpt","chat_id":"sol 7 gpt","node_id":"N18-MEMORY-RETRIEVAL-CONTEXT","fresh_main_sha":"7afd3c638ebd2acb9f080117ccff69181ad69c76","write_scope":"runtime/src/memory/**|runtime/src/agent/**|runtime/tests/test_memory*|runtime/tests/test_agent*","claimed_at":"2026-09-13T02:37:00Z","reported_at":"2026-09-13T03:16:00Z","title":"Cerrar P08/P09/P10 Memory + Retrieval + Context","scope":"runtime/src/memory/**|runtime/src/agent/**|runtime/tests/test_memory*|runtime/tests/test_agent*","depends_on":[],"steps":["Auditar boundary ya probado y requirements faltantes","Implementar persistence/checkpoint + GET_CONTEXT/MEMORY/EVIDENCE + provenance/budget","Test restart isolation, retrieval/context E2E y no-direct-LLM-write"],"close":"P08-P10 VERIFIED_CLOSED por evidencia","paths_changed":["runtime/src/memory/fabric.py","runtime/src/memory/__init__.py","runtime/tests/test_memory_context_fabric.py"],"commit_sha":"ad5757ef8a072b20f47c4de9b1c3a24498e7e5f3","blob_sha":"fabric.py=255909eab5aa4d83c3bd14712533a97611e5da04|test=ec254c1c9b4764d36000f196e36af32d7ded72c2","tests":"specific N18 suite 10/10 PASS; global run failed before runtime suite: Wordflow 34/36 PASS, runtime SKIPPED","run_id":34733747431,"job_id":103661284462,"evidence":["existing Memory/Agent boundaries reused; no second workflow or storage owner introduced","deterministic context ranking/budget/checkpoint identity/provenance implemented and read back from main","specific 10/10 PASS covers restart reproducibility, cross-agent isolation, GET_MEMORY/GET_EVIDENCE, read-only context and direct-LLM-write rejection","global log proves failure occurred in wordflow_loop/tests/test_core.py before runtime test step"],"remaining_gaps":["global runtime gate for N18 did not execute because L01_RESEARCH contract changed but two test_core fixtures still omit as_of/max_age_seconds/VERIFIED provenance","N14 remains GAP and owns wordflow research layer/tests; N18 cannot patch that scope"],"blocked_by":{"node_id":"N14-RESEARCH-SOURCE-VERIFICATION","run_id":34733747431,"job_id":103661284462,"state":"global_ci_failed_before_runtime"},"next_free_node":"N19-STORAGE-LOCAL-FIRST"},
-    {"n":19,"id":"N19-STORAGE-LOCAL-FIRST","state":"VERIFIED_CLOSED","report_state":"PASS","owner":"sol 7 gpt","chat_id":"sol 7 gpt","node_id":"N19-STORAGE-LOCAL-FIRST","fresh_main_sha":"a6204addd92172e0399dd952352426cf808116b9","write_scope":"runtime/src/storage/**|runtime/src/memory/**|runtime/tests/test_storage*|runtime/tests/test_memory*","claimed_at":"2026-09-13T03:21:00Z","reported_at":"2026-09-13T04:02:13Z","title":"Storage local-first + checkpoints","scope":"runtime/src/storage/**|runtime/src/memory/**|runtime/tests/test_storage*|runtime/tests/test_memory*","depends_on":[],"steps":["Dedup Stabilize/rqlite y requisitos local-first","Implementar adapter mínimo sin duplicar store","Test persist/reopen/snapshot/restore/mirror semantics"],"close":"Storage/checkpoint local-first probado","paths_changed":["runtime/src/storage/local_first.py","runtime/tests/test_storage_local_first.py","runtime/tests/test_storage_local_first_process.py"],"commit_sha":"4bf1a4a9792c8d54ca16876f137e351da9ea2b39","certified_sha":"ecc94aee690df744b3f90b13d079ea566d32a5ad","blob_sha":"local_first.py=020695f6de57d3869bf7344459136f8cfa333114|test_storage_local_first.py=9650335408ff36b20c827d98af8538777b418e1c|test_storage_local_first_process.py=d4ed6dfd58152e3b12febc0cd794074658bdacf3","tests":"authoritative exact-head run 34736360641 job 103668395574 SUCCESS: Wordflow 41/41 PASS; runtime 196/196 PASS + 32 subtests PASS; full runtime includes 8 base N19 cases plus 2 fresh-process persistence/restore cases","run_id":34736360641,"job_id":103668395574,"evidence":["Stabilize SqliteEventStore snapshot primitive reused through existing vendor_root; no second scheduler, recovery engine or database implementation introduced","rqlite search returned no mounted implementation and adding it would duplicate the canonical local store","local save_snapshot is followed by exact local readback before optional mirror; mirror failure preserves already committed local state","checkpoint bytes are deterministic SHA256-bound; tamper fails before persistence and restore creates a new latest version rather than rewriting history","fresh-process proof writes an on-disk SQLite snapshot, reopens from a new Python process, restores a checkpoint after restart, and parent readback observes restored latest state","process fixture matches Stabilize snapshot port/schema fields entity_type/entity_id/workflow_id/version/sequence/state/state_hash and uniqueness by entity/version","certified SHA ecc94aee690df744b3f90b13d079ea566d32a5ad is a descendant of implementation merge de27a879a794a450d16ae153317ffc33e79fd5ba with no N19 runtime drift","GitHub Actions checked out exact certified SHA; authoritative log reports 41 Wordflow passed and 196 runtime passed with 32 subtests; two warnings belong to N06 benchmark/probe and are not N19 failures","post-merge main readback preserved exact N19 blobs"],"remaining_gaps":[],"next_free_node":"N09-DUCKDB-ACQUIRE-SPECIAL"},
-    {"n":20,"id":"N20-SANDBOX-UEK-ROUTER","state":"VERIFIED_CLOSED","report_state":"PASS","owner":"sol 3 gpt","chat_id":"sol 3 gpt","node_id":"N20-SANDBOX-UEK-ROUTER","fresh_main_sha":"b0fe1b1d9a43caeaac45fa8cd463821cedb81459","write_scope":"runtime/src/uek/**|runtime/src/adapters/**|runtime/tests/test_platform*|runtime/tests/test_sandbox*","claimed_at":"2026-09-13T03:25:30Z","reported_at":"2026-09-13T03:55:00Z","title":"Sandbox/UEK/VM capability router","scope":"runtime/src/uek/**|runtime/src/adapters/**|runtime/tests/test_platform*|runtime/tests/test_sandbox*","depends_on":[],"steps":["Dedup Firecracker/gVisor/QEMU/crosvm/nsjail y requisitos","Implementar capability matrix/router/lifecycle fail-closed","Test supported/conditional/blocked paths"],"close":"Sandbox lifecycle + platform routing probado","paths_changed":["runtime/src/uek/sandbox_router.py","runtime/tests/test_sandbox_router.py"],"commit_sha":"39e955f37793f151a0f8aebeaecdac6e57c21916","blob_sha":"sandbox_router.py=27fc0b6c7fc6e0a1844f47941ddecdcd06834be0|test=85d6d6acf060113b0545494de5e0302ba311e311","tests":"specific 12/12 PASS; trusted descendant CI run 34735844744 job 103667777897: Wordflow 41/41 PASS; runtime 192 PASS + 32 subtests PASS","run_id":34735844744,"job_id":103667777897,"evidence":["Firecracker/gVisor/QEMU/crosvm/nsjail donor sources re-read as SOURCE_PRESENT; no new download","reused N06 CapabilitySnapshot/platform matrix; source presence never implies executable capability","deterministic supported/conditional/blocked routing covers Firecracker+KVM, QEMU fallback, Android AVF+crosvm, gVisor and nsjail","lifecycle fails closed before effects unless route is executable and driver is registered","negative/idempotency tests cover unavailable preferred backend, missing driver, create failure, destroy-running rejection and duplicate-effect prevention","exact router/test blobs are unchanged in trusted descendant SHA 162a1b5d56a825ce5bdf9df0e7c3b2ee45e3f47b","GitHub Actions job checked out exact descendant SHA; authoritative log: Wordflow 41 passed; runtime 192 passed, 32 subtests passed"],"remaining_gaps":[],"next_free_node":"N09-DUCKDB-ACQUIRE-SPECIAL"},
-    {"n":21,"id":"N21-WORKER-ADAPTER","state":"CLAIMED","owner":"sol 3 gpt","title":"Worker adapter YAIWES sobre Stabilize","scope":"runtime/src/adapters/**|runtime/tests/test_worker*|runtime/tests/test_platform*","depends_on":["N20-SANDBOX-UEK-ROUTER"],"steps":["Dedup Stabilize worker primitives","Añadir sólo contrato/adaptador faltante","Test task→worker→output/evidence sin segundo scheduler"],"close":"Worker boundary WIRED+TESTED","chat_id":"sol 3 gpt","node_id":"N21-WORKER-ADAPTER","fresh_main_sha":"881bbf19dcaaeb9574790b63ca8422e889473d24","write_scope":"runtime/src/adapters/**|runtime/tests/test_worker*|runtime/tests/test_platform*","claimed_at":"2026-09-13T06:14:06Z"},
-    {"n":22,"id":"N22-OTEL-RUNTIME","state":"GAP_RESOLVABLE","owner":"sol-5-gpt","chat_id":"sol-5-gpt","node_id":"N22-OTEL-RUNTIME","fresh_main_sha":"95c30286dc7cb8dd5a9160eda8c13f61000efd2d","write_scope":"runtime/src/observability/**|runtime/src/adapters/**|runtime/tests/test_observability*","claimed_at":"2026-09-13T02:19:00Z","reported_at":"2026-09-13T02:24:00Z","title":"Observability/OTel runtime real","scope":"runtime/src/observability/**|runtime/src/adapters/**|runtime/tests/test_observability*","depends_on":[],"steps":["Dedup instrumentation existente vs OTel Collector adquirido","Cablear trace/correlation sólo si distinct capability","Test end-to-end correlation task/evidence/recovery"],"close":"Runtime telemetry observable y probada","paths_changed":["runtime/src/observability/__init__.py","runtime/src/observability/runtime.py","runtime/tests/test_observability_runtime.py"],"commit_sha":"3c367a13f5bc3ed444fa5fb8c6c58091a2f1a53e","blob_sha":"runtime.py=ca42936d00dcd2160e69e2c5625d3a35bfc82a10|test=7d628e722a536e618f8e2aded7f137a3acd372ec","tests":"specific 4/4 PASS; global CI NOT_EXECUTED","run_id":34732895153,"job_id":null,"evidence":["opentelemetry_python vendor source already present and cataloged","deterministic task/evidence/recovery correlation adapter read back from main","specific fail-closed/correlation suite 4/4 PASS","N22 commit is ancestor of current pending global run"],"remaining_gaps":["global CI gate not executed","concurrency group blocked by run 34732684153 job 103659536775 at complete runtime suite"],"blocked_by":{"run_id":34732684153,"job_id":103659536775,"state":"in_progress"},"next_free_node":"N25-RESOURCE-BRAIN"},
-    {"n":23,"id":"N23-FIVE-PASS-AUDITOR","state":"VERIFIED_CLOSED","report_state":"PASS","owner":"sol 4 gpt 🆘","chat_id":"sol 4 gpt 🆘","node_id":"N23-FIVE-PASS-AUDITOR","fresh_main_sha":"bf9cbec840ff45a059e1679cb545a5f90e2172a3","write_scope":"runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*","claimed_at":"2026-09-13T02:47:00Z","reported_at":"2026-09-13T03:54:20Z","title":"Five-pass auditor ejecutable","scope":"runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*","depends_on":[],"steps":["Codificar requirements/evidence/contradictions/coverage/traceability deterministic","Conectar con matriz y verifier","Testear pass/gap/refutation y CI"],"close":"5-pass automático PASS con evidencia","paths_changed":["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/audit/five_pass.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_audit_five_pass.py","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_audit_evidence_matrix.py","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"],"commit_sha":"cdf0c30e2c9f117a27724cd9f2b2d5fab3369d11","certified_sha":"6223ed833be0fddf5023646f269089a7a3705e88","tree_sha":"158200f58cbd52d8c1e466e9c67b25c83b8179f9","blob_sha":"five_pass.py=7be820cb3642438a22f36778ecb5c2b549ffce12|test_audit_five_pass.py=1fd520fa74ff237418796c4a5f9a4766df02d508|test_audit_evidence_matrix.py=3903e0d497776e504edce2b843246935d6567268","tests":"specific N23 audit suite 23/23 PASS; authoritative exact-tree CI run 34736273179 job 103668162691: Wordflow 41/41 PASS; runtime 194/194 PASS + 32 subtests PASS","run_id":34736273179,"job_id":103668162691,"evidence":["REQ-S3-057 five audits implemented: requirements, evidence, contradictions, coverage and traceability","divergent fingerprints for one requirement fail closed as requirement:contradiction; identical duplicate rows remain duplicate errors and are not mislabeled contradictions","existing RequirementMatrix and independent trusted CI verifier reused; no second scheduler, orchestrator, recovery or governance owner introduced","main merge cdf0c30e2c9f117a27724cd9f2b2d5fab3369d11 read back final five_pass blob 7be820cb3642438a22f36778ecb5c2b549ffce12","certified SHA 6223ed833be0fddf5023646f269089a7a3705e88 and main merge use the same tree 158200f58cbd52d8c1e466e9c67b25c83b8179f9","authoritative workflow checked out exact certified SHA and passed 41 Wordflow tests plus 194 runtime tests and 32 subtests; two emitted warnings belong to N06 benchmark/probe and are not failures","three refutations PASS: full five-pass schema is wired; adversarial contradiction/matrix tests leave no N23 gap; exact-tree CI and main readback prove the integrated bytes"],"remaining_gaps":[],"next_free_node":"N09-DUCKDB-ACQUIRE-SPECIAL"},
-    {"n":24,"id":"N24-CONSOLIDATOR","state":"GAP_RESOLVABLE","owner":"sol 7 gpt","chat_id":"sol 7 gpt","node_id":"N24-CONSOLIDATOR","fresh_main_sha":"fb0b862d475b827090f957256a9f444c59eeaeff","write_scope":"runtime/src/consolidation/**|runtime/tests/test_consolidation*","claimed_at":"2026-09-13T02:23:00Z","reported_at":"2026-09-13T02:34:00Z","title":"Consolidator task→phase→project","scope":"runtime/src/consolidation/**|runtime/tests/test_consolidation*","depends_on":[],"steps":["Dedup lógica existente y contrato fuente","Implementar consolidación determinista con evidence refs","Test partial != global y no pérdida de provenance"],"close":"Consolidator determinista probado","paths_changed":["runtime/src/consolidation/__init__.py","runtime/src/consolidation/consolidator.py","runtime/tests/test_consolidation.py"],"commit_sha":"f26ee4439f84884e1ba2add7b86b2dee307f6591","blob_sha":"consolidator.py=c089f61aa296460191dfed1b608b24c2223c72e5|test=f39e8c681b948bdcdd456909a918add189b8fb11","tests":"specific 8/8 PASS; global CI PENDING","run_id":34733148449,"job_id":null,"evidence":["existing integration consolidate_integration was deduplicated and not duplicated as workflow owner","deterministic task->phase->project rollup implemented with evidence provenance and fail-closed PASS semantics","committed code/test blobs read back unchanged from main","specific suite 8/8 PASS includes partial!=global, missing evidence/gap rejection, duplicate IDs, provenance retention and forged phase rejection"],"remaining_gaps":["global CI gate has not executed; run 34733148449 is pending in shared main concurrency queue with no job allocated"],"blocked_by":{"run_id":34733148449,"job_id":null,"state":"pending"},"next_free_node":"N18-MEMORY-RETRIEVAL-CONTEXT"},
-    {"n":25,"id":"N25-RESOURCE-BRAIN","state":"CLAIMED","owner":"sol-5-gpt","chat_id":"sol-5-gpt","node_id":"N25-RESOURCE-BRAIN","fresh_main_sha":"66ed1e85c4d50dc430487f67b1becf7867d7caff","write_scope":"research report first; runtime adapter only after unique gap","claimed_at":"2026-09-13T02:26:00Z","title":"Resource brain/capability selection","scope":"research report first; runtime adapter only after unique gap","depends_on":[],"steps":["Investigar/reusar router/capability/resource components existentes","Rankear official code > existing code > community and dedup","Implementar sólo gap único y testear selection/fail-closed"],"close":"Resource selection probado sin descarga redundante"},
-    {"n":26,"id":"N26-GLOBAL-INTEGRATION","state":"GAP_RESOLVABLE","owner":"sol 3 gpt","chat_id":"sol 3 gpt","node_id":"N26-GLOBAL-INTEGRATION","fresh_main_sha":"615ba15eaa9c524fab5687f249c2deb3c29e3482","write_scope":"runtime/src/integration/**|runtime/tests/test_integration*","claimed_at":"2026-09-13T02:20:30Z","reported_at":"2026-09-13T02:29:00Z","title":"Global integration/Fables state","scope":"runtime/src/integration/**|runtime/tests/test_integration*","depends_on":[],"steps":["Mapear sublanes ya probadas a integration state","Implementar Fables-backed boundary mínimo","Test múltiples subresultados→state/evidence"],"close":"Global integration runtime PASS","paths_changed":["runtime/src/integration/__init__.py","runtime/src/integration/integration_state.py","runtime/tests/test_integration_state.py"],"commit_sha":"fb0b862d475b827090f957256a9f444c59eeaeff","blob_sha":"integration_state.py=511d4eabd0bb2d419bea4f707e87273d8ae1ccac|test=bd6ff79d3b402be15c60ca219f53c5b3f36b0d30","tests":"specific 8/8 PASS; global CI NOT_EXECUTED","run_id":34732895153,"job_id":null,"evidence":["Fables existing socket reused: blob 23f4e1b8b91301f2df396e7a0860fc65b977cfb3","deterministic multi-lane PASS/GAP state with evidence aggregation read back from main","negative refutations cover duplicate lane, PASS without evidence, GAP without cause, undeclared capability, and no-evidence pre-effect rejection","specific integration suite 8/8 PASS"],"remaining_gaps":["global CI gate not executed for fb0b862d475b827090f957256a9f444c59eeaeff","concurrency group blocked by pre-existing run 34732684153 job 103658281949 at complete runtime suite"],"blocked_by":{"run_id":34732684153,"job_id":103658281949,"state":"in_progress","head_sha":"344a714fcce5c41e4f8ed4ad4555b55f6f08d14e"},"next_free_node":"N28-API-CONTROL"},
-    {"n":27,"id":"N27-CONTINUOUS-LOOP","state":"BLOCKED_AFTER_N26_N23","owner":null,"title":"Continuous LOOP multi-stage","scope":"runtime/src/integration/**|runtime/tests/test_integration*","depends_on":["N26-GLOBAL-INTEGRATION","N23-FIVE-PASS-AUDITOR"],"steps":["Conectar state delta/audit/gap/StrategyDelta/next","Ejecutar LOOP con fallo y recuperación","Test estabilidad/reinyección hasta cierre"],"close":"Loop real multi-stage PASS y gap reinjection probada"},
-    {"n":28,"id":"N28-API-CONTROL","state":"GAP_RESOLVABLE","owner":"sol 3 gpt","chat_id":"sol 3 gpt","node_id":"N28-API-CONTROL","fresh_main_sha":"57d4bfe5b7ba39810d99ed573ca803f2f734cec7","write_scope":"runtime/src/conn/**|runtime/src/integration/**|runtime/tests/test_integration*","claimed_at":"2026-09-13T02:31:00Z","reported_at":"2026-09-13T02:39:00Z","title":"Python API/control streaming/cancel/status","scope":"runtime/src/conn/**|runtime/src/integration/**|runtime/tests/test_integration*","depends_on":[],"steps":["Dedup Starlette/HTTPX y definir contrato mínimo","Implementar API Python sobre runtime/Fables","Test streaming/cancel/status/auth-policy"],"close":"API real probada","paths_changed":["runtime/src/conn/__init__.py","runtime/src/conn/api_control.py","runtime/tests/test_integration_api_control.py"],"commit_sha":"b2593d0fd7c003d2463fc0a7486d69e42106c9b0","blob_sha":"api_control.py=ac81ca96f97663faddb03e9e712a498366eb543f|test=e21384df64a1bb6f18c043e526e54321586864fc","tests":"9 specific refutation cases committed and read back; execution NOT_OBSERVED; global CI NOT_EXECUTED","run_id":34733409335,"job_id":null,"evidence":["runtime/src/conn was empty before delta; no second scheduler/orchestrator was introduced","Starlette vendor tree 820b2cdde800811062b2be43abd909e27b38854f and HTTPX vendor tree 21eaf49210613909be2f7a864389a312a484d0eb already exist, so no download was added","canonical CI does not install or sparse-checkout Starlette/HTTPX; ASGI control boundary remains dependency-free and wrapper-compatible","API/control delegates runtime effects through existing FablesIntegrationBoundary and requires authorization before create/run/cancel mutations","readback confirms exact code/test blobs on main","run 34733409335 for b2593d0 is pending with zero jobs"],"remaining_gaps":["specific 9-case test file has not been executed by a trusted runner","global CI gate for b2593d0fd7c003d2463fc0a7486d69e42106c9b0 has not executed","shared main concurrency is blocked by run 34733116016 job 103659536775 at runtime suite step 6"],"blocked_by":{"run_id":34733116016,"job_id":103659536775,"state":"in_progress","step":"Run complete YAIWES runtime test suite"},"next_free_node":"N29-GLOBAL-RECOVERY-FAILOVER"},
-    {"n":29,"id":"N29-GLOBAL-RECOVERY-FAILOVER","state":"CLAIMED","owner":"sol 4 gpt 🆘","chat_id":"sol 4 gpt 🆘","node_id":"N29-GLOBAL-RECOVERY-FAILOVER","fresh_main_sha":"d5b42a5474e002596002a3f2ab3dc8cad31d2f62","write_scope":"runtime/src/recovery/**|runtime/tests/test_recovery*|integration E2E","claimed_at":"2026-09-13T04:36:30Z","title":"Workspace/multi-host failover/reconstruction","scope":"runtime/src/recovery/**|runtime/tests/test_recovery*|integration E2E","depends_on":[],"steps":["Reusar control-plane/ledger/checkpoint ya probado","Añadir sólo workspace/failover/reconstruction faltante","Test restart/failover/replay sin duplicar efectos"],"close":"Recovery global E2E PASS"},
-    {"n":30,"id":"N30-G12-GLOBAL-COVERAGE","state":"VERIFIED_CLOSED","owner":"sol 3 gpt","title":"Cobertura global G12","scope":"audit/coverage/Crazy-Wall/Handoff reports","depends_on":["N01-DOC-REVIEW-COMPLETE","N02-TRACEABILITY-BIDIRECTIONAL"],"steps":["Consumir denominador completo de requisitos","Cruzar con código/tests/evidence y huérfanos","Calcular cierre verificable y listar cada GAP residual"],"close":"Cobertura bidireccional 100% o lista residual exacta","chat_id":"sol 3 gpt","node_id":"N30-G12-GLOBAL-COVERAGE","fresh_main_sha":"64833992e439dba9708225283be08c3d75aa15fe","write_scope":"audit/coverage/Crazy-Wall/Handoff reports","claimed_at":"2026-09-13T04:45:48Z","report_state":"PASS_AUDIT_WITH_EXACT_RESIDUALS","reported_at":"2026-09-13T04:55:14Z","paths_changed":["UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N30-G12-GLOBAL-COVERAGE-SOL-3-GPT-2026-09-13.json","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"],"commit_sha":"70592e544573519847770d90dceaa34dae4a6225","blob_sha":"report=b8a7e46c98dc10502f8d9539cad2cefb21dbe966|five_pass=7be820cb3642438a22f36778ecb5c2b549ffce12|matrix=637b64161f67f6d2f8aaa0280555964385bef6e2","tests":"canonical N30 audit run 34738908302 job 103675124914 SUCCESS: 100 source rows; 98 implementable; 98/98 mapped; canonical five-pass persisted certification 0/98 with exactly 98 missing_trace residuals; 3 refutations PASS","run_id":34738908302,"job_id":103675124914,"evidence":["N01/N02 denominator preserved: 100 source rows, 98 implementable, REQ-S2-011 and REQ-S3-062 non-implementable numbering gaps","N02 mapping remains complete: 98/98 requirements map across CAN-001..CAN-034","canonical audit_five_pass requires exact source/implementation/test/evidence hashes, Python symbols, revision and independent trusted CI","runtime/src/audit contains only evidence.py/five_pass.py/matrix.py and existing matrix tests are synthetic R1/R2; no persisted production RequirementTrace inventory for the 98 requirements","official runner 34738908302 job 103675124914 reproduced exactly 98 missing_trace gaps and rejected accidental product closure","N30 closes the audit task with an exact residual list; global product_verified remains false"],"remaining_gaps":[],"global_residual_requirement_count":98,"global_project_verified_closed":false,"next_free_node":null},
-    {"n":31,"id":"N31-UI-FINAL","state":"BLOCKED_AFTER_N17","owner":null,"title":"UI final sobre runtime verificado","scope":"UI factory only; no runtime ownership","depends_on":["N17-FULL-PRODUCT-E2E"],"steps":["Consumir API/runtime verificados","Probar ventanas/chat/files/control sin bypass","E2E final + Final Judge"],"close":"Producto completo VERIFIED_CLOSED"},
-    {"n":32,"id":"N32-GUEST-INSTALLER-VERIFICATION","state":"FREE","owner":null,"title":"Guest installer + artifact verification + rollback","scope":"runtime/src/install/**|runtime/tests/test_install*","depends_on":["N20-SANDBOX-UEK-ROUTER"],"discovered_by":"N02-TRACEABILITY-BIDIRECTIONAL","gap_evidence":"REQ-S2-005 / CAN-009; runtime/src/install is placeholder-only and N01-N31 had no owner","steps":["Verificar requisito de instalación dentro del guest y deduplicar capabilities existentes","Implementar/adaptar sólo installer/verifier/arch/dependency/snapshot-before-install/rollback sin contaminar host","Test hash/signature/format/arch/dependency failure + rollback + guest-only effect"],"close":"CAN-009 WIRED + TESTED con efectos dentro del guest y rollback"},
-    {"n":33,"id":"N33-MIRROR-TRANSPORT-CONTROL","state":"FREE","owner":null,"title":"Mirror display/audio/input/clipboard/control transport","scope":"runtime/src/mirror/**|runtime/tests/test_mirror*","depends_on":["N20-SANDBOX-UEK-ROUTER"],"discovered_by":"N02-TRACEABILITY-BIDIRECTIONAL","gap_evidence":"REQ-S2-008 / CAN-010; no N01-N31 runtime transport owner and N31 is UI-only","steps":["Verificar requisito mirror LAN-first y deduplicar transports/codecs existentes","Implementar/adaptar runtime transport/control sin sync continuo de disk/RAM","Test pairing/auth/session/display-input-control/clipboard plus prohibition of disk/RAM mirroring"],"close":"CAN-010 runtime mirror transport WIRED + TESTED; UI remains N31"}
+    {
+      "n": 1,
+      "id": "N01-DOC-REVIEW-COMPLETE",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS",
+      "owner": "sol 8 gpt",
+      "chat_id": "sol 8 gpt",
+      "node_id": "N01-DOC-REVIEW-COMPLETE",
+      "fresh_main_sha": "3c367a13f5bc3ed444fa5fb8c6c58091a2f1a53e",
+      "write_scope": "audit/reports/Crazy-Wall only",
+      "claimed_at": "2026-09-13T02:22:00Z",
+      "reported_at": "2026-09-13T02:33:00Z",
+      "title": "Revisión documental exhaustiva de las 3 fuentes",
+      "scope": "audit/reports/Crazy-Wall only",
+      "depends_on": [],
+      "steps": [
+        "Leer 100% de las tres fuentes y extraer requisitos literales con source anchor",
+        "Deduplicar requisitos y construir denominador único sin reinterpretar",
+        "Testear cobertura de extracción y reportar requisito_id + fuente + evidencia"
+      ],
+      "close": "100% de requisitos de las 3 fuentes enumerados y auditables",
+      "paths_changed": [
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N01-DOC-REVIEW-COMPLETE-SOL-8-GPT-2026-09-13.md",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "26af52357550e040de9fa79416bafa3d6e5d6258",
+      "blob_sha": "217caa8bfba2edd71c6bc505e89122759ac9573c",
+      "tests": "TEST-N01-01 source identity PASS; TEST-N01-02 numbered-anchor coverage PASS_FAIL_CLOSED; TEST-N01-03 no-drop dedup PASS; TEST-N01-04 authority/refutation PASS",
+      "run_id": null,
+      "job_id": null,
+      "evidence": [
+        "3/3 full source blobs read and pinned by SHA",
+        "98 normative source packages registered",
+        "35 canonical groups after dedup with source anchors preserved",
+        "0 dropped source packages",
+        "source numbering gaps preserved rather than inferred"
+      ],
+      "remaining_gaps": [
+        "S1 index/body numbering mismatch remains source defect",
+        "S2 Objective 11 absent from source",
+        "S3 section 62 absent as numbered heading"
+      ],
+      "next_free_node": "N02-TRACEABILITY-BIDIRECTIONAL"
+    },
+    {
+      "n": 2,
+      "id": "N02-TRACEABILITY-BIDIRECTIONAL",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS_AUDIT_NODE_WITH_NEW_GAPS",
+      "owner": "sol 8 gpt",
+      "chat_id": "sol 8 gpt",
+      "node_id": "N02-TRACEABILITY-BIDIRECTIONAL",
+      "fresh_main_sha": "ec1ced7852dd6b81a72aea19748461f8ad6a90b6",
+      "write_scope": "audit/coverage/reports",
+      "claimed_at": "2026-09-13T02:34:00Z",
+      "reported_at": "2026-09-13T02:46:00Z",
+      "title": "Matriz requisito↔tarea↔código↔test↔evidencia",
+      "scope": "audit/coverage/reports",
+      "depends_on": [
+        "N01-DOC-REVIEW-COMPLETE"
+      ],
+      "steps": [
+        "Cruzar cada requirement_id con task/node y código actual",
+        "Agregar test/evidencia y detectar código sin requisito",
+        "Refutar top-down y bottom-up y reportar cobertura exacta"
+      ],
+      "close": "G12 bidireccional 100% con huérfanos explícitos",
+      "paths_changed": [
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N02-TRACEABILITY-BIDIRECTIONAL-SOL-8-GPT-2026-09-13.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "995658a50dfc45b5045e08983933e54dcf0bb2a0",
+      "tests": "TEST-N02-01 denominator 98/98 PASS; TEST-N02-02 100 unique source anchors PASS; TEST-N02-03 top-down unmapped=[] PASS; TEST-N02-04 bottom-up orphan implementation domains=[] with placeholders explicit; TEST-N02-05 found two unowned implementable capabilities; TEST-N02-06 global closure refutation PASS_FAIL_CLOSED",
+      "run_id": null,
+      "job_id": null,
+      "evidence": [
+        "N01 report blob 217caa8bfba2edd71c6bc505e89122759ac9573c consumed",
+        "runtime source tree 450971a891534ab711f2873bef4880ef265133b7 inventoried",
+        "runtime test tree fe89f6af726a013a52310c174d697b87de9eeb7d inventoried",
+        "100 source-anchor rows / 98 implementable requirements mapped",
+        "35 canonical capability groups mapped to nodes/code/tests/status"
+      ],
+      "remaining_gaps": [
+        "Product implementation/test/evidence coverage is not globally closed",
+        "CAN-009 guest installer had no N01-N31 runtime owner; registered as N32",
+        "CAN-010 mirror transport/control had no N01-N31 runtime owner; registered as N33",
+        "placeholder boundaries remain explicit"
+      ],
+      "next_free_node": "N06-PLATFORM-MATRIX-PERF-100X"
+    },
+    {
+      "n": 3,
+      "id": "N03-AUTO-AUDITOR-EVIDENCE",
+      "state": "GAP_RESOLVABLE",
+      "owner": "SOL-2-GPT",
+      "chat_id": "SOL-2-GPT",
+      "node_id": "N03-AUTO-AUDITOR-EVIDENCE",
+      "fresh_main_sha": "644bbe1154526682efed9bca1fb46ce801ce9e90",
+      "write_scope": "runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*",
+      "claimed_at": "2026-09-13T02:24:00Z",
+      "reported_at": "2026-09-13T02:36:00Z",
+      "title": "Auditor automático + verificador de evidencias",
+      "scope": "runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*",
+      "depends_on": [],
+      "steps": [
+        "Verificar código/pruebas existentes y CI del auditor",
+        "Conectar evidence verifier + matriz + consolidación mínima sin duplicar governance",
+        "Correr tests locales/globales y registrar run/log"
+      ],
+      "close": "Auditor ejecutable consume matriz/evidencia y CI PASS",
+      "paths_changed": [
+        "runtime/src/audit/evidence.py",
+        "runtime/src/audit/matrix.py",
+        "runtime/tests/test_audit_evidence_matrix.py"
+      ],
+      "commit_sha": "1984c7c269d9d405e50b43a79ac198a51aad8b23",
+      "blob_sha": "evidence.py=73c33495d3910f8d5a1f504fe7b19547fd9d4519|matrix.py=637b64161f67f6d2f8aaa0280555964385bef6e2|test=1eeb33fc43a89db158f98c11306df9c707e43435",
+      "tests": "specific audit suite 21/21 PASS (13 existing + 8 new); global CI CANCELLED before job allocation",
+      "run_id": 34733321677,
+      "job_id": null,
+      "evidence": [
+        "existing audit.five_pass reused unchanged; no second governance or consolidation owner created",
+        "untrusted evidence is bound to independent trusted run/job lookup plus exact revision/implementation/test hashes",
+        "immutable RequirementMatrix delegates to existing audit_five_pass and preserves the complete requirement denominator",
+        "specific audit suite reconstructed from exact GitHub readback blobs: 21/21 PASS",
+        "main merge commit 1984c7c269d9d405e50b43a79ac198a51aad8b23 read back successfully",
+        "global workflow run 34733321677 reached completed/cancelled with zero jobs allocated"
+      ],
+      "remaining_gaps": [
+        "global GitHub Actions gate for commit 1984c7c269d9d405e50b43a79ac198a51aad8b23 did not execute",
+        "GitHub rejected retry of cancelled no-job run 34733321677 with workflow-run cannot be retried"
+      ],
+      "blocked_by": {
+        "run_id": 34733321677,
+        "job_id": null,
+        "state": "completed/cancelled",
+        "jobs": 0
+      },
+      "next_free_node": "N05-PRODUCT-RECOVERY-CHATS-WINDOWS-FILES"
+    },
+    {
+      "n": 4,
+      "id": "N04-STATE-RECONCILIATION",
+      "state": "BLOCKED_AFTER_N02_N03",
+      "owner": null,
+      "title": "Reconciliar Crazy Wall/STATE/CHECKPOINT/HANDOFF",
+      "scope": "shared state docs only",
+      "depends_on": [
+        "N02-TRACEABILITY-BIDIRECTIONAL",
+        "N03-AUTO-AUDITOR-EVIDENCE"
+      ],
+      "steps": [
+        "Leer versiones frescas de todos los estados",
+        "Aplicar sólo delta reconciliado preservando historia",
+        "Readback y verificar mismo resultado/pendientes en todos"
+      ],
+      "close": "Sin contradicciones de estado entre fuentes operativas"
+    },
+    {
+      "n": 5,
+      "id": "N05-PRODUCT-RECOVERY-CHATS-WINDOWS-FILES",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS",
+      "owner": "SOL-2-GPT",
+      "chat_id": "SOL-2-GPT",
+      "node_id": "N05-PRODUCT-RECOVERY-CHATS-WINDOWS-FILES",
+      "fresh_main_sha": "7afd3c638ebd2acb9f080117ccff69181ad69c76",
+      "write_scope": "runtime/src/recovery/**|runtime/src/storage/**|runtime/tests/test_recovery*|runtime/tests/test_storage*",
+      "claimed_at": "2026-09-13T02:38:00Z",
+      "reported_at": "2026-09-13T03:46:00Z",
+      "title": "Recuperación real de chats, ventanas y archivos",
+      "scope": "runtime/src/recovery/**|runtime/src/storage/**|runtime/tests/test_recovery*|runtime/tests/test_storage*",
+      "depends_on": [],
+      "steps": [
+        "Mapear requisitos y reutilizar checkpoint/recovery existente",
+        "Implementar sólo glue faltante para chats/ventanas/archivos y separación de memoria",
+        "Probar cancelación, desconexión, restart e idempotencia sin duplicar efectos"
+      ],
+      "close": "Recovery E2E de producto con hash/readback e idempotencia",
+      "paths_changed": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/recovery/product_session.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/storage/product_state.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_recovery_product_session.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_storage_product_state.py",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "ab30c42ef35bf758e7afe930d5fc0d11e1ac081e",
+      "certified_sha": "4b32a3228627e9709edbdd6cd403f01a6656492c",
+      "blob_sha": "product_session.py=955d11b7dcb67bf139cba85ffd017991f4f6c41d|product_state.py=8f00ff671b7c0a62c7572ceb5767b467b7c73cda|test_recovery_product_session.py=4f089dcd5f09b32bf4274eead18d6c87fab6d137|test_storage_product_state.py=397966f3669103ce42f17ac7b57aa7f815c002b6",
+      "tests": "specific reconstructed N05 suite 18/18 PASS; authoritative full CI run 34735520028 job 103666138630: Wordflow 41/41 PASS; runtime 151/151 PASS + 27 subtests PASS",
+      "run_id": 34735520028,
+      "job_id": 103666138630,
+      "evidence": [
+        "existing recovery.control_plane SHA256 gate reused; no second workflow recovery engine introduced",
+        "deterministic canonical product snapshot restores chats/windows/files while storing only opaque agent_memory_ref",
+        "checkpoint SHA256 plus canonical byte-for-byte readback fail closed before product restore",
+        "effect idempotency binds effect_id to payload_sha256 with pending/committed readback; payload mismatch is rejected before delivery",
+        "disconnect after physical side effect leaves pending; restart reuses the same stable effect_id and idempotent sink produces one physical effect",
+        "three refutations PASS: tampered/noncanonical restore rejected; same effect_id with different payload rejected pre-effect; disconnect+restart produces no duplicate physical effect",
+        "certified branch inherited main commit ab30c42ef35bf758e7afe930d5fc0d11e1ac081e and exact N05 blobs were read back",
+        "authoritative workflow log: Wordflow 41 passed; runtime 151 passed and 27 subtests passed"
+      ],
+      "remaining_gaps": [],
+      "next_free_node": "N08-SUPABASE-ACQUIRE"
+    },
+    {
+      "n": 6,
+      "id": "N06-PLATFORM-MATRIX-PERF-100X",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS",
+      "owner": "sol 8 gpt",
+      "chat_id": "sol 8 gpt",
+      "node_id": "N06-PLATFORM-MATRIX-PERF-100X",
+      "fresh_main_sha": "37bbc063f41cba6ca7c0480c54a2c67dd9f20390",
+      "write_scope": "runtime/src/uek/**|runtime/src/adapters/**|runtime/tests/test_platform*|benchmark reports",
+      "claimed_at": "2026-09-13T03:23:30Z",
+      "reported_at": "2026-09-13T03:55:19Z",
+      "title": "Plataformas + medición mejora 100x",
+      "scope": "runtime/src/uek/**|runtime/src/adapters/**|runtime/tests/test_platform*|benchmark reports",
+      "depends_on": [],
+      "steps": [
+        "Construir matriz Web/Windows/Linux/Android/iOS supported|conditional|blocked",
+        "Cablear/probar capabilities reales sin prometer backends ausentes",
+        "Medir baseline vs candidate y demostrar o refutar 100x por métrica"
+      ],
+      "close": "Matriz por plataforma + benchmarks reproducibles; 100x sólo si medido",
+      "paths_changed": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/__init__.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/platform_matrix.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/probe.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform_matrix.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform_probe.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform_benchmark.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/docs/benchmarks/N06-PLATFORM-MATRIX-PERF-2026-09-13.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "162a1b5d56a825ce5bdf9df0e7c3b2ee45e3f47b",
+      "report_commit_sha": "0c239c3dde7808067721a25a09169e664eee77db",
+      "blob_sha": "__init__.py=7fa563c15f9427b6c06824e356d95efde041bff2|platform_matrix.py=e470aa343f93184004b09585830c1a5b9547844f|probe.py=cbeccbcd4275d5225fa911dfc751a8cfeadfc19a|test_platform_matrix.py=0e6691b99034f5c66df8c497fa3069f970d2cc95|test_platform_probe.py=0435d5bd5b369bf6e3ebdcb17f68afe144cd2cbb|test_platform_benchmark.py=28e3ebc894c02132a37f10f7807c10c100b56a3a|report=424a69d20049a0542da3b20302c52a7dc80b4a11",
+      "tests": "authoritative run 34735844744 job 103667777897 SUCCESS: Wordflow 41/41 PASS; runtime 192/192 PASS + 32 subtests PASS; benchmark policy_lookup_latency 2.5799x and meets_100x=false; real Ubuntu CI host probe BLOCKED with no verified backend",
+      "run_id": 34735844744,
+      "job_id": 103667777897,
+      "evidence": [
+        "5-platform deterministic supported|conditional|blocked matrix implemented",
+        "read-only real host capability probe cannot launch VMs or invent support",
+        "CI runner observed Linux with no verified QEMU/KVM and correctly returned BLOCKED",
+        "authoritative benchmark baseline_ns=16450178 candidate_ns=6376241 speedup=2.5799x; 100x refuted rather than fabricated",
+        "three refutations PASS and exact implementation/test/report blobs read back"
+      ],
+      "remaining_gaps": [
+        "N20 owns VM/sandbox lifecycle and runtime routing",
+        "N10 owns Android AVF provider/real ARM64 capability proof"
+      ],
+      "next_free_node": "N09-DUCKDB-ACQUIRE-SPECIAL"
+    },
+    {
+      "n": 7,
+      "id": "N07-VITE-ACQUIRE",
+      "state": "CLAIMED",
+      "owner": "SOL GPT 🆘1",
+      "chat_id": "SOL GPT 🆘1",
+      "node_id": "N07-VITE-ACQUIRE",
+      "fresh_main_sha": "e30d3513c4b4fb7d71e31f7de9a2e3e494e93396",
+      "write_scope": "component acquisition + registry only",
+      "claimed_at": "2026-09-13T03:33:00Z",
+      "title": "Resolver Vite PENDING_SOURCE/destino",
+      "scope": "component acquisition + registry only",
+      "depends_on": [],
+      "steps": [
+        "Confirmar requisito, destino literal y fuente oficial",
+        "Adquirir con motor canónico o cerrar por equivalencia probada",
+        "Readback de source y actualizar registry/evidencia"
+      ],
+      "close": "Vite SOURCE_PRESENT_READBACK_VERIFIED o equivalencia cerrada"
+    },
+    {
+      "n": 8,
+      "id": "N08-SUPABASE-ACQUIRE",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS_EQUIVALENCE_NO_DOWNLOAD",
+      "owner": "SOL-2-GPT",
+      "chat_id": "SOL-2-GPT",
+      "node_id": "N08-SUPABASE-ACQUIRE",
+      "fresh_main_sha": "90878e549a2700559f9b66f08693fcff130a77c0",
+      "write_scope": "component acquisition + evidence only",
+      "claimed_at": "2026-09-13T03:49:00Z",
+      "reported_at": "2026-09-13T03:56:00Z",
+      "title": "Resolver Supabase destino/adquisición",
+      "scope": "component acquisition + evidence only",
+      "depends_on": [],
+      "steps": [
+        "Confirmar capability requerida y destino literal",
+        "Dedup; adquirir con motor canónico sólo si sigue necesario",
+        "Readback + provenance + estado"
+      ],
+      "close": "Supabase adquirido/verificado o requisito cerrado por equivalencia",
+      "paths_changed": [
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N08-SUPABASE-ACQUIRE-SOL-2-GPT-2026-09-13.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "e70383c0a6c0e47ae9d7ac70a1ea170bf30395f4",
+      "blob_sha": "catalog.py=5299d6c849a8cf68ca6bf4ced5ca7323b4621dd7|selector.py=bc5c0f62118ff40e4fb2d32d7d991be5219f6bbd|test_resource_brain.py=76d718097ee5c964dff17475001cc953e34d85da|upstream_supabase_master=26585dd4a4d6db8910a595214c9f6e8fdd206768",
+      "tests": "specific ResourceBrain suite reconstructed from exact GitHub blobs 6/6 PASS; reference full CI run 34735520028 job 103666138630 SUCCESS: Wordflow 41/41 PASS, runtime 151/151 PASS + 27 subtests",
+      "run_id": 34735520028,
+      "job_id": 103666138630,
+      "evidence": [
+        "N01 denominator contains no Supabase-specific normative requirement",
+        "N02 maps N08 only under provider-neutral CAN-013 OSS reuse/provenance/dedup",
+        "G03_SUPABASE_DEST explicitly states no literal/authorized physical acquisition destination and says not to infer",
+        "component trees todos-los-componentes 9bd4de6934911f621f62d26e6f2e264b7a16691e and componentes-open-source 2d25955c0d3f932ae14debe2f671883861698a4b contain no Supabase path",
+        "official provenance verified: supabase/supabase, master 26585dd4a4d6db8910a595214c9f6e8fdd206768, Apache-2.0",
+        "existing ResourceBrain + PluginRegistry implement provider-neutral capability selection, exact identity/provenance checks and duplicate rejection",
+        "three refutations PASS: no distinct requirement; no authorized destination; downloading anyway would violate REQ-S2-014 and component_policy.download_rule"
+      ],
+      "remaining_gaps": [],
+      "next_free_node": "N09-DUCKDB-ACQUIRE-SPECIAL"
+    },
+    {
+      "n": 9,
+      "id": "N09-DUCKDB-ACQUIRE-SPECIAL",
+      "state": "VERIFIED_CLOSED",
+      "owner": "sol 3 gpt",
+      "chat_id": "sol 3 gpt",
+      "node_id": "N09-DUCKDB-ACQUIRE-SPECIAL",
+      "fresh_main_sha": "82d90d7634770b8dbe00ad41006e849d6cdad6f2",
+      "write_scope": "component acquisition/research only",
+      "claimed_at": "2026-09-13T04:01:30Z",
+      "title": "Resolver DuckDB special-files sin alterar motor",
+      "scope": "component acquisition/research only",
+      "depends_on": [],
+      "steps": [
+        "Investigar fuente/ref oficial compatible con política del motor",
+        "Probar StrategyDelta permitido sin sanitizar/LFS/force",
+        "Readback exacto o GAP proveedor documentado con equivalente funcional"
+      ],
+      "close": "DuckDB source verificable o equivalencia funcional probada",
+      "report_state": "PASS",
+      "reported_at": "2026-09-13T04:45:48Z",
+      "paths_changed": [
+        ".github/workflows/sol-gpt2-s2-01-duckdb-materialize-20260911.yml",
+        "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
+        "UI YAIWES/automation/S2-duckdb-materialize-20260911/staging/DuckDB/DOWNLOAD_EXTRACT_MANIFEST.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "01e9817ed2159e6fe1706545197d9e6498d971c5",
+      "blob_sha": "workflow=85a5cb7239d28a63e7bcc2b67e386543945d841c|tree_sha256=203b13970343ee05276d6992dc42fd81c7b09b4fc3b3b27c3689edf27286f52b",
+      "tests": "materialization run 34738075968 job 103672927926 SUCCESS; idempotence branch run 34738315538 job 103673575865 SUCCESS; integrated main run 34738359677 job 103673688209 SUCCESS; final readback 4122 files / 37127481 bytes / sha256 203b13970343ee05276d6992dc42fd81c7b09b4fc3b3b27c3689edf27286f52b",
+      "run_id": 34738359677,
+      "job_id": 103673688209,
+      "evidence": [
+        "source duckdb/duckdb-r pinned to commit fdef8b2325d49774c990e59f127b90e4d54d3065",
+        "canonical acquisition/move motors remained immutable; no sanitizer, LFS, force or alternate motor",
+        "canonical final DuckDB root matches verified staging manifest exactly",
+        "branch idempotence run verified existing final and no-op Motor4/publish with exact readback",
+        "integrated main run 34738359677 repeated VERIFIED_EXISTING + exact independent readback with failed=0 pending=0",
+        "three refutations PASS: schema complete, no residual N09 GAP, exact source/tree/run evidence proves closure"
+      ],
+      "remaining_gaps": [],
+      "next_free_node": "N30-G12-GLOBAL-COVERAGE"
+    },
+    {
+      "n": 10,
+      "id": "N10-AVF-PROVIDER-CAPABILITY",
+      "state": "CLAIMED",
+      "owner": "sol 7 gpt",
+      "chat_id": "sol 7 gpt",
+      "node_id": "N10-AVF-PROVIDER-CAPABILITY",
+      "fresh_main_sha": "f629a052bc4351dd34cebadacc23da8ca7caa2a0",
+      "write_scope": "component research/acquisition|runtime/src/uek/**|runtime/tests/test_platform*",
+      "claimed_at": "2026-09-13T04:06:07Z",
+      "title": "Resolver AVF proveedor + capability Android",
+      "scope": "component research/acquisition|runtime/src/uek/**|runtime/tests/test_platform*",
+      "depends_on": [],
+      "steps": [
+        "Separar adquisición AVF de capability runtime y comprobar fuente oficial",
+        "Resolver transporte autorizado o equivalencia; implementar capability probe fail-closed",
+        "Probar Android ARM64/Cuttlefish y bloquear hosts no soportados"
+      ],
+      "close": "AVF/equivalente con provenance + capability test real"
+    },
+    {
+      "n": 11,
+      "id": "N11-BIG-AGI-SOURCE-INTEGRATION",
+      "state": "CLAIMED",
+      "owner": "sol 8 gpt",
+      "chat_id": "sol 8 gpt",
+      "node_id": "N11-BIG-AGI-SOURCE-INTEGRATION",
+      "fresh_main_sha": "7db4d1629664d8419d759d553c9d6240449a64ba",
+      "write_scope": "component acquisition|runtime integration/UI donor evidence",
+      "claimed_at": "2026-09-13T04:10:00Z",
+      "title": "big-AGI PENDING_SOURCE + integración",
+      "scope": "component acquisition|runtime integration/UI donor evidence",
+      "depends_on": [],
+      "steps": [
+        "Confirmar fuente oficial/licencia/capability y destino",
+        "Adquirir si sigue necesario y montar por Fables/adaptador sin nuevo owner",
+        "Probar integración y registrar evidence"
+      ],
+      "close": "SOURCE_PRESENT + adapter/Fables + integration test"
+    },
+    {
+      "n": 12,
+      "id": "N12-VITE-INTEGRATION",
+      "state": "BLOCKED_AFTER_N07",
+      "owner": null,
+      "title": "Integrar Vite",
+      "scope": "runtime/vendor/integration or UI build boundary as truth docs require",
+      "depends_on": [
+        "N07-VITE-ACQUIRE"
+      ],
+      "steps": [
+        "Readback de Vite source + contrato de build",
+        "Cablear sólo al boundary requerido",
+        "Test build/runtime y evidencia"
+      ],
+      "close": "Vite WIRED + TESTED en boundary correcto"
+    },
+    {
+      "n": 13,
+      "id": "N13-VERCEL-AI-SDK-SOURCE-INTEGRATION",
+      "state": "CLAIMED",
+      "owner": "SOL-2-GPT",
+      "chat_id": "SOL-2-GPT",
+      "node_id": "N13-VERCEL-AI-SDK-SOURCE-INTEGRATION",
+      "fresh_main_sha": "6b6e50eb00af65cd0449e4eeca22652e0e13ef76",
+      "write_scope": "component acquisition|streaming provider UI boundary",
+      "claimed_at": "2026-09-13T04:27:40Z",
+      "title": "Vercel AI SDK PENDING_SOURCE + integración",
+      "scope": "component acquisition|streaming provider UI boundary",
+      "depends_on": [],
+      "steps": [
+        "Confirmar fuente oficial/licencia y requisito streaming",
+        "Adquirir/dedup y cablear por boundary existente",
+        "Test streaming/cancel/status y evidence"
+      ],
+      "close": "SOURCE_PRESENT + WIRED + TESTED"
+    },
+    {
+      "n": 14,
+      "id": "N14-RESEARCH-SOURCE-VERIFICATION",
+      "state": "GAP_RESOLVABLE",
+      "owner": "SOL GPT 🆘1",
+      "chat_id": "SOL GPT 🆘1",
+      "node_id": "N14-RESEARCH-SOURCE-VERIFICATION",
+      "fresh_main_sha": "0f070f0f50a0aec6cf3ef8897749a5482ed2e41d",
+      "write_scope": "wordflow research layer/tests",
+      "claimed_at": "2026-09-13T02:28:00Z",
+      "reported_at": "2026-09-13T02:37:00Z",
+      "title": "Research debe consultar/comprobar fuentes",
+      "scope": "wordflow research layer/tests",
+      "depends_on": [],
+      "steps": [
+        "Revisar layer research actual contra contrato 6 pasos",
+        "Añadir validación de URL/frescura/provenance sólo si falta",
+        "Testear filtro/dedup/ranking/fail-closed sin fuentes"
+      ],
+      "close": "Research prueba fuentes reales y nunca inventa URL",
+      "paths_changed": [
+        "wordflow_loop/wordflow_loop/layers/layer_01_research.py",
+        "wordflow_loop/tests/test_layers.py"
+      ],
+      "commit_sha": "986defa85a1d7d39d306e0f5e07c7b537d386cb5",
+      "blob_sha": "layer_01_research.py=d61e2c48fc618ea7b93ced207950891367fe19d6|test_layers.py=e5bd84571caf2718f0c7c73bd88c973b58886aba",
+      "tests": "specific deterministic N14 harness 4/4 PASS; global CI NOT_EXECUTED",
+      "run_id": 34733321677,
+      "job_id": null,
+      "evidence": [
+        "syntactic-only URLs no longer qualify as evidence",
+        "candidate must carry VERIFIED retrieval provenance bound to checked_url, retrieved_at, adapter and content_sha256",
+        "freshness is deterministic from injected as_of + max_age_seconds; stale/future/mismatched provenance fails closed",
+        "verified official source ranks before community and duplicate URL is removed",
+        "committed layer/test blobs read back unchanged from main",
+        "descendant head 1984c7c269d9d405e50b43a79ac198a51aad8b23 directly includes N14 commit 986defa85a1d7d39d306e0f5e07c7b537d386cb5"
+      ],
+      "remaining_gaps": [
+        "global CI gate has not executed a descendant containing N14 yet",
+        "shared concurrency queue is occupied by an older runtime suite"
+      ],
+      "blocked_by": {
+        "run_id": 34733116016,
+        "job_id": 103659536775,
+        "state": "in_progress",
+        "head_sha": "0f070f0f50a0aec6cf3ef8897749a5482ed2e41d"
+      },
+      "next_free_node": "N15-SUPERVISOR-PRE-EFFECT-GATE"
+    },
+    {
+      "n": 15,
+      "id": "N15-SUPERVISOR-PRE-EFFECT-GATE",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS",
+      "owner": "SOL GPT 🆘1",
+      "chat_id": "SOL GPT 🆘1",
+      "node_id": "N15-SUPERVISOR-PRE-EFFECT-GATE",
+      "fresh_main_sha": "b8e972cbeb1e79273365205dd587982eecd1f43c",
+      "write_scope": "wordflow governance/runner/tests",
+      "claimed_at": "2026-09-13T02:39:00Z",
+      "reported_at": "2026-09-13T03:29:27Z",
+      "title": "Supervisor valida antes de efectos",
+      "scope": "wordflow governance/runner/tests",
+      "depends_on": [],
+      "steps": [
+        "Auditar orden Sheriff/Validator/Supervisor antes de mutaciones",
+        "Parche mínimo si algún efecto puede ocurrir antes de aprobación",
+        "Test negativo demuestra que efecto no autorizado no ocurre"
+      ],
+      "close": "Pre-effect gate determinista probado",
+      "paths_changed": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/governance/supervisor.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/wordflow_loop/runner.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_preflight_scope.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/wordflow_loop/tests/test_core.py"
+      ],
+      "commit_sha": "1cd45a7e4d67af788552af9b61789f5020b008a8",
+      "blob_sha": "supervisor.py=bb953cfcab6d2528253009566fcdf584bdbefa0f|runner.py=f74d79b52e58f634c16a33ce8189c00c2fcc5354|test_preflight_scope.py=fa3e98d5d58e51f486065fb33841feaa27a494df|test_core.py=aa5175e539926aded7a2ce4cf37b5e5c379b9b6e",
+      "tests": "initial global run 34735121142: 39 PASS / 2 FAIL from stale N14 research fixtures; repaired without relaxing runtime. Final run 34735161080 job 103665162605: Wordflow 41/41 PASS; runtime 133 PASS + 25 subtests PASS",
+      "run_id": 34735161080,
+      "job_id": 103665162605,
+      "evidence": [
+        "runner invokes Sheriff + Validator + Supervisor.check_before_effects before handler execution",
+        "mutation without effect_plan is BLOCKED before handler and handler side-effect sentinel remains untouched",
+        "unauthorized planned action/path/traversal are BLOCKED before handler",
+        "post-effect Supervisor still rejects actual action outside allowlist",
+        "three refutations PASS: no-plan/action/path pre-effect rejection; verified ordering before handler; post-effect forged action rejection",
+        "exact code/test blobs read back unchanged from main",
+        "GitHub Actions job checked out exact N15 repair commit 1cd45a7e4d67af788552af9b61789f5020b008a8",
+        "authoritative workflow log: 41 passed in 0.13s; runtime 133 passed, 25 subtests passed in 639.58s"
+      ],
+      "remaining_gaps": [],
+      "next_free_node": "N07-VITE-ACQUIRE"
+    },
+    {
+      "n": 16,
+      "id": "N16-CHECKPOINT-BYTES-HASH",
+      "state": "GAP_RESOLVABLE",
+      "owner": "SOL GPT 🆘1",
+      "chat_id": "SOL GPT 🆘1",
+      "node_id": "N16-CHECKPOINT-BYTES-HASH",
+      "fresh_main_sha": "344a714fcce5c41e4f8ed4ad4555b55f6f08d14e",
+      "write_scope": "runtime/src/recovery/**|runtime/tests/test_recovery*",
+      "claimed_at": "2026-09-13T02:17:00Z",
+      "reported_at": "2026-09-13T02:27:00Z",
+      "title": "Recovery verifica bytes de checkpoint contra hash",
+      "scope": "runtime/src/recovery/**|runtime/tests/test_recovery*",
+      "depends_on": [],
+      "steps": [
+        "Auditar control_plane/checkpoint actual y formato hash",
+        "Implementar verificación byte-for-byte SHA256 antes de restore si falta",
+        "Test tamper/corruption + global regression"
+      ],
+      "close": "Restore rechaza bytes cuyo hash no coincide",
+      "paths_changed": [
+        "runtime/src/recovery/control_plane.py",
+        "runtime/tests/test_recovery_control_plane.py"
+      ],
+      "commit_sha": "f7e9af7d846000857005c342d042e0214edbf6c1",
+      "blob_sha": "control_plane.py=252b5b5bd47d082df4c2963e624c64990e160bb4|test=9631f9d112913d66836fab3f7c2627030bfac411",
+      "tests": "specific readback unit suite 7/7 PASS; global CI NOT_EXECUTED",
+      "run_id": 34732895153,
+      "job_id": null,
+      "evidence": [
+        "checkpoint bytes are SHA256-hashed before ledger/recovery engine effects",
+        "tampered checkpoint bytes and checkpoint read failure fail closed before FakeRecovery initialization",
+        "committed code/test blobs read back unchanged from main",
+        "N16 commit f7e9af7 is ancestor of current pending global run fb0b862 by 9 commits"
+      ],
+      "remaining_gaps": [
+        "global CI gate not executed",
+        "concurrency group blocked by pre-N16 run 34732684153 job 103658281949 at complete runtime suite"
+      ],
+      "blocked_by": {
+        "run_id": 34732684153,
+        "job_id": 103658281949,
+        "state": "in_progress"
+      },
+      "next_free_node": "N14-RESEARCH-SOURCE-VERIFICATION"
+    },
+    {
+      "n": 17,
+      "id": "N17-FULL-PRODUCT-E2E",
+      "state": "BLOCKED_AFTER_CORE_RUNTIME",
+      "owner": null,
+      "title": "UI→API/Fables→ejecución→memoria→recovery→respuesta",
+      "scope": "runtime/src/integration/**|runtime/src/conn/**|runtime/tests/test_integration*|E2E",
+      "depends_on": [
+        "N18-MEMORY-RETRIEVAL-CONTEXT",
+        "N20-SANDBOX-UEK-ROUTER",
+        "N26-GLOBAL-INTEGRATION",
+        "N28-API-CONTROL",
+        "N29-GLOBAL-RECOVERY-FAILOVER"
+      ],
+      "steps": [
+        "Construir escenario real único desde UI/API hasta respuesta",
+        "Ejecutar con memoria/checkpoint/restart y correlación de evidencia",
+        "Repetir/refutar y registrar run/log/result"
+      ],
+      "close": "E2E completo PASS con recovery y respuesta observable"
+    },
+    {
+      "n": 18,
+      "id": "N18-MEMORY-RETRIEVAL-CONTEXT",
+      "state": "GAP_RESOLVABLE",
+      "report_state": "GAP_BLOCKED_BY_N14_GLOBAL_CI",
+      "owner": "sol 7 gpt",
+      "chat_id": "sol 7 gpt",
+      "node_id": "N18-MEMORY-RETRIEVAL-CONTEXT",
+      "fresh_main_sha": "7afd3c638ebd2acb9f080117ccff69181ad69c76",
+      "write_scope": "runtime/src/memory/**|runtime/src/agent/**|runtime/tests/test_memory*|runtime/tests/test_agent*",
+      "claimed_at": "2026-09-13T02:37:00Z",
+      "reported_at": "2026-09-13T03:16:00Z",
+      "title": "Cerrar P08/P09/P10 Memory + Retrieval + Context",
+      "scope": "runtime/src/memory/**|runtime/src/agent/**|runtime/tests/test_memory*|runtime/tests/test_agent*",
+      "depends_on": [],
+      "steps": [
+        "Auditar boundary ya probado y requirements faltantes",
+        "Implementar persistence/checkpoint + GET_CONTEXT/MEMORY/EVIDENCE + provenance/budget",
+        "Test restart isolation, retrieval/context E2E y no-direct-LLM-write"
+      ],
+      "close": "P08-P10 VERIFIED_CLOSED por evidencia",
+      "paths_changed": [
+        "runtime/src/memory/fabric.py",
+        "runtime/src/memory/__init__.py",
+        "runtime/tests/test_memory_context_fabric.py"
+      ],
+      "commit_sha": "ad5757ef8a072b20f47c4de9b1c3a24498e7e5f3",
+      "blob_sha": "fabric.py=255909eab5aa4d83c3bd14712533a97611e5da04|test=ec254c1c9b4764d36000f196e36af32d7ded72c2",
+      "tests": "specific N18 suite 10/10 PASS; global run failed before runtime suite: Wordflow 34/36 PASS, runtime SKIPPED",
+      "run_id": 34733747431,
+      "job_id": 103661284462,
+      "evidence": [
+        "existing Memory/Agent boundaries reused; no second workflow or storage owner introduced",
+        "deterministic context ranking/budget/checkpoint identity/provenance implemented and read back from main",
+        "specific 10/10 PASS covers restart reproducibility, cross-agent isolation, GET_MEMORY/GET_EVIDENCE, read-only context and direct-LLM-write rejection",
+        "global log proves failure occurred in wordflow_loop/tests/test_core.py before runtime test step"
+      ],
+      "remaining_gaps": [
+        "global runtime gate for N18 did not execute because L01_RESEARCH contract changed but two test_core fixtures still omit as_of/max_age_seconds/VERIFIED provenance",
+        "N14 remains GAP and owns wordflow research layer/tests; N18 cannot patch that scope"
+      ],
+      "blocked_by": {
+        "node_id": "N14-RESEARCH-SOURCE-VERIFICATION",
+        "run_id": 34733747431,
+        "job_id": 103661284462,
+        "state": "global_ci_failed_before_runtime"
+      },
+      "next_free_node": "N19-STORAGE-LOCAL-FIRST"
+    },
+    {
+      "n": 19,
+      "id": "N19-STORAGE-LOCAL-FIRST",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS",
+      "owner": "sol 7 gpt",
+      "chat_id": "sol 7 gpt",
+      "node_id": "N19-STORAGE-LOCAL-FIRST",
+      "fresh_main_sha": "a6204addd92172e0399dd952352426cf808116b9",
+      "write_scope": "runtime/src/storage/**|runtime/src/memory/**|runtime/tests/test_storage*|runtime/tests/test_memory*",
+      "claimed_at": "2026-09-13T03:21:00Z",
+      "reported_at": "2026-09-13T04:02:13Z",
+      "title": "Storage local-first + checkpoints",
+      "scope": "runtime/src/storage/**|runtime/src/memory/**|runtime/tests/test_storage*|runtime/tests/test_memory*",
+      "depends_on": [],
+      "steps": [
+        "Dedup Stabilize/rqlite y requisitos local-first",
+        "Implementar adapter mínimo sin duplicar store",
+        "Test persist/reopen/snapshot/restore/mirror semantics"
+      ],
+      "close": "Storage/checkpoint local-first probado",
+      "paths_changed": [
+        "runtime/src/storage/local_first.py",
+        "runtime/tests/test_storage_local_first.py",
+        "runtime/tests/test_storage_local_first_process.py"
+      ],
+      "commit_sha": "4bf1a4a9792c8d54ca16876f137e351da9ea2b39",
+      "certified_sha": "ecc94aee690df744b3f90b13d079ea566d32a5ad",
+      "blob_sha": "local_first.py=020695f6de57d3869bf7344459136f8cfa333114|test_storage_local_first.py=9650335408ff36b20c827d98af8538777b418e1c|test_storage_local_first_process.py=d4ed6dfd58152e3b12febc0cd794074658bdacf3",
+      "tests": "authoritative exact-head run 34736360641 job 103668395574 SUCCESS: Wordflow 41/41 PASS; runtime 196/196 PASS + 32 subtests PASS; full runtime includes 8 base N19 cases plus 2 fresh-process persistence/restore cases",
+      "run_id": 34736360641,
+      "job_id": 103668395574,
+      "evidence": [
+        "Stabilize SqliteEventStore snapshot primitive reused through existing vendor_root; no second scheduler, recovery engine or database implementation introduced",
+        "rqlite search returned no mounted implementation and adding it would duplicate the canonical local store",
+        "local save_snapshot is followed by exact local readback before optional mirror; mirror failure preserves already committed local state",
+        "checkpoint bytes are deterministic SHA256-bound; tamper fails before persistence and restore creates a new latest version rather than rewriting history",
+        "fresh-process proof writes an on-disk SQLite snapshot, reopens from a new Python process, restores a checkpoint after restart, and parent readback observes restored latest state",
+        "process fixture matches Stabilize snapshot port/schema fields entity_type/entity_id/workflow_id/version/sequence/state/state_hash and uniqueness by entity/version",
+        "certified SHA ecc94aee690df744b3f90b13d079ea566d32a5ad is a descendant of implementation merge de27a879a794a450d16ae153317ffc33e79fd5ba with no N19 runtime drift",
+        "GitHub Actions checked out exact certified SHA; authoritative log reports 41 Wordflow passed and 196 runtime passed with 32 subtests; two warnings belong to N06 benchmark/probe and are not N19 failures",
+        "post-merge main readback preserved exact N19 blobs"
+      ],
+      "remaining_gaps": [],
+      "next_free_node": "N09-DUCKDB-ACQUIRE-SPECIAL"
+    },
+    {
+      "n": 20,
+      "id": "N20-SANDBOX-UEK-ROUTER",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS",
+      "owner": "sol 3 gpt",
+      "chat_id": "sol 3 gpt",
+      "node_id": "N20-SANDBOX-UEK-ROUTER",
+      "fresh_main_sha": "b0fe1b1d9a43caeaac45fa8cd463821cedb81459",
+      "write_scope": "runtime/src/uek/**|runtime/src/adapters/**|runtime/tests/test_platform*|runtime/tests/test_sandbox*",
+      "claimed_at": "2026-09-13T03:25:30Z",
+      "reported_at": "2026-09-13T03:55:00Z",
+      "title": "Sandbox/UEK/VM capability router",
+      "scope": "runtime/src/uek/**|runtime/src/adapters/**|runtime/tests/test_platform*|runtime/tests/test_sandbox*",
+      "depends_on": [],
+      "steps": [
+        "Dedup Firecracker/gVisor/QEMU/crosvm/nsjail y requisitos",
+        "Implementar capability matrix/router/lifecycle fail-closed",
+        "Test supported/conditional/blocked paths"
+      ],
+      "close": "Sandbox lifecycle + platform routing probado",
+      "paths_changed": [
+        "runtime/src/uek/sandbox_router.py",
+        "runtime/tests/test_sandbox_router.py"
+      ],
+      "commit_sha": "39e955f37793f151a0f8aebeaecdac6e57c21916",
+      "blob_sha": "sandbox_router.py=27fc0b6c7fc6e0a1844f47941ddecdcd06834be0|test=85d6d6acf060113b0545494de5e0302ba311e311",
+      "tests": "specific 12/12 PASS; trusted descendant CI run 34735844744 job 103667777897: Wordflow 41/41 PASS; runtime 192 PASS + 32 subtests PASS",
+      "run_id": 34735844744,
+      "job_id": 103667777897,
+      "evidence": [
+        "Firecracker/gVisor/QEMU/crosvm/nsjail donor sources re-read as SOURCE_PRESENT; no new download",
+        "reused N06 CapabilitySnapshot/platform matrix; source presence never implies executable capability",
+        "deterministic supported/conditional/blocked routing covers Firecracker+KVM, QEMU fallback, Android AVF+crosvm, gVisor and nsjail",
+        "lifecycle fails closed before effects unless route is executable and driver is registered",
+        "negative/idempotency tests cover unavailable preferred backend, missing driver, create failure, destroy-running rejection and duplicate-effect prevention",
+        "exact router/test blobs are unchanged in trusted descendant SHA 162a1b5d56a825ce5bdf9df0e7c3b2ee45e3f47b",
+        "GitHub Actions job checked out exact descendant SHA; authoritative log: Wordflow 41 passed; runtime 192 passed, 32 subtests passed"
+      ],
+      "remaining_gaps": [],
+      "next_free_node": "N09-DUCKDB-ACQUIRE-SPECIAL"
+    },
+    {
+      "n": 21,
+      "id": "N21-WORKER-ADAPTER",
+      "state": "CLAIMED",
+      "owner": "sol 3 gpt",
+      "title": "Worker adapter YAIWES sobre Stabilize",
+      "scope": "runtime/src/adapters/**|runtime/tests/test_worker*|runtime/tests/test_platform*",
+      "depends_on": [
+        "N20-SANDBOX-UEK-ROUTER"
+      ],
+      "steps": [
+        "Dedup Stabilize worker primitives",
+        "Añadir sólo contrato/adaptador faltante",
+        "Test task→worker→output/evidence sin segundo scheduler"
+      ],
+      "close": "Worker boundary WIRED+TESTED",
+      "chat_id": "sol 3 gpt",
+      "node_id": "N21-WORKER-ADAPTER",
+      "fresh_main_sha": "881bbf19dcaaeb9574790b63ca8422e889473d24",
+      "write_scope": "runtime/src/adapters/**|runtime/tests/test_worker*|runtime/tests/test_platform*",
+      "claimed_at": "2026-09-13T06:14:06Z"
+    },
+    {
+      "n": 22,
+      "id": "N22-OTEL-RUNTIME",
+      "state": "GAP_RESOLVABLE",
+      "owner": "sol-5-gpt",
+      "chat_id": "sol-5-gpt",
+      "node_id": "N22-OTEL-RUNTIME",
+      "fresh_main_sha": "95c30286dc7cb8dd5a9160eda8c13f61000efd2d",
+      "write_scope": "runtime/src/observability/**|runtime/src/adapters/**|runtime/tests/test_observability*",
+      "claimed_at": "2026-09-13T02:19:00Z",
+      "reported_at": "2026-09-13T02:24:00Z",
+      "title": "Observability/OTel runtime real",
+      "scope": "runtime/src/observability/**|runtime/src/adapters/**|runtime/tests/test_observability*",
+      "depends_on": [],
+      "steps": [
+        "Dedup instrumentation existente vs OTel Collector adquirido",
+        "Cablear trace/correlation sólo si distinct capability",
+        "Test end-to-end correlation task/evidence/recovery"
+      ],
+      "close": "Runtime telemetry observable y probada",
+      "paths_changed": [
+        "runtime/src/observability/__init__.py",
+        "runtime/src/observability/runtime.py",
+        "runtime/tests/test_observability_runtime.py"
+      ],
+      "commit_sha": "3c367a13f5bc3ed444fa5fb8c6c58091a2f1a53e",
+      "blob_sha": "runtime.py=ca42936d00dcd2160e69e2c5625d3a35bfc82a10|test=7d628e722a536e618f8e2aded7f137a3acd372ec",
+      "tests": "specific 4/4 PASS; global CI NOT_EXECUTED",
+      "run_id": 34732895153,
+      "job_id": null,
+      "evidence": [
+        "opentelemetry_python vendor source already present and cataloged",
+        "deterministic task/evidence/recovery correlation adapter read back from main",
+        "specific fail-closed/correlation suite 4/4 PASS",
+        "N22 commit is ancestor of current pending global run"
+      ],
+      "remaining_gaps": [
+        "global CI gate not executed",
+        "concurrency group blocked by run 34732684153 job 103659536775 at complete runtime suite"
+      ],
+      "blocked_by": {
+        "run_id": 34732684153,
+        "job_id": 103659536775,
+        "state": "in_progress"
+      },
+      "next_free_node": "N25-RESOURCE-BRAIN"
+    },
+    {
+      "n": 23,
+      "id": "N23-FIVE-PASS-AUDITOR",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS",
+      "owner": "sol 4 gpt 🆘",
+      "chat_id": "sol 4 gpt 🆘",
+      "node_id": "N23-FIVE-PASS-AUDITOR",
+      "fresh_main_sha": "bf9cbec840ff45a059e1679cb545a5f90e2172a3",
+      "write_scope": "runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*",
+      "claimed_at": "2026-09-13T02:47:00Z",
+      "reported_at": "2026-09-13T03:54:20Z",
+      "title": "Five-pass auditor ejecutable",
+      "scope": "runtime/src/audit/**|runtime/src/coverage/**|runtime/tests/test_audit*|runtime/tests/test_coverage*",
+      "depends_on": [],
+      "steps": [
+        "Codificar requirements/evidence/contradictions/coverage/traceability deterministic",
+        "Conectar con matriz y verifier",
+        "Testear pass/gap/refutation y CI"
+      ],
+      "close": "5-pass automático PASS con evidencia",
+      "paths_changed": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/audit/five_pass.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_audit_five_pass.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_audit_evidence_matrix.py",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "cdf0c30e2c9f117a27724cd9f2b2d5fab3369d11",
+      "certified_sha": "6223ed833be0fddf5023646f269089a7a3705e88",
+      "tree_sha": "158200f58cbd52d8c1e466e9c67b25c83b8179f9",
+      "blob_sha": "five_pass.py=7be820cb3642438a22f36778ecb5c2b549ffce12|test_audit_five_pass.py=1fd520fa74ff237418796c4a5f9a4766df02d508|test_audit_evidence_matrix.py=3903e0d497776e504edce2b843246935d6567268",
+      "tests": "specific N23 audit suite 23/23 PASS; authoritative exact-tree CI run 34736273179 job 103668162691: Wordflow 41/41 PASS; runtime 194/194 PASS + 32 subtests PASS",
+      "run_id": 34736273179,
+      "job_id": 103668162691,
+      "evidence": [
+        "REQ-S3-057 five audits implemented: requirements, evidence, contradictions, coverage and traceability",
+        "divergent fingerprints for one requirement fail closed as requirement:contradiction; identical duplicate rows remain duplicate errors and are not mislabeled contradictions",
+        "existing RequirementMatrix and independent trusted CI verifier reused; no second scheduler, orchestrator, recovery or governance owner introduced",
+        "main merge cdf0c30e2c9f117a27724cd9f2b2d5fab3369d11 read back final five_pass blob 7be820cb3642438a22f36778ecb5c2b549ffce12",
+        "certified SHA 6223ed833be0fddf5023646f269089a7a3705e88 and main merge use the same tree 158200f58cbd52d8c1e466e9c67b25c83b8179f9",
+        "authoritative workflow checked out exact certified SHA and passed 41 Wordflow tests plus 194 runtime tests and 32 subtests; two emitted warnings belong to N06 benchmark/probe and are not failures",
+        "three refutations PASS: full five-pass schema is wired; adversarial contradiction/matrix tests leave no N23 gap; exact-tree CI and main readback prove the integrated bytes"
+      ],
+      "remaining_gaps": [],
+      "next_free_node": "N09-DUCKDB-ACQUIRE-SPECIAL"
+    },
+    {
+      "n": 24,
+      "id": "N24-CONSOLIDATOR",
+      "state": "GAP_RESOLVABLE",
+      "owner": "sol 7 gpt",
+      "chat_id": "sol 7 gpt",
+      "node_id": "N24-CONSOLIDATOR",
+      "fresh_main_sha": "fb0b862d475b827090f957256a9f444c59eeaeff",
+      "write_scope": "runtime/src/consolidation/**|runtime/tests/test_consolidation*",
+      "claimed_at": "2026-09-13T02:23:00Z",
+      "reported_at": "2026-09-13T02:34:00Z",
+      "title": "Consolidator task→phase→project",
+      "scope": "runtime/src/consolidation/**|runtime/tests/test_consolidation*",
+      "depends_on": [],
+      "steps": [
+        "Dedup lógica existente y contrato fuente",
+        "Implementar consolidación determinista con evidence refs",
+        "Test partial != global y no pérdida de provenance"
+      ],
+      "close": "Consolidator determinista probado",
+      "paths_changed": [
+        "runtime/src/consolidation/__init__.py",
+        "runtime/src/consolidation/consolidator.py",
+        "runtime/tests/test_consolidation.py"
+      ],
+      "commit_sha": "f26ee4439f84884e1ba2add7b86b2dee307f6591",
+      "blob_sha": "consolidator.py=c089f61aa296460191dfed1b608b24c2223c72e5|test=f39e8c681b948bdcdd456909a918add189b8fb11",
+      "tests": "specific 8/8 PASS; global CI PENDING",
+      "run_id": 34733148449,
+      "job_id": null,
+      "evidence": [
+        "existing integration consolidate_integration was deduplicated and not duplicated as workflow owner",
+        "deterministic task->phase->project rollup implemented with evidence provenance and fail-closed PASS semantics",
+        "committed code/test blobs read back unchanged from main",
+        "specific suite 8/8 PASS includes partial!=global, missing evidence/gap rejection, duplicate IDs, provenance retention and forged phase rejection"
+      ],
+      "remaining_gaps": [
+        "global CI gate has not executed; run 34733148449 is pending in shared main concurrency queue with no job allocated"
+      ],
+      "blocked_by": {
+        "run_id": 34733148449,
+        "job_id": null,
+        "state": "pending"
+      },
+      "next_free_node": "N18-MEMORY-RETRIEVAL-CONTEXT"
+    },
+    {
+      "n": 25,
+      "id": "N25-RESOURCE-BRAIN",
+      "state": "CLAIMED",
+      "owner": "sol-5-gpt",
+      "chat_id": "sol-5-gpt",
+      "node_id": "N25-RESOURCE-BRAIN",
+      "fresh_main_sha": "66ed1e85c4d50dc430487f67b1becf7867d7caff",
+      "write_scope": "research report first; runtime adapter only after unique gap",
+      "claimed_at": "2026-09-13T02:26:00Z",
+      "title": "Resource brain/capability selection",
+      "scope": "research report first; runtime adapter only after unique gap",
+      "depends_on": [],
+      "steps": [
+        "Investigar/reusar router/capability/resource components existentes",
+        "Rankear official code > existing code > community and dedup",
+        "Implementar sólo gap único y testear selection/fail-closed"
+      ],
+      "close": "Resource selection probado sin descarga redundante"
+    },
+    {
+      "n": 26,
+      "id": "N26-GLOBAL-INTEGRATION",
+      "state": "GAP_RESOLVABLE",
+      "owner": "sol 3 gpt",
+      "chat_id": "sol 3 gpt",
+      "node_id": "N26-GLOBAL-INTEGRATION",
+      "fresh_main_sha": "615ba15eaa9c524fab5687f249c2deb3c29e3482",
+      "write_scope": "runtime/src/integration/**|runtime/tests/test_integration*",
+      "claimed_at": "2026-09-13T02:20:30Z",
+      "reported_at": "2026-09-13T02:29:00Z",
+      "title": "Global integration/Fables state",
+      "scope": "runtime/src/integration/**|runtime/tests/test_integration*",
+      "depends_on": [],
+      "steps": [
+        "Mapear sublanes ya probadas a integration state",
+        "Implementar Fables-backed boundary mínimo",
+        "Test múltiples subresultados→state/evidence"
+      ],
+      "close": "Global integration runtime PASS",
+      "paths_changed": [
+        "runtime/src/integration/__init__.py",
+        "runtime/src/integration/integration_state.py",
+        "runtime/tests/test_integration_state.py"
+      ],
+      "commit_sha": "fb0b862d475b827090f957256a9f444c59eeaeff",
+      "blob_sha": "integration_state.py=511d4eabd0bb2d419bea4f707e87273d8ae1ccac|test=bd6ff79d3b402be15c60ca219f53c5b3f36b0d30",
+      "tests": "specific 8/8 PASS; global CI NOT_EXECUTED",
+      "run_id": 34732895153,
+      "job_id": null,
+      "evidence": [
+        "Fables existing socket reused: blob 23f4e1b8b91301f2df396e7a0860fc65b977cfb3",
+        "deterministic multi-lane PASS/GAP state with evidence aggregation read back from main",
+        "negative refutations cover duplicate lane, PASS without evidence, GAP without cause, undeclared capability, and no-evidence pre-effect rejection",
+        "specific integration suite 8/8 PASS"
+      ],
+      "remaining_gaps": [
+        "global CI gate not executed for fb0b862d475b827090f957256a9f444c59eeaeff",
+        "concurrency group blocked by pre-existing run 34732684153 job 103658281949 at complete runtime suite"
+      ],
+      "blocked_by": {
+        "run_id": 34732684153,
+        "job_id": 103658281949,
+        "state": "in_progress",
+        "head_sha": "344a714fcce5c41e4f8ed4ad4555b55f6f08d14e"
+      },
+      "next_free_node": "N28-API-CONTROL"
+    },
+    {
+      "n": 27,
+      "id": "N27-CONTINUOUS-LOOP",
+      "state": "BLOCKED_AFTER_N26_N23",
+      "owner": null,
+      "title": "Continuous LOOP multi-stage",
+      "scope": "runtime/src/integration/**|runtime/tests/test_integration*",
+      "depends_on": [
+        "N26-GLOBAL-INTEGRATION",
+        "N23-FIVE-PASS-AUDITOR"
+      ],
+      "steps": [
+        "Conectar state delta/audit/gap/StrategyDelta/next",
+        "Ejecutar LOOP con fallo y recuperación",
+        "Test estabilidad/reinyección hasta cierre"
+      ],
+      "close": "Loop real multi-stage PASS y gap reinjection probada"
+    },
+    {
+      "n": 28,
+      "id": "N28-API-CONTROL",
+      "state": "GAP_RESOLVABLE",
+      "owner": "sol 3 gpt",
+      "chat_id": "sol 3 gpt",
+      "node_id": "N28-API-CONTROL",
+      "fresh_main_sha": "57d4bfe5b7ba39810d99ed573ca803f2f734cec7",
+      "write_scope": "runtime/src/conn/**|runtime/src/integration/**|runtime/tests/test_integration*",
+      "claimed_at": "2026-09-13T02:31:00Z",
+      "reported_at": "2026-09-13T02:39:00Z",
+      "title": "Python API/control streaming/cancel/status",
+      "scope": "runtime/src/conn/**|runtime/src/integration/**|runtime/tests/test_integration*",
+      "depends_on": [],
+      "steps": [
+        "Dedup Starlette/HTTPX y definir contrato mínimo",
+        "Implementar API Python sobre runtime/Fables",
+        "Test streaming/cancel/status/auth-policy"
+      ],
+      "close": "API real probada",
+      "paths_changed": [
+        "runtime/src/conn/__init__.py",
+        "runtime/src/conn/api_control.py",
+        "runtime/tests/test_integration_api_control.py"
+      ],
+      "commit_sha": "b2593d0fd7c003d2463fc0a7486d69e42106c9b0",
+      "blob_sha": "api_control.py=ac81ca96f97663faddb03e9e712a498366eb543f|test=e21384df64a1bb6f18c043e526e54321586864fc",
+      "tests": "9 specific refutation cases committed and read back; execution NOT_OBSERVED; global CI NOT_EXECUTED",
+      "run_id": 34733409335,
+      "job_id": null,
+      "evidence": [
+        "runtime/src/conn was empty before delta; no second scheduler/orchestrator was introduced",
+        "Starlette vendor tree 820b2cdde800811062b2be43abd909e27b38854f and HTTPX vendor tree 21eaf49210613909be2f7a864389a312a484d0eb already exist, so no download was added",
+        "canonical CI does not install or sparse-checkout Starlette/HTTPX; ASGI control boundary remains dependency-free and wrapper-compatible",
+        "API/control delegates runtime effects through existing FablesIntegrationBoundary and requires authorization before create/run/cancel mutations",
+        "readback confirms exact code/test blobs on main",
+        "run 34733409335 for b2593d0 is pending with zero jobs"
+      ],
+      "remaining_gaps": [
+        "specific 9-case test file has not been executed by a trusted runner",
+        "global CI gate for b2593d0fd7c003d2463fc0a7486d69e42106c9b0 has not executed",
+        "shared main concurrency is blocked by run 34733116016 job 103659536775 at runtime suite step 6"
+      ],
+      "blocked_by": {
+        "run_id": 34733116016,
+        "job_id": 103659536775,
+        "state": "in_progress",
+        "step": "Run complete YAIWES runtime test suite"
+      },
+      "next_free_node": "N29-GLOBAL-RECOVERY-FAILOVER"
+    },
+    {
+      "n": 29,
+      "id": "N29-GLOBAL-RECOVERY-FAILOVER",
+      "state": "CLAIMED",
+      "owner": "sol 4 gpt 🆘",
+      "chat_id": "sol 4 gpt 🆘",
+      "node_id": "N29-GLOBAL-RECOVERY-FAILOVER",
+      "fresh_main_sha": "d5b42a5474e002596002a3f2ab3dc8cad31d2f62",
+      "write_scope": "runtime/src/recovery/**|runtime/tests/test_recovery*|integration E2E",
+      "claimed_at": "2026-09-13T04:36:30Z",
+      "title": "Workspace/multi-host failover/reconstruction",
+      "scope": "runtime/src/recovery/**|runtime/tests/test_recovery*|integration E2E",
+      "depends_on": [],
+      "steps": [
+        "Reusar control-plane/ledger/checkpoint ya probado",
+        "Añadir sólo workspace/failover/reconstruction faltante",
+        "Test restart/failover/replay sin duplicar efectos"
+      ],
+      "close": "Recovery global E2E PASS"
+    },
+    {
+      "n": 30,
+      "id": "N30-G12-GLOBAL-COVERAGE",
+      "state": "VERIFIED_CLOSED",
+      "owner": "sol 3 gpt",
+      "title": "Cobertura global G12",
+      "scope": "audit/coverage/Crazy-Wall/Handoff reports",
+      "depends_on": [
+        "N01-DOC-REVIEW-COMPLETE",
+        "N02-TRACEABILITY-BIDIRECTIONAL"
+      ],
+      "steps": [
+        "Consumir denominador completo de requisitos",
+        "Cruzar con código/tests/evidence y huérfanos",
+        "Calcular cierre verificable y listar cada GAP residual"
+      ],
+      "close": "Cobertura bidireccional 100% o lista residual exacta",
+      "chat_id": "sol 3 gpt",
+      "node_id": "N30-G12-GLOBAL-COVERAGE",
+      "fresh_main_sha": "64833992e439dba9708225283be08c3d75aa15fe",
+      "write_scope": "audit/coverage/Crazy-Wall/Handoff reports",
+      "claimed_at": "2026-09-13T04:45:48Z",
+      "report_state": "PASS_AUDIT_WITH_EXACT_RESIDUALS",
+      "reported_at": "2026-09-13T04:55:14Z",
+      "paths_changed": [
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/N30-G12-GLOBAL-COVERAGE-SOL-3-GPT-2026-09-13.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "70592e544573519847770d90dceaa34dae4a6225",
+      "blob_sha": "report=b8a7e46c98dc10502f8d9539cad2cefb21dbe966|five_pass=7be820cb3642438a22f36778ecb5c2b549ffce12|matrix=637b64161f67f6d2f8aaa0280555964385bef6e2",
+      "tests": "canonical N30 audit run 34738908302 job 103675124914 SUCCESS: 100 source rows; 98 implementable; 98/98 mapped; canonical five-pass persisted certification 0/98 with exactly 98 missing_trace residuals; 3 refutations PASS",
+      "run_id": 34738908302,
+      "job_id": 103675124914,
+      "evidence": [
+        "N01/N02 denominator preserved: 100 source rows, 98 implementable, REQ-S2-011 and REQ-S3-062 non-implementable numbering gaps",
+        "N02 mapping remains complete: 98/98 requirements map across CAN-001..CAN-034",
+        "canonical audit_five_pass requires exact source/implementation/test/evidence hashes, Python symbols, revision and independent trusted CI",
+        "runtime/src/audit contains only evidence.py/five_pass.py/matrix.py and existing matrix tests are synthetic R1/R2; no persisted production RequirementTrace inventory for the 98 requirements",
+        "official runner 34738908302 job 103675124914 reproduced exactly 98 missing_trace gaps and rejected accidental product closure",
+        "N30 closes the audit task with an exact residual list; global product_verified remains false"
+      ],
+      "remaining_gaps": [],
+      "global_residual_requirement_count": 98,
+      "global_project_verified_closed": false,
+      "next_free_node": null
+    },
+    {
+      "n": 31,
+      "id": "N31-UI-FINAL",
+      "state": "BLOCKED_AFTER_N17",
+      "owner": null,
+      "title": "UI final sobre runtime verificado",
+      "scope": "UI factory only; no runtime ownership",
+      "depends_on": [
+        "N17-FULL-PRODUCT-E2E"
+      ],
+      "steps": [
+        "Consumir API/runtime verificados",
+        "Probar ventanas/chat/files/control sin bypass",
+        "E2E final + Final Judge"
+      ],
+      "close": "Producto completo VERIFIED_CLOSED"
+    },
+    {
+      "n": 32,
+      "id": "N32-GUEST-INSTALLER-VERIFICATION",
+      "state": "CLAIMED",
+      "owner": "ASTRA_GPT",
+      "title": "Guest installer + artifact verification + rollback",
+      "scope": "runtime/src/install/**|runtime/tests/test_install*",
+      "depends_on": [
+        "N20-SANDBOX-UEK-ROUTER"
+      ],
+      "discovered_by": "N02-TRACEABILITY-BIDIRECTIONAL",
+      "gap_evidence": "REQ-S2-005 / CAN-009; runtime/src/install is placeholder-only and N01-N31 had no owner",
+      "steps": [
+        "Verificar requisito de instalación dentro del guest y deduplicar capabilities existentes",
+        "Implementar/adaptar sólo installer/verifier/arch/dependency/snapshot-before-install/rollback sin contaminar host",
+        "Test hash/signature/format/arch/dependency failure + rollback + guest-only effect"
+      ],
+      "close": "CAN-009 WIRED + TESTED con efectos dentro del guest y rollback",
+      "chat_id": "ASTRA_GPT_WATCHDOG",
+      "node_id": "N32-GUEST-INSTALLER-VERIFICATION",
+      "fresh_main_sha": "1ee383669c573c1efed12c12cdd03e0a7b5f327f",
+      "write_scope": "runtime/src/install/**|runtime/tests/test_install*|Crazy Wall N32/report Astra only",
+      "claimed_at": "2026-09-13T06:25:00Z"
+    },
+    {
+      "n": 33,
+      "id": "N33-MIRROR-TRANSPORT-CONTROL",
+      "state": "FREE",
+      "owner": null,
+      "title": "Mirror display/audio/input/clipboard/control transport",
+      "scope": "runtime/src/mirror/**|runtime/tests/test_mirror*",
+      "depends_on": [
+        "N20-SANDBOX-UEK-ROUTER"
+      ],
+      "discovered_by": "N02-TRACEABILITY-BIDIRECTIONAL",
+      "gap_evidence": "REQ-S2-008 / CAN-010; no N01-N31 runtime transport owner and N31 is UI-only",
+      "steps": [
+        "Verificar requisito mirror LAN-first y deduplicar transports/codecs existentes",
+        "Implementar/adaptar runtime transport/control sin sync continuo de disk/RAM",
+        "Test pairing/auth/session/display-input-control/clipboard plus prohibition of disk/RAM mirroring"
+      ],
+      "close": "CAN-010 runtime mirror transport WIRED + TESTED; UI remains N31"
+    }
   ],
   "component_policy": {
     "priority": "REUSE_EXISTING > PATCH > ADAPT > GENERATE > NEW_DOWNLOAD",
