@@ -1,0 +1,22 @@
+name: Factory F-CTL-010 Undo Redo Gate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ctl-010-undo-redo.spec.mjs'
+      - '.github/workflows/factory-f-ctl-010-undo-redo.yml'
+  workflow_dispatch:
+
+jobs:
+  undo-redo-history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run exact-history gate
+        working-directory: 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0'
+        run: node tests/e2e/f-ctl-010-undo-redo.spec.mjs
