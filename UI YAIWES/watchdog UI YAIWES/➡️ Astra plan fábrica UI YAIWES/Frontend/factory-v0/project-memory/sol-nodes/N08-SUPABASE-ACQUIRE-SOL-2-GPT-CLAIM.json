@@ -1,0 +1,12 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "chat_id":"SOL-2-GPT-2026-09-12T22:41-05:00",
+  "agent_name":"SOL 2 GPT 🆘",
+  "node_id":"N08-SUPABASE-ACQUIRE",
+  "fresh_main_sha":"36c33750c51bc643483d4d625600ccbf3b440a7c",
+  "write_scope":"component acquisition + evidence only",
+  "claimed_at":"2026-09-12T22:41:57-05:00",
+  "state":"CLAIMED",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"]
+}
