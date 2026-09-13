@@ -1,0 +1,15 @@
+{
+  "schema":"yaiwes.factory.sol.claim.v1",
+  "contract":"tel.workflow/v3",
+  "chat_id":"SOL-4-GPT-2026-09-12T22:04-05:00",
+  "agent_name":"SOL 4 GPT 🆘",
+  "node_id":"F-AI-021",
+  "fresh_main_sha":"6d2edb26ec4fa47eb795933847d8fa5e72415bd8",
+  "base_sha":"6d2edb26ec4fa47eb795933847d8fa5e72415bd8",
+  "write_scope":"F-AI-021 file import verification/evidence only until product failure is reproduced; no shared runtime write while other SOL claims are active; excludes Wordflow N01-N31",
+  "paths":["UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-AI-021-SOL-4-GPT-CLAIM.json","UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-AI-021-SOL-4-EVIDENCE.json"],
+  "claimed_at":"2026-09-12T22:04:00-05:00",
+  "state":"CLAIMED",
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "goals12_input":{"G01":"PASS literal file->parse->canvas editable","G02":"PASS fresh main 6d2edb26","G03":"PASS dynamic Factory queue authority","G04":"PASS no F-AI-021 claim found in fresh sol-nodes/readbacks; evidence paths unique","G05":"EXECUTING inspect importer/parser/editor wiring","G06":"PASS reuse-first","G07":"PENDING","G08":"PENDING","G09":"PENDING","G10":"PENDING","G11":"PENDING","G12":"PENDING"}
+}
