@@ -666,9 +666,9 @@
     }
   ],
   "next": [
-    "Consume N30 residual IDs into existing production RequirementMatrix, bind exact code/test/evidence and trusted CI; obtain canonical claim/reassignment before runtime changes. Do not reopen N23 or N30 audit closure.",
-    "Re-read fresh dynamic V5 and roles; preserve active foreign claims regardless of age.",
-    "N04 shared reconciliation remains dependency-gated; no product VERIFIED_CLOSED."
+    "Read fresh dynamic V5 before any new claim.",
+    "N17 and N27 were dependency-satisfied FREE at the N32 release read; claim only after fresh CAS.",
+    "Do not declare product VERIFIED_CLOSED until full requirement certification and real UI/workspace/platform E2E pass."
   ],
   "iterations": [
     {
@@ -833,6 +833,110 @@
         "action": "Consume N30 residual IDs into existing production RequirementMatrix, bind exact code/test/evidence and trusted CI; obtain canonical claim/reassignment before runtime changes. Do not reopen N23 or N30 audit closure.",
         "parallel_nodes": "N21/N32/N33 remain FREE in dynamic queue but are outside this run's priority audit scope; no claims taken."
       }
+    },
+    {
+      "at": "2026-09-13T10:34:00Z",
+      "node": "N32-GUEST-INSTALLER-VERIFICATION",
+      "owner": "ASTRA_GPT",
+      "scope": "runtime/src/install/**|runtime/tests/test_install*|N32 report/queue fields",
+      "base_claim_commit": "575e74e1fe5a9bbd45d916134eff38810c5347a2",
+      "outcome": "VERIFIED_CLOSED_NODE_ONLY_PRODUCT_OPEN",
+      "five_passes": [
+        "Fresh queue and N20 dependency verified; exclusive ASTRA claim preserved.",
+        "Existing installer from 240241a54e76a31c04bc017df26ea72566dc8885 adopted and audited.",
+        "Pre-effect validation/rollback gaps repaired in f057e8f03a53c8be635e855f8e16941d8a9fb479.",
+        "Nine focused local tests passed from exact blobs committed by 84454c98f1fa3a2ab01e3c5f378f9d65f3fd9f96.",
+        "Certified descendant a5b3a2b385b1448edfd6decc95e75b1bd875098c passed CI; queue/report persisted with CAS."
+      ],
+      "code": {
+        "source": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/install/guest_installer.py",
+        "source_blob": "555f608a4751bf81de2d4d5ca72543b657f31292",
+        "test": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_install_guest.py",
+        "test_blob": "96d08d02a766ef896e4a9eb4b822eb1660f32f7d"
+      },
+      "tests": {
+        "local": "9/9 PASS; real unit execution with a guest-port fixture, not a real OS package install",
+        "ci": {
+          "run": 34743024813,
+          "job": 103686612626,
+          "sha": "a5b3a2b385b1448edfd6decc95e75b1bd875098c",
+          "conclusion": "success",
+          "wordflow": 41,
+          "runtime": 256,
+          "subtests": 42,
+          "warnings": 2
+        }
+      },
+      "entry_goals_12": [
+        "PASS repo/main",
+        "PASS fresh queue",
+        "PASS exclusive claim",
+        "PASS dependency",
+        "PASS provenance",
+        "PASS scope",
+        "PASS root cause",
+        "PASS repair plan",
+        "PASS negative cases",
+        "PASS local executor",
+        "PASS CI source",
+        "PASS closure boundary"
+      ],
+      "exit_goals_12": [
+        "PASS scoped delta",
+        "PASS pre-effect filename guard",
+        "PASS bytes/hash guard",
+        "PASS signature guard",
+        "PASS architecture guard",
+        "PASS dependency guard",
+        "PASS rollback status",
+        "PASS local 9/9",
+        "PASS exact blobs",
+        "PASS CI 41/256/42",
+        "PASS evidence boundary",
+        "PASS report/release"
+      ],
+      "council_12": {
+        "method": "Single-agent analytical review, not twelve independent models.",
+        "steps": [
+          "Objective",
+          "Authority",
+          "Ownership",
+          "Dependency",
+          "Reuse",
+          "Cause",
+          "Repair",
+          "Negative tests",
+          "Compatibility",
+          "CI identity",
+          "Limits",
+          "Verdict"
+        ],
+        "verdict": "N32_VERIFIED_CLOSED_GLOBAL_ACTIVE"
+      },
+      "refutations_3": [
+        "Existing source presence did not prove verification because focused tests/evidence were absent.",
+        "Local 9/9 did not alone close N32; exact-blob descendant CI was required.",
+        "Guest-port fixture tests do not prove real installation on Android/Linux/Windows/iOS."
+      ],
+      "evidence": {
+        "report_commit": "c8e87d22609c02e6cb1cf9fd7a52bd3192010171",
+        "queue_commit": "46e50a71ed257a52105391bb8e4fe0ca8ac0af99",
+        "queue_blob": "5e79e4ac7150c1541f76c8de728a011b6d0e199a"
+      },
+      "limitations": [
+        "No real platform installation E2E in N32.",
+        "No 100x performance claim or benchmark applies to this correctness node.",
+        "Global requirement certification and UI/product E2E remain open."
+      ],
+      "next": {
+        "eligible_at_release": [
+          "N17-FULL-PRODUCT-E2E",
+          "N27-CONTINUOUS-LOOP"
+        ],
+        "action": "Fresh read and exclusive CAS claim; do not assume availability."
+      }
     }
-  ]
+  ],
+  "last_node": "N32-GUEST-INSTALLER-VERIFICATION",
+  "last_node_state": "VERIFIED_CLOSED"
 }
