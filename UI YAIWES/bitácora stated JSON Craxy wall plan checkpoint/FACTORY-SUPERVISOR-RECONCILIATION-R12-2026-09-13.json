@@ -1,0 +1,84 @@
+{
+  "schema": "yaiwes.factory.supervisor.reconciliation.v3",
+  "round": "R12",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "project": "FABRICA_UI_YAIWES_ONLY",
+  "audited_at_utc": "2026-09-13T15:35:18Z",
+  "observed_main_head": "4413de2a2cdd100f1d196767b9c7ae1ecfb20353",
+  "current_gate": "T1_FACTORY_FRONTEND_ACTIVE_LOOP",
+  "t2": "BLOCKED",
+  "node_audit": {
+    "node": "F-MOD-033",
+    "owner": "SOL 7 GPT",
+    "claim_blob": "c22fb46c101a439414b99b515d15a7358d12a542",
+    "claim_state": "CLAIMED",
+    "ownership_action": "PRESERVED_NO_TAKEOVER",
+    "deliverables_readback": {
+      "tests/e2e/f-mod-033-composed-ui.spec.mjs": "NOT_FOUND_404",
+      ".github/workflows/factory-f-mod-033-composed-ui.yml": "NOT_FOUND_404",
+      "project-memory/F-MOD-033-SOL-7-EVIDENCE.json": "NOT_FOUND_404"
+    }
+  },
+  "new_material_finding": {
+    "id": "ENTRYPOINT_DIVERGENCE_EXECUTION_CONTRACT",
+    "evidence": [
+      "factory-v0/index.html identifies V1.8 and loads src/app.js",
+      "factory-v0/index-v192.html identifies V1.9.2 and loads src/app-v19.js plus touch/import/component-browser adapters",
+      "f-mod-032-primitives.spec.mjs targets /index-v19.html",
+      "f-mod-034-external-normalize.spec.mjs targets /index-v192.html",
+      "f-ui-061-full-user-journey.spec.mjs targets /index-v19.html",
+      "astra-hf-static-space-publish.yml pins SOURCE_REF f66624e90e154e6ba4c9c61963973e7659f25431 and packages index.html/src/app.js as V1.8"
+    ],
+    "verdict": "A F-MOD-033 PASS against an unspecified or mixed entrypoint would be unauditable and cannot unblock F-INT-035.",
+    "risk": "Tests can pass on candidate-only entrypoints while the publish path continues serving the older V1.8 entrypoint."
+  },
+  "execution_dispatch_for_sol7": {
+    "node": "F-MOD-033",
+    "required_target": "/index-v192.html as explicit pre-integration candidate; record entrypoint, app module blob and tested commit SHA",
+    "required_visible_journey": [
+      "clear yaiwes-factory-project-v19 in a fresh session",
+      "create at least window, button, selector and segment through visible library controls",
+      "compose by duplicate plus move; select through Layers",
+      "edit labels and dimensions through Step 2 inspector",
+      "save version, reload, verify component count/order/labels/positions/version from UI and localStorage",
+      "perform a second edit after reload and verify persistence after another reload",
+      "run desktop and mobile/touch paths with console_errors=0"
+    ],
+    "required_evidence": [
+      "dedicated Playwright test in claimed path",
+      "dedicated workflow in claimed path",
+      "run/job URL, tested SHA, entrypoint and relevant blob SHAs",
+      "before/after/reload screenshots as workflow artifact with SHA256",
+      "3 simulations plus 3 refutations",
+      "PASS_PENDING_REVIEW only; producer cannot self-certify"
+    ],
+    "forbidden": [
+      "do not modify canonical index.html or publish workflow inside F-MOD-033",
+      "do not claim F-INT-035 before F-MOD-033 terminal evidence exists",
+      "do not download new OSS; source capability is already present"
+    ]
+  },
+  "dependency_effect": {
+    "node": "F-INT-035",
+    "state": "BLOCKED_BY_F-MOD-033",
+    "post_terminal_action": "Serial integrator must choose one canonical entrypoint, reconcile candidate adapters into it, and make test target equal package target before QA/publish."
+  },
+  "tests": [
+    "fresh main HEAD read PASS",
+    "fresh claim read PASS",
+    "three expected deliverables read 404",
+    "cross-read index.html/index-v192.html/app modules/tests/publish workflow PASS"
+  ],
+  "refutations": [
+    "A candidate test on index-v19/index-v192 does not prove the pinned V1.8 publish payload.",
+    "A published HTTP 200 does not prove the same entrypoint tested locally.",
+    "Additional OSS acquisition cannot resolve entrypoint or missing-execution evidence."
+  ],
+  "next": [
+    "SOL7 executes the scoped F-MOD-033 dispatch and publishes evidence or explicitly releases ownership.",
+    "After terminal read-back, a FREE serial integrator claims F-INT-035 and eliminates entrypoint divergence.",
+    "Then run candidate 50x, exact publish, live 50x, full control/touch/keyboard matrices and independent review."
+  ],
+  "status": "ACTIVE_LOOP_ACTIONABLE_EXECUTION_CONTRACT_RECORDED"
+}
