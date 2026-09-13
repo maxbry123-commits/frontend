@@ -7,6 +7,8 @@
   "fresh_base_main_sha":"17f191f4cb55fdb32cf99fdbd3dd3647d4e51a80",
   "write_scope":["UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/**","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/adapters/**","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform*","UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_sandbox*","UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S2-*.json"],
   "claimed_at":"2026-09-12T22:46:10-05:00",
-  "state":"CLAIMED",
+  "state":"TESTING_RETRY",
+  "retest_reason":"run 34737907971 cancelled before any job was assigned; product/test code unchanged",
+  "tested_code_sha":"0e9b6b2630555bf7b0529a46b2d3dc7424ee1b42",
   "steps":["VERIFY_OR_RESEARCH","EXECUTE_AUTHORIZED_DELTA","TEST_AND_REPORT"]
 }
