@@ -16,8 +16,9 @@ if (library && host) {
     .component-browser-filter{min-height:38px}.component-browser-filter.active{border-color:var(--accent);background:#20283a}
     .component-browser-preview{display:grid;gap:7px;padding:9px;border:1px solid var(--line);border-radius:10px;background:#151a21}
     .component-browser-preview[hidden]{display:none}.component-browser-preview strong{font-size:13px}.component-browser-preview small{color:var(--muted)}
+    .component-browser-preview[data-dragging="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
     .component-browser-actions{display:flex;gap:6px}.component-browser-actions button{flex:1;min-height:44px}
-    .component-card.browser-hidden{display:none}.component-card.browser-selected{outline:2px solid var(--accent);outline-offset:2px}
+    .component-card.browser-hidden{display:none}.component-card.browser-selected{outline:2px solid var(--accent);outline-offset:2px}.component-card.browser-dragging{opacity:.68}
     .component-browser-count{font-size:11px;color:var(--muted)}
   `;
   document.head.append(style);
@@ -113,23 +114,18 @@ if (library && host) {
           e.preventDefault(); e.stopImmediatePropagation(); select(card); insertButton.focus();
         }
       }, true);
-      card.addEventListener('dragstart', e => {
+      card.addEventListener('dragstart', () => {
         const data = info(card);
-        if (e.dataTransfer) {
-          e.dataTransfer.setData('text/yaiwes-kind', data.kind);
-          e.dataTransfer.setData('text/yaiwes-label', data.label);
-          e.dataTransfer.effectAllowed = 'copyMove';
-        }
-        const ghost = card.cloneNode(true);
-        ghost.classList.remove('browser-hidden');
-        ghost.style.cssText='position:fixed;left:-9999px;top:-9999px;width:180px;opacity:.9;pointer-events:none';
-        document.body.append(ghost);
-        card.__yaiwesDragGhost = ghost;
-        e.dataTransfer?.setDragImage?.(ghost, 20, 20);
+        select(card);
+        card.classList.add('browser-dragging');
+        preview.dataset.dragging = 'true';
+        previewMeta.textContent = `Arrastrando · ${data.kind} · ${data.category}`;
       });
       card.addEventListener('dragend', () => {
-        card.__yaiwesDragGhost?.remove();
-        card.__yaiwesDragGhost = null;
+        card.classList.remove('browser-dragging');
+        delete preview.dataset.dragging;
+        const data = info(card);
+        previewMeta.textContent = `${data.kind} · ${data.category}`;
       });
     });
     applyFilters();
