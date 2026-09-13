@@ -2,7 +2,7 @@
   "schema": "yaiwes.crazy-wall.multi-ai-node-queue.v2",
   "contract": "tel.workflow/v3",
   "status": "ACTIVE_LOOP",
-  "base_main_sha": "16adf8093830cf41022b7a4635edb935174cf7b4",
+  "base_main_sha": "98f8afe44ee4aa949e88c20575785650365c53fc",
   "supersedes_for_new_claims": "CRAZY-WALL-TASK-QUEUE-4SOL-2026-09-12.json",
   "history_rule": "Do not delete prior queue; V2 is authoritative for new claims only.",
   "node_schema": {
@@ -71,7 +71,7 @@
     {
       "node_id": "S1-09-MEMORY-AGENT-BOUNDARY",
       "role": "SOL_GPT1",
-      "state": "FREE",
+      "state": "REPORT",
       "write_scope": [
         "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/memory/**",
         "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/**",
@@ -81,8 +81,27 @@
       ],
       "task": "Implement/evidence minimal Agent↔Memory↔Tools↔Workflow boundary; keep agent memory separate from chat/project memory; forbid direct LLM canonical writes.",
       "next": [
-        "S1-10-RQLITE-DISTINCT-STATE",
-        "S1-11-LOCAL-FIRST-CHECKPOINT-MEMORY"
+        "S1-10-REPORTED_DISTINCT_WIRING_SCOPE_GAP",
+        "S1-11-REPORTED_PARTIAL_STORAGE_E2E_GAP",
+        "S1-12-BLOCKED_INPUT"
+      ],
+      "result": "TARGETED_ACCEPTANCE_AND_GLOBAL_REGRESSION_PASS",
+      "evidence": {
+        "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/S1-09-MEMORY-AGENT-BOUNDARY.json",
+        "implementation_commit": "17d98a7e7f1a083108c96443d5bc10a05bb7024d",
+        "test_commit": "084debdb8acb102d9d41b9ca39b8ca88d8c29125",
+        "run": 34730513826,
+        "job": 103652482919,
+        "wordflow_tests": 23,
+        "runtime_tests": 75,
+        "runtime_subtests": 9,
+        "log_readback": true
+      },
+      "remaining_gap": [
+        "product storage placeholder only",
+        "memory checkpoint binding E2E missing",
+        "chat/project/agent restart isolation E2E missing",
+        "P09 retrieval and P10 context fabric not closed"
       ]
     },
     {
@@ -209,15 +228,19 @@
   },
   "mandatory_report_note": "Every role must leave a report in reports/ at node end. Astra must additionally leave recommendations for SOL_ORQUESTADOR/SOL_GPT1/SOL_GPT2/SOL_GPT3 indicating which FREE node should consume each finding; findings are not claims.",
   "global_close": "Only after Memory/Audit, Agent boundary, Integration/Consolidator, Sandbox/UEK/Recovery, platform routing and G12 coverage are evidenced end-to-end.",
-  "updated_at_utc": "2026-09-12T23:01:09.459Z",
+  "updated_at_utc": "2026-09-13T01:44:10Z",
   "latest_gate_observation": {
-    "checked_at_utc": "2026-09-12T23:01:09.459Z",
-    "run": 34723669555,
-    "job": 103633952112,
+    "checked_at_utc": "2026-09-13T01:44:10Z",
+    "run": 34730513826,
+    "job": 103652482919,
     "conclusion": "success",
     "wordflow_tests": 23,
-    "runtime_tests": 62,
+    "runtime_tests": 75,
     "runtime_subtests": 9,
-    "promotion": "P18_RECOVERY_CONTROL_PLANE_TESTED_ONLY"
-  }
+    "promotion": "P18_RECOVERY_CONTROL_PLANE_AND_S1_MEMORY_BOUNDARY_TESTED_SUBGATES_ONLY"
+  },
+  "coordination_flags": [
+    "S1 role state references a separate hourly watchdog; this central queue remains authoritative for the unified Wordflow loop.",
+    "ASTRA-WATCHDOG-EDITOR-CLOSURE-QUEUE is downstream P23 and cannot supersede runtime/Wordflow V2/V4 authority or close runtime gaps."
+  ]
 }
