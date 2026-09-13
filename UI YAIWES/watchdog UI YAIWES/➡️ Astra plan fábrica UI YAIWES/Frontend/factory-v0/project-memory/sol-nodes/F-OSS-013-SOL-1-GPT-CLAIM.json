@@ -1,0 +1,31 @@
+{
+  "schema": "yaiwes.factory.sol.claim.v1",
+  "contract": "tel.workflow/v3",
+  "chat_id": "SOL-1-GPT-2026-09-12T21:43-05:00",
+  "agent_name": "SOL 1 GPT 🆘",
+  "node_id": "F-OSS-013",
+  "fresh_main_sha": "037ce6b915fe939f72d56ee0387478522a7a1909",
+  "base_sha": "037ce6b915fe939f72d56ee0387478522a7a1909",
+  "write_scope": "Frontend/factory-v0/project-memory only: OSS capability matrix/evidence for F-OSS-013; no product runtime writes",
+  "paths": [
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/sol-nodes/F-OSS-013-SOL-1-GPT-CLAIM.json",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-OSS-013-CAPABILITY-MATRIX-SOL-1.json"
+  ],
+  "claimed_at": "2026-09-12T21:43:55-05:00",
+  "state": "CLAIMED",
+  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+  "goals12_input": {
+    "G01": "PASS literal F-OSS-013 preserved",
+    "G02": "PASS fresh main read",
+    "G03": "PASS Crazy Wall/STATE/CHECKPOINT read; dynamic V2 supersedes older queue decomposition",
+    "G04": "PASS no existing F-OSS-013 claim found; write paths unique",
+    "G05": "PENDING inventory dedup",
+    "G06": "PASS reuse-first policy",
+    "G07": "PENDING evidence-only minimum delta",
+    "G08": "PENDING matrix validation",
+    "G09": "N/A no runtime wiring in this node",
+    "G10": "PENDING 3 simulations + 3 refutations",
+    "G11": "PENDING SHA/readback",
+    "G12": "PENDING reconcile next node"
+  }
+}
