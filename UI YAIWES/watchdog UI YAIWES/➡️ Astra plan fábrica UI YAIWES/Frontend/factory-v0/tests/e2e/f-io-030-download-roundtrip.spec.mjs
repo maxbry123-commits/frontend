@@ -49,8 +49,9 @@ test('F-IO-030 configured DOWNLOAD destination exports, reads back and reopens w
   await page.reload({waitUntil:'domcontentloaded'});
   await expect(page.locator('[data-node]')).toHaveCount(2);
   const after=await page.evaluate(()=>({state:window.__YAIWES_FACTORY_V19__.getState(),view:window.__YAIWES_FACTORY_V19__.getView(),config:JSON.parse(localStorage.getItem('yaiwes-factory-config-v13')||'{}')}));
-  expect(after.state).toEqual(before.state);
-  expect(after.view).toEqual(before.view);
-  expect(after.config.destinations.some(d=>d.type==='DOWNLOAD'&&d.path==='exports/final')).toBe(true);
+  expect(after.state).toEqual(payload.state);
+  expect(after.view).toEqual({zoom:payload.zoom,breakpoint:payload.breakpoint});
+  expect(after.state.components).toEqual(before.state.components);
+  expect(after.config).toEqual(payload.config);
   console.log('F_IO_030_DOWNLOAD_ROUNDTRIP=PASS');
 });
