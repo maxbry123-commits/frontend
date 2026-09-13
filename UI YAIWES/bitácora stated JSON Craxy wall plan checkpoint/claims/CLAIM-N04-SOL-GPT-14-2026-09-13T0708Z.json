@@ -1,10 +1,11 @@
 {
   "schema": "tel.workflow/v3.claim",
-  "state": "IN_PROGRESS",
+  "state": "RELEASED_COLLISION",
   "chat_id": "SOL GPT <14>",
   "node_id": "N04-STATE-RECONCILIATION",
   "fresh_main_sha": "babe4943aa3ee66c2d3ff748691cfd247d2a8978",
   "write_scope": "shared state docs only",
   "claimed_at": "2026-09-13T07:08:25Z",
-  "reason": "Fresh Crazy Wall shows N04 FREE; latest N04 event is release f649e24ab25afb253c4ba23c39368c9c919c3b9b. Claiming only N04 to reconcile central row with already refreshed STATE/CHECKPOINT/Handoff."
+  "released_at": "2026-09-13T07:11:20Z",
+  "reason": "Released after final pre-write anti-collision check found later SOL GPT <10> claim f69b7a1aac506285496d88a11cfae01ad367f842. No shared-state or Crazy Wall mutation applied by SOL GPT <14>."
 }
