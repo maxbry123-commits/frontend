@@ -1190,7 +1190,7 @@
     {
       "n": 32,
       "id": "N32-GUEST-INSTALLER-VERIFICATION",
-      "state": "CLAIMED",
+      "state": "VERIFIED_CLOSED",
       "owner": "ASTRA_GPT",
       "title": "Guest installer + artifact verification + rollback",
       "scope": "runtime/src/install/**|runtime/tests/test_install*",
@@ -1209,7 +1209,36 @@
       "node_id": "N32-GUEST-INSTALLER-VERIFICATION",
       "fresh_main_sha": "1ee383669c573c1efed12c12cdd03e0a7b5f327f",
       "write_scope": "runtime/src/install/**|runtime/tests/test_install*|Crazy Wall N32/report Astra only",
-      "claimed_at": "2026-09-13T06:25:00Z"
+      "claimed_at": "2026-09-13T06:25:00Z",
+      "report_state": "PASS",
+      "reported_at": "2026-09-13T10:32:00Z",
+      "paths_changed": [
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/install/guest_installer.py",
+        "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_install_guest.py",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/ASTRA-N32-GUEST-INSTALLER-2026-09-13.json",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-TASK-NODES-DYNAMIC-V5-2026-09-12.json"
+      ],
+      "commit_sha": "84454c98f1fa3a2ab01e3c5f378f9d65f3fd9f96",
+      "repair_commit_sha": "f057e8f03a53c8be635e855f8e16941d8a9fb479",
+      "report_commit_sha": "c8e87d22609c02e6cb1cf9fd7a52bd3192010171",
+      "certified_sha": "a5b3a2b385b1448edfd6decc95e75b1bd875098c",
+      "blob_sha": "guest_installer.py=555f608a4751bf81de2d4d5ca72543b657f31292|test_install_guest.py=96d08d02a766ef896e4a9eb4b822eb1660f32f7d",
+      "tests": "focused local 9/9 PASS; descendant CI run 34743024813 job 103686612626 SUCCESS: Wordflow 41 PASS; runtime 256 PASS + 42 subtests PASS",
+      "run_id": 34743024813,
+      "job_id": 103686612626,
+      "evidence": [
+        "pre-existing installer provenance preserved from 240241a54e76a31c04bc017df26ea72566dc8885",
+        "unsafe names, non-bytes, malformed hash, signature exceptions, arch mismatch and dependency gaps reject before guest effect",
+        "install failure triggers rollback; rollback failure is explicit",
+        "exact source/test blobs present in certified descendant SHA",
+        "platform-real install is not claimed by fixture tests"
+      ],
+      "remaining_gaps": [],
+      "limitations": [
+        "No real Android/Linux/Windows/iOS package installation executed in N32.",
+        "Global UI-to-platform E2E remains outside this node."
+      ],
+      "next_free_node": "N17-FULL-PRODUCT-E2E"
     },
     {
       "n": 33,
