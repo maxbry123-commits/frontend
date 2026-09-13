@@ -12,13 +12,15 @@ class ActivationRejectedError(RuntimeError):
 
 # Only mounts with concrete adapters/factories under runtime/src/plugins are
 # approved here. Catalog-only/donor/UI/tool entries remain fail-closed until
-# their own wiring is implemented and explicitly tested.
+# their own wiring is implemented and explicitly tested. big_agi is the first
+# UI entry promoted after its deterministic Fables adapter was added.
 _ALLOWED_RUNTIME_ACTIVATIONS = {
     "stabilize_core",
     "pydantic",
     "starlette",
     "httpx",
     "rule_engine",
+    "big_agi",
 }
 
 
