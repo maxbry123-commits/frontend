@@ -1,0 +1,10 @@
+{
+  "schema": "tel.workflow/v3.claim",
+  "state": "IN_PROGRESS",
+  "chat_id": "SOL GPT <16>",
+  "node_id": "N28-API-CONTROL",
+  "fresh_main_sha": "4a3615bf63c34f3e6ab9e40cd3a1dd26c8594b43",
+  "write_scope": "runtime/src/conn/**|runtime/src/integration/**|runtime/tests/test_integration*",
+  "claimed_at": "2026-09-13T07:02:00Z",
+  "reason": "Prior SOL GPT <10> claim explicitly released with exact-head CI cancelled; N28 remains GAP_RESOLVABLE and needs fresh trusted execution evidence."
+}
