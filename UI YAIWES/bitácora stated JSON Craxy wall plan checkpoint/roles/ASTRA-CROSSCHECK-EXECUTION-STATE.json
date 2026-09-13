@@ -1,9 +1,9 @@
 {
   "assertion": "Valida trazabilidad completa y CI real del auditor sin asumir cierre.",
   "audit_status": "INCOMPLETE",
-  "base_sha": "66c25ccfc44d26c1b30c10c6c002a5c686c3f701",
+  "base_sha": "a29290b02cf4aa655b85581d0ba134d3ac3f04d6",
   "contract": "tel.workflow/v3",
-  "current_node": "X17-11",
+  "current_node": "ASTRA-EVIDENCE-INPUT-004",
   "evidence": {
     "ci_run": 34711848316,
     "ci_status": "cancelled",
@@ -29,7 +29,7 @@
       }
     }
   },
-  "node_id": "ASTRA-PREFLIGHT-SCOPE-003",
+  "node_id": "ASTRA-EVIDENCE-INPUT-004",
   "owner": "ASTRA_CROSSCHECK",
   "remaining": [
     "Mapeo semántico de candidatos",
@@ -41,22 +41,20 @@
   "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-PREFLIGHT-SCOPE-003.json",
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
-  "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T04:04:22Z",
+  "status": "EXECUTING",
+  "updated_at_utc": "2026-09-13T05:05:19Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
-  "write_scope": [],
+  "write_scope": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/audit/evidence.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_audit_evidence_matrix.py",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
+  ],
   "last_observed_head": "ac91c4812f3bac30ed6d91e0033ea0e723ab693b",
   "last_activation": {
-    "node": "X17-11",
-    "status": "ACTIVE_LOOP",
-    "delta": "Verified successor preflight CI run and job logs; preserved cancelled scanner run as cancelled.",
-    "code_changes": 0,
-    "tests_executed_locally": 0,
-    "next": "Revalidate ownership and reproduce remaining execution/evidence defect before claiming a minimal code patch.",
-    "refutations": [
-      "Success at 344a714 does not certify latest HEAD.",
-      "Cancelled scanner run remains cancelled.",
-      "32+75 tests and 9 subtests do not establish semantic coverage or product E2E."
-    ]
+    "node": "ASTRA-EVIDENCE-INPUT-004",
+    "status": "EXECUTING",
+    "defect": "verify_ci_evidence calls evidence.decode before type validation; malformed untrusted non-bytes input raises instead of fail-closed False",
+    "reproduction": "direct API call with str/object/memoryview",
+    "next": "Add input gate and regression test, then execute focused/full local suites."
   }
 }
