@@ -1,0 +1,63 @@
+{
+  "schema":"yaiwes.factory.frontend.grok-delta.v1",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "domain":"FRONTEND_ONLY",
+  "created_at":"2026-09-14T06:15:00-05:00",
+  "base_main_sha":"1f0ddde9a7b9938ed906d81bdc2351f457d6d891",
+  "authoritative_parent":"FACTORY-FRONTEND-GROK-WORKPACK-100-V1-2026-09-14.json",
+  "audit":"Frontend/factory-v0/audits/FRONTEND-OSS-INTEGRATION-GAP-MATRIX-V2-2026-09-14.json",
+  "range":"F-FE-190..209",
+  "count":20,
+  "why_not_100_more":"The authoritative parent already contains 100 nodes (65 control QA + 19 OSS + 16 improvements). These 20 are only verified omissions; adding another duplicate 100 would be overengineering.",
+  "coordination":{
+    "manifest_immutable":true,
+    "one_chat_one_active_node":true,
+    "one_path_one_writer":true,
+    "claim_path":"UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-delta-20/<node-id>.json",
+    "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+    "qa_nodes":"TEST_ONLY; on fail report owner segment; no shared product patch",
+    "oss_nodes":"local dedup first; ZIP_ONLY uses existing extraction/copy motors; no duplicate downloader or monolith embedding",
+    "candidate":"SEG-11 only",
+    "final":"F-UI-063 only"
+  },
+  "motors":{
+    "extract":"➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂 Motor de extracción zip/motor_1_extract_only.py",
+    "copy_batch":"➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂motor de copiar archivos/motor_3_copy_batches.py",
+    "copy_root":"➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py"
+  },
+  "lanes":{"GROK-K":"190-194","GROK-L":"195-199","GROK-M":"200-204","GROK-N":"205-209"},
+  "write_scope_template":[
+    "Frontend/factory-v0/tests/e2e/frontend-delta-20/<node>.spec.mjs",
+    "Frontend/factory-v0/project-memory/frontend-delta-20/<node>/CLAIM.json",
+    "Frontend/factory-v0/project-memory/frontend-delta-20/<node>/REPORT.json",
+    ".github/workflows/frontend-delta-20-<node>.yml"
+  ],
+  "nodes":[
+    {"id":"F-FE-190-PROP-LABEL","lane":"GROK-K","segment":"SEG-03-EDITOR-CORE","type":"CONTROL_QA","task":"Property label edit","acceptance":"Editing #prop-label changes selected label exactly once and survives reload."},
+    {"id":"F-FE-191-PROP-WIDTH","lane":"GROK-K","segment":"SEG-03-EDITOR-CORE","type":"CONTROL_QA","task":"Property width edit","acceptance":"#prop-w updates canonical width with valid numeric bounds and persists."},
+    {"id":"F-FE-192-PROP-HEIGHT","lane":"GROK-K","segment":"SEG-03-EDITOR-CORE","type":"CONTROL_QA","task":"Property height edit","acceptance":"#prop-h updates canonical height with valid numeric bounds and persists."},
+    {"id":"F-FE-193-FILE-INPUT","lane":"GROK-K","segment":"SEG-07-IMPORT","type":"CONTROL_QA","task":"Multiple file input","acceptance":"#file-input accepts supported multiple files, records metadata and never executes imported script."},
+    {"id":"F-FE-194-TEAM-MODE","lane":"GROK-K","segment":"SEG-08-AI-ROUTER","type":"CONTROL_QA","task":"Team mode selector","acceptance":"#team-mode cycles single/race/quorum/sequence and persists exact selected mode."},
+
+    {"id":"F-FE-195-APPLY-DELTA","lane":"GROK-L","segment":"SEG-08-AI-ROUTER","type":"CONTROL_QA","task":"Apply proposed delta through delta preview","acceptance":"Clicking #delta-preview with proposed delta applies operations exactly once and is undoable."},
+    {"id":"F-FE-196-MEDIA-UPLOAD","lane":"GROK-L","segment":"SEG-08-AI-ROUTER","type":"CONTROL_QA","task":"Media upload input","acceptance":"#media-upload records image/audio/video/3D metadata without leaking file contents or tokens."},
+    {"id":"F-FE-197-PAGE-TEMPLATES","lane":"GROK-L","segment":"SEG-03-EDITOR-CORE","type":"CONTROL_QA","task":"Page template selector matrix","acceptance":"landing/dashboard/saas/portfolio/blank create editable page nodes with correct template record."},
+    {"id":"F-FE-198-THEME-FIELDS","lane":"GROK-L","segment":"SEG-03-EDITOR-CORE","type":"CONTROL_QA","task":"Theme field matrix","acceptance":"background/accent/radius controls update visible CSS and persisted config with reload readback."},
+    {"id":"F-FE-199-MODEL-FIELDS","lane":"GROK-L","segment":"SEG-08-AI-ROUTER","type":"CONTROL_QA","task":"Model role endpoint secret_ref validation","acceptance":"planner/designer/coder/reviewer roles persist; secret_ref stays reference-only; invalid endpoint gets deterministic feedback."},
+
+    {"id":"F-FE-200-REMOTE-PROTOCOLS","lane":"GROK-M","segment":"SEG-08-AI-ROUTER","type":"CONTROL_QA","task":"Remote protocol matrix","acceptance":"MCP_HTTP/HTTP/WEBSOCKET/API save and probe paths are distinguishable and fail closed on invalid URL."},
+    {"id":"F-FE-201-MEDIA-TYPES","lane":"GROK-M","segment":"SEG-08-AI-ROUTER","type":"CONTROL_QA","task":"Media generation type matrix","acceptance":"image/video/audio/3d produce correctly typed queued or blocked jobs."},
+    {"id":"F-FE-202-DESTINATION-TYPES","lane":"GROK-M","segment":"SEG-06-IO","type":"CONTROL_QA","task":"Destination type matrix","acceptance":"DOWNLOAD/GITHUB/HUGGINGFACE/VERCEL/MCP/SHARE/CUSTOM_HTTP create typed plans; no inline secrets."},
+    {"id":"F-FE-203-DRAGDROP-ALL-KINDS","lane":"GROK-M","segment":"SEG-02-BROWSER","type":"FLOW_QA","task":"Drag/drop matrix for all 10 component kinds","acceptance":"window/button/selector/segment/panel/page/image/video/audio/model3d drop once at bounded coordinates and remain editable."},
+    {"id":"F-FE-204-RESIZE-SNAP","lane":"GROK-M","segment":"SEG-05-CONTROLS","type":"FLOW_QA","task":"Resize/snap focused browser regression","acceptance":"resize changes canonical w/h, respects minimums/snap and is undoable; no touch-drag collision."},
+
+    {"id":"F-FE-205-CONTEXT-ACTIONS","lane":"GROK-N","segment":"SEG-05-CONTROLS","type":"FLOW_QA","task":"Frappe context duplicate/delete regression","acceptance":"duplicate/delete keyboard+pointer actions mutate canonical state exactly once and persist.","component":"Frappe Builder"},
+    {"id":"F-FE-206-OSS-MERMAID","lane":"GROK-N","segment":"SEG-10-OSS","type":"OSS_CAPABILITY","task":"Mermaid diagram component","acceptance":"If still ZIP_ONLY use existing extraction motor, record blob/count/license, then thin diagram render adapter + browser microtest.","component":"Mermaid"},
+    {"id":"F-FE-207-OSS-A11Y-SKILLS","lane":"GROK-N","segment":"SEG-10-OSS","type":"OSS_QA_DONOR","task":"Accessibility skills rules adapter","acceptance":"Extract only if needed; convert useful WCAG/ARIA rules into Factory tests, not runtime dependency.","component":"accessibility-skills"},
+    {"id":"F-FE-208-OSS-VISUAL-AUDIT","lane":"GROK-N","segment":"SEG-10-OSS","type":"OSS_QA_DONOR","task":"Frontend audit visual regression donor","acceptance":"Extract only if needed; adapt screenshot comparison workflow into bounded QA with artifacts, not runtime code.","component":"frontend-audit-skill"},
+    {"id":"F-FE-209-OSS-ONLOOK-INSPECTOR","lane":"GROK-N","segment":"SEG-10-OSS","type":"OSS_PATTERN_DONOR","task":"Onlook visual inspector pattern","acceptance":"Use local source; if ZIP_ONLY materialize with existing motor; extract only inspector/style-edit patterns needed by current Factory; no Onlook monolith.","component":"Onlook"}
+  ],
+  "lane_dependency":"Within each lane, only first unclaimed node is eligible; next requires previous PASS_RELEASED or GAP_RESOLVABLE report.",
+  "release_rule":"PASS_RELEASED or GAP_RESOLVABLE with paths/blob SHA/commit/test/run/job/artifact/readback. Producer never promotes candidate."
+}
