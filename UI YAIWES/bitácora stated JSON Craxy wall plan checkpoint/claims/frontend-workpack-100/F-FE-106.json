@@ -3,30 +3,22 @@
   "node_id": "F-FE-106-REDO",
   "segment_id": "SEG-03-EDITOR-CORE",
   "lane": "CONTROL_QA",
-  "state": "CLAIMED",
+  "state": "PASS_RELEASED",
   "owner": "ChatGPT",
   "agent": "GPT-5.6 Sol",
   "chat_id": "CHATGPT-FACTORY-FRONTEND-WATCHDOG",
   "fresh_main_sha": "e8295361e5b8f383c0022867c471800d53b84f4e",
   "claimed_at": "2026-09-14T17:20:38Z",
+  "claim_commit": "d1f0a9f96470e4d32f48355800ca728d09907d2d",
+  "spec_commit": "77278660a8ceeb2105a708d80546c1230c1358b5",
+  "delta_commit": "5f0b29109342089f97f112207669c541c32b055b",
+  "report_commit": "11d253a9a1d1893f1d1e75442712cd0960825359",
+  "released_at": "2026-09-14T18:25:01Z",
   "type": "CONTROL_QA",
   "selector": "#redo",
-  "write_scope": [
-    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-106-REDO.spec.mjs",
-    "Frontend/factory-v0/project-memory/F-FE-106-REDO-*",
-    ".github/workflows/factory-F-FE-106-REDO.yml",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-106.json"
-  ],
-  "base_blobs": {
-    "index-v192.html": "e3d68e1063cd37c2a59d91911f071fda304e4695",
-    "src/app-v19.js": "1aab6ebec09a8e6a14f221b83226cf92552b4526",
-    "src/actions.js": "5d5617507b3cd2e02e397f6e973e79adfb8297b1",
-    "src/state.js": "32c6b9e619e146a1571766b2dcd9055c3a86d16d",
-    "styles.css": "ddda72eb2073aaea9dbdcc647b6522a5b7faa4eb"
-  },
-  "depends_on": ["F-FE-105-UNDO"],
+  "run_id": 34874362388,
+  "job_id": 104077764248,
+  "artifact_count": 0,
   "product_patched": false,
-  "frozen": ["index-v19.html","index-v192.html","index-v193-preview.html","src/bootstrap/candidate-v193.js"],
-  "steps": ["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
-  "release": false
+  "release": true
 }
