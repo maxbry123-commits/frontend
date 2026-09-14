@@ -96,6 +96,34 @@
   .app-shell[data-workspace-shell="v2"] .brand small {
     overflow-wrap: anywhere;
   }
+  .app-shell[data-workspace-shell="v2"] .topbar {
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+  .app-shell[data-workspace-shell="v2"] .steps {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    width: 100%;
+    gap: 4px;
+    overflow: visible;
+  }
+  .app-shell[data-workspace-shell="v2"] .steps button {
+    min-width: 0;
+    width: 100%;
+    padding-inline: 4px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .app-shell[data-workspace-shell="v2"] .mode-switch {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+  }
+  .app-shell[data-workspace-shell="v2"] .mode-switch button {
+    min-width: 0;
+    width: 100%;
+    white-space: normal;
+  }
   .app-shell[data-workspace-shell="v2"] .studio {
     position: relative;
     display: grid;
@@ -112,12 +140,38 @@
     z-index: 1;
   }
   .app-shell[data-workspace-shell="v2"] .canvas-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
     width: 100%;
+    align-items: stretch;
   }
   .app-shell[data-workspace-shell="v2"] .canvas-controls {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     width: 100%;
-    overflow-x: auto;
-    scrollbar-width: thin;
+    gap: 6px;
+    overflow: visible;
+  }
+  .app-shell[data-workspace-shell="v2"] .canvas-controls button {
+    min-width: 0;
+    width: 100%;
+    min-height: 40px;
+    padding-inline: 4px;
+    white-space: normal;
+  }
+  .app-shell[data-workspace-shell="v2"] .canvas-controls .divider {
+    display: none;
+  }
+  .app-shell[data-workspace-shell="v2"] #zoom-label {
+    min-width: 0;
+    width: 100%;
+    align-self: center;
+  }
+  .app-shell[data-workspace-shell="v2"] .status-pill {
+    max-width: 100%;
+    justify-self: start;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
   .app-shell[data-workspace-shell="v2"] .canvas-stage {
     width: 100%;
@@ -178,11 +232,13 @@
     padding: 12px;
   }
   .app-shell[data-workspace-shell="v2"] .workspace-shell-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     width: 100%;
     order: 4;
+    margin-left: 0;
   }
   .app-shell[data-workspace-shell="v2"] .workspace-shell-toggle {
-    flex: 1 1 0;
     min-width: 0;
     min-height: 44px;
   }
