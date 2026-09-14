@@ -1,0 +1,68 @@
+name: factory-f-fe-075-canvas-keyboard-ops
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-fe-075-canvas-keyboard-ops.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/app-v20.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-fe-075-canvas-keyboard-ops.spec.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-f-fe-075-canvas-keyboard-ops
+  cancel-in-progress: false
+
+jobs:
+  keyboard-ops:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Preserve prior app-v19
+        run: |
+          set -euo pipefail
+          test -s src/app-v19.js
+          test -s src/app-v20.js
+          grep -F "__YAIWES_FACTORY_V19__" src/app-v19.js
+          grep -F "APP_V20_VERSION = '1.9.20'" src/app-v20.js
+          ! grep -F "APP_V20_VERSION = '1.9.20'" src/app-v19.js
+          git hash-object src/app-v19.js
+          git hash-object src/app-v20.js
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Syntax F-FE-075
+        run: |
+          node --check src/app-v20.js
+          node --check tests/e2e/f-fe-075-canvas-keyboard-ops.spec.mjs
+      - name: F-FE-075 desktop keyboard ops
+        run: npx playwright test tests/e2e/f-fe-075-canvas-keyboard-ops.spec.mjs --project=chromium-desktop --reporter=line
+      - name: F-FE-075 Pixel 7 keyboard ops
+        run: npx playwright test tests/e2e/f-fe-075-canvas-keyboard-ops.spec.mjs --project=mobile-chromium --reporter=line
+      - name: Preserve F-FE-075 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-f-fe-075-canvas-keyboard-ops-evidence
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+          if-no-files-found: warn
+          retention-days: 14
