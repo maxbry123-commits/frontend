@@ -74,11 +74,13 @@ export function createCapabilityRouter({ routes = [], transports = {} } = {}) {
     async route(input = {}) {
       if (input.contract && input.contract !== CONTRACT) throw new Error(`CONTRACT_MISMATCH:${input.contract}`);
       if (containsRawSecret(input)) throw new Error('RAW_SECRET_REJECTED_USE_SECRET_REF');
+      const requestId = clean(input.request_id);
+      if (!requestId) throw new TypeError('request.request_id required');
       const selected = chooseRoute(normalized, input);
       const request = Object.freeze({
         contract: CONTRACT,
         type: 'CAPABILITY_REQUEST',
-        request_id: clean(input.request_id) || `factory-${Date.now()}`,
+        request_id: requestId,
         capability: selected.capability,
         route_id: selected.id,
         route_kind: selected.kind,
