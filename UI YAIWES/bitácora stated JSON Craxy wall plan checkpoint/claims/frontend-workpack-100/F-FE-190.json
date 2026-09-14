@@ -1,0 +1,26 @@
+{
+  "schema":"yaiwes.factory.frontend.node-claim.v1",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "node_id":"F-FE-190-OSS-MERMAID",
+  "segment_id":"SEG-10-OSS",
+  "lane":"GROK-K",
+  "state":"CLAIMED",
+  "owner":"GPT-5.6-SOL",
+  "agent":"GPT-5.6-SOL",
+  "chat_id":"CURRENT_CHAT_FACTORY_WATCHDOG_LOOP",
+  "fresh_main_sha":"b37bf293ee002a820613ed7b12cec4eb7bd78ace",
+  "claimed_at":"2026-09-14T13:22:00Z",
+  "type":"OSS_ADAPTER",
+  "source_component":"Mermaid",
+  "source_truth":"Already extracted at 📂componentes open soure fromtend/Fromtend code/Mermaid/ by commit ba74a2c9a91b7108fe78daf66c3c7e1a897add5c; no download/extract authorized for this node.",
+  "write_scope":[
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/oss/mermaid-adapter-v1.js",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/oss/f-fe-190-oss-mermaid.spec.mjs",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-FE-190-OSS-MERMAID-REPORT.md",
+    ".github/workflows/factory-f-fe-190-oss-mermaid.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-190.json"
+  ],
+  "rules":["NO_CANDIDATE_WIRING","NO_SECOND_EDITOR","NO_REDOWNLOAD","THIN_ADAPTER_ONLY","SOURCE_PRESENT != WIRED != RUNTIME_TEST_PASS"],
+  "release":false
+}
