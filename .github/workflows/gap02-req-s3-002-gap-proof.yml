@@ -1,0 +1,32 @@
+name: GAP02 REQ-S3-002 Gap Proof
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gap02-req-s3-002-gap-proof.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/storage/local_first.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_req_s3_002_master_input.py
+          sparse-checkout-cone-mode: false
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: REQ-S3-002 invariant proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
+          PYTHONPATH=src python -m unittest -v tests.test_req_s3_002_master_input
