@@ -1,0 +1,42 @@
+name: GAP02 REQ-S3-046 Evidence
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gap02-req-s3-046-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/memory/boundary.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_memory_boundary.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md
+          sparse-checkout-cone-mode: false
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES'
+          echo "revision=$GITHUB_SHA"
+          sha256sum "$ROOT/runtime/src/memory/boundary.py"
+          sha256sum "$ROOT/runtime/tests/test_memory_boundary.py"
+          sha256sum "$ROOT/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md"
+      - name: Focused REQ-S3-046 regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
+          PYTHONPATH=src python -m unittest -v tests.test_memory_boundary.MemoryBoundaryTests.test_s3_046_literal_memory_operations_contract_is_complete
