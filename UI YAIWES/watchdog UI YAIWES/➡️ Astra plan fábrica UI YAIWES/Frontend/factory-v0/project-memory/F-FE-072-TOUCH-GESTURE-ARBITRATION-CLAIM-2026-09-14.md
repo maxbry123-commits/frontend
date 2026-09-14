@@ -7,12 +7,14 @@
   "node_id": "F-FE-072-TOUCH-GESTURE-ARBITRATION",
   "segment_id": "SEG-04-TOUCH",
   "lane": "GROK-A",
-  "state": "CLAIMED",
+  "state": "PASS_RELEASED",
   "owner": "GROK 3",
   "agent": "GROK",
   "chat_id": "GROK-3-UI-YAIWES-FACTORY",
   "fresh_main_sha": "251102b104e9c36771551fcc84ee31f1dd357216",
   "claimed_at": "2026-09-14T10:36:00Z",
+  "claim_commit": "1c14293ae3baf4c12dfb95d0e5800239d85492b5",
+  "delta_commit": "2751669d85db38569f4af3358676915590485dc4",
   "write_scope": [
     "Frontend/factory-v0/src/touch-dnd-v194.js",
     "Frontend/factory-v0/tests/e2e/f-fe-072-touch-gesture-arbitration.spec.mjs",
@@ -28,14 +30,9 @@
   ],
   "depends_on": ["SEG-04-TOUCH-v193-RELEASED"],
   "dependency_status": "SATISFIED F-FE-068 release=true TESTED_NOT_WIRED blob 4125dfd",
-  "collision_check": {
-    "F-FE-069": "CLAIMED SOL integrator SEG-11 disjoint",
-    "F-FE-070": "BLOCKED_DEPENDENCY new workpack / old IO would collide GROK-B",
-    "F-FE-071": "BLOCKED_DEPENDENCY",
-    "F-FE-072-TOUCH": "no claim / no touch-dnd-v194 at readback"
-  },
   "strategy": "REUSE_EXISTING v193 helpers then PATCH v194 arbitration",
   "acceptance": "Pointer/touch/pen one session; canvas scroll preserved when not node move; resize corner never stolen; Android-size Playwright PASS",
-  "release": false
+  "release": true,
+  "released_at": "2026-09-14T10:52:00Z"
 }
 ```
