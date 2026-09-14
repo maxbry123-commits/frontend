@@ -1,0 +1,63 @@
+name: factory-F-FE-217-EMPTY-STATE-MATRIX
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-F-FE-217-EMPTY-STATE-MATRIX.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/control-audit/F-FE-217-EMPTY-STATE-MATRIX.spec.mjs'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v192.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/app-v19.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/version-store-v1.js'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: factory-F-FE-217-EMPTY-STATE-MATRIX
+  cancel-in-progress: false
+jobs:
+  empty-state-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Candidate readback
+        run: |
+          set -euo pipefail
+          test -s index-v192.html
+          test -s src/app-v19.js
+          test -s src/version-store-v1.js
+          test -s tests/e2e/control-audit/F-FE-217-EMPTY-STATE-MATRIX.spec.mjs
+          grep -F 'Sin capas todavía' src/app-v19.js
+          grep -F 'Sin delta propuesto' src/app-v19.js
+          node --check tests/e2e/control-audit/F-FE-217-EMPTY-STATE-MATRIX.spec.mjs
+          git hash-object index-v192.html
+          git hash-object src/app-v19.js
+          git hash-object src/version-store-v1.js
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Desktop empty-state matrix
+        run: npx playwright test tests/e2e/control-audit/F-FE-217-EMPTY-STATE-MATRIX.spec.mjs --project=chromium-desktop --reporter=line
+      - name: Preserve F-FE-217 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-F-FE-217-EMPTY-STATE-MATRIX-evidence
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+          if-no-files-found: warn
+          retention-days: 14
