@@ -1,0 +1,32 @@
+{
+  "schema": "yaiwes.factory.node-claim/v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-SEG-SHELL-MOBILE-067",
+  "owner": "GPT-5.6-SOL",
+  "chat_id": "CURRENT_CHAT_FACTORY_SEGMENTATION",
+  "state": "CLAIMED",
+  "fresh_main_sha": "cdd305160c91a8de65845f1f5b01890fb885f3a6",
+  "segment_id": "SEG-01-SHELL",
+  "claimed_at": "2026-09-14T04:36:00-05:00",
+  "depends_on": ["F-FRONTEND-QA-066:F-UI-052_PRODUCT_FAILURE_MOBILE_LAYOUT"],
+  "write_scope": [
+    "Frontend/factory-v0/src/ui/workspace-shell-v2.js",
+    "Frontend/factory-v0/workspace-shell-v2.css",
+    "Frontend/factory-v0/tests/e2e/f-ui-052-shell-v2-mobile.spec.mjs",
+    ".github/workflows/factory-f-ui-052-shell-v2-mobile.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/F-SEG-SHELL-MOBILE-067-*.json"
+  ],
+  "frozen": [
+    "Frontend/factory-v0/index-v19.html",
+    "Frontend/factory-v0/index-v192.html",
+    "Frontend/factory-v0/workspace-shell-v1.css",
+    "Frontend/factory-v0/src/ui/workspace-shell-v1.js"
+  ],
+  "steps": [
+    "VERIFY_RESEARCH: reproduce clipping from F-UI-052 and identify minimal responsive override",
+    "EXECUTE_DELTA: create workspace shell V2 files only; reuse V1 behavior without rewriting state/editor",
+    "TEST_REPORT: run Pixel 7 portrait+landscape isolated V2 hit-target gate and preserve screenshots/artifact"
+  ],
+  "acceptance": "Biblioteca and Inspector toggles fully hit-testable inside viewport; bottom actions not clipped; historical V1 untouched; no editor/state changes"
+}
