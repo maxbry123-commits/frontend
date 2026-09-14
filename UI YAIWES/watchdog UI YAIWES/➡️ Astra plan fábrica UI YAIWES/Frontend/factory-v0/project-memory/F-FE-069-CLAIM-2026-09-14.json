@@ -1,0 +1,35 @@
+{
+  "schema":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "node_id":"F-FE-069",
+  "segment_id":"SEG-11-TOUCH-INTEGRATION",
+  "lane":"frontend-integration",
+  "state":"CLAIMED",
+  "owner":"GPT-5.6-SOL-ASTRA-WATCHDOG",
+  "base_sha":"0ea75c28f981cc2dc3d6ad723bef984a0b61d95b",
+  "claimed_at":"2026-09-14T09:45:00Z",
+  "write_scope":[
+    "Frontend/factory-v0/src/bootstrap/candidate-v195.js",
+    "Frontend/factory-v0/index-v195.html",
+    "Frontend/factory-v0/tests/e2e/canonical-v195-touch-integration.spec.mjs",
+    ".github/workflows/factory-v195-touch-integration.yml",
+    "Frontend/factory-v0/project-memory/F-FE-069-*"
+  ],
+  "frozen":[
+    "Frontend/factory-v0/index-v193.html",
+    "Frontend/factory-v0/index-v194.html",
+    "Frontend/factory-v0/src/bootstrap/candidate-v193.js",
+    "Frontend/factory-v0/src/bootstrap/candidate-v194.js",
+    "Frontend/factory-v0/src/touch-dnd-v192.js",
+    "Frontend/factory-v0/src/touch-dnd-v193.js"
+  ],
+  "dependency":"F-FE-068 TESTED_NOT_WIRED release=true; V1.9.4 currently composes shell-v2/browser-v2 but still loads touch-dnd-v192",
+  "strategy":"ADDITIVE_V195_INTEGRATION_ONLY",
+  "acceptance":[
+    "V1.9.5 preserves V1.9.4 shell/browser composition",
+    "candidate loads touch-dnd-v193 and does not load touch-dnd-v192",
+    "mobile browser performs real touch move, commit and reload persistence",
+    "desktop integration remains functional",
+    "exact SHA workflow evidence required"
+  ]
+}
