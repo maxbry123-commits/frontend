@@ -1,0 +1,58 @@
+name: Factory V1.9.5 Closure Gap Regression
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-066-v195-gap-regression.spec.mjs'
+      - '.github/workflows/factory-v195-closure-gap-regression.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  closure-gaps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Exact V195 readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s index-v195.html
+          test -s src/bootstrap/candidate-v195.js
+          grep -F 'candidate-v195.js' index-v195.html
+          grep -F "export const CANDIDATE_VERSION = '1.9.5'" src/bootstrap/candidate-v195.js
+          node --check tests/e2e/f-ui-066-v195-gap-regression.spec.mjs
+          git rev-parse HEAD
+          git hash-object index-v195.html
+          git hash-object src/bootstrap/candidate-v195.js
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Desktop closure regressions
+        run: npx playwright test tests/e2e/f-ui-066-v195-gap-regression.spec.mjs --project=chromium-desktop --reporter=line
+      - name: Mobile closure regressions
+        if: always()
+        run: npx playwright test tests/e2e/f-ui-066-v195-gap-regression.spec.mjs --project=mobile-chromium --reporter=line
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: f-ui-066-v195-${{ github.sha }}
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+          if-no-files-found: warn
+          retention-days: 14
