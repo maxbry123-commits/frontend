@@ -4,11 +4,10 @@
   "node_id": "F-INT-065",
   "owner": "SOL GPT <FACTORY-INTEGRATOR>",
   "chat_id": "current-factory-chat",
-  "fresh_main_sha": "c785a66c3a14af39ade1f9bd66985a5fd9f3f3f5",
-  "claimed_at": "2026-09-14T08:50:00Z",
-  "reported_at": "2026-09-14T08:53:00Z",
-  "state": "GAP_RESOLVABLE",
-  "report_state": "STATIC_PASS_RUNTIME_E2E_PENDING",
+  "fresh_main_sha": "ecb3159935bd73086d90619293c1f77f104acd61",
+  "claimed_at": "2026-09-14T08:57:00Z",
+  "state": "CLAIMED",
+  "report_state": "REOPENED_RUNTIME_IMPORT_PATH_GAP",
   "segment": "SEG-11-INTEGRATOR",
   "write_scope": [
     "Frontend/factory-v0/index-v193.html",
@@ -18,29 +17,22 @@
   ],
   "frozen": ["Frontend/factory-v0/index-v19.html", "Frontend/factory-v0/index-v192.html"],
   "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
-  "paths": [
-    "Frontend/factory-v0/index-v193.html",
-    "Frontend/factory-v0/src/bootstrap/candidate-v193.js",
-    "Frontend/factory-v0/tests/e2e/canonical-v193-static.test.mjs"
-  ],
-  "commits": [
-    "efc363e9888b0d6c403a86d029bf9a2ae5b8c12d",
-    "556b90b62aa4cbc11f3fef1ea2d2d8fdaeee0168",
-    "9cfc64729e2a43929f9a2c09f2cce1ad6bc30a8c"
-  ],
-  "blobs": {
-    "index_v193": "2f42d309cef2c523180b030d4bc1d924cd280a20",
-    "bootstrap_v193": "b392c252bd2c3aec7578c04d9bc34d582a9f1457",
-    "static_test": "01df753a0124309ac21bae42acdc123e9493f3ff"
+  "reclaim_reason": "candidate-v193.js is located in src/bootstrap but CANDIDATE_MODULES uses ./ paths that resolve under src/bootstrap instead of src; previous static test mocked importer and did not verify filesystem/module resolution",
+  "previous_report": {
+    "state": "GAP_RESOLVABLE",
+    "report_state": "STATIC_PASS_RUNTIME_E2E_PENDING",
+    "commits": [
+      "efc363e9888b0d6c403a86d029bf9a2ae5b8c12d",
+      "556b90b62aa4cbc11f3fef1ea2d2d8fdaeee0168",
+      "9cfc64729e2a43929f9a2c09f2cce1ad6bc30a8c",
+      "ee61c77d88b172c8ba834055b6b07fa11d5274b1"
+    ]
   },
-  "test": "node tests/e2e/canonical-v193-static.test.mjs => canonical-v193-static: PASS",
-  "run_id": null,
-  "job_id": null,
-  "readback": "index/bootstrap/test exact blobs read back from main",
   "remaining_gaps": [
-    "real browser/Playwright runtime journey on index-v193.html not yet executed",
-    "published/Hugging Face preview exact-SHA validation not yet executed"
+    "fix bootstrap import resolution",
+    "run hardened static/filesystem resolution test",
+    "real browser/Playwright runtime journey on index-v193.html",
+    "published/Hugging Face preview exact-SHA validation"
   ],
-  "release": true,
-  "next": "independent backend node F-BE-074 while F-INT-065 awaits runtime E2E"
+  "release": false
 }
