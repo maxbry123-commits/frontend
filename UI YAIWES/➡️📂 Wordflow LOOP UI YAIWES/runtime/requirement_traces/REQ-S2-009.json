@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.requirement-trace.v1",
+  "requirement_id": "REQ-S2-009",
+  "goal_id": "G12",
+  "task_id": "GAP-04-REQ-S2-009",
+  "source": {
+    "path": "documentos proyectos UI YAIWES/📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR Q grock tiene ventanas agente  linux iOS Android phyton 🤯🤯🤯🎯 14 objetivos💡💡💡✅✅✅🎯🎯🎯.md",
+    "sha256": "0284085ddb211a2d2fd49e0f197dc2f7f0b92e4ed5c8e434832a68275014a475",
+    "symbol": "Objetivo 9 — multiplataforma"
+  },
+  "implementation": {
+    "path": "runtime/src/uek/platform_control.py",
+    "sha256": "d45c9699df56abe19b61d442626edec29e0019641b9aeb253f77a4fa2d2094ba",
+    "symbol": "BackendRegistry|PlatformUpdateManager"
+  },
+  "test": {
+    "path": "runtime/tests/test_platform_control.py",
+    "sha256": "9d338985d399d3edf287256e3845d7905a9d3399529b1ec5e25a402256713b3e",
+    "symbol": "PlatformControlTests"
+  },
+  "evidence": {
+    "path": "runtime/evidence/requirement_traces/REQ-S2-009.ci.json",
+    "sha256": "c6064041424b527fd1f6704c575a84944c4fd048f84a4195f9bbadb868512e91",
+    "symbol": ""
+  },
+  "revision": "1a799861d71a1a5154614289a89b2ef44b9d205b"
+}
