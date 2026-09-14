@@ -2,15 +2,37 @@
   "schema": "yaiwes.factory.node-claim/v1",
   "node_id": "B-MK-001",
   "owner": "ASTRA-GPT-5.6-SOL",
-  "state": "IN_PROGRESS",
+  "state": "TESTED_SUBGATE_PASS",
   "base_sha": "dafe932809d6d92e7d645e90c8655ace720ecdaf",
   "write_scope": "Frontend/factory-v0/src/microkernel/acquisition/**",
   "strategy": "REUSE_EXISTING_ADAPT_NO_FORK",
-  "source_existing": "Frontend/factory-v0/src/acquisition/microkernel-v1/acquisition-contract-v1.js",
-  "acceptance": [
-    "no alternate downloader",
-    "canonical motor invoked only after proven capability gap",
-    "fail-closed validation",
-    "exact provenance/readback receipt required"
-  ]
+  "source_existing": {
+    "path": "Frontend/factory-v0/src/acquisition/microkernel-v1/acquisition-contract-v1.js",
+    "blob_sha": "c0f503c915b0437ecbe5962c687fe63e27d157c4"
+  },
+  "adapter": {
+    "path": "Frontend/factory-v0/src/microkernel/acquisition/index.js",
+    "blob_sha": "9f867621b768a6226ab9505de116672eedfc133c",
+    "commit": "a03b368b948fdbb06e6423474d2184587e33a7d6"
+  },
+  "test": {
+    "path": "Frontend/factory-v0/src/microkernel/acquisition/selftest.mjs",
+    "blob_sha": "2d5daa01f4036275559daabe6a0e2db928a61be6",
+    "commit": "8104919eeff19425c870e373ac8956508a35d459",
+    "result": "PASS",
+    "assertions": 16,
+    "pre_gate_blocked_motor_invocations": 0,
+    "mode": "node selftest replay of GitHub read-back code"
+  },
+  "acceptance": {
+    "no_alternate_downloader": "PASS",
+    "canonical_motor_after_proven_gap_only": "PASS",
+    "fail_closed_validation": "PASS",
+    "provenance_readback_receipt_required": "PASS"
+  },
+  "limits": [
+    "No real network download was executed by this unit subgate.",
+    "Final VERIFIED_CLOSED for acquisition still requires a real canonical-motor receipt on an approved capability gap."
+  ],
+  "next": "B-MK-002 local research/dedup or queue reconciliation by current Crazy Wall writer"
 }
