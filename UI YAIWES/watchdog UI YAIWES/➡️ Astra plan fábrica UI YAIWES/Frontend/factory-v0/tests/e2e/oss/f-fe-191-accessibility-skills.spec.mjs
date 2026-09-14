@@ -1,14 +1,23 @@
 import { test, expect } from '@playwright/test';
 
+async function installFixture(page, { head = '', body = '' }) {
+  await page.goto('/');
+  await page.evaluate(({ head, body }) => {
+    document.head.innerHTML = head;
+    document.body.innerHTML = body;
+  }, { head, body });
+}
+
 test.describe('F-FE-191 accessibility-skills QA adapter', () => {
   test('detects missing rules that F-UI-056 does not centralize', async ({ page }) => {
-    await page.setContent(`<!doctype html>
-      <meta name="viewport" content="width=device-width,maximum-scale=1,user-scalable=no">
-      <style>button,[role=button]{display:inline-block;width:20px;height:20px}</style>
-      <button id="positive" tabindex="3">A</button>
-      <div id="custom" role="button">B</div>
-      <button id="disabled" disabled>C</button>
-      <button id="unnamed" aria-label=""></button>`);
+    await installFixture(page, {
+      head: `<meta name="viewport" content="width=device-width,maximum-scale=1,user-scalable=no">
+        <style>button,[role=button]{display:inline-block;width:20px;height:20px}</style>`,
+      body: `<button id="positive" tabindex="3">A</button>
+        <div id="custom" role="button">B</div>
+        <button id="disabled" disabled>C</button>
+        <button id="unnamed" aria-label=""></button>`,
+    });
     const audit = await page.evaluate(async () => {
       const mod = await import(`/src/oss/accessibility-skills-qa-v1.js?t=${Date.now()}`);
       return mod.auditAccessibilitySkills(document);
@@ -28,12 +37,13 @@ test.describe('F-FE-191 accessibility-skills QA adapter', () => {
   });
 
   test('passes a semantic keyboard/touch fixture and supports explicit disabled reason', async ({ page }) => {
-    await page.setContent(`<!doctype html>
-      <meta name="viewport" content="width=device-width,initial-scale=1">
-      <style>button,input{display:inline-flex;min-width:44px;min-height:44px}</style>
-      <label for="name">Name</label><input id="name">
-      <button id="save">Save</button>
-      <button id="blocked" disabled data-disabled-reason="Requires project">Publish</button>`);
+    await installFixture(page, {
+      head: `<meta name="viewport" content="width=device-width,initial-scale=1">
+        <style>button,input{display:inline-flex;min-width:44px;min-height:44px}</style>`,
+      body: `<label for="name">Name</label><input id="name">
+        <button id="save">Save</button>
+        <button id="blocked" disabled data-disabled-reason="Requires project">Publish</button>`,
+    });
     const audit = await page.evaluate(async () => {
       const mod = await import(`/src/oss/accessibility-skills-qa-v1.js?t=${Date.now()}`);
       return mod.auditAccessibilitySkills(document, { minTouchTarget: 44 });
