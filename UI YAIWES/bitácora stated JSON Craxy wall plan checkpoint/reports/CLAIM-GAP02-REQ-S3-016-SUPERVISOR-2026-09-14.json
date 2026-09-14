@@ -9,8 +9,9 @@
   "write_scope": [
     "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-016.json",
     "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-016.ci.json",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_req_s3_016.py",
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/CLAIM-GAP02-REQ-S3-016-SUPERVISOR-2026-09-14.json"
   ],
-  "strategy": "REUSE existing N27 run_continuous_loop implementation, focal regression and trusted CI; no runtime rewrite.",
-  "acceptance": "RequirementTrace exact source/code/test/evidence/revision + trusted CI + audit_five_pass TRACEABILITY_PASS."
+  "strategy": "REUSE existing N27 run_continuous_loop implementation, focal regression and trusted CI; add only a focused canonical five-pass regression for this RequirementTrace; no runtime rewrite.",
+  "acceptance": "RequirementTrace exact source/code/test/evidence/revision + trusted CI + focused audit_five_pass TRACEABILITY_PASS + global CI/readback."
 }
