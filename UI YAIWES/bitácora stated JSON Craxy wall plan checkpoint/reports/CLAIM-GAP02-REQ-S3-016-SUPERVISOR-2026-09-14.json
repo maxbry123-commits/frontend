@@ -1,0 +1,16 @@
+{
+  "schema": "yaiwes.gap-subclaim.v1",
+  "contract": "tel.workflow/v3",
+  "parent_node": "GAP-02-N35-S3-REMAINDER",
+  "requirement_id": "REQ-S3-016",
+  "owner": "SUPERVISOR_CHAT",
+  "state": "CLAIMED",
+  "fresh_base_main_sha": "255802b2bac2f292dee86325089e0111af742c92",
+  "write_scope": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-016.json",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-016.ci.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/CLAIM-GAP02-REQ-S3-016-SUPERVISOR-2026-09-14.json"
+  ],
+  "strategy": "REUSE existing N27 run_continuous_loop implementation, focal regression and trusted CI; no runtime rewrite.",
+  "acceptance": "RequirementTrace exact source/code/test/evidence/revision + trusted CI + audit_five_pass TRACEABILITY_PASS."
+}
