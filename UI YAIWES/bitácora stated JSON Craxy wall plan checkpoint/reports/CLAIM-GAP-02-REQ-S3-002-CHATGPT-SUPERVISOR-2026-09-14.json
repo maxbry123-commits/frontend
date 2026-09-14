@@ -9,11 +9,21 @@
   "source_anchor": "§2 MASTER INPUT",
   "requirement": "Original immutable, versioned, traceable and always recoverable; derived forms never replace original.",
   "write_scope": [
+    "runtime/src/storage/local_first.py",
     "runtime/tests/test_req_s3_002_master_input.py",
     "runtime/requirement_traces/REQ-S3-002.json",
     "runtime/evidence/requirement_traces/REQ-S3-002.ci.json",
     "reports/CLAIM-GAP-02-REQ-S3-002-CHATGPT-SUPERVISOR-2026-09-14.json"
   ],
-  "product_delta_gate": "No product-code write until VERIFY_RESEARCH proves MISSING_IMPLEMENTATION; extend claim before any product delta.",
-  "strategy": "REUSE_EXISTING > PATCH > ADAPT"
+  "gap_proof": {
+    "run_id": 34903611691,
+    "job_id": 104175064051,
+    "result": "failure_expected_gap_proof",
+    "observed": [
+      "derived snapshot dropped master_input:original",
+      "mutated master_input:original was accepted"
+    ]
+  },
+  "product_delta_gate": "OPEN: VERIFY_RESEARCH proved MISSING_MASTER_INPUT_IMMUTABILITY_GATE with real CI.",
+  "strategy": "PATCH existing local-first storage; no new state engine"
 }
