@@ -1,6 +1,7 @@
 {
   "schema": "yaiwes.frontend.download-extract-queue.v1",
   "node": "GAP-10-STEERING-INTERPROCESS-OSS",
+  "trigger_nonce": "manual-retrigger-1",
   "queue": [
     {
       "id": "gap10-01-temporal-python-sdk",
