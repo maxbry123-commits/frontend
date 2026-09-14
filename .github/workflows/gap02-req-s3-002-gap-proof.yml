@@ -19,6 +19,7 @@ jobs:
           sparse-checkout: |
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/storage/local_first.py
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_req_s3_002_master_input.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_storage_local_first.py
           sparse-checkout-cone-mode: false
           fetch-depth: 1
       - uses: actions/setup-python@v5
@@ -30,3 +31,9 @@ jobs:
           set -euo pipefail
           cd 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
           PYTHONPATH=src python -m unittest -v tests.test_req_s3_002_master_input
+      - name: Local-first regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
+          PYTHONPATH=src python -m unittest -v tests.test_storage_local_first
