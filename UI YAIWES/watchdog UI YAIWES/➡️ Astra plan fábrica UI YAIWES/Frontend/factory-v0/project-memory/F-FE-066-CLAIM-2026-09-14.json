@@ -4,32 +4,68 @@
   "node_id": "F-FE-066",
   "segment_id": "SEG-01-SHELL",
   "lane": "frontend",
-  "state": "CLAIMED",
+  "state": "VERIFIED_CLOSED",
+  "report_state": "PASS_ISOLATED_RUNTIME_NOT_WIRED_TO_CANDIDATE",
   "owner": "GROK 1",
   "agent": "GROK",
   "chat_id": "GROK-1-FACTORY-FRONTEND",
-  "fresh_main_sha": "decdf706ae198846a0eaa132b80e0edc5b13750b",
+  "fresh_main_sha_at_claim": "decdf706ae198846a0eaa132b80e0edc5b13750b",
+  "claim_commit": "5a6c5e108064413b89f0ea47a1034579023d5b66",
   "claimed_at": "2026-09-14T09:29:30Z",
+  "reported_at": "2026-09-14T09:42:00Z",
+  "fresh_main_sha_at_report": "bcf7b46a82979454bee406b545c770b72c3de715",
   "write_scope": [
     "Frontend/factory-v0/src/ui/workspace-shell-v2.js",
     "Frontend/factory-v0/workspace-shell-v2.css",
     "Frontend/factory-v0/tests/e2e/*shell-v2*",
     "Frontend/factory-v0/project-memory/*F-FE-066*"
   ],
-  "frozen": [
-    "Frontend/factory-v0/index-v19.html",
-    "Frontend/factory-v0/index-v192.html",
-    "Frontend/factory-v0/src/ui/workspace-shell-v1.js",
-    "Frontend/factory-v0/workspace-shell-v1.css"
-  ],
-  "integrator_only": [
-    "Frontend/factory-v0/index-v193.html",
-    "Frontend/factory-v0/index-v193-preview.html",
-    "Frontend/factory-v0/src/bootstrap/candidate-v193.js"
-  ],
   "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
-  "verified_gap_hypothesis": "v1 resize listener resets both drawers on every viewport change; no mount API/version evidence; no Escape/backdrop close; producer cannot wire candidate",
-  "strategy": "REUSE_EXISTING then PATCH into versioned v2; preserve v1",
-  "acceptance": "canvas-first desktop/mobile drawers with previous v1 preserved",
-  "release": false
+  "verified_gap": "v1 resize listener calls syncMobileDefaults on every viewport change and resets both drawers; v1 has no mount API/version evidence; no Escape/backdrop close",
+  "fix": "versioned workspace-shell-v2 reuses v1 DOM contract; matchMedia change applies defaults only on desktop/mobile crossing; remembers per-mode drawer state; Escape+backdrop close on mobile; refuses to steal a live v1 mount",
+  "strategy": "REUSE_EXISTING then PATCH into v2; v1 files untouched",
+  "paths": [
+    "Frontend/factory-v0/src/ui/workspace-shell-v2.js",
+    "Frontend/factory-v0/workspace-shell-v2.css",
+    "Frontend/factory-v0/tests/e2e/shell-v2.test.mjs",
+    "Frontend/factory-v0/tests/e2e/shell-v2.spec.mjs",
+    "Frontend/factory-v0/tests/e2e/shell-v2-harness.html"
+  ],
+  "commits": [
+    "5a6c5e108064413b89f0ea47a1034579023d5b66",
+    "b28d6d412f3c68214b6a9818fdee220bfebd2a6c"
+  ],
+  "blobs": {
+    "workspace_shell_v2_js": "bf5e7086f96de125703e891ba998fc798040aa8d",
+    "workspace_shell_v2_css": "198fee7098d027fb334bb740fac7ce0320cc0f25",
+    "shell_v2_node_test": "0e7847eb6a844670a7d61acdc48f697994e67084",
+    "shell_v2_playwright_spec": "338b0b131b6562f1cd33a364b4c63b2eee3ddbbf",
+    "shell_v2_harness": "6870ad6900f58c6f7fcc03cd50fab6ff7695f480",
+    "workspace_shell_v1_js_preserved": "355d0cf652e0e3e53c7b0049b22050dee997af66",
+    "workspace_shell_v1_css_preserved": "1ddfed85066c31f94b3d5067e98d07b75567d47e",
+    "candidate_v193_untouched": "73deb4432ddb3b40519984a6d85925e9c6cd21a2"
+  },
+  "test": "node tests/e2e/shell-v2.test.mjs => PASS; playwright tests/e2e/shell-v2.spec.mjs => 4 passed / 4 skipped",
+  "run_id": 34829104348,
+  "job_id": 103927963170,
+  "workflow": "Factory F-FE-066 SEG-01-SHELL v2",
+  "conclusion": "success",
+  "log": "https://github.com/maxbry123-commits/frontend/actions/runs/34829104348/job/103927963170",
+  "readback": "GitHub main blob readback confirmed for v2 js/css/tests/harness and preserved v1",
+  "gates": {
+    "SOURCE_PRESENT": true,
+    "IMPLEMENTED": true,
+    "WIRED_ISOLATED_HARNESS": true,
+    "WIRED_CANONICAL_CANDIDATE": false,
+    "RUNTIME_TEST_PASS": true,
+    "VERIFIED_CLOSED_PRODUCT": false
+  },
+  "artifact_warning": "upload-artifact reported no playwright-report/test-results files; terminal run/job/log are the authoritative evidence",
+  "remaining_gaps": [
+    "SEG-11 integrator must switch candidate-v193 from ../ui/workspace-shell-v1.js to ../ui/workspace-shell-v2.js and load workspace-shell-v2.css",
+    "isolated PASS is not live Hugging Face promotion",
+    "F-UI-063 remains the sole FRONTEND_100 gate"
+  ],
+  "release": true,
+  "next_free_node": "F-FE-069 SEG-05-CONTROLS if still FREE; F-FE-067 and F-FE-068 already claimed"
 }
