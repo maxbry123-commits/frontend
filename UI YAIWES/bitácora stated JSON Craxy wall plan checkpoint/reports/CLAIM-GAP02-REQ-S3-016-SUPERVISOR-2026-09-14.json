@@ -3,16 +3,36 @@
   "contract": "tel.workflow/v3",
   "parent_node": "GAP-02-N35-S3-REMAINDER",
   "requirement_id": "REQ-S3-016",
-  "owner": "SUPERVISOR_CHAT",
-  "state": "CLAIMED",
+  "owner": null,
+  "state": "VERIFIED_CLOSED",
   "fresh_base_main_sha": "255802b2bac2f292dee86325089e0111af742c92",
-  "write_scope": [
-    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-016.json",
-    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-016.ci.json",
-    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_req_s3_016.py",
-    ".github/workflows/yaiwes-n35-req-s3-016-focused-20260914.yml",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/CLAIM-GAP02-REQ-S3-016-SUPERVISOR-2026-09-14.json"
-  ],
-  "strategy": "REUSE existing N27 run_continuous_loop implementation, focal regression and trusted CI. Global CI is queue-blocked with no job; StrategyDelta uses a temporary focused exact-SHA workflow at 602bf216cf7fb331f2747638876dc7093b490db2, then removes it after terminal evidence. No runtime rewrite.",
-  "acceptance": "RequirementTrace exact source/code/test/evidence/revision + trusted CI + focused audit_five_pass TRACEABILITY_PASS + exact-SHA CI/readback."
+  "strategy": "REUSE existing N27 run_continuous_loop implementation/test/trusted CI; persist trace/evidence; verify via focused exact-SHA CI after global workflow queue had no job.",
+  "artifacts": {
+    "trace_commit": "6e1791eca2682310e9e059072a4b21d99a9ba8b7",
+    "trace_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-016.json",
+    "evidence_commit": "670ea2c87e8e2d0f48863b2a84a9986111e4bc7d",
+    "evidence_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-016.ci.json",
+    "focused_test_commit": "602bf216cf7fb331f2747638876dc7093b490db2",
+    "focused_test_path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_req_s3_016.py"
+  },
+  "canonical_binding": {
+    "source_symbol": "§16 CONTINUOUS EXECUTION LOOP",
+    "implementation": "runtime/src/integration/continuous_loop.py::run_continuous_loop",
+    "implementation_sha256": "d76689eda6c63ee1be2aca016cdf95a17fbf14967c4da85450eee29cfd33a5fe",
+    "test": "runtime/tests/test_integration_continuous_loop.py::ContinuousLoopTests.test_gap_is_reinjected_into_same_stage_then_loop_advances",
+    "test_sha256": "dede3f13fce60ed2509007ad82a6158ebe09175f192593eea709f8f44ca107fb",
+    "trusted_ci": "34745090975/103691474425",
+    "trusted_revision": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc"
+  },
+  "verification": {
+    "focused_run_id": 34861851397,
+    "focused_job_id": 104035820593,
+    "focused_exact_sha": "602bf216cf7fb331f2747638876dc7093b490db2",
+    "n27_regression": "SUCCESS",
+    "audit_five_pass": "TRACEABILITY_PASS",
+    "exact_trace_readback": "SUCCESS",
+    "job_conclusion": "success"
+  },
+  "acceptance": "PASS",
+  "next": "Checkpoint GAP-02 count, remove consumed focused workflow, choose next unclaimed S3 requirement."
 }
