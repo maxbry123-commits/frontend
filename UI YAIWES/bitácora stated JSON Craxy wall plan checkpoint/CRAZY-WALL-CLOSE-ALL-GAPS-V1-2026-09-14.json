@@ -7,12 +7,12 @@
   "created_from_evidence": {
     "denominator": 167,
     "denominator_source": "reports/N34-FOUR-SOURCE-DENOMINATOR-SOL-GPT-16-2026-09-13.json",
-    "certified_now": 6,
-    "missing_now": 161,
-    "certified_ids": ["REQ-S3-047", "REQ-S3-050", "REQ-S3-053", "REQ-S3-054", "REQ-S3-055", "REQ-S3-057"],
-    "stalled_claim": "REQ-S3-048",
-    "stalled_claim_commit": "d5f40585b3394aed7ff58f0333451b7498373e54",
-    "stalled_trace_readback": "404_NOT_FOUND",
+    "certified_now": 7,
+    "missing_now": 160,
+    "certified_ids": ["REQ-S3-047", "REQ-S3-048", "REQ-S3-050", "REQ-S3-053", "REQ-S3-054", "REQ-S3-055", "REQ-S3-057"],
+    "resolved_stalled_claim": "REQ-S3-048",
+    "resolved_trace_blob": "2f78f0e4879d3f390ad6384af674973e5825c4da",
+    "resolved_evidence_blob": "8cfd896597062e2aa51234eb1e58e8fdea42cebb",
     "backend_e2e": "N17 VERIFIED_CLOSED; browser/deployed/platform-real explicitly outside proof",
     "continuous_loop": "N27 VERIFIED_CLOSED",
     "guest_installer": "N32 VERIFIED_CLOSED; real OS install explicitly outside proof"
@@ -31,26 +31,38 @@
   "nodes": [
     {
       "id": "GAP-01-N35-S3-048",
-      "state": "GAP_RESOLVABLE",
+      "state": "VERIFIED_CLOSED",
       "priority": 1,
-      "owner": null,
-      "gap": "REQ-S3-048 was claimed but no production trace exists in main.",
+      "owner": "ChatGPT-Sol-supervisor",
+      "gap": "REQ-S3-048 was claimed but no production trace existed in main.",
       "scope": "REQ-S3-048 only; relevant existing implementation/test + runtime/requirement_traces/REQ-S3-048.json + matching CI evidence",
       "steps": [
-        "VERIFY_RESEARCH: read literal S3 §48 and locate exact existing implementation and named regression; if missing, identify the smallest real implementation delta.",
-        "EXECUTE_DELTA: reuse/patch only the exact context-read gate and create one RequirementTrace + yaiwes.ci-evidence.v1 bound to exact hashes/revision.",
-        "TEST_REPORT: focused regression + five-pass single-requirement + trusted CI/readback; close only TRACEABILITY_PASS."
+        "VERIFY_RESEARCH PASS: literal S3 §48 maps to existing memory.fabric.build_context_pack and focused context-fabric tests.",
+        "EXECUTE_DELTA PASS: no product rewrite; persisted RequirementTrace and yaiwes.ci-evidence.v1 with exact hashes/revision.",
+        "TEST_REPORT PASS: context regression 10/10 + single-requirement five-pass TRACEABILITY_PASS + trusted CI/readback."
       ],
-      "close": "REQ-S3-048 has source/code/test/evidence/revision binding and trusted CI; five-pass=TRACEABILITY_PASS."
+      "evidence": {
+        "source_sha256": "aa9ea84565a9dfd250cc57ba465a7131a032b1e96c404d9dd21a349c8185c58c",
+        "implementation_sha256": "dc781e7afd5e19b39d53d111d51796c61dd2d4540c0241aba3f65920cbb07da2",
+        "test_sha256": "52a528eb9c7b727648787b9ff98286b92a344d61caa1bc8477b2f1cb941ee7c6",
+        "trace_blob": "2f78f0e4879d3f390ad6384af674973e5825c4da",
+        "evidence_blob": "8cfd896597062e2aa51234eb1e58e8fdea42cebb",
+        "evidence_run_id": 34825919154,
+        "evidence_job_id": 103917937346,
+        "final_microtest_run_id": 34826290290,
+        "final_microtest_job_id": 103919120002,
+        "test_commit": "08515aaa2dc01ccc7aa379d651fa036cdc870f52"
+      },
+      "close": "PASS: REQ-S3-048 has source/code/test/evidence/revision binding and trusted CI; five-pass=TRACEABILITY_PASS."
     },
     {
       "id": "GAP-02-N35-S3-REMAINDER",
-      "state": "BLOCKED_AFTER_GAP-01",
+      "state": "GAP_RESOLVABLE",
       "priority": 2,
       "owner": null,
       "gap": "Remaining S3 requirement certifications.",
-      "selector": "REQ-S3-001..065 excluding 047,048,050,053,054,055,057,062 after GAP-01 closes",
-      "remaining_count_after_gap01": 57,
+      "selector": "REQ-S3-001..065 excluding 047,048,050,053,054,055,057,062",
+      "remaining_count": 57,
       "steps": [
         "VERIFY_RESEARCH each requirement literally and consume existing code/tests before patching.",
         "EXECUTE_DELTA one trace at a time; if implementation/test missing, repair minimum real gap before trace.",
@@ -158,7 +170,7 @@
       "close": "No open GAP; all required runtime/UI/platform/evidence gates satisfied; Final Judge records VERIFIED_CLOSED on exact published SHA."
     }
   ],
-  "execution_order": "GAP-01; in parallel GAP-03/GAP-04/GAP-05 where write scopes do not collide; GAP-02 follows GAP-01; then GAP-06/GAP-07; GAP-08; GAP-09.",
+  "execution_order": "GAP-01 CLOSED; GAP-02 now eligible; in parallel GAP-03/GAP-04/GAP-05 where write scopes do not collide; then GAP-06/GAP-07; GAP-08; GAP-09.",
   "forbidden": [
     "New unrelated features/components/downloads",
     "Second auditor/governance/runtime/state engine",
