@@ -1,0 +1,20 @@
+{
+  "schema": "yaiwes.factory.node-claim/v1",
+  "node_id": "B-MK-006",
+  "owner": "ASTRA-GPT-5.6-SOL",
+  "state": "IN_PROGRESS",
+  "base_sha": "176e7d5dfe08fd51ef66e0ba471ec1f47de54fe6",
+  "write_scope": [
+    "Frontend/factory-v0/src/microkernel/promotion/**",
+    "Frontend/factory-v0/tests/microkernel/**"
+  ],
+  "strategy": "GENERATE_MINIMAL_DETERMINISTIC_GATE",
+  "depends_on": ["B-MK-001","B-MK-002","B-MK-003","B-MK-004","B-MK-005"],
+  "acceptance": [
+    "96/4 deterministic LLM boundary",
+    "isolated and factory integration tests required",
+    "candidate/test SHA binding required",
+    "independent reviewer required",
+    "controller cannot self-certify UI final"
+  ]
+}
