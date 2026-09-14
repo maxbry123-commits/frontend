@@ -1,0 +1,18 @@
+{
+  "schema": "yaiwes.factory.node-report/v1",
+  "contract": "tel.workflow/v3",
+  "node_id": "F-SEG-SHELL-MOBILE-067",
+  "owner": "GPT-5.6-SOL",
+  "chat_id": "CURRENT_CHAT_FACTORY_SEGMENTATION",
+  "state": "RELEASED_STALE_LOCK_COLLISION",
+  "released_at": "2026-09-14T04:37:00-05:00",
+  "reason": "SEG-01 workspace shell V2 was already claimed by another Factory worker before this chat attempted its first product write.",
+  "collision_evidence": {
+    "other_claim_commit": "8b948fa7d680dd4c5a9c2c11cb04d639d3cb97ba",
+    "other_delta_commit": "5a4e925cebc6f1c0fd45371b7165e3083c1be4fb",
+    "existing_path": "Frontend/factory-v0/workspace-shell-v2.css",
+    "existing_blob": "59b375ebc700ec7e42bbf3bf7259334a4f61d849"
+  },
+  "writes_to_segment": [],
+  "policy": "Do not overwrite or patch the other worker's SEG-01 paths. Re-read fresh and select an independent node."
+}
