@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { mkdirSync, writeFileSync } from 'node:fs';
 
-const URL = '/index-v192.html';
+const URL = '/index-v193.html';
 const OUT = 'test-results/f-ui-051';
 mkdirSync(OUT, { recursive: true });
 
@@ -11,6 +11,7 @@ async function boot(page) {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(URL, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('#canvas')).toBeVisible();
+  await page.waitForFunction(() => Boolean(globalThis.__YAIWES_FACTORY_CANDIDATE_V193__), null, { timeout: 10_000 });
 }
 
 async function controlInventory(page, step) {
@@ -41,12 +42,20 @@ test('discover exhaustive visible desktop controls for all Factory steps', async
   test.skip(testInfo.project.name !== 'chromium-desktop', 'desktop matrix discovery');
   await boot(page);
   const inventory = [];
-  const steps = await page.locator('#steps [data-step]').count();
+  const stepButtons = page.locator('#steps [data-step]');
+  const steps = await stepButtons.count();
   expect(steps).toBeGreaterThanOrEqual(5);
+  const stepIds = [];
   for (let i = 0; i < steps; i += 1) {
-    await page.locator(`#steps [data-step="${i}"]`).click();
+    const value = await stepButtons.nth(i).getAttribute('data-step');
+    expect(value, `step button ${i} must expose data-step`).toBeTruthy();
+    stepIds.push(value);
+  }
+  for (let i = 0; i < stepIds.length; i += 1) {
+    const stepId = stepIds[i];
+    await page.locator(`#steps [data-step="${stepId}"]`).click();
     await expect(page.locator('#context-count')).toContainText(`${i + 1}/`);
-    inventory.push(...await controlInventory(page, i));
+    inventory.push(...await controlInventory(page, stepId));
     await page.screenshot({ path: `${OUT}/step-${i + 1}-controls.png`, fullPage: true });
   }
   const unique = [];
@@ -72,10 +81,10 @@ test('baseline controls produce canonical desktop effects', async ({ page }, tes
     await expect(button).toHaveClass(/active/);
   }
   for (const bp of ['desktop','tablet','mobile']) {
-    await page.locator(`[data-breakpoint="${bp}"]`).click();
+    await page.locator(`.canvas-controls button[data-breakpoint="${bp}"]`).click();
     await expect(page.locator('#canvas')).toHaveAttribute('data-breakpoint', bp);
   }
-  await page.locator('[data-breakpoint="desktop"]').click();
+  await page.locator('.canvas-controls button[data-breakpoint="desktop"]').click();
   await page.locator('#zoom-reset').click();
   await expect(page.locator('#zoom-label')).toHaveText('100%');
   await page.locator('#zoom-in').click();
