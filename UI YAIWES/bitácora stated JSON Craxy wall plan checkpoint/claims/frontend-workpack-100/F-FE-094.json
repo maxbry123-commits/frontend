@@ -1,0 +1,33 @@
+{
+  "schema": "yaiwes.factory.frontend.node-claim.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-FE-094-STEP-1",
+  "segment_id": "SEG-03-EDITOR-CORE",
+  "lane": "GROK-A",
+  "state": "CLAIMED",
+  "owner": "GROK 3",
+  "agent": "GROK",
+  "chat_id": "GROK-3-UI-YAIWES-FACTORY",
+  "fresh_main_sha": "0beb15d03aa96e20ccafbb8d5ddbc121cc3b6ae3",
+  "claimed_at": "2026-09-14T13:36:40Z",
+  "type": "CONTROL_QA",
+  "selector": "[data-step='1']",
+  "candidate": "index-v192.html",
+  "depends_on": ["F-FE-093-NEW-COMPONENT"],
+  "dependency_status": "SATISFIED F-FE-093 PASS_RELEASED GROK 3 run 34846959649",
+  "write_scope": [
+    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-094-STEP-1.spec.mjs",
+    "Frontend/factory-v0/project-memory/F-FE-094-STEP-1-*",
+    ".github/workflows/factory-F-FE-094-STEP-1.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-094.json"
+  ],
+  "skipped": {
+    "F-FE-093": "PASS_RELEASED GROK 3 not re-claimed",
+    "F-FE-069": "CLAIMED GPT-5.6-SOL",
+    "F-FE-073": "CLAIM file still CLAIMED GROK 1",
+    "F-FE-076": "SKIP while 073 claim not PASS_RELEASED"
+  },
+  "product_patched": false,
+  "release": false
+}
