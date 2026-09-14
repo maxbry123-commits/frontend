@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 649335,
+  "bundle_sha256": "52356d6e5f14cf940c654ddf39b43d776edd265d814fefbb3f4246af371448dd",
+  "extracted_tree": {
+    "bytes": 3151539,
+    "files": 128,
+    "sha256": "987f1496296f5dc4ed45208d0f977684277d8a3a50c96bc88f3df1f41a7a839a"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 649335,
+      "name": "DBOS-Python.bundle.zip.part-0001",
+      "sha256": "52356d6e5f14cf940c654ddf39b43d776edd265d814fefbb3f4246af371448dd"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "DBOS-Python",
+  "source_bytes": 3151539,
+  "source_commit": "83805fd84494c85ea09105443884a2786152d921",
+  "source_files": 128,
+  "source_ref": "83805fd84494c85ea09105443884a2786152d921",
+  "source_repo": "dbos-inc/dbos-transact-py",
+  "source_tree": {
+    "bytes": 3151539,
+    "files": 128,
+    "sha256": "987f1496296f5dc4ed45208d0f977684277d8a3a50c96bc88f3df1f41a7a839a"
+  }
+}
