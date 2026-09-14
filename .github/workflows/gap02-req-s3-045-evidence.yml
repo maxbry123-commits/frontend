@@ -17,7 +17,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           sparse-checkout: |
-            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent/boundary.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/memory
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_memory_context_fabric.py
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md
           sparse-checkout-cone-mode: false
