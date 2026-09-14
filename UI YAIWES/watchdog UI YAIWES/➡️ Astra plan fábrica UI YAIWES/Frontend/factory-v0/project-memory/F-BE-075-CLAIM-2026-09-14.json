@@ -1,0 +1,17 @@
+{
+  "schema":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "node_id":"F-BE-075",
+  "owner":"SOL GPT <FACTORY-BACKEND>",
+  "chat_id":"current-factory-chat",
+  "fresh_main_sha":"ecb3159935bd73086d90619293c1f77f104acd61",
+  "claimed_at":"2026-09-14T08:59:00Z",
+  "state":"CLAIMED",
+  "depends_on":["F-BE-074"],
+  "write_scope":[
+    "Frontend/factory-v0/src/acquisition/provenance-v1/**",
+    "Frontend/factory-v0/tests/*provenance-v1*",
+    "Frontend/factory-v0/project-memory/*F-BE-075*"
+  ],
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"]
+}
