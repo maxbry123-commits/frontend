@@ -1,0 +1,42 @@
+name: Factory V1.9.3 segmented architecture gate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/segments/**'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/bootstrap/**'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v193-preview.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/segment-architecture.test.mjs'
+      - '.github/workflows/factory-segmented-v193-static.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  segment-architecture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run segmented architecture test
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0'
+          node "$ROOT/tests/segment-architecture.test.mjs"
+      - name: Readback exact candidate files
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0'
+          git rev-parse HEAD
+          git hash-object "$ROOT/index-v19.html"
+          git hash-object "$ROOT/index-v192.html"
+          git hash-object "$ROOT/index-v193-preview.html"
+          git hash-object "$ROOT/src/segments/segment-registry-v1.js"
+          git hash-object "$ROOT/src/bootstrap/candidate-v193.js"
