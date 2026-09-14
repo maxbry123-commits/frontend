@@ -4,7 +4,9 @@
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_NOT_CLOSED",
   "created_at": "2026-09-14T08:46:00Z",
+  "updated_at": "2026-09-14T08:49:00Z",
   "fresh_main_sha_at_plan": "1345f12111e802e240d860396d6fffd586710045",
+  "fresh_main_sha_at_last_report": "f06e99f78b5d33a2bf1eef914c6c29ad37bb807e",
   "authority": "code+runtime+tests+Action/log > this queue > architecture/handoff > inference",
   "parents": [
     "FACTORY-CRAZY-WALL-DYNAMIC-V2-2026-09-12.json",
@@ -36,11 +38,13 @@
       "id": "F-SEG-064",
       "lane": "frontend-governance",
       "title": "Segmentar ownership frontend y bloquear colisiones",
-      "state": "EXECUTING",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS",
       "owner": "SOL GPT <FACTORY-SEGMENTATION>",
       "chat_id": "current-factory-chat",
       "fresh_main_sha": "1345f12111e802e240d860396d6fffd586710045",
       "claimed_at": "2026-09-14T08:46:00Z",
+      "reported_at": "2026-09-14T08:49:00Z",
       "write_scope": [
         "Frontend/factory-v0/src/segments/**",
         "Frontend/factory-v0/tests/segment-registry-v1.test.mjs",
@@ -52,13 +56,35 @@
         "EXECUTE_DELTA: publish deterministic segment registry + frozen historical entrypoints + disjoint ownership",
         "TEST_REPORT: run registry claim/collision tests and read back exact blobs"
       ],
-      "acceptance": "historical entrypoints frozen; every active frontend lane has explicit segment/write_scope; cross-segment write rejected; test PASS"
+      "paths": [
+        "Frontend/factory-v0/src/segments/segment-registry-v1.js",
+        "Frontend/factory-v0/tests/segment-registry-v1.test.mjs",
+        "readme arquitectura UI YAIWES/ARQUITECTURA-FACTORY-SEGMENTADA-SWARM-V1-2026-09-14.md",
+        "bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-FE-BE-V1-2026-09-14.json"
+      ],
+      "commits": [
+        "41ace2d97672c5e1e3a1f9b3bd15e3ef5c6a6ab1",
+        "6b927355133efca5c1ae2955599723608f7a726c",
+        "1345f12111e802e240d860396d6fffd586710045",
+        "f06e99f78b5d33a2bf1eef914c6c29ad37bb807e"
+      ],
+      "blob_sha": {
+        "segment_registry": "3b6c69b296f8d4e8ae2d33c77acfdff409376139",
+        "segment_test": "14051e8e72d014045244fd23ffd9d1cc81745513"
+      },
+      "test": "node tests/segment-registry-v1.test.mjs => segment-registry-v1: PASS (Node v22.16.0)",
+      "run_id": null,
+      "job_id": null,
+      "readback": "GitHub main blob readback confirmed for registry and test",
+      "remaining_gaps": ["canonical product entrypoint still divergent until F-INT-065"],
+      "acceptance": "historical entrypoints frozen; every active frontend lane has explicit segment/write_scope; cross-segment write rejected; test PASS",
+      "next_free_node": "F-INT-065"
     },
     {
       "id": "F-INT-065",
       "lane": "frontend-integration",
       "title": "Crear candidato canónico nuevo sin modificar v19/v192",
-      "state": "BLOCKED_AFTER_F-SEG-064",
+      "state": "FREE",
       "depends_on": ["F-SEG-064"],
       "write_scope": ["Frontend/factory-v0/index-v193.html", "Frontend/factory-v0/src/bootstrap/candidate-v193.js", "Frontend/factory-v0/tests/e2e/*canonical-v193*", "Frontend/factory-v0/project-memory/*F-INT-065*"],
       "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
