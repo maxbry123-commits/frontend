@@ -1,0 +1,15 @@
+{
+  "schema": "yaiwes.safe-copy-provenance/v1",
+  "source_repo": "maxbry123-commits/agentes",
+  "source_commit": "30ef4c36f958be96e7e73d98b9ed16f5767c7a3b",
+  "source_component_path": "📂coda workflow persistencias/🏈 YAIWES 23",
+  "copied_scope": [
+    "README.md",
+    "code/yaiwes_internal/persistence_runtime.py"
+  ],
+  "source_git_blob_sha": {
+    "README.md": "78a8bc2fe702e1b3be19c1c2b99beca5f5bd545c",
+    "code/yaiwes_internal/persistence_runtime.py": "e228bc32bbdd0597a8ee067a073027fc118413b5"
+  },
+  "safety_scope": "benign transformed persistence runtime only; quarantined upstream code excluded"
+}
