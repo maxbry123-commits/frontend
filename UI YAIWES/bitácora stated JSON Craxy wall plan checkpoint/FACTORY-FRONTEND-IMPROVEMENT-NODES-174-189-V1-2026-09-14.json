@@ -1,0 +1,64 @@
+{
+  "schema": "yaiwes.factory.frontend.improvement-nodes.v1",
+  "range": "F-FE-174..189",
+  "count": 16,
+  "family": "FRONTEND_IMPROVEMENT",
+  "steps": ["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "integration_rule": "Producer creates versioned segment and releases only after focused PASS; SEG-11 alone composes candidates.",
+  "write_scope_suffix": [
+    "Frontend/factory-v0/tests/e2e/improvements/<node>.spec.mjs",
+    "Frontend/factory-v0/project-memory/<node>-*",
+    ".github/workflows/factory-<node>.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/<node-number>.json"
+  ],
+  "nodes": [
+    {
+      "id":"F-FE-174-SHELL-FOCUS-INERT","segment":"SEG-01-SHELL","files":["Frontend/factory-v0/src/ui/workspace-shell-v6.js","Frontend/factory-v0/workspace-shell-v6.css"],"depends_on":["F-FE-071-SHELL-PERSISTED-DOCKS"],"acceptance":"Restore focus on drawer close; inert/aria-hidden correct on mobile; no trapped focus."
+    },
+    {
+      "id":"F-FE-175-SHELL-REDUCED-MOTION","segment":"SEG-01-SHELL","files":["Frontend/factory-v0/src/ui/workspace-shell-v7.js","Frontend/factory-v0/workspace-shell-v7.css"],"depends_on":["F-FE-174-SHELL-FOCUS-INERT"],"acceptance":"Honor prefers-reduced-motion and avoid layout-jank during drawer transitions."
+    },
+    {
+      "id":"F-FE-176-BROWSER-VIRTUAL-LARGE","segment":"SEG-02-BROWSER","files":["Frontend/factory-v0/src/ui/component-browser-v6.js"],"depends_on":["F-FE-078-BROWSER-COLLECTIONS"],"acceptance":"Search/filter/preview remain responsive with 500+ catalog entries without changing canonical component state."
+    },
+    {
+      "id":"F-FE-177-BROWSER-KEYBOARD-A11Y","segment":"SEG-02-BROWSER","files":["Frontend/factory-v0/src/ui/component-browser-v7.js"],"depends_on":["F-FE-069-COMMAND-PALETTE","F-FE-078-BROWSER-COLLECTIONS"],"acceptance":"Keyboard navigation, visible focus, preview/insert/favorite and Escape work without dead ends."
+    },
+    {
+      "id":"F-FE-178-TOUCH-PINCH-ARBITRATION","segment":"SEG-04-TOUCH","files":["Frontend/factory-v0/src/touch-dnd-v196.js"],"depends_on":["F-FE-073-TOUCH-DRAG-INTENT"],"acceptance":"Disambiguate pinch, scroll, drag and resize without accidental movement."
+    },
+    {
+      "id":"F-FE-179-TOUCH-CANCEL-ROBUSTNESS","segment":"SEG-04-TOUCH","files":["Frontend/factory-v0/src/touch-dnd-v197.js"],"depends_on":["F-FE-178-TOUCH-PINCH-ARBITRATION"],"acceptance":"pointercancel, touchcancel and orientation change always release interaction sessions without phantom drag."
+    },
+    {
+      "id":"F-FE-180-CONTROLS-SNAP-GUIDES","segment":"SEG-05-CONTROLS","files":["Frontend/factory-v0/src/layer-reorder-v4.js"],"depends_on":["F-FE-074-LAYER-LOCK-VISIBILITY","F-FE-076-CANVAS-MULTISELECT"],"acceptance":"Deterministic alignment/snap guide metadata; movement remains editable and undoable."
+    },
+    {
+      "id":"F-FE-181-CONTEXT-MENU-A11Y","segment":"SEG-05-CONTROLS","files":["Frontend/factory-v0/src/layer-reorder-v5.js"],"depends_on":["F-FE-180-CONTROLS-SNAP-GUIDES"],"acceptance":"Context actions have focus order, keyboard activation, Escape and deterministic focus restoration."
+    },
+    {
+      "id":"F-FE-182-IO-DIRTY-RECOVERY","segment":"SEG-06-IO","files":["Frontend/factory-v0/src/version-store-v3.js"],"depends_on":["F-FE-081-VERSION-AUTOSAVE-CHECKPOINTS"],"acceptance":"Visible dirty/saved/recovered state and reload recovery without silent data loss."
+    },
+    {
+      "id":"F-FE-183-IO-RESTORE-CONFIRM","segment":"SEG-06-IO","files":["Frontend/factory-v0/src/json-roundtrip-v4.js"],"depends_on":["F-FE-082-JSON-ROUNDTRIP-DIFF"],"acceptance":"Show structured diff before restore and prove lossless roundtrip after confirmation."
+    },
+    {
+      "id":"F-FE-184-IMPORT-PROVENANCE-BADGES","segment":"SEG-07-IMPORT","files":["Frontend/factory-v0/src/file-import-controller-v4.js"],"depends_on":["F-FE-080-IMPORT-PREVIEW-VALIDATION"],"acceptance":"Imported items expose source, type, size and provenance while remaining editable."
+    },
+    {
+      "id":"F-FE-185-IMPORT-FAIL-CLOSED-LIMITS","segment":"SEG-07-IMPORT","files":["Frontend/factory-v0/src/file-import-v4.js"],"depends_on":["F-FE-184-IMPORT-PROVENANCE-BADGES"],"acceptance":"Unsupported, oversized or malformed import fails closed with actionable reason and no state corruption."
+    },
+    {
+      "id":"F-FE-186-AI-JOB-STATUS-CANCEL","segment":"SEG-08-AI-ROUTER","files":["Frontend/factory-v0/src/remote-control-v3.js"],"depends_on":["F-FE-086-REMOTE-CONNECTION-UX"],"acceptance":"Queued/running/success/failure/cancel states visible and cancellable; no inline secret exposure."
+    },
+    {
+      "id":"F-FE-187-SKILL-PERMISSION-STATUS","segment":"SEG-08-AI-ROUTER","files":["Frontend/factory-v0/src/skill-activation-v3.js"],"depends_on":["F-FE-085-SKILL-ACTIVATION-UX"],"acceptance":"Every skill shows source, activation/permission state and deterministic disabled reason."
+    },
+    {
+      "id":"F-FE-188-HF-LIVE-LOG-A11Y","segment":"SEG-09-HF-JOBS","files":["Frontend/factory-v0/src/hf-jobs-panel-v3.js"],"depends_on":["F-FE-087-HF-JOBS-UX"],"acceptance":"Bounded accessible live logs, error summary and refresh/cancel work without exposing tokens."
+    },
+    {
+      "id":"F-FE-189-FRONTEND-PERF-ERROR-BUDGET","segment":"QA_ONLY","files":[],"depends_on":["LATEST_SEG11_CANDIDATE"],"acceptance":"Measure startup/interactivity, critical console errors, failed requests and large-layout regressions on one exact candidate; report only, no product patch."
+    }
+  ]
+}
