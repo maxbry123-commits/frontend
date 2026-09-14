@@ -7,20 +7,27 @@
   "owner": "GROK 1 UI YAIWES",
   "chat_id": "GROK-1-UI-YAIWES-CRAZY-WALL",
   "state": "IMPLEMENTED_UNIT_TEST_PASS",
-  "report_state": "NOT_WIRED_NOT_BROWSER_NOT_VERIFIED_CLOSED",
-  "release": true,
+  "report_state": "BROWSER_GATE_PENDING",
+  "release": false,
   "claimed_at": "2026-09-14T09:35:00Z",
   "claimed_commit": "8b948fa7d680dd4c5a9c2c11cb04d639d3cb97ba",
   "implemented_commit": "5a4e925cebc6f1c0fd45371b7165e3083c1be4fb",
-  "reported_at": "2026-09-14T09:38:30Z",
-  "fresh_main_sha_at_report": "59f5a96bc7c56e46e61ccb89560832a6e7b7384a",
+  "reported_at": "2026-09-14T11:25:00Z",
+  "fresh_main_sha_at_report": "5900cb38f88b3e9dceecd804c69ace35be31d391",
+  "fresh_main_sha_at_continue": "5900cb38f88b3e9dceecd804c69ace35be31d391",
   "blobs": {
-    "workspace-shell-v2.js": "ae0ce5b0254ca1f5622ec22b02df953fae02c4a3",
-    "workspace-shell-v2.css": "59b375ebc700ec7e42bbf3bf7259334a4f61d849",
-    "workspace-shell-v2.test.mjs": "44bbf5d34355d08161aaebdb6d40399a74140286"
+    "workspace-shell-v2.js": "bf5e7086f96de125703e891ba998fc798040aa8d",
+    "workspace-shell-v2.css": "198fee7098d027fb334bb740fac7ce0320cc0f25"
   },
-  "test": "node tests/workspace-shell-v2.test.mjs => PASS",
+  "test": "node tests prior PASS; browser gate pending via factory-f-fe-066-shell-v2.yml",
   "WIRED": false,
+  "BROWSER_TEST": "PENDING",
   "VERIFIED_CLOSED": false,
-  "next_free_node": "F-FE-067 SEG-02-BROWSER"
+  "next_free_node": "F-FE-067 SEG-02-BROWSER",
+  "write_scope": [
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/ui/workspace-shell-v2.js",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/workspace-shell-v2.css",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/shell-v2*"
+  ],
+  "notes": "Continue from IMPLEMENTED_UNIT_TEST_PASS. No frozen index touch. REUSE_EXISTING. Segment SEG-01-SHELL exclusive writer."
 }
