@@ -1,0 +1,79 @@
+{
+  "schema": "yaiwes.factory.frontend.grok-workpack.v2",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "domain": "FRONTEND_ONLY",
+  "created_at": "2026-09-14T05:45:00-05:00",
+  "base_main_sha": "99e21412c87f757ee1312402ec592f183228b50e",
+  "sources": {
+    "crazy_wall": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json",
+    "workpack_20": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-FRONTEND-GROK-WORKPACK-20-V1-2026-09-14.json",
+    "architecture": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-FACTORY-SEGMENTADA-V10-2026-09-14.md",
+    "segment_registry": "Frontend/factory-v0/src/segments/segment-registry-v1.js",
+    "oss_registry": "Frontend/factory-v0/src/donors/oss-registry.js",
+    "canonical_acquisition": "Frontend/factory-v0/src/microkernel/acquisition/index.js",
+    "component_inventory": "UI YAIWES/componentes open soure UI YAIWES"
+  },
+  "node_files": [
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-FRONTEND-CONTROL-NODES-090-154-V1-2026-09-14.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-FRONTEND-OSS-NODES-155-173-V1-2026-09-14.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-FRONTEND-IMPROVEMENT-NODES-174-189-V1-2026-09-14.json"
+  ],
+  "totals": {"nodes":100,"control_qa":65,"oss_frontend_adapters":19,"frontend_improvements":16},
+  "truth": {
+    "frontend_oss_registry_count": 22,
+    "donor_active": ["Frappe Builder","xyflow","Craft.js"],
+    "runtime_active_non_donor": ["Lucide"],
+    "test_active": ["Playwright"],
+    "frontend_not_donor_active_count": 19,
+    "invariant": "SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+  },
+  "coordination": {
+    "manifest_immutable_for_workers": true,
+    "claim_path_template": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-XXX.json",
+    "one_chat_one_active_node": true,
+    "one_path_one_writer": true,
+    "fresh_read_before_every_write": true,
+    "main_change": "STALE_LOCK_GAP_REBUILD_DELTA",
+    "steps": ["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+    "strategy": ["REUSE_EXISTING","PATCH","ADAPT","GENERATE","CANONICAL_MOTOR2_ONLY_IF_GAP"],
+    "producer_never_wires_candidate": true,
+    "integrator_only": "SEG-11",
+    "no_backend": true,
+    "no_second_state_engine": true,
+    "no_alternate_downloader": true,
+    "no_force_push": true,
+    "no_git_lfs": true,
+    "final_gate": "F-UI-063"
+  },
+  "claim_contract": {
+    "fields": ["node_id","chat_id","agent","state","fresh_main_sha","claimed_at","write_scope","base_blobs"],
+    "allowed_initial_states": ["FREE","READY_AFTER_LANE_PREVIOUS","READY_AFTER_DEPENDENCIES"],
+    "worker_terminal_states": ["PASS_RELEASED","GAP_RESOLVABLE"],
+    "collision": "READ_FRESH -> NO_WRITE -> RELEASE_OR_SKIP -> NEXT_VALID_NODE"
+  },
+  "lanes": {
+    "GROK-A": "F-FE-090..099",
+    "GROK-B": "F-FE-100..109",
+    "GROK-C": "F-FE-110..119",
+    "GROK-D": "F-FE-120..129",
+    "GROK-E": "F-FE-130..139",
+    "GROK-F": "F-FE-140..149",
+    "GROK-G": "F-FE-150..159",
+    "GROK-H": "F-FE-160..169",
+    "GROK-I": "F-FE-170..179",
+    "GROK-J": "F-FE-180..189"
+  },
+  "initial_claimable": [
+    "F-FE-090-MODE-MANUAL",
+    "F-FE-100-BREAKPOINT-TABLET",
+    "F-FE-110-ELEMENT-WINDOW",
+    "F-FE-120-REMOVE-SELECTED",
+    "F-FE-130-ADD-MODEL",
+    "F-FE-140-BUILD-OUTPUT-PLAN",
+    "F-FE-150-SHELL-CLOSE-LEFT",
+    "F-FE-160-OSS-MAMMOTHJS",
+    "F-FE-170-OSS-DOCKVIEW"
+  ],
+  "lane_j_note": "GROK-J starts only when the dependencies declared in F-FE-180 are satisfied; do not bypass workpack-20 dependencies."
+}
