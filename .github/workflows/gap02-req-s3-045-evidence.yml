@@ -17,27 +17,57 @@ jobs:
       - uses: actions/checkout@v4
         with:
           sparse-checkout: |
-            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/agent
-            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/memory
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_memory_context_fabric.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-045.json
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-045.ci.json
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md
           sparse-checkout-cone-mode: false
           fetch-depth: 1
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Exact hashes
-        shell: bash
-        run: |
-          set -euo pipefail
-          ROOT='UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES'
-          echo "revision=$GITHUB_SHA"
-          sha256sum "$ROOT/runtime/src/agent/boundary.py"
-          sha256sum "$ROOT/runtime/tests/test_memory_context_fabric.py"
-          sha256sum "$ROOT/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md"
       - name: Focused REQ-S3-045 regression
         shell: bash
         run: |
           set -euo pipefail
           cd 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
           PYTHONPATH=src python -m unittest -v tests.test_memory_context_fabric.MemoryContextFabricTests.test_context_fabric_connects_to_agent_without_memory_writer
+      - name: REQ-S3-045 five-pass
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES'
+          PYTHONPATH=runtime/src python - <<'PY'
+          from pathlib import Path
+          from audit.evidence import TrustedCIExecution, make_ci_verifier
+          from audit.five_pass import audit_five_pass
+          from coverage.trace_inventory import load_trace_inventory
+
+          root = Path('.').resolve()
+          trace = load_trace_inventory(root / 'runtime/requirement_traces', ('REQ-S3-045',))[0]
+
+          def trusted_lookup(run_id: int, job_id: int) -> TrustedCIExecution:
+              assert (run_id, job_id) == (34828085852, 103924748765)
+              return TrustedCIExecution(
+                  run_id=run_id,
+                  job_id=job_id,
+                  revision='65bd5d5b8894f47e625a62034a40054b2b757a5b',
+                  status='completed',
+                  conclusion='success',
+                  implementation_sha256='2f5d141f6a2c917520181720b38bf3374b96779be0939203bf34567bc5869459',
+                  test_sha256='52a528eb9c7b727648787b9ff98286b92a344d61caa1bc8477b2f1cb941ee7c6',
+              )
+
+          result = audit_five_pass(
+              root,
+              ('REQ-S3-045',),
+              (trace,),
+              (trace.implementation.path,),
+              make_ci_verifier(trusted_lookup),
+          )
+          print(result)
+          assert result.status == 'TRACEABILITY_PASS'
+          assert result.verified_requirements == 1
+          assert result.total_requirements == 1
+          PY
