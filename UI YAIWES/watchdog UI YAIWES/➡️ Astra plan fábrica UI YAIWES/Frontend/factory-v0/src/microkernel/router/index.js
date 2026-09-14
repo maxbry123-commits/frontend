@@ -29,6 +29,10 @@ function assertKnownProvider(knownProviders, capability, provider) {
   if (!known || !known.has(requested)) throw new Error(`UNKNOWN_PROVIDER:${requested}`);
 }
 
+function resolvePort(ports, transportId, capability) {
+  return ports[`${transportId}:${capability}`] || ports[capability] || ports[transportId] || null;
+}
+
 export function createMicrokernelCapabilityRouter({ routes = [], ports = {}, providerAllowlist = {} } = {}) {
   if (!Array.isArray(routes) || !routes.length) throw new TypeError('MICROKERNEL_ROUTES_REQUIRED');
   const knownProviders = providerSets(routes, providerAllowlist);
@@ -37,15 +41,20 @@ export function createMicrokernelCapabilityRouter({ routes = [], ports = {}, pro
   for (const route of routes) {
     const transportId = clean(route?.transport_id ?? route?.transportId);
     const capability = clean(route?.capability);
-    const port = ports[transportId] || ports[capability];
     if (!transportId) throw new TypeError('MICROKERNEL_TRANSPORT_ID_REQUIRED');
-    if (!port || typeof port.invoke !== 'function') throw new TypeError(`MICROKERNEL_PORT_REQUIRED:${transportId}`);
-    if (port.capability && clean(port.capability) !== capability) {
-      throw new Error(`MICROKERNEL_PORT_CAPABILITY_MISMATCH:${transportId}`);
+    const routePort = resolvePort(ports, transportId, capability);
+    if (!routePort || typeof routePort.invoke !== 'function') throw new TypeError(`MICROKERNEL_PORT_REQUIRED:${transportId}:${capability}`);
+    if (routePort.capability && clean(routePort.capability) !== capability) {
+      throw new Error(`MICROKERNEL_PORT_CAPABILITY_MISMATCH:${transportId}:${capability}`);
     }
     if (!transports[transportId]) {
       transports[transportId] = async (request) => {
         assertKnownProvider(knownProviders, request.capability, request.provider);
+        const port = resolvePort(ports, transportId, clean(request.capability));
+        if (!port || typeof port.invoke !== 'function') throw new Error(`MICROKERNEL_PORT_NOT_FOUND:${transportId}:${request.capability}`);
+        if (port.capability && clean(port.capability) !== clean(request.capability)) {
+          throw new Error(`MICROKERNEL_PORT_CAPABILITY_MISMATCH:${transportId}:${request.capability}`);
+        }
         const operation = clean(request?.payload?.operation).toUpperCase();
         const type = operation === 'CANCEL' ? 'CANCEL' : 'ROUTE_REQUEST';
         const response = await port.invoke({
@@ -96,16 +105,15 @@ export function createMicrokernelCapabilityRouter({ routes = [], ports = {}, pro
       });
     },
     async health() {
-      const unique = [...new Set(routes.map((route) => clean(route.transport_id ?? route.transportId)))];
-      const results = [];
-      for (const transportId of unique) {
-        const route = routes.find((candidate) => clean(candidate.transport_id ?? candidate.transportId) === transportId);
-        const capability = clean(route?.capability);
-        const port = ports[transportId] || ports[capability];
+      const rows = [];
+      for (const route of routes) {
+        const transportId = clean(route.transport_id ?? route.transportId);
+        const capability = clean(route.capability);
+        const port = resolvePort(ports, transportId, capability);
         const detail = typeof port?.health === 'function' ? await port.health() : { ok: true, state: 'NO_HEALTH_PROBE' };
-        results.push({ transport_id: transportId, capability, detail });
+        rows.push({ route_id: clean(route.id), transport_id: transportId, capability, detail });
       }
-      return Object.freeze({ ok: results.every((row) => row.detail?.ok !== false), routes: base.listRoutes().length, results });
+      return Object.freeze({ ok: rows.every((row) => row.detail?.ok !== false), routes: base.listRoutes().length, results: rows });
     },
   });
 }
@@ -115,4 +123,5 @@ export const B_MK_005_ROUTER = Object.freeze({
   ingress: Object.freeze(['MCP', 'API']),
   secret_policy: 'SECRET_REF_ONLY',
   unknown_provider: 'FAIL_CLOSED',
+  shared_transport_resolution: 'CAPABILITY_FIRST',
 });
