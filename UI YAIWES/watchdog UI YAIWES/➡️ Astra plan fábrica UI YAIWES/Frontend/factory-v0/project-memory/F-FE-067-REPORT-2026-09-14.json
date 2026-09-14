@@ -1,0 +1,59 @@
+{
+  "schema": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-FE-067",
+  "segment_id": "SEG-02-BROWSER",
+  "lane": "frontend",
+  "state": "TESTED_ISOLATED_NOT_WIRED",
+  "report_state": "PASS_ISOLATED_NODE_GATE",
+  "owner": "GROK 2",
+  "agent": "GROK",
+  "chat_id": "GROK-2-UI-YAIWES-FACTORY",
+  "claimed_at": "2026-09-14T09:33:40Z",
+  "reported_at": "2026-09-14T09:41:20Z",
+  "release": true,
+  "fresh_main_sha_at_claim": "ce19dc3c23539544e65d928e2c5c4b0d8a305190",
+  "claim_commit": "93114a2dbbee25d9950b87e39955124de640b03c",
+  "implement_commit": "33ef87baa5b34a8183912ca86c0fdc92890a1e96",
+  "ci_commit": "48c7ff6b06e152b56a743947ca837b5dc4fda14e",
+  "gates": {
+    "SOURCE_PRESENT": true,
+    "IMPLEMENTED": true,
+    "WIRED": false,
+    "RUNTIME_TEST_PASS": true,
+    "VERIFIED_CLOSED": false
+  },
+  "write_scope": [
+    "Frontend/factory-v0/src/ui/component-browser-v2.js",
+    "Frontend/factory-v0/tests/component-browser-v2.test.mjs",
+    "Frontend/factory-v0/project-memory/*F-FE-067*",
+    ".github/workflows/factory-f-fe-067-browser-v2.yml"
+  ],
+  "blobs": {
+    "component_browser_v2": "87e66d6e8c229df67cf793c7f91b49d19b5d58a9",
+    "component_browser_v2_test": "7513e67d375f2f885414a9d19143f7e0a0fd5743",
+    "component_browser_v1_unchanged": "6803afedfd2f6bd08b528d71d6c175747a31bb43",
+    "candidate_v193_unchanged": "73deb4432ddb3b40519984a6d85925e9c6cd21a2",
+    "workflow": "089cc1d982f85f8dfff375ab804471eb515cbeb0"
+  },
+  "test": "node tests/component-browser-v2.test.mjs => PASS 8/8; Node v22.23.2",
+  "run_id": 34829193496,
+  "job_id": 103928244417,
+  "run_url": "https://github.com/maxbry123-commits/frontend/actions/runs/34829193496",
+  "job_url": "https://github.com/maxbry123-commits/frontend/actions/runs/34829193496/job/103928244417",
+  "log": "{\"status\":\"PASS\",\"schema\":\"yaiwes.factory.segment-test/v1\",\"node_id\":\"F-FE-067\",\"segment_id\":\"SEG-02-BROWSER\",\"version\":\"v2\",\"passed\":8,\"expected\":8}",
+  "readback": "GitHub main blob 87e66d6e for v2; v1 blob 6803afed preserved; candidate-v193 still imports component-browser-v1.js",
+  "strategy": "REUSE_EXISTING then PATCH",
+  "gap_fixed": "v1 had no export/mount API and did not set text/yaiwes-kind; drag depended on app-v19",
+  "remaining_gaps": [
+    "Producer did not wire v2 into candidate-v193; INTEGRATOR only",
+    "Desktop/mobile Playwright of v2 on the same candidate SHA is still open",
+    "Independent F-UI-062/063 review remains global"
+  ],
+  "next_free_node": "F-FE-068 SEG-04-TOUCH unless already claimed",
+  "watchdog": {
+    "automation_id": "ec969590-6e64-4d9a-a681-78d3f8d254de",
+    "interval": "1h",
+    "timezone": "America/Bogota"
+  }
+}
