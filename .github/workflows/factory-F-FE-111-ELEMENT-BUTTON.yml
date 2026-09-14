@@ -1,0 +1,73 @@
+name: factory-F-FE-111-ELEMENT-BUTTON
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-F-FE-111-ELEMENT-BUTTON.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/control-audit/F-FE-111-ELEMENT-BUTTON.spec.mjs'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v192.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/app-v19.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/actions.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/ui/component-browser-v1.js'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-F-FE-111-ELEMENT-BUTTON
+  cancel-in-progress: false
+
+jobs:
+  element-button:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Frozen candidate readback
+        run: |
+          set -euo pipefail
+          test -s index-v192.html
+          test -s src/app-v19.js
+          test -s src/ui/component-browser-v1.js
+          test -s tests/e2e/control-audit/F-FE-111-ELEMENT-BUTTON.spec.mjs
+          grep -F "['button'" src/app-v19.js
+          grep -F 'data-preview-insert' src/ui/component-browser-v1.js
+          grep -F 'allowCanonicalInsert' src/ui/component-browser-v1.js
+          node --check tests/e2e/control-audit/F-FE-111-ELEMENT-BUTTON.spec.mjs
+          echo "INDEX_V192=$(git hash-object index-v192.html)"
+          echo "APP_V19=$(git hash-object src/app-v19.js)"
+          echo "BROWSER=$(git hash-object src/ui/component-browser-v1.js)"
+          test "$(git hash-object index-v192.html)" = "e3d68e1063cd37c2a59d91911f071fda304e4695"
+          test "$(git hash-object src/app-v19.js)" = "1aab6ebec09a8e6a14f221b83226cf92552b4526"
+          test "$(git hash-object src/ui/component-browser-v1.js)" = "6803afedfd2f6bd08b528d71d6c175747a31bb43"
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: F-FE-111 desktop ELEMENT-BUTTON gate
+        run: npx playwright test tests/e2e/control-audit/F-FE-111-ELEMENT-BUTTON.spec.mjs --project=chromium-desktop --reporter=line
+      - name: F-FE-111 Pixel 7 ELEMENT-BUTTON gate
+        run: npx playwright test tests/e2e/control-audit/F-FE-111-ELEMENT-BUTTON.spec.mjs --project=mobile-chromium --reporter=line
+      - name: Preserve F-FE-111 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-F-FE-111-ELEMENT-BUTTON-evidence
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+          if-no-files-found: warn
+          retention-days: 14
