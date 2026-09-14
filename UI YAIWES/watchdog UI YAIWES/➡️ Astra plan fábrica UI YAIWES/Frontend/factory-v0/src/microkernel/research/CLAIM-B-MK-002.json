@@ -2,14 +2,33 @@
   "schema": "yaiwes.factory.node-claim/v1",
   "node_id": "B-MK-002",
   "owner": "ASTRA-GPT-5.6-SOL",
-  "state": "IN_PROGRESS",
+  "state": "TESTED_SUBGATE_PASS",
   "write_scope": "Frontend/factory-v0/src/microkernel/research/**",
   "strategy": "REUSE_LOCAL_BEFORE_EXTERNAL",
   "local_registry_root": "UI YAIWES/componentes open soure UI YAIWES",
-  "acceptance": [
-    "local exact capability match blocks duplicate acquisition",
-    "external candidate considered only after local gap",
-    "decision includes source/license/ref",
-    "incomplete provenance fails closed"
-  ]
+  "implementation": {
+    "path": "Frontend/factory-v0/src/microkernel/research/index.js",
+    "blob_sha": "991aad50109c6eae1ffe3ffa7518ea5fba7af7bc",
+    "commit": "bc794c577de52307fda6f20b40cfb074e1586e28"
+  },
+  "test": {
+    "path": "Frontend/factory-v0/src/microkernel/research/selftest.mjs",
+    "blob_sha": "9f54d43addca0043c64dd85931e43e0dc6435497",
+    "commit": "912abeabbb275019649fcab8bf04cf914466aeeb",
+    "result": "PASS",
+    "assertions": 15,
+    "mode": "node selftest replay of GitHub read-back code"
+  },
+  "acceptance": {
+    "local_match_blocks_duplicate_acquisition": "PASS",
+    "external_only_after_local_gap": "PASS",
+    "source_license_ref_emitted": "PASS",
+    "incomplete_local_provenance_fails_closed": "PASS",
+    "unpinned_external_candidate_rejected": "PASS"
+  },
+  "limits": [
+    "This deterministic gate consumes registry/candidate records; it performs no external network research itself.",
+    "Real external acquisition must pass B-MK-001 and canonical motor receipt validation."
+  ],
+  "next": "B-MK-003 provenance/integrity ledger can now consume B-MK-001 + B-MK-002 outputs"
 }
