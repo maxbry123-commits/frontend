@@ -6,9 +6,24 @@
   "chat_id": "current-factory-chat",
   "fresh_main_sha": "6ea16b1efc4cbb4cc06ca16cdb15918c244e9cbe",
   "claimed_at": "2026-09-14T09:04:00Z",
-  "state": "CLAIMED",
+  "reported_at": "2026-09-14T09:08:00Z",
+  "state": "VERIFIED_CLOSED",
+  "report_state": "PASS_RESEARCH_DEDUP",
   "write_scope": ["Frontend/factory-v0/project-memory/research/F-BE-079-*"],
   "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
   "acceptance": "10 candidates scored against local registry; each has source/license/capability/gap/REUSE decision; no download by popularity alone",
-  "policy": "RESEARCH_DEDUP_FIRST_NO_DOWNLOAD"
+  "policy": "RESEARCH_DEDUP_FIRST_NO_DOWNLOAD",
+  "paths": ["Frontend/factory-v0/project-memory/research/F-BE-079-TOP10-OSS-DESIGN-DEDUP-2026-09-14.json"],
+  "commit_sha": "bb553e8e149f0975052ad3bb81ed29feba061f6c",
+  "test": "10/10 candidates contain source, license, capability, local status, score, decision and Factory target; local registry readback used before download decisions",
+  "result": {
+    "ranked": 10,
+    "reuse_or_local": 6,
+    "external_not_in_current_factory_registry_or_exact_root_path": 4,
+    "immediate_downloads_authorized": 0,
+    "conditional_candidates": ["Puck", "GrapesJS"]
+  },
+  "remaining_gaps": ["F-BE-080 can acquire only after F-BE-075 and a residual capability gap; third new component remains intentionally unselected until proven"],
+  "release": true,
+  "next_free_node": "F-BE-076 or F-BE-077 if still FREE"
 }
