@@ -7,31 +7,60 @@
   "agent": "GROK",
   "owner": "GROK 1 UI YAIWES",
   "chat_id": "GROK-1-UI-YAIWES-CRAZY-WALL",
-  "state": "CLAIMED",
-  "fresh_main_sha": "e19252b38fca00c72782d4424b2ba5358c6eb033",
+  "state": "IMPLEMENTED_UNIT_TEST_PASS",
+  "report_state": "NOT_WIRED_NOT_BROWSER_NOT_VERIFIED_CLOSED",
+  "release": true,
+  "fresh_main_sha_at_claim": "e19252b38fca00c72782d4424b2ba5358c6eb033",
   "claimed_at": "2026-09-14T09:35:00Z",
-  "write_scope": [
+  "claimed_commit": "8b948fa7d680dd4c5a9c2c11cb04d639d3cb97ba",
+  "implemented_commit": "5a4e925cebc6f1c0fd45371b7165e3083c1be4fb",
+  "reported_at": "2026-09-14T09:38:30Z",
+  "fresh_main_sha_at_report": "59f5a96bc7c56e46e61ccb89560832a6e7b7384a",
+  "write_scope_landed": [
     "Frontend/factory-v0/src/ui/workspace-shell-v2.js",
     "Frontend/factory-v0/workspace-shell-v2.css",
-    "Frontend/factory-v0/tests/workspace-shell-v2.test.mjs",
-    "Frontend/factory-v0/src/ui/CLAIM-F-FE-066.json"
+    "Frontend/factory-v0/tests/workspace-shell-v2.test.mjs"
   ],
-  "excluded_due_to_collision": [
-    "Frontend/factory-v0/tests/e2e/*shell-v2*",
-    "Frontend/factory-v0/project-memory/*F-FE-066*"
+  "blobs": {
+    "workspace-shell-v2.js": "ae0ce5b0254ca1f5622ec22b02df953fae02c4a3",
+    "workspace-shell-v2.css": "59b375ebc700ec7e42bbf3bf7259334a4f61d849",
+    "workspace-shell-v2.test.mjs": "44bbf5d34355d08161aaebdb6d40399a74140286",
+    "workspace-shell-v1.js_preserved": "355d0cf652e0e3e53c7b0049b22050dee997af66",
+    "workspace-shell-v1.css_preserved": "1ddfed85066c31f94b3d5067e98d07b75567d47e",
+    "index-v19.html_frozen": "4b043e60eba53156d1fc23c9b2fa4be30b54960a",
+    "index-v192.html_frozen": "e3d68e1063cd37c2a59d91911f071fda304e4695"
+  },
+  "test": {
+    "path": "Frontend/factory-v0/tests/workspace-shell-v2.test.mjs",
+    "result": "PASS",
+    "runner": "node tests/workspace-shell-v2.test.mjs",
+    "mode": "local Node replay of GitHub-readback equivalent sources",
+    "assertions": [
+      "canvas-first mobile drawers start collapsed",
+      "user toggle survives resize",
+      "Escape closes mobile drawers",
+      "SEG-01 write_scope valid",
+      "candidate-v193 is integrator-only"
+    ]
+  },
+  "truth_gate": {
+    "SOURCE_PRESENT": true,
+    "IMPLEMENTED": true,
+    "WIRED": false,
+    "RUNTIME_TEST_PASS": false,
+    "VERIFIED_CLOSED": false
+  },
+  "lateral_collision": {
+    "other_claim": "claims/F-SEG-SHELL-MOBILE-067.json",
+    "owner": "GPT-5.6-SOL",
+    "claimed_at": "2026-09-14T09:36:00Z",
+    "overlap": ["workspace-shell-v2.js", "workspace-shell-v2.css"],
+    "priority": "GROK F-FE-066 claimed first at 09:35:16Z; releasing v2 paths so SOL can run F-UI-052 mobile hit-target e2e without a second writer"
+  },
+  "remaining_gaps": [
+    "SEG-11 integrator must point candidate-v193 to workspace-shell-v2.js + workspace-shell-v2.css",
+    "F-UI-052 Pixel 7 hit-target/browser gate is SOL F-SEG-SHELL-MOBILE-067; not claimed here",
+    "No Playwright e2e from this chat: tests/e2e/** owned by F-FRONTEND-QA-066"
   ],
-  "collision_note": "SOL GPT owns F-FRONTEND-QA-066 tests/e2e/** and project-memory/**. This claim uses disjoint concrete paths only.",
-  "frozen_not_touched": [
-    "Frontend/factory-v0/index-v19.html",
-    "Frontend/factory-v0/index-v192.html"
-  ],
-  "integrator_only_not_touched": [
-    "Frontend/factory-v0/index-v193.html",
-    "Frontend/factory-v0/index-v193-preview.html",
-    "Frontend/factory-v0/src/bootstrap/candidate-v193.js"
-  ],
-  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
-  "strategy": "REUSE_EXISTING > PATCH",
-  "gap": "v1 remounts collapsed drawers on every resize; no overlay/Escape; not version-exported",
-  "acceptance": "canvas-first desktop/mobile drawers; v1 preserved; v2 unit test PASS; not wired into candidate"
+  "next_free_node": "F-FE-067 SEG-02-BROWSER after fresh read if still FREE and write_scope disjoint"
 }
