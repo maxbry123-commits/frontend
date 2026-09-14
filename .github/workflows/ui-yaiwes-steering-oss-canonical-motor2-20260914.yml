@@ -1,0 +1,112 @@
+name: UI YAIWES Steering OSS Canonical Motor2 GAP-10
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ui-yaiwes-steering-oss-canonical-motor2-20260914.yml'
+      - 'UI YAIWES/automation/steering-oss-20260914/QUEUE-STEERING-OSS.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ui-yaiwes-steering-oss-canonical-motor2-20260914
+  cancel-in-progress: false
+
+jobs:
+  download-extract-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Sparse bootstrap main
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git init -q
+          git remote add origin 'https://github.com/maxbry123-commits/frontend.git'
+          git sparse-checkout init --no-cone
+          cat > .git/info/sparse-checkout <<'EOF'
+          /➡️📂motores de descarga extracción copiado movimiento archivos fromtend/
+          /UI YAIWES/automation/steering-oss-20260914/QUEUE-STEERING-OSS.json
+          EOF
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch --depth=1 --filter=blob:none origin main
+          git checkout -q -B main FETCH_HEAD
+
+      - name: Verify immutable canonical motor blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py")" = '84d566e2ee4e98e42eb3a864026d067d48caabd9'
+          test "$(git hash-object "$ROOT/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py")" = '91e6e4486692eab314be5c7130d8310d3c855397'
+
+      - name: Execute exact canonical Motor2 for steering donors
+        shell: bash
+        env:
+          QUEUE_FILE: ${{ github.workspace }}/UI YAIWES/automation/steering-oss-20260914/QUEUE-STEERING-OSS.json
+          STATE_FILE: ${{ runner.temp }}/motor2-steering-state.json
+          INDEX_PATH: ${{ runner.temp }}/motor2-steering-index.md
+          ENGINE_PATH: ${{ github.workspace }}/➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py
+          DEST_REPO: maxbry123-commits/frontend
+          DEST_BRANCH: main
+          DEST_ROOT: UI YAIWES/componentes open soure UI YAIWES
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAX_RETRIES: '3'
+          LOOP_SLEEP_SECONDS: '0'
+        run: |
+          set -uo pipefail
+          ROOT='➡️📂motores de descarga extracción copiado movimiento archivos fromtend'
+          set +e
+          python "$ROOT/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py" | tee "$RUNNER_TEMP/motor2-steering-final.json"
+          rc=${PIPESTATUS[0]}
+          set -e
+          cat "$STATE_FILE" || true
+          cat "$INDEX_PATH" || true
+          test "$rc" -eq 0
+          python - <<'PY'
+          import json, os, pathlib
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'motor2-steering-final.json'
+          obj=json.loads([x for x in p.read_text().splitlines() if x.strip()][-1])
+          b=obj.get('balance',{})
+          assert obj.get('verdict') == 'VERIFIED_CLOSED', obj
+          assert b.get('total') == 4, b
+          assert b.get('download_verified') == 4, b
+          assert b.get('extraction_verified') == 4, b
+          assert b.get('published_readback_verified') == 4, b
+          assert b.get('failed') == 0 and b.get('pending') == 0, b
+          PY
+
+      - name: Independent steering donor readback
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          AUTH="$(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $AUTH" fetch origin main
+          ROOT='UI YAIWES/componentes open soure UI YAIWES'
+          python - <<'PY'
+          import json, subprocess
+          expected={
+            'temporal':('temporalio/temporal','9ab3a9f770da20df7d94bcc0030f28eec7b0b947'),
+            'stately_agent':('statelyai/agent','1fde45dcf6d3bda6a04cb468a2b74dc6595b8396'),
+            'hatchet':('hatchet-dev/hatchet','315d43a72fd771b049b304b865a81dbab98c466c'),
+            'conductor':('conductor-oss/conductor','24ac3cb4db112a3bcd70d6eef6eaf3dc91f70a77'),
+          }
+          root='UI YAIWES/componentes open soure UI YAIWES'
+          for slug,(repo,commit) in expected.items():
+              target=f'{root}/{slug}'
+              names=subprocess.check_output(['git','ls-tree','-r','--name-only','origin/main','--',f'{target}/code'],text=True).splitlines()
+              assert names, (slug,'empty_code_tree')
+              raw=subprocess.check_output(['git','show',f'origin/main:{target}/DOWNLOAD_EXTRACT_MANIFEST.json'],text=True)
+              m=json.loads(raw)
+              assert m['source_repo']==repo,(slug,m.get('source_repo'))
+              assert m['source_commit']==commit,(slug,m.get('source_commit'))
+              assert m['extraction_verified'] is True,(slug,'extraction_not_verified')
+              print(f'STEERING_DONOR_READBACK_VERIFIED slug={slug} files={len(names)} source_commit={commit}')
+          PY
+          echo "VERIFIED_CLOSED node=GAP-10-STEERING-OSS-DONORS final_sha=$(git rev-parse origin/main)"
