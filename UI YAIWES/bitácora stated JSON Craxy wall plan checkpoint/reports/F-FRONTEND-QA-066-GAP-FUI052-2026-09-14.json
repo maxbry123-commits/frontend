@@ -1,0 +1,37 @@
+{
+  "schema": "yaiwes.factory.node-report/v1",
+  "contract": "tel.workflow/v3",
+  "node_id": "F-FRONTEND-QA-066",
+  "owner": "GPT-5.6-SOL",
+  "chat_id": "CURRENT_CHAT_FACTORY_SEGMENTATION",
+  "state": "GAP_RELEASED_FOR_DEPENDENCY_FIX",
+  "reported_at": "2026-09-14T04:35:00-05:00",
+  "tested_candidate": "index-v193.html",
+  "completed_subgates": {
+    "F-UI-051": {
+      "result": "PASS",
+      "fix_commit": "22d0b5cd1c0557151407b4ac775e5d62b8f3f517",
+      "run_id": 34828299912,
+      "job_id": 103925419317,
+      "artifact_id": 10341421328,
+      "artifact_digest": "sha256:3d41cb8f57a5fa9fb86196b9a8a8e085ce27e03bd053e2385553989890ec881f"
+    }
+  },
+  "blocking_gap": {
+    "subgate": "F-UI-052",
+    "classification": "PRODUCT_FAILURE_MOBILE_LAYOUT",
+    "run_id": 34828614225,
+    "job_id": 103926396296,
+    "artifact_id": 10340878111,
+    "artifact_digest": "sha256:8690910d659977fc361dadcbd0d446fb0496aa766a6f38ac546f6e08b6dc1361",
+    "symptom": "Inspector workspace toggle is partially outside/covered at Pixel 7 portrait; center point is not hit-testable.",
+    "evidence": [
+      "index-v193.html and all candidate modules returned HTTP 200",
+      "Playwright syntax PASS",
+      "mobile test fails at inspector toggle center hit-test",
+      "portrait screenshot shows the right workspace control clipped by viewport"
+    ]
+  },
+  "strategy_delta": "Do not patch product from QA scope. Create a SEG-01 versioned shell node, preserve workspace-shell-v1.*, test V2 in isolation, then use a separate SEG-11 integrator node to wire V2 into the canonical candidate and resume F-FRONTEND-QA-066.",
+  "next_node": "F-SEG-SHELL-MOBILE-067"
+}
