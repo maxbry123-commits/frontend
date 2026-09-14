@@ -1,0 +1,11 @@
+{
+  "schema": "yaiwes.factory.node-claim/v1",
+  "node_id": "B-MK-003",
+  "owner": "ASTRA-GPT-5.6-SOL",
+  "state": "IN_PROGRESS",
+  "write_scope": "Frontend/factory-v0/src/microkernel/provenance/**",
+  "strategy": "REUSE_EXISTING_ADAPT_NO_FORK",
+  "source_existing": "Frontend/factory-v0/src/acquisition/provenance-v1/provenance-v1.js",
+  "depends_on": ["B-MK-001", "B-MK-002"],
+  "acceptance": ["source/ref/hash/license/destination/adapter/test bound", "hash or provenance mismatch rejects promotion"]
+}
