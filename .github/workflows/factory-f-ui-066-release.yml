@@ -1,0 +1,73 @@
+name: Factory F-UI-066 fail-closed release
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-ui-066-release.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: factory-f-ui-066-release
+  cancel-in-progress: false
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Refresh main and patch only owned node
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git checkout main
+          git reset --hard origin/main
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+          nodes = {n['id']: n for n in data['frontend_nodes']}
+          node = nodes['F-FRONTEND-QA-066']
+          assert node['state'] == 'CLAIMED', node
+          assert node['owner'] == 'GPT-5.6-SOL', node
+          assert node['chat_id'] == 'CURRENT_CHAT_FACTORY_SEGMENTATION', node
+
+          node['state'] = 'GAP_RESOLVABLE'
+          node['report_state'] = 'QA_PARTIAL_PASS_TWO_REAL_GAPS'
+          node['reported_at'] = '2026-09-14T04:57:00-05:00'
+          node['tested_candidate'] = 'V1.9.5'
+          node['run_id'] = 34830387803
+          node['job_id'] = 103932105765
+          node['artifact_id'] = 10341712835
+          node['artifact_digest'] = 'sha256:210282ca705a43f8c011b47d2f926c0679320cffadf52272a7964b5ac8e5095c'
+          node['tests'] = 'V1.9.5 targeted closure regression: undo PASS; reload PASS; mobile Escape PASS; mobile canvas release PASS; command palette GAP; horizontal overflow GAP (body 604px on 412px viewport)'
+          node['evidence'] = [
+              'Frontend/factory-v0/project-memory/F-UI-066-V193-QA-GAP-REPORT-2026-09-14.md blob 4ad6e22be0e072a770ac3fca614ab826e823fc3a',
+              'QA report reconciliation commit 465b5843d55ae86fc0b0375ed1127defca0bcbef',
+              'V1.9.5 test harness commit 838f9f3a33b83e1a1a4267d8213429a32f0008db',
+              'F-UI-053 user-like edit harness commit 57917d8f2f0e7a2efb591a0447a2354e02ae87d9',
+              'run 34830387803 / job 103932105765 / artifact 10341712835'
+          ]
+          node['remaining_gaps'] = [
+              'SEG-01-SHELL: mobile horizontal overflow body.scrollWidth=604 on viewport=412; fix content geometry, not cosmetic clipping',
+              'F-UI-055: Ctrl+K command palette/quick-action surface absent; reuse canonical actions, no second state engine'
+          ]
+          node['next_action'] = 'READ_FRESH_THEN_CLAIM_ONE_REAL_GAP_ONLY'
+          data['last_reconciled_at'] = '2026-09-14T04:57:00-05:00'
+          path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+          PY
+          python -m json.tool 'UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json' >/dev/null
+      - name: Commit exact reconciliation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'factory-fail-closed-bot'
+          git config user.email 'factory-fail-closed-bot@users.noreply.github.com'
+          git add 'UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json'
+          git diff --cached --check
+          git commit -m 'report(factory): release F-FRONTEND-QA-066 with two verified gaps'
+          git push origin HEAD:main
