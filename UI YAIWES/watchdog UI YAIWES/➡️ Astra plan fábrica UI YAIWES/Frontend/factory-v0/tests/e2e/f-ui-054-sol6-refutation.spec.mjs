@@ -44,11 +44,14 @@ test('refutation 1: reload has no ghost or duplicate component',async({page})=>{
 test('refutation 2: repeated drawer transitions do not hide canvas or double-act',async({page})=>{
   await boot(page,{width:412,height:839});
   const studio=page.locator('.studio');
+  // This suite is executed by the desktop Playwright project and changes the viewport
+  // to mobile dimensions. Use the universal click action instead of tap(), which
+  // requires a hasTouch browser context and otherwise creates a harness-only failure.
   for(let i=0;i<3;i+=1){
-    await page.locator('[data-workspace-toggle="left"]').tap();
+    await page.locator('[data-workspace-toggle="left"]').click();
     await expect(page.locator('.library-pane')).toBeVisible();
     await expect(page.locator('#canvas')).toBeVisible();
-    await page.locator('[data-workspace-close="left"]').tap();
+    await page.locator('[data-workspace-close="left"]').click();
     await expect(studio).toHaveClass(/workspace-left-collapsed/);
   }
   expect(await page.locator('.library-pane').count()).toBe(1);
