@@ -11,7 +11,7 @@
   "implementation": {
     "path": "runtime/src/uek/platform_control.py",
     "sha256": "d45c9699df56abe19b61d442626edec29e0019641b9aeb253f77a4fa2d2094ba",
-    "symbol": "BackendRegistry|PlatformUpdateManager"
+    "symbol": "PlatformUpdateManager"
   },
   "test": {
     "path": "runtime/tests/test_platform_control.py",
