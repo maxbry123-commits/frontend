@@ -6,12 +6,12 @@
   "authority": "current code + tests + trusted CI/readback > this queue + Crazy Wall V5/N34-N35 > architecture/handoff > history",
   "progress": {
     "denominator": 167,
-    "certified_now": 8,
-    "missing_now": 159,
-    "certified_ids": ["REQ-S3-047", "REQ-S3-048", "REQ-S3-049", "REQ-S3-050", "REQ-S3-053", "REQ-S3-054", "REQ-S3-055", "REQ-S3-057"],
-    "current_subgap": "REQ-S3-046",
-    "current_subgap_state": "CLAIMED",
-    "current_owner": "ChatGPT-Sol-supervisor"
+    "certified_now": 9,
+    "missing_now": 158,
+    "certified_ids": ["REQ-S3-046", "REQ-S3-047", "REQ-S3-048", "REQ-S3-049", "REQ-S3-050", "REQ-S3-053", "REQ-S3-054", "REQ-S3-055", "REQ-S3-057"],
+    "current_subgap": null,
+    "current_subgap_state": "NEXT_UNCLAIMED",
+    "current_owner": null
   },
   "rules": [
     "1 literal task = 1 active subgap; one owner per write scope.",
@@ -33,18 +33,17 @@
     },
     {
       "id": "GAP-02-N35-S3-REMAINDER",
-      "state": "EXECUTING",
+      "state": "GAP_RESOLVABLE",
       "priority": 2,
-      "owner": "ChatGPT-Sol-supervisor",
-      "gap": "56 implementable S3 requirements remain uncertified after closing 047,048,049,050,053,054,055,057.",
-      "current_subgap": {
+      "owner": null,
+      "gap": "55 implementable S3 requirements remain uncertified after closing 046,047,048,049,050,053,054,055,057.",
+      "last_closed_subgap": {
         "id": "REQ-S3-046",
-        "state": "CLAIMED_TESTING",
         "claim_commit": "2859f73157312761e2a737c893ad5cded827930d",
         "test_commit": "d33bd726add10ec5011fdf6fb44c3eba1ad921ff",
-        "ci_run": 34827227847,
-        "gap": "§46 literal memory operation inventory existed in runtime but lacked exhaustive regression coverage",
-        "delta": "test-only unless CI exposes runtime mismatch"
+        "trusted_ci": "34827469610/103922812582",
+        "trace_commit": "90b5d6d23528edeabca3dd742bb3d1dde775b16f",
+        "five_pass": "34827655560/103923397490 TRACEABILITY_PASS"
       },
       "steps": [
         "Read each literal S3 requirement and locate existing code/test first.",
