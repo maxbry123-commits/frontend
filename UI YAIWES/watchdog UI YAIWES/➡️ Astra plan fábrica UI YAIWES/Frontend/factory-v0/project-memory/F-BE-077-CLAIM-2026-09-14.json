@@ -6,7 +6,9 @@
   "chat_id": "current-factory-chat",
   "fresh_main_sha": "311f11a282685f5a7048c9c3539c4800fd029030",
   "claimed_at": "2026-09-14T09:07:00Z",
-  "state": "CLAIMED",
+  "reported_at": "2026-09-14T09:12:00Z",
+  "state": "VERIFIED_CLOSED",
+  "report_state": "PASS_TYPED_MCP_ROUTER_BOUNDARY",
   "write_scope": [
     "Frontend/factory-v0/src/mcp/**",
     "Frontend/factory-v0/src/router/**",
@@ -16,5 +18,36 @@
   "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
   "reuse": ["src/backend-adapter.js", "src/ai-router-fai017.js", "tel.workflow/v3"],
   "acceptance": "typed MCP/API tools routed by capability/model/provider with fail-closed policy and deterministic state",
-  "forbidden": ["raw secrets", "arbitrary unregistered tool execution", "second state engine", "LLM routing authority"]
+  "forbidden": ["raw secrets", "arbitrary unregistered tool execution", "second state engine", "LLM routing authority"],
+  "paths": [
+    "Frontend/factory-v0/src/router/capability-router-v1.js",
+    "Frontend/factory-v0/src/mcp/factory-mcp-boundary-v1.js",
+    "Frontend/factory-v0/tests/mcp-router-v1.test.mjs"
+  ],
+  "commits": [
+    "10379c728d45d9c063d0a3196b00dec6d362c70c",
+    "2dff6aeb2c5dd5df76aca12f34dd1df32b04f25b",
+    "6ac598b52274119b6265c9e7281d72bec9863758",
+    "cc80ecb18031645a1e1cb21bc85a76acc9cdf742",
+    "e490c7f238bdabdf104089843f805a037a32fc52"
+  ],
+  "blobs": {
+    "capability_router": "b2822f47891faf0da8655ea3d505fde2f504ebca",
+    "mcp_api_boundary": "25c2714e0870088c55882dc17890e087d6a059a1",
+    "test": "2867c9836ae7bc2ff82e3ead17f5b91c6e060c02"
+  },
+  "test": "node behavioral microtest => mcp-router-v1: PASS; GitHub exact blob readback confirmed implementation and repository test",
+  "verified_behaviors": [
+    "deterministic capability selection by priority then stable route id",
+    "provider/model constrained routing",
+    "MCP explicit tool registry",
+    "shared API boundary over same router",
+    "request_id required rather than generated from clock",
+    "raw token/api_key/authorization/password/secret rejected; secret_ref allowed",
+    "unknown capability/tool fail closed",
+    "duplicate route ids rejected"
+  ],
+  "remaining_gaps": ["wire this backend boundary into frontend bridge under F-FE-072", "real remote MCP/API transport E2E remains downstream F-BE-081/F-UI gates"],
+  "release": true,
+  "next_free_node": "frontend F-FE-066..073 for separate producer; backend F-BE-076 is owned by another worker"
 }
