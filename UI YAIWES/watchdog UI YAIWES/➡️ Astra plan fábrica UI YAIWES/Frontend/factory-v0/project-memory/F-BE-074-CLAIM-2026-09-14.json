@@ -6,7 +6,9 @@
   "chat_id": "current-factory-chat",
   "fresh_main_sha": "ee61c77d88b172c8ba834055b6b07fa11d5274b1",
   "claimed_at": "2026-09-14T08:54:00Z",
-  "state": "CLAIMED",
+  "reported_at": "2026-09-14T08:58:00Z",
+  "state": "VERIFIED_CLOSED",
+  "report_state": "PASS",
   "write_scope": [
     "Frontend/factory-v0/src/acquisition/microkernel-v1/**",
     "Frontend/factory-v0/tests/*acquisition-microkernel*",
@@ -18,5 +20,28 @@
     "policy": "CANONICAL_MOTOR2_DIRECT_PUBLISH_FAIL_CLOSED",
     "destination": "UI YAIWES/componentes open soure UI YAIWES"
   },
-  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"]
+  "paths": [
+    "Frontend/factory-v0/src/acquisition/microkernel-v1/acquisition-contract-v1.js",
+    "Frontend/factory-v0/tests/acquisition-microkernel-v1.test.mjs"
+  ],
+  "commits": [
+    "6a234462da7991cc7e7d08b7e43f044e4820171f",
+    "dfb7ccb35deedf0cbc9ef455c4048e1e373494fa"
+  ],
+  "blobs": {
+    "contract": "c0f503c915b0437ecbe5962c687fe63e27d157c4",
+    "test": "2dc48458bd9b24d6204db2be242bff0ad3b18c13"
+  },
+  "test": "node tests/acquisition-microkernel-v1.test.mjs => acquisition-microkernel-v1: PASS",
+  "identity_check": "local executed copies git hash-object matched repo blobs exactly: c0f503c9... + 2dc48458...",
+  "behavior": [
+    "wrapper performs no clone/curl/extraction itself",
+    "requires proven capability gap + local dedup + research evidence + license + pinned 40-hex source SHA",
+    "rejects Git LFS, force and overwrite",
+    "delegates only through injected canonicalMotorInvoke",
+    "rejects receipts without exact source readback, SHA256 manifest, extraction_verified and hash PASS"
+  ],
+  "remaining_gaps": ["real canonical acquisition execution remains downstream F-BE-081 E2E"],
+  "release": true,
+  "next_free_node": "F-BE-075"
 }
