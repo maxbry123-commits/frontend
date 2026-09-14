@@ -1,0 +1,60 @@
+{
+  "schema":"yaiwes.factory.astra.independent-review.v1",
+  "contract":"tel.workflow/v3",
+  "date":"2026-09-14",
+  "node_id":"ASTRA-E04-AI-IMPORT-INDEPENDENT-REVIEW",
+  "owner":"GPT-5.6-SOL-ASTRA-WATCHDOG",
+  "base_sha":"882baa0613a6b771620f1bce8dd1ea4b7f6e03b9",
+  "write_scope":["Frontend/factory-v0/audits/ASTRA-E04-AI-IMPORT-INDEPENDENT-REVIEW-2026-09-14.json"],
+  "verdict":"AI_IMPORT_E2E_VERIFIED_ON_CANONICAL_V19_GLOBAL_V193_QA_ACTIVE",
+  "reviewed_nodes":{
+    "F-AI-017":{"capability":"provider/model router + fail-closed routing","result":"PASS_4_OF_4","state":"PASS_PENDING_REVIEW"},
+    "F-AI-018":{"capability":"team/model selector + persisted team mode","run_id":34735134030,"job_id":103665089139,"result":"PASS","state":"PASS_PENDING_REVIEW"},
+    "F-AI-019":{"capability":"skill activation/deactivation propagated into AI job payload","run_id":34735452047,"job_id":103665955820,"result":"PASS_AFTER_PRODUCT_FIX","state":"PASS_PENDING_REVIEW"},
+    "F-AI-020":{"capability":"remote MCP/API connect/status/cancel with SECRET_REF_ONLY","run_id":34735643947,"job_id":103666467938,"result":"PASS_6_OF_6","state":"PASS"},
+    "F-AI-021":{"capability":"file -> parser -> canonical drop -> editable canvas -> reload","run_id":34734680224,"job_id":103663832303,"result":"PASS","state":"PASS_PENDING_REVIEW"},
+    "F-AI-022":{"capability":"HTML -> canonical import/drop -> editable canvas + file regression","run_id":34734770943,"job_id":103664092658,"regression_run_id":34734760325,"regression_job_id":103664061338,"result":"PASS","state":"PASS_PENDING_REVIEW"},
+    "F-AI-023":{"capability":"reference URL -> adapter -> canonical drop -> editable canvas; file/html regressions preserved","run_id":34734933472,"job_id":103664538732,"result":"PASS_100","state":"PASS_100_PENDING_GLOBAL_REVIEW"},
+    "F-AI-024":{"capability":"source -> adapter -> router tel.workflow/v3 -> accepted response -> editable state -> reload","run_id":34738399707,"job_id":103673790605,"tested_sha":"37cdefb5a6e826f28cb04ecea5927bf31beb8e13","result":"PASS_1_OF_1","state":"PASS_PENDING_REVIEW","independent_log_readback":"PASS: exact SHA checkout; syntax PASS; canonical index includes file-import-controller and frontend-router-bridge; HTTP 200 modules; Playwright browser E2E 1 passed (1.9s)"}
+  },
+  "goals12":{
+    "G01_router_real_boundary":"PASS",
+    "G02_provider_model_explicit":"PASS",
+    "G03_team_models_persist":"PASS",
+    "G04_skills_propagate":"PASS",
+    "G05_remote_mcp_api":"PASS_SECRET_REF_ONLY",
+    "G06_file_import_editable":"PASS",
+    "G07_html_import_editable":"PASS",
+    "G08_reference_import_editable":"PASS",
+    "G09_source_to_router_to_editor_e2e":"PASS_CANONICAL_V19",
+    "G10_three_simulations_refutations":"PASS_PRODUCER_PLUS_INDEPENDENT_CROSSCHECK",
+    "G11_exact_run_job_sha":"PASS",
+    "G12_global_current_candidate":"PENDING_EXHAUSTIVE_V193_QA_AND_PUBLISHED_SHA"
+  },
+  "council12":[
+    "metadata-only import rejected",
+    "second state engine rejected",
+    "canonical drop/reducer path reused",
+    "router boundary exercised in browser",
+    "provider/model fail closed",
+    "team mode persists",
+    "skills mutate outbound AI job",
+    "remote secrets remain references only",
+    "file and HTML regressions rerun after shared adapter changes",
+    "reference path independently covered by fan-in",
+    "exact workflow log and SHA re-read",
+    "global V1.9.3/published closure withheld until active QA completes"
+  ],
+  "refutations":[
+    "SOURCE_PRESENT is insufficient: browser runs and exact logs were required.",
+    "Unit-only PASS is insufficient: F-AI-024 uses Playwright on the canonical page and crosses import, router, editor and persistence.",
+    "Canonical V1.9 E2E does not by itself prove final V1.9.3 publication; exhaustive current-candidate QA and exact published SHA remain required."
+  ],
+  "supply_chain_note":"F-AI-024 ephemeral runner npm install reported two high-severity audit findings in the temporary Playwright install; this review does not classify them as product dependencies without package-manifest provenance.",
+  "remaining_gaps":[
+    "F-FRONTEND-QA-066 / successor exhaustive current V1.9.3 functional matrix",
+    "independent final FRONTEND_100 review",
+    "published artifact must equal exact tested candidate SHA"
+  ],
+  "collision_note":"Audit-only write. No product, test, workflow, project-memory, shared Crazy Wall, or active frontend/backend claim paths modified."
+}
