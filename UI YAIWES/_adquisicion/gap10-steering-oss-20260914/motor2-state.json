@@ -1,0 +1,110 @@
+{
+  "created_at": 1789398688,
+  "items": {
+    "gap10-01-temporal-python-sdk": {
+      "attempts": 1,
+      "result": {
+        "bundle_bytes": 2757737,
+        "bundle_sha256": "10253f5a727e7d3a3e7f0a75014885ab2daa39ed010ba70f4ed40f614a1e8ca7",
+        "elapsed_seconds": 20.45,
+        "extracted_tree": {
+          "bytes": 12923008,
+          "files": 796,
+          "sha256": "a2b6efccb696bfe5ffacb94984de7fa19ce1604969c7b769caacb9042454c800"
+        },
+        "extraction_verified": true,
+        "max_github_blob_bytes": 99614720,
+        "no_lfs": true,
+        "part_size_limit_bytes": 12582912,
+        "parts": [
+          {
+            "bytes": 2757737,
+            "name": "Temporal-Python-SDK.bundle.zip.part-0001",
+            "sha256": "10253f5a727e7d3a3e7f0a75014885ab2daa39ed010ba70f4ed40f614a1e8ca7"
+          }
+        ],
+        "publish": {
+          "commit": "c4bbe1a6e47fc0419ec1829bd2fd74fe0b308513",
+          "verdict": "PUBLISHED_AND_EXTRACTED_READBACK_VERIFIED"
+        },
+        "reconstruction_verified": true,
+        "schema": "yaiwes.hf.download-extract.v1",
+        "slug": "Temporal-Python-SDK",
+        "source_bytes": 12923008,
+        "source_commit": "ab25ed693f7ec77589346e66c98db299a8c9c9fe",
+        "source_files": 796,
+        "source_ref": "ab25ed693f7ec77589346e66c98db299a8c9c9fe",
+        "source_repo": "temporalio/sdk-python",
+        "source_tree": {
+          "bytes": 12923008,
+          "files": 796,
+          "sha256": "a2b6efccb696bfe5ffacb94984de7fa19ce1604969c7b769caacb9042454c800"
+        },
+        "verdict": "VERIFIED_CLOSED"
+      },
+      "slug": "Temporal-Python-SDK",
+      "source_repo": "temporalio/sdk-python",
+      "status": "VERIFIED_CLOSED"
+    },
+    "gap10-02-dbos-python": {
+      "attempts": 2,
+      "result": {
+        "bundle_bytes": 649335,
+        "bundle_sha256": "52356d6e5f14cf940c654ddf39b43d776edd265d814fefbb3f4246af371448dd",
+        "elapsed_seconds": 16.46,
+        "extracted_tree": {
+          "bytes": 3151539,
+          "files": 128,
+          "sha256": "987f1496296f5dc4ed45208d0f977684277d8a3a50c96bc88f3df1f41a7a839a"
+        },
+        "extraction_verified": true,
+        "max_github_blob_bytes": 99614720,
+        "no_lfs": true,
+        "part_size_limit_bytes": 12582912,
+        "parts": [
+          {
+            "bytes": 649335,
+            "name": "DBOS-Python.bundle.zip.part-0001",
+            "sha256": "52356d6e5f14cf940c654ddf39b43d776edd265d814fefbb3f4246af371448dd"
+          }
+        ],
+        "publish": {
+          "commit": "ddbe32b73a3b53a6a05f018d15cab30cb7ce8b71",
+          "verdict": "PUBLISHED_AND_EXTRACTED_READBACK_VERIFIED"
+        },
+        "reconstruction_verified": true,
+        "schema": "yaiwes.hf.download-extract.v1",
+        "slug": "DBOS-Python",
+        "source_bytes": 3151539,
+        "source_commit": "83805fd84494c85ea09105443884a2786152d921",
+        "source_files": 128,
+        "source_ref": "83805fd84494c85ea09105443884a2786152d921",
+        "source_repo": "dbos-inc/dbos-transact-py",
+        "source_tree": {
+          "bytes": 3151539,
+          "files": 128,
+          "sha256": "987f1496296f5dc4ed45208d0f977684277d8a3a50c96bc88f3df1f41a7a839a"
+        },
+        "verdict": "VERIFIED_CLOSED"
+      },
+      "slug": "DBOS-Python",
+      "source_repo": "dbos-inc/dbos-transact-py",
+      "status": "VERIFIED_CLOSED"
+    },
+    "gap10-03-langgraph": {
+      "attempts": 2,
+      "error": "Traceback (most recent call last):\n  File \"/home/runner/work/frontend/frontend/\u27a1\ufe0f\ud83d\udcc2motores de descarga extracci\u00f3n copiado movimiento archivos fromtend/\ud83d\udcc2Motor descarga de componentes y extracci\u00f3n de zip/hf_download_extract_engine.py\", line 161, in <module>\n    if __name__=='__main__': main()\n                             ^^^^^^\n  File \"/home/runner/work/frontend/frontend/\u27a1\ufe0f\ud83d\udcc2motores de descarga extracci\u00f3n copiado movimiento archivos fromtend/\ud83d\udcc2Motor descarga de componentes y extracci\u00f3n de zip/hf_download_extract_engine.py\", line 158, in main\n    pub=publish(work,parts_dir,extracted,mp,slug) if PUBLISH else {'verdict':'DRY_RUN_DOWNLOAD_EXTRACT_VERIFIED'}\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/frontend/frontend/\u27a1\ufe0f\ud83d\udcc2motores de descarga extracci\u00f3n copiado movimiento archivos fromtend/\ud83d\udcc2Motor descarga de componentes y extracci\u00f3n de zip/hf_download_extract_engine.py\", line 128, in publish\n    if target.exists(): raise RuntimeError('DESTINATION_EXISTS:'+rel)\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: DESTINATION_EXISTS:UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/LangGraph\n",
+      "slug": "LangGraph",
+      "source_repo": "langchain-ai/langgraph",
+      "status": "FAILED"
+    },
+    "gap10-04-hatchet": {
+      "attempts": 2,
+      "error": "Traceback (most recent call last):\n  File \"/home/runner/work/frontend/frontend/\u27a1\ufe0f\ud83d\udcc2motores de descarga extracci\u00f3n copiado movimiento archivos fromtend/\ud83d\udcc2Motor descarga de componentes y extracci\u00f3n de zip/hf_download_extract_engine.py\", line 161, in <module>\n    if __name__=='__main__': main()\n                             ^^^^^^\n  File \"/home/runner/work/frontend/frontend/\u27a1\ufe0f\ud83d\udcc2motores de descarga extracci\u00f3n copiado movimiento archivos fromtend/\ud83d\udcc2Motor descarga de componentes y extracci\u00f3n de zip/hf_download_extract_engine.py\", line 158, in main\n    pub=publish(work,parts_dir,extracted,mp,slug) if PUBLISH else {'verdict':'DRY_RUN_DOWNLOAD_EXTRACT_VERIFIED'}\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/runner/work/frontend/frontend/\u27a1\ufe0f\ud83d\udcc2motores de descarga extracci\u00f3n copiado movimiento archivos fromtend/\ud83d\udcc2Motor descarga de componentes y extracci\u00f3n de zip/hf_download_extract_engine.py\", line 128, in publish\n    if target.exists(): raise RuntimeError('DESTINATION_EXISTS:'+rel)\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: DESTINATION_EXISTS:UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/Hatchet\n",
+      "slug": "Hatchet",
+      "source_repo": "hatchet-dev/hatchet",
+      "status": "FAILED"
+    }
+  },
+  "schema": "yaiwes.frontend.download-extract-queue.v1"
+}
