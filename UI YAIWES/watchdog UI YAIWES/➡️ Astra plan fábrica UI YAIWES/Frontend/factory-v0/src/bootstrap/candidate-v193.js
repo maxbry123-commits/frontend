@@ -1,25 +1,27 @@
 // Canonical YAIWES UI Factory candidate V1.9.3 bootstrap.
 // Historical entrypoints remain frozen. This file only composes already-existing modules.
+// Module specifiers are relative to this file in src/bootstrap/, therefore Factory modules
+// located in src/ must be addressed through ../ so browser/runtime resolution is real.
 
 export const CANDIDATE_VERSION = '1.9.3';
 
 export const CANDIDATE_MODULES = Object.freeze([
-  './app-v19.js',
-  './file-import-controller-v1.js',
-  './json-roundtrip-v1.js',
-  './touch-dnd-v192.js',
-  './interaction-fix.js',
-  './scroll-preserver.js',
-  './skill-activation-v1.js',
-  './donors/frappe-context-menu-adapter.js',
-  './resize-snap.js',
-  './donors/xyflow-minimap-adapter.js',
-  './ui/workspace-shell-v1.js',
-  './ui/component-browser-v1.js',
-  './frontend-router-bridge.js',
-  './layer-reorder-v1.js',
-  './remote-control-v1.js',
-  './hf-jobs-panel-v1.js',
+  '../app-v19.js',
+  '../file-import-controller-v1.js',
+  '../json-roundtrip-v1.js',
+  '../touch-dnd-v192.js',
+  '../interaction-fix.js',
+  '../scroll-preserver.js',
+  '../skill-activation-v1.js',
+  '../donors/frappe-context-menu-adapter.js',
+  '../resize-snap.js',
+  '../donors/xyflow-minimap-adapter.js',
+  '../ui/workspace-shell-v1.js',
+  '../ui/component-browser-v1.js',
+  '../frontend-router-bridge.js',
+  '../layer-reorder-v1.js',
+  '../remote-control-v1.js',
+  '../hf-jobs-panel-v1.js',
 ]);
 
 export const CANDIDATE_CAPABILITIES = Object.freeze({
