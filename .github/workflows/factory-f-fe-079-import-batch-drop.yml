@@ -1,0 +1,59 @@
+name: factory-f-fe-079-import-batch-drop
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/file-import-controller-v2.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-fe-079-import-batch-drop.spec.mjs'
+      - '.github/workflows/factory-f-fe-079-import-batch-drop.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  import-batch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Exact readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s src/file-import-controller-v2.js
+          test -s src/file-import-controller-v1.js
+          test -s src/file-import-v1.js
+          test -s tests/e2e/f-fe-079-import-batch-drop.spec.mjs
+          grep -F 'classifiedBeforeMutation' src/file-import-controller-v2.js
+          grep -F 'UNSUPPORTED_TYPE' src/file-import-controller-v2.js
+          node --check src/file-import-controller-v2.js
+          node --check tests/e2e/f-fe-079-import-batch-drop.spec.mjs
+          git rev-parse HEAD
+          git hash-object src/file-import-controller-v2.js
+          git hash-object tests/e2e/f-fe-079-import-batch-drop.spec.mjs
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run F-FE-079 batch intake gate
+        run: npx playwright test tests/e2e/f-fe-079-import-batch-drop.spec.mjs --project=chromium-desktop --reporter=line
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: f-fe-079-import-batch-${{ github.sha }}
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+          if-no-files-found: warn
+          retention-days: 14
