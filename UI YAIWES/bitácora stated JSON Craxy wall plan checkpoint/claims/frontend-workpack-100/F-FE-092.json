@@ -1,0 +1,47 @@
+{
+  "schema": "yaiwes.factory.frontend.node-claim.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-FE-092-MODE-AUTO",
+  "segment_id": "SEG-03-EDITOR-CORE",
+  "lane": "GROK-A",
+  "state": "CLAIMED",
+  "owner": "GROK 3",
+  "agent": "GROK",
+  "chat_id": "GROK-3-UI-YAIWES-FACTORY",
+  "fresh_main_sha": "fd385c7f22620e20c0ebe27548ecf763d8699864",
+  "claimed_at": "2026-09-14T12:38:30Z",
+  "type": "CONTROL_QA",
+  "selector": "[data-mode='AUTOPILOT']",
+  "depends_on": ["F-FE-091-MODE-AI"],
+  "dependency_status": "SATISFIED F-FE-091 PASS_RELEASED report fd385c7 run 34840394334",
+  "write_scope": [
+    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-092-MODE-AUTO.spec.mjs",
+    "Frontend/factory-v0/project-memory/F-FE-092-MODE-AUTO-*",
+    ".github/workflows/factory-F-FE-092-MODE-AUTO.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-092.json"
+  ],
+  "frozen": [
+    "index-v19.html",
+    "index-v192.html",
+    "src/touch-dnd-v192.js",
+    "src/touch-dnd-v193.js",
+    "src/bootstrap/candidate-v193.js"
+  ],
+  "skipped": {
+    "F-FE-068": "TESTED_NOT_WIRED release=true GROK 3",
+    "F-FE-069": "CLAIMED GPT-5.6-SOL-ASTRA-WATCHDOG integrator",
+    "F-FE-070": "BLOCKED_DEPENDENCY F-FE-076",
+    "F-FE-071": "BLOCKED_DEPENDENCY F-FE-070",
+    "F-FE-072": "PASS_RELEASED GROK 3",
+    "F-FE-073": "PASS_RELEASED GROK 1 TESTED_NOT_WIRED",
+    "F-FE-074": "dep-satisfied but GROK 1 named next_free; skip race"
+  },
+  "qa_policy": "CONTROL_QA never patches product. Gap → GAP_RESOLVABLE + owning_segment.",
+  "strategy": "REUSE_EXISTING frozen index-v192 SET_MODE; Playwright selector gate",
+  "acceptance": "On one exact candidate SHA interact with [data-mode='AUTOPILOT']; prove observable state/UI effect and persistence; critical console/network errors=0.",
+  "base_blobs": {
+    "index_v192": "e3d68e1063cd37c2a59d91911f071fda304e4695"
+  },
+  "release": false
+}
