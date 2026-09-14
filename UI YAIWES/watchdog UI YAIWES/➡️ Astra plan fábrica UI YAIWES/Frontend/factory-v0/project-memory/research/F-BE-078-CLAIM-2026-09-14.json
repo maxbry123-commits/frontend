@@ -1,0 +1,14 @@
+{
+  "schema": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-BE-078",
+  "owner": "SOL GPT <FACTORY-RESEARCH>",
+  "chat_id": "current-factory-chat",
+  "fresh_main_sha": "b7b9fc957e70497319806d09b41a4e9a4eefd74e",
+  "claimed_at": "2026-09-14T09:02:00Z",
+  "state": "CLAIMED",
+  "write_scope": ["Frontend/factory-v0/project-memory/research/F-BE-078-*"],
+  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+  "acceptance": "official-source research maps workspace/viewport/inspector/shortcuts/addons/history/assets to existing Factory gaps; no Blender monolith copied",
+  "policy": "RESEARCH_ONLY_NO_VENDOR_COPY_NO_RUNTIME_MUTATION"
+}
