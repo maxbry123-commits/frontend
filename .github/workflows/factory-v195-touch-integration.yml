@@ -1,0 +1,64 @@
+name: Factory V1.9.5 Touch Integration
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v195.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/bootstrap/candidate-v195.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/canonical-v195-touch-integration.spec.mjs'
+      - '.github/workflows/factory-v195-touch-integration.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  integrate-touch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Exact candidate readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s index-v195.html
+          test -s src/bootstrap/candidate-v195.js
+          test -s src/touch-dnd-v193.js
+          test -s src/ui/workspace-shell-v2.js
+          test -s src/ui/component-browser-v2.js
+          grep -F 'candidate-v195.js' index-v195.html
+          grep -F "../touch-dnd-v193.js" src/bootstrap/candidate-v195.js
+          ! grep -F "../touch-dnd-v192.js" src/bootstrap/candidate-v195.js
+          ! grep -F 'candidate-v195.js' index-v194.html
+          node --check src/bootstrap/candidate-v195.js
+          node --check src/touch-dnd-v193.js
+          node --check tests/e2e/canonical-v195-touch-integration.spec.mjs
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Desktop V195 integration
+        run: npx playwright test tests/e2e/canonical-v195-touch-integration.spec.mjs --project=chromium-desktop --reporter=line
+      - name: Mobile V195 touch integration
+        run: npx playwright test tests/e2e/canonical-v195-touch-integration.spec.mjs --project=mobile-chromium --reporter=line
+      - name: Preserve integration evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: f-fe-069-v195-${{ github.sha }}
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/f-fe-069-v195
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/**/attachments/**
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+          if-no-files-found: warn
+          retention-days: 14
