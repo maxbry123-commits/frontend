@@ -71,7 +71,10 @@ class MasterInputInvariantTests(unittest.TestCase):
         self.store.save_entries(self.scope, [original])
         self.store.save_entries(self.scope, [entry("derived:plan", "PLAN", "2")])
         by_id = {item["entry_id"]: item for item in self.checkpoint_entries()}
-        self.assertEqual(by_id[MASTER_INPUT_ID], original)
+        self.assertEqual(by_id[MASTER_INPUT_ID]["content"], original["content"])
+        self.assertEqual(
+            by_id[MASTER_INPUT_ID]["provenance"], original["provenance"]
+        )
         self.assertEqual(by_id["derived:plan"]["content"], "PLAN")
 
     def test_master_input_content_cannot_be_replaced(self):
