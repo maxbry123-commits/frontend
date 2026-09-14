@@ -1,0 +1,72 @@
+name: factory-f-fe-073-touch-drag-intent
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-fe-073-touch-drag-intent.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/touch-dnd-v195.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-fe-073-touch-drag-intent.spec.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-f-fe-073-touch-drag-intent
+  cancel-in-progress: false
+
+jobs:
+  drag-intent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Preserve prior touch versions
+        run: |
+          set -euo pipefail
+          test -s src/touch-dnd-v192.js
+          test -s src/touch-dnd-v193.js
+          test -s src/touch-dnd-v194.js
+          test -s src/touch-dnd-v195.js
+          grep -F "version:'1.9.2'" src/touch-dnd-v192.js
+          grep -F "TOUCH_DND_VERSION = '1.9.3'" src/touch-dnd-v193.js
+          grep -F "TOUCH_DND_VERSION = '1.9.4'" src/touch-dnd-v194.js
+          grep -F "TOUCH_DND_VERSION = '1.9.5'" src/touch-dnd-v195.js
+          ! grep -F "1.9.5" src/touch-dnd-v192.js
+          ! grep -F "1.9.5" src/touch-dnd-v193.js
+          ! grep -F "1.9.5" src/touch-dnd-v194.js
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Syntax F-FE-073
+        run: |
+          node --check src/touch-dnd-v195.js
+          node --check tests/e2e/f-fe-073-touch-drag-intent.spec.mjs
+      - name: F-FE-073 desktop unit drag intent
+        run: npx playwright test tests/e2e/f-fe-073-touch-drag-intent.spec.mjs --project=chromium-desktop --reporter=line
+      - name: F-FE-073 Android-size Pixel 7 gate
+        run: npx playwright test tests/e2e/f-fe-073-touch-drag-intent.spec.mjs --project=mobile-chromium --reporter=line
+      - name: Preserve F-FE-073 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-f-fe-073-touch-drag-intent-evidence
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+          if-no-files-found: warn
+          retention-days: 14
