@@ -92,6 +92,60 @@ class StabilizeIntegrationTests(unittest.TestCase):
         self.assertEqual(len(definition.fingerprint()), 64)
         self.assertEqual(definition.fingerprint(), definition.fingerprint())
 
+    def test_s3_049_continuous_cognitive_loop_projection_is_ordered(self):
+        definition = YAIWES_CHAT_WORKFLOW
+        self.assertEqual(
+            tuple(step.step_id for step in definition.steps),
+            (
+                "master_input",
+                "questions",
+                "goals",
+                "requirements",
+                "plan",
+                "workflow",
+                "task_contract",
+                "context",
+                "route",
+                "agent",
+                "candidate_delta",
+                "audit",
+                "gap_strategy",
+                "consolidate",
+                "memory_update",
+                "checkpoint",
+                "coverage",
+                "next_stage",
+                "final_judge",
+            ),
+        )
+        self.assertEqual(
+            tuple(step.task for step in definition.steps),
+            (
+                "MasterInputContract",
+                "QuestionTask",
+                "GoalTask",
+                "RequirementTask",
+                "PlanTask",
+                "StabilizeWorkflow",
+                "TaskContract",
+                "MemoryAdapter",
+                "RouterAdapter",
+                "AgentTask",
+                "StateDeltaValidation",
+                "AuditTask",
+                "FailureAnalysisStrategyDelta",
+                "ConsolidatorTask",
+                "MemoryUpdate",
+                "StabilizeDurableCheckpoint",
+                "CoverageTask",
+                "NextRunnableStage",
+                "FinalJudgeTask",
+            ),
+        )
+        self.assertEqual(definition.steps[12].condition, "GAP")
+        self.assertEqual(definition.steps[13].condition, "PASS")
+        self.assertEqual(definition.steps[18].condition, "CLOSURE_CANDIDATE")
+
     def test_workflow_definition_matches_runtime_single_owner(self):
         registry = build_runtime_registry([WORKFLOW_OWNER])
         self.assertEqual(registry.workflow_owner.name, YAIWES_CHAT_WORKFLOW.owner)
