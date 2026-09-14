@@ -1,0 +1,17 @@
+{
+  "schema": "yaiwes.factory.node-claim/v1",
+  "contract": "tel.workflow/v3",
+  "node_id": "F-FE-066",
+  "segment_id": "SEG-01-SHELL",
+  "agent": "GROK",
+  "owner": "GROK 1 UI YAIWES",
+  "chat_id": "GROK-1-UI-YAIWES-CRAZY-WALL",
+  "state": "CLAIMED",
+  "fresh_main_sha": "e19252b38fca00c72782d4424b2ba5358c6eb033",
+  "claimed_at": "2026-09-14T09:35:00Z",
+  "write_scope": [
+    "Frontend/factory-v0/src/ui/workspace-shell-v2.js",
+    "Frontend/factory-v0/workspace-shell-v2.css",
+    "Frontend/factory-v0/tests/workspace-shell-v2.test.mjs"
+  ]
+}

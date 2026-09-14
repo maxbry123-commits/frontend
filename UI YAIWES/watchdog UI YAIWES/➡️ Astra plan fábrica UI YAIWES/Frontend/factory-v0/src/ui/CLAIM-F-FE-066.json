@@ -1,0 +1,37 @@
+{
+  "schema": "yaiwes.factory.node-claim/v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-FE-066",
+  "segment_id": "SEG-01-SHELL",
+  "agent": "GROK",
+  "owner": "GROK 1 UI YAIWES",
+  "chat_id": "GROK-1-UI-YAIWES-CRAZY-WALL",
+  "state": "CLAIMED",
+  "fresh_main_sha": "e19252b38fca00c72782d4424b2ba5358c6eb033",
+  "claimed_at": "2026-09-14T09:35:00Z",
+  "write_scope": [
+    "Frontend/factory-v0/src/ui/workspace-shell-v2.js",
+    "Frontend/factory-v0/workspace-shell-v2.css",
+    "Frontend/factory-v0/tests/workspace-shell-v2.test.mjs",
+    "Frontend/factory-v0/src/ui/CLAIM-F-FE-066.json"
+  ],
+  "excluded_due_to_collision": [
+    "Frontend/factory-v0/tests/e2e/*shell-v2*",
+    "Frontend/factory-v0/project-memory/*F-FE-066*"
+  ],
+  "collision_note": "SOL GPT owns F-FRONTEND-QA-066 tests/e2e/** and project-memory/**. This claim uses disjoint concrete paths only.",
+  "frozen_not_touched": [
+    "Frontend/factory-v0/index-v19.html",
+    "Frontend/factory-v0/index-v192.html"
+  ],
+  "integrator_only_not_touched": [
+    "Frontend/factory-v0/index-v193.html",
+    "Frontend/factory-v0/index-v193-preview.html",
+    "Frontend/factory-v0/src/bootstrap/candidate-v193.js"
+  ],
+  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+  "strategy": "REUSE_EXISTING > PATCH",
+  "gap": "v1 remounts collapsed drawers on every resize; no overlay/Escape; not version-exported",
+  "acceptance": "canvas-first desktop/mobile drawers; v1 preserved; v2 unit test PASS; not wired into candidate"
+}
