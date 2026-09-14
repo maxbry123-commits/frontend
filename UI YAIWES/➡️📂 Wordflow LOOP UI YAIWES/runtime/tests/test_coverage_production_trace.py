@@ -17,6 +17,7 @@ TRACE_ID = "REQ-S3-057"
 SECOND_TRACE_ID = "REQ-S3-055"
 THIRD_TRACE_ID = "REQ-S3-054"
 FOURTH_TRACE_ID = "REQ-S3-053"
+FIFTH_TRACE_ID = "REQ-S3-050"
 
 
 def _copy_certified_trace(tmp_path: Path) -> Path:
@@ -151,6 +152,38 @@ def test_funnel_consolidation_trace_preserves_provenance_and_real_ci(tmp_path):
     assert result.product_verified is False
 
 
+def test_continuous_loop_trace_binds_autonomous_retry_and_real_ci(tmp_path):
+    target = tmp_path / f"{FIFTH_TRACE_ID}.json"
+    target.write_bytes((TRACE_ROOT / f"{FIFTH_TRACE_ID}.json").read_bytes())
+    traces = load_trace_inventory(tmp_path, (FIFTH_TRACE_ID,))
+    trace = traces[0]
+
+    def trusted_lookup(run_id: int, job_id: int) -> TrustedCIExecution:
+        assert (run_id, job_id) == (34745090975, 103691474425)
+        return TrustedCIExecution(
+            run_id=run_id,
+            job_id=job_id,
+            revision="52d52bac59186078e36af7a982b7c7f8aaf2d9dc",
+            status="completed",
+            conclusion="success",
+            implementation_sha256=trace.implementation.sha256,
+            test_sha256=trace.test.sha256,
+        )
+
+    result = audit_five_pass(
+        PROJECT_ROOT,
+        (FIFTH_TRACE_ID,),
+        traces,
+        (trace.implementation.path,),
+        make_ci_verifier(trusted_lookup),
+    )
+
+    assert result.status == "TRACEABILITY_PASS"
+    assert result.verified_requirements == 1
+    assert result.total_requirements == 1
+    assert result.product_verified is False
+
+
 def test_product_inventory_stays_fail_closed_until_all_167_traces_exist():
     with pytest.raises(ValueError) as exc:
         load_trace_inventory(TRACE_ROOT, requirement_inventory())
@@ -162,4 +195,5 @@ def test_product_inventory_stays_fail_closed_until_all_167_traces_exist():
     assert SECOND_TRACE_ID not in missing
     assert THIRD_TRACE_ID not in missing
     assert FOURTH_TRACE_ID not in missing
-    assert len(missing) == 163
+    assert FIFTH_TRACE_ID not in missing
+    assert len(missing) == 162
