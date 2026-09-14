@@ -6,12 +6,12 @@
   "authority": "current code + tests + trusted CI/readback > this queue + Crazy Wall V5/N34-N35 > architecture/handoff > history",
   "progress": {
     "denominator": 167,
-    "certified_now": 11,
-    "missing_now": 156,
-    "certified_ids": ["REQ-S3-044", "REQ-S3-045", "REQ-S3-046", "REQ-S3-047", "REQ-S3-048", "REQ-S3-049", "REQ-S3-050", "REQ-S3-053", "REQ-S3-054", "REQ-S3-055", "REQ-S3-057"],
-    "current_subgap": "GAP-10-STEERING-INTERPROCESS-OSS",
-    "current_subgap_state": "EXECUTING",
-    "current_owner": "CHAT_SUPERVISOR"
+    "certified_now": 12,
+    "missing_now": 155,
+    "certified_ids": ["REQ-S3-016", "REQ-S3-044", "REQ-S3-045", "REQ-S3-046", "REQ-S3-047", "REQ-S3-048", "REQ-S3-049", "REQ-S3-050", "REQ-S3-053", "REQ-S3-054", "REQ-S3-055", "REQ-S3-057"],
+    "current_subgap": null,
+    "current_subgap_state": "NEXT_UNCLAIMED",
+    "current_owner": null
   },
   "rules": [
     "1 literal task = 1 active subgap; one owner per write scope.",
@@ -36,14 +36,16 @@
       "state": "GAP_RESOLVABLE",
       "priority": 2,
       "owner": null,
-      "gap": "53 implementable S3 requirements remain uncertified after closing 044,045,046,047,048,049,050,053,054,055,057.",
+      "gap": "52 implementable S3 requirements remain uncertified after 12 total certified requirements; REQ-S3-016 is now certified in addition to the prior S3 set.",
       "last_closed_subgap": {
-        "id": "REQ-S3-044",
-        "claim_commit": "d5886752bc7f53465bf177d3f6dab676070a7353",
-        "test_commit": "063c5c4ed31b45adb3c4316328176e31b59db5ea",
-        "trusted_ci": "34828607033/103926374286",
-        "trace_commit": "e19252b38fca00c72782d4424b2ba5358c6eb033",
-        "five_pass": "34828794746/103926967427 TRACEABILITY_PASS"
+        "id": "REQ-S3-016",
+        "claim_close_commit": "52a04c3175322f534630b2a93003c9f322b31685",
+        "trace_commit": "6e1791eca2682310e9e059072a4b21d99a9ba8b7",
+        "evidence_commit": "670ea2c87e8e2d0f48863b2a84a9986111e4bc7d",
+        "focused_test_commit": "602bf216cf7fb331f2747638876dc7093b490db2",
+        "trusted_ci": "34745090975/103691474425",
+        "focused_five_pass_ci": "34861851397/104035820593 TRACEABILITY_PASS",
+        "strategy": "REUSE existing N27 code/test/CI; no runtime rewrite"
       },
       "steps": [
         "Read each literal S3 requirement and locate existing code/test first.",
@@ -106,7 +108,7 @@
     },
     {
       "id": "GAP-09-FINAL-JUDGE",
-      "state": "BLOCKED_AFTER_GAP-06-07-08-10",
+      "state": "BLOCKED_AFTER_GAP-06-07-08",
       "priority": 9,
       "gap": "project_verified_closed=false",
       "plan": "cross-check final architecture/readme/Crazy Wall vs exact code/tests/evidence -> repair residual only -> 12 entry + 12 exit goals + Council12 + 3 refutations + 4 E2E simulations/executions + exact candidate CI/readback",
@@ -114,29 +116,26 @@
     },
     {
       "id": "GAP-10-STEERING-INTERPROCESS-OSS",
-      "state": "EXECUTING",
+      "state": "VERIFIED_CLOSED",
       "priority": 2,
-      "owner": "CHAT_SUPERVISOR",
-      "gap": "Current drain_steer primitive is Redis LPOP coordination only; user explicitly authorized comparison and acquisition of 3-4 more advanced OSS steering/durable-workflow systems.",
+      "owner": null,
+      "gap": "User explicitly authorized comparison of four advanced OSS steering/durable-workflow systems and acquisition of three or four through canonical motors.",
       "microflow": "run_id -> queue/key -> operator/API injects directive -> worker consumes directive(s) -> continue same persistent task without restart",
-      "selected": [
-        {"name":"Temporal Python SDK","source_repo":"temporalio/sdk-python","source_ref":"ab25ed693f7ec77589346e66c98db299a8c9c9fe","reason":"durable workflows + Signals/Updates + worker/client control"},
-        {"name":"DBOS Python","source_repo":"dbos-inc/dbos-transact-py","source_ref":"83805fd84494c85ea09105443884a2786152d921","reason":"durable workflow send/recv messaging with persisted queues"},
-        {"name":"LangGraph","source_repo":"langchain-ai/langgraph","source_ref":"e539ac122f4126f6dd850581c1494948cf620e31","reason":"interrupt/resume + Command + durable execution"},
-        {"name":"Hatchet","source_repo":"hatchet-dev/hatchet","source_ref":"315d43a72fd771b049b304b865a81dbab98c466c","reason":"durable tasks + event waits + pause/unpause + distributed workers"}
+      "research_count": 4,
+      "selected_verified": [
+        {"name":"Stately Agent","source_repo":"statelyai/agent","source_ref":"1fde45dcf6d3bda6a04cb468a2b74dc6595b8396","manifest_blob":"2f0c1e32c98b472340d01c8fcbb61922ab8fac0b","files":504},
+        {"name":"Hatchet","source_repo":"hatchet-dev/hatchet","source_ref":"315d43a72fd771b049b304b865a81dbab98c466c","manifest_blob":"4d6864608d512ce20961def84408f4859a9f4a6e","files":4774},
+        {"name":"Conductor","source_repo":"conductor-oss/conductor","source_ref":"24ac3cb4db112a3bcd70d6eef6eaf3dc91f70a77","manifest_blob":"3f124c593040ee871f902e1eac39fa8d0d46e0cf","files":4232}
       ],
-      "motor": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py",
-      "engine": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py",
-      "destination": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/",
-      "steps": [
-        "VERIFY_RESEARCH: compare official code/docs, dedup destination, pin exact source commits.",
-        "EXECUTE_DELTA: run canonical Motor 2 with explicit ENGINE_PATH and PUBLISH=1 for each selected repo; no LFS, no force, fail closed on special files/blob limits/destination collision.",
-        "TEST_REPORT: require download+extraction+source tree hash+published readback for each successful component; record any engine rejection as GAP without bypassing guards."
-      ],
-      "close": "At least 3 of 4 selected systems are published with SOURCE_URL+exact commit+manifest/tree SHA+extraction_verified+readback; failures remain explicit and do not get fabricated."
+      "excluded": {"name":"Temporal server","source_repo":"temporalio/temporal","source_ref":"9ab3a9f770da20df7d94bcc0030f28eec7b0b947","reason":"SOURCE_SPECIAL_FILE_GAP; canonical motor guard preserved, no bypass"},
+      "motor_evidence": {"run_id":34860346777,"job_id":104030594193,"run_conclusion":"failure","reason":"Stately published; Conductor/Hatchet already existed from concurrent acquisition; Temporal rejected by special-file guard"},
+      "independent_readback": "3 selected manifests exact source commits + extraction_verified + no_lfs",
+      "collision_cleanup": {"failed_competing_run":34860254466,"cleanup_commit":"db13ab4c0a712d7572370a6f72d5b243eb88a0ee","redundant_path_readback":"404_NOT_FOUND"},
+      "closure_commit": "639e9a268333708ff3e66549c259223be4630cfe",
+      "close": "3/4 researched systems retained as the authorized selected set with exact provenance/readback; presence is not runtime integration."
     }
   ],
-  "execution_order": "GAP-10 current explicit user delta; then GAP-02; GAP-03/GAP-04/GAP-05 may run in parallel only with non-overlapping scopes; then GAP-06/GAP-07; GAP-08; GAP-09",
+  "execution_order": "GAP-02 current; GAP-03/GAP-04/GAP-05 may run in parallel only with non-overlapping scopes; then GAP-06/GAP-07; GAP-08; GAP-09",
   "forbidden": [
     "unrelated features/components/downloads",
     "second auditor/governance/runtime/state engine",
