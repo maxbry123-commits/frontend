@@ -1,0 +1,91 @@
+name: Factory F-FE-068 Release PASS
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-fe-068-release-pass.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Release F-FE-068 against fresh Crazy Wall
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import base64, json, os, time, urllib.parse, urllib.request, urllib.error
+
+          repo=os.environ['GITHUB_REPOSITORY']
+          token=os.environ['GH_TOKEN']
+          path='UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json'
+          encoded=urllib.parse.quote(path, safe='/')
+          url=f'https://api.github.com/repos/{repo}/contents/{encoded}'
+          headers={
+            'Authorization':f'Bearer {token}',
+            'Accept':'application/vnd.github+json',
+            'X-GitHub-Api-Version':'2022-11-28',
+            'User-Agent':'yaiwes-f-fe-068-release'
+          }
+
+          def call(req):
+            with urllib.request.urlopen(req, timeout=30) as r:
+              return r.status, json.loads(r.read().decode())
+
+          for attempt in range(1,6):
+            req=urllib.request.Request(url+'?ref=main', headers=headers)
+            _, meta=call(req)
+            doc=json.loads(base64.b64decode(meta['content']).decode('utf-8'))
+            node=next((x for x in doc.get('frontend_nodes',[]) if x.get('id')=='F-FE-068-MOBILE-FIT'),None)
+            if not node:
+              raise SystemExit('F-FE-068 node missing')
+            if node.get('state')=='PASS_RELEASED':
+              print('F_FE_068_RELEASE idempotent PASS_RELEASED')
+              raise SystemExit(0)
+            if node.get('state')!='CLAIMED' or node.get('owner')!='GPT-5.6-SOL':
+              raise SystemExit(f"fail-closed state/owner mismatch: {node.get('state')} {node.get('owner')}")
+
+            node.update({
+              'state':'PASS_RELEASED',
+              'report_state':'PASS_FOCUSED_MOBILE_FIT',
+              'reported_at':'2026-09-14T06:22:00-05:00',
+              'final_sha':'7b1c57267d37646454e4541a0cfbf882a3819eb4',
+              'run_id':34837590449,
+              'job_id':103954867553,
+              'artifact_id':10344608599,
+              'artifact_digest':'sha256:ea8f70e1c8f06378780dbd294f59f389666553b3e27459c9156cbf1a00b4a625',
+              'tests':'f-ui-068-mobile-fit.spec.mjs: 4/4 PASS; 390/412 root widths exact; offenders=[]; drawers/canvas/touch actions usable',
+              'evidence':[ 
+                'workspace-shell-v3.css blob 0ee1ed8d4fcf81c0bbdb64c9d861d6fcf39b50f5',
+                'test blob 478d6cd327b98c5cd6d0119b10ffdb6d28ef70ce',
+                'report Frontend/factory-v0/project-memory/F-FE-068-MOBILE-FIT-REPORT-2026-09-14.md',
+                'run 34837590449 job 103954867553 artifact 10344608599'
+              ],
+              'remaining_gaps':['SEG-11 must wire released shell into a new candidate and rerun candidate-level gates'],
+              'next_action':'RELEASED_READ_FRESH_NEXT_NODE'
+            })
+            doc['last_reconciled_at']='2026-09-14T06:22:00-05:00'
+            raw=(json.dumps(doc,ensure_ascii=False,indent=2)+'\n').encode('utf-8')
+            payload=json.dumps({
+              'message':'report(factory): release F-FE-068 mobile fit PASS',
+              'content':base64.b64encode(raw).decode(),
+              'sha':meta['sha'],
+              'branch':'main'
+            }).encode()
+            put=urllib.request.Request(url,data=payload,headers={**headers,'Content-Type':'application/json'},method='PUT')
+            try:
+              status,out=call(put)
+              print('F_FE_068_RELEASE', status, out.get('commit',{}).get('sha'))
+              break
+            except urllib.error.HTTPError as exc:
+              if exc.code in (409,422) and attempt<5:
+                print('retry fresh after concurrent update',attempt,exc.code)
+                time.sleep(attempt)
+                continue
+              raise
+          else:
+            raise SystemExit('release retry exhausted')
+          PY
