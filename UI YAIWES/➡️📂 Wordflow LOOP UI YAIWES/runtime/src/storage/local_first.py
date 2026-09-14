@@ -11,6 +11,7 @@ from typing import Any, Callable, Mapping
 _STORAGE_SCHEMA = "yaiwes.local-first.v1"
 _CHECKPOINT_SCHEMA = "yaiwes.local-first-checkpoint.v1"
 _ALLOWED_SCOPES = frozenset({"AGENT_PRIVATE", "CHAT", "PROJECT"})
+MASTER_INPUT_ENTRY_ID = "master_input:original"
 
 
 class LocalFirstStorageError(RuntimeError):
@@ -208,6 +209,23 @@ class StabilizeLocalFirstStorage:
         if not isinstance(entries, (tuple, list)):
             raise LocalFirstStorageError("storage_entries_sequence_required")
 
+        latest = self._latest(scope)
+        original_master_input: dict[str, Any] | None = None
+        if latest is not None:
+            previous_entries = latest["state"].get("entries")
+            if not isinstance(previous_entries, list):
+                raise LocalFirstStorageError("storage_snapshot_entries_invalid")
+            previous_master_inputs = [
+                dict(item)
+                for item in previous_entries
+                if isinstance(item, Mapping)
+                and item.get("entry_id") == MASTER_INPUT_ENTRY_ID
+            ]
+            if len(previous_master_inputs) > 1:
+                raise LocalFirstStorageError("duplicate_master_input_original")
+            if previous_master_inputs:
+                original_master_input = previous_master_inputs[0]
+
         normalized: list[dict[str, Any]] = []
         seen_ids: set[str] = set()
         for item in entries:
@@ -228,7 +246,20 @@ class StabilizeLocalFirstStorage:
             _json_bytes(entry)
             normalized.append(entry)
 
-        latest = self._latest(scope)
+        incoming_master_input = next(
+            (
+                item
+                for item in normalized
+                if item.get("entry_id") == MASTER_INPUT_ENTRY_ID
+            ),
+            None,
+        )
+        if original_master_input is not None:
+            if incoming_master_input is None:
+                normalized.insert(0, original_master_input)
+            elif _json_bytes(incoming_master_input) != _json_bytes(original_master_input):
+                raise LocalFirstStorageError("master_input_original_immutable")
+
         version = 1 if latest is None else int(latest["version"]) + 1
         sequence = 1 if latest is None else int(latest["sequence"]) + 1
         state = {
