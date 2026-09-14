@@ -5,29 +5,21 @@
   "node_id": "F-FE-094-STEP-1",
   "segment_id": "SEG-03-EDITOR-CORE",
   "lane": "GROK-A",
-  "state": "CLAIMED",
+  "state": "PASS_RELEASED",
   "owner": "GROK 3",
   "agent": "GROK",
   "chat_id": "GROK-3-UI-YAIWES-FACTORY",
-  "fresh_main_sha": "0beb15d03aa96e20ccafbb8d5ddbc121cc3b6ae3",
+  "fresh_main_sha": "0f698be4b9b033b1e508626bce9a089d80fe5db6",
   "claimed_at": "2026-09-14T13:36:40Z",
+  "claim_commit": "990b582870a9567e57a13efb4c45b5c1eac4c129",
+  "delta_commit": "1f7076aab6428f11d77d97d74f3fe3f674f7c927",
+  "tested_sha": "d1d4d35505bf719e41ac896b17003f91fdcbc084",
+  "released_at": "2026-09-14T13:41:30Z",
   "type": "CONTROL_QA",
   "selector": "[data-step='1']",
-  "candidate": "index-v192.html",
-  "depends_on": ["F-FE-093-NEW-COMPONENT"],
-  "dependency_status": "SATISFIED F-FE-093 PASS_RELEASED GROK 3 run 34846959649",
-  "write_scope": [
-    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-094-STEP-1.spec.mjs",
-    "Frontend/factory-v0/project-memory/F-FE-094-STEP-1-*",
-    ".github/workflows/factory-F-FE-094-STEP-1.yml",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-094.json"
-  ],
-  "skipped": {
-    "F-FE-093": "PASS_RELEASED GROK 3 not re-claimed",
-    "F-FE-069": "CLAIMED GPT-5.6-SOL",
-    "F-FE-073": "CLAIM file still CLAIMED GROK 1",
-    "F-FE-076": "SKIP while 073 claim not PASS_RELEASED"
-  },
+  "run_id": 34850710217,
+  "job_id": 103997645152,
   "product_patched": false,
-  "release": false
+  "release": true,
+  "next_free_node": "F-FE-095-STEP-2"
 }
