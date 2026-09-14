@@ -1,0 +1,19 @@
+{
+  "schema": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-INT-065",
+  "owner": "SOL GPT <FACTORY-INTEGRATOR>",
+  "chat_id": "current-factory-chat",
+  "fresh_main_sha": "c785a66c3a14af39ade1f9bd66985a5fd9f3f3f5",
+  "claimed_at": "2026-09-14T08:50:00Z",
+  "state": "CLAIMED",
+  "segment": "SEG-11-INTEGRATOR",
+  "write_scope": [
+    "Frontend/factory-v0/index-v193.html",
+    "Frontend/factory-v0/src/bootstrap/candidate-v193.js",
+    "Frontend/factory-v0/tests/e2e/*canonical-v193*",
+    "Frontend/factory-v0/project-memory/*F-INT-065*"
+  ],
+  "frozen": ["Frontend/factory-v0/index-v19.html", "Frontend/factory-v0/index-v192.html"],
+  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"]
+}
