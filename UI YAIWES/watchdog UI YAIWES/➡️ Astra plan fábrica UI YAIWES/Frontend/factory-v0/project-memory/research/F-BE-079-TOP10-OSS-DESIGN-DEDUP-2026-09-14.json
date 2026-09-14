@@ -1,0 +1,162 @@
+{
+  "schema": "yaiwes.factory.research.oss-top10.v1",
+  "contract": "tel.workflow/v3",
+  "node_id": "F-BE-079",
+  "date": "2026-09-14",
+  "local_registry_blob": "5c24b1a7780945c51f8d3a8f67cc2c0b92b3f3e8",
+  "policy": "REUSE_EXISTING > PATCH > ADAPT > GENERATE > NEW_DOWNLOAD",
+  "scoring": ["visual_editor_fit", "app_web_fit", "component_model", "extensibility", "license_fit", "integration_cost", "existing_local_asset"],
+  "candidates": [
+    {
+      "rank": 1,
+      "name": "Penpot",
+      "source": "https://github.com/penpot/penpot",
+      "license": "MPL-2.0",
+      "capability": "design system, tokens, responsive layout, SVG/CSS/HTML/JSON oriented design, plugin/API/MCP patterns",
+      "local_status": "AVAILABLE_ZIP",
+      "score_100": 94,
+      "decision": "REUSE_LOCAL_AND_ADAPT_PATTERNS",
+      "factory_target": ["SEG-02-BROWSER", "SEG-03-EDITOR-CORE", "SEG-10-OSS"],
+      "gap": "design-token/catalog metadata can improve Factory, but no new download is justified"
+    },
+    {
+      "rank": 2,
+      "name": "Webstudio",
+      "source": "https://github.com/webstudio-is/webstudio",
+      "license": "AGPL-3.0-or-later for core; optional proprietary animation package excluded",
+      "capability": "visual web development, responsive layout, style/composition patterns",
+      "local_status": "AVAILABLE_ZIP",
+      "score_100": 91,
+      "decision": "REUSE_LOCAL_REFERENCE_ONLY",
+      "factory_target": ["SEG-01-SHELL", "SEG-03-EDITOR-CORE"],
+      "gap": "no residual capability requiring another copy"
+    },
+    {
+      "rank": 3,
+      "name": "Craft.js",
+      "source": "https://github.com/prevwong/craft.js",
+      "license": "MIT",
+      "capability": "extensible React page-editor nodes, connectors and editor-state patterns",
+      "local_status": "DONOR_ACTIVE",
+      "score_100": 90,
+      "decision": "KEEP_EXISTING_DONOR_ACTIVE",
+      "factory_target": ["SEG-03-EDITOR-CORE", "SEG-05-CONTROLS"],
+      "gap": "none proven for acquisition"
+    },
+    {
+      "rank": 4,
+      "name": "Puck",
+      "source": "https://github.com/puckeditor/puck",
+      "license": "MIT",
+      "capability": "modular React visual editor, component config, fields, categories, viewports, permissions, data migration",
+      "local_status": "NOT_FOUND_IN_FACTORY_OSS_REGISTRY_OR_CANONICAL_OSS_ROOT_EXACT_PATH",
+      "score_100": 89,
+      "decision": "CANDIDATE_ONLY_IF_COMPONENT_SCHEMA_OR_PERMISSIONS_GAP_PERSISTS",
+      "factory_target": ["SEG-02-BROWSER", "SEG-03-EDITOR-CORE"],
+      "gap": "valuable component-schema/permissions patterns, but direct React integration would add runtime cost"
+    },
+    {
+      "rank": 5,
+      "name": "GrapesJS",
+      "source": "https://github.com/GrapesJS/grapesjs",
+      "license": "BSD-3-Clause",
+      "capability": "framework for visual web builders with blocks, components, commands, traits, styles and storage patterns",
+      "local_status": "NOT_FOUND_IN_FACTORY_OSS_REGISTRY_OR_CANONICAL_OSS_ROOT_EXACT_PATH",
+      "score_100": 88,
+      "decision": "CANDIDATE_ONLY_IF_TRAIT_STYLE_COMMAND_GAP_PERSISTS",
+      "factory_target": ["SEG-03-EDITOR-CORE", "SEG-05-CONTROLS", "SEG-06-IO"],
+      "gap": "strong donor potential but overlaps existing editor core; never replace app-v19 wholesale"
+    },
+    {
+      "rank": 6,
+      "name": "Onlook",
+      "source": "https://github.com/onlook-dev/onlook",
+      "license": "Apache-2.0",
+      "capability": "visual editing of real React code with changes written back to code",
+      "local_status": "AVAILABLE_ZIP",
+      "score_100": 87,
+      "decision": "REUSE_LOCAL_REFERENCE_ONLY",
+      "factory_target": ["SEG-07-IMPORT", "SEG-03-EDITOR-CORE"],
+      "gap": "code roundtrip patterns useful; no new acquisition"
+    },
+    {
+      "rank": 7,
+      "name": "Silex",
+      "source": "https://github.com/silexlabs/Silex",
+      "license": "AGPL-3.0 family",
+      "capability": "hackable visual website builder and responsive page composition",
+      "local_status": "AVAILABLE_EXTRACTED",
+      "score_100": 84,
+      "decision": "REUSE_EXTRACTED_REFERENCE",
+      "factory_target": ["SEG-02-BROWSER", "SEG-03-EDITOR-CORE"],
+      "gap": "already extracted; presence is not runtime integration"
+    },
+    {
+      "rank": 8,
+      "name": "Appsmith",
+      "source": "https://github.com/appsmithorg/appsmith",
+      "license": "Apache-2.0 Community Edition",
+      "capability": "low-code app builder, datasource/action/UI composition patterns",
+      "local_status": "AVAILABLE_LOCAL",
+      "score_100": 82,
+      "decision": "REUSE_LOCAL_REFERENCE_ONLY",
+      "factory_target": ["SEG-08-AI-ROUTER", "SEG-10-OSS"],
+      "gap": "large monolith; use patterns only, never embed whole platform"
+    },
+    {
+      "rank": 9,
+      "name": "ToolJet",
+      "source": "https://github.com/ToolJet/ToolJet",
+      "license": "AGPL-3.0",
+      "capability": "visual internal-app builder with data/API integrations and workflows",
+      "local_status": "NOT_FOUND_IN_FACTORY_OSS_REGISTRY_OR_CANONICAL_OSS_ROOT_EXACT_PATH",
+      "score_100": 79,
+      "decision": "REJECT_DOWNLOAD_CURRENTLY_MONOLITH_OVERLAP",
+      "factory_target": ["SEG-08-AI-ROUTER"],
+      "gap": "capability overlaps existing Factory+Router architecture and integration cost is high"
+    },
+    {
+      "rank": 10,
+      "name": "Plasmic",
+      "source": "https://github.com/plasmicapp/plasmic",
+      "license": "mixed: MIT outside platform, AGPL for platform",
+      "capability": "visual React app/site builder and component-code integration patterns",
+      "local_status": "NOT_FOUND_IN_FACTORY_OSS_REGISTRY_OR_CANONICAL_OSS_ROOT_EXACT_PATH",
+      "score_100": 77,
+      "decision": "REFERENCE_ONLY_LICENSE_AND_MONOLITH_COMPLEXITY",
+      "factory_target": ["SEG-02-BROWSER", "SEG-03-EDITOR-CORE"],
+      "gap": "mixed licensing and platform size make direct acquisition lower priority"
+    }
+  ],
+  "already_local_specialists_to_reuse_before_download": [
+    "OpenPencil",
+    "Frappe Builder",
+    "tldraw",
+    "draw.io",
+    "xyflow",
+    "Excalidraw",
+    "Dockview",
+    "PixiJS"
+  ],
+  "top_external_candidates_for_F_BE_080_if_residual_gap_is_proven": [
+    {
+      "name": "Puck",
+      "only_for": "component schema/fields/categories/permissions/viewports gap",
+      "integration_rule": "extract/adapt smallest donor contract; do not add second editor engine"
+    },
+    {
+      "name": "GrapesJS",
+      "only_for": "traits/style/command registry gap not covered by existing local donors",
+      "integration_rule": "donor adapter only; app-v19 remains canonical state engine"
+    }
+  ],
+  "third_additional_candidate": null,
+  "third_candidate_reason": "No third new download is justified yet: current local registry already contains higher-value specialists for canvas, node flows, menus, docking, design canvas and web-builder patterns. F-BE-080 must remain fail-closed until an actual residual capability gap survives those local donors.",
+  "result": {
+    "ten_ranked": 10,
+    "already_local_or_reusable": 6,
+    "external_exact_path_not_found": 4,
+    "new_download_authorized_now": 0,
+    "conditional_new_download_candidates": 2
+  }
+}
