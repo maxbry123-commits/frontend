@@ -2,10 +2,32 @@
   "schema": "yaiwes.factory.node-claim/v1",
   "node_id": "B-MK-003",
   "owner": "ASTRA-GPT-5.6-SOL",
-  "state": "IN_PROGRESS",
+  "state": "TESTED_SUBGATE_PASS",
   "write_scope": "Frontend/factory-v0/src/microkernel/provenance/**",
   "strategy": "REUSE_EXISTING_ADAPT_NO_FORK",
-  "source_existing": "Frontend/factory-v0/src/acquisition/provenance-v1/provenance-v1.js",
-  "depends_on": ["B-MK-001", "B-MK-002"],
-  "acceptance": ["source/ref/hash/license/destination/adapter/test bound", "hash or provenance mismatch rejects promotion"]
+  "source_existing": {
+    "path": "Frontend/factory-v0/src/acquisition/provenance-v1/provenance-v1.js",
+    "blob_sha": "d4b212302377570dc5a6d6525c530ad46b56befd"
+  },
+  "implementation": {
+    "path": "Frontend/factory-v0/src/microkernel/provenance/index.js",
+    "blob_sha": "b3ce6eff18a85162fe99bac039e859c172e38730",
+    "commit": "2e92998190e5b3a8cff3a348b13ffbac65cc01e7"
+  },
+  "test": {
+    "path": "Frontend/factory-v0/src/microkernel/provenance/selftest.mjs",
+    "blob_sha": "d2b920589c89cbd3ec144f8dffe5b0d631ba1273",
+    "commit": "23e76df33d24d7a057d38f3f2243c8194adadca5",
+    "result": "PASS",
+    "assertions": 12,
+    "mode": "node selftest replay of GitHub read-back code"
+  },
+  "acceptance": {
+    "source_ref_hash_license_destination_adapter_test_bound": "PASS",
+    "source_commit_mismatch_rejected": "PASS",
+    "missing_adapter_rejected": "PASS",
+    "hash_mismatch_blocks_promotion": "PASS"
+  },
+  "limits": ["Final promotion still requires a real canonical acquisition receipt, not the test fixture."],
+  "next": "B-MK-004 universal plugin/capability bus wiring"
 }
