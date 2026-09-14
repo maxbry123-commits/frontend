@@ -6,12 +6,25 @@
   "chat_id":"current-factory-chat",
   "fresh_main_sha":"ecb3159935bd73086d90619293c1f77f104acd61",
   "claimed_at":"2026-09-14T08:59:00Z",
-  "state":"CLAIMED",
+  "reported_at":"2026-09-14T09:03:00Z",
+  "state":"VERIFIED_CLOSED",
+  "report_state":"PASS",
   "depends_on":["F-BE-074"],
   "write_scope":[
     "Frontend/factory-v0/src/acquisition/provenance-v1/**",
     "Frontend/factory-v0/tests/*provenance-v1*",
     "Frontend/factory-v0/project-memory/*F-BE-075*"
   ],
-  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"]
+  "paths":[
+    "Frontend/factory-v0/src/acquisition/provenance-v1/provenance-v1.js",
+    "Frontend/factory-v0/tests/provenance-v1.test.mjs"
+  ],
+  "commits":["9495b31647485460a7406fc6df5761d883c79d68","3212500ba74247a23f0611e88132dd2e27dea59c"],
+  "blobs":{"provenance":"d4b212302377570dc5a6d6525c530ad46b56befd","test":"99aac5fc2ab1ea8186f027ee7257929f4a8addef"},
+  "test":"node tests/provenance-v1.test.mjs => provenance-v1: PASS",
+  "identity_check":"executed local copies git hash-object matched repo blobs d4b21230... and 99aac5fc...",
+  "acceptance":"promotion requires source_url+source_ref/readback+sha256 manifest/hash PASS+license+destination+capability+adapter+test+installed_at",
+  "remaining_gaps":[],
+  "release":true,
+  "next_free_node":"F-BE-076"
 }
