@@ -5,25 +5,21 @@
   "node_id": "F-FE-097-STEP-4",
   "segment_id": "SEG-03-EDITOR-CORE",
   "lane": "GROK-A",
-  "state": "CLAIMED",
+  "state": "PASS_RELEASED",
   "owner": "GROK 3",
   "agent": "GROK",
   "chat_id": "GROK-3-UI-YAIWES-FACTORY",
   "fresh_main_sha": "642f5dd50b786df6d5df3dec14fcc0de47400e9a",
   "claimed_at": "2026-09-14T14:54:40Z",
+  "claim_commit": "d311f01c3a19d43827631abc17ce0cdd7c27f289",
+  "delta_commit": "04186400ff1a80cd1aa63ef4d14790fc59041d7d",
+  "tested_sha": "9b2e1813ba7ad610371d10f609f0d5a9e6879930",
+  "released_at": "2026-09-14T14:59:20Z",
   "type": "CONTROL_QA",
   "selector": "[data-step='4']",
+  "run_id": 34859131560,
+  "job_id": 104026401509,
   "product_patched": false,
-  "release": false,
-  "write_scope": [
-    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-097-STEP-4.spec.mjs",
-    "Frontend/factory-v0/project-memory/F-FE-097-STEP-4-*",
-    ".github/workflows/factory-F-FE-097-STEP-4.yml",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-097.json"
-  ],
-  "base_blobs": {
-    "index-v192.html": "e3d68e1063cd37c2a59d91911f071fda304e4695",
-    "src/app-v19.js": "1aab6ebec09a8e6a14f221b83226cf92552b4526"
-  },
+  "release": true,
   "next_free_node": "F-FE-098-STEP-5"
 }
