@@ -1,0 +1,26 @@
+{
+  "schema": "yaiwes.crazy-wall.claim.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "id": "GAP-04-REQ-S2-009",
+  "source_selector": "REQ-S2-009",
+  "state": "CLAIMED",
+  "owner": "chatgpt-recovery-gap04",
+  "base_sha": "e8ac63730bde0d62783799286145ef71416a42ce",
+  "source_anchor": "S2 Objetivo 9 — multiplataforma",
+  "requirement": "Core compartido + backends de plataforma; Android/Windows/Linux obligatorios; iOS inicialmente cliente/mirror; capability matrix/backend registry/update manager; protocolos comunes.",
+  "write_scope": [
+    "runtime/src/uek/platform_control.py",
+    "runtime/tests/test_platform_control.py",
+    ".github/workflows/gap04-req-s2-009-five-pass.yml",
+    "runtime/requirement_traces/REQ-S2-009.json",
+    "runtime/evidence/requirement_traces/REQ-S2-009.ci.json",
+    "runtime/tests/test_coverage_req_s2_009.py",
+    "reports/CLAIM-GAP-04-REQ-S2-009-CHATGPT-RECOVERY-2026-09-14.json"
+  ],
+  "verify_research": "PASS_PARTIAL: platform_matrix + sandbox_router + VirtualMachineManager already cover capability matrix/common lifecycle; global search found no explicit UpdateManager/BackendRegistry. Do not duplicate lifecycle or scheduler.",
+  "execute_delta": "PATCH only the missing platform-control capability: thin backend registry + fail-closed update-decision contract delegating runtime effects to existing canonical lifecycle.",
+  "test_report": "focused unit tests + exact source/code/test hashes + trusted CI + RequirementTrace + focused five-pass + readback",
+  "close": "REQ-S2-009 only; real-platform acceptance remains GAP-07 and global project remains open",
+  "strategy": "REUSE_EXISTING > PATCH > ADAPT"
+}
