@@ -6,9 +6,25 @@
   "chat_id": "current-factory-chat",
   "fresh_main_sha": "b7b9fc957e70497319806d09b41a4e9a4eefd74e",
   "claimed_at": "2026-09-14T09:02:00Z",
-  "state": "CLAIMED",
+  "reported_at": "2026-09-14T09:05:00Z",
+  "state": "VERIFIED_CLOSED",
+  "report_state": "PASS_RESEARCH_ONLY",
   "write_scope": ["Frontend/factory-v0/project-memory/research/F-BE-078-*"],
   "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
   "acceptance": "official-source research maps workspace/viewport/inspector/shortcuts/addons/history/assets to existing Factory gaps; no Blender monolith copied",
-  "policy": "RESEARCH_ONLY_NO_VENDOR_COPY_NO_RUNTIME_MUTATION"
+  "policy": "RESEARCH_ONLY_NO_VENDOR_COPY_NO_RUNTIME_MUTATION",
+  "paths": ["Frontend/factory-v0/project-memory/research/F-BE-078-BLENDER-PATTERN-RESEARCH-2026-09-14.json"],
+  "commit_sha": "65c5ff384d652d2ccee313c324a9e76ee5772a2a",
+  "test": "JSON report written from official Blender manual/developer sources; 8 Blender patterns mapped to existing Factory segments; new_component_required=false",
+  "evidence": [
+    "workspace/area/editor/region model -> SEG-01",
+    "context properties -> SEG-03",
+    "asset browser/catalogs -> SEG-02",
+    "extension isolation/network policy -> SEG-10/SEG-08",
+    "undo/version/recovery -> SEG-06",
+    "operator traceability -> SEG-05"
+  ],
+  "remaining_gaps": [],
+  "release": true,
+  "next_free_node": "F-BE-079"
 }
