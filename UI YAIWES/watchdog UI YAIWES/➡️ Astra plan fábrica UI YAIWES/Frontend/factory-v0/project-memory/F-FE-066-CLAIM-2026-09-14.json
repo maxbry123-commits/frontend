@@ -1,0 +1,35 @@
+{
+  "schema": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-FE-066",
+  "segment_id": "SEG-01-SHELL",
+  "lane": "frontend",
+  "state": "CLAIMED",
+  "owner": "GROK 1",
+  "agent": "GROK",
+  "chat_id": "GROK-1-FACTORY-FRONTEND",
+  "fresh_main_sha": "decdf706ae198846a0eaa132b80e0edc5b13750b",
+  "claimed_at": "2026-09-14T09:29:30Z",
+  "write_scope": [
+    "Frontend/factory-v0/src/ui/workspace-shell-v2.js",
+    "Frontend/factory-v0/workspace-shell-v2.css",
+    "Frontend/factory-v0/tests/e2e/*shell-v2*",
+    "Frontend/factory-v0/project-memory/*F-FE-066*"
+  ],
+  "frozen": [
+    "Frontend/factory-v0/index-v19.html",
+    "Frontend/factory-v0/index-v192.html",
+    "Frontend/factory-v0/src/ui/workspace-shell-v1.js",
+    "Frontend/factory-v0/workspace-shell-v1.css"
+  ],
+  "integrator_only": [
+    "Frontend/factory-v0/index-v193.html",
+    "Frontend/factory-v0/index-v193-preview.html",
+    "Frontend/factory-v0/src/bootstrap/candidate-v193.js"
+  ],
+  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+  "verified_gap_hypothesis": "v1 resize listener resets both drawers on every viewport change; no mount API/version evidence; no Escape/backdrop close; producer cannot wire candidate",
+  "strategy": "REUSE_EXISTING then PATCH into versioned v2; preserve v1",
+  "acceptance": "canvas-first desktop/mobile drawers with previous v1 preserved",
+  "release": false
+}
