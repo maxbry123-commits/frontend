@@ -1,0 +1,17 @@
+{
+  "schema": "yaiwes.gap.claim.v1",
+  "contract": "tel.workflow/v3",
+  "node": "GAP-02-N35-S3-REMAINDER",
+  "requirement_id": "REQ-S3-001",
+  "owner": "ChatGPT-Sol-supervisor",
+  "state": "CLAIMED",
+  "base_main_sha": "796d23a83f9bad710cc158dfe52e0ebf37d49e14",
+  "write_scope": [
+    "runtime/tests/test_req_s3_001_workflow_responsibility.py",
+    "runtime/requirement_traces/REQ-S3-001.json",
+    "runtime/evidence/requirement_traces/REQ-S3-001.ci.json",
+    "runtime/tests/test_req_s3_001_trace.py",
+    "reports/CLAIM-GAP-02-REQ-S3-001-CHATGPT-SUPERVISOR-2026-09-14.json"
+  ],
+  "rule": "No shared N35 test files; no product rewrite unless focused validation proves a real implementation gap."
+}
