@@ -1,0 +1,38 @@
+{
+  "bundle_bytes": 18012976,
+  "bundle_sha256": "c58b44f5394796ab3b552a10bc1ef7f581612f9dadbc0b778ce46d3af84aaabc",
+  "extracted_tree": {
+    "bytes": 41258030,
+    "files": 4232,
+    "sha256": "ba2d5ce19df43292f17b5decef40e84973e491a3828138e3c05d5c30e614ed2c"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "conductor.bundle.zip.part-0001",
+      "sha256": "986bc46e1bd28164350bfbe26bf0beed070d24565f6db862611ed93a222b4a6a"
+    },
+    {
+      "bytes": 5430064,
+      "name": "conductor.bundle.zip.part-0002",
+      "sha256": "8368567626abfc0617c086f01ad0e7b247492f9efe8ec63a3062b0177b204479"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "conductor",
+  "source_bytes": 41258030,
+  "source_commit": "24ac3cb4db112a3bcd70d6eef6eaf3dc91f70a77",
+  "source_files": 4232,
+  "source_ref": "24ac3cb4db112a3bcd70d6eef6eaf3dc91f70a77",
+  "source_repo": "conductor-oss/conductor",
+  "source_tree": {
+    "bytes": 41258030,
+    "files": 4232,
+    "sha256": "ba2d5ce19df43292f17b5decef40e84973e491a3828138e3c05d5c30e614ed2c"
+  }
+}
