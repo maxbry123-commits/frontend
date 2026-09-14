@@ -29,9 +29,10 @@ test('desktop search filter preview insert select edit undo redo stays on one ca
   await page.locator('[data-preview-insert]').click();
   await expect(page.locator('[data-node]')).toHaveCount(1);
   await page.locator('[data-node]').click();
-  await expect(page.locator('#prop-label')).toBeVisible();
-  await page.locator('#prop-label').fill('Botón editado V193');
-  await page.locator('#prop-label').dispatchEvent('change');
+  const label=page.locator('#prop-label');
+  await expect(label).toBeVisible();
+  await label.fill('Botón editado V193');
+  await label.blur();
   await expect(page.locator('[data-node] strong')).toHaveText('Botón editado V193');
   expect((await state(page)).components[0].label).toBe('Botón editado V193');
   await page.locator('#undo').click();
@@ -57,9 +58,10 @@ test('mobile touch preview insert select and edit keep canvas state',async({page
   await page.locator('[data-workspace-close="left"]').tap();
   await page.locator('[data-node]').tap();
   if(await page.locator('.studio').evaluate(el=>el.classList.contains('workspace-right-collapsed'))) await page.locator('[data-workspace-toggle="right"]').tap();
-  await expect(page.locator('#prop-label')).toBeVisible();
-  await page.locator('#prop-label').fill('Panel móvil editado');
-  await page.locator('#prop-label').dispatchEvent('change');
+  const label=page.locator('#prop-label');
+  await expect(label).toBeVisible();
+  await label.fill('Panel móvil editado');
+  await label.blur();
   await expect(page.locator('[data-node] strong')).toHaveText('Panel móvil editado');
   expect((await state(page)).components[0].label).toBe('Panel móvil editado');
   await expect(page.locator('#canvas')).toBeVisible();
