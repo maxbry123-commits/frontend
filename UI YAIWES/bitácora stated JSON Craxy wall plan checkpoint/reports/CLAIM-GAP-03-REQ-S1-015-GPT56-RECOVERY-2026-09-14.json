@@ -1,0 +1,24 @@
+{
+  "schema": "yaiwes.crazy-wall.claim.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "id": "GAP-03-REQ-S1-015",
+  "source_selector": "REQ-S1-015",
+  "state": "VERIFY_RESEARCH",
+  "owner": "gpt-5.6-sol-recovery-gap03",
+  "base_sha": "b9368f2a8b2520bb3b583e2d04f9c14148682aeb",
+  "source_anchor": "S1 §15 Catálogo de funciones",
+  "requirement": "El runtime debe tratar tools como capabilities controladas, no como autoridad implícita; filesystem/search/media/memory/agents/tasks/secrets/deploy requieren contrato y permisos.",
+  "write_scope": [
+    ".github/workflows/gap03-req-s1-015-five-pass.yml",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S1-015.json",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S1-015.ci.json",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_req_s1_015.py",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/CLAIM-GAP-03-REQ-S1-015-GPT56-RECOVERY-2026-09-14.json"
+  ],
+  "verify_research": "Map literal S1 §15 to PluginSpec capability contract, activation fail-closed, mount/workflow-owner guards and external policy/authz path; prove coverage before adding any product-code delta.",
+  "execute_delta": "REUSE_EXISTING first. Add only focused regression/RequirementTrace/evidence/CI binding if existing implementation proves the requirement; patch product code only if a concrete permission/contract gap is reproduced.",
+  "test_report": "focused contract/activation/policy regression + exact SHA256 bindings + trusted completed/success CI + audit_five_pass + readback",
+  "close": "REQ-S1-015 VERIFIED_CLOSED only after source->implementation->wiring->test->trace->evidence->trusted CI->five-pass->readback; no global-close implication",
+  "strategy": "REUSE_EXISTING > PATCH > ADAPT"
+}
