@@ -1,0 +1,25 @@
+{
+  "schema":"yaiwes.factory.frontend.node-claim.v1",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "node_id":"F-FE-218-NETWORK-OFFLINE-MATRIX",
+  "segment_id":"QA_ONLY",
+  "lane":"GROK-P",
+  "state":"CLAIMED",
+  "owner":"GPT-5.6-SOL",
+  "agent":"GPT-5.6-SOL",
+  "chat_id":"CURRENT_CHAT_FACTORY_SEGMENTATION",
+  "fresh_main_sha":"b6fc7af7b024e0a27a4ffa607cdd6d0b95f76049",
+  "claimed_at":"2026-09-14T08:59:00-05:00",
+  "type":"QA_ONLY",
+  "candidate":"index-v192.html",
+  "acceptance":"Local editing/save/export remains usable offline after boot; remote-only probe fails closed with an explicit reason; no fake remote success.",
+  "write_scope":[
+    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-218-NETWORK-OFFLINE-MATRIX.spec.mjs",
+    "Frontend/factory-v0/project-memory/F-FE-218-NETWORK-OFFLINE-MATRIX-*",
+    ".github/workflows/factory-F-FE-218-NETWORK-OFFLINE-MATRIX.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-218.json"
+  ],
+  "product_patched":false,
+  "release":false
+}
