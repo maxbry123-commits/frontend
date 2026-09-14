@@ -9,19 +9,19 @@
     "certified_now": 11,
     "missing_now": 156,
     "certified_ids": ["REQ-S3-044", "REQ-S3-045", "REQ-S3-046", "REQ-S3-047", "REQ-S3-048", "REQ-S3-049", "REQ-S3-050", "REQ-S3-053", "REQ-S3-054", "REQ-S3-055", "REQ-S3-057"],
-    "current_subgap": null,
-    "current_subgap_state": "NEXT_UNCLAIMED",
-    "current_owner": null
+    "current_subgap": "GAP-10-STEERING-INTERPROCESS-OSS",
+    "current_subgap_state": "EXECUTING",
+    "current_owner": "CHAT_SUPERVISOR"
   },
   "rules": [
     "1 literal task = 1 active subgap; one owner per write scope.",
-    "No new feature/framework/download/document unless directly required to close a listed GAP.",
+    "No new feature/framework/download/document unless directly required to close a listed GAP or explicitly authorized by the user as a new literal GAP.",
     "REUSE_EXISTING > PATCH > ADAPT; generate only a proven missing artifact.",
     "Each node: VERIFY_RESEARCH -> EXECUTE_DELTA -> TEST_REPORT.",
     "SOURCE_PRESENT != IMPLEMENTED != WIRED != TEST_PASS != VERIFIED_CLOSED.",
     "No PASS without exact path/blob/SHA + test + trusted CI/readback where applicable.",
     "Collision => release and next non-overlapping subgap.",
-    "Global close requires GAP-01..09 terminal and Final Judge PASS."
+    "Global close requires GAP-01..10 terminal and Final Judge PASS."
   ],
   "nodes": [
     {
@@ -106,14 +106,37 @@
     },
     {
       "id": "GAP-09-FINAL-JUDGE",
-      "state": "BLOCKED_AFTER_GAP-06-07-08",
+      "state": "BLOCKED_AFTER_GAP-06-07-08-10",
       "priority": 9,
       "gap": "project_verified_closed=false",
       "plan": "cross-check final architecture/readme/Crazy Wall vs exact code/tests/evidence -> repair residual only -> 12 entry + 12 exit goals + Council12 + 3 refutations + 4 E2E simulations/executions + exact candidate CI/readback",
       "close": "no open GAP; Final Judge VERIFIED_CLOSED on exact published SHA"
+    },
+    {
+      "id": "GAP-10-STEERING-INTERPROCESS-OSS",
+      "state": "EXECUTING",
+      "priority": 2,
+      "owner": "CHAT_SUPERVISOR",
+      "gap": "Current drain_steer primitive is Redis LPOP coordination only; user explicitly authorized comparison and acquisition of 3-4 more advanced OSS steering/durable-workflow systems.",
+      "microflow": "run_id -> queue/key -> operator/API injects directive -> worker consumes directive(s) -> continue same persistent task without restart",
+      "selected": [
+        {"name":"Temporal Python SDK","source_repo":"temporalio/sdk-python","source_ref":"ab25ed693f7ec77589346e66c98db299a8c9c9fe","reason":"durable workflows + Signals/Updates + worker/client control"},
+        {"name":"DBOS Python","source_repo":"dbos-inc/dbos-transact-py","source_ref":"83805fd84494c85ea09105443884a2786152d921","reason":"durable workflow send/recv messaging with persisted queues"},
+        {"name":"LangGraph","source_repo":"langchain-ai/langgraph","source_ref":"e539ac122f4126f6dd850581c1494948cf620e31","reason":"interrupt/resume + Command + durable execution"},
+        {"name":"Hatchet","source_repo":"hatchet-dev/hatchet","source_ref":"315d43a72fd771b049b304b865a81dbab98c466c","reason":"durable tasks + event waits + pause/unpause + distributed workers"}
+      ],
+      "motor": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip/motor_2_queue_download_extract.py",
+      "engine": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/📂Motor descarga de componentes y extracción de zip/hf_download_extract_engine.py",
+      "destination": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/",
+      "steps": [
+        "VERIFY_RESEARCH: compare official code/docs, dedup destination, pin exact source commits.",
+        "EXECUTE_DELTA: run canonical Motor 2 with explicit ENGINE_PATH and PUBLISH=1 for each selected repo; no LFS, no force, fail closed on special files/blob limits/destination collision.",
+        "TEST_REPORT: require download+extraction+source tree hash+published readback for each successful component; record any engine rejection as GAP without bypassing guards."
+      ],
+      "close": "At least 3 of 4 selected systems are published with SOURCE_URL+exact commit+manifest/tree SHA+extraction_verified+readback; failures remain explicit and do not get fabricated."
     }
   ],
-  "execution_order": "GAP-02 current; GAP-03/GAP-04/GAP-05 may run in parallel only with non-overlapping scopes; then GAP-06/GAP-07; GAP-08; GAP-09",
+  "execution_order": "GAP-10 current explicit user delta; then GAP-02; GAP-03/GAP-04/GAP-05 may run in parallel only with non-overlapping scopes; then GAP-06/GAP-07; GAP-08; GAP-09",
   "forbidden": [
     "unrelated features/components/downloads",
     "second auditor/governance/runtime/state engine",
