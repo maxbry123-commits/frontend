@@ -1,0 +1,15 @@
+{
+  "schema": "yaiwes.factory.node-claim/v1",
+  "node_id": "B-MK-002",
+  "owner": "ASTRA-GPT-5.6-SOL",
+  "state": "IN_PROGRESS",
+  "write_scope": "Frontend/factory-v0/src/microkernel/research/**",
+  "strategy": "REUSE_LOCAL_BEFORE_EXTERNAL",
+  "local_registry_root": "UI YAIWES/componentes open soure UI YAIWES",
+  "acceptance": [
+    "local exact capability match blocks duplicate acquisition",
+    "external candidate considered only after local gap",
+    "decision includes source/license/ref",
+    "incomplete provenance fails closed"
+  ]
+}
