@@ -5,15 +5,27 @@
   "node_id":"F-FE-215-FOCUS-RESTORE-MATRIX",
   "segment_id":"SEG-01-SHELL",
   "lane":"GROK-P",
-  "state":"CLAIMED",
+  "state":"GAP_RESOLVABLE",
   "owner":"GPT-5.6-SOL",
   "agent":"GPT-5.6-SOL",
   "chat_id":"CURRENT_CHAT_FACTORY_SEGMENTATION",
   "fresh_main_sha":"31633983cd1758e56578817c66d863f863b15e01",
   "claimed_at":"2026-09-14T08:41:40-05:00",
+  "claim_commit":"1629bc56294e23e66f23719d4748dbd4ed07849f",
+  "test_commit":"625b78a29fe89a6b200404a088a1f5f6eab117a6",
+  "tested_sha":"636991d4d2f40b4249ab9d3d8564fe3a73f2f078",
+  "report_commit":"01406d66cc2ec5c7ce5a5311ecf4deace21c7b36",
+  "released_at":"2026-09-14T08:46:45-05:00",
   "type":"QA_ONLY",
   "candidate":"index-v192.html",
   "acceptance":"Drawer/dialog/palette/context close restores focus to deterministic invoker; missing surface is explicit GAP, never fake PASS.",
+  "run_id":34851158701,
+  "job_id":103999160462,
+  "artifact_id":10350177781,
+  "artifact_digest":"sha256:51217beaf183b0f6559ef097ab453572a0d2c165a1e9fb9ea5e7e45f4c7722eb",
+  "gap_type":"MISSING_WIRING",
+  "gap":"Closing either mobile drawer drops focus to BODY instead of restoring focus to the Library/Inspector invoker.",
+  "gap_owner":"F-FE-174-SHELL-FOCUS-INERT",
   "write_scope":[
     "Frontend/factory-v0/tests/e2e/control-audit/F-FE-215-FOCUS-RESTORE-MATRIX.spec.mjs",
     "Frontend/factory-v0/project-memory/F-FE-215-FOCUS-RESTORE-MATRIX-*",
@@ -21,5 +33,6 @@
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-215.json"
   ],
   "product_patched":false,
-  "release":false
+  "release":true,
+  "next_free_node":"F-FE-216-ERROR-STATE-MATRIX"
 }
