@@ -5,39 +5,18 @@
   "node_id": "F-FE-091-MODE-AI",
   "segment_id": "SEG-03-EDITOR-CORE",
   "lane": "GROK-A",
-  "state": "CLAIMED",
+  "state": "PASS_RELEASED",
   "owner": "GROK 3",
   "agent": "GROK",
   "chat_id": "GROK-3-UI-YAIWES-FACTORY",
   "fresh_main_sha": "9b695f604feff9fad45823fdee59cecd4cd34593",
   "claimed_at": "2026-09-14T11:44:40Z",
+  "claim_commit": "c28219c394246cb40b091b3f66f31be156afaee9",
+  "delta_commit": "55a0b44e2162eae41007c345987886afdafeeddf",
+  "released_at": "2026-09-14T11:54:00Z",
   "type": "CONTROL_QA",
   "selector": "[data-mode='AI_ASSIST']",
-  "depends_on": ["F-FE-090-MODE-MANUAL"],
-  "dependency_status": "SATISFIED F-FE-090 PASS_RELEASED report 9b695f6 run 34839523170",
-  "write_scope": [
-    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-091-MODE-AI.spec.mjs",
-    "Frontend/factory-v0/project-memory/F-FE-091-MODE-AI-*",
-    ".github/workflows/factory-F-FE-091-MODE-AI.yml",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-091.json"
-  ],
-  "frozen": [
-    "index-v19.html",
-    "index-v192.html",
-    "src/touch-dnd-v192.js",
-    "src/touch-dnd-v193.js",
-    "src/bootstrap/candidate-v193.js"
-  ],
-  "skipped_collision": {
-    "node_id": "F-FE-073-TOUCH-DRAG-INTENT",
-    "first_writer": "GROK 1 UI YAIWES",
-    "claim_commit": "497b075bbec925d1a00fc0c3868f11e797535261"
-  },
-  "qa_policy": "CONTROL_QA never patches product. Gap → GAP_RESOLVABLE + owning_segment.",
-  "strategy": "REUSE_EXISTING frozen index-v192 SET_MODE; Playwright selector gate",
-  "acceptance": "On one exact candidate SHA interact with [data-mode='AI_ASSIST']; prove observable state/UI effect and persistence; critical console/network errors=0.",
-  "base_blobs": {
-    "index_v192": "e3d68e1063cd37c2a59d91911f071fda304e4695"
-  },
-  "release": false
+  "run_id": 34840394334,
+  "job_id": 103963770796,
+  "release": true
 }
