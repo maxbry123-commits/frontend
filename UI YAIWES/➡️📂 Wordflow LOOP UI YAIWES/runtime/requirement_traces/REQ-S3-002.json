@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.requirement-trace.v1",
+  "requirement_id": "REQ-S3-002",
+  "goal_id": "G12",
+  "task_id": "GAP-02-N35-S3-REMAINDER",
+  "source": {
+    "path": "documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md",
+    "sha256": "aa9ea84565a9dfd250cc57ba465a7131a032b1e96c404d9dd21a349c8185c58c",
+    "symbol": "§2 MASTER INPUT"
+  },
+  "implementation": {
+    "path": "runtime/src/storage/local_first.py",
+    "sha256": "e503f23e73ae805cd839cd15cf8cd9817dfe10ec53216b11e0c8b7ca5d5d509e",
+    "symbol": "StabilizeLocalFirstStorage.save_entries"
+  },
+  "test": {
+    "path": "runtime/tests/test_req_s3_002_master_input.py",
+    "sha256": "3ac8f1f5b7a26afae6d24c2a03ec17b322c5ff48b507dee436d7213ce9adfb7c",
+    "symbol": "MasterInputInvariantTests.test_master_input_content_cannot_be_replaced"
+  },
+  "evidence": {
+    "path": "runtime/evidence/requirement_traces/REQ-S3-002.ci.json",
+    "sha256": "7f5313b6b49fa56ae12a0985829f79467feef1df59a343e76b9587c89580e79d",
+    "symbol": ""
+  },
+  "revision": "b4f62b56347df90166292373f57103a6950f7c39"
+}
