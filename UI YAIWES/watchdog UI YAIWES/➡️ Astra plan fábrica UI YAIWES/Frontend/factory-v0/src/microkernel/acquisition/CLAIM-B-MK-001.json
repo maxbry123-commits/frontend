@@ -1,0 +1,16 @@
+{
+  "schema": "yaiwes.factory.node-claim/v1",
+  "node_id": "B-MK-001",
+  "owner": "ASTRA-GPT-5.6-SOL",
+  "state": "IN_PROGRESS",
+  "base_sha": "dafe932809d6d92e7d645e90c8655ace720ecdaf",
+  "write_scope": "Frontend/factory-v0/src/microkernel/acquisition/**",
+  "strategy": "REUSE_EXISTING_ADAPT_NO_FORK",
+  "source_existing": "Frontend/factory-v0/src/acquisition/microkernel-v1/acquisition-contract-v1.js",
+  "acceptance": [
+    "no alternate downloader",
+    "canonical motor invoked only after proven capability gap",
+    "fail-closed validation",
+    "exact provenance/readback receipt required"
+  ]
+}
