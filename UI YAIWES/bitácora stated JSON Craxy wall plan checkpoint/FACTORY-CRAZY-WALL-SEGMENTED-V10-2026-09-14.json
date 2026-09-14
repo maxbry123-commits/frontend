@@ -4,7 +4,7 @@
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_SEGMENTED_RECOVERY",
   "created_at": "2026-09-14T04:17:00-05:00",
-  "last_reconciled_at": "2026-09-14T05:00:00-05:00",
+  "last_reconciled_at": "2026-09-14T06:22:00-05:00",
   "observed_head_before_write": "0305a040a28bfcb4e9a72d73294422c42ce1da57",
   "authority": [
     "fresh code + runtime + tests + Actions logs",
@@ -224,7 +224,7 @@
     {
       "id": "F-FE-068-MOBILE-FIT",
       "title": "Eliminate real mobile horizontal overflow without clipping functionality",
-      "state": "CLAIMED",
+      "state": "PASS_RELEASED",
       "segment_id": "SEG-01-SHELL",
       "owner": "GPT-5.6-SOL",
       "chat_id": "CURRENT_CHAT_FACTORY_SEGMENTATION",
@@ -248,7 +248,25 @@
         "run 34830387803 job 103932105765: body.scrollWidth=604 on viewport=412"
       ],
       "fresh_main_sha": "3db57d0710dc87c9a57424acdfd797e734eb21e8",
-      "claimed_at": "2026-09-14T05:00:00-05:00"
+      "claimed_at": "2026-09-14T05:00:00-05:00",
+      "report_state": "PASS_FOCUSED_MOBILE_FIT",
+      "reported_at": "2026-09-14T06:22:00-05:00",
+      "final_sha": "7b1c57267d37646454e4541a0cfbf882a3819eb4",
+      "run_id": 34837590449,
+      "job_id": 103954867553,
+      "artifact_id": 10344608599,
+      "artifact_digest": "sha256:ea8f70e1c8f06378780dbd294f59f389666553b3e27459c9156cbf1a00b4a625",
+      "tests": "f-ui-068-mobile-fit.spec.mjs: 4/4 PASS; 390/412 root widths exact; offenders=[]; drawers/canvas/touch actions usable",
+      "evidence": [
+        "workspace-shell-v3.css blob 0ee1ed8d4fcf81c0bbdb64c9d861d6fcf39b50f5",
+        "test blob 478d6cd327b98c5cd6d0119b10ffdb6d28ef70ce",
+        "report Frontend/factory-v0/project-memory/F-FE-068-MOBILE-FIT-REPORT-2026-09-14.md",
+        "run 34837590449 job 103954867553 artifact 10344608599"
+      ],
+      "remaining_gaps": [
+        "SEG-11 must wire released shell into a new candidate and rerun candidate-level gates"
+      ],
+      "next_action": "RELEASED_READ_FRESH_NEXT_NODE"
     }
   ],
   "backend_nodes": [
