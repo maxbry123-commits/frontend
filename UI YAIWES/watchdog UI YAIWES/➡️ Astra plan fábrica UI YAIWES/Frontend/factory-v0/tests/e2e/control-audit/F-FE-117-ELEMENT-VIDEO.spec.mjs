@@ -49,7 +49,7 @@ test.describe('F-FE-117 ELEMENT-VIDEO control QA', () => {
     await card.click();
     await expect(card).toHaveClass(/browser-selected/);
     await expect(preview).toBeVisible();
-    await expect(page.locator('[data-preview-title]')).toHaveText('Video');
+    await expect(page.locator('[data-preview-title]')).toHaveText('Vídeo');
     await expect(page.locator('[data-preview-meta]')).toContainText('video');
     await expect(insert).toHaveAttribute('data-selected-kind', 'video');
     await expect(page.locator('[data-node]')).toHaveCount(0);
@@ -57,7 +57,7 @@ test.describe('F-FE-117 ELEMENT-VIDEO control QA', () => {
 
     await insert.click();
     await expect(page.locator('[data-node]')).toHaveCount(1);
-    await expect(page.locator('[data-node] strong')).toHaveText('Video');
+    await expect(page.locator('[data-node] strong')).toHaveText('Vídeo');
     await expect(page.locator('[data-node] small')).toContainText('video');
     await expect(page.locator('#canvas-empty')).toBeHidden();
 
@@ -74,22 +74,22 @@ test.describe('F-FE-117 ELEMENT-VIDEO control QA', () => {
       };
     }, PROJECT_KEY);
     expect(created.count).toBe(1);
-    expect(created.item).toMatchObject({ kind: 'video', label: 'Video' });
+    expect(created.item).toMatchObject({ kind: 'video', label: 'Vídeo' });
     expect(created.selectedId).toBe(created.item.id);
     expect(created.storedCount).toBe(1);
     expect(created.storedKind).toBe('video');
-    expect(created.storedLabel).toBe('Video');
+    expect(created.storedLabel).toBe('Vídeo');
 
     await page.reload({ waitUntil: 'domcontentloaded' });
     await expect(page.locator('#canvas')).toBeVisible();
     await page.waitForFunction(() => Boolean(globalThis.__YAIWES_FACTORY_V19__), null, { timeout: 10_000 });
     await expect(page.locator('[data-node]')).toHaveCount(1);
-    await expect(page.locator('[data-node] strong')).toHaveText('Video');
+    await expect(page.locator('[data-node] strong')).toHaveText('Vídeo');
     const afterReload = await page.evaluate(() => {
       const state = globalThis.__YAIWES_FACTORY_V19__.getState();
       return { count: state.components.length, kind: state.components[0]?.kind, label: state.components[0]?.label };
     });
-    expect(afterReload).toEqual({ count: 1, kind: 'video', label: 'Video' });
+    expect(afterReload).toEqual({ count: 1, kind: 'video', label: 'Vídeo' });
 
     expect(pageErrors, `critical page errors ${JSON.stringify(pageErrors)}`).toEqual([]);
     expect(failedRequests, `failed document/script ${JSON.stringify(failedRequests)}`).toEqual([]);
