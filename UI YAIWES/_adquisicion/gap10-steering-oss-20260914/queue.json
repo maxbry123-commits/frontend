@@ -1,0 +1,46 @@
+{
+  "schema": "yaiwes.frontend.download-extract-queue.v1",
+  "node": "GAP-10-STEERING-INTERPROCESS-OSS",
+  "queue": [
+    {
+      "id": "gap10-01-temporal-python-sdk",
+      "source_repo": "temporalio/sdk-python",
+      "source_ref": "ab25ed693f7ec77589346e66c98db299a8c9c9fe",
+      "slug": "Temporal-Python-SDK",
+      "dest_repo": "maxbry123-commits/frontend",
+      "dest_branch": "main",
+      "dest_root": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS",
+      "publish": true
+    },
+    {
+      "id": "gap10-02-dbos-python",
+      "source_repo": "dbos-inc/dbos-transact-py",
+      "source_ref": "83805fd84494c85ea09105443884a2786152d921",
+      "slug": "DBOS-Python",
+      "dest_repo": "maxbry123-commits/frontend",
+      "dest_branch": "main",
+      "dest_root": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS",
+      "publish": true
+    },
+    {
+      "id": "gap10-03-langgraph",
+      "source_repo": "langchain-ai/langgraph",
+      "source_ref": "e539ac122f4126f6dd850581c1494948cf620e31",
+      "slug": "LangGraph",
+      "dest_repo": "maxbry123-commits/frontend",
+      "dest_branch": "main",
+      "dest_root": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS",
+      "publish": true
+    },
+    {
+      "id": "gap10-04-hatchet",
+      "source_repo": "hatchet-dev/hatchet",
+      "source_ref": "315d43a72fd771b049b304b865a81dbab98c466c",
+      "slug": "Hatchet",
+      "dest_repo": "maxbry123-commits/frontend",
+      "dest_branch": "main",
+      "dest_root": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS",
+      "publish": true
+    }
+  ]
+}
