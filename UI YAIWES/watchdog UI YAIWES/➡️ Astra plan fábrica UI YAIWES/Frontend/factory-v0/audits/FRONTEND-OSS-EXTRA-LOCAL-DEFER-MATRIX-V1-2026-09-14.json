@@ -1,0 +1,74 @@
+{
+  "schema": "yaiwes.factory.frontend.oss-extra-defer.v1",
+  "contract": "tel.workflow/v3",
+  "domain": "FRONTEND_ONLY",
+  "base_main_sha": "827d435d6c9085698bb6775cb250d44fa1c0604e",
+  "inventory_root": "📂componentes open soure fromtend",
+  "decision": "DO_NOT_ADD_ANOTHER_100_NODES_NOW",
+  "reason": "140 frontend nodes are already prepared. These additional local trees overlap capabilities already owned by existing nodes; integrating them now would create duplicate runtimes/state/interaction paths.",
+  "rule": "DEFER_UNTIL_A_REPRODUCED_GAP_REMAINS_AFTER_EXISTING_OWNER_NODE",
+  "verified_local_trees": [
+    {
+      "component": "Radix-UI",
+      "tree_sha": "da903ac31598d8866d200583b946c236dcab0312",
+      "code_tree_sha": "052fa0aab834e3cee6298c78ce65696552db7cf0",
+      "decision": "REFERENCE_ONLY_IF_A11Y_GAP_REMAINS",
+      "why": "Dialog/menu/popover/focus patterns overlap command palette, shell focus/inert and context-menu accessibility nodes. Factory core is vanilla JS; do not introduce a parallel React control runtime for this gap."
+    },
+    {
+      "component": "React-Spectrum",
+      "tree_sha": "aef3a631786c959c34376797dbdd89cb92650f81",
+      "code_tree_sha": "341b440a3c38831c9793f86d05d8b062df3d4429",
+      "decision": "REFERENCE_ONLY_IF_CONTROL_A11Y_FAILS",
+      "why": "Accessible control patterns are useful, but current QA already tests keyboard/focus/touch targets and adding React runtime would be disproportionate."
+    },
+    {
+      "component": "dnd-kit",
+      "tree_sha": "9cba2a253a45a9ec170746a8d9646fbc820a9e84",
+      "code_tree_sha": "44f62183fc0647c0b2b5263af105065a68c11a3b",
+      "decision": "REFERENCE_ONLY_IF_TOUCH_OR_SORTABLE_GAP_REMAINS",
+      "why": "Touch arbitration, drag intent, layer reorder and multiselect already have dedicated owner nodes. Do not create a second drag engine."
+    },
+    {
+      "component": "Puck",
+      "tree_sha": "043e8d030f20914da011f5930649d4e3efaad472",
+      "code_tree_sha": "fac95f7fd01ad1ed471c16c8c1d57757d28cdb46",
+      "decision": "REFERENCE_ONLY_IF_PAGE_SCHEMA_GAP_REMAINS",
+      "why": "Page-editor capability overlaps existing Craft.js/Frappe patterns and canonical editor state. No second page-builder engine."
+    },
+    {
+      "component": "Motion",
+      "tree_sha": "34e83757851a7f18d55da9968956d08ba3bc25de",
+      "code_tree_sha": "43bba36c138609466b361fbda5246a347103f58c",
+      "decision": "DEFER_DUPLICATE_MOTION_CAPABILITY",
+      "why": "GSAP already has an OSS adapter node and reduced-motion has an explicit frontend improvement node."
+    },
+    {
+      "component": "TanStack-Table",
+      "tree_sha": "a155e61a7c070d4b70d4d1ba7a45ee7a1cc17999",
+      "code_tree_sha": "1e95e70ff7d813ddf68883a1b9859e2f9367af6d",
+      "decision": "DEFER_NEW_PRODUCT_CAPABILITY",
+      "why": "A data-grid component could be useful later but is not a current Factory closure gap and would expand product scope."
+    },
+    {
+      "component": "echarts",
+      "tree_sha": "55041ce71bce981e1d753650045d2d252392f4e3",
+      "code_tree_sha": "945e4f577cf01dc66dc20d01b9d6697b0fdef63f",
+      "decision": "DEFER_DUPLICATE_CHART_CAPABILITY",
+      "why": "Chart.js already owns the bounded chart adapter task. Add ECharts only if Chart.js cannot meet a demonstrated requirement."
+    },
+    {
+      "component": "frappe-gantt",
+      "tree_sha": "6ae751044b6d371317fbd6073b250dd92cee9513",
+      "code_tree_sha": "32387484067205d6d0333968447507ee43608cc7",
+      "decision": "DEFER_NEW_PRODUCT_CAPABILITY",
+      "why": "Gantt is a useful future component but not required by current five-step Factory closure."
+    }
+  ],
+  "activation_contract": "If an existing node produces GAP_RESOLVABLE and one of these donors directly matches that gap: READ_FRESH -> verify local code/license -> create a new F-FE-210+ node with unique write_scope -> thin pattern/adapter only -> focused microtest -> browser test -> PASS_RELEASED -> SEG-11 integration. Otherwise no task is created.",
+  "motors": {
+    "existing_zip_extract": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂 Motor de extracción zip/motor_1_extract_only.py",
+    "copy_batches": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂motor de copiar archivos/motor_3_copy_batches.py",
+    "copy_root": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py"
+  }
+}
