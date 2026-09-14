@@ -4,179 +4,122 @@
   "mode": "FAIL_CLOSED_LOOP",
   "objective": "Resolver exclusivamente todos los GAPs restantes hasta cierre global verificable. No abrir trabajo ajeno al cierre.",
   "authority": "current code + tests + trusted CI/readback > this queue + Crazy Wall V5/N34-N35 > architecture/handoff > history",
-  "created_from_evidence": {
+  "progress": {
     "denominator": 167,
-    "denominator_source": "reports/N34-FOUR-SOURCE-DENOMINATOR-SOL-GPT-16-2026-09-13.json",
-    "certified_now": 7,
-    "missing_now": 160,
-    "certified_ids": ["REQ-S3-047", "REQ-S3-048", "REQ-S3-050", "REQ-S3-053", "REQ-S3-054", "REQ-S3-055", "REQ-S3-057"],
-    "resolved_stalled_claim": "REQ-S3-048",
-    "resolved_trace_blob": "2f78f0e4879d3f390ad6384af674973e5825c4da",
-    "resolved_evidence_blob": "8cfd896597062e2aa51234eb1e58e8fdea42cebb",
-    "backend_e2e": "N17 VERIFIED_CLOSED; browser/deployed/platform-real explicitly outside proof",
-    "continuous_loop": "N27 VERIFIED_CLOSED",
-    "guest_installer": "N32 VERIFIED_CLOSED; real OS install explicitly outside proof"
+    "certified_now": 8,
+    "missing_now": 159,
+    "certified_ids": ["REQ-S3-047", "REQ-S3-048", "REQ-S3-049", "REQ-S3-050", "REQ-S3-053", "REQ-S3-054", "REQ-S3-055", "REQ-S3-057"],
+    "current_subgap": "REQ-S3-046",
+    "current_subgap_state": "CLAIMED",
+    "current_owner": "ChatGPT-Sol-supervisor"
   },
   "rules": [
-    "1 instruction/task = 1 literal node; one active owner per node.",
-    "No new feature/framework/download/documentation unless directly required to close a listed GAP.",
-    "REUSE_EXISTING > PATCH > ADAPT; GENERATE only when a concrete missing artifact is proven.",
-    "Every node executes VERIFY_RESEARCH -> EXECUTE_DELTA -> TEST_REPORT.",
+    "1 literal task = 1 active subgap; one owner per write scope.",
+    "No new feature/framework/download/document unless directly required to close a listed GAP.",
+    "REUSE_EXISTING > PATCH > ADAPT; generate only a proven missing artifact.",
+    "Each node: VERIFY_RESEARCH -> EXECUTE_DELTA -> TEST_REPORT.",
     "SOURCE_PRESENT != IMPLEMENTED != WIRED != TEST_PASS != VERIFIED_CLOSED.",
-    "No PASS without exact path/blob or SHA + test + trusted CI/readback when applicable.",
-    "If a node exposes a new concrete blocker, record it as a child GAP of the same closure chain; do not broaden scope.",
-    "Fresh-read claims before writes; collision => release and take next non-overlapping node.",
-    "Global close requires all nodes below CLOSED and Final Judge PASS."
+    "No PASS without exact path/blob/SHA + test + trusted CI/readback where applicable.",
+    "Collision => release and next non-overlapping subgap.",
+    "Global close requires GAP-01..09 terminal and Final Judge PASS."
   ],
   "nodes": [
     {
       "id": "GAP-01-N35-S3-048",
       "state": "VERIFIED_CLOSED",
       "priority": 1,
-      "owner": "ChatGPT-Sol-supervisor",
-      "gap": "REQ-S3-048 was claimed but no production trace existed in main.",
-      "scope": "REQ-S3-048 only; relevant existing implementation/test + runtime/requirement_traces/REQ-S3-048.json + matching CI evidence",
-      "steps": [
-        "VERIFY_RESEARCH PASS: literal S3 §48 maps to existing memory.fabric.build_context_pack and focused context-fabric tests.",
-        "EXECUTE_DELTA PASS: no product rewrite; persisted RequirementTrace and yaiwes.ci-evidence.v1 with exact hashes/revision.",
-        "TEST_REPORT PASS: context regression 10/10 + single-requirement five-pass TRACEABILITY_PASS + trusted CI/readback."
-      ],
-      "evidence": {
-        "source_sha256": "aa9ea84565a9dfd250cc57ba465a7131a032b1e96c404d9dd21a349c8185c58c",
-        "implementation_sha256": "dc781e7afd5e19b39d53d111d51796c61dd2d4540c0241aba3f65920cbb07da2",
-        "test_sha256": "52a528eb9c7b727648787b9ff98286b92a344d61caa1bc8477b2f1cb941ee7c6",
-        "trace_blob": "2f78f0e4879d3f390ad6384af674973e5825c4da",
-        "evidence_blob": "8cfd896597062e2aa51234eb1e58e8fdea42cebb",
-        "evidence_run_id": 34825919154,
-        "evidence_job_id": 103917937346,
-        "final_microtest_run_id": 34826290290,
-        "final_microtest_job_id": 103919120002,
-        "test_commit": "08515aaa2dc01ccc7aa379d651fa036cdc870f52"
-      },
-      "close": "PASS: REQ-S3-048 has source/code/test/evidence/revision binding and trusted CI; five-pass=TRACEABILITY_PASS."
+      "evidence": "trace 2f78f0e4879d3f390ad6384af674973e5825c4da; CI 34825919154/103917937346; five-pass TRACEABILITY_PASS",
+      "close": "REQ-S3-048 source/code/test/evidence/revision bound and trusted CI PASS"
     },
     {
       "id": "GAP-02-N35-S3-REMAINDER",
-      "state": "GAP_RESOLVABLE",
+      "state": "EXECUTING",
       "priority": 2,
-      "owner": null,
-      "gap": "Remaining S3 requirement certifications.",
-      "selector": "REQ-S3-001..065 excluding 047,048,050,053,054,055,057,062",
-      "remaining_count": 57,
+      "owner": "ChatGPT-Sol-supervisor",
+      "gap": "56 implementable S3 requirements remain uncertified after closing 047,048,049,050,053,054,055,057.",
+      "current_subgap": {
+        "id": "REQ-S3-046",
+        "state": "CLAIMED_TESTING",
+        "claim_commit": "2859f73157312761e2a737c893ad5cded827930d",
+        "test_commit": "d33bd726add10ec5011fdf6fb44c3eba1ad921ff",
+        "ci_run": 34827227847,
+        "gap": "§46 literal memory operation inventory existed in runtime but lacked exhaustive regression coverage",
+        "delta": "test-only unless CI exposes runtime mismatch"
+      },
       "steps": [
-        "VERIFY_RESEARCH each requirement literally and consume existing code/tests before patching.",
-        "EXECUTE_DELTA one trace at a time; if implementation/test missing, repair minimum real gap before trace.",
-        "TEST_REPORT focused + five-pass + independent trusted CI; checkpoint count after each closure."
+        "Read each literal S3 requirement and locate existing code/test first.",
+        "Repair only MISSING_IMPLEMENTATION|MISSING_WIRING|MISSING_TEST|MISSING_CI for that requirement.",
+        "Persist one RequirementTrace + exact CI evidence; focused test + five-pass + trusted CI/readback.",
+        "Checkpoint count after each closure; zero missing S3 traces required for node close."
       ],
-      "close": "All 64 implementable S3 requirements certified; zero missing S3 traces."
+      "close": "64/64 implementable S3 requirements certified"
     },
     {
       "id": "GAP-03-N35-S1",
       "state": "GAP_RESOLVABLE",
       "priority": 3,
-      "owner": null,
-      "gap": "20 S1 requirements have no production RequirementTrace certification.",
-      "selector": "REQ-S1-001..020",
       "count": 20,
-      "steps": [
-        "VERIFY_RESEARCH exact S1 anchor -> existing implementation/test.",
-        "EXECUTE_DELTA minimum implementation/test fix only when the real binding is absent, then persist trace+CI evidence.",
-        "TEST_REPORT five-pass and trusted CI per requirement/bounded batch with exact-hash identity."
-      ],
-      "close": "20/20 S1 certified with zero missing_trace."
+      "selector": "REQ-S1-001..020",
+      "plan": "anchor -> existing code/test -> minimum fix if missing -> trace/evidence -> focused+five-pass+trusted CI",
+      "close": "20/20 S1 certified"
     },
     {
       "id": "GAP-04-N35-S2",
       "state": "GAP_RESOLVABLE",
       "priority": 4,
-      "owner": null,
-      "gap": "14 S2 requirements have no production RequirementTrace certification.",
-      "selector": "REQ-S2-000..014 excluding 011",
       "count": 14,
-      "steps": [
-        "VERIFY_RESEARCH exact S2 anchor -> platform/sandbox implementation/test.",
-        "EXECUTE_DELTA smallest real platform contract/test fix, then trace+CI evidence; no fake physical-platform claims.",
-        "TEST_REPORT five-pass + trusted CI and preserve explicit simulated-vs-real boundary."
-      ],
-      "close": "14/14 S2 certified; physical-platform obligations not falsely inferred."
+      "selector": "REQ-S2-000..014 excluding 011",
+      "plan": "anchor -> platform/sandbox code/test -> minimum real fix -> trace/evidence -> five-pass+trusted CI; never label fixture as real platform",
+      "close": "14/14 S2 certified with real/simulated boundary explicit"
     },
     {
       "id": "GAP-05-N35-S4-COMMAND-CENTER",
       "state": "GAP_RESOLVABLE",
       "priority": 5,
-      "owner": null,
-      "gap": "69 unique Command Center requirements added by N34 are uncertified and some may still lack implementation/wiring/tests.",
-      "selector": "REQ-S4-001..085 excluding 023,028,035,041,042,043,047,049,050,051,054,055,057,070,082,084",
       "count": 69,
-      "steps": [
-        "VERIFY_RESEARCH each S4 requirement against actual UI/runtime/connector code; classify IMPLEMENTED|MISSING_IMPLEMENTATION|MISSING_WIRING|MISSING_TEST|MISSING_CI.",
-        "EXECUTE_DELTA only the smallest missing product delta for that requirement; prioritize existing components/adapters and never count donor/source presence as wiring.",
-        "TEST_REPORT requirement-specific test + integration where needed + trace + trusted CI; REQ-S4-034 must enforce real auth/authz."
-      ],
-      "close": "69/69 unique S4 requirements implemented/wired/tested/certified, not merely documented."
+      "gap": "Command Center requirements may be MISSING_IMPLEMENTATION|MISSING_WIRING|MISSING_TEST|MISSING_CI",
+      "plan": "classify each literal S4 requirement -> smallest real UI/runtime/connector delta -> requirement test -> trace+trusted CI; REQ-S4-034 requires real auth/authz",
+      "close": "69/69 S4 implemented/wired/tested/certified"
     },
     {
       "id": "GAP-06-UI-COMMAND-CENTER-E2E",
       "state": "BLOCKED_AFTER_GAP-05",
       "priority": 6,
-      "owner": null,
-      "gap": "Backend E2E is closed but deployed browser/UI Command Center acceptance is not proven.",
-      "scope": "existing UI + runtime public boundary + browser E2E only",
-      "steps": [
-        "VERIFY_RESEARCH map S4 UI capabilities to actual rendered controls/routes and identify dead/missing wiring.",
-        "EXECUTE_DELTA repair only missing UI-to-runtime wiring and dead controls discovered by the map.",
-        "TEST_REPORT real browser E2E for chat/model/stream/stop/history/files/tasks/recovery/error/auth flows with exact tested SHA."
-      ],
-      "close": "Deployed/browser E2E passes on exact published candidate; no dead required control and tested SHA equals published SHA."
+      "gap": "Backend E2E closed; deployed browser/UI acceptance not proven",
+      "plan": "map required controls/routes -> repair only dead/missing wiring -> real browser E2E chat/model/stream/stop/history/files/tasks/recovery/error/auth on exact published SHA",
+      "close": "browser/deployed candidate passes and TESTED_SHA == PUBLISHED_SHA"
     },
     {
       "id": "GAP-07-PLATFORM-REAL-ACCEPTANCE",
       "state": "BLOCKED_AFTER_GAP-04",
       "priority": 7,
-      "owner": null,
-      "gap": "Existing adapter/guest tests do not prove real Android/Linux/Windows/iOS installation, disconnect/restart/recovery boundaries.",
-      "scope": "existing platform adapters/installers only; no new virtualization stack",
-      "steps": [
-        "VERIFY_RESEARCH distinguish executable real-platform targets available in CI/lab from unsupported targets; no simulation mislabeled real.",
-        "EXECUTE_DELTA patch only platform-specific blocker exposed by real execution; preserve safe rollback and architecture checks.",
-        "TEST_REPORT real target evidence where environment exists; unsupported targets remain explicit limitation and cannot be called PASS."
-      ],
-      "close": "All project-required real-platform targets have reproducible execution evidence or the final authority explicitly narrows unsupported scope; no simulated proof substituted."
+      "gap": "Adapter/guest fixtures do not prove required real platform execution",
+      "plan": "run available real targets -> patch only observed platform blocker -> preserve rollback/architecture checks -> record unsupported targets honestly",
+      "close": "all required supported real targets have reproducible evidence; no fixture substituted"
     },
     {
       "id": "GAP-08-GLOBAL-TRACE-CERTIFICATION",
       "state": "BLOCKED_AFTER_GAP-02-03-04-05",
       "priority": 8,
-      "owner": null,
-      "gap": "Global inventory remains fail-closed until all 167 production traces pass.",
-      "steps": [
-        "VERIFY_RESEARCH load authoritative 167 inventory and exactly all persisted traces.",
-        "EXECUTE_DELTA none unless verifier finds a concrete hash/symbol/revision/evidence mismatch; repair only mismatch.",
-        "TEST_REPORT run full five-pass + inverse artifact reconciliation + orphan/contradiction checks + trusted CI."
-      ],
-      "close": "167/167 verified, 0 missing_trace, 0 contradiction, 0 orphan, product_verified gate eligible."
+      "gap": "global inventory fail-closed until 167/167 production traces pass",
+      "plan": "load exact inventory+traces -> full five-pass -> inverse artifact reconciliation -> contradiction/orphan checks -> trusted CI",
+      "close": "167/167; 0 missing_trace; 0 contradiction; 0 orphan"
     },
     {
       "id": "GAP-09-FINAL-JUDGE",
       "state": "BLOCKED_AFTER_GAP-06-07-08",
       "priority": 9,
-      "owner": null,
-      "gap": "Global project_verified_closed=false until final cross-check of product, evidence and published candidate.",
-      "steps": [
-        "VERIFY_RESEARCH cross-check architecture/readme/Crazy Wall against exact final code/tests/evidence and all prior limitations.",
-        "EXECUTE_DELTA only concrete residual contradiction/gap; otherwise no code change.",
-        "TEST_REPORT 12 entry goals + 12 exit goals + Council12 + 3 adversarial refutations + 4 end-to-end simulations/executions, exact candidate CI/readback."
-      ],
-      "close": "No open GAP; all required runtime/UI/platform/evidence gates satisfied; Final Judge records VERIFIED_CLOSED on exact published SHA."
+      "gap": "project_verified_closed=false",
+      "plan": "cross-check final architecture/readme/Crazy Wall vs exact code/tests/evidence -> repair residual only -> 12 entry + 12 exit goals + Council12 + 3 refutations + 4 E2E simulations/executions + exact candidate CI/readback",
+      "close": "no open GAP; Final Judge VERIFIED_CLOSED on exact published SHA"
     }
   ],
-  "execution_order": "GAP-01 CLOSED; GAP-02 now eligible; in parallel GAP-03/GAP-04/GAP-05 where write scopes do not collide; then GAP-06/GAP-07; GAP-08; GAP-09.",
+  "execution_order": "GAP-02 current; GAP-03/GAP-04/GAP-05 may run in parallel only with non-overlapping scopes; then GAP-06/GAP-07; GAP-08; GAP-09",
   "forbidden": [
-    "New unrelated features/components/downloads",
-    "Second auditor/governance/runtime/state engine",
-    "Historical percentage as proof",
-    "Synthetic RequirementTrace or fake CI evidence",
-    "Closing browser/platform-real gaps with fixtures only",
-    "Force push or overwrite of another active claim"
+    "unrelated features/components/downloads",
+    "second auditor/governance/runtime/state engine",
+    "synthetic RequirementTrace or fake CI",
+    "fixture as real-platform proof",
+    "force push or overwrite active claim"
   ]
 }
