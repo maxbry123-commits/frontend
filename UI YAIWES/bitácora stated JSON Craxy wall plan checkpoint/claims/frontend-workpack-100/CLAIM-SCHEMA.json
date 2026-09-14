@@ -1,0 +1,19 @@
+{
+  "schema": "yaiwes.factory.frontend.node-claim.v1",
+  "contract": "tel.workflow/v3",
+  "required": ["node_id","chat_id","agent","state","fresh_main_sha","claimed_at","write_scope","base_blobs"],
+  "states": ["CLAIMED","EXECUTING","PASS_RELEASED","GAP_RESOLVABLE"],
+  "rules": {
+    "one_file_one_node": true,
+    "one_chat_one_active_node": true,
+    "one_path_one_writer": true,
+    "fresh_read_before_write": true,
+    "on_main_change": "STALE_LOCK_GAP_REBUILD_DELTA",
+    "on_path_collision": "NO_WRITE_RELEASE_OR_SKIP",
+    "steps": ["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+    "producer_cannot_integrate_candidate": true,
+    "no_force_push": true,
+    "no_git_lfs": true
+  },
+  "report_fields": ["paths","blob_shas","commit_sha","tests","run_id","job_id","artifact_id","gaps","next"]
+}
