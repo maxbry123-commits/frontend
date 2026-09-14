@@ -7,12 +7,17 @@
   "node_id": "F-FE-075-CANVAS-KEYBOARD-OPS",
   "segment_id": "SEG-03-EDITOR-CORE",
   "lane": "GROK-A",
-  "state": "CLAIMED",
+  "state": "TESTED_NOT_WIRED",
+  "report_state": "PASS_RELEASED",
   "owner": "GROK 3",
   "agent": "GROK",
   "chat_id": "GROK-3-UI-YAIWES-FACTORY",
   "fresh_main_sha": "05014bf2a7a30307f0dd8f6ea1332cccfe0cafa0",
   "claimed_at": "2026-09-14T12:52:40Z",
+  "released_at": "2026-09-14T12:59:20Z",
+  "claim_commit": "c40b9410634c932fd958006611c660feb4ecc348",
+  "delta_commit": "c9f22e2cac02779507b5740aeb08723353a514e5",
+  "tested_sha": "f49543a834f2e8210cec9c538e21ea19fd67a895",
   "depends_on": ["F-FE-074-LAYER-LOCK-VISIBILITY"],
   "dependency_status": "SATISFIED F-FE-074 TESTED_NOT_WIRED PASS_RELEASED GROK 3 delta 9a24da9 run 34845576951",
   "write_scope": [
@@ -40,8 +45,13 @@
   "acceptance": "Arrow/Shift+Arrow nudge, duplicate and delete route through existing reducer/history; no second state engine; undo/redo and reload persistence PASS.",
   "base_blobs": {
     "app_v19": "1aab6ebec09a8e6a14f221b83226cf92552b4526",
-    "index_v192": "e3d68e1063cd37c2a59d91911f071fda304e4695"
+    "index_v192": "e3d68e1063cd37c2a59d91911f071fda304e4695",
+    "app_v20": "17966b343c4bea8c0282cf0dca121005b0ef1d5c"
   },
-  "release": false
+  "run_id": 34846343096,
+  "job_id": 103983101838,
+  "wired": false,
+  "release": true,
+  "next_free_node": "F-FE-076-CANVAS-MULTISELECT"
 }
 ```
