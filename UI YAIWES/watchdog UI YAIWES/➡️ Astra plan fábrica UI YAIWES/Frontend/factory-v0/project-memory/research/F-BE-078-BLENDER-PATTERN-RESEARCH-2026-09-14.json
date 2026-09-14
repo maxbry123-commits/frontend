@@ -1,0 +1,113 @@
+{
+  "schema": "yaiwes.factory.research.blender-patterns.v1",
+  "contract": "tel.workflow/v3",
+  "node_id": "F-BE-078",
+  "date": "2026-09-14",
+  "decision": "PATTERN_DONOR_ONLY_NO_MONOLITH_COPY",
+  "official_sources": [
+    {
+      "url": "https://docs.blender.org/manual/en/latest/interface/window_system/workspaces.html",
+      "finding": "Workspaces are task-oriented predefined window layouts made of Areas containing Editors; workspaces can be duplicated, reordered and saved with the project."
+    },
+    {
+      "url": "https://docs.blender.org/manual/en/latest/editors/index.html",
+      "finding": "Each Area can host an Editor type; multiple instances of the same editor can coexist."
+    },
+    {
+      "url": "https://developer.blender.org/docs/features/interface/human_interface_guidelines/editors/",
+      "finding": "Editors follow consistent regions such as header, toolbar, sidebar and navigation while retaining task-specific behavior."
+    },
+    {
+      "url": "https://developer.blender.org/docs/features/interface/human_interface_guidelines/paradigms/",
+      "finding": "Blender favors non-overlapping, non-blocking, mostly non-modal UI and separates data properties from tools."
+    },
+    {
+      "url": "https://docs.blender.org/manual/en/5.2/editors/properties_editor.html",
+      "finding": "Properties are context-sensitive to the active object/scene/tool and grouped by stable tabs."
+    },
+    {
+      "url": "https://docs.blender.org/manual/en/5.2/editors/asset_browser.html",
+      "finding": "Asset Browser provides catalogs, metadata/details, import modes and drag/drop organization."
+    },
+    {
+      "url": "https://developer.blender.org/docs/handbook/extensions/addon_guidelines/",
+      "finding": "Extensions should be self-contained, namespaced, avoid changing other extensions and honor online-access policy."
+    },
+    {
+      "url": "https://docs.blender.org/manual/en/latest/troubleshooting/recover.html",
+      "finding": "Recovery combines save versions, autosave, undo, redo and undo history."
+    },
+    {
+      "url": "https://developer.blender.org/docs/handbook/new_developers/navigate_code/",
+      "finding": "UI actions are traceable from interface controls to operators/properties; editor operators live in explicit code areas."
+    }
+  ],
+  "factory_mapping": [
+    {
+      "pattern": "TASK_WORKSPACES",
+      "factory_segment": "SEG-01-SHELL",
+      "existing": "workspace-shell-v1.js",
+      "recommended_delta": "Keep canvas-first shell but allow named task workspaces/presets as versioned state; do not create separate app instances.",
+      "priority": "MEDIUM"
+    },
+    {
+      "pattern": "AREA_EDITOR_REGIONS",
+      "factory_segment": "SEG-01-SHELL",
+      "existing": "left library + canvas + context pane",
+      "recommended_delta": "Treat library/canvas/context as explicit regions with stable ownership and hide/show behavior; preserve shared project state.",
+      "priority": "HIGH"
+    },
+    {
+      "pattern": "CONTEXT_PROPERTIES",
+      "factory_segment": "SEG-03-EDITOR-CORE",
+      "existing": "context-content + selected component state",
+      "recommended_delta": "Properties pane must derive strictly from selected entity/tool and write through canonical actions; no duplicate state engine.",
+      "priority": "HIGH"
+    },
+    {
+      "pattern": "ASSET_BROWSER",
+      "factory_segment": "SEG-02-BROWSER",
+      "existing": "component-browser-v1.js",
+      "recommended_delta": "Add catalog hierarchy/metadata/import provenance on top of existing search/filter/preview/favorites; reuse current component browser instead of adding another browser.",
+      "priority": "HIGH"
+    },
+    {
+      "pattern": "ISOLATED_EXTENSIONS",
+      "factory_segment": "SEG-10-OSS",
+      "existing": "Fables + acquisition microkernel lane",
+      "recommended_delta": "Every acquired component stays namespaced behind typed adapter/capability bus and cannot mutate other plugins or core directly.",
+      "priority": "CRITICAL"
+    },
+    {
+      "pattern": "ONLINE_ACCESS_POLICY",
+      "factory_segment": "SEG-08-AI-ROUTER",
+      "existing": "remote-control/router bridge",
+      "recommended_delta": "Remote plugins declare network capability and remain disabled/fail-closed without approved endpoint/secret_ref.",
+      "priority": "HIGH"
+    },
+    {
+      "pattern": "UNDO_VERSION_RECOVERY",
+      "factory_segment": "SEG-06-IO",
+      "existing": "undo/redo + version-store-v1 + local recovery",
+      "recommended_delta": "Unify undo history, named snapshots and reload recovery under one visible recovery model without replacing existing store.",
+      "priority": "HIGH"
+    },
+    {
+      "pattern": "OPERATOR_TRACEABILITY",
+      "factory_segment": "SEG-05-CONTROLS",
+      "existing": "canonical button/action handlers",
+      "recommended_delta": "Every UI control maps to one canonical action/operator identifier so F-UI-051/055 can enumerate and test effect deterministically.",
+      "priority": "CRITICAL"
+    }
+  ],
+  "new_component_required": false,
+  "reason": "All high-value Blender patterns map to capabilities already represented by Factory segments; immediate work is integration/standardization, not copying Blender or downloading its source tree.",
+  "handoff": [
+    "SEG-01: use workspace/region model as UX acceptance guidance",
+    "SEG-02: enrich current component browser with catalogs/metadata only if F-FE-067 proves a gap",
+    "SEG-05: expose canonical action/operator ids for exhaustive controls tests",
+    "SEG-06: present recovery/version history consistently",
+    "SEG-10/Fables: enforce extension isolation and capability declarations"
+  ],
+  "close": "RESEARCH_COMPLETE_NO_DOWNLOAD_AUTHORIZED"
+}
