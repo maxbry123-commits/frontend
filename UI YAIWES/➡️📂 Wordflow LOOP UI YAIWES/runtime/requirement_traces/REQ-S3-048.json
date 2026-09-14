@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.requirement-trace.v1",
+  "requirement_id": "REQ-S3-048",
+  "goal_id": "G12",
+  "task_id": "N18-MEMORY-RETRIEVAL-CONTEXT",
+  "source": {
+    "path": "documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md",
+    "sha256": "aa9ea84565a9dfd250cc57ba465a7131a032b1e96c404d9dd21a349c8185c58c",
+    "symbol": "§48 REGLA DE LECTURA"
+  },
+  "implementation": {
+    "path": "runtime/src/memory/fabric.py",
+    "sha256": "dc781e7afd5e19b39d53d111d51796c61dd2d4540c0241aba3f65920cbb07da2",
+    "symbol": "build_context_pack"
+  },
+  "test": {
+    "path": "runtime/tests/test_memory_context_fabric.py",
+    "sha256": "52a528eb9c7b727648787b9ff98286b92a344d61caa1bc8477b2f1cb941ee7c6",
+    "symbol": "MemoryContextFabricTests.test_context_pack_rank_budget_and_provenance_are_deterministic"
+  },
+  "evidence": {
+    "path": "runtime/evidence/requirement_traces/REQ-S3-048.ci.json",
+    "sha256": "d787739d02d044d52a21d8cea351f91fd37922771dbef9040994bdd79771f8bb",
+    "symbol": ""
+  },
+  "revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e"
+}
