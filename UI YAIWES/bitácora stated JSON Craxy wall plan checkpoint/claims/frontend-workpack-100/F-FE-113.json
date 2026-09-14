@@ -1,0 +1,22 @@
+{
+  "schema": "yaiwes.factory.frontend.node-claim.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-FE-113-ELEMENT-SEGMENT",
+  "segment_id": "SEG-02-BROWSER",
+  "lane": "GROK-C",
+  "state": "CLAIMED",
+  "owner": "CHATGPT-FACTORY-FRONTEND-WATCHDOG",
+  "agent": "GPT-5.6-SOL",
+  "chat_id": "CHATGPT-FACTORY-FRONTEND-WATCHDOG-HOURLY",
+  "fresh_main_sha": "9242f053d7f021ac501d55c5d4eace294ef0c9ad",
+  "claimed_at": "2026-09-14T20:19:40Z",
+  "type": "CONTROL_QA",
+  "selector": "[data-kind='segment']",
+  "release": false,
+  "write_scope": [
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/control-audit/F-FE-113-ELEMENT-SEGMENT.spec.mjs",
+    ".github/workflows/factory-F-FE-113-ELEMENT-SEGMENT.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-113.json"
+  ]
+}
