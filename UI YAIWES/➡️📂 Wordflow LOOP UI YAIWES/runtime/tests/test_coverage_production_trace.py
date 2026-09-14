@@ -193,11 +193,11 @@ def test_memory_write_gate_trace_rejects_direct_llm_persistence_and_real_ci(tmp_
     trace = traces[0]
 
     def trusted_lookup(run_id: int, job_id: int) -> TrustedCIExecution:
-        assert (run_id, job_id) == (34739510224, 103678337638)
+        assert (run_id, job_id) == (34902325960, 104170931337)
         return TrustedCIExecution(
             run_id=run_id,
             job_id=job_id,
-            revision="cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+            revision="412031390af1074539f2129059dc80b9fb060c43",
             status="completed",
             conclusion="success",
             implementation_sha256=trace.implementation.sha256,
