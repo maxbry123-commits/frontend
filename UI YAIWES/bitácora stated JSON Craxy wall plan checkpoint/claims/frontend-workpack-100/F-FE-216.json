@@ -1,0 +1,25 @@
+{
+  "schema":"yaiwes.factory.frontend.node-claim.v1",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "node_id":"F-FE-216-ERROR-STATE-MATRIX",
+  "segment_id":"QA_ONLY",
+  "lane":"GROK-P",
+  "state":"CLAIMED",
+  "owner":"GPT-5.6-SOL",
+  "agent":"GPT-5.6-SOL",
+  "chat_id":"CURRENT_CHAT_FACTORY_SEGMENTATION",
+  "fresh_main_sha":"069c491ec9ddc6643d26a414d90efee864e6fd93",
+  "claimed_at":"2026-09-14T08:48:30-05:00",
+  "type":"QA_ONLY",
+  "candidate":"index-v192.html",
+  "acceptance":"Import/router/HF/destination failures show actionable UI, no fake success and no canonical project corruption.",
+  "write_scope":[
+    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-216-ERROR-STATE-MATRIX.spec.mjs",
+    "Frontend/factory-v0/project-memory/F-FE-216-ERROR-STATE-MATRIX-*",
+    ".github/workflows/factory-F-FE-216-ERROR-STATE-MATRIX.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-216.json"
+  ],
+  "product_patched":false,
+  "release":false
+}
