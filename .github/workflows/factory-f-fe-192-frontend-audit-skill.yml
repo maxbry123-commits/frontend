@@ -1,0 +1,52 @@
+name: factory-f-fe-192-frontend-audit-skill
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-fe-192-frontend-audit-skill.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/oss/frontend-audit-qa-v1.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/oss/f-fe-192-frontend-audit-skill.spec.mjs'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: factory-f-fe-192-frontend-audit-skill
+  cancel-in-progress: false
+jobs:
+  frontend-audit-qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: QA adapter readback
+        run: |
+          set -euo pipefail
+          test -s src/oss/frontend-audit-qa-v1.js
+          test -s tests/e2e/oss/f-fe-192-frontend-audit-skill.spec.mjs
+          grep -F "3e035c4675ed3d00430e9934d60948b890cfe6c6" src/oss/frontend-audit-qa-v1.js
+          grep -F "autonomous-css-mutation" src/oss/frontend-audit-qa-v1.js
+          grep -F "VISUAL_TESTED_SHA_MISMATCH" src/oss/frontend-audit-qa-v1.js
+          node --check src/oss/frontend-audit-qa-v1.js
+          node --check tests/e2e/oss/f-fe-192-frontend-audit-skill.spec.mjs
+          git hash-object src/oss/frontend-audit-qa-v1.js
+          git hash-object tests/e2e/oss/f-fe-192-frontend-audit-skill.spec.mjs
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Desktop frontend-audit QA gate
+        run: npx playwright test tests/e2e/oss/f-fe-192-frontend-audit-skill.spec.mjs --project=chromium-desktop --reporter=line
+      - name: Mobile frontend-audit QA gate
+        run: npx playwright test tests/e2e/oss/f-fe-192-frontend-audit-skill.spec.mjs --project=mobile-chromium --reporter=line
