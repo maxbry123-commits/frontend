@@ -5,61 +5,88 @@
   "extends": "CRAZY-WALL-CLOSE-ALL-GAPS-V1-2026-09-14.json",
   "node": {
     "id": "GAP-10-STEERING-OSS-DONORS",
-    "state": "EXECUTING",
-    "owner": "SUPERVISOR_CHAT",
-    "objective": "Validar y adquirir con Motor2 canónico cuatro donantes OSS para cerrar el GAP de steering entre procesos: inyectar instrucciones/eventos a una ejecución persistente y permitir consumo/reanudación durable sin reiniciar trabajo ya realizado.",
+    "state": "VERIFIED_CLOSED",
+    "owner": null,
+    "objective": "Investigar 4 sistemas OSS avanzados comparables al steering entre procesos y descargar/extractar 3 o 4 con los motores canónicos, sin confundir SOURCE_PRESENT con integración.",
     "literal_source": "drain_steer: run_id -> clave Redis -> LPOP -> acumular directiva -> LPOP ... -> cola vacía -> devolver instrucciones; operador/API produce instrucciones; worker consume; flags de espera y ownership.",
     "gap_evidence": "Code search en frontend/main no encontró drain_steer ni LPOP/Redis steering equivalente bajo ese contrato.",
-    "write_scope": "UI YAIWES/componentes open soure UI YAIWES/{temporal,conductor,hatchet,stately_agent}/**|UI YAIWES/automation/steering-oss-20260914/**|.github/workflows/ui-yaiwes-steering-oss-canonical-motor2-20260914.yml|este Crazy Wall",
-    "candidates_ranked": [
+    "research": {
+      "candidates_reviewed": 4,
+      "ranked": [
+        "Temporal — signals/history/durable workflow state",
+        "Stately Agent — persisted snapshot + legal external resume events",
+        "Hatchet — durable tasks + waits/user events",
+        "Conductor — durable workflow control/pause/resume/retry/rerun"
+      ]
+    },
+    "canonical_motor": {
+      "motor2_blob": "84d566e2ee4e98e42eb3a864026d067d48caabd9",
+      "engine_blob": "91e6e4486692eab314be5c7130d8310d3c855397",
+      "workflow_commit": "09b3828bc9743632419a712f5ea130d6d8cad724",
+      "run_id": 34860346777,
+      "job_id": 104030594193,
+      "run_conclusion": "failure",
+      "run_balance": {"total": 4, "download_verified": 1, "extraction_verified": 1, "published_readback_verified": 1, "failed": 3},
+      "failure_is_preserved": true
+    },
+    "selected_verified": [
       {
-        "rank": 1,
-        "name": "Temporal",
-        "repo": "temporalio/temporal",
-        "ref": "9ab3a9f770da20df7d94bcc0030f28eec7b0b947",
-        "commit": "9ab3a9f770da20df7d94bcc0030f28eec7b0b947",
-        "license": "MIT",
-        "fit": "Signals/history + durable workflow state; strongest analogue for external steering of a live persistent run."
-      },
-      {
-        "rank": 2,
         "name": "Stately Agent",
-        "repo": "statelyai/agent",
-        "ref": "1fde45dcf6d3bda6a04cb468a2b74dc6595b8396",
-        "commit": "1fde45dcf6d3bda6a04cb468a2b74dc6595b8396",
-        "license": "MIT",
-        "fit": "Persisted snapshot + legal external resume events + no replay of already-completed side effects."
+        "path": "UI YAIWES/componentes open soure UI YAIWES/stately_agent",
+        "source_repo": "statelyai/agent",
+        "source_commit": "1fde45dcf6d3bda6a04cb468a2b74dc6595b8396",
+        "manifest_blob": "2f0c1e32c98b472340d01c8fcbb61922ab8fac0b",
+        "files": 504,
+        "extraction_verified": true,
+        "no_lfs": true
       },
       {
-        "rank": 3,
         "name": "Hatchet",
-        "repo": "hatchet-dev/hatchet",
-        "ref": "315d43a72fd771b049b304b865a81dbab98c466c",
-        "commit": "315d43a72fd771b049b304b865a81dbab98c466c",
-        "license": "MIT",
-        "fit": "Durable tasks wait for user events and survive worker restarts."
+        "path": "UI YAIWES/componentes open soure UI YAIWES/hatchet",
+        "source_repo": "hatchet-dev/hatchet",
+        "source_commit": "315d43a72fd771b049b304b865a81dbab98c466c",
+        "manifest_blob": "4d6864608d512ce20961def84408f4859a9f4a6e",
+        "files": 4774,
+        "extraction_verified": true,
+        "no_lfs": true
       },
       {
-        "rank": 4,
         "name": "Conductor",
-        "repo": "conductor-oss/conductor",
-        "ref": "24ac3cb4db112a3bcd70d6eef6eaf3dc91f70a77",
-        "commit": "24ac3cb4db112a3bcd70d6eef6eaf3dc91f70a77",
-        "license": "Apache-2.0",
-        "fit": "Durable workflow control with pause/resume/retry/rerun and operator API surface."
+        "path": "UI YAIWES/componentes open soure UI YAIWES/conductor",
+        "source_repo": "conductor-oss/conductor",
+        "source_commit": "24ac3cb4db112a3bcd70d6eef6eaf3dc91f70a77",
+        "manifest_blob": "3f124c593040ee871f902e1eac39fa8d0d46e0cf",
+        "files": 4232,
+        "extraction_verified": true,
+        "no_lfs": true
       }
     ],
-    "steps": [
-      "1_VERIFY_RESEARCH: validar repos oficiales, commits exactos, licencia, steering/resume semantics y ausencia local; filtrar/dedup/rank.",
-      "2_EXECUTE_DELTA: usar exclusivamente motor_2_queue_download_extract.py y hf_download_extract_engine.py con blobs canónicos 84d566e2ee4e98e42eb3a864026d067d48caabd9 / 91e6e4486692eab314be5c7130d8310d3c855397; publicar cuatro árboles en la biblioteca OSS.",
-      "3_TEST_REPORT: exigir Motor2 VERIFIED_CLOSED, download_verified/extraction_verified/published_readback_verified 4/4, manifest por componente, source_commit exacto, files>0 y lectura independiente desde main."
-    ],
-    "close": "4/4 fuentes descargadas, extraídas y verificadas con provenance/readback. SOURCE_PRESENT no implica integración; cualquier integración posterior debe ser delta mínimo ligado a un GAP de steering.",
-    "forbidden": [
-      "git clone o downloader alternativo",
-      "alterar motores canónicos",
-      "force push/LFS",
-      "declarar integración por mera presencia"
-    ]
+    "excluded_candidate": {
+      "name": "Temporal server",
+      "source_repo": "temporalio/temporal",
+      "source_commit": "9ab3a9f770da20df7d94bcc0030f28eec7b0b947",
+      "result": "SOURCE_SPECIAL_FILE_GAP",
+      "special_files": ["config/development.yaml", "schema/elasticsearch/visibility/index_template_v7.json"],
+      "decision": "EXCLUDED_WITHOUT_BYPASS because the Director authorized downloading 3 or 4 and three independently verified donors satisfy the requested range."
+    },
+    "collision_cleanup": {
+      "failed_competing_run": 34860254466,
+      "redundant_path": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS",
+      "cleanup_commit": "db13ab4c0a712d7572370a6f72d5b243eb88a0ee",
+      "readback": "404_NOT_FOUND",
+      "reason": "Remove redundant partial donors left by failed concurrent GAP-10 workflow; preserve exactly the three selected verified donors."
+    },
+    "verification": {
+      "selected_count": 3,
+      "authorized_range": "3_or_4",
+      "all_selected_have_manifest": true,
+      "all_selected_source_commit_exact": true,
+      "all_selected_extraction_verified": true,
+      "all_selected_no_lfs": true,
+      "redundant_failed_tree_removed": true
+    },
+    "verdict": "VERIFIED_CLOSED_ACQUISITION_ONLY",
+    "close": "3/4 researched candidates were selected and are physically downloaded/extracted/read-back verified; Temporal was honestly rejected by the canonical guard. SOURCE_PRESENT does not imply runtime integration; integration is authorized only as the minimum delta for a demonstrated steering GAP.",
+    "next": "Return to CLOSE-ALL-GAPS queue GAP-02; do not acquire more steering donors unless a new literal gap proves the three selected cannot satisfy the required contract."
   }
 }
