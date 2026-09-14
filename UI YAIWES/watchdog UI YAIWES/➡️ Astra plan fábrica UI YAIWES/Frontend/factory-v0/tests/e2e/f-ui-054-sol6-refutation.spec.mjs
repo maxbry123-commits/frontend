@@ -20,7 +20,9 @@ async function addWindow(page){
   await expect(page.locator('[data-node]')).toHaveCount(1);
 }
 
-test.beforeEach(async({page})=>{await page.addInitScript(()=>localStorage.clear());});
+// Each Playwright test already receives a fresh context. An init script that clears
+// localStorage is intentionally forbidden here because it would also execute on
+// page.reload() and manufacture a false recovery failure.
 
 for(const [name,size] of [['desktop',{width:1440,height:900}],['compact',{width:900,height:640}],['mobile',{width:412,height:839}]]){
   test(`simulation ${name}: candidate keeps canvas and deterministic state`,async({page})=>{
