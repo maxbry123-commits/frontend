@@ -58,6 +58,19 @@ assert.equal(
   false,
 );
 
+let blockedInvocationCount = 0;
+const preGateKernel = createAcquisitionMicrokernel({
+  canonicalMotorInvoke: async () => {
+    blockedInvocationCount += 1;
+    return verifiedReceipt;
+  },
+});
+await assert.rejects(
+  () => preGateKernel.acquire({ ...validInput, capabilityGap: false }),
+  /CAPABILITY_GAP_NOT_PROVEN/,
+);
+assert.equal(blockedInvocationCount, 0);
+
 let invocationCount = 0;
 const kernel = createAcquisitionMicrokernel({
   canonicalMotorInvoke: async (receivedRequest) => {
@@ -86,7 +99,8 @@ console.log(JSON.stringify({
   status: 'PASS',
   strategy: B_MK_001.strategy,
   canonicalPolicy: CANONICAL_ACQUISITION.policy,
-  assertions: 14,
+  assertions: 16,
+  preGateBlockedInvocations: blockedInvocationCount,
   noAlternateDownloader: true,
   failClosed: true,
 }));
