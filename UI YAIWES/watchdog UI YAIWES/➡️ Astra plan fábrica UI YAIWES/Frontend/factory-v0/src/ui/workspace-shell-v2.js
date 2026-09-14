@@ -1,184 +1,214 @@
-// YAIWES Factory SEG-01-SHELL v2.
-// Preserves workspace-shell-v1.js. Integrator (SEG-11) wires this into a candidate.
-// Canvas-first: mobile drawers start collapsed; user toggles survive resize.
+// YAIWES Factory SEG-01-SHELL workspace v2.
+// Reuses v1 DOM contract. Does not mutate workspace-shell-v1 or frozen entrypoints.
 
 export const WORKSPACE_SHELL_VERSION = 'v2';
-export const MOBILE_BREAKPOINT = 760;
+export const WORKSPACE_SHELL_BREAKPOINT = 760;
+export const WORKSPACE_SHELL_CHANGE_EVENT = 'yaiwes:workspace-shell-change';
 
-export function isMobileWidth(width, breakpoint = MOBILE_BREAKPOINT) {
-  return Number(width) <= breakpoint;
+const CONTROLLERS = new WeakMap();
+
+export function classifyViewportWidth(width, breakpoint = WORKSPACE_SHELL_BREAKPOINT) {
+  const value = Number(width);
+  if (!Number.isFinite(value)) return 'desktop';
+  return value <= breakpoint ? 'mobile' : 'desktop';
 }
 
-export function createShellState({ width = 1280, userOverride = false } = {}) {
-  const mobile = isMobileWidth(width);
+export function defaultCollapsedForMode(mode) {
+  const mobile = mode === 'mobile';
+  return { left: mobile, right: mobile };
+}
+
+export function shouldApplyModeDefaults(previousMode, nextMode) {
+  return String(previousMode || '') !== String(nextMode || '');
+}
+
+export function resolveCollapsedForMode(memory = {}, mode) {
+  const remembered = memory?.[mode];
+  if (remembered && typeof remembered.left === 'boolean' && typeof remembered.right === 'boolean') {
+    return { left: remembered.left, right: remembered.right };
+  }
+  return defaultCollapsedForMode(mode);
+}
+
+function query(root, selector) {
+  return root.querySelector(selector);
+}
+
+export function readWorkspaceShellState(root) {
+  if (!root) return null;
+  const studio = query(root, '.studio') || root;
   return {
-    version: WORKSPACE_SHELL_VERSION,
-    mode: mobile ? 'mobile' : 'desktop',
-    leftCollapsed: mobile,
-    rightCollapsed: mobile,
-    userOverride: Boolean(userOverride),
+    version: root.dataset?.workspaceShell || null,
+    mode: root.dataset?.workspaceMode || null,
+    leftCollapsed: studio.classList.contains('workspace-left-collapsed'),
+    rightCollapsed: studio.classList.contains('workspace-right-collapsed'),
   };
 }
 
-export function reduceShell(state, action = {}) {
-  const current = state && typeof state === 'object' ? state : createShellState();
-  switch (action.type) {
-    case 'TOGGLE': {
-      const key = action.side === 'right' ? 'rightCollapsed' : 'leftCollapsed';
-      return { ...current, [key]: !current[key], userOverride: true };
-    }
-    case 'SET': {
-      const key = action.side === 'right' ? 'rightCollapsed' : 'leftCollapsed';
-      return { ...current, [key]: Boolean(action.collapsed), userOverride: true };
-    }
-    case 'ESCAPE': {
-      if (current.mode !== 'mobile') return current;
-      return { ...current, leftCollapsed: true, rightCollapsed: true, userOverride: true };
-    }
-    case 'RESIZE': {
-      const width = Number(action.width);
-      const mobile = isMobileWidth(width);
-      const mode = mobile ? 'mobile' : 'desktop';
-      if (current.userOverride) return { ...current, mode };
-      return createShellState({ width, userOverride: false });
-    }
-    default:
-      return current;
+export function mountWorkspaceShell(doc = globalThis.document, options = {}) {
+  if (!doc?.querySelector) return { ok: false, reason: 'DOCUMENT_REQUIRED' };
+
+  const root = options.root || query(doc, '.app-shell');
+  const studio = options.studio || query(doc, '.studio');
+  const library = options.library || query(doc, '.library-pane');
+  const context = options.context || query(doc, '.context-pane');
+  const toolbar = options.toolbar || query(doc, '.canvas-toolbar');
+  const win = options.window || doc.defaultView || globalThis;
+  const breakpoint = Number(options.breakpoint) > 0 ? Number(options.breakpoint) : WORKSPACE_SHELL_BREAKPOINT;
+
+  if (!root || !studio || !library || !context || !toolbar) {
+    return { ok: false, reason: 'SHELL_MARKUP_MISSING' };
   }
-}
 
-function requireNodes(doc) {
-  const root = doc.querySelector('.app-shell');
-  const studio = doc.querySelector('.studio');
-  const library = doc.querySelector('.library-pane');
-  const context = doc.querySelector('.context-pane');
-  const toolbar = doc.querySelector('.canvas-toolbar');
-  if (!root || !studio || !library || !context || !toolbar) return null;
-  return { root, studio, library, context, toolbar };
-}
+  const existingVersion = root.dataset.workspaceShell;
+  if (existingVersion === 'v1' && options.replace !== true) {
+    return { ok: false, reason: 'V1_PRESERVED', version: 'v1' };
+  }
 
-function applyState(nodes, state, win) {
-  const { root, studio, library, context } = nodes;
+  const reused = CONTROLLERS.get(root);
+  if (existingVersion === WORKSPACE_SHELL_VERSION && reused) {
+    return { ok: true, reused: true, version: WORKSPACE_SHELL_VERSION, controller: reused };
+  }
+
   root.dataset.workspaceShell = WORKSPACE_SHELL_VERSION;
-  root.dataset.workspaceMode = state.mode;
-  studio.classList.toggle('workspace-left-collapsed', state.leftCollapsed);
-  studio.classList.toggle('workspace-right-collapsed', state.rightCollapsed);
-  library.setAttribute('aria-hidden', String(state.leftCollapsed));
-  context.setAttribute('aria-hidden', String(state.rightCollapsed));
-  const overlay = root.querySelector('[data-workspace-overlay]');
-  const drawerOpen = !state.leftCollapsed || !state.rightCollapsed;
-  if (overlay) overlay.hidden = !(state.mode === 'mobile' && drawerOpen);
-  const leftBtn = root.querySelector('[data-workspace-toggle="left"]');
-  const rightBtn = root.querySelector('[data-workspace-toggle="right"]');
-  if (leftBtn) leftBtn.setAttribute('aria-expanded', String(!state.leftCollapsed));
-  if (rightBtn) rightBtn.setAttribute('aria-expanded', String(!state.rightCollapsed));
-  win.dispatchEvent(new CustomEvent('yaiwes:workspace-shell-change', {
-    detail: { version: WORKSPACE_SHELL_VERSION, ...state },
-  }));
-}
+  const memory = { desktop: null, mobile: null };
+  const buttons = new Map();
+  const targets = { left: library, right: context };
+  let mode = null;
 
-function makeButton(doc, label, side) {
-  const button = doc.createElement('button');
-  button.type = 'button';
-  button.className = 'workspace-shell-toggle';
-  button.dataset.workspaceToggle = side;
-  button.setAttribute('aria-expanded', 'true');
-  button.textContent = label;
-  return button;
-}
-
-function makeDrawerClose(doc, side, label) {
-  const close = doc.createElement('button');
-  close.type = 'button';
-  close.className = 'workspace-drawer-close';
-  close.dataset.workspaceClose = side;
-  close.setAttribute('aria-label', `Cerrar ${label}`);
-  close.textContent = '×';
-  return close;
-}
-
-export function mountWorkspaceShellV2({
-  document: doc = globalThis.document,
-  window: win = globalThis.window,
-} = {}) {
-  if (!doc || !win) return null;
-  const nodes = requireNodes(doc);
-  if (!nodes) return null;
-  if (nodes.root.dataset.workspaceShell === WORKSPACE_SHELL_VERSION && nodes.root.__yaiwesShellV2) {
-    return nodes.root.__yaiwesShellV2;
-  }
-
-  let state = createShellState({ width: Number(win.innerWidth || 1280) });
-  const api = {
-    version: WORKSPACE_SHELL_VERSION,
-    getState: () => ({ ...state }),
-    dispatch(action) {
-      state = reduceShell(state, action);
-      applyState(nodes, state, win);
-      return api.getState();
-    },
-    destroy() {
-      win.removeEventListener('resize', onResize);
-      win.removeEventListener('keydown', onKeydown);
-      delete nodes.root.__yaiwesShellV2;
-    },
+  const ensureBackdrop = () => {
+    let backdrop = query(studio, '[data-workspace-backdrop]');
+    if (backdrop) return backdrop;
+    backdrop = doc.createElement('button');
+    backdrop.type = 'button';
+    backdrop.className = 'workspace-shell-backdrop';
+    backdrop.dataset.workspaceBackdrop = 'true';
+    backdrop.setAttribute('aria-label', 'Cerrar paneles');
+    backdrop.addEventListener('click', () => {
+      setCollapsed('left', true);
+      setCollapsed('right', true);
+    });
+    studio.append(backdrop);
+    return backdrop;
   };
 
-  if (!nodes.root.querySelector('.workspace-shell-controls')) {
+  const syncBackdrop = () => {
+    const backdrop = ensureBackdrop();
+    const anyOpen = !studio.classList.contains('workspace-left-collapsed') || !studio.classList.contains('workspace-right-collapsed');
+    const show = mode === 'mobile' && anyOpen;
+    backdrop.hidden = !show;
+    backdrop.setAttribute('aria-hidden', String(!show));
+  };
+
+  const setCollapsed = (side, collapsed) => {
+    const target = targets[side];
+    const button = buttons.get(side);
+    studio.classList.toggle(`workspace-${side}-collapsed`, collapsed);
+    if (button) button.setAttribute('aria-expanded', String(!collapsed));
+    target.setAttribute('aria-hidden', String(collapsed));
+    memory[mode] = {
+      left: studio.classList.contains('workspace-left-collapsed'),
+      right: studio.classList.contains('workspace-right-collapsed'),
+    };
+    syncBackdrop();
+    win.dispatchEvent(new CustomEvent(WORKSPACE_SHELL_CHANGE_EVENT, { detail: { side, collapsed, mode, version: WORKSPACE_SHELL_VERSION } }));
+  };
+
+  const applyMode = (nextMode) => {
+    const changed = shouldApplyModeDefaults(mode, nextMode);
+    mode = nextMode;
+    root.dataset.workspaceMode = mode;
+    const collapsed = resolveCollapsedForMode(memory, mode);
+    if (changed) {
+      setCollapsed('left', collapsed.left);
+      setCollapsed('right', collapsed.right);
+    } else {
+      syncBackdrop();
+    }
+  };
+
+  if (!query(toolbar, '.workspace-shell-controls')) {
     const controls = doc.createElement('div');
     controls.className = 'workspace-shell-controls';
     controls.setAttribute('aria-label', 'Controles del workspace');
-    controls.append(makeButton(doc, 'Biblioteca', 'left'), makeButton(doc, 'Inspector', 'right'));
-    nodes.toolbar.append(controls);
-  }
-  if (!nodes.library.querySelector('[data-workspace-close="left"]')) {
-    nodes.library.prepend(makeDrawerClose(doc, 'left', 'Biblioteca'));
-  }
-  if (!nodes.context.querySelector('[data-workspace-close="right"]')) {
-    nodes.context.prepend(makeDrawerClose(doc, 'right', 'Inspector'));
-  }
-  if (!nodes.root.querySelector('[data-workspace-overlay]')) {
-    const overlay = doc.createElement('div');
-    overlay.className = 'workspace-shell-overlay';
-    overlay.dataset.workspaceOverlay = 'v2';
-    overlay.hidden = true;
-    overlay.setAttribute('aria-hidden', 'true');
-    nodes.studio.append(overlay);
+
+    const makeButton = (label, side) => {
+      const button = doc.createElement('button');
+      button.type = 'button';
+      button.className = 'workspace-shell-toggle';
+      button.dataset.workspaceToggle = side;
+      button.setAttribute('aria-expanded', 'true');
+      button.textContent = label;
+      button.addEventListener('click', () => {
+        setCollapsed(side, !studio.classList.contains(`workspace-${side}-collapsed`));
+      });
+      buttons.set(side, button);
+      return button;
+    };
+
+    controls.append(makeButton('Biblioteca', 'left'), makeButton('Inspector', 'right'));
+    toolbar.append(controls);
+  } else {
+    for (const side of ['left', 'right']) {
+      const button = query(toolbar, `[data-workspace-toggle="${side}"]`);
+      if (button) buttons.set(side, button);
+    }
   }
 
-  nodes.root.addEventListener('click', (event) => {
-    const toggle = event.target.closest?.('[data-workspace-toggle]');
-    if (toggle) {
-      api.dispatch({ type: 'TOGGLE', side: toggle.dataset.workspaceToggle });
-      return;
-    }
-    const closer = event.target.closest?.('[data-workspace-close]');
-    if (closer) {
-      api.dispatch({ type: 'SET', side: closer.dataset.workspaceClose, collapsed: true });
-      return;
-    }
-    if (event.target.closest?.('[data-workspace-overlay]')) {
-      api.dispatch({ type: 'ESCAPE' });
-    }
-  });
-
-  const onResize = () => api.dispatch({ type: 'RESIZE', width: Number(win.innerWidth || 1280) });
-  const onKeydown = (event) => {
-    if (event.key === 'Escape') api.dispatch({ type: 'ESCAPE' });
+  const addDrawerClose = (side, target, label) => {
+    if (query(target, `[data-workspace-close="${side}"]`)) return;
+    const close = doc.createElement('button');
+    close.type = 'button';
+    close.className = 'workspace-drawer-close';
+    close.dataset.workspaceClose = side;
+    close.setAttribute('aria-label', `Cerrar ${label}`);
+    close.textContent = '×';
+    close.addEventListener('click', () => setCollapsed(side, true));
+    target.prepend(close);
   };
-  win.addEventListener('resize', onResize, { passive: true });
+
+  addDrawerClose('left', library, 'Biblioteca');
+  addDrawerClose('right', context, 'Inspector');
+  ensureBackdrop();
+
+  const media = win.matchMedia(`(max-width: ${breakpoint}px)`);
+  const readMode = () => (media.matches ? 'mobile' : 'desktop');
+  applyMode(readMode());
+
+  const onMediaChange = () => applyMode(readMode());
+  if (typeof media.addEventListener === 'function') media.addEventListener('change', onMediaChange);
+  else if (typeof media.addListener === 'function') media.addListener(onMediaChange);
+
+  const onKeydown = (event) => {
+    if (event.key !== 'Escape') return;
+    if (mode !== 'mobile') return;
+    setCollapsed('left', true);
+    setCollapsed('right', true);
+  };
   win.addEventListener('keydown', onKeydown);
 
-  nodes.root.__yaiwesShellV2 = api;
-  applyState(nodes, state, win);
-  return api;
+  const controller = {
+    version: WORKSPACE_SHELL_VERSION,
+    setCollapsed,
+    getState: () => readWorkspaceShellState(root),
+    unmount() {
+      if (typeof media.removeEventListener === 'function') media.removeEventListener('change', onMediaChange);
+      else if (typeof media.removeListener === 'function') media.removeListener(onMediaChange);
+      win.removeEventListener('keydown', onKeydown);
+      CONTROLLERS.delete(root);
+    },
+  };
+
+  CONTROLLERS.set(root, controller);
+  globalThis.__YAIWES_WORKSPACE_SHELL_V2__ = Object.freeze({
+    schema: 'yaiwes.factory.workspace-shell/v2',
+    version: WORKSPACE_SHELL_VERSION,
+    mode,
+    breakpoint,
+  });
+  return { ok: true, reused: false, version: WORKSPACE_SHELL_VERSION, controller };
 }
 
-if (typeof document !== 'undefined') {
-  const boot = () => {
-    if (document.querySelector('.app-shell')?.dataset?.workspaceShell === 'v1') return;
-    mountWorkspaceShellV2();
-  };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
-  else boot();
+if (typeof document !== 'undefined' && document.querySelector?.('.app-shell')) {
+  mountWorkspaceShell(document);
 }

@@ -1,44 +1,183 @@
-/* SEG-01-SHELL v2. Does not replace workspace-shell-v1.css. */
-.app-shell[data-workspace-shell="v2"] .workspace-shell-controls{display:flex;gap:6px;align-items:center;margin-left:auto}
-.app-shell[data-workspace-shell="v2"] .workspace-shell-toggle,
-.app-shell[data-workspace-shell="v2"] .workspace-drawer-close{border:1px solid var(--line);background:#151a21;color:var(--text);border-radius:9px;padding:7px 9px;cursor:pointer}
-.app-shell[data-workspace-shell="v2"] .workspace-shell-toggle[aria-expanded="false"]{border-color:var(--accent);background:#20283a}
-.app-shell[data-workspace-shell="v2"] .workspace-drawer-close{display:none;position:sticky;top:0;z-index:2;margin:0 0 8px auto;min-width:44px;min-height:44px;font-size:24px;line-height:1;background:#20283a;border-color:var(--accent)}
-.app-shell[data-workspace-shell="v2"] .studio.workspace-left-collapsed{grid-template-columns:0 minmax(420px,1fr) 340px}
-.app-shell[data-workspace-shell="v2"] .studio.workspace-right-collapsed{grid-template-columns:220px minmax(420px,1fr) 0}
-.app-shell[data-workspace-shell="v2"] .studio.workspace-left-collapsed.workspace-right-collapsed{grid-template-columns:0 minmax(420px,1fr) 0}
-.app-shell[data-workspace-shell="v2"] .studio.workspace-left-collapsed>.library-pane,
-.app-shell[data-workspace-shell="v2"] .studio.workspace-right-collapsed>.context-pane{visibility:hidden;pointer-events:none;padding:0;border:0;overflow:hidden}
-.app-shell[data-workspace-shell="v2"] .library-pane,
-.app-shell[data-workspace-shell="v2"] .context-pane{transition:width .18s ease,opacity .18s ease}
-.app-shell[data-workspace-shell="v2"] .canvas-pane{min-width:0;min-height:0;z-index:1}
-.app-shell[data-workspace-shell="v2"] .canvas-stage{overscroll-behavior:contain;min-height:100%}
-.app-shell[data-workspace-shell="v2"] .canvas{touch-action:none}
-.app-shell[data-workspace-shell="v2"] .context-scroll,
-.app-shell[data-workspace-shell="v2"] .library-pane{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-.app-shell[data-workspace-shell="v2"] .workspace-shell-overlay{display:none}
+.workspace-shell-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-left: auto;
+}
+.workspace-shell-toggle,
+.workspace-drawer-close,
+.workspace-shell-backdrop {
+  border: 1px solid var(--line);
+  background: #151a21;
+  color: var(--text);
+  border-radius: 9px;
+  padding: 7px 9px;
+  cursor: pointer;
+}
+.workspace-shell-toggle[aria-expanded="false"] {
+  border-color: var(--accent);
+  background: #20283a;
+}
+.workspace-drawer-close {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: 0 0 8px auto;
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 24px;
+  line-height: 1;
+  background: #20283a;
+  border-color: var(--accent);
+}
+.workspace-shell-backdrop {
+  display: none;
+}
+.studio.workspace-left-collapsed {
+  grid-template-columns: 0 minmax(420px, 1fr) 340px;
+}
+.studio.workspace-right-collapsed {
+  grid-template-columns: 220px minmax(420px, 1fr) 0;
+}
+.studio.workspace-left-collapsed.workspace-right-collapsed {
+  grid-template-columns: 0 minmax(420px, 1fr) 0;
+}
+.studio.workspace-left-collapsed > .library-pane,
+.studio.workspace-right-collapsed > .context-pane {
+  visibility: hidden;
+  pointer-events: none;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+}
+.library-pane,
+.context-pane {
+  transition: width .18s ease, opacity .18s ease, transform .18s ease;
+}
+.canvas-pane {
+  min-width: 0;
+}
+.canvas-stage {
+  overscroll-behavior: contain;
+}
+.canvas {
+  touch-action: none;
+}
+.context-scroll,
+.library-pane {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
 
-@media(max-width:760px){
-  html,body{overflow:hidden}
-  .app-shell[data-workspace-shell="v2"]{height:100dvh;min-height:0;grid-template-rows:auto minmax(0,1fr) auto}
-  .app-shell[data-workspace-shell="v2"] .studio{position:relative;display:grid;grid-template-columns:minmax(0,1fr);overflow:hidden}
-  .app-shell[data-workspace-shell="v2"] .canvas-pane{grid-column:1;grid-row:1;height:auto;min-height:0;z-index:1}
-  .app-shell[data-workspace-shell="v2"] .canvas-stage{height:100%;min-height:0;padding:8px}
-  .app-shell[data-workspace-shell="v2"] .canvas{min-height:100%;height:100%}
-  .app-shell[data-workspace-shell="v2"] .workspace-shell-overlay{display:block;position:absolute;inset:0;background:#0008;z-index:15;border:0}
-  .app-shell[data-workspace-shell="v2"] .workspace-shell-overlay[hidden]{display:none}
+@media (max-width: 760px) {
+  html,
+  body {
+    overflow: hidden;
+  }
+  .app-shell[data-workspace-shell="v2"] {
+    height: 100dvh;
+    min-height: 0;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+  .app-shell[data-workspace-shell="v2"] .studio {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    overflow: hidden;
+  }
+  .app-shell[data-workspace-shell="v2"] .canvas-pane {
+    grid-column: 1;
+    grid-row: 1;
+    height: auto;
+    min-height: 0;
+    z-index: 1;
+  }
+  .app-shell[data-workspace-shell="v2"] .canvas-stage {
+    height: 100%;
+    min-height: 0;
+    padding: 8px;
+  }
+  .app-shell[data-workspace-shell="v2"] .canvas {
+    min-height: 100%;
+    height: 100%;
+  }
   .app-shell[data-workspace-shell="v2"] .library-pane,
-  .app-shell[data-workspace-shell="v2"] .context-pane{position:absolute;top:0;bottom:0;width:min(86vw,360px);max-height:none;z-index:20;overflow:auto;box-shadow:0 16px 36px #000a;background:var(--panel)}
-  .app-shell[data-workspace-shell="v2"] .library-pane{left:0;border-right:1px solid var(--line);border-bottom:0}
-  .app-shell[data-workspace-shell="v2"] .context-pane{right:0;left:auto;border-left:1px solid var(--line);border-top:0;height:auto;min-height:0}
-  .app-shell[data-workspace-shell="v2"] .studio.workspace-left-collapsed>.library-pane{transform:translateX(-105%);opacity:0;visibility:hidden}
-  .app-shell[data-workspace-shell="v2"] .studio.workspace-right-collapsed>.context-pane{transform:translateX(105%);opacity:0;visibility:hidden}
-  .app-shell[data-workspace-shell="v2"] .studio:not(.workspace-left-collapsed)>.library-pane,
-  .app-shell[data-workspace-shell="v2"] .studio:not(.workspace-right-collapsed)>.context-pane{transform:translateX(0);opacity:1;visibility:visible}
-  .app-shell[data-workspace-shell="v2"] .workspace-shell-controls{width:100%;order:4}
-  .app-shell[data-workspace-shell="v2"] .workspace-shell-toggle{flex:1;min-height:44px}
-  .app-shell[data-workspace-shell="v2"] .workspace-drawer-close{display:block}
-  .app-shell[data-workspace-shell="v2"] .bottom-bar{position:relative;bottom:auto}
-  .app-shell[data-workspace-shell="v2"] .component-grid{grid-template-columns:1fr 1fr;overflow:visible}
-  .app-shell[data-workspace-shell="v2"] .layer-list{max-height:none}
+  .app-shell[data-workspace-shell="v2"] .context-pane {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: min(86vw, 360px);
+    max-height: none;
+    z-index: 20;
+    overflow: auto;
+    box-shadow: 0 16px 36px #000a;
+    background: var(--panel);
+  }
+  .app-shell[data-workspace-shell="v2"] .library-pane {
+    left: 0;
+    border-right: 1px solid var(--line);
+    border-bottom: 0;
+  }
+  .app-shell[data-workspace-shell="v2"] .context-pane {
+    right: 0;
+    left: auto;
+    border-left: 1px solid var(--line);
+    border-top: 0;
+    height: auto;
+    min-height: 0;
+  }
+  .app-shell[data-workspace-shell="v2"] .studio.workspace-left-collapsed > .library-pane {
+    transform: translateX(-105%);
+    opacity: 0;
+    visibility: hidden;
+  }
+  .app-shell[data-workspace-shell="v2"] .studio.workspace-right-collapsed > .context-pane {
+    transform: translateX(105%);
+    opacity: 0;
+    visibility: hidden;
+  }
+  .app-shell[data-workspace-shell="v2"] .studio:not(.workspace-left-collapsed) > .library-pane,
+  .app-shell[data-workspace-shell="v2"] .studio:not(.workspace-right-collapsed) > .context-pane {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    padding: 12px;
+  }
+  .app-shell[data-workspace-shell="v2"] .workspace-shell-controls {
+    width: 100%;
+    order: 4;
+  }
+  .app-shell[data-workspace-shell="v2"] .workspace-shell-toggle {
+    flex: 1;
+    min-height: 44px;
+  }
+  .app-shell[data-workspace-shell="v2"] .workspace-drawer-close {
+    display: block;
+  }
+  .app-shell[data-workspace-shell="v2"] .workspace-shell-backdrop {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    border: 0;
+    border-radius: 0;
+    background: #0006;
+    padding: 0;
+  }
+  .app-shell[data-workspace-shell="v2"] .workspace-shell-backdrop[hidden] {
+    display: none;
+  }
+  .app-shell[data-workspace-shell="v2"] .bottom-bar {
+    position: relative;
+    bottom: auto;
+  }
+  .app-shell[data-workspace-shell="v2"] .component-grid {
+    grid-template-columns: 1fr 1fr;
+    overflow: visible;
+  }
+  .app-shell[data-workspace-shell="v2"] .layer-list {
+    max-height: none;
+  }
 }
