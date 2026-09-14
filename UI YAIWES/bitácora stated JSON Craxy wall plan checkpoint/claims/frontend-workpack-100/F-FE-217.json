@@ -5,14 +5,26 @@
   "node_id":"F-FE-217-EMPTY-STATE-MATRIX",
   "segment_id":"QA_ONLY",
   "lane":"GROK-P",
-  "state":"CLAIMED",
+  "state":"GAP_RESOLVABLE",
   "owner":"GPT-5.6-SOL",
   "agent":"GPT-5.6-SOL",
   "chat_id":"CURRENT_CHAT_FACTORY_SEGMENTATION",
   "fresh_main_sha":"6faf4538eb1a4793161938716bbfaaeb2d0d164a",
   "claimed_at":"2026-09-14T08:54:30-05:00",
+  "claim_commit":"327ac2ed387836cff436a2666f54a20856ed70a3",
+  "test_commit":"fa1849c52f0d038aebce921b852b972f3f5c8a0e",
+  "tested_sha":"7bef3557be833810c4f294d4eeb7f95e6a1de112",
+  "report_commit":"f6aec145856fcb4a606db58a231757b89efe8d19",
+  "released_at":"2026-09-14T08:58:20-05:00",
   "type":"QA_ONLY",
   "candidate":"index-v192.html",
+  "run_id":34852317019,
+  "job_id":104003063922,
+  "artifact_id":10350249088,
+  "artifact_digest":"sha256:1aac1465d37a59d3667edc9d98d0ba1314863af6230e02ae99068aa31a42824a",
+  "test_summary":{"passed":4,"failed":1},
+  "verified_pass":["layers empty state actionable","version empty state actionable","AI result empty state actionable","library baseline has 10 usable entries"],
+  "gaps":[{"type":"HF_EMPTY_STATE_SURFACE_MISSING","owner":"SEG-09-HF-JOBS","detail":"candidate exposes no HF empty/status/refresh surface"}],
   "acceptance":"Library/layers/versions/HF/results empty states remain actionable and expose no dead controls; missing surface is a GAP, not fake PASS.",
   "write_scope":[
     "Frontend/factory-v0/tests/e2e/control-audit/F-FE-217-EMPTY-STATE-MATRIX.spec.mjs",
@@ -21,5 +33,6 @@
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-217.json"
   ],
   "product_patched":false,
-  "release":false
+  "release":true,
+  "next_free_node":"F-FE-218-NETWORK-OFFLINE-MATRIX"
 }
