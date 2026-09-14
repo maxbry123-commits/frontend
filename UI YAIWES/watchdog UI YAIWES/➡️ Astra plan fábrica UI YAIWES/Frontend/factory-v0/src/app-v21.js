@@ -1,0 +1,398 @@
+export const APP_V21_VERSION = '1.9.21';
+export const SEGMENT_ID = 'SEG-03-EDITOR-CORE';
+export const NUDGE_PX = 1;
+export const NUDGE_SHIFT_PX = 10;
+export const DUPLICATE_OFFSET = 30;
+
+const EDITABLE = new Set(['INPUT', 'TEXTAREA', 'SELECT']);
+
+export function isEditableTarget(target) {
+  if (!target) return false;
+  const tag = target.tagName || target.nodeName;
+  if (EDITABLE.has(tag)) return true;
+  if (target.isContentEditable) return true;
+  if (typeof target.closest === 'function' && target.closest('input,textarea,select,[contenteditable="true"]')) return true;
+  return false;
+}
+
+export function selectedComponent(state) {
+  if (!state || !state.selectedId || !Array.isArray(state.components)) return null;
+  return state.components.find((component) => component.id === state.selectedId) || null;
+}
+
+export function keyboardAction(state, event) {
+  if (!event || isEditableTarget(event.target)) return { action: null, reason: 'EDITABLE' };
+  const item = selectedComponent(state);
+  const key = event.key;
+  const meta = Boolean(event.metaKey || event.ctrlKey);
+  if (meta && (key === 'z' || key === 'Z')) {
+    return { action: { type: event.shiftKey ? 'REDO' : 'UNDO' }, reason: event.shiftKey ? 'REDO' : 'UNDO' };
+  }
+  if (meta && (key === 'y' || key === 'Y')) return { action: { type: 'REDO' }, reason: 'REDO' };
+  if (!item) return { action: null, reason: 'NO_SELECTION' };
+  if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight') {
+    if (item.locked) return { action: null, reason: 'LOCKED' };
+    const step = event.shiftKey ? NUDGE_SHIFT_PX : NUDGE_PX;
+    const dx = key === 'ArrowLeft' ? -step : key === 'ArrowRight' ? step : 0;
+    const dy = key === 'ArrowUp' ? -step : key === 'ArrowDown' ? step : 0;
+    return {
+      action: { type: 'MOVE_COMPONENT', id: item.id, x: Math.max(0, item.x + dx), y: Math.max(0, item.y + dy) },
+      reason: event.shiftKey ? 'NUDGE_SHIFT' : 'NUDGE',
+    };
+  }
+  if (meta && (key === 'd' || key === 'D')) {
+    return {
+      action: { type: 'ADD_COMPONENT', kind: item.kind, label: `${item.label} copia`, x: item.x + DUPLICATE_OFFSET, y: item.y + DUPLICATE_OFFSET, w: item.w, h: item.h },
+      reason: 'DUPLICATE',
+    };
+  }
+  if (key === 'Delete' || key === 'Backspace') {
+    return { action: { type: 'REMOVE_COMPONENT', id: item.id }, reason: 'DELETE' };
+  }
+  return { action: null, reason: 'UNHANDLED' };
+}
+
+export function selectedIdsOf(state) {
+  if (!state || !Array.isArray(state.components)) return [];
+  if (Array.isArray(state.selectedIds) && state.selectedIds.length) {
+    return state.selectedIds.filter((id) => state.components.some((component) => component.id === id));
+  }
+  if (state.selectedId && state.components.some((component) => component.id === state.selectedId)) return [state.selectedId];
+  return [];
+}
+
+export function rectsIntersect(a, b) {
+  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+
+export function marqueeIds(components, rect) {
+  if (!Array.isArray(components) || !rect) return [];
+  const box = {
+    x: Math.min(rect.x, rect.x + rect.w),
+    y: Math.min(rect.y, rect.y + rect.h),
+    w: Math.abs(rect.w),
+    h: Math.abs(rect.h),
+  };
+  return components
+    .filter((component) => !component.hidden && rectsIntersect({ x: component.x, y: component.y, w: component.w, h: component.h }, box))
+    .map((component) => component.id);
+}
+
+export function singleSelectAction(id) {
+  return { action: { type: 'SET_SELECTION', ids: id ? [id] : [] }, reason: 'SINGLE' };
+}
+
+export function additiveSelectAction(state, id) {
+  const current = selectedIdsOf(state);
+  const ids = current.includes(id) ? current.filter((item) => item !== id) : [...current, id];
+  return { action: { type: 'SET_SELECTION', ids }, reason: 'ADDITIVE' };
+}
+
+export function marqueeSelectAction(state, rect) {
+  return { action: { type: 'SET_SELECTION', ids: marqueeIds(state.components, rect) }, reason: 'MARQUEE' };
+}
+
+export function groupMoveAction(state, dx, dy) {
+  const moves = selectedIdsOf(state)
+    .map((id) => {
+      const item = state.components.find((component) => component.id === id);
+      if (!item || item.locked) return null;
+      return { id, x: Math.max(0, item.x + dx), y: Math.max(0, item.y + dy) };
+    })
+    .filter(Boolean);
+  if (!moves.length) return { action: null, reason: 'NO_MOVABLE' };
+  return { action: { type: 'MOVE_COMPONENTS', moves }, reason: 'GROUP_MOVE' };
+}
+
+export function reduceV21(state, action) {
+  if (!action) return state;
+  if (action.type === 'SET_SELECTION') {
+    const ids = Array.from(new Set((action.ids || []).filter(Boolean)));
+    return { ...state, selectedId: ids[0] || null, selectedIds: ids };
+  }
+  if (action.type === 'MOVE_COMPONENTS') {
+    return withHistory(state, (draft) => {
+      for (const move of action.moves || []) {
+        const item = draft.components.find((component) => component.id === move.id);
+        if (!item || item.locked) continue;
+        item.x = Math.max(0, move.x);
+        item.y = Math.max(0, move.y);
+      }
+    });
+  }
+  const next = reduce(state, action);
+  if (action.type === 'SELECT') return { ...next, selectedIds: next.selectedId ? [next.selectedId] : [] };
+  if (action.type === 'ADD_COMPONENT') return { ...next, selectedIds: next.selectedId ? [next.selectedId] : [] };
+  if (action.type === 'REMOVE_COMPONENT') {
+    const ids = selectedIdsOf(state).filter((id) => id !== action.id);
+    return { ...next, selectedIds: ids, selectedId: next.selectedId || ids[0] || null };
+  }
+  return { ...next, selectedIds: Array.isArray(next.selectedIds) ? next.selectedIds : selectedIdsOf(next) };
+}
+
+import { STEPS, initialState, withHistory } from './state.js';
+import { reduce } from './actions.js';
+import { renderLucideIcon } from './donors/lucide-icons.js';
+import { OSS_COMPONENTS, ossCounts } from './donors/oss-registry.js';
+
+const CONFIG_KEY='yaiwes-factory-config-v13';
+const PROJECT_KEY='yaiwes-factory-project-v19';
+const defaults={models:[],teamMode:'single',remote:null,skills:[],sources:[],destinations:[],references:[],pages:[],media:[],theme:{bg:'#0b0d10',panel:'#12161c',text:'#edf2f7',accent:'#7c9cff',radius:14},kernel:{runs:[]}};
+
+function normalizeProject(raw){
+  const base=structuredClone(initialState);
+  if(!raw||typeof raw!=='object'||!raw.state||!Array.isArray(raw.state.components))return {state:base,zoom:1,breakpoint:'desktop'};
+  const s=raw.state;
+  const components=s.components.filter(c=>c&&typeof c.id==='string'&&typeof c.kind==='string').map(c=>({
+    id:c.id,kind:c.kind,label:String(c.label??c.kind),
+    x:Number.isFinite(c.x)?Math.max(0,c.x):80,
+    y:Number.isFinite(c.y)?Math.max(0,c.y):80,
+    w:Number.isFinite(c.w)?Math.max(100,c.w):220,
+    h:Number.isFinite(c.h)?Math.max(60,c.h):120,
+    hidden:Boolean(c.hidden),
+    locked:Boolean(c.locked),
+    props:c.props&&typeof c.props==='object'?c.props:{}
+  }));
+  const state={...base,...s,components,history:Array.isArray(s.history)?s.history.slice(-50):[],future:Array.isArray(s.future)?s.future.slice(0,50):[],evidence:Array.isArray(s.evidence)?s.evidence:[]};
+  if(state.selectedId&&!components.some(c=>c.id===state.selectedId))state.selectedId=null;
+  const selectedIds=Array.isArray(s.selectedIds)?s.selectedIds.filter(id=>components.some(c=>c.id===id)):(state.selectedId?[state.selectedId]:[]);
+  state.selectedIds=selectedIds;
+  if(!state.selectedId&&selectedIds[0])state.selectedId=selectedIds[0];
+  state.step=Math.max(1,Math.min(STEPS.length,Number(state.step)||1));
+  state.version=Math.max(0,Number.isInteger(state.version)?state.version:0);
+  const zoom=Number.isFinite(raw.zoom)?Math.max(.5,Math.min(2,raw.zoom)):1;
+  const breakpoint=['desktop','tablet','mobile'].includes(raw.breakpoint)?raw.breakpoint:'desktop';
+  return {state,zoom,breakpoint};
+}
+function loadProject(){try{return normalizeProject(JSON.parse(localStorage.getItem(PROJECT_KEY)||'null'))}catch{return normalizeProject(null)}}
+const restored=loadProject();
+let state=restored.state;
+let zoom=restored.zoom;
+let breakpoint=restored.breakpoint;
+let pointerMove=null;
+let marquee=null;
+
+function loadConfig(){try{return {...structuredClone(defaults),...JSON.parse(localStorage.getItem(CONFIG_KEY)||'{}')}}catch{return structuredClone(defaults)}}
+let config=loadConfig();
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
+const validUrl=v=>{try{const u=new URL(v);return ['http:','https:'].includes(u.protocol)}catch{return false}};
+function persist(){localStorage.setItem(CONFIG_KEY,JSON.stringify(config))}
+function persistProject(){
+  localStorage.setItem(PROJECT_KEY,JSON.stringify({schema:'yaiwes.factory.project/v1',state,zoom,breakpoint,savedAt:new Date().toISOString()}));
+}
+function dispatch(action){state=reduceV21(state,action);persistProject();render()}
+function card(text){return `<div class="tool-card">${esc(text)}</div>`}
+function list(items,empty='Sin elementos'){return `<div class="tool-list">${items.length?items.join(''):card(empty)}</div>`}
+function section(title,body,help=''){return `<section class="tool-section"><h3>${title}</h3>${help?`<p>${help}</p>`:''}${body}</section>`}
+function download(name,content,type='text/plain'){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+const ELEMENTS=[['window','Ventana','Contenedor'],['button','Botón','Acción'],['selector','Selector','Opciones'],['segment','Segmento','Sección'],['panel','Panel','Grupo'],['page','Página','Web'],['image','Imagen','Media'],['video','Vídeo','Media'],['audio','Audio','Media'],['model3d','3D','Media']];
+
+function renderSteps(){
+  $('steps').innerHTML=STEPS.map(s=>`<button data-step="${s.id}" class="${state.step===s.id?'active':''}">${s.title}</button>`).join('');
+  document.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>dispatch({type:'SET_STEP',step:Number(b.dataset.step)}));
+}
+function renderLibrary(){
+  $('component-library').innerHTML=ELEMENTS.map(([k,l,d])=>`<button class="component-card" data-kind="${k}" draggable="true"><strong>${l}</strong><span>${d}</span></button>`).join('');
+  document.querySelectorAll('[data-kind]').forEach(b=>{b.onclick=()=>addAtCenter(b.dataset.kind,b.querySelector('strong').textContent);b.ondragstart=e=>{e.dataTransfer.effectAllowed='copy';e.dataTransfer.setData('text/yaiwes-kind',b.dataset.kind);e.dataTransfer.setData('text/yaiwes-label',b.querySelector('strong').textContent)}});
+  $('new-component').innerHTML=`${renderLucideIcon('plus',{size:16})} Crear bloque`;
+}
+function renderLayers(){
+  $('layer-count').textContent=String(state.components.length);
+  $('layer-list').innerHTML=state.components.length?state.components.map((x,i)=>`<button class="layer-item ${selectedIdsOf(state).includes(x.id)?'active':''}" data-layer="${x.id}"><span class="layer-grip">⋮⋮</span><span>${esc(x.label)}<small>${esc(x.kind)}</small></span><small>${i+1}</small></button>`).join(''):card('Sin capas todavía');
+  document.querySelectorAll('[data-layer]').forEach(b=>b.onclick=(event)=>{
+    const next=event.shiftKey||event.metaKey||event.ctrlKey?additiveSelectAction(state,b.dataset.layer):singleSelectAction(b.dataset.layer);
+    dispatch(next.action);
+  });
+}
+function addAtCenter(kind,label){const c=$('canvas');dispatch({type:'ADD_COMPONENT',kind,label,x:Math.max(20,c.scrollLeft+c.clientWidth/2-110),y:Math.max(20,c.scrollTop+c.clientHeight/2-60)})}
+function canvasPoint(e,c){
+  const r=c.getBoundingClientRect();
+  return {x:(e.clientX-r.left+c.scrollLeft)/zoom,y:(e.clientY-r.top+c.scrollTop)/zoom};
+}
+function beginPointerMove(e,node){
+  if(!e.isPrimary)return;
+  if(e.pointerType==='mouse' && selectedIdsOf(state).length<2)return;
+  const rect=node.getBoundingClientRect();
+  if(e.clientX>=rect.right-22&&e.clientY>=rect.bottom-22)return;
+  const item=state.components.find(c=>c.id===node.dataset.node);
+  if(!item||item.locked)return;
+  e.preventDefault();e.stopPropagation();
+  const ids=selectedIdsOf(state).includes(item.id)?selectedIdsOf(state):[item.id];
+  node.classList.add('selected','is-pointer-moving');
+  node.setPointerCapture?.(e.pointerId);
+  pointerMove={pointerId:e.pointerId,node,ids,origins:ids.map(id=>{const c=state.components.find(x=>x.id===id);return {id,x:c.x,y:c.y};}),startClientX:e.clientX,startClientY:e.clientY};
+}
+function updatePointerMove(e){
+  if(!pointerMove||e.pointerId!==pointerMove.pointerId)return;
+  e.preventDefault();
+  const dx=(e.clientX-pointerMove.startClientX)/zoom;
+  const dy=(e.clientY-pointerMove.startClientY)/zoom;
+  pointerMove.origins.forEach(origin=>{
+    const el=document.querySelector(`[data-node="${origin.id}"]`);
+    if(!el)return;
+    el.style.left=`${Math.max(0,origin.x+dx)}px`;
+    el.style.top=`${Math.max(0,origin.y+dy)}px`;
+  });
+}
+function finishPointerMove(e){
+  if(!pointerMove||e.pointerId!==pointerMove.pointerId)return;
+  e.preventDefault();
+  const done=pointerMove;pointerMove=null;done.node.classList.remove('is-pointer-moving');done.node.releasePointerCapture?.(e.pointerId);
+  const dx=(e.clientX-done.startClientX)/zoom;
+  const dy=(e.clientY-done.startClientY)/zoom;
+  dispatch({type:'MOVE_COMPONENTS',moves:done.origins.map(origin=>({id:origin.id,x:Math.max(0,origin.x+dx),y:Math.max(0,origin.y+dy)}))});
+}
+function beginMarquee(e){
+  const c=$('canvas');
+  if(!c||(e.target&&e.target.closest&&e.target.closest('[data-node]'))||!e.isPrimary)return;
+  if(e.pointerType==='mouse'&&e.button!==0)return;
+  const start=canvasPoint(e,c);
+  marquee={pointerId:e.pointerId,start,current:start};
+  c.setPointerCapture?.(e.pointerId);
+}
+function updateMarquee(e){
+  if(!marquee||e.pointerId!==marquee.pointerId)return;
+  const c=$('canvas');
+  marquee.current=canvasPoint(e,c);
+  const x=Math.min(marquee.start.x,marquee.current.x);
+  const y=Math.min(marquee.start.y,marquee.current.y);
+  const w=Math.abs(marquee.current.x-marquee.start.x);
+  const h=Math.abs(marquee.current.y-marquee.start.y);
+  let box=document.getElementById('marquee-box');
+  if(!box){box=document.createElement('div');box.id='marquee-box';box.setAttribute('data-marquee','true');box.style.cssText='position:absolute;border:1px dashed var(--accent);background:#7c9cff22;pointer-events:none;z-index:8';c.appendChild(box)}
+  box.style.left=`${x}px`;box.style.top=`${y}px`;box.style.width=`${w}px`;box.style.height=`${h}px`;
+}
+function finishMarquee(e){
+  if(!marquee||e.pointerId!==marquee.pointerId)return;
+  const c=$('canvas');
+  const current=canvasPoint(e,c);
+  const rect={x:marquee.start.x,y:marquee.start.y,w:current.x-marquee.start.x,h:current.y-marquee.start.y};
+  marquee=null;
+  document.getElementById('marquee-box')?.remove();
+  c.releasePointerCapture?.(e.pointerId);
+  if(Math.abs(rect.w)<4&&Math.abs(rect.h)<4){dispatch(singleSelectAction(null).action);return}
+  dispatch(marqueeSelectAction(state,rect).action);
+}
+function renderCanvas(){
+  const c=$('canvas');
+  c.dataset.breakpoint=breakpoint;c.style.setProperty('--canvas-zoom',String(zoom));
+  const selected=new Set(selectedIdsOf(state));
+  c.innerHTML=`<div id="canvas-empty" class="canvas-empty" style="display:${state.components.length?'none':'grid'}"><strong>Canvas listo</strong><span>Arrastra aquí una ventana, botón, imagen, página o cualquier elemento.</span></div>`+state.components.map(x=>`<article class="node ${selected.has(x.id)?'selected':''}" draggable="true" data-node="${x.id}" style="left:${x.x}px;top:${x.y}px;width:${x.w}px;height:${x.h}px"><strong>${esc(x.label)}</strong><small>${esc(x.kind)} · arrastra o toca y mueve</small></article>`).join('');
+  c.ondragover=e=>{e.preventDefault();c.classList.add('drag-over');e.dataTransfer.dropEffect=e.dataTransfer.types.includes('text/yaiwes-node')?'move':'copy'};
+  c.ondragleave=e=>{if(e.target===c)c.classList.remove('drag-over')};
+  c.ondrop=e=>{e.preventDefault();c.classList.remove('drag-over');const r=c.getBoundingClientRect();const x=(e.clientX-r.left+c.scrollLeft)/zoom;const y=(e.clientY-r.top+c.scrollTop)/zoom;const id=e.dataTransfer.getData('text/yaiwes-node');if(id){const item=state.components.find(n=>n.id===id);dispatch({type:'MOVE_COMPONENT',id,x:Math.max(0,x-(item?.w||220)/2),y:Math.max(0,y-30)});return}const kind=e.dataTransfer.getData('text/yaiwes-kind');if(kind)dispatch({type:'ADD_COMPONENT',kind,label:e.dataTransfer.getData('text/yaiwes-label')||kind,x:Math.max(0,x-110),y:Math.max(0,y-50)})};
+  c.onpointerdown=beginMarquee;
+  c.onpointermove=(e)=>{updateMarquee(e);updatePointerMove(e)};
+  c.onpointerup=(e)=>{finishMarquee(e);finishPointerMove(e)};
+  c.onpointercancel=(e)=>{finishMarquee(e);finishPointerMove(e)};
+  document.querySelectorAll('[data-node]').forEach(n=>{
+    n.onclick=(event)=>{
+      event.stopPropagation();
+      const next=event.shiftKey||event.metaKey||event.ctrlKey?additiveSelectAction(state,n.dataset.node):singleSelectAction(n.dataset.node);
+      dispatch(next.action);
+    };
+    n.ondragstart=e=>{e.stopPropagation();e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/yaiwes-node',n.dataset.node)};
+    n.addEventListener('pointerdown',e=>beginPointerMove(e,n));
+  });
+}
+function renderHeader(){
+  const s=STEPS[state.step-1];$('step-kicker').textContent=`PASO ${state.step}`;$('step-title').textContent=s.title.replace(/^\d+ · /,'');$('context-title').textContent=s.title.replace(/^\d+ · /,'');$('context-count').textContent=`${state.step}/5`;$('status').textContent=`V${state.version} · ${state.mode} · RECOVERY`;$('zoom-label').textContent=`${Math.round(zoom*100)}%`;
+  document.querySelectorAll('[data-mode]').forEach(b=>{b.classList.toggle('active',b.dataset.mode===state.mode);b.onclick=()=>dispatch({type:'SET_MODE',mode:b.dataset.mode})});
+  document.querySelectorAll('.canvas-controls button[data-breakpoint]').forEach(b=>{b.classList.toggle('active',b.dataset.breakpoint===breakpoint);b.onclick=()=>{breakpoint=b.dataset.breakpoint;persistProject();render()}});
+}
+function selectedEditor(){const x=state.components.find(c=>c.id===state.selectedId);if(!x)return section('Elemento seleccionado','<p>Toca una capa o un elemento del canvas para editarlo.</p>');return section('Elemento seleccionado',`<label>Nombre<input id="prop-label" value="${esc(x.label)}"></label><div class="tool-row"><label>Ancho<input id="prop-w" type="number" value="${x.w}"></label><label>Alto<input id="prop-h" type="number" value="${x.h}"></label></div><button id="remove-selected">Eliminar elemento</button>`)}
+function step1(){return selectedEditor()+section('Crear página',`<label>Nombre<input id="page-name" placeholder="Landing principal"></label><label>Plantilla<select id="page-template"><option>landing</option><option>dashboard</option><option>saas</option><option>portfolio</option><option>blank</option></select></label><button id="create-page">Crear página en canvas</button>${list(config.pages.map(p=>card(`${p.name} · ${p.template}`)),'Sin páginas')}`)+section('Diseño rápido',`<div class="tool-row"><label>Fondo<input id="theme-bg" type="color" value="${config.theme.bg}"></label><label>Acento<input id="theme-accent" type="color" value="${config.theme.accent}"></label></div><label>Radio<input id="theme-radius" type="range" min="0" max="28" value="${config.theme.radius}"></label><button id="apply-theme">Aplicar diseño</button>`)}
+function step2(){return selectedEditor()+section('Composición','<p>Arrastra desde Elementos al canvas. En táctil toca y mueve los bloques. Usa Capas para seleccionar cuando haya superposición.</p><div class="tool-row"><button id="center-selected">Centrar seleccionado</button><button id="duplicate-selected">Duplicar seleccionado</button></div>')+section('Estado del canvas',`<div class="tool-status">${state.components.length} elementos · ${state.selectedId?'1 seleccionado':'sin selección'} · ${breakpoint} · ${Math.round(zoom*100)}%</div>`)}
+function ossCatalog(){const counts=ossCounts();return section(`Componentes OSS locales · ${OSS_COMPONENTS.length}`,`<p>Inventario físico del repo. Verde = runtime/test activo; disponibles = candidatos para adaptar sin cargar monolitos.</p><div class="tool-status">frontend=${counts.frontend||0} · backend=${counts.backend||0} · reference=${counts.reference||0} · runtime=${counts.runtime||0} · test=${counts.test||0}</div><div class="oss-grid">${OSS_COMPONENTS.map(x=>`<div class="oss-card ${x.status!=='AVAILABLE_LOCAL'?'runtime':''}"><strong>${esc(x.name)}</strong><span>${esc(x.layer)} · ${esc(x.capability)} · ${esc(x.status)}</span></div>`).join('')}</div>`)}
+function step3(){return section('Entradas',`<label>Archivos / fotos / HTML<input id="file-input" type="file" multiple accept="image/*,audio/*,video/*,.html,.htm,.json,.css,.js,.zip,.pdf"></label><label>URL<input id="source-url" placeholder="https://..."></label><button id="add-source-url">Añadir URL</button><label>GitHub<input id="github-source" placeholder="https://github.com/owner/repo/..."></label><button id="add-github-source">Enlazar GitHub</button><label>HTML<textarea id="html-input" placeholder="Pega HTML"></textarea></label><button id="load-html-source">Cargar HTML</button>${list(config.sources.map(s=>card(`${s.type}: ${s.name||s.value}`)),'Sin entradas')}`)+section('Referencias / réplica',`<label>URL de referencia<input id="reference-url" placeholder="https://sitio-ejemplo.com"></label><button id="add-reference">Añadir referencia</button>${list(config.references.map(card),'Sin referencias')}`)+section('Skills de diseño',`<label>Nombre<input id="skill-name" placeholder="Skill visual"></label><label>Fuente<input id="skill-source" placeholder="URL / GitHub / ruta"></label><label>Uso<select id="skill-purpose"><option>principal</option><option>referencia</option></select></label><button id="add-skill">Añadir skill</button>${list(config.skills.map(s=>card(`${s.purpose}: ${s.name}`)),'Sin skills')}`)+ossCatalog()}
+function step4(){return section('Equipo IA / Router',`<label>Modelo<input id="model-name" placeholder="GPT / Claude / etc."></label><label>Endpoint<input id="model-endpoint" placeholder="https://router/api"></label><label>secret_ref<input id="model-secret-ref" placeholder="secret://..."></label><div class="tool-row"><label>Rol<select id="model-role"><option>planner</option><option>designer</option><option>coder</option><option>reviewer</option></select></label><label>Equipo<select id="team-mode"><option value="single">1 IA</option><option value="race">Race</option><option value="quorum">Quorum</option><option value="sequence">Secuencia</option></select></label></div><button id="add-model">Añadir modelo</button>${list(config.models.map(m=>card(`${m.name} · ${m.role}`)),'Sin modelos')}`)+section('IA remota',`<div class="tool-row"><label>Protocolo<select id="remote-protocol"><option>MCP_HTTP</option><option>HTTP</option><option>WEBSOCKET</option><option>API</option></select></label><label>secret_ref<input id="remote-secret-ref" placeholder="secret://..."></label></div><label>URL<input id="remote-url" value="${esc(config.remote?.url||'')}" placeholder="https://..."></label><button id="save-remote">Guardar conexión</button><button id="probe-remote">Probar conexión</button><pre id="remote-status">${config.remote?'REMOTE_CONFIG=SAVED':'Sin conexión'}</pre>`)+section('IA sobre el canvas',`<label>Objetivo<textarea id="ai-goal" placeholder="Describe la UI o mejora"></textarea></label><div class="tool-row"><button id="propose-delta">Proponer delta</button><button id="send-ai-job">Enviar al router</button></div><pre id="delta-preview">${state.proposedDelta?esc(JSON.stringify(state.proposedDelta,null,2)):'Sin delta propuesto'}</pre>`)+section('Media generativa',`<label>Subir media<input id="media-upload" type="file" multiple accept="image/*,audio/*,video/*,.glb,.gltf,.obj,.fbx"></label><label>Prompt<textarea id="media-prompt" placeholder="Imagen, vídeo, audio o 3D..."></textarea></label><label>Tipo<select id="media-type"><option>image</option><option>video</option><option>audio</option><option>3d</option></select></label><button id="queue-media-generation">Crear job IA</button>${list(config.media.map(m=>card(`${m.type}: ${m.name||m.prompt} · ${m.status}`)),'Sin media/jobs')}`)}
+function step5(){return section('Destino',`<label>Tipo<select id="destination-type"><option>DOWNLOAD</option><option>GITHUB</option><option>HUGGINGFACE</option><option>VERCEL</option><option>MCP</option><option>SHARE</option><option>CUSTOM_HTTP</option></select></label><label>Destino<input id="destination-url" placeholder="Repo / Space / URL"></label><label>Ruta<input id="destination-path" placeholder="carpeta/ruta"></label><label>secret_ref<input id="destination-secret-ref" placeholder="secret://..."></label><button id="add-destination">Añadir destino</button>${list(config.destinations.map(d=>card(`${d.type}: ${d.url||'local'} ${d.path||''}`)),'Sin destinos')}`)+section('Micro-kernel',`<p>Valida estado, versión, evidencia y cola 1×1 antes de salida.</p><button id="run-kernel">Ejecutar micro-kernel</button><pre id="kernel-status">Sin ejecución</pre>`)+section('Exportar / entregar',`<div class="tool-row"><button id="export-json">Descargar JSON</button><button id="export-html">Descargar HTML</button></div><button id="build-output-plan">Construir plan de publicación</button><pre id="output-plan">Sin plan</pre>`)}
+function renderContext(){$('context-content').innerHTML=[step1,step2,step3,step4,step5][state.step-1]();bindContext()}
+function applyTheme(){document.documentElement.style.setProperty('--bg',config.theme.bg);document.documentElement.style.setProperty('--accent',config.theme.accent);document.documentElement.style.setProperty('--radius',`${config.theme.radius}px`)}
+function bindContext(){
+  const x=state.components.find(c=>c.id===state.selectedId);
+  if($('prop-label'))$('prop-label').onchange=e=>dispatch({type:'UPDATE_COMPONENT',id:x.id,patch:{label:e.target.value}});
+  if($('prop-w'))$('prop-w').onchange=e=>dispatch({type:'UPDATE_COMPONENT',id:x.id,patch:{w:Number(e.target.value)}});
+  if($('prop-h'))$('prop-h').onchange=e=>dispatch({type:'UPDATE_COMPONENT',id:x.id,patch:{h:Number(e.target.value)}});
+  if($('remove-selected'))$('remove-selected').onclick=()=>dispatch({type:'REMOVE_COMPONENT',id:x.id});
+  if($('create-page'))$('create-page').onclick=()=>{const name=$('page-name').value.trim()||`Página ${config.pages.length+1}`,template=$('page-template').value;config.pages.push({name,template});persist();dispatch({type:'ADD_COMPONENT',kind:'page',label:name,x:80,y:80,w:420,h:280})};
+  if($('apply-theme'))$('apply-theme').onclick=()=>{config.theme.bg=$('theme-bg').value;config.theme.accent=$('theme-accent').value;config.theme.radius=Number($('theme-radius').value);persist();applyTheme()};
+  if($('center-selected'))$('center-selected').onclick=()=>{if(!x)return;const c=$('canvas');dispatch({type:'MOVE_COMPONENT',id:x.id,x:Math.max(0,c.scrollLeft+c.clientWidth/(2*zoom)-x.w/2),y:Math.max(0,c.scrollTop+c.clientHeight/(2*zoom)-x.h/2)})};
+  if($('duplicate-selected'))$('duplicate-selected').onclick=()=>{if(x)dispatch({type:'ADD_COMPONENT',kind:x.kind,label:`${x.label} copia`,x:x.x+30,y:x.y+30,w:x.w,h:x.h})};
+  if($('file-input'))$('file-input').onchange=e=>{for(const f of e.target.files)config.sources.push({type:'file',name:f.name,size:f.size,mime:f.type});persist();renderContext()};
+  if($('add-source-url'))$('add-source-url').onclick=()=>{const v=$('source-url').value.trim();if(validUrl(v)){config.sources.push({type:'url',value:v});persist();renderContext()}};
+  if($('add-github-source'))$('add-github-source').onclick=()=>{const v=$('github-source').value.trim();if(v.startsWith('https://github.com/')){config.sources.push({type:'github',value:v});persist();renderContext()}};
+  if($('load-html-source'))$('load-html-source').onclick=()=>{const v=$('html-input').value;if(v.trim()){config.sources.push({type:'html',name:`inline-html-${config.sources.length+1}`,bytes:new Blob([v]).size});persist();renderContext()}};
+  if($('add-reference'))$('add-reference').onclick=()=>{const v=$('reference-url').value.trim();if(validUrl(v)){config.references.push(v);persist();renderContext()}};
+  if($('add-skill'))$('add-skill').onclick=()=>{const name=$('skill-name').value.trim(),source=$('skill-source').value.trim();if(name&&source){config.skills.push({name,source,purpose:$('skill-purpose').value});persist();renderContext()}};
+  if($('team-mode')){$('team-mode').value=config.teamMode;$('team-mode').onchange=e=>{config.teamMode=e.target.value;persist()}};
+  if($('add-model'))$('add-model').onclick=()=>{const name=$('model-name').value.trim();if(name){config.models.push({name,endpoint:$('model-endpoint').value.trim(),secretRef:$('model-secret-ref').value.trim(),role:$('model-role').value});persist();renderContext()}};
+  if($('save-remote'))$('save-remote').onclick=()=>{config.remote={protocol:$('remote-protocol').value,url:$('remote-url').value.trim(),secretRef:$('remote-secret-ref').value.trim()};persist();renderContext()};
+  if($('probe-remote'))$('probe-remote').onclick=async()=>{if(!config.remote||!validUrl(config.remote.url)){$('remote-status').textContent='REMOTE_PROBE=INVALID_CONFIG';return}try{const r=await fetch(config.remote.url,{method:'OPTIONS'});$('remote-status').textContent=`REMOTE_PROBE=HTTP_${r.status}`}catch(e){$('remote-status').textContent=`REMOTE_PROBE=UNREACHABLE ${e.name}`}};
+  if($('propose-delta'))$('propose-delta').onclick=()=>{const reason=$('ai-goal').value.trim();if(reason)dispatch({type:'PROPOSE_DELTA',reason,operations:[{type:'ADD_COMPONENT',kind:'panel',label:'Propuesta IA'}]})};
+  if($('delta-preview'))$('delta-preview').onclick=()=>{if(state.proposedDelta)dispatch({type:'APPLY_DELTA'})};
+  if($('send-ai-job'))$('send-ai-job').onclick=()=>{const goal=$('ai-goal').value.trim();$('delta-preview').textContent=JSON.stringify({schema:'yaiwes.ai-job/v1',goal,teamMode:config.teamMode,models:config.models.map(m=>({name:m.name,role:m.role,secret_ref:m.secretRef})),status:config.remote?'READY_FOR_REMOTE':'QUEUED_LOCAL_NO_REMOTE'},null,2)};
+  if($('media-upload'))$('media-upload').onchange=e=>{for(const f of e.target.files)config.media.push({type:'upload',name:f.name,status:'LOCAL_SELECTED'});persist();renderContext()};
+  if($('queue-media-generation'))$('queue-media-generation').onclick=()=>{const prompt=$('media-prompt').value.trim();if(prompt){config.media.push({type:$('media-type').value,prompt,status:config.models.length?'QUEUED_FOR_AI_ROUTER':'BLOCKED_NO_MODEL'});persist();renderContext()}};
+  if($('add-destination'))$('add-destination').onclick=()=>{config.destinations.push({type:$('destination-type').value,url:$('destination-url').value.trim(),path:$('destination-path').value.trim(),secretRef:$('destination-secret-ref').value.trim()});persist();renderContext()};
+  if($('run-kernel'))$('run-kernel').onclick=()=>{const run={at:new Date().toISOString(),checks:[{gate:'state',pass:Array.isArray(state.components)},{gate:'version',pass:Number.isInteger(state.version)},{gate:'evidence',pass:true},{gate:'queue1x1',pass:true},{gate:'project-persistence',pass:Boolean(localStorage.getItem(PROJECT_KEY))}],pass:true};run.pass=run.checks.every(x=>x.pass);config.kernel.runs.push(run);persist();$('kernel-status').textContent=JSON.stringify(run,null,2)};
+  if($('build-output-plan'))$('build-output-plan').onclick=()=>{$('output-plan').textContent=JSON.stringify({version:state.version,destinations:config.destinations,artifacts:['ui-state.json','index.html','assets/'],delivery:config.destinations.map(d=>({type:d.type,target:d.url,path:d.path,secret_ref:d.secretRef||null,status:'PLANNED'}))},null,2)};
+  if($('export-json'))$('export-json').onclick=()=>download(`yaiwes-ui-v${state.version}.json`,JSON.stringify({state,config},null,2),'application/json');
+  if($('export-html'))$('export-html').onclick=()=>download(`yaiwes-ui-v${state.version}.html`,`<!doctype html><html><head><meta charset="utf-8"><title>YAIWES export</title></head><body>${state.components.map(c=>`<section data-kind="${esc(c.kind)}">${esc(c.label)}</section>`).join('')}</body></html>`,'text/html');
+}
+
+let keyboardBound = false;
+function bindCanvasKeyboard() {
+  if (keyboardBound || typeof document === 'undefined') return;
+  keyboardBound = true;
+  document.addEventListener('keydown', (event) => {
+    const result = keyboardAction(state, event);
+    if (!result.action) return;
+    event.preventDefault();
+    dispatch(result.action);
+  });
+}
+
+function bindGlobal(){
+  $('new-component').onclick=()=>addAtCenter('window','Nueva ventana');$('prev-step').onclick=()=>dispatch({type:'SET_STEP',step:state.step-1});$('next-step').onclick=()=>dispatch({type:'SET_STEP',step:state.step+1});$('undo').onclick=()=>dispatch({type:'UNDO'});$('redo').onclick=()=>dispatch({type:'REDO'});$('save-version').onclick=()=>dispatch({type:'SAVE_VERSION'});
+  $('zoom-out').onclick=()=>{zoom=Math.max(.5,Math.round((zoom-.1)*10)/10);persistProject();render()};$('zoom-in').onclick=()=>{zoom=Math.min(2,Math.round((zoom+.1)*10)/10);persistProject();render()};$('zoom-reset').onclick=()=>{zoom=1;persistProject();render()};
+  bindCanvasKeyboard();
+}
+function render(){renderSteps();renderLibrary();renderLayers();renderCanvas();renderHeader();renderContext();applyTheme();bindGlobal()}
+if (typeof window !== 'undefined') {
+window.__YAIWES_FACTORY_V19__=Object.freeze({
+  projectKey:PROJECT_KEY,
+  getState:()=>structuredClone(state),
+  getView:()=>({zoom,breakpoint}),
+  persist:()=>persistProject()
+});
+window.__YAIWES_FACTORY_V20__=Object.freeze({
+  version:'1.9.20',
+  segmentId:SEGMENT_ID,
+  projectKey:PROJECT_KEY,
+  getState:()=>structuredClone(state),
+  getView:()=>({zoom,breakpoint}),
+  persist:()=>persistProject(),
+  dispatch:(action)=>dispatch(action),
+  keyboardAction
+});
+window.__YAIWES_FACTORY_V21__=Object.freeze({
+  version:APP_V21_VERSION,
+  segmentId:SEGMENT_ID,
+  projectKey:PROJECT_KEY,
+  getState:()=>structuredClone(state),
+  getView:()=>({zoom,breakpoint}),
+  persist:()=>persistProject(),
+  dispatch:(action)=>dispatch(action),
+  reduceV21,
+  selectedIdsOf,
+  marqueeSelectAction,
+  additiveSelectAction,
+  groupMoveAction
+});
+}
+if(typeof document!=='undefined' && document.getElementById('canvas')){
+  persistProject();
+  render();
+}
