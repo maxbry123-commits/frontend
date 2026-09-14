@@ -1,0 +1,22 @@
+{
+  "schema": "yaiwes.factory.node-claim/v1",
+  "contract": "tel.workflow/v3",
+  "node_id": "F-QA-V193-ENTRYPOINT-AUDIT-069",
+  "owner": "GPT-5.6-SOL",
+  "chat_id": "CURRENT_CHAT_FACTORY_SEGMENTATION",
+  "state": "CLAIMED",
+  "segment_id": "QA_ONLY",
+  "fresh_main_sha": "7bf7471df677148079f605c30a4fddc69cdc9c4f",
+  "claimed_at": "2026-09-14T04:38:00-05:00",
+  "write_scope": [
+    "Frontend/factory-v0/tests/qa-v193-entrypoint-audit.test.mjs",
+    ".github/workflows/factory-qa-v193-entrypoint-audit.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/F-QA-V193-ENTRYPOINT-AUDIT-069-*.json"
+  ],
+  "steps": [
+    "VERIFY_RESEARCH: inventory F-UI-051..061 E2E files and detect old index-v19/index-v192 targets",
+    "EXECUTE_DELTA: add deterministic read-only audit; do not edit product or active segment paths",
+    "TEST_REPORT: run CI and emit exact legacy-reference list for next QA repair nodes"
+  ],
+  "acceptance": "every existing F-UI-051..061 test is classified as V193|LIVE_DYNAMIC|LEGACY_TARGET|MISSING; no product mutation"
+}
