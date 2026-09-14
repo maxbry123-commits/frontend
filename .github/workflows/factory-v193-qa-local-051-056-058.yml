@@ -1,10 +1,11 @@
-name: Factory V1.9.3 QA 051-056 058
+name: Factory V1.9.3 QA 051-061 Local
 
 on:
   push:
     branches: [main]
     paths:
       - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-05*.spec.mjs'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-06*.spec.mjs'
       - '.github/workflows/factory-v193-qa-local-051-056-058.yml'
   workflow_dispatch:
 
@@ -18,7 +19,7 @@ concurrency:
 jobs:
   qa-local:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
@@ -43,24 +44,35 @@ jobs:
           echo "revision=$GITHUB_SHA"
           git hash-object index-v193.html
           git hash-object src/bootstrap/candidate-v193.js
-          git hash-object tests/e2e/f-ui-051-button-matrix-desktop.spec.mjs
-          git hash-object tests/e2e/f-ui-052-button-matrix-mobile.spec.mjs
-          git hash-object tests/e2e/f-ui-053-component-journey.spec.mjs
-          git hash-object tests/e2e/f-ui-054-sol6-refutation.spec.mjs
-          git hash-object tests/e2e/f-ui-055-command-matrix.spec.mjs
-          git hash-object tests/e2e/f-ui-056-a11y-functional.spec.mjs
-          git hash-object tests/e2e/f-ui-058-visual-friction.spec.mjs
+          for f in \
+            tests/e2e/f-ui-051-button-matrix-desktop.spec.mjs \
+            tests/e2e/f-ui-052-button-matrix-mobile.spec.mjs \
+            tests/e2e/f-ui-053-component-journey.spec.mjs \
+            tests/e2e/f-ui-054-sol6-refutation.spec.mjs \
+            tests/e2e/f-ui-055-command-matrix.spec.mjs \
+            tests/e2e/f-ui-056-a11y-functional.spec.mjs \
+            tests/e2e/f-ui-057-published-web-navigation.spec.mjs \
+            tests/e2e/f-ui-058-visual-friction.spec.mjs \
+            tests/e2e/f-ui-059-router-panel-v193.spec.mjs \
+            tests/e2e/f-ui-060-hf-jobs-v193.spec.mjs \
+            tests/e2e/f-ui-061-full-user-journey-v193.spec.mjs; do git hash-object "$f"; done
       - name: F-UI-051 desktop controls
+        if: always()
         run: npx playwright test tests/e2e/f-ui-051-button-matrix-desktop.spec.mjs --project=chromium-desktop
       - name: F-UI-052 mobile touch matrix
+        if: always()
         run: npx playwright test tests/e2e/f-ui-052-button-matrix-mobile.spec.mjs --project=mobile-chromium
       - name: F-UI-053 component journey desktop
+        if: always()
         run: npx playwright test tests/e2e/f-ui-053-component-journey.spec.mjs --project=chromium-desktop
       - name: F-UI-053 component journey mobile
+        if: always()
         run: npx playwright test tests/e2e/f-ui-053-component-journey.spec.mjs --project=mobile-chromium
       - name: F-UI-054 three simulations three refutations
+        if: always()
         run: npx playwright test tests/e2e/f-ui-054-sol6-refutation.spec.mjs --project=chromium-desktop
       - name: F-UI-055 command shortcut matrix
+        if: always()
         run: npx playwright test tests/e2e/f-ui-055-command-matrix.spec.mjs --project=chromium-desktop
       - name: F-UI-056 accessibility desktop
         if: always()
@@ -74,6 +86,18 @@ jobs:
       - name: F-UI-058 visual mobile
         if: always()
         run: npx playwright test tests/e2e/f-ui-058-visual-friction.spec.mjs --project=mobile-chromium
+      - name: F-UI-059 Router panel V193
+        if: always()
+        run: npx playwright test tests/e2e/f-ui-059-router-panel-v193.spec.mjs --project=chromium-desktop
+      - name: F-UI-060 HF Jobs V193
+        if: always()
+        run: npx playwright test tests/e2e/f-ui-060-hf-jobs-v193.spec.mjs --project=chromium-desktop
+      - name: F-UI-061 full journey V193 desktop
+        if: always()
+        run: npx playwright test tests/e2e/f-ui-061-full-user-journey-v193.spec.mjs --project=chromium-desktop
+      - name: F-UI-061 full journey V193 mobile
+        if: always()
+        run: npx playwright test tests/e2e/f-ui-061-full-user-journey-v193.spec.mjs --project=mobile-chromium
       - name: Upload QA evidence
         if: always()
         uses: actions/upload-artifact@v4
