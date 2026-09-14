@@ -1,0 +1,24 @@
+{
+  "schema": "yaiwes.crazy-wall.claim.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "id": "GAP-03-REQ-S1-003",
+  "source_selector": "REQ-S1-003",
+  "state": "VERIFY_RESEARCH",
+  "owner": "chatgpt-recovery-gap03",
+  "base_sha": "b4f62b56347df90166292373f57103a6950f7c39",
+  "source_anchor": "S1 §3 OSS GitHub",
+  "requirement": "Reutilizar OSS maduro cuando cubra capability; no reinventar orquestación, durabilidad o scheduling ya disponibles.",
+  "write_scope": [
+    ".github/workflows/gap03-req-s1-003-five-pass.yml",
+    "runtime/requirement_traces/REQ-S1-003.json",
+    "runtime/evidence/requirement_traces/REQ-S1-003.ci.json",
+    "runtime/tests/test_coverage_req_s1_003.py",
+    "reports/CLAIM-GAP-03-REQ-S1-003-CHATGPT-RECOVERY-2026-09-14.json"
+  ],
+  "verify_research": "Map literal requirement to existing plugins/catalog.py, ResourceBrain/plugin tests and existing OSS provenance; no product-code write unless implementation/wiring gap is proven.",
+  "execute_delta": "REUSE_EXISTING. Add only focused CI/hash capture, RequirementTrace/evidence and focused five-pass binding if current implementation/test already prove the requirement.",
+  "test_report": "existing plugin regression + trusted completed/success CI + exact SHA256 bindings + focused audit_five_pass + readback",
+  "close": "REQ-S1-003 VERIFIED_CLOSED only after source->implementation->test->trace->evidence->trusted CI->five-pass readback; never implies global close",
+  "strategy": "REUSE_EXISTING > PATCH > ADAPT"
+}
