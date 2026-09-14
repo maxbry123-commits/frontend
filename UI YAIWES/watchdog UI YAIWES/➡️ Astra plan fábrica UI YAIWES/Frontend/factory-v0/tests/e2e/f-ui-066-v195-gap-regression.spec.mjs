@@ -40,9 +40,13 @@ test('desktop: edit must undo and redo through canonical history', async({page},
   await boot(page,false);
   await insertButton(page);
   await page.locator('[data-node]').click();
-  await expect(page.locator('#prop-label')).toBeVisible();
-  await page.locator('#prop-label').fill('Botón editado V195');
-  await page.locator('#prop-label').dispatchEvent('change');
+  const label=page.locator('#prop-label');
+  await expect(label).toBeVisible();
+  await label.fill('Botón editado V195');
+  // Use the native user-like commit path: blur emits the single change event handled by app-v19.
+  // A synthetic change followed by clicking Undo can cause a second native change on focus loss,
+  // producing two identical history snapshots and a harness-only one-step undo failure.
+  await label.blur();
   await expect(page.locator('[data-node] strong')).toHaveText('Botón editado V195');
   await page.locator('#undo').click();
   await expect(page.locator('[data-node] strong')).not.toHaveText('Botón editado V195');
@@ -72,12 +76,18 @@ test('desktop: Ctrl+K must expose a real command surface', async({page},testInfo
   await expect(surfaces.first()).toBeVisible();
 });
 
-test('mobile: shell must fit viewport and Escape close drawers', async({page},testInfo)=>{
+test('mobile: shell must fit viewport without horizontal overflow', async({page},testInfo)=>{
   test.skip(testInfo.project.name!=='mobile-chromium','mobile-only');
   await boot(page,true);
   const dimensions=await page.evaluate(()=>({viewport:innerWidth,html:document.documentElement.scrollWidth,body:document.body.scrollWidth}));
   expect(dimensions.html,'html must not overflow mobile viewport').toBeLessThanOrEqual(dimensions.viewport+2);
   expect(dimensions.body,'body must not overflow mobile viewport').toBeLessThanOrEqual(dimensions.viewport+2);
+  await page.screenshot({path:`${OUT}/mobile-shell-width.png`,fullPage:true});
+});
+
+test('mobile: Escape closes each drawer independently', async({page},testInfo)=>{
+  test.skip(testInfo.project.name!=='mobile-chromium','mobile-only');
+  await boot(page,true);
   await page.locator('[data-workspace-toggle="left"]').tap();
   await expect(page.locator('.studio')).not.toHaveClass(/workspace-left-collapsed/);
   await page.keyboard.press('Escape');
@@ -86,7 +96,6 @@ test('mobile: shell must fit viewport and Escape close drawers', async({page},te
   await expect(page.locator('.studio')).not.toHaveClass(/workspace-right-collapsed/);
   await page.keyboard.press('Escape');
   await expect(page.locator('.studio')).toHaveClass(/workspace-right-collapsed/);
-  await page.screenshot({path:`${OUT}/mobile-shell.png`,fullPage:true});
 });
 
 test('mobile: library must release canvas after insert', async({page},testInfo)=>{
