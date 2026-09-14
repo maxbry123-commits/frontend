@@ -18,6 +18,7 @@ SECOND_TRACE_ID = "REQ-S3-055"
 THIRD_TRACE_ID = "REQ-S3-054"
 FOURTH_TRACE_ID = "REQ-S3-053"
 FIFTH_TRACE_ID = "REQ-S3-050"
+SIXTH_TRACE_ID = "REQ-S3-047"
 
 
 def _copy_certified_trace(tmp_path: Path) -> Path:
@@ -184,6 +185,38 @@ def test_continuous_loop_trace_binds_autonomous_retry_and_real_ci(tmp_path):
     assert result.product_verified is False
 
 
+def test_memory_write_gate_trace_rejects_direct_llm_persistence_and_real_ci(tmp_path):
+    target = tmp_path / f"{SIXTH_TRACE_ID}.json"
+    target.write_bytes((TRACE_ROOT / f"{SIXTH_TRACE_ID}.json").read_bytes())
+    traces = load_trace_inventory(tmp_path, (SIXTH_TRACE_ID,))
+    trace = traces[0]
+
+    def trusted_lookup(run_id: int, job_id: int) -> TrustedCIExecution:
+        assert (run_id, job_id) == (34739510224, 103678337638)
+        return TrustedCIExecution(
+            run_id=run_id,
+            job_id=job_id,
+            revision="cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+            status="completed",
+            conclusion="success",
+            implementation_sha256=trace.implementation.sha256,
+            test_sha256=trace.test.sha256,
+        )
+
+    result = audit_five_pass(
+        PROJECT_ROOT,
+        (SIXTH_TRACE_ID,),
+        traces,
+        (trace.implementation.path,),
+        make_ci_verifier(trusted_lookup),
+    )
+
+    assert result.status == "TRACEABILITY_PASS"
+    assert result.verified_requirements == 1
+    assert result.total_requirements == 1
+    assert result.product_verified is False
+
+
 def test_product_inventory_stays_fail_closed_until_all_167_traces_exist():
     with pytest.raises(ValueError) as exc:
         load_trace_inventory(TRACE_ROOT, requirement_inventory())
@@ -196,4 +229,5 @@ def test_product_inventory_stays_fail_closed_until_all_167_traces_exist():
     assert THIRD_TRACE_ID not in missing
     assert FOURTH_TRACE_ID not in missing
     assert FIFTH_TRACE_ID not in missing
-    assert len(missing) == 162
+    assert SIXTH_TRACE_ID not in missing
+    assert len(missing) == 161
