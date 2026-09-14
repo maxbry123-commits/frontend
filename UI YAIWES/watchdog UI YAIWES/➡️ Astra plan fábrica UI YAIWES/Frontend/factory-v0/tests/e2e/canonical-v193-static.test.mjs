@@ -2,7 +2,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { CANDIDATE_MODULES, CANDIDATE_CAPABILITIES } from '../../src/bootstrap/candidate-v193.js';
+import {
+  CANDIDATE_MODULES,
+  CANDIDATE_CAPABILITIES,
+  bootCandidate,
+} from '../../src/bootstrap/candidate-v193.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '../..');
@@ -39,5 +43,11 @@ assert.equal(CANDIDATE_CAPABILITIES.hfJobs, true);
 assert.equal(CANDIDATE_CAPABILITIES.remoteControl, true);
 assert.equal(CANDIDATE_CAPABILITIES.layers, true);
 assert.equal(CANDIDATE_CAPABILITIES.skills, true);
+
+const observedOrder = [];
+const evidence = await bootCandidate({ importer: async (specifier) => { observedOrder.push(specifier); return {}; } });
+assert.deepEqual(observedOrder, [...CANDIDATE_MODULES], 'bootstrap must load modules deterministically in declared order');
+assert.deepEqual(evidence.modules, [...CANDIDATE_MODULES]);
+assert.equal(evidence.version, '1.9.3');
 
 console.log('canonical-v193-static: PASS');
