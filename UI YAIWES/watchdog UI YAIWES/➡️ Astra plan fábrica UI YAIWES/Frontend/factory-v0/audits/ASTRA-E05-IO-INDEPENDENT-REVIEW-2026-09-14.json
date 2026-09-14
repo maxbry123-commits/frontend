@@ -1,0 +1,37 @@
+{
+  "schema":"yaiwes.factory.astra.independent-review.v1",
+  "contract":"tel.workflow/v3",
+  "date":"2026-09-14",
+  "node_id":"ASTRA-E05-IO-INDEPENDENT-REVIEW",
+  "owner":"GPT-5.6-SOL-ASTRA-WATCHDOG",
+  "base_sha":"d5e5dce8e71cd5de1861595e92fb211bd5f21158",
+  "write_scope":["Frontend/factory-v0/audits/ASTRA-E05-IO-INDEPENDENT-REVIEW-2026-09-14.json"],
+  "verdict":"PARTIAL_VERIFIED_TWO_BROWSER_GAPS",
+  "verified_nodes":{
+    "F-IO-025":{"capability":"local memory exact-state persistence","run_id":34734714616,"job_id":103663927551,"result":"PASS_PENDING_REVIEW; deep state equality and reload rehydrate"},
+    "F-IO-026":{"capability":"reload recovery exact-state equality","run_id":34734853435,"job_id":103664320236,"result":"PASS_PENDING_REVIEW"},
+    "F-IO-027":{"capability":"saved version reopen/restore/reload","run_id":34735214282,"job_id":103665310539,"result":"PASS_AFTER_TWO_REAL_PRODUCT_FAILURES_FIXED; V1 restore survives second reload"},
+    "F-IO-030":{"capability":"configured DOWNLOAD destination real delivery/readback/reimport/reload","run_id":34735401820,"job_id":103665820527,"result":"PASS_AFTER_TEST_HARNESS_REFUTATION"}
+  },
+  "current_candidate_coverage":{
+    "F-UI-061":"Real visible-UI journey downloads JSON and parses it, downloads HTML and verifies exported content, while also validating save/reload and remote routing on index-v193.html.",
+    "coverage_gain":"Current-candidate QA now proves the export buttons create readable JSON/HTML artifacts from the visible UI.",
+    "not_yet_proven":"F-UI-061 does not reimport the downloaded JSON through the real browser file/import path and does not open the downloaded HTML as a page to verify rendered geometry/theme/content."
+  },
+  "open_nodes":{
+    "F-IO-028":{"capability":"JSON export/reimport roundtrip","implemented":"YES: json-roundtrip-v1; syntax/microtests plus current-candidate JSON download/readback","missing_gate":"Browser import of the exported JSON -> canvas/state exact equality -> reload exact readback","classification":"TEST_EVIDENCE_GAP_NOT_PRODUCT_REDESIGN"},
+    "F-IO-029":{"capability":"HTML export preserving geometry/theme and escaping hostile values","implemented":"YES: serializer + microtest + current-candidate HTML download/content readback","missing_gate":"Open the real downloaded HTML in a browser and assert rendered geometry/theme/content/safety","classification":"TEST_EVIDENCE_GAP_NOT_PRODUCT_REDESIGN"}
+  },
+  "collision_analysis":{
+    "active_frontend_claims":["F-FE-066 SEG-01-SHELL","F-FE-067 SEG-02-BROWSER","F-FE-068 SEG-04-TOUCH"],
+    "active_qa":"F-UI-051..061 non-fail-fast current-candidate QA running on exact SHA f11f9198fb5f31e185ea8221194687ce8a11455b",
+    "decision":"Do not create a parallel test/workflow writer. Queue only the two missing browser gates for the owning QA/integrator lane."
+  },
+  "goals12":{"G01_local_memory":"PASS","G02_reload_recovery":"PASS","G03_saved_version_reopen":"PASS","G04_json_export":"PASS_ARTIFACT_READBACK","G05_json_browser_roundtrip":"GAP","G06_html_export":"PASS_ARTIFACT_READBACK","G07_html_browser_open":"GAP","G08_configured_download_destination":"PASS","G09_roundtrip_without_state_loss":"PASS_FOR_VERIFIED_SUBGATES","G10_three_refutations":"PASS","G11_no_writer_collision":"PASS","G12_verified_closed":"NO"},
+  "council12":["reuse existing persistence engine","preserve one canonical state engine","require deep equality","require reload evidence","require saved-version restoration","separate artifact creation from browser roundtrip","reuse JSON serializer for download destination","reject fake remote-secret destination PASS","classify harness failure separately","reuse current F-UI-061 evidence","avoid duplicate active QA writer","withhold E05 closure until both missing browser gates pass"],
+  "simulations":["JSON download parses correctly but real browser reimport is broken -> E05 remains open","HTML text contains expected label but opened artifact renders wrong geometry/theme -> E05 remains open","DOWNLOAD delivery reimports exact state -> destination subgate passes without certifying secret-bearing remote destinations"],
+  "refutations":["Export code existing does not prove round-trip.","Artifact content readback does not replace opening/importing through the real browser path.","Configured DOWNLOAD PASS does not certify every external secret-bearing destination."],
+  "next_required_tests":["F-IO-028_BROWSER: export JSON, import that artifact through real UI/file path, assert exact canvas/state equality, reload and reassert","F-IO-029_BROWSER: export HTML, open the resulting artifact/page in browser, assert geometry/theme/content and escaping behavior"],
+  "done_rule":"Promote E05 only when both missing browser gates are green on the exact current candidate and independently read back.",
+  "collision_note":"Audit-only write; no tests, workflows, product, project-memory claims or shared Crazy Wall files modified."
+}
