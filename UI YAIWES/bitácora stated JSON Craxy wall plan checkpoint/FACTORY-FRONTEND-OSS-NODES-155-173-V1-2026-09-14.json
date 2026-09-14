@@ -4,9 +4,16 @@
   "count": 19,
   "family": "OSS_FRONTEND_ADAPTER",
   "segment": "SEG-10-OSS",
-  "inventory": "UI YAIWES/componentes open soure UI YAIWES",
+  "inventory": "📂componentes open soure fromtend",
+  "inventory_index": "📂 Indice fromtend componentes.md",
   "registry": "Frontend/factory-v0/src/donors/oss-registry.js",
   "canonical_acquisition": "Frontend/factory-v0/src/microkernel/acquisition/index.js",
+  "motors": {
+    "extract_existing_zip": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂 Motor de extracción zip/motor_1_extract_only.py",
+    "copy_batches": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂motor de copiar archivos/motor_3_copy_batches.py",
+    "copy_root_to_repo": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py",
+    "new_acquisition": "CANONICAL_MOTOR2_ONLY_AFTER_LOCAL_DEDUP_AND_DEMONSTRATED_GAP"
+  },
   "invariant": "NO_ALTERNATE_DOWNLOADER",
   "steps": ["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
   "write_scope_template": [
@@ -19,12 +26,14 @@
   "policy": {
     "AVAILABLE_LOCAL": "REUSE_LOCAL_TREE_NO_DOWNLOAD",
     "AVAILABLE_EXTRACTED": "REUSE_LOCAL_TREE_NO_DOWNLOAD",
-    "AVAILABLE_ZIP": "CANONICAL_MOTOR2_EXTRACT_IF_NEEDED",
+    "AVAILABLE_ZIP": "READ_LOCAL_ZIP_BLOB_THEN_EXISTING_EXTRACT_MOTOR_IF_NEEDED",
     "already_wired_at_claim_time": "PASS_NO_DELTA",
     "adapter": "bounded thin capability only",
     "producer_candidate_wiring": "FORBIDDEN",
     "monolithic_embedding": "FORBIDDEN",
-    "second_state_engine": "FORBIDDEN"
+    "second_state_engine": "FORBIDDEN",
+    "materialization_evidence": "source path + ZIP blob SHA + extracted file count + license + destination + hashes/readback",
+    "copy_rule": "Use existing copy motor only when a bounded adapter/test needs local materialization; never bulk-copy a monolith into Factory."
   },
   "acceptance": "Prove a useful bounded Factory capability through a thin adapter; preserve source URL/ref/hash/license/local path; run browser microtest; SOURCE_PRESENT alone is not PASS.",
   "nodes": [
