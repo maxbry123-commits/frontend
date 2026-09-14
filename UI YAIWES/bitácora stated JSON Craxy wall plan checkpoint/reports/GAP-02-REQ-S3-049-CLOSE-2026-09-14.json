@@ -1,0 +1,19 @@
+{
+  "schema": "tel.workflow/v3.gap-subclose",
+  "parent_node": "GAP-02-N35-S3-REMAINDER",
+  "requirement_id": "REQ-S3-049",
+  "state": "VERIFIED_CLOSED",
+  "source_anchor": "S3 §49 CONTINUOUS COGNITIVE LOOP",
+  "implementation": "runtime/src/core/workflow_definition.py::WorkflowDefinition/YAIWES_CHAT_WORKFLOW",
+  "test": "runtime/tests/test_stabilize_integration.py::StabilizeIntegrationTests.test_s3_049_continuous_cognitive_loop_projection_is_ordered",
+  "trace": "runtime/requirement_traces/REQ-S3-049.json",
+  "evidence": "runtime/evidence/requirement_traces/REQ-S3-049.ci.json",
+  "trusted_run_id": 34826841165,
+  "trusted_job_id": 103920850277,
+  "five_pass_run_id": 34827015342,
+  "five_pass_job_id": 103921392653,
+  "result": "TRACEABILITY_PASS",
+  "certified_total_after": 8,
+  "global_missing_after": 159,
+  "gap02_remaining_after": 56
+}
