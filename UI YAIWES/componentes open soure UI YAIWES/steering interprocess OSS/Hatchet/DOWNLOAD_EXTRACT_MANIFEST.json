@@ -1,0 +1,68 @@
+{
+  "bundle_bytes": 98878106,
+  "bundle_sha256": "9a07f6cf8d356acf121525af7c6a25737688458f4e23032864f7c15356320c0e",
+  "extracted_tree": {
+    "bytes": 123097503,
+    "files": 4774,
+    "sha256": "ee22b4e35a424145a186fc7c29785761071438e829d35bf97c4604fd457bef8a"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "Hatchet.bundle.zip.part-0001",
+      "sha256": "e38fb8975fe51e697b4e896f5dbf896e30b421b808e082a02a137cfb9e3786de"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Hatchet.bundle.zip.part-0002",
+      "sha256": "ba22f46c23a4ca13070ad6a85ec402609d4bc71dcf360d83a946b53ff6f65d80"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Hatchet.bundle.zip.part-0003",
+      "sha256": "e9abec20f8e9e9a1fc2fa4661b730393da1cfa4006c86a71eb42ff6539d98cba"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Hatchet.bundle.zip.part-0004",
+      "sha256": "7b799da51d33707e4798dd9ffee2abbd703627d5fa5e99f1ed5ac3c634f32634"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Hatchet.bundle.zip.part-0005",
+      "sha256": "bd2d8efc733cdcf0f1ba06600fb1924b7fffdc356d9d8d04e56ab4daac88b4a9"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Hatchet.bundle.zip.part-0006",
+      "sha256": "a1ae6a6913a3361789b52ad9f845b11abcb5f96bdcfd6ed587bc79011a4e0fba"
+    },
+    {
+      "bytes": 12582912,
+      "name": "Hatchet.bundle.zip.part-0007",
+      "sha256": "3af6c814d0e4f86d8b0e69ec1465b882a35efa5dc0eff4d09309a608bac459f6"
+    },
+    {
+      "bytes": 10797722,
+      "name": "Hatchet.bundle.zip.part-0008",
+      "sha256": "8670b3f91693e3799ce724612f2a9d802ce3913dcf140c92e75c85bca21bbcc0"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Hatchet",
+  "source_bytes": 123097503,
+  "source_commit": "315d43a72fd771b049b304b865a81dbab98c466c",
+  "source_files": 4774,
+  "source_ref": "315d43a72fd771b049b304b865a81dbab98c466c",
+  "source_repo": "hatchet-dev/hatchet",
+  "source_tree": {
+    "bytes": 123097503,
+    "files": 4774,
+    "sha256": "ee22b4e35a424145a186fc7c29785761071438e829d35bf97c4604fd457bef8a"
+  }
+}
