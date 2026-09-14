@@ -1,0 +1,72 @@
+name: factory-f-fe-070-shell-safe-areas
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-fe-070-shell-safe-areas.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/ui/workspace-shell-v4.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/workspace-shell-v4.css'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-fe-070-shell-safe-areas.spec.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-f-fe-070-shell-safe-areas
+  cancel-in-progress: false
+
+jobs:
+  shell-safe-areas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Preserve prior shells
+        run: |
+          set -euo pipefail
+          test -s src/ui/workspace-shell-v1.js
+          test -s src/ui/workspace-shell-v2.js
+          test -s workspace-shell-v1.css
+          test -s workspace-shell-v2.css
+          test -s workspace-shell-v3.css
+          test -s src/ui/workspace-shell-v4.js
+          test -s workspace-shell-v4.css
+          grep -F "WORKSPACE_SHELL_VERSION = 'v2'" src/ui/workspace-shell-v2.js
+          grep -F "WORKSPACE_SHELL_VERSION = 'v4'" src/ui/workspace-shell-v4.js
+          ! grep -F "WORKSPACE_SHELL_VERSION = 'v4'" src/ui/workspace-shell-v2.js
+          grep -F 'data-workspace-shell="v4"' workspace-shell-v4.css
+          git hash-object src/ui/workspace-shell-v1.js src/ui/workspace-shell-v2.js src/ui/workspace-shell-v4.js
+          git hash-object workspace-shell-v1.css workspace-shell-v2.css workspace-shell-v3.css workspace-shell-v4.css
+          node --check src/ui/workspace-shell-v4.js
+          node --check tests/e2e/f-fe-070-shell-safe-areas.spec.mjs
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: F-FE-070 desktop shell safe-areas
+        run: npx playwright test tests/e2e/f-fe-070-shell-safe-areas.spec.mjs --project=chromium-desktop --reporter=line
+      - name: F-FE-070 Pixel 7 shell safe-areas
+        run: npx playwright test tests/e2e/f-fe-070-shell-safe-areas.spec.mjs --project=mobile-chromium --reporter=line
+      - name: Preserve F-FE-070 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-f-fe-070-shell-safe-areas-evidence
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+          if-no-files-found: warn
+          retention-days: 14
