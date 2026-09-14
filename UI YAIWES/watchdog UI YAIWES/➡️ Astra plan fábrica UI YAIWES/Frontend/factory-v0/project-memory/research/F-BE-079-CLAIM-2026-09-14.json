@@ -1,0 +1,14 @@
+{
+  "schema": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-BE-079",
+  "owner": "SOL GPT <FACTORY-RESEARCH>",
+  "chat_id": "current-factory-chat",
+  "fresh_main_sha": "6ea16b1efc4cbb4cc06ca16cdb15918c244e9cbe",
+  "claimed_at": "2026-09-14T09:04:00Z",
+  "state": "CLAIMED",
+  "write_scope": ["Frontend/factory-v0/project-memory/research/F-BE-079-*"],
+  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+  "acceptance": "10 candidates scored against local registry; each has source/license/capability/gap/REUSE decision; no download by popularity alone",
+  "policy": "RESEARCH_DEDUP_FIRST_NO_DOWNLOAD"
+}
