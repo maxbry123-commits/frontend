@@ -4,7 +4,7 @@
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_SEGMENTED_RECOVERY",
   "created_at": "2026-09-14T04:17:00-05:00",
-  "last_reconciled_at": "2026-09-14T04:57:00-05:00",
+  "last_reconciled_at": "2026-09-14T05:00:00-05:00",
   "observed_head_before_write": "0305a040a28bfcb4e9a72d73294422c42ce1da57",
   "authority": [
     "fresh code + runtime + tests + Actions logs",
@@ -193,6 +193,62 @@
       "artifact_digest": "sha256:210282ca705a43f8c011b47d2f926c0679320cffadf52272a7964b5ac8e5095c",
       "tests": "V1.9.5 targeted closure regression: undo PASS; reload PASS; mobile Escape PASS; mobile canvas release PASS; command palette GAP; horizontal overflow GAP (body 604px on 412px viewport)",
       "next_action": "READ_FRESH_THEN_CLAIM_ONE_REAL_GAP_ONLY"
+    },
+    {
+      "id": "F-FE-069-COMMAND-PALETTE",
+      "title": "Implement real Ctrl+K command palette over canonical actions",
+      "state": "FREE",
+      "segment_id": "SEG-02-BROWSER",
+      "owner": null,
+      "chat_id": null,
+      "write_scope": [
+        "Frontend/factory-v0/src/ui/component-browser-v3.js",
+        "Frontend/factory-v0/tests/e2e/f-ui-069-command-palette.spec.mjs",
+        "Frontend/factory-v0/project-memory/F-FE-069-*",
+        ".github/workflows/factory-f-fe-069*",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json"
+      ],
+      "depends_on": [
+        "F-FRONTEND-QA-066"
+      ],
+      "steps": [
+        "VERIFY_RESEARCH",
+        "EXECUTE_DELTA",
+        "TEST_REPORT"
+      ],
+      "acceptance": "Ctrl+K opens accessible command surface; every listed command calls existing canonical UI/action path; keyboard navigation/Escape PASS; no second state engine",
+      "evidence_seed": [
+        "run 34830387803 job 103932105765: command surfaces count=0 on V1.9.5"
+      ]
+    },
+    {
+      "id": "F-FE-068-MOBILE-FIT",
+      "title": "Eliminate real mobile horizontal overflow without clipping functionality",
+      "state": "CLAIMED",
+      "segment_id": "SEG-01-SHELL",
+      "owner": "GPT-5.6-SOL",
+      "chat_id": "CURRENT_CHAT_FACTORY_SEGMENTATION",
+      "write_scope": [
+        "Frontend/factory-v0/workspace-shell-v3.css",
+        "Frontend/factory-v0/tests/e2e/f-ui-068-mobile-fit.spec.mjs",
+        "Frontend/factory-v0/project-memory/F-FE-068-*",
+        ".github/workflows/factory-f-fe-068*",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json"
+      ],
+      "depends_on": [
+        "F-FRONTEND-QA-066"
+      ],
+      "steps": [
+        "VERIFY_RESEARCH",
+        "EXECUTE_DELTA",
+        "TEST_REPORT"
+      ],
+      "acceptance": "412px viewport has html/body scrollWidth <=414 without overflow:hidden-only masking; drawers, toolbar, canvas and touch targets remain usable; focused browser gate PASS",
+      "evidence_seed": [
+        "run 34830387803 job 103932105765: body.scrollWidth=604 on viewport=412"
+      ],
+      "fresh_main_sha": "3db57d0710dc87c9a57424acdfd797e734eb21e8",
+      "claimed_at": "2026-09-14T05:00:00-05:00"
     }
   ],
   "backend_nodes": [
