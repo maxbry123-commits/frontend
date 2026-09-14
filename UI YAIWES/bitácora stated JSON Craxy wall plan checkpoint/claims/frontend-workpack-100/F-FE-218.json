@@ -5,14 +5,25 @@
   "node_id":"F-FE-218-NETWORK-OFFLINE-MATRIX",
   "segment_id":"QA_ONLY",
   "lane":"GROK-P",
-  "state":"CLAIMED",
+  "state":"PASS_RELEASED",
   "owner":"GPT-5.6-SOL",
   "agent":"GPT-5.6-SOL",
   "chat_id":"CURRENT_CHAT_FACTORY_SEGMENTATION",
   "fresh_main_sha":"b6fc7af7b024e0a27a4ffa607cdd6d0b95f76049",
   "claimed_at":"2026-09-14T08:59:00-05:00",
+  "claim_commit":"bfe4ea1d84fee3ea86a2b916b1cf97bd159a4b5b",
+  "test_commit":"9933774fa66408aa4128dfdfb41c503c612b3822",
+  "tested_sha":"a2be5ac759e19cd82b76cf72d0250e96fa4c0952",
+  "report_commit":"80914fffd89bb04c829a1a93217c0054673d4cc2",
+  "released_at":"2026-09-14T09:04:30-05:00",
   "type":"QA_ONLY",
   "candidate":"index-v192.html",
+  "run_id":34852983528,
+  "job_id":104005302526,
+  "artifact_id":10350639943,
+  "artifact_digest":"sha256:053c00e1a54d59095776849a2de4c13631dffff215b1759874d76a24503d6b7d",
+  "test_summary":{"passed":4,"failed":0},
+  "verified_pass":["local create/edit/version offline","JSON and HTML local export offline","remote probe explicit UNREACHABLE offline","local AI proposal QUEUED_LOCAL_NO_REMOTE without fake remote success"],
   "acceptance":"Local editing/save/export remains usable offline after boot; remote-only probe fails closed with an explicit reason; no fake remote success.",
   "write_scope":[
     "Frontend/factory-v0/tests/e2e/control-audit/F-FE-218-NETWORK-OFFLINE-MATRIX.spec.mjs",
@@ -21,5 +32,6 @@
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-218.json"
   ],
   "product_patched":false,
-  "release":false
+  "release":true,
+  "next_node":"F-FE-219-INTEGRATOR-CONTROL-COVERAGE (only when latest SEG-11 candidate and dependency coverage are ready)"
 }
