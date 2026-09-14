@@ -4,45 +4,24 @@
   "node_id": "F-FE-068",
   "segment_id": "SEG-04-TOUCH",
   "lane": "frontend",
-  "state": "CLAIMED",
+  "state": "TESTED_NOT_WIRED",
+  "report_state": "PASS_SEGMENT_NODE_TEST",
   "owner": "GROK 3",
   "agent": "GROK",
   "chat_id": "GROK-3-UI-YAIWES-FACTORY",
   "fresh_main_sha": "22ef8b8a3f0b116691b6765ecf9fb461a7e458a0",
   "claimed_at": "2026-09-14T09:36:50Z",
+  "reported_at": "2026-09-14T09:42:20Z",
+  "claim_commit": "c10a1038c9d29046f4e06b4d4e3d00b8a57362ee",
+  "delta_commit": "bcf7b46a82979454bee406b545c770b72c3de715",
+  "report_path": "Frontend/factory-v0/project-memory/F-FE-068-REPORT-2026-09-14.json",
   "write_scope": [
     "Frontend/factory-v0/src/touch-dnd-v193.js",
     "Frontend/factory-v0/tests/e2e/*touch-v193*",
     "Frontend/factory-v0/project-memory/*F-FE-068*"
   ],
-  "frozen": [
-    "Frontend/factory-v0/index-v19.html",
-    "Frontend/factory-v0/index-v192.html",
-    "Frontend/factory-v0/src/touch-dnd-v192.js",
-    "Frontend/factory-v0/src/touch-dnd-v191.js"
-  ],
-  "integrator_only": [
-    "Frontend/factory-v0/index-v193.html",
-    "Frontend/factory-v0/index-v193-preview.html",
-    "Frontend/factory-v0/src/bootstrap/candidate-v193.js"
-  ],
-  "do_not_touch": [
-    "Frontend/factory-v0/src/ui/workspace-shell-v2.js",
-    "Frontend/factory-v0/src/ui/component-browser-v2.js",
-    "Frontend/factory-v0/src/scroll-preserver.js",
-    "Frontend/factory-v0/src/interaction-fix.js",
-    "Frontend/factory-v0/src/resize-snap.js",
-    "Frontend/factory-v0/project-memory/*F-FE-066*",
-    "Frontend/factory-v0/project-memory/*F-FE-067*"
-  ],
-  "collision_check": {
-    "F-FE-066": "CLAIMED GROK 1 SEG-01-SHELL disjoint",
-    "F-FE-067": "CLAIMED GROK 2 SEG-02-BROWSER disjoint",
-    "F-FE-068": "no claim file / no touch-dnd-v193 at readback"
-  },
   "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
-  "verified_gap_hypothesis": "v192 IIFE has no mount/version API; drop uses finger clientXY not node origin so grab-offset/scroll miss; dual auto-bind would collide with v192 still loaded by candidate; v193 SOURCE_ABSENT; producer cannot wire candidate",
-  "strategy": "REUSE_EXISTING then PATCH into versioned v193; preserve v192",
   "acceptance": "real touch move/drop/scroll/resize no coordinate miss; previous v192 preserved",
-  "release": false
+  "release": true,
+  "next_free_node": "F-FE-069"
 }

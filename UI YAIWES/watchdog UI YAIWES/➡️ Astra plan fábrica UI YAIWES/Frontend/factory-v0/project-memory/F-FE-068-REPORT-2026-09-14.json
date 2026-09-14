@@ -1,0 +1,61 @@
+{
+  "schema": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-FE-068",
+  "segment_id": "SEG-04-TOUCH",
+  "lane": "frontend",
+  "state": "TESTED_NOT_WIRED",
+  "report_state": "PASS_SEGMENT_NODE_TEST",
+  "owner": "GROK 3",
+  "agent": "GROK",
+  "chat_id": "GROK-3-UI-YAIWES-FACTORY",
+  "claimed_at": "2026-09-14T09:36:50Z",
+  "claim_commit": "c10a1038c9d29046f4e06b4d4e3d00b8a57362ee",
+  "reported_at": "2026-09-14T09:42:20Z",
+  "fresh_main_sha_at_claim": "22ef8b8a3f0b116691b6765ecf9fb461a7e458a0",
+  "delta_commit": "bcf7b46a82979454bee406b545c770b72c3de715",
+  "readback_head": "bcf7b46a82979454bee406b545c770b72c3de715",
+  "write_scope": [
+    "Frontend/factory-v0/src/touch-dnd-v193.js",
+    "Frontend/factory-v0/tests/e2e/*touch-v193*",
+    "Frontend/factory-v0/project-memory/*F-FE-068*"
+  ],
+  "paths": [
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/touch-dnd-v193.js",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-fe-068-touch-v193.test.mjs"
+  ],
+  "blob_sha": {
+    "touch_dnd_v193": "4125dfd27be2374e03e13763dc07264b3a7f8ebb",
+    "touch_v193_test": "b961267da40cbbb5a59f6194c3eeb4b760920025",
+    "touch_dnd_v192_preserved": "ec437c11bb6b513ab200182709378e5131b50f6a"
+  },
+  "strategy": "REUSE_EXISTING then PATCH into versioned v193; preserve v192",
+  "gap": "v192 IIFE drop used finger clientXY (grab-offset/scroll miss); no mount/version API; v193 SOURCE_ABSENT",
+  "fix": "exported mount API; drop client mapped from node origin + canvas scroll; skip auto-bind if v192 already mounted; resize-corner passthrough; scroll passthrough when target is not a node",
+  "test": "node tests/e2e/f-fe-068-touch-v193.test.mjs => f-fe-068-touch-v193: PASS (readback checkout bcf7b46)",
+  "run_id": null,
+  "job_id": null,
+  "wired": false,
+  "candidate_still_loads": "../touch-dnd-v192.js",
+  "frozen_untouched": [
+    "index-v19.html",
+    "index-v192.html",
+    "src/touch-dnd-v192.js",
+    "src/touch-dnd-v191.js",
+    "src/bootstrap/candidate-v193.js"
+  ],
+  "classification": {
+    "SOURCE_PRESENT": true,
+    "IMPLEMENTED": true,
+    "WIRED": false,
+    "RUNTIME_TEST_PASS": "SEGMENT_NODE_TEST_PASS",
+    "VERIFIED_CLOSED": false
+  },
+  "remaining_gaps": [
+    "integrator must switch candidate-v193 from touch-dnd-v192 to v193",
+    "desktop+mobile Playwright on wired candidate not run (producer cannot edit integrator entrypoint)",
+    "independent review required before VERIFIED_CLOSED"
+  ],
+  "release": true,
+  "next_free_node": "F-FE-069"
+}
