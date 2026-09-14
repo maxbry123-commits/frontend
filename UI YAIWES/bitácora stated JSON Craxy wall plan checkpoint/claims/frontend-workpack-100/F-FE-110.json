@@ -1,0 +1,25 @@
+{
+  "schema": "yaiwes.factory.frontend.claim.v1",
+  "node_id": "F-FE-110-ELEMENT-WINDOW",
+  "segment_id": "SEG-02-BROWSER",
+  "lane": "CONTROL_QA",
+  "state": "CLAIMED",
+  "owner": "CHATGPT-FACTORY-FRONTEND-WATCHDOG",
+  "agent": "GPT-5.6-SOL",
+  "chat_id": "CHATGPT-FACTORY-FRONTEND-WATCHDOG",
+  "fresh_main_sha": "4f448fa20872a0fb972ae378383ada2dfeb5c64d",
+  "claimed_at": "2026-09-14T19:24:11Z",
+  "type": "CONTROL_QA",
+  "selector": "[data-kind='window']",
+  "write_scope": [
+    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-110-ELEMENT-WINDOW.spec.mjs",
+    "Frontend/factory-v0/project-memory/F-FE-110-ELEMENT-WINDOW-*",
+    ".github/workflows/factory-F-FE-110-ELEMENT-WINDOW.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-110.json"
+  ],
+  "depends_on": ["F-FE-109-NEXT-STEP"],
+  "product_patched": false,
+  "frozen": ["index-v19.html", "index-v192.html"],
+  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+  "release": false
+}
