@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.requirement-trace.v1",
+  "requirement_id": "REQ-S3-017",
+  "goal_id": "G12",
+  "task_id": "N27-CONTINUOUS-LOOP",
+  "source": {
+    "path": "documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md",
+    "sha256": "aa9ea84565a9dfd250cc57ba465a7131a032b1e96c404d9dd21a349c8185c58c",
+    "symbol": "17. CONTINUOUS LOOP"
+  },
+  "implementation": {
+    "path": "runtime/src/integration/continuous_loop.py",
+    "sha256": "d76689eda6c63ee1be2aca016cdf95a17fbf14967c4da85450eee29cfd33a5fe",
+    "symbol": "run_continuous_loop"
+  },
+  "test": {
+    "path": "runtime/tests/test_integration_continuous_loop.py",
+    "sha256": "dede3f13fce60ed2509007ad82a6158ebe09175f192593eea709f8f44ca107fb",
+    "symbol": "ContinuousLoopTests.test_gap_is_reinjected_into_same_stage_then_loop_advances"
+  },
+  "evidence": {
+    "path": "runtime/evidence/requirement_traces/REQ-S3-017.ci.json",
+    "sha256": "776b71b2523011534edab9828f7eb3d1c9717f0a87174124dd75211b620ee181",
+    "symbol": ""
+  },
+  "revision": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc"
+}
