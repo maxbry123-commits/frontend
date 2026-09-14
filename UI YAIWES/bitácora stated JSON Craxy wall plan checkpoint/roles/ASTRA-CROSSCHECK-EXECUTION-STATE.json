@@ -108,12 +108,12 @@
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-14T04:00:24Z",
+  "updated_at_utc": "2026-09-14T04:03:52Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
   ],
-  "last_observed_head": "8b65885394ef3521b2c359d8a9bf66d105cb4b55",
+  "last_observed_head": "2dcf82baec5a175660e66acd86ed7c97bb74a41d",
   "last_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "status": "ACTIVE_LOOP",
@@ -337,129 +337,62 @@
   },
   "current_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
-    "requirement_id": "REQ-S3-047",
-    "status": "VERIFIED_CLOSED_DELTA",
-    "checkpoint_read_blob": "839ce1b90b0ba4813ba584a7bd8531223a34a21c",
-    "observed_main": "8b65885394ef3521b2c359d8a9bf66d105cb4b55",
-    "claim_commit": "a6d19fb1da02122a675a581fc6424a4f68b3bbd2",
+    "requirement_id": "REQ-S3-048",
+    "status": "IN_PROGRESS",
+    "checkpoint_read_blob": "38e2fc9bc6f179007c6b57c083afbac543a4ceb8",
+    "observed_main": "2dcf82baec5a175660e66acd86ed7c97bb74a41d",
     "verify_research": [
-      "§47 forbids direct LLM writes to canonical memory and requires normalization, schema validation, audit and accepted state delta before memory update.",
-      "memory/boundary.py and test_memory_boundary.py are byte-identical at trusted revision cf40e9c and merged main.",
-      "Trusted CI 34739510224/job 103678337638 checked out cf40e9c and passed all Wordflow/runtime steps.",
-      "REQ-S3-047 trace lookup at fresh pre-delta main returned 404 NOT_FOUND.",
-      "Exact branch CI 34801719326/job 103848792709 succeeded on 40c64aed7fe5f277b4625ef66a1f5dfd3487820d.",
-      "PR 63 merged as 8b65885394ef3521b2c359d8a9bf66d105cb4b55.",
-      "Post-merge CI 34803773045/job 103851476295 succeeded on the merge revision."
+      "§48 requires runtime-mediated memory selection: the Runtime requests context and Memory Orchestrator constructs a ContextPack for the LLM.",
+      "memory/fabric.py and test_memory_context_fabric.py are byte-identical at trusted revision cf40e9c and fresh main.",
+      "CI 34739510224/job 103678337638 checked out cf40e9c and completed Wordflow/runtime successfully.",
+      "REQ-S3-048 trace lookup at fresh main returned 404 NOT_FOUND."
     ],
-    "defect_reproduced": "Missing production trace: NOT_FOUND for REQ-S3-047.json.",
-    "delta": "Added one source/code/test/evidence trace, one trusted CI evidence record and one production regression; no N18 memory implementation code changed.",
-    "files": [
-      {
-        "path": "runtime/evidence/requirement_traces/REQ-S3-047.ci.json",
-        "commit": "c420dfb81de55650ef5904cd0d69f19b66efcf8e",
-        "sha256": "1d4039d230f59e09721c962944d4892926de5bdae7a6a8cf0d763a2d0b792d5a"
-      },
-      {
-        "path": "runtime/requirement_traces/REQ-S3-047.json",
-        "commit": "a33e202fbece8cb965457ba62d9b62770c562204"
-      },
-      {
-        "path": "runtime/tests/test_coverage_production_trace.py",
-        "commit": "40c64aed7fe5f277b4625ef66a1f5dfd3487820d"
-      }
-    ],
+    "defect_reproduced": "Missing production trace: NOT_FOUND for REQ-S3-048.json.",
+    "delta": "PENDING",
     "tests": [
       {
         "scope": "pre-delta trace availability",
         "result": "FAIL reproduced: NOT_FOUND"
-      },
-      {
-        "run_id": 34739510224,
-        "job_id": 103678337638,
-        "revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
-        "result": "SUCCESS historical unchanged bytes: all workflow steps passed"
-      },
-      {
-        "run_id": 34801719326,
-        "job_id": 103848792709,
-        "revision": "40c64aed7fe5f277b4625ef66a1f5dfd3487820d",
-        "result": "SUCCESS",
-        "wordflow": "41 passed",
-        "runtime": "283 passed, 2 warnings",
-        "subtests": "42 passed"
-      },
-      {
-        "run_id": 34803773045,
-        "job_id": 103851476295,
-        "revision": "8b65885394ef3521b2c359d8a9bf66d105cb4b55",
-        "result": "SUCCESS",
-        "wordflow": "41 passed",
-        "runtime": "283 passed, 2 warnings",
-        "subtests": "42 passed"
       }
     ],
     "simulations": [
-      "Direct LLM origin is rejected before canonical memory authorization.",
-      "Incomplete normalize/schema/audit/state-delta gate is rejected.",
-      "Full inventory remains fail-closed with exactly 161 missing traces."
+      "ContextPack ranking and budget remain deterministic.",
+      "Cross-agent private memory leakage remains fail-closed.",
+      "Full inventory remains fail-closed with 161 traces missing before this delta."
     ],
     "refutations": [
-      "Exact-head and post-merge CI certify only REQ-S3-047 and its trace regression, not remaining product requirements.",
-      "Six certified traces are 3.59%, not full product coverage.",
-      "Post-merge benchmark measured 2.8682x, refuting 100x.",
-      "Linux CI reported BLOCKED:no_verified_runtime_backend; it does not prove Windows, Android, iOS or platform E2E."
+      "Existing implementation alone is not a certified binding.",
+      "Trusted CI certifies unchanged code/test bytes, not a missing trace.",
+      "Global closure remains false."
     ],
-    "decision": "Close only REQ-S3-047 as VERIFIED_CLOSED_DELTA after exact-head and post-merge CI; keep N35 ACTIVE_LOOP.",
-    "pull_request": 63,
-    "branch": "astra-n35-req-s3-047-20260914",
-    "candidate_head": "40c64aed7fe5f277b4625ef66a1f5dfd3487820d",
-    "merge_commit": "8b65885394ef3521b2c359d8a9bf66d105cb4b55",
-    "post_merge_ci": {
-      "run_id": 34803773045,
-      "job_id": 103851476295,
-      "status": "SUCCESS"
-    },
-    "limits": "N36, 161 traces, scanner recovery, deployed/platform E2E and 100x remain open."
+    "decision": "Claim one trace/evidence pair and one regression; do not mutate N18 memory implementation.",
+    "limits": "N36, 161 pre-delta traces, scanner recovery, platforms, deployed E2E and 100x remain open."
   },
   "n35_next_trace_claim": {
-    "requirement_id": "REQ-S3-047",
-    "state": "VERIFIED_CLOSED",
-    "claimed_at_utc": "2026-09-14T03:10:15Z",
-    "fresh_main_sha": "19d3e77f08c1ef772260581cdc411ccec7897c56",
-    "source_anchor": "§47 REGLA DE ESCRITURA",
+    "requirement_id": "REQ-S3-048",
+    "state": "IN_PROGRESS",
+    "claimed_at_utc": "2026-09-14T04:03:52Z",
+    "fresh_main_sha": "2dcf82baec5a175660e66acd86ed7c97bb74a41d",
+    "source_anchor": "§48 REGLA DE LECTURA",
     "write_scope": [
-      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-047.json",
-      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-047.ci.json",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-048.json",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-048.ci.json",
       "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_production_trace.py",
       "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
     ],
     "evidence_candidate": {
-      "implementation": "runtime/src/memory/boundary.py#authorize_canonical_memory_write",
-      "implementation_sha256": "18d1f243ba2f191923d9438be89fb3022ea5ab26a6f8d973f43f9478300c605e",
-      "test": "runtime/tests/test_memory_boundary.py#MemoryBoundaryTests.test_direct_llm_canonical_write_is_rejected",
-      "test_sha256": "bc8a22537cfe14726b6bf56639a6901f948b79c235a59aae2d2f88f4d8301b23",
+      "implementation": "runtime/src/memory/fabric.py#build_context_pack",
+      "implementation_sha256": "dc781e7afd5e19b39d53d111d51796c61dd2d4540c0241aba3f65920cbb07da2",
+      "test": "runtime/tests/test_memory_context_fabric.py#MemoryContextFabricTests.test_context_pack_rank_budget_and_provenance_are_deterministic",
+      "test_sha256": "52a528eb9c7b727648787b9ff98286b92a344d61caa1bc8477b2f1cb941ee7c6",
       "trusted_ci_run": 34739510224,
       "trusted_ci_job": 103678337638,
       "revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e"
     },
-    "semantic_basis": "§47 is enforced by the existing canonical-write authorization gate: direct LLM origin and any incomplete normalize/schema/audit/state-delta chain fail closed.",
-    "next_step": "Select another unclaimed requirement only after fresh HEAD/owner/scope verification.",
-    "branch": "astra-n35-req-s3-047-20260914",
-    "certification_if_integrated": "6/167; 161 missing",
-    "head_sha": "40c64aed7fe5f277b4625ef66a1f5dfd3487820d",
-    "pull_request": 63,
-    "branch_ci": {
-      "run_id": 34801719326,
-      "job_id": 103848792709,
-      "status": "SUCCESS"
-    },
-    "merge_commit": "8b65885394ef3521b2c359d8a9bf66d105cb4b55",
-    "post_merge_ci": {
-      "run_id": 34803773045,
-      "job_id": 103851476295,
-      "status": "SUCCESS"
-    },
-    "certification": "6/167; 161 missing"
+    "semantic_basis": "§48 is implemented by build_context_pack, which obtains memory through the validated runtime request, ranks it deterministically, enforces budget and preserves provenance/checkpoint identity.",
+    "next_step": "Create one trace/evidence pair plus one regression; no N18 code mutation.",
+    "branch": "astra-n35-req-s3-048-20260914",
+    "certification_if_integrated": "7/167; 160 missing"
   },
   "final_judge_gap_order": {
     "state": "CLAIMABLE_NOT_CLAIMED",
