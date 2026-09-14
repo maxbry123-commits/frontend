@@ -10,6 +10,8 @@ from memory.boundary import (
     MemoryBoundaryError,
     MemoryReadRequest,
     MemoryScopeRef,
+    READ_OPERATIONS,
+    WRITE_OPERATIONS,
     authorize_canonical_memory_write,
     perform_memory_read,
 )
@@ -40,6 +42,32 @@ class MemoryBoundaryTests(unittest.TestCase):
                 MemoryScopeRef("CHAT", "chat-3"),
                 MemoryScopeRef("PROJECT", "project-9"),
             ),
+        )
+
+    def test_s3_046_literal_memory_operations_contract_is_complete(self):
+        self.assertEqual(
+            READ_OPERATIONS,
+            frozenset({
+                "GET_CONTEXT",
+                "GET_MEMORY",
+                "GET_EVIDENCE",
+                "GET_STATE",
+                "GET_HISTORY",
+                "GET_ARTIFACT",
+                "GET_RELATIONS",
+                "AUDIT_MEMORY",
+            }),
+        )
+        self.assertEqual(
+            WRITE_OPERATIONS,
+            frozenset({
+                "SAVE_STATE_DELTA",
+                "SAVE_ARTIFACT",
+                "SAVE_CLAIM",
+                "SAVE_EVIDENCE",
+                "SAVE_CONSOLIDATION",
+                "CREATE_CHECKPOINT",
+            }),
         )
 
     def test_get_context_returns_read_only_context_pack(self):
