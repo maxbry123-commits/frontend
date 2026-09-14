@@ -52,3 +52,18 @@ Si otro chat ya reclamó el nodo o cualquiera de sus paths:
 Un productor termina en `PASS_RELEASED` o `GAP_RESOLVABLE`.
 Nunca promociona live.
 El integrador posterior compone sólo segmentos `PASS_RELEASED`, ejecuta browser regression y mantiene `TESTED_SHA == PUBLISHED_SHA`.
+
+## NEXT_WORKPACK — CONTINUIDAD AUTOMÁTICA FRONTEND
+Cuando este chat agote su cola actual y no tenga nodo activo, **no inventar trabajo ni detener el frontend**. Leer fresh:
+
+`UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-FRONTEND-GROK-WORKPACK-100-V1-2026-09-14.json`
+
+Luego leer:
+
+`UI YAIWES/readme arquitectura UI YAIWES/HANDOFF-GROK-MULTI-FRONTEND-WORKPACK-100-2026-09-14.md`
+
+El pack siguiente contiene `F-FE-090..189` y usa claims separados por nodo bajo:
+
+`UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/`
+
+Antes de saltar al siguiente pack: `READ FRESH → confirmar que el nodo actual terminó PASS_RELEASED/GAP_RESOLVABLE → liberar → elegir sólo un nodo claimable sin colisión`.
