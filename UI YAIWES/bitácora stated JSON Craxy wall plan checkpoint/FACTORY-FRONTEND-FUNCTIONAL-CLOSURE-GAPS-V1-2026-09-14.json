@@ -1,0 +1,172 @@
+{
+  "schema": "yaiwes.factory.frontend.functional-closure.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "domain": "FRONTEND_ONLY",
+  "created_at": "2026-09-14T16:35:00-05:00",
+  "base_main_sha": "aea8272039727c16a6d794c1cc16141800aeb40d",
+  "purpose": "Convert the remaining gap between isolated frontend PASS evidence and one functioning, published, independently reviewed Factory candidate into a short deterministic closure queue. Do not duplicate existing producer/control/OSS nodes.",
+  "authoritative_refs": [
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-FRONTEND-GROK-WORKPACK-20-V1-2026-09-14.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-FRONTEND-GROK-WORKPACK-100-V1-2026-09-14.json",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-FRONTEND-DELTA-NODES-190-219-V1-2026-09-14.json",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/segments/segment-registry-v1.js",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/audits/FRONTEND-OSS-INTEGRATION-GAP-MATRIX-V2-2026-09-14.json"
+  ],
+  "progress_snapshot": {
+    "grok_workpack_100": {
+      "pass_released": 25,
+      "claimed_active": 1,
+      "unclaimed_or_not_started": 74,
+      "pass_percent": 25,
+      "lanes": {
+        "GROK-A_090_099": "10/10 PASS_RELEASED",
+        "GROK-B_100_109": "10/10 PASS_RELEASED",
+        "GROK-C_110_119": "5/10 PASS_RELEASED; F-FE-110 CLAIMED by GPT-5.6-SOL; F-FE-116..119 not started",
+        "GROK-D_to_J_120_189": "not started by claim evidence at snapshot"
+      },
+      "interpretation": "Task throughput only. It is not functional certification of the Factory."
+    },
+    "global_frontend_certification": "NOT_VERIFIED_CLOSED",
+    "latest_known_integrated_candidate_family": "v195 historical integration; newer released segments are not yet proven together on one exact candidate SHA"
+  },
+  "global_rules": {
+    "one_chat_one_active_node": true,
+    "one_path_one_writer": true,
+    "read_fresh_before_claim_write_test_release": true,
+    "no_duplicate_product_work": true,
+    "producer_nodes_are_references_not_reimplemented_here": true,
+    "qa_never_patches_product": true,
+    "only_segment_11_integrates_candidate": true,
+    "no_second_state_engine_editor_router_downloader": true,
+    "no_force_push": true,
+    "no_git_lfs": true,
+    "source_present_not_equal_integrated": true,
+    "tested_sha_must_equal_published_sha": true,
+    "only_F_UI_063_can_declare_FRONTEND_100": true
+  },
+  "nodes": [
+    {
+      "id": "F-CLOSE-FE-001-RECONCILE-AUTHORITATIVE-STATE",
+      "state": "FREE",
+      "gap": "Claims, release commits and static workpack manifests can diverge while several Grok/SOL chats work concurrently.",
+      "solution": "Fresh-scan workpack-20, workpack-100, delta-190..219, claim files, release commits and current main; classify each node PASS_RELEASED, GAP_RESOLVABLE, CLAIMED, READY or VERIFIED_NO_NEED without changing product code.",
+      "acceptance": "One deduplicated current-state matrix with node id, owner, exact state, evidence SHA/run/job and next valid dependency.",
+      "write_scope": ["Frontend/factory-v0/project-memory/F-CLOSE-FE-001-*"],
+      "depends_on": []
+    },
+    {
+      "id": "F-CLOSE-FE-002-CLOSE-REQUIRED-PRODUCER-CHAINS",
+      "state": "BLOCKED_AFTER_F_CLOSE_FE_001",
+      "gap": "Several required segment improvements are tested in isolation or still pending dependency chains; optional OSS work must not delay operation.",
+      "solution": "Complete only dependency-satisfied required nodes from F-FE-069..089 and F-FE-174..188 that materially affect shell, browser, editor, touch, IO/import, remote/HF. Optional components may end VERIFIED_NO_NEED.",
+      "acceptance": "Every segment needed by the candidate has a latest PASS_RELEASED version; no required node remains TESTED_NOT_WIRED without an integrator handoff.",
+      "depends_on": ["F-CLOSE-FE-001-RECONCILE-AUTHORITATIVE-STATE"]
+    },
+    {
+      "id": "F-CLOSE-FE-003-CONTROL-EFFECT-COVERAGE",
+      "state": "BLOCKED_AFTER_F_CLOSE_FE_001",
+      "gap": "The Factory cannot be called functional while visible enabled controls are untested or only checked for existence/clickability.",
+      "solution": "Finish applicable CONTROL_QA F-FE-090..154 plus discovery/matrix nodes F-FE-201..211. Each control must prove a canonical state/UI/output effect; disabled controls need a visible deterministic reason.",
+      "acceptance": "100% of discovered controls map to PASS, GAP with owner, or valid deterministic disabled reason; zero unmapped enabled controls.",
+      "depends_on": ["F-CLOSE-FE-001-RECONCILE-AUTHORITATIVE-STATE"]
+    },
+    {
+      "id": "F-CLOSE-FE-004-SHELL-MOBILE-A11Y-GATE",
+      "state": "BLOCKED_DEPENDENCIES",
+      "gap": "Shell versions, mobile fit, docks, focus/inert and reduced-motion work exist separately.",
+      "solution": "Consolidate evidence from F-FE-068/070/071/174/175/214/215; repair only real shell gaps, then release one latest shell segment version.",
+      "acceptance": "390/412/768 widths fit without masking overflow; drawers are touch/keyboard usable; focus restores; no trapped focus; reduced-motion respected.",
+      "depends_on": ["F-CLOSE-FE-002-CLOSE-REQUIRED-PRODUCER-CHAINS"]
+    },
+    {
+      "id": "F-CLOSE-FE-005-EDITOR-CANONICAL-STATE-GATE",
+      "state": "BLOCKED_DEPENDENCIES",
+      "gap": "Editor controls, layers, keyboard operations and multiselect are split across isolated versions and tests.",
+      "solution": "Validate F-FE-074/075/076/089 plus core control QA and F-FE-213 against the single existing reducer/history/state engine; repair only failing owner segment.",
+      "acceptance": "Create/select/move/resize/duplicate/delete/layer/group/property/undo/redo all use one canonical state and survive required reload/undo paths.",
+      "depends_on": ["F-CLOSE-FE-002-CLOSE-REQUIRED-PRODUCER-CHAINS","F-CLOSE-FE-003-CONTROL-EFFECT-COVERAGE"]
+    },
+    {
+      "id": "F-CLOSE-FE-006-TOUCH-GESTURE-GATE",
+      "state": "BLOCKED_DEPENDENCIES",
+      "gap": "Touch fixes have passed isolated tests but must coexist with scroll, pinch, resize and mobile controls.",
+      "solution": "Run latest F-FE-072/073/178/179 and F-FE-214 together on phone/tablet viewports; patch only SEG-04 on reproducible failure.",
+      "acceptance": "Tap/select, drag, scroll, resize, cancel and pinch do not steal each other; no phantom drag; touch targets usable.",
+      "depends_on": ["F-CLOSE-FE-002-CLOSE-REQUIRED-PRODUCER-CHAINS","F-CLOSE-FE-004-SHELL-MOBILE-A11Y-GATE"]
+    },
+    {
+      "id": "F-CLOSE-FE-007-IO-IMPORT-RECOVERY-GATE",
+      "state": "BLOCKED_DEPENDENCIES",
+      "gap": "Import, versions, JSON/HTML export and reload recovery are individually implemented/tested but not yet accredited together on one candidate.",
+      "solution": "Converge F-FE-079..084, 081..083, 152..164, 182..185, 212; verify malformed input fail-closed, semantic roundtrip, autosave/recovery and destination status/retry.",
+      "acceptance": "Import/edit/save/reload/reopen/export/restore/destination roundtrip has no silent loss or fake success.",
+      "depends_on": ["F-CLOSE-FE-002-CLOSE-REQUIRED-PRODUCER-CHAINS","F-CLOSE-FE-003-CONTROL-EFFECT-COVERAGE"]
+    },
+    {
+      "id": "F-CLOSE-FE-008-AI-REMOTE-HF-UI-GATE",
+      "state": "BLOCKED_DEPENDENCIES",
+      "gap": "AI skill/model/team, remote health and HF jobs need one coherent frontend behavior with explicit failure states and no secret exposure.",
+      "solution": "Converge F-FE-085..087, 165..175, 186..188, 216..218 against existing typed router/remote boundaries; no frontend router duplication.",
+      "acceptance": "Available/disabled/running/success/error/cancel/offline states are explicit; secret_ref only; no raw token in DOM/localStorage; failures do not corrupt project state.",
+      "depends_on": ["F-CLOSE-FE-002-CLOSE-REQUIRED-PRODUCER-CHAINS","F-CLOSE-FE-003-CONTROL-EFFECT-COVERAGE"]
+    },
+    {
+      "id": "F-CLOSE-FE-009-OSS-NEED-ONLY-RUNTIME-GATE",
+      "state": "BLOCKED_DEPENDENCIES",
+      "gap": "The component inventory is large, but most source presence is not runtime integration and many components are optional for the current Factory.",
+      "solution": "Use F-FE-155..173, 190..200 only for demonstrated capability gaps. Reuse existing extraction/copy motors and thin adapters; mark non-required monoliths VERIFIED_NO_NEED rather than integrating for count.",
+      "acceptance": "Every component claimed as integrated has source/ref/license -> adapter -> wiring -> runtime test evidence; optional components cannot block candidate closure.",
+      "depends_on": ["F-CLOSE-FE-001-RECONCILE-AUTHORITATIVE-STATE"]
+    },
+    {
+      "id": "F-CLOSE-FE-010-SEG11-COMPOSE-LATEST-CANDIDATE",
+      "state": "BLOCKED_DEPENDENCIES",
+      "gap": "Current PASS evidence is distributed across isolated/versioned segment files; the last known integrated candidate family predates several newer releases.",
+      "solution": "SEG-11 alone composes a new additive candidate from only latest PASS_RELEASED/VERIFIED_NO_NEED segment versions, preserving frozen historical entrypoints and recording exact component blobs.",
+      "acceptance": "One candidate entrypoint/bootstrap has deterministic segment manifest and boots without page/console/module errors on desktop and mobile.",
+      "depends_on": ["F-CLOSE-FE-004-SHELL-MOBILE-A11Y-GATE","F-CLOSE-FE-005-EDITOR-CANONICAL-STATE-GATE","F-CLOSE-FE-006-TOUCH-GESTURE-GATE","F-CLOSE-FE-007-IO-IMPORT-RECOVERY-GATE","F-CLOSE-FE-008-AI-REMOTE-HF-UI-GATE","F-CLOSE-FE-009-OSS-NEED-ONLY-RUNTIME-GATE"]
+    },
+    {
+      "id": "F-CLOSE-FE-011-EXACT-CANDIDATE-GLOBAL-REGRESSION",
+      "state": "BLOCKED_DEPENDENCIES",
+      "gap": "Isolated PASS cannot prove the assembled candidate works end-to-end.",
+      "solution": "Run F-UI-051..061 plus applicable F-FE-201..219 on the exact candidate SHA: all five steps, controls, desktop/mobile/touch/keyboard, reload/reopen, import/export, router/remote/HF, offline and error states.",
+      "acceptance": "All required gates PASS on the same exact SHA; all discovered controls have real effects; critical console/network errors = 0.",
+      "depends_on": ["F-CLOSE-FE-010-SEG11-COMPOSE-LATEST-CANDIDATE"]
+    },
+    {
+      "id": "F-CLOSE-FE-012-FAILURE-REPAIR-LOOP",
+      "state": "CONDITIONAL_AFTER_F_CLOSE_FE_011_FAIL",
+      "gap": "Any global regression failure must be fixed without broad rewrites or parallel workers touching the same product path.",
+      "solution": "For each reproducible failure create/claim exactly one owner-segment GAP node, apply a distinct minimal StrategyDelta, focused test it, release it, then return to SEG-11 composition and rerun global regression.",
+      "acceptance": "No unresolved critical failure remains; every repair has before/after evidence and no same-strategy retry loop.",
+      "depends_on": ["F-CLOSE-FE-011-EXACT-CANDIDATE-GLOBAL-REGRESSION"]
+    },
+    {
+      "id": "F-CLOSE-FE-013-PUBLISH-EXACT-TESTED-SHA",
+      "state": "BLOCKED_DEPENDENCIES",
+      "gap": "A local/CI candidate is not a delivered Factory until the exact tested commit is published and read back.",
+      "solution": "Publish the exact candidate commit that passed global regression; do not rebuild from a moving main. Record published SHA, artifact/deployment id and browser readback.",
+      "acceptance": "TESTED_SHA == PUBLISHED_SHA and deployed desktop/mobile readback matches the tested candidate blobs.",
+      "depends_on": ["F-CLOSE-FE-011-EXACT-CANDIDATE-GLOBAL-REGRESSION"]
+    },
+    {
+      "id": "F-CLOSE-FE-014-F-UI-062-INDEPENDENT-REVIEW",
+      "state": "BLOCKED_DEPENDENCIES",
+      "gap": "Producer/integrator evidence is not sufficient for final accreditation.",
+      "solution": "An independent reviewer replays critical journeys and verifies exact published SHA, evidence integrity, mobile/touch/keyboard behavior, controls, persistence/export and no hidden failures.",
+      "acceptance": "F-UI-062 PASS with reviewer independent of the final producer/integrator and evidence linked to exact published SHA.",
+      "depends_on": ["F-CLOSE-FE-013-PUBLISH-EXACT-TESTED-SHA"]
+    },
+    {
+      "id": "F-CLOSE-FE-015-F-UI-063-FRONTEND-100",
+      "state": "BLOCKED_DEPENDENCIES",
+      "gap": "Global frontend closure has not yet been certified.",
+      "solution": "Run the existing F-UI-063 Final Judge only after every required closure node and independent review pass; do not add features at this stage.",
+      "acceptance": "F-UI-063 VERIFIED_CLOSED; TESTED_SHA == PUBLISHED_SHA; no critical GAP; only then declare FRONTEND_100.",
+      "depends_on": ["F-CLOSE-FE-014-F-UI-062-INDEPENDENT-REVIEW"]
+    }
+  ]
+}
