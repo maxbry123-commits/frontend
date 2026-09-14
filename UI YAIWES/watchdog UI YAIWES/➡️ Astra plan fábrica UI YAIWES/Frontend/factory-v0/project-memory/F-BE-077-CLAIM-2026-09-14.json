@@ -1,0 +1,20 @@
+{
+  "schema": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-BE-077",
+  "owner": "SOL GPT <FACTORY-BACKEND>",
+  "chat_id": "current-factory-chat",
+  "fresh_main_sha": "311f11a282685f5a7048c9c3539c4800fd029030",
+  "claimed_at": "2026-09-14T09:07:00Z",
+  "state": "CLAIMED",
+  "write_scope": [
+    "Frontend/factory-v0/src/mcp/**",
+    "Frontend/factory-v0/src/router/**",
+    "Frontend/factory-v0/tests/*mcp-router*",
+    "Frontend/factory-v0/project-memory/*F-BE-077*"
+  ],
+  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+  "reuse": ["src/backend-adapter.js", "src/ai-router-fai017.js", "tel.workflow/v3"],
+  "acceptance": "typed MCP/API tools routed by capability/model/provider with fail-closed policy and deterministic state",
+  "forbidden": ["raw secrets", "arbitrary unregistered tool execution", "second state engine", "LLM routing authority"]
+}
