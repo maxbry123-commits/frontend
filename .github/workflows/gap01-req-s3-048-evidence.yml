@@ -41,4 +41,4 @@ jobs:
         run: |
           set -euo pipefail
           cd 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
-          python -m pytest -q tests/test_coverage_production_trace.py::test_context_read_gate_trace_binds_context_pack_and_real_ci
+          PYTHONPATH=src python -m pytest -q tests/test_coverage_production_trace.py::test_context_read_gate_trace_binds_context_pack_and_real_ci
