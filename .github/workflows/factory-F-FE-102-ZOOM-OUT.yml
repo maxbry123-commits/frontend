@@ -43,7 +43,7 @@ jobs:
           test -s tests/e2e/control-audit/F-FE-102-ZOOM-OUT.spec.mjs
           grep -F 'id="zoom-out"' index-v192.html
           grep -F 'zoom-out' src/app-v19.js
-          grep -F '--canvas-zoom' src/app-v19.js
+          grep -F -- '--canvas-zoom' src/app-v19.js
           node --check tests/e2e/control-audit/F-FE-102-ZOOM-OUT.spec.mjs
           echo "INDEX_V192=$(git hash-object index-v192.html)"
           echo "APP_V19=$(git hash-object src/app-v19.js)"
