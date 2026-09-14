@@ -4,38 +4,24 @@
   "node_id": "F-FE-067",
   "segment_id": "SEG-02-BROWSER",
   "lane": "frontend",
-  "state": "CLAIMED",
+  "state": "TESTED_ISOLATED_NOT_WIRED",
   "owner": "GROK 2",
   "agent": "GROK",
   "chat_id": "GROK-2-UI-YAIWES-FACTORY",
   "fresh_main_sha": "ce19dc3c23539544e65d928e2c5c4b0d8a305190",
   "claimed_at": "2026-09-14T09:33:40Z",
+  "reported_at": "2026-09-14T09:41:39Z",
+  "release": true,
+  "claim_commit": "93114a2dbbee25d9950b87e39955124de640b03c",
+  "implement_commit": "33ef87baa5b34a8183912ca86c0fdc92890a1e96",
+  "report_commit": "fe3d33fa841dc52c42f0eaef286760a84e26b21f",
+  "run_id": 34829193496,
+  "job_id": 103928244417,
   "write_scope": [
     "Frontend/factory-v0/src/ui/component-browser-v2.js",
     "Frontend/factory-v0/tests/component-browser-v2.test.mjs",
-    "Frontend/factory-v0/tests/e2e/*browser-v2*",
-    "Frontend/factory-v0/project-memory/*F-FE-067*"
+    "Frontend/factory-v0/project-memory/*F-FE-067*",
+    ".github/workflows/factory-f-fe-067-browser-v2.yml"
   ],
-  "frozen": [
-    "Frontend/factory-v0/index-v19.html",
-    "Frontend/factory-v0/index-v192.html",
-    "Frontend/factory-v0/src/ui/component-browser-v1.js"
-  ],
-  "integrator_only": [
-    "Frontend/factory-v0/index-v193.html",
-    "Frontend/factory-v0/index-v193-preview.html",
-    "Frontend/factory-v0/src/bootstrap/candidate-v193.js"
-  ],
-  "do_not_touch": [
-    "Frontend/factory-v0/src/ui/workspace-shell-v2.js",
-    "Frontend/factory-v0/workspace-shell-v2.css",
-    "Frontend/factory-v0/tests/e2e/*shell-v2*",
-    "Frontend/factory-v0/project-memory/*F-FE-066*",
-    "Frontend/factory-v0/tests/e2e/f-ui-*"
-  ],
-  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
-  "verified_gap_hypothesis": "v1 auto-mounts with no export/mount API; dragstart does not set dataTransfer; no isolated test surface; insert depends on DOM click hijack; category innerHTML is not a module contract",
-  "strategy": "REUSE_EXISTING then PATCH into versioned v2; preserve v1",
-  "acceptance": "search/filter/preview/favorite/recent/insert/drag-drop remain isolated and tested",
-  "release": false
+  "report": "Frontend/factory-v0/project-memory/F-FE-067-REPORT-2026-09-14.json"
 }
