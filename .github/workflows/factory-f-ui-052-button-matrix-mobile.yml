@@ -1,0 +1,46 @@
+name: Factory F-UI-052 Mobile Touch Matrix
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-052-button-matrix-mobile.spec.mjs'
+      - '.github/workflows/factory-f-ui-052-button-matrix-mobile.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mobile-touch-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Syntax
+        run: node --check tests/e2e/f-ui-052-button-matrix-mobile.spec.mjs
+      - name: Mobile touch matrix
+        run: npx playwright test tests/e2e/f-ui-052-button-matrix-mobile.spec.mjs --project=mobile-chromium --reporter=line
+      - name: Preserve mobile evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: f-ui-052-mobile-touch-evidence-${{ github.sha }}
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/f-ui-052
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/**/attachments/**
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+          if-no-files-found: warn
+          retention-days: 14
