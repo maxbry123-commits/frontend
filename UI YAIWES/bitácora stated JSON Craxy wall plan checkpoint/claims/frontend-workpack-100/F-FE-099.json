@@ -5,25 +5,21 @@
   "node_id": "F-FE-099-BREAKPOINT-DESKTOP",
   "segment_id": "SEG-03-EDITOR-CORE",
   "lane": "GROK-A",
-  "state": "CLAIMED",
+  "state": "PASS_RELEASED",
   "owner": "GROK 3",
   "agent": "GROK",
   "chat_id": "GROK-3-UI-YAIWES-FACTORY",
-  "fresh_main_sha": "3ef2ec1de6d09f319d887f830307a56328aeace7",
+  "fresh_main_sha": "e29348deb2013a87f20064d9b66d08662f6d7166",
   "claimed_at": "2026-09-14T15:07:20Z",
+  "claim_commit": "a4774f0872717a7d16b2225207df357439cf1e78",
+  "delta_commit": "9fa9b65fa367b378d5865589757a9e10bcef5859",
+  "tested_sha": "e3e4cbaeaca42f4950196e7a57b434ee04ed4770",
+  "released_at": "2026-09-14T15:11:10Z",
   "type": "CONTROL_QA",
   "selector": "[data-breakpoint='desktop']",
+  "run_id": 34860384107,
+  "job_id": 104030724852,
   "product_patched": false,
-  "release": false,
-  "write_scope": [
-    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-099-BREAKPOINT-DESKTOP.spec.mjs",
-    "Frontend/factory-v0/project-memory/F-FE-099-BREAKPOINT-DESKTOP-*",
-    ".github/workflows/factory-F-FE-099-BREAKPOINT-DESKTOP.yml",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-099.json"
-  ],
-  "base_blobs": {
-    "index-v192.html": "e3d68e1063cd37c2a59d91911f071fda304e4695",
-    "src/app-v19.js": "1aab6ebec09a8e6a14f221b83226cf92552b4526"
-  },
-  "next_free_node": null
+  "release": true,
+  "next_free_node": "F-FE-071-SHELL-PERSISTED-DOCKS"
 }
