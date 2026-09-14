@@ -2,20 +2,39 @@
   "schema": "yaiwes.factory.node-claim/v1",
   "node_id": "B-MK-004",
   "owner": "ASTRA-GPT-5.6-SOL",
-  "state": "IN_PROGRESS",
+  "state": "TESTED_SUBGATE_PASS",
   "base_sha": "8b948fa7d680dd4c5a9c2c11cb04d639d3cb97ba",
   "write_scope": [
     "Frontend/factory-v0/src/microkernel/bus/**",
     "Frontend/factory-v0/src/microkernel/plugins/**"
   ],
   "strategy": "REUSE_FABLES_ADAPT_TYPED_PORT",
-  "source_existing": "Frontend/factory-v0/src/evolution/fables-plugin-bus-v1.js",
-  "source_blob": "d11c335b66c9581da323ea8ef4e3c603e960f416",
-  "depends_on": ["B-MK-003"],
-  "acceptance": [
-    "no core mutation path",
-    "typed capability/action required",
-    "all plugin calls traverse Fables bus",
-    "disabled/unknown/mismatched capability fails closed"
-  ]
+  "source_existing": {
+    "path": "Frontend/factory-v0/src/evolution/fables-plugin-bus-v1.js",
+    "blob_sha": "d11c335b66c9581da323ea8ef4e3c603e960f416"
+  },
+  "implementation": {
+    "path": "Frontend/factory-v0/src/microkernel/bus/index.js",
+    "blob_sha": "04e486e0adb9abea8d30ac13a31297df1a29957e",
+    "commit": "4bea190cf6ed45f3aa71b1ed7a280a24eae89725"
+  },
+  "test": {
+    "path": "Frontend/factory-v0/src/microkernel/bus/selftest.mjs",
+    "blob_sha": "770c5c4459eb37fd875af75851807354b485c94e",
+    "commit": "44901f7e4333168dde0e2eeddc4a4635c7d289f6",
+    "result": "PASS",
+    "assertions": 20,
+    "adapter_calls_on_valid_path": 1,
+    "mode": "shadow test on GitHub read-back code"
+  },
+  "acceptance": {
+    "no_direct_core_mutation_path_in_port": "PASS",
+    "typed_capability_action_required": "PASS",
+    "all_calls_via_fables_bus": "PASS",
+    "mismatched_capability_blocked": "PASS",
+    "unknown_action_blocked": "PASS",
+    "disabled_unknown_plugin_blocked": "PASS",
+    "remote_eval_disabled": "PASS"
+  },
+  "next": "B-MK-005 MCP/API ingress + capability router"
 }
