@@ -20,6 +20,11 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+          sparse-checkout-cone-mode: false
+          fetch-depth: 1
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
