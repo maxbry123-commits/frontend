@@ -1,0 +1,19 @@
+{
+  "schema": "yaiwes.gap.claim.v1",
+  "contract": "tel.workflow/v3",
+  "node": "GAP-02-N35-S3-REMAINDER",
+  "requirement_id": "REQ-S3-002",
+  "owner": "ChatGPT-Sol-supervisor",
+  "state": "CLAIMED",
+  "base_main_sha": "e2e143092f71cf27f3dc0201ba5b12cc617aa6d9",
+  "source_anchor": "§2 MASTER INPUT",
+  "requirement": "Original immutable, versioned, traceable and always recoverable; derived forms never replace original.",
+  "write_scope": [
+    "runtime/tests/test_req_s3_002_master_input.py",
+    "runtime/requirement_traces/REQ-S3-002.json",
+    "runtime/evidence/requirement_traces/REQ-S3-002.ci.json",
+    "reports/CLAIM-GAP-02-REQ-S3-002-CHATGPT-SUPERVISOR-2026-09-14.json"
+  ],
+  "product_delta_gate": "No product-code write until VERIFY_RESEARCH proves MISSING_IMPLEMENTATION; extend claim before any product delta.",
+  "strategy": "REUSE_EXISTING > PATCH > ADAPT"
+}
