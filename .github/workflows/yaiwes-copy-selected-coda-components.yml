@@ -1,0 +1,151 @@
+name: YAIWES copy selected CODA components with Motor 3
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/yaiwes-copy-selected-coda-components.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: yaiwes-copy-selected-coda-components
+  cancel-in-progress: false
+
+jobs:
+  copy-with-canonical-motor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout frontend main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Clone agentes main as immutable source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --branch main https://github.com/maxbry123-commits/agentes.git "$RUNNER_TEMP/agentes-source"
+          echo "SOURCE_SHA=$(git -C "$RUNNER_TEMP/agentes-source" rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Validate Motor 3 blob lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          MOTOR="$RUNNER_TEMP/agentes-source/Motores/➡️📂motor de copiar archivos/motor_3_copy_batches.py"
+          EXPECTED="3689924361ce4a1a9fde4ae2b6f6009c37a6042d"
+          ACTUAL="$(git -C "$RUNNER_TEMP/agentes-source" hash-object "Motores/➡️📂motor de copiar archivos/motor_3_copy_batches.py")"
+          echo "motor_blob_sha=$ACTUAL"
+          test "$ACTUAL" = "$EXPECTED" || { echo "MOTOR_CODE_LOCK_GAP"; exit 1; }
+          test -f "$MOTOR"
+
+      - name: Execute canonical Motor 3 for 8 components
+        shell: bash
+        run: |
+          set -euo pipefail
+          MOTOR="$RUNNER_TEMP/agentes-source/Motores/➡️📂motor de copiar archivos/motor_3_copy_batches.py"
+          STATE_ROOT="$RUNNER_TEMP/yaiwes-motor3-state"
+          mkdir -p "$STATE_ROOT"
+          for N in 08 11 12 15 16 21 22 23; do
+            SRC="$RUNNER_TEMP/agentes-source/📂coda workflow persistencias/🏈 YAIWES $N"
+            DST="$GITHUB_WORKSPACE/UI YAIWES/🏈 YAIWES $N"
+            STATE="$STATE_ROOT/yaiwes-$N.json"
+            echo "=== MOTOR3 YAIWES $N ==="
+            SOURCE_DIR="$SRC" \
+            DEST_DIR="$DST" \
+            STATE_FILE="$STATE" \
+            BATCH_SIZE=25 \
+            COLLISION_POLICY=fail \
+            python "$MOTOR" | tee "$STATE_ROOT/result-$N.log"
+            grep -q '"verdict": "VERIFIED_CLOSED"' "$STATE_ROOT/result-$N.log"
+            grep -q '"failed": 0' "$STATE_ROOT/result-$N.log"
+            grep -q '"pending": 0' "$STATE_ROOT/result-$N.log"
+          done
+
+      - name: Write copy provenance outside copied trees
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p 'UI YAIWES/24-CODA-INTEGRATION'
+          python - <<'PY'
+          import json, os, pathlib
+          out = pathlib.Path('UI YAIWES/24-CODA-INTEGRATION/COPY-PROVENANCE.json')
+          out.write_text(json.dumps({
+              'schema': 'yaiwes.copy.provenance/v1',
+              'source_repo': 'maxbry123-commits/agentes',
+              'source_branch': 'main',
+              'source_commit': os.environ['SOURCE_SHA'],
+              'motor': 'Motores/➡️📂motor de copiar archivos/motor_3_copy_batches.py',
+              'motor_blob_sha': '3689924361ce4a1a9fde4ae2b6f6009c37a6042d',
+              'destination_repo': 'maxbry123-commits/frontend',
+              'destination_branch': 'main',
+              'destination_root': 'UI YAIWES/',
+              'components': ['08','11','12','15','16','21','22','23'],
+              'collision_policy': 'fail',
+              'batch_size': 25,
+              'motor_result_required': 'VERIFIED_CLOSED'
+          }, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+          PY
+
+      - name: Commit copied trees to frontend main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- \
+            'UI YAIWES/🏈 YAIWES 08' \
+            'UI YAIWES/🏈 YAIWES 11' \
+            'UI YAIWES/🏈 YAIWES 12' \
+            'UI YAIWES/🏈 YAIWES 15' \
+            'UI YAIWES/🏈 YAIWES 16' \
+            'UI YAIWES/🏈 YAIWES 21' \
+            'UI YAIWES/🏈 YAIWES 22' \
+            'UI YAIWES/🏈 YAIWES 23' \
+            'UI YAIWES/24-CODA-INTEGRATION/COPY-PROVENANCE.json'
+          if git diff --cached --quiet; then
+            echo 'No copy changes; destination already identical.'
+          else
+            git commit -m 'copy(yaiwes): Motor 3 verified CODA 08 11 12 15 16 21 22 23'
+          fi
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "DEST_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Clean read-back from frontend main and SHA-256 compare
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf "$RUNNER_TEMP/frontend-readback"
+          git clone --depth 1 --branch main https://github.com/maxbry123-commits/frontend.git "$RUNNER_TEMP/frontend-readback"
+          python - <<'PY'
+          import hashlib, json, os, pathlib
+          src_root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'agentes-source' / '📂coda workflow persistencias'
+          dst_root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'frontend-readback' / 'UI YAIWES'
+          components = ['08','11','12','15','16','21','22','23']
+          def sha(p):
+              h=hashlib.sha256()
+              with p.open('rb') as f:
+                  for b in iter(lambda:f.read(1024*1024), b''):
+                      h.update(b)
+              return h.hexdigest()
+          report=[]
+          for n in components:
+              s=src_root / f'🏈 YAIWES {n}'
+              d=dst_root / f'🏈 YAIWES {n}'
+              if not s.is_dir() or not d.is_dir():
+                  raise SystemExit(f'MISSING_TREE:{n}')
+              sf={p.relative_to(s).as_posix(): sha(p) for p in s.rglob('*') if p.is_file()}
+              df={p.relative_to(d).as_posix(): sha(p) for p in d.rglob('*') if p.is_file()}
+              if sf != df:
+                  missing=sorted(set(sf)-set(df))[:20]
+                  extra=sorted(set(df)-set(sf))[:20]
+                  mismatched=sorted(k for k in set(sf)&set(df) if sf[k]!=df[k])[:20]
+                  raise SystemExit(json.dumps({'component':n,'missing':missing,'extra':extra,'mismatched':mismatched}, ensure_ascii=False))
+              report.append({'component':n,'files':len(sf),'verified':True})
+          print(json.dumps({'verdict':'VERIFIED_CLOSED','source_commit':os.environ['SOURCE_SHA'],'destination_commit':os.environ.get('DEST_SHA'),'components':report}, ensure_ascii=False, sort_keys=True))
+          PY
