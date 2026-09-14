@@ -108,12 +108,12 @@
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-13T23:15:00Z",
+  "updated_at_utc": "2026-09-14T00:08:00Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
   ],
-  "last_observed_head": "ffe41f84d2bb46053047ef37403092f4bfc352ce",
+  "last_observed_head": "7c3fff9f0b228746ae7df2365d82e94446c8cdca",
   "last_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "status": "ACTIVE_LOOP",
@@ -211,68 +211,6 @@
   },
   "previous_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
-    "requirement_id": "REQ-S3-056",
-    "status": "INCONCLUSIVE_BLOCKED_SCOPE",
-    "checkpoint_read_blob": "61ef31e7b6091b5222a77145f520a6835736b1c3",
-    "observed_main": "7837b8e8cd5f7c04fedc5a997c8347ed5f0ac6ea",
-    "verify_research": [
-      "workflow_definition.py declares step 19 FinalJudgeTask under CLOSURE_CANDIDATE.",
-      "runtime/src/tasks has README.md only; final_judge_task.py is planned but absent from the exact HEAD tree.",
-      "test_stabilize_integration.py checks only the declarative final_judge name, not terminal behavior.",
-      "No FinalJudge PR exists; N31 is FREE but UI-factory-only and was not claimed."
-    ],
-    "defect_reproduced": "Module resolver probe exited 1: AssertionError FinalJudgeTask module is declared but missing.",
-    "delta": "No product-code delta because runtime/src/tasks/** is outside active N35 scope. Published a bounded claimable Sol order in this owner checkpoint.",
-    "tests": [
-      {
-        "scope": "module availability probe",
-        "result": "FAIL reproduced at exact HEAD"
-      }
-    ],
-    "simulations": "No product simulation executed.",
-    "refutations": [
-      "A workflow declaration is not executable behavior.",
-      "The 19-step name assertion does not cover terminal decisions or fail-closed evidence.",
-      "N31 UI-only scope cannot authorize this runtime patch."
-    ],
-    "decision": "Keep REQ-S3-056 blocked; require a new runtime-task node, then exact tests/CI before creating its trace.",
-    "limits": "No FinalJudge code, E2E/platform proof or 100x result."
-  },
-  "candidate_patch": {
-    "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
-    "status": "VERIFIED_CLOSED_DELTA",
-    "base_sha": "edcbd013bafe766f26c9e1758a0f2c89067e1ec3",
-    "branch": "astra-crosscheck-n35-incomplete-inventory",
-    "pull_request": 55,
-    "head_sha": "574931077ed42046ef0cec0c5ddda4752cef6666",
-    "defect_reproduced": "A one-row inventory was accepted when three requirement IDs were expected: 1 failed, 4 passed.",
-    "delta": "Reject incomplete inventories with a deterministic missing_requirement_traces error; 3 production lines and 13 test lines.",
-    "tests": "Local 33 passed plus 24 subtests; CI 34751336489, 34751342145 and post-merge 34753763545 SUCCESS; merge CI 41 Wordflow plus 273 runtime plus 42 subtests",
-    "refutations": [
-      "The exact changed revisions and merged main are CI-verified, but that certifies only the loader delta.",
-      "Completeness enforcement does not create or certify any RequirementTrace.",
-      "N35 remains 0/167 and global closure remains fail-closed."
-    ],
-    "next_action": "Create RequirementTrace rows only from genuine source/code/test/evidence bindings; current certified trace count remains 0/167."
-  },
-  "active_claim": {
-    "state": "IN_PROGRESS",
-    "claimed_at_utc": "2026-09-13T08:11:08Z",
-    "fresh_main_sha": "574931077ed42046ef0cec0c5ddda4752cef6666",
-    "dependency_evidence": "N34 VERIFIED_CLOSED at 53dee9a50a; prior N35 released GAP_RESOLVABLE at e00b2e6e08; no later N35 claim observed",
-    "write_scope": [
-      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/audit/**",
-      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/coverage/**",
-      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_audit*",
-      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage*",
-      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
-    ],
-    "bounded_strategy": "Consume only independently verifiable RequirementTrace bindings; do not synthesize traces or CI attestations.",
-    "code_commit": "ffe41f84d2bb46053047ef37403092f4bfc352ce",
-    "next_action": "Continue with genuine per-requirement records; 4/167 are certified and 163 remain."
-  },
-  "current_activation": {
-    "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "requirement_id": "REQ-S3-053",
     "status": "VERIFIED_CLOSED_DELTA",
     "checkpoint_read_blob": "b9eaf89b18545ecfd3ca0dc9f72fff4f8523021d",
@@ -364,44 +302,95 @@
       "status": "SUCCESS"
     }
   },
-  "n35_next_trace_claim": {
-    "requirement_id": "REQ-S3-053",
-    "state": "VERIFIED_CLOSED",
-    "claimed_at_utc": "2026-09-13T22:08:00Z",
-    "fresh_main_sha": "bc8fc54145cf9ad744165b6291a233e882beea5f",
-    "source_anchor": "§53 CONSOLIDACIÓN EN EMBUDO",
+  "candidate_patch": {
+    "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+    "status": "VERIFIED_CLOSED_DELTA",
+    "base_sha": "edcbd013bafe766f26c9e1758a0f2c89067e1ec3",
+    "branch": "astra-crosscheck-n35-incomplete-inventory",
+    "pull_request": 55,
+    "head_sha": "574931077ed42046ef0cec0c5ddda4752cef6666",
+    "defect_reproduced": "A one-row inventory was accepted when three requirement IDs were expected: 1 failed, 4 passed.",
+    "delta": "Reject incomplete inventories with a deterministic missing_requirement_traces error; 3 production lines and 13 test lines.",
+    "tests": "Local 33 passed plus 24 subtests; CI 34751336489, 34751342145 and post-merge 34753763545 SUCCESS; merge CI 41 Wordflow plus 273 runtime plus 42 subtests",
+    "refutations": [
+      "The exact changed revisions and merged main are CI-verified, but that certifies only the loader delta.",
+      "Completeness enforcement does not create or certify any RequirementTrace.",
+      "N35 remains 0/167 and global closure remains fail-closed."
+    ],
+    "next_action": "Create RequirementTrace rows only from genuine source/code/test/evidence bindings; current certified trace count remains 0/167."
+  },
+  "active_claim": {
+    "state": "IN_PROGRESS",
+    "claimed_at_utc": "2026-09-13T08:11:08Z",
+    "fresh_main_sha": "574931077ed42046ef0cec0c5ddda4752cef6666",
+    "dependency_evidence": "N34 VERIFIED_CLOSED at 53dee9a50a; prior N35 released GAP_RESOLVABLE at e00b2e6e08; no later N35 claim observed",
     "write_scope": [
-      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-053.json",
-      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-053.ci.json",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/audit/**",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/coverage/**",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_audit*",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage*",
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
+    ],
+    "bounded_strategy": "Consume only independently verifiable RequirementTrace bindings; do not synthesize traces or CI attestations.",
+    "code_commit": "ffe41f84d2bb46053047ef37403092f4bfc352ce",
+    "next_action": "Continue with genuine per-requirement records; 4/167 are certified and 163 remain."
+  },
+  "current_activation": {
+    "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
+    "requirement_id": "REQ-S3-050",
+    "status": "IN_PROGRESS",
+    "checkpoint_read_blob": "41cf59f74e341902af9dedaeb472a4ce09c69c8c",
+    "observed_main": "7c3fff9f0b228746ae7df2365d82e94446c8cdca",
+    "verify_research": [
+      "§50 requires continuation without new human input when tasks, authorization, context and progress exist.",
+      "N27 source/test bytes match certified revision 52d52bac and current main.",
+      "CI 34745090975/job 103691474425 passed 41 Wordflow, 268 runtime and 42 subtests.",
+      "REQ-S3-050 trace lookup at fresh main returned 404."
+    ],
+    "defect_reproduced": "Missing production trace: NOT_FOUND for REQ-S3-050.json.",
+    "delta": "PENDING",
+    "tests": [
+      {
+        "scope": "pre-delta trace availability",
+        "result": "FAIL reproduced: NOT_FOUND"
+      }
+    ],
+    "simulations": [
+      "Missing trace lookup fails closed; no product PASS inferred."
+    ],
+    "refutations": [
+      "Implementation alone is not a certified binding.",
+      "Trusted CI certifies unchanged implementation/test bytes, not the pending trace delta.",
+      "Global closure remains false with 163 missing traces."
+    ],
+    "decision": "Claim one trace/evidence pair and one regression; do not mutate N27.",
+    "limits": "N36, platforms, E2E and 100x remain open."
+  },
+  "n35_next_trace_claim": {
+    "requirement_id": "REQ-S3-050",
+    "state": "IN_PROGRESS",
+    "claimed_at_utc": "2026-09-14T00:08:00Z",
+    "fresh_main_sha": "7c3fff9f0b228746ae7df2365d82e94446c8cdca",
+    "source_anchor": "§50 EL SISTEMA DEBE PODER CONTINUAR SIN NUEVO INPUT HUMANO",
+    "write_scope": [
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-050.json",
+      "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-050.ci.json",
       "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_production_trace.py",
       "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
     ],
     "evidence_candidate": {
-      "implementation": "runtime/src/consolidation/consolidator.py#consolidate_project",
-      "implementation_sha256": "3ad8994b38e2655a86ee056b0b3b5c2c92fabb20f9361dbcb18236512b1a3709",
-      "test": "runtime/tests/test_consolidation.py#ConsolidationTests.test_evidence_requires_provenance_and_survives_project_rollup",
-      "test_sha256": "3d6ef7b06666a405c6d55c2fcf7ea123bac875ffd240f14f44f1311a7b87ca5b",
-      "trusted_ci_run": 34739510224,
-      "trusted_ci_job": 103678337638,
-      "revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e"
+      "implementation": "runtime/src/integration/continuous_loop.py#run_continuous_loop",
+      "implementation_sha256": "d76689eda6c63ee1be2aca016cdf95a17fbf14967c4da85450eee29cfd33a5fe",
+      "test": "runtime/tests/test_integration_continuous_loop.py#ContinuousLoopTests.test_gap_is_reinjected_into_same_stage_then_loop_advances",
+      "test_sha256": "dede3f13fce60ed2509007ad82a6158ebe09175f192593eea709f8f44ca107fb",
+      "trusted_ci_run": 34745090975,
+      "trusted_ci_job": 103691474425,
+      "revision": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc"
     },
-    "semantic_basis": "§53 requires Work Unit→Task Result→Task Consolidation→Phase→Project→Final Consolidation; the selected test executes task→phase→project while preserving evidence provenance.",
-    "next_step": "Select the next requirement only when source, executable code, named test and exact CI evidence are independently verifiable; N36 remains separately claimable.",
-    "branch": "astra-n35-req-s3-053-20260913",
-    "pull_request": 61,
-    "head_sha": "adc79775cdaed33cefed8d6cc2d8540b8add870e",
-    "local_tests": "37 passed, 24 subtests",
-    "ci_status": "success",
-    "certification_if_integrated": "4/167; 163 missing",
-    "merge_commit": "ffe41f84d2bb46053047ef37403092f4bfc352ce",
-    "branch_ci": {
-      "run_id": 34785964688,
-      "job_id": 103803284933
-    },
-    "post_merge_ci": {
-      "run_id": 34788527235,
-      "job_id": 103808343026
-    }
+    "semantic_basis": "§50 continuation is implemented by N27 advancing after PASS, reinjecting a bound StrategyDelta after GAP and stopping on unresolved exhaustion.",
+    "next_step": "Create one trace/evidence pair plus one regression; no N27 code mutation.",
+    "branch": "astra-n35-req-s3-050-20260914",
+    "certification_if_integrated": "5/167; 162 missing"
   },
   "final_judge_gap_order": {
     "state": "CLAIMABLE_NOT_CLAIMED",
