@@ -15,13 +15,13 @@
   },
   "test": {
     "path": "runtime/tests/test_memory_boundary.py",
-    "sha256": "bc8a22537cfe14726b6bf56639a6901f948b79c235a59aae2d2f88f4d8301b23",
+    "sha256": "a19fe978c403cfb2cbd198b493273882933734e8f03f53faddb55621da9ca685",
     "symbol": "MemoryBoundaryTests.test_direct_llm_canonical_write_is_rejected"
   },
   "evidence": {
     "path": "runtime/evidence/requirement_traces/REQ-S3-047.ci.json",
-    "sha256": "1d4039d230f59e09721c962944d4892926de5bdae7a6a8cf0d763a2d0b792d5a",
+    "sha256": "a4301fc8ede87e7e3daf5d72475ad9250fce4a384bec0195ef5d5251858372b8",
     "symbol": ""
   },
-  "revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e"
+  "revision": "412031390af1074539f2129059dc80b9fb060c43"
 }
