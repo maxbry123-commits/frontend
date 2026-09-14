@@ -1,0 +1,110 @@
+{
+  "schema": "yaiwes.factory.astra.independent-review.v1",
+  "contract": "tel.workflow/v3",
+  "date": "2026-09-14",
+  "node_id": "ASTRA-E02-CONTROLS-INDEPENDENT-REVIEW",
+  "owner": "GPT-5.6-SOL-ASTRA-WATCHDOG",
+  "base_sha": "d5886752bc7f53465bf177d3f6dab676070a7353",
+  "write_scope": [
+    "Frontend/factory-v0/audits/ASTRA-E02-CONTROLS-INDEPENDENT-REVIEW-2026-09-14.json"
+  ],
+  "verdict": "NODE_LEVEL_CONTROLS_VERIFIED_GLOBAL_FRONTEND_QA_ACTIVE",
+  "reviewed_nodes": {
+    "F-CTL-007": {
+      "capability": "layers/select/reorder/persist/undo",
+      "run_id": 34734929428,
+      "job_id": 103664527749,
+      "tested_sha": "d94ba598f329e33fbc29c6ead66d779ff7691bcf",
+      "runtime_result": "PASS_1_OF_1",
+      "independent_readback": "PASS"
+    },
+    "F-CTL-008": {
+      "capability": "properties label/width/height + reload persistence",
+      "run_id": 34734985635,
+      "job_id": 103664681702,
+      "tested_sha": "b71634c97cf78bc649d56d4e77b8074e8ad3f11d",
+      "runtime_marker": "F_CTL_008_PROPERTIES_PASS label=Panel verificado w=333 h=177",
+      "runtime_result": "PASS_1_OF_1",
+      "independent_readback": "PASS"
+    },
+    "F-CTL-009": {
+      "capability": "zoom/fit-view/minimap",
+      "run_id": 34735254160,
+      "job_id": 103665418340,
+      "tested_sha": "d30270d78318320068a2de35c7e680d3762ab8d3",
+      "runtime_result": "PASS_1_OF_1",
+      "independent_readback": "PASS_EXISTING_CLOSURE"
+    },
+    "F-CTL-010": {
+      "capability": "undo/redo/history",
+      "run_id": 34735229765,
+      "job_id": 103665351574,
+      "tested_sha": "9138766c6898ddedd232a3fe7fa01dfd9932cff9",
+      "runtime_result": "PASS_6_OF_6",
+      "independent_readback": "PASS_EXISTING_CLOSURE"
+    },
+    "F-CTL-011": {
+      "capability": "versions/rollback/reload",
+      "run_id": 34735522782,
+      "job_id": 103666146106,
+      "runtime_result": "PASS",
+      "independent_readback": "PASS_EXISTING_CLOSURE"
+    },
+    "F-CTL-012": {
+      "capability": "context menu duplicate/center/remove",
+      "run_id": 34735080979,
+      "job_id": 103664939951,
+      "tested_sha": "33f0a9647d9a987b2e84fad33fa379ce87daa888",
+      "runtime_result": "PASS_1_OF_1",
+      "independent_readback": "PASS"
+    }
+  },
+  "current_candidate": {
+    "version": "1.9.3",
+    "unified_gate": "VERIFIED_CLOSED",
+    "tested_sha": "64f98261af4fb334bd753b46460c4d83e3e63cc4",
+    "run_id": 34828013813,
+    "job_id": 103924524220,
+    "result": "desktop 1/1 PASS; Pixel 7 mobile 1/1 PASS; console_errors=[]; request_failures=[]",
+    "composition_verified": ["app-v19", "layer-reorder-v1", "frappe-context-menu-adapter", "xyflow-minimap-adapter", "json-roundtrip-v1", "touch-dnd-v192"]
+  },
+  "goals12": {
+    "G01_real_effects": "PASS",
+    "G02_exact_run_evidence": "PASS",
+    "G03_state_mutation": "PASS",
+    "G04_persistence": "PASS",
+    "G05_no_dead_controls": "PASS_NODE_LEVEL",
+    "G06_reuse_existing_modules": "PASS",
+    "G07_no_second_state_engine": "PASS",
+    "G08_mobile_coexistence": "PASS_UNIFIED_SMOKE",
+    "G09_versioning_preserved": "PASS",
+    "G10_three_refutations": "PASS",
+    "G11_independent_readback": "PASS",
+    "G12_global_frontend_close": "PENDING_F_FRONTEND_QA_066_AND_FINAL_REVIEW"
+  },
+  "council12": [
+    "source paths present",
+    "actions mutate canonical project",
+    "runtime tests executed",
+    "exact run/job retained",
+    "persistence verified",
+    "history/undo verified",
+    "version rollback verified",
+    "zoom/minimap effects verified",
+    "context actions verified",
+    "modules composed in V1.9.3",
+    "desktop/mobile unified smoke verified",
+    "global FRONTEND_100 withheld until exhaustive matrix and independent final gate"
+  ],
+  "refutations": [
+    "SOURCE_PRESENT alone is rejected; runtime logs were re-read.",
+    "Producer PASS alone is rejected; exact run/job and tested SHA were independently cross-checked.",
+    "Historical control PASS is not FRONTEND_100; exhaustive F-UI-051..061 plus final independent/published exact-SHA gates remain mandatory."
+  ],
+  "remaining_gaps": [
+    "F-FRONTEND-QA-066 active: exhaustive F-UI-051..061 against index-v193.html",
+    "F-UI-063 independent FRONTEND_100 review",
+    "published exact tested SHA validation"
+  ],
+  "collision_note": "No product, test, workflow, project-memory or shared Crazy Wall files changed; active F-FRONTEND-QA-066 scope was not touched."
+}
