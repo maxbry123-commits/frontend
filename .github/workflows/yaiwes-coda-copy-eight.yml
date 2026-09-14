@@ -1,0 +1,121 @@
+name: YAIWES CODA Copy Eight via Motor 3
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/yaiwes-coda-copy-eight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: yaiwes-coda-copy-eight
+  cancel-in-progress: false
+
+jobs:
+  copy-verify-commit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout frontend destination
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: dest
+          fetch-depth: 2
+          lfs: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /.github/workflows/yaiwes-coda-copy-eight.yml
+            /UI YAIWES/todos los componentes/
+
+      - name: Checkout pinned agentes source
+        uses: actions/checkout@v4
+        with:
+          repository: maxbry123-commits/agentes
+          ref: b28e63bba47ec96f74c34b1685206e50c36b6469
+          path: source
+          fetch-depth: 1
+          lfs: false
+          persist-credentials: false
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /Motores/➡️📂motor de copiar archivos/motor_3_copy_batches.py
+            /📂coda workflow persistencias/🏈 YAIWES 08/
+            /📂coda workflow persistencias/🏈 YAIWES 11/
+            /📂coda workflow persistencias/🏈 YAIWES 12/
+            /📂coda workflow persistencias/🏈 YAIWES 15/
+            /📂coda workflow persistencias/🏈 YAIWES 16/
+            /📂coda workflow persistencias/🏈 YAIWES 21/
+            /📂coda workflow persistencias/🏈 YAIWES 22/
+            /📂coda workflow persistencias/🏈 YAIWES 23/
+
+      - name: Copy selected components with canonical Motor 3
+        shell: bash
+        run: |
+          set -euo pipefail
+          MOTOR="$GITHUB_WORKSPACE/source/Motores/➡️📂motor de copiar archivos/motor_3_copy_batches.py"
+          test -f "$MOTOR"
+          cd "$GITHUB_WORKSPACE/dest"
+          for N in 08 11 12 15 16 21 22 23; do
+            SRC="$GITHUB_WORKSPACE/source/📂coda workflow persistencias/🏈 YAIWES $N"
+            DST="$GITHUB_WORKSPACE/dest/UI YAIWES/todos los componentes/🏈 YAIWES $N"
+            STATE="$RUNNER_TEMP/yaiwes-motor3-$N.json"
+            test -d "$SRC"
+            mkdir -p "$DST"
+            OUT=$(SOURCE_DIR="$SRC" DEST_DIR="$DST" STATE_FILE="$STATE" BATCH_SIZE=100 COLLISION_POLICY=fail python3 "$MOTOR")
+            echo "YAIWES_$N $OUT"
+            python3 - "$OUT" <<'PY'
+          import json, sys
+          data=json.loads(sys.argv[1])
+          assert data['verdict']=='VERIFIED_CLOSED', data
+          assert data['failed']==0 and data['pending']==0, data
+          PY
+          done
+
+      - name: Cross-check copied trees and repaired YAIWES 15
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE/dest"
+          for N in 08 11 12 15 16 21 22 23; do
+            SRC="$GITHUB_WORKSPACE/source/📂coda workflow persistencias/🏈 YAIWES $N"
+            DST="$GITHUB_WORKSPACE/dest/UI YAIWES/todos los componentes/🏈 YAIWES $N"
+            SCOUNT=$(find "$SRC" -type f | wc -l)
+            DCOUNT=$(find "$DST" -type f | wc -l)
+            test "$SCOUNT" -eq "$DCOUNT"
+            echo "YAIWES_$N FILES=$DCOUNT COPY_TREE=PASS"
+          done
+          grep -F 'row = c.fetchone()' 'UI YAIWES/todos los componentes/🏈 YAIWES 15/code/skills/memory/__init__.py'
+          grep -F 'session = dict(row) if row else None' 'UI YAIWES/todos los componentes/🏈 YAIWES 15/code/skills/memory/__init__.py'
+          ! grep -F 'session = dict(c.fetchone()) if c.fetchone() else None' 'UI YAIWES/todos los componentes/🏈 YAIWES 15/code/skills/memory/__init__.py'
+          echo 'YAIWES15_REPAIRED_COPY=PASS'
+
+      - name: Commit copied components
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE/dest"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- 'UI YAIWES/todos los componentes/🏈 YAIWES 08' \
+                     'UI YAIWES/todos los componentes/🏈 YAIWES 11' \
+                     'UI YAIWES/todos los componentes/🏈 YAIWES 12' \
+                     'UI YAIWES/todos los componentes/🏈 YAIWES 15' \
+                     'UI YAIWES/todos los componentes/🏈 YAIWES 16' \
+                     'UI YAIWES/todos los componentes/🏈 YAIWES 21' \
+                     'UI YAIWES/todos los componentes/🏈 YAIWES 22' \
+                     'UI YAIWES/todos los componentes/🏈 YAIWES 23'
+          if git diff --cached --quiet; then
+            echo 'YAIWES_EIGHT_COPY_ALREADY_CURRENT'
+            exit 0
+          fi
+          git commit -m 'copy(yaiwes): import eight CODA components via Motor 3'
+          git fetch origin main
+          test "$(git rev-parse HEAD^)" = "$(git rev-parse origin/main)"
+          git push origin HEAD:main
+          echo 'YAIWES_EIGHT_COPY_COMMIT=PASS'
