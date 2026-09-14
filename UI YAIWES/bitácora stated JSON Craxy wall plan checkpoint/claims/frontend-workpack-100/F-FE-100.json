@@ -5,40 +5,18 @@
   "node_id": "F-FE-100-BREAKPOINT-TABLET",
   "segment_id": "SEG-03-EDITOR-CORE",
   "lane": "GROK-B",
-  "state": "CLAIMED",
+  "state": "PASS_RELEASED",
   "owner": "GROK 4",
   "agent": "GROK",
   "chat_id": "GROK-4-UI-YAIWES-WATCHDOG-HORARIO",
   "fresh_main_sha": "c28219c394246cb40b091b3f66f31be156afaee9",
   "claimed_at": "2026-09-14T11:46:41Z",
+  "claim_commit": "ee9b5ce7d605e6d8ecc20440f5f60b3496589e48",
+  "delta_commit": "0b1b44a2a0e95045bc34f053f5883cd8bbd086fd",
+  "released_at": "2026-09-14T11:51:33Z",
   "type": "CONTROL_QA",
   "selector": "[data-breakpoint='tablet']",
-  "depends_on": [],
-  "dependency_status": "INITIAL_CLAIMABLE workpack-100 GROK-B; no lane predecessor",
-  "write_scope": [
-    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-100-BREAKPOINT-TABLET.spec.mjs",
-    "Frontend/factory-v0/project-memory/F-FE-100-BREAKPOINT-TABLET-*",
-    ".github/workflows/factory-F-FE-100-BREAKPOINT-TABLET.yml",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-100.json"
-  ],
-  "frozen": [
-    "index-v19.html",
-    "index-v192.html",
-    "index-v193-preview.html",
-    "src/bootstrap/candidate-v193.js",
-    "src/app-v19.js"
-  ],
-  "skipped_collision": {
-    "F-FE-091-MODE-AI": "CLAIMED GROK 3 c28219c39; GROK-A CONTROL_QA disjoint",
-    "F-FE-073-TOUCH-DRAG-INTENT": "CLAIMED GROK 1 497b075 + delta 1f989209f; SEG-04 product path untouched",
-    "F-FE-090-MODE-MANUAL": "PASS_RELEASED GROK 3 9b695f6; not reopened"
-  },
-  "qa_policy": "CONTROL_QA never patches product. Gap → GAP_RESOLVABLE + owning_segment.",
-  "strategy": "REUSE_EXISTING frozen index-v192 + app-v19 breakpoint persist; Playwright selector gate",
-  "acceptance": "On one exact candidate SHA interact with [data-breakpoint='tablet']; prove active class, canvas data-breakpoint, getView().breakpoint, localStorage persist, reload readback; critical console/network errors=0.",
-  "base_blobs": {
-    "index_v192": "e3d68e1063cd37c2a59d91911f071fda304e4695",
-    "app_v19": "1aab6ebec09a8e6a14f221b83226cf92552b4526"
-  },
-  "release": false
+  "run_id": 34840175476,
+  "job_id": 103963055663,
+  "release": true
 }
