@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.requirement-trace.v1",
+  "requirement_id": "REQ-S1-003",
+  "goal_id": "G12",
+  "task_id": "GAP-03-REQ-S1-003",
+  "source": {
+    "path": "documentos proyectos UI YAIWES/📌MAX-SYSTEM-100X-FINAL-1.md",
+    "sha256": "6f9281123c002a99dbc9b9dbfeabf4d1e1987a90150eaa127845c647968449db",
+    "symbol": "§3 OSS GitHub"
+  },
+  "implementation": {
+    "path": "runtime/src/plugins/catalog.py",
+    "sha256": "8266a2a9f4687015ca942c82955f7406b454c1d988159b71eb7351c2e09b906e",
+    "symbol": "build_registry"
+  },
+  "test": {
+    "path": "runtime/tests/test_universal_plugins.py",
+    "sha256": "12d3e64dfe26defadf13042af371fe3bf60afefd7352d5e7139aaa318737c69c",
+    "symbol": "UniversalPluginTests.test_catalog_is_14_unique_components"
+  },
+  "evidence": {
+    "path": "runtime/evidence/requirement_traces/REQ-S1-003.ci.json",
+    "sha256": "37ba7836bb843da817f88257b9f18df0513f60c22fb5c5419a00a0e3cb58b4cb",
+    "symbol": ""
+  },
+  "revision": "b614811995b55324577e702c1fd538c7424e0ff1"
+}
