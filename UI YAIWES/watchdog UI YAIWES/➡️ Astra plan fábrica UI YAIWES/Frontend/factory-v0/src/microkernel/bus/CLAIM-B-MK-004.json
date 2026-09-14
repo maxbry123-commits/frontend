@@ -1,0 +1,21 @@
+{
+  "schema": "yaiwes.factory.node-claim/v1",
+  "node_id": "B-MK-004",
+  "owner": "ASTRA-GPT-5.6-SOL",
+  "state": "IN_PROGRESS",
+  "base_sha": "8b948fa7d680dd4c5a9c2c11cb04d639d3cb97ba",
+  "write_scope": [
+    "Frontend/factory-v0/src/microkernel/bus/**",
+    "Frontend/factory-v0/src/microkernel/plugins/**"
+  ],
+  "strategy": "REUSE_FABLES_ADAPT_TYPED_PORT",
+  "source_existing": "Frontend/factory-v0/src/evolution/fables-plugin-bus-v1.js",
+  "source_blob": "d11c335b66c9581da323ea8ef4e3c603e960f416",
+  "depends_on": ["B-MK-003"],
+  "acceptance": [
+    "no core mutation path",
+    "typed capability/action required",
+    "all plugin calls traverse Fables bus",
+    "disabled/unknown/mismatched capability fails closed"
+  ]
+}
