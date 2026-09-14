@@ -43,6 +43,7 @@ jobs:
           sha256sum "$ROOT/documentos proyectos UI YAIWES/📌MAX-SYSTEM-100X-FINAL-1.md"
           sha256sum "$ROOT/runtime/src/plugins/activation.py"
           sha256sum "$ROOT/runtime/tests/test_coverage_req_s1_015.py"
+          sha256sum "$ROOT/runtime/evidence/requirement_traces/REQ-S1-015.ci.json"
       - name: Focused REQ-S1-015 behavior
         shell: bash
         run: |
@@ -52,13 +53,51 @@ jobs:
             tests.test_coverage_req_s1_015.ReqS1015CapabilityGovernanceTests.test_tools_are_capabilities_not_implicit_authority \
             tests.test_coverage_req_s1_015.ReqS1015CapabilityGovernanceTests.test_unapproved_tool_activation_fails_closed \
             tests.test_coverage_req_s1_015.ReqS1015CapabilityGovernanceTests.test_external_policy_denial_is_preserved
-      - name: Focused REQ-S1-015 five-pass if trace exists
+      - name: Focused REQ-S1-015 five-pass
         shell: bash
         run: |
           set -euo pipefail
           cd 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
-          if test -f requirement_traces/REQ-S1-015.json && test -f evidence/requirement_traces/REQ-S1-015.ci.json; then
-            PYTHONPATH=src python -m pytest -q tests/test_coverage_req_s1_015.py
-          else
-            echo 'TRACE_BOOTSTRAP_PENDING'
-          fi
+          PYTHONPATH=src python - <<'PY'
+          from pathlib import Path
+          from tempfile import TemporaryDirectory
+          from audit.evidence import TrustedCIExecution, make_ci_verifier
+          from audit.five_pass import audit_five_pass
+          from coverage.trace_inventory import load_trace_inventory
+
+          trace_id = "REQ-S1-015"
+          runtime_root = Path.cwd()
+          project_root = runtime_root.parent
+          trace_source = runtime_root / "requirement_traces" / f"{trace_id}.json"
+
+          with TemporaryDirectory() as tmp:
+              tmp_path = Path(tmp)
+              (tmp_path / f"{trace_id}.json").write_bytes(trace_source.read_bytes())
+              traces = load_trace_inventory(tmp_path, (trace_id,))
+              trace = traces[0]
+
+              def trusted_lookup(run_id: int, job_id: int) -> TrustedCIExecution:
+                  assert (run_id, job_id) == (34904337102, 104177381482)
+                  return TrustedCIExecution(
+                      run_id=run_id,
+                      job_id=job_id,
+                      revision="7c1589284996377131baa2bc7071a1c1234f841d",
+                      status="completed",
+                      conclusion="success",
+                      implementation_sha256=trace.implementation.sha256,
+                      test_sha256=trace.test.sha256,
+                  )
+
+              result = audit_five_pass(
+                  project_root,
+                  (trace_id,),
+                  traces,
+                  (trace.implementation.path,),
+                  make_ci_verifier(trusted_lookup),
+              )
+              print(f"REQ_S1_015_FIVE_PASS={result.status}")
+              assert result.status == "TRACEABILITY_PASS"
+              assert result.verified_requirements == 1
+              assert result.total_requirements == 1
+              assert result.product_verified is False
+          PY
