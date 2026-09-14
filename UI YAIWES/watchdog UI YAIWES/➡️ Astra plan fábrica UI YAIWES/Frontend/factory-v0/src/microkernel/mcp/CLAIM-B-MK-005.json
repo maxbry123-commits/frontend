@@ -1,0 +1,24 @@
+{
+  "schema": "yaiwes.factory.node-claim/v1",
+  "node_id": "B-MK-005",
+  "owner": "ASTRA-GPT-5.6-SOL",
+  "state": "IN_PROGRESS",
+  "write_scope": [
+    "Frontend/factory-v0/src/microkernel/mcp/**",
+    "Frontend/factory-v0/src/microkernel/router/**"
+  ],
+  "strategy": "REUSE_MCP_ROUTER_ADAPT_POLICY",
+  "sources": [
+    "Frontend/factory-v0/src/mcp/factory-mcp-boundary-v1.js",
+    "Frontend/factory-v0/src/router/capability-router-v1.js",
+    "Frontend/factory-v0/src/microkernel/bus/index.js"
+  ],
+  "depends_on": ["B-MK-004"],
+  "acceptance": [
+    "MCP/API only external ingress",
+    "typed routing through capability bus",
+    "unknown capability/provider fails closed",
+    "raw secrets rejected; secret_ref only",
+    "route/error/cancel/readback test"
+  ]
+}
