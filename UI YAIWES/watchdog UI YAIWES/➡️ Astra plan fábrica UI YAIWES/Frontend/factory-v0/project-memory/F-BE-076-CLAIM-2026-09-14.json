@@ -1,0 +1,23 @@
+{
+  "schema":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "node_id":"F-BE-076",
+  "owner":"SOL GPT <FACTORY-BACKEND>",
+  "chat_id":"current-factory-chat",
+  "fresh_main_sha":"f89856f2968def1ff88ce8fa8e2f684b1cbe17dc",
+  "claimed_at":"2026-09-14T09:04:00Z",
+  "state":"CLAIMED",
+  "write_scope":[
+    "Frontend/factory-v0/src/bus/**",
+    "Frontend/factory-v0/src/plugins/fables-factory/**",
+    "Frontend/factory-v0/tests/*fables-bus*",
+    "Frontend/factory-v0/project-memory/*F-BE-076*"
+  ],
+  "reuse_authority":[
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/fables.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/contract.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/loader.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins/mount_guard.py"
+  ],
+  "steps":["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"]
+}
