@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.requirement-trace.v1",
+  "requirement_id": "REQ-S3-047",
+  "goal_id": "G12",
+  "task_id": "N18-MEMORY-RETRIEVAL-CONTEXT",
+  "source": {
+    "path": "documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md",
+    "sha256": "aa9ea84565a9dfd250cc57ba465a7131a032b1e96c404d9dd21a349c8185c58c",
+    "symbol": "§47 REGLA DE ESCRITURA"
+  },
+  "implementation": {
+    "path": "runtime/src/memory/boundary.py",
+    "sha256": "18d1f243ba2f191923d9438be89fb3022ea5ab26a6f8d973f43f9478300c605e",
+    "symbol": "authorize_canonical_memory_write"
+  },
+  "test": {
+    "path": "runtime/tests/test_memory_boundary.py",
+    "sha256": "bc8a22537cfe14726b6bf56639a6901f948b79c235a59aae2d2f88f4d8301b23",
+    "symbol": "MemoryBoundaryTests.test_direct_llm_canonical_write_is_rejected"
+  },
+  "evidence": {
+    "path": "runtime/evidence/requirement_traces/REQ-S3-047.ci.json",
+    "sha256": "1d4039d230f59e09721c962944d4892926de5bdae7a6a8cf0d763a2d0b792d5a",
+    "symbol": ""
+  },
+  "revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e"
+}
