@@ -1,4 +1,4 @@
-# HANDOFF — GROK FRONTEND RECONCILIADO — 120 NODOS — 2026-09-14
+# HANDOFF — GROK FRONTEND RECONCILIADO — 140 NODOS PREPARADOS — 2026-09-14
 
 repo: `maxbry123-commits/frontend`  
 branch: `main`  
@@ -22,9 +22,11 @@ domain: `FRONTEND_ONLY`
 
 ## Capacidad total preparada
 
-- Workpack anterior: `F-FE-070..089` = 20 nodos.
-- Workpack autoritativo 100: `F-FE-090..189` = 100 nodos.
-- Delta verificado: `F-FE-190..209` = 20 nodos.
+- Workpack anterior: `F-FE-070..089` = **20 nodos**.
+- Workpack autoritativo: `F-FE-090..189` = **100 nodos**.
+- Delta verificado: `F-FE-190..209` = **20 nodos**.
+- **Total preparado en estas tres colas: 140 nodos frontend.**
+- **Nodos añadidos desde el workpack original de 20: 120.**
 
 Los nodos `090..189` prueban 65 controles, 19 capacidades OSS y 16 mejoras frontend. El delta `190..209` cubre sólo omisiones verificadas: propiedades, file input, team mode, apply delta, media upload, matrices de campos/tipos, drag/drop/resize/context y cuatro donors OSS adicionales.
 
