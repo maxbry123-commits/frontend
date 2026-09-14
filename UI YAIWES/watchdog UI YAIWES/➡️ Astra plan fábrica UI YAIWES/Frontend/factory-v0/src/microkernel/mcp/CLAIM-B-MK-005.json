@@ -2,23 +2,36 @@
   "schema": "yaiwes.factory.node-claim/v1",
   "node_id": "B-MK-005",
   "owner": "ASTRA-GPT-5.6-SOL",
-  "state": "IN_PROGRESS",
+  "state": "TESTED_SUBGATE_PASS",
   "write_scope": [
     "Frontend/factory-v0/src/microkernel/mcp/**",
     "Frontend/factory-v0/src/microkernel/router/**"
   ],
   "strategy": "REUSE_MCP_ROUTER_ADAPT_POLICY",
   "sources": [
-    "Frontend/factory-v0/src/mcp/factory-mcp-boundary-v1.js",
-    "Frontend/factory-v0/src/router/capability-router-v1.js",
-    "Frontend/factory-v0/src/microkernel/bus/index.js"
+    {"path":"Frontend/factory-v0/src/mcp/factory-mcp-boundary-v1.js","blob_sha":"25c2714e0870088c55882dc17890e087d6a059a1"},
+    {"path":"Frontend/factory-v0/src/router/capability-router-v1.js","blob_sha":"b2822f47891faf0da8655ea3d505fde2f504ebca"},
+    {"path":"Frontend/factory-v0/src/microkernel/bus/index.js","blob_sha":"04e486e0adb9abea8d30ac13a31297df1a29957e"}
   ],
-  "depends_on": ["B-MK-004"],
-  "acceptance": [
-    "MCP/API only external ingress",
-    "typed routing through capability bus",
-    "unknown capability/provider fails closed",
-    "raw secrets rejected; secret_ref only",
-    "route/error/cancel/readback test"
-  ]
+  "implementation": [
+    {"path":"Frontend/factory-v0/src/microkernel/router/index.js","blob_sha":"1c4e3252d314d24593bd15aa68da52383992ab57","commit":"8c9dbbaa0f0d65e7a7a9117a3b3b0edf65aebc74"},
+    {"path":"Frontend/factory-v0/src/microkernel/mcp/index.js","blob_sha":"28469266df9e9c8dd744bdba535d7e6ca7c0c1a2","commit":"a0ebd112b49da7bdd227a510533ed87a18bcda08"}
+  ],
+  "test": {
+    "path": "Frontend/factory-v0/src/microkernel/mcp/selftest.mjs",
+    "blob_sha": "9cb8cc559aecce074aa204ccec9b77c674a45266",
+    "commit": "ab74433557011f88c840d54dde2877d109e39f61",
+    "result": "PASS",
+    "assertions": 22,
+    "mode": "runtime selftest of GitHub read-back module set"
+  },
+  "acceptance": {
+    "mcp_api_only_external_ingress": "PASS",
+    "typed_routing_through_fables_bus": "PASS",
+    "unknown_provider_capability_fail_closed": "PASS",
+    "raw_secret_rejected_secret_ref_only": "PASS",
+    "health_route_error_cancel_readback": "PASS",
+    "shared_transport_multi_capability_resolution": "PASS"
+  },
+  "next": "B-MK-006 deterministic auto-evolution promotion controller"
 }
