@@ -1,0 +1,248 @@
+.workspace-shell-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-left: auto;
+}
+.workspace-shell-toggle,
+.workspace-drawer-close,
+.workspace-shell-backdrop {
+  border: 1px solid var(--line);
+  background: #151a21;
+  color: var(--text);
+  border-radius: 9px;
+  padding: 7px 9px;
+  cursor: pointer;
+}
+.workspace-shell-toggle[aria-expanded="false"] {
+  border-color: var(--accent);
+  background: #20283a;
+}
+.workspace-drawer-close {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: 0 0 8px auto;
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 24px;
+  line-height: 1;
+  background: #20283a;
+  border-color: var(--accent);
+}
+.workspace-shell-backdrop { display: none; }
+.studio.workspace-left-collapsed { grid-template-columns: 0 minmax(420px, 1fr) 340px; }
+.studio.workspace-right-collapsed { grid-template-columns: 220px minmax(420px, 1fr) 0; }
+.studio.workspace-left-collapsed.workspace-right-collapsed { grid-template-columns: 0 minmax(420px, 1fr) 0; }
+.studio.workspace-left-collapsed > .library-pane,
+.studio.workspace-right-collapsed > .context-pane {
+  visibility: hidden;
+  pointer-events: none;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+}
+.library-pane,
+.context-pane { transition: width .18s ease, opacity .18s ease, transform .18s ease; }
+.canvas-pane { min-width: 0; }
+.canvas-stage { overscroll-behavior: contain; }
+.canvas { touch-action: none; }
+.context-scroll,
+.library-pane {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 760px) {
+  /* V3 fixes geometry instead of globally hiding horizontal overflow. */
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: visible;
+    overflow-y: auto;
+  }
+  .app-shell[data-workspace-shell="v2"] {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: 100dvh;
+    min-height: 0;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+  .app-shell[data-workspace-shell="v2"] .topbar,
+  .app-shell[data-workspace-shell="v2"] .studio,
+  .app-shell[data-workspace-shell="v2"] .canvas-pane,
+  .app-shell[data-workspace-shell="v2"] .canvas-toolbar,
+  .app-shell[data-workspace-shell="v2"] .canvas-controls,
+  .app-shell[data-workspace-shell="v2"] .bottom-bar,
+  .app-shell[data-workspace-shell="v2"] .history-actions,
+  .app-shell[data-workspace-shell="v2"] .step-actions,
+  .app-shell[data-workspace-shell="v2"] .workspace-shell-controls,
+  .app-shell[data-workspace-shell="v2"] .steps,
+  .app-shell[data-workspace-shell="v2"] .mode-switch,
+  .app-shell[data-workspace-shell="v2"] .brand {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .app-shell[data-workspace-shell="v2"] .brand {
+    width: 100%;
+  }
+  .app-shell[data-workspace-shell="v2"] .brand > div {
+    min-width: 0;
+  }
+  .app-shell[data-workspace-shell="v2"] .brand strong,
+  .app-shell[data-workspace-shell="v2"] .brand small {
+    overflow-wrap: anywhere;
+  }
+  .app-shell[data-workspace-shell="v2"] .studio {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    overflow: hidden;
+  }
+  .app-shell[data-workspace-shell="v2"] .canvas-pane {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    z-index: 1;
+  }
+  .app-shell[data-workspace-shell="v2"] .canvas-toolbar {
+    width: 100%;
+  }
+  .app-shell[data-workspace-shell="v2"] .canvas-controls {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .app-shell[data-workspace-shell="v2"] .canvas-stage {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 8px;
+  }
+  .app-shell[data-workspace-shell="v2"] .canvas {
+    width: 100%;
+    min-width: 0;
+    min-height: 100%;
+    height: 100%;
+  }
+  .app-shell[data-workspace-shell="v2"] .library-pane,
+  .app-shell[data-workspace-shell="v2"] .context-pane {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: min(86vw, 360px);
+    max-width: calc(100vw - 16px);
+    min-width: 0;
+    max-height: none;
+    z-index: 20;
+    overflow: auto;
+    box-shadow: 0 16px 36px #000a;
+    background: var(--panel);
+  }
+  .app-shell[data-workspace-shell="v2"] .library-pane {
+    left: 0;
+    border-right: 1px solid var(--line);
+    border-bottom: 0;
+  }
+  .app-shell[data-workspace-shell="v2"] .context-pane {
+    right: 0;
+    left: auto;
+    border-left: 1px solid var(--line);
+    border-top: 0;
+    height: auto;
+    min-height: 0;
+  }
+  .app-shell[data-workspace-shell="v2"] .studio.workspace-left-collapsed > .library-pane {
+    transform: translateX(-105%);
+    opacity: 0;
+    visibility: hidden;
+  }
+  .app-shell[data-workspace-shell="v2"] .studio.workspace-right-collapsed > .context-pane {
+    transform: translateX(105%);
+    opacity: 0;
+    visibility: hidden;
+  }
+  .app-shell[data-workspace-shell="v2"] .studio:not(.workspace-left-collapsed) > .library-pane,
+  .app-shell[data-workspace-shell="v2"] .studio:not(.workspace-right-collapsed) > .context-pane {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    padding: 12px;
+  }
+  .app-shell[data-workspace-shell="v2"] .workspace-shell-controls {
+    width: 100%;
+    order: 4;
+  }
+  .app-shell[data-workspace-shell="v2"] .workspace-shell-toggle {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 44px;
+  }
+  .app-shell[data-workspace-shell="v2"] .workspace-drawer-close { display: block; }
+  .app-shell[data-workspace-shell="v2"] .workspace-shell-backdrop {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    border: 0;
+    border-radius: 0;
+    background: #0006;
+    padding: 0;
+  }
+  .app-shell[data-workspace-shell="v2"] .workspace-shell-backdrop[hidden] { display: none; }
+
+  /* Root cause guard: the base bottom bar is a nowrap flex row whose intrinsic width
+     exceeds a 412px viewport. V3 gives each action group its own row and distributes
+     the buttons within the available width. */
+  .app-shell[data-workspace-shell="v2"] .bottom-bar {
+    position: relative;
+    bottom: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+    width: 100%;
+    padding: 8px;
+  }
+  .app-shell[data-workspace-shell="v2"] .history-actions,
+  .app-shell[data-workspace-shell="v2"] .step-actions {
+    display: grid;
+    width: 100%;
+    min-width: 0;
+    gap: 6px;
+  }
+  .app-shell[data-workspace-shell="v2"] .history-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .app-shell[data-workspace-shell="v2"] .step-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .app-shell[data-workspace-shell="v2"] .bottom-bar button {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding-inline: 6px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .app-shell[data-workspace-shell="v2"] .component-grid {
+    width: 100%;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    overflow: visible;
+  }
+  .app-shell[data-workspace-shell="v2"] .component-card,
+  .app-shell[data-workspace-shell="v2"] .component-browser-v2,
+  .app-shell[data-workspace-shell="v2"] .component-browser-row,
+  .app-shell[data-workspace-shell="v2"] .component-browser-actions,
+  .app-shell[data-workspace-shell="v2"] .tool-section,
+  .app-shell[data-workspace-shell="v2"] .tool-row {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .app-shell[data-workspace-shell="v2"] .layer-list { max-height: none; }
+}
