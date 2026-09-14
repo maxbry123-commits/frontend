@@ -1,0 +1,53 @@
+name: YAIWES N35 REQ-S3-016 Focused Exact-SHA
+
+on:
+  push:
+    paths:
+      - '.github/workflows/yaiwes-n35-req-s3-016-focused-20260914.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yaiwes-n35-req-s3-016-focused-20260914
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '602bf216cf7fb331f2747638876dc7093b490db2'
+          sparse-checkout: |
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_req_s3_016.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_integration_continuous_loop.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-016.json
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-016.ci.json
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install focused test dependencies
+        run: python -m pip install pytest 'pydantic==2.14.0b1'
+      - name: Verify N27 continuous-loop implementation regression
+        working-directory: 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
+        env:
+          PYTHONPATH: src
+        run: python -m pytest -q tests/test_integration_continuous_loop.py
+      - name: Verify REQ-S3-016 five-pass trace
+        working-directory: 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
+        env:
+          PYTHONPATH: src
+        run: python -m pytest -q tests/test_coverage_req_s3_016.py
+      - name: Exact trace readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-016.json'
+          test -f 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-016.ci.json'
+          echo 'REQ-S3-016 EXACT_SHA_FOCUSED_PASS ref=602bf216cf7fb331f2747638876dc7093b490db2'
