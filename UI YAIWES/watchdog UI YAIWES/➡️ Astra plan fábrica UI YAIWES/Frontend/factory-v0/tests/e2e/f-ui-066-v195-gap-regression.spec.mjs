@@ -31,7 +31,9 @@ async function insertButton(page) {
   await expect(page.locator('[data-node]')).toHaveCount(1);
 }
 
-test.beforeEach(async({page})=>{await page.addInitScript(()=>localStorage.clear());});
+// Playwright gives every test a fresh browser context. Do not install an init script
+// that clears localStorage on every navigation: it would also run on page.reload()
+// and create a false recovery failure.
 
 test('desktop: edit must undo and redo through canonical history', async({page},testInfo)=>{
   test.skip(testInfo.project.name!=='chromium-desktop','desktop-only');
