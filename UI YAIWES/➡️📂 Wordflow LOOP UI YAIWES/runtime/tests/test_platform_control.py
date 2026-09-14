@@ -13,7 +13,7 @@ from uek.platform_control import (
     UpdateCandidate,
     UpdateState,
 )
-from uek.platform_matrix import Platform
+from uek.platform_matrix import Platform, policies
 
 
 class PlatformControlTests(unittest.TestCase):
@@ -50,6 +50,14 @@ class PlatformControlTests(unittest.TestCase):
                 ),
             )
         )
+
+    def test_shared_platform_matrix_denominator_is_preserved(self):
+        rows = policies()
+        self.assertEqual({row.platform for row in rows}, set(Platform))
+        self.assertEqual(len(rows), 5)
+        mandatory = {Platform.ANDROID, Platform.WINDOWS, Platform.LINUX}
+        self.assertTrue(mandatory.issubset({row.platform for row in rows}))
+        self.assertIn(Platform.IOS, {row.platform for row in rows})
 
     def test_registry_filters_unverified_backends_fail_closed(self):
         registry = self._registry()
