@@ -9,7 +9,7 @@ async function bootWithShellV3(page, width=412, height=839) {
   await page.setViewportSize({width,height});
   await page.goto(URL,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>globalThis.__YAIWES_FACTORY_CANDIDATE_V195__?.version==='1.9.5');
-  await page.waitForFunction(()=>document.documentElement.dataset.workspaceShell==='v2');
+  await page.waitForFunction(()=>document.querySelector('.app-shell')?.dataset.workspaceShell==='v2');
   await page.evaluate(async()=>{
     const link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(el=>el.href.endsWith('/workspace-shell-v2.css'));
     if(!link) throw new Error('workspace-shell-v2.css link missing');
