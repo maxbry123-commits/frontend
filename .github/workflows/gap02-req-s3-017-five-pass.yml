@@ -20,6 +20,7 @@ jobs:
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/audit
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/coverage
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/integration
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/plugins
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_integration_continuous_loop.py
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_req_s3_017.py
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-017.json
