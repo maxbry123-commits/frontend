@@ -1,0 +1,55 @@
+name: Factory F-FE-068 Mobile Fit Gate
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/workspace-shell-v3.css'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-068-mobile-fit.spec.mjs'
+      - '.github/workflows/factory-f-fe-068-mobile-fit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mobile-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Exact readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s workspace-shell-v3.css
+          test -s tests/e2e/f-ui-068-mobile-fit.spec.mjs
+          grep -F 'Root cause guard' workspace-shell-v3.css
+          node --check tests/e2e/f-ui-068-mobile-fit.spec.mjs
+          git rev-parse HEAD
+          git hash-object workspace-shell-v3.css
+          git hash-object tests/e2e/f-ui-068-mobile-fit.spec.mjs
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run focused mobile geometry gate
+        run: npx playwright test tests/e2e/f-ui-068-mobile-fit.spec.mjs --project=mobile-chromium --reporter=line
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: f-fe-068-mobile-fit-${{ github.sha }}
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+          if-no-files-found: warn
+          retention-days: 14
