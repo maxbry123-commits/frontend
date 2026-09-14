@@ -1,0 +1,22 @@
+{
+  "schema": "yaiwes.gap-claim.v1",
+  "contract": "tel.workflow/v3",
+  "parent_node": "GAP-02-N35-S3-REMAINDER",
+  "subgap": "REQ-S3-044",
+  "owner": "ChatGPT-Sol-supervisor",
+  "state": "CLAIMED",
+  "base_main_sha": "2e92998190e5b3a8cff3a348b13ffbac65cc01e7",
+  "write_scope": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_memory_context_fabric.py",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-044.json",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-044.ci.json",
+    ".github/workflows/gap02-req-s3-044-evidence.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-CLOSE-ALL-GAPS-V1-2026-09-14.json"
+  ],
+  "gap": "§44 forbids Memory Orchestrator from owning objective/policy/final strategy/finalization/authorization; runtime fabric is read-only/stateless, but no explicit regression guards its exported ContextPack authority surface.",
+  "plan": [
+    "VERIFY_RESEARCH literal §44 against ContextPack/build_context_pack",
+    "EXECUTE_DELTA add only an explicit authority-surface regression; no runtime change unless it fails",
+    "TEST_REPORT focused CI + exact hashes + trace/evidence + five-pass"
+  ]
+}
