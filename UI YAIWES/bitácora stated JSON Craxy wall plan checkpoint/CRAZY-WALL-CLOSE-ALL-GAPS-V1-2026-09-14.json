@@ -6,9 +6,9 @@
   "authority": "current code + tests + trusted CI/readback > this queue + Crazy Wall V5/N34-N35 > architecture/handoff > history",
   "progress": {
     "denominator": 167,
-    "certified_now": 10,
-    "missing_now": 157,
-    "certified_ids": ["REQ-S3-045", "REQ-S3-046", "REQ-S3-047", "REQ-S3-048", "REQ-S3-049", "REQ-S3-050", "REQ-S3-053", "REQ-S3-054", "REQ-S3-055", "REQ-S3-057"],
+    "certified_now": 11,
+    "missing_now": 156,
+    "certified_ids": ["REQ-S3-044", "REQ-S3-045", "REQ-S3-046", "REQ-S3-047", "REQ-S3-048", "REQ-S3-049", "REQ-S3-050", "REQ-S3-053", "REQ-S3-054", "REQ-S3-055", "REQ-S3-057"],
     "current_subgap": null,
     "current_subgap_state": "NEXT_UNCLAIMED",
     "current_owner": null
@@ -36,15 +36,14 @@
       "state": "GAP_RESOLVABLE",
       "priority": 2,
       "owner": null,
-      "gap": "54 implementable S3 requirements remain uncertified after closing 045,046,047,048,049,050,053,054,055,057.",
+      "gap": "53 implementable S3 requirements remain uncertified after closing 044,045,046,047,048,049,050,053,054,055,057.",
       "last_closed_subgap": {
-        "id": "REQ-S3-045",
-        "claim_commit": "8072580c4e9f390565f9d8e5437623743eb3cfd6",
-        "failed_harness": "34827941503/103924292005",
-        "strategy_delta_commit": "65bd5d5b8894f47e625a62034a40054b2b757a5b",
-        "trusted_ci": "34828085852/103924748765",
-        "trace_commit": "460c5ca9df0fa11c9ad1b5115b351fc6a2f0afee",
-        "five_pass": "34828216403/103925159663 TRACEABILITY_PASS"
+        "id": "REQ-S3-044",
+        "claim_commit": "d5886752bc7f53465bf177d3f6dab676070a7353",
+        "test_commit": "063c5c4ed31b45adb3c4316328176e31b59db5ea",
+        "trusted_ci": "34828607033/103926374286",
+        "trace_commit": "e19252b38fca00c72782d4424b2ba5358c6eb033",
+        "five_pass": "34828794746/103926967427 TRACEABILITY_PASS"
       },
       "steps": [
         "Read each literal S3 requirement and locate existing code/test first.",
