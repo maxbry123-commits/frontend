@@ -1,0 +1,203 @@
+{
+  "schema": "yaiwes.factory.segmented-swarm.reconciliation.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "ACTIVE_NOT_CLOSED",
+  "created_at": "2026-09-14T09:10:00Z",
+  "observed_main_sha": "d572f6364cb954c3c2edd103155a3c441e1b403f",
+  "parent_queue": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-FE-BE-V1-2026-09-14.json",
+  "architecture": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-FACTORY-SEGMENTADA-SWARM-V1-2026-09-14.md",
+  "authority": "fresh code+tests+project-memory claim/report+commit/readback > this reconciliation > parent queue > historical docs",
+  "purpose": "Additive state reconciliation only. It does not erase the parent queue. Workers must fresh-read HEAD and claim markers before every claim.",
+  "global_rules": {
+    "one_chat_one_active_node": true,
+    "one_concrete_path_one_writer": true,
+    "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+    "strategy": ["REUSE_EXISTING", "PATCH", "ADAPT", "GENERATE", "NEW_DOWNLOAD"],
+    "frozen_paths": [
+      "Frontend/factory-v0/index-v19.html",
+      "Frontend/factory-v0/index-v192.html"
+    ],
+    "integrator_only_paths": [
+      "Frontend/factory-v0/index-v193.html",
+      "Frontend/factory-v0/src/bootstrap/candidate-v193.js"
+    ],
+    "truth_rule": "SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED",
+    "promotion_rule": "segment_test_sha == candidate_test_sha, then TESTED_SHA == PUBLISHED_SHA",
+    "no_collision": "CLAIMED or EXECUTING write_scope belongs exclusively to its current worker until report/release or explicit stale reconciliation"
+  },
+  "node_overrides": [
+    {
+      "node_id": "F-SEG-064",
+      "lane": "frontend-governance",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS",
+      "evidence": [
+        "src/segments/segment-registry-v1.js blob 3b6c69b296f8d4e8ae2d33c77acfdff409376139",
+        "segment registry test PASS recorded by producer"
+      ]
+    },
+    {
+      "node_id": "F-INT-065",
+      "lane": "frontend-integration",
+      "state": "GAP_RESOLVABLE",
+      "report_state": "IMPORT_PATH_FIXED_RUNTIME_EXECUTION_PENDING",
+      "release": true,
+      "commits": [
+        "44787215a539d2b56d0eb36c5790718d372ff479",
+        "b3b1669a9229560b3326037727ccb8bc389d0783",
+        "7114de4d388b18cc4792bbfd8205d917e30c4611",
+        "b7b9fc957e70497319806d09b41a4e9a4eefd74e"
+      ],
+      "blobs": {
+        "bootstrap_v193": "73deb4432ddb3b40519984a6d85925e9c6cd21a2",
+        "static_resolution_test": "d10cde52b35ebac5538e1d7c19ba96034f7e93e0",
+        "runtime_playwright_spec": "c1d3be462906481dcde29c5b7c37c32f98703fc0"
+      },
+      "fixed": "candidate bootstrap specifiers now resolve from src/bootstrap to src using ../ paths; hardened static test checks filesystem resolution",
+      "remaining_gaps": [
+        "trusted-runner static test execution",
+        "desktop+mobile Playwright runtime execution",
+        "Hugging Face exact-SHA preview/readback"
+      ]
+    },
+    {
+      "node_id": "F-FE-066",
+      "lane": "frontend",
+      "segment": "SEG-01-SHELL",
+      "state": "FREE",
+      "collision_check": "no F-FE-066 commit found at R1 readback",
+      "recommended_for": "GROK frontend worker after fresh read"
+    },
+    {
+      "node_id": "F-FE-067",
+      "lane": "frontend",
+      "segment": "SEG-02-BROWSER",
+      "state": "FREE",
+      "recommended_after": "F-FE-066 or in parallel only with a different chat and disjoint write_scope"
+    },
+    {
+      "node_id": "F-FE-068",
+      "lane": "frontend",
+      "segment": "SEG-04-TOUCH",
+      "state": "FREE"
+    },
+    {
+      "node_id": "F-FE-069",
+      "lane": "frontend",
+      "segment": "SEG-05-CONTROLS",
+      "state": "FREE"
+    },
+    {
+      "node_id": "F-FE-070",
+      "lane": "frontend",
+      "segment": "SEG-06-IO",
+      "state": "FREE"
+    },
+    {
+      "node_id": "F-FE-071",
+      "lane": "frontend",
+      "segment": "SEG-07-IMPORT",
+      "state": "FREE"
+    },
+    {
+      "node_id": "F-FE-072",
+      "lane": "frontend",
+      "segment": "SEG-08-AI-ROUTER",
+      "state": "FREE",
+      "dependency_note": "Backend F-BE-077 is VERIFIED_CLOSED and may be reused through its typed MCP/router boundary. Do not mutate backend scope from this frontend node."
+    },
+    {
+      "node_id": "F-FE-073",
+      "lane": "frontend",
+      "segment": "SEG-09-HF-JOBS",
+      "state": "FREE"
+    },
+    {
+      "node_id": "F-BE-074",
+      "lane": "backend",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS",
+      "report_commit": "ecb3159935bd73086d90619293c1f77f104acd61",
+      "result": "canonical acquisition microkernel wrapper reuses canonical motor and fails closed"
+    },
+    {
+      "node_id": "F-BE-075",
+      "lane": "backend",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS",
+      "report_commit": "ec60d7e786a43c9e125a929494a6178dff57782a",
+      "result": "provenance gate requires source/ref/hash/license/destination/adapter/test/readback before promotion"
+    },
+    {
+      "node_id": "F-BE-076",
+      "lane": "backend",
+      "state": "CLAIMED",
+      "owner": "SOL GPT <FACTORY-BACKEND>",
+      "claim_commit": "707ff3c88c0285f69deeb965cea6566d62b509a7",
+      "write_scope": [
+        "Frontend/factory-v0/src/bus/**",
+        "Frontend/factory-v0/src/plugins/fables-factory/**",
+        "Frontend/factory-v0/tests/*fables-bus*",
+        "Frontend/factory-v0/project-memory/*F-BE-076*"
+      ],
+      "instruction": "DO_NOT_TOUCH_OR_RECLAIM while claim remains fresh"
+    },
+    {
+      "node_id": "F-BE-077",
+      "lane": "backend",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS_TYPED_MCP_ROUTER_BOUNDARY",
+      "report_commit": "d572f6364cb954c3c2edd103155a3c441e1b403f",
+      "blobs": {
+        "router": "b2822f47891faf0da8655ea3d505fde2f504ebca",
+        "mcp_api": "25c2714e0870088c55882dc17890e087d6a059a1",
+        "test": "2867c9836ae7bc2ff82e3ead17f5b91c6e060c02"
+      },
+      "result": "deterministic capability/provider/model routing, explicit MCP tool registry, shared API boundary, request_id required, raw secret rejection, secret_ref allowed"
+    },
+    {
+      "node_id": "F-BE-078",
+      "lane": "research",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS_RESEARCH_ONLY",
+      "report_commit": "6ea16b1efc4cbb4cc06ca16cdb15918c244e9cbe",
+      "result": "Blender patterns mapped to existing Factory segments; no Blender source-tree download authorized"
+    },
+    {
+      "node_id": "F-BE-079",
+      "lane": "research",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS_RESEARCH_DEDUP",
+      "report_commit": "8f4afb63177b66a297fcd05845a8e431aaa80211",
+      "result": "10 OSS systems ranked; 6 local/reusable; Puck and GrapesJS conditional candidates; zero immediate new downloads"
+    },
+    {
+      "node_id": "F-BE-080",
+      "lane": "backend",
+      "state": "BLOCKED_CONDITIONAL",
+      "dependencies_now_satisfied": ["F-BE-074", "F-BE-075", "F-BE-079"],
+      "still_blocked_by": "No residual capability gap has yet justified an acquisition. Puck/GrapesJS are candidates only; third new component intentionally unselected until a third independent residual gap is proven.",
+      "rule": "never acquire merely to reach a count of three"
+    },
+    {
+      "node_id": "F-BE-081",
+      "lane": "backend-e2e",
+      "state": "BLOCKED_AFTER_F-BE-076_AND_FRONTEND_WIRING",
+      "goal": "prove capability request -> dedup/research -> acquisition/provenance -> Fables bus -> MCP/router -> frontend use -> audit/readback end-to-end"
+    }
+  ],
+  "qa_chain": {
+    "authority": "FACTORY-CRAZY-WALL-FRONTEND-QA-V3-2026-09-12.json",
+    "must_run_on_same_candidate": true,
+    "sequence": "F-UI-051..061 -> F-UI-062 independent cross-review -> F-UI-063 FRONTEND_100",
+    "current_global_closure": "NOT_ACCREDITED",
+    "final_rule": "Only F-UI-063 may certify frontend 100 after TESTED_SHA == PUBLISHED_SHA and desktop/mobile/touch/keyboard/reload/export/router/HF gates pass"
+  },
+  "deterministic_next": {
+    "grok_frontend": "Fresh-read then claim F-FE-066 if still FREE; otherwise first FREE F-FE-067..073 whose write_scope is disjoint.",
+    "sol_backend": "Do not touch F-BE-076; wait for its report, then F-BE-081 when dependencies/wiring are ready.",
+    "integrator": "Reclaim F-INT-065 only to execute trusted runner/browser/HF exact-SHA gates or reconcile proven segment versions.",
+    "qa": "Do not promote legacy lane PASS to global PASS; run F-UI gates only on the same integrated candidate."
+  }
+}
