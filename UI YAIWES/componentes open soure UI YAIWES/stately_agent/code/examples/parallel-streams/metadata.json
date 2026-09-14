@@ -1,0 +1,19 @@
+{
+  "name": "parallel-streams",
+  "title": "Write two pieces at once, streamed live",
+  "kind": "pattern",
+  "origin": {
+    "type": "pattern",
+    "source": "Parallel streaming agent pattern",
+    "url": "https://github.com/dinavinter/agents"
+  },
+  "comparison": {
+    "targets": ["parallel", "streaming"],
+    "purpose": "Two writing tasks stream at the same time and their text interleaves as it arrives, each chunk tagged with the request it came from."
+  },
+  "starters": [
+    "The rise of state machines in AI agent design",
+    "Why octopuses would make excellent distributed systems",
+    "What a city sounds like at 4am"
+  ]
+}

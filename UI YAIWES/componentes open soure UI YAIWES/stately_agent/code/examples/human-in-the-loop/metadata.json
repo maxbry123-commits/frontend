@@ -1,0 +1,15 @@
+{
+  "name": "human-in-the-loop",
+  "title": "Approve or reject a draft",
+  "kind": "pattern",
+  "origin": {
+    "type": "stately-agent",
+    "source": "Consolidated from the LangGraph human-in-the-loop and snapshot-persistence demos",
+    "url": null
+  },
+  "comparison": {
+    "targets": ["LangGraph"],
+    "purpose": "Idle review state typed by interactionMetaSchema, a REJECT-with-feedback redraft loop bounded by a counter, and a real JSON snapshot round-trip between runAgent calls."
+  },
+  "starters": ["the new deploy pipeline", "our move to a four-day work week"]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "joke",
+  "title": "Tell jokes until one lands",
+  "kind": "agent-workflow",
+  "origin": {
+    "type": "stately-agent",
+    "source": "Ported from the v1 joke-teller example in this repository",
+    "url": null
+  },
+  "comparison": {
+    "targets": ["Vercel AI SDK", "LangGraph"],
+    "purpose": "Tells a joke, rates it out of 10, always takes one improvement pass, then decides for itself whether to try another one or stop."
+  },
+  "starters": [
+    "penguins reviewing code",
+    "a state machine that won't transition",
+    "a database that trusts no one"
+  ]
+}

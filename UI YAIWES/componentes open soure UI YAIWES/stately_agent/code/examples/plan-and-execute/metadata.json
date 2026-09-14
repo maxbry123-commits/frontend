@@ -1,0 +1,19 @@
+{
+  "name": "plan-and-execute",
+  "title": "Run a plan under a step budget",
+  "kind": "pattern",
+  "origin": {
+    "type": "pattern",
+    "source": "Plan-and-execute / ReWOO agent pattern",
+    "url": "https://github.com/langchain-ai/langgraphjs/tree/main/examples"
+  },
+  "comparison": {
+    "targets": ["plan-and-execute", "ReWOO"],
+    "purpose": "Bounded plan execution: a planner writes out the steps, each is worked through in order under a MAX_STEPS budget, and a solver composes the answer. If the plan needs more steps than the budget allows, the run ends in `failed` rather than answering from a plan it only partly executed."
+  },
+  "starters": [
+    "Plan a 3-day food tour of Tokyo on a $200 budget.",
+    "Figure out how many tennis balls fit inside a school bus.",
+    "Work out whether a heat pump makes sense for a 1920s house."
+  ]
+}

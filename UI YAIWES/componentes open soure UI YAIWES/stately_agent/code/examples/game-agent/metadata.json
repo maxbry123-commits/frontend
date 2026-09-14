@@ -1,0 +1,29 @@
+{
+  "name": "game-agent",
+  "title": "Rock-paper-scissors from the saved event log",
+  "kind": "agent-workflow",
+  "machine": "rpsMachine",
+  "origin": {
+    "type": "stately-agent",
+    "source": "Created in this repository",
+    "url": null
+  },
+  "comparison": {
+    "targets": ["LangGraph", "Burr", "Flowise"],
+    "purpose": "Play rock-paper-scissors against the model, first to 3 — it reads the round history saved in context to counter your habits. The saved event log is the agent's only memory."
+  },
+  "starters": [
+    {
+      "label": "Play a match (first to 3)",
+      "input": { "targetWins": 3 }
+    },
+    {
+      "label": "Quick match (first to 2)",
+      "input": { "targetWins": 2 }
+    },
+    {
+      "label": "Long match (first to 5)",
+      "input": { "targetWins": 5 }
+    }
+  ]
+}

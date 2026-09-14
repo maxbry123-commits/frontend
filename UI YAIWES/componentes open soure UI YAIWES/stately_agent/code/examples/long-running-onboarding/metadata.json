@@ -1,0 +1,28 @@
+{
+  "name": "long-running-onboarding",
+  "title": "Employee onboarding that pauses for days",
+  "kind": "pattern",
+  "origin": {
+    "type": "article",
+    "source": "Google Cloud Tech article: Build Long-running AI agents that pause, resume, and never lose context with ADK",
+    "url": "https://x.com/GoogleCloudTech/status/2074940791277932742"
+  },
+  "comparison": {
+    "targets": ["Google ADK", "durable agents", "human-in-the-loop", "multi-agent delegation"],
+    "purpose": "Ports the article's onboarding coordinator shape into Stately Agent: explicit durable state, event-driven idle states, snapshot resume across days, delegated IT provisioning, a bounded resend loop for rejected documents, and an escalation path off every wait."
+  },
+  "starters": [
+    {
+      "label": "Onboard Jordan Rivera (Backend Engineer)",
+      "input": {
+        "employee": {
+          "id": "emp-001",
+          "name": "Jordan Rivera",
+          "role": "Backend Engineer",
+          "startDate": "2026-08-03",
+          "equipment": "MacBook Pro 16"
+        }
+      }
+    }
+  ]
+}

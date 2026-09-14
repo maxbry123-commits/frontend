@@ -1,0 +1,111 @@
+import { describe, expect, test } from "vitest";
+import { plainWriterMachine, runPlainXstateExample } from "./index.js";
+
+describe("plain-xstate", () => {
+  test("drives the plain machine to completion when the model approves", async () => {
+    const result = await runPlainXstateExample({
+      generateText: async () => ({ output: "A crisp, concrete launch blurb." }),
+      decide: async () => ({ event: { type: "APPROVE" } }),
+    });
+
+    expect(result.decisions).toEqual(["APPROVE"]);
+    expect(result.drafts).toBe(1);
+    expect(result.revisions).toBe(0);
+    expect(result.retries).toBe(0);
+    expect(result.draft).toBe("A crisp, concrete launch blurb.");
+    expect(result.progress).toBe(
+      "Draft 1 ready: 0 of 2 revisions used, 0 retries after a failed attempt.",
+    );
+  });
+
+  test("a rejected draft actor is re-invoked, and the run continues", async () => {
+    let calls = 0;
+    const result = await runPlainXstateExample({
+      generateText: async () => {
+        calls += 1;
+        if (calls === 1) throw new Error("model unavailable");
+        return { output: "A crisp, concrete launch blurb." };
+      },
+      decide: async () => ({ event: { type: "APPROVE" } }),
+    });
+
+    // One failure, one retry, then the normal draft → judge → approve path.
+    expect(calls).toBe(2);
+    expect(result.retries).toBe(1);
+    expect(result.drafts).toBe(1);
+    expect(result.decisions).toEqual(["APPROVE"]);
+    expect(result.progress).toContain("1 retry after a failed attempt");
+  });
+
+  test("retries are bounded by the machine, not by the driving loop", async () => {
+    let calls = 0;
+    const result = await runPlainXstateExample({
+      generateText: async () => {
+        calls += 1;
+        throw new Error("model unavailable");
+      },
+      decide: async () => ({ event: { type: "APPROVE" } }),
+    });
+
+    // First attempt plus two retries, then `failed` — no judging round happens.
+    expect(calls).toBe(3);
+    expect(result.retries).toBe(2);
+    expect(result.drafts).toBe(0);
+    expect(result.decisions).toEqual([]);
+    expect(result.progress).toBe("Draft failed after 2 retries.");
+  });
+
+  test("loops through REVISE and re-drafts, then approves", async () => {
+    let judged = 0;
+    const result = await runPlainXstateExample({
+      generateText: async () => ({ output: "draft" }),
+      // REVISE the first two rounds, then APPROVE.
+      decide: async () => {
+        judged += 1;
+        return { event: { type: judged <= 2 ? "REVISE" : "APPROVE" } };
+      },
+    });
+
+    // draft → judge(REVISE) → draft → judge(REVISE) → draft → judge(APPROVE)
+    expect(result.decisions).toEqual(["REVISE", "REVISE", "APPROVE"]);
+    expect(result.drafts).toBe(3);
+    // Exactly `maxRevisions` REVISEs were accepted — no off-by-one third one.
+    expect(result.revisions).toBe(2);
+  });
+
+  test("the guard — not the model — bounds the revision loop", () => {
+    // At the budget, REVISE is not takeable; only APPROVE remains legal.
+    const spent = plainWriterMachine.resolveState({
+      value: "judging",
+      context: {
+        topic: "x",
+        maxRevisions: 2,
+        drafts: 3,
+        revisions: 2,
+        retries: 0,
+        maxRetries: 2,
+        draft: "d",
+        failure: null,
+      },
+    });
+    expect(spent.can({ type: "REVISE" })).toBe(false);
+    expect(spent.can({ type: "APPROVE" })).toBe(true);
+
+    // Within the budget, both are legal.
+    const withinBudget = plainWriterMachine.resolveState({
+      value: "judging",
+      context: {
+        topic: "x",
+        maxRevisions: 2,
+        drafts: 2,
+        revisions: 1,
+        retries: 0,
+        maxRetries: 2,
+        draft: "d",
+        failure: null,
+      },
+    });
+    expect(withinBudget.can({ type: "REVISE" })).toBe(true);
+    expect(withinBudget.can({ type: "APPROVE" })).toBe(true);
+  });
+});

@@ -1,0 +1,87 @@
+{
+  "name": "code-assistant",
+  "title": "Write code, run it, fix it until tests pass",
+  "kind": "agent-workflow",
+  "origin": {
+    "type": "langgraph",
+    "source": "LangGraph code assistant tutorial",
+    "url": "https://langchain-ai.github.io/langgraph/tutorials/code_assistant/langgraph_code_assistant/"
+  },
+  "comparison": {
+    "targets": ["LangGraph"],
+    "purpose": "Starts from code that already fails a check, actually runs it, and reflects on the failure to rewrite it — repeating within a retry budget."
+  },
+  "starters": [
+    {
+      "label": "Fix sum (empty array throws)",
+      "input": {
+        "spec": "Fix this function so it returns the sum of an array of numbers.",
+        "functionName": "sumArray",
+        "initialCode": "function sumArray(numbers) {\n  return numbers.reduce((total, n) => total + n);\n}",
+        "checks": [
+          {
+            "args": [[1, 2, 3]],
+            "expected": 6
+          },
+          {
+            "args": [[]],
+            "expected": 0
+          }
+        ]
+      }
+    },
+    {
+      "label": "Fix Fibonacci (off by one)",
+      "input": {
+        "spec": "Fix this function so it returns the nth Fibonacci number (0-indexed).",
+        "functionName": "fib",
+        "initialCode": "function fib(n) {\n  let a = 1;\n  let b = 1;\n  for (let i = 0; i < n; i++) [a, b] = [b, a + b];\n  return a;\n}",
+        "checks": [
+          {
+            "args": [0],
+            "expected": 0
+          },
+          {
+            "args": [7],
+            "expected": 13
+          }
+        ]
+      }
+    },
+    {
+      "label": "Fix palindrome (case sensitive)",
+      "input": {
+        "spec": "Fix this function so it returns true if the string is a palindrome, ignoring case.",
+        "functionName": "isPalindrome",
+        "initialCode": "function isPalindrome(s) {\n  return s === s.split('').reverse().join('');\n}",
+        "checks": [
+          {
+            "args": ["Racecar"],
+            "expected": true
+          },
+          {
+            "args": ["hello"],
+            "expected": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "From scratch: Roman numerals",
+      "input": {
+        "spec": "Convert an integer from 1 to 3999 into a Roman numeral string.",
+        "functionName": "toRoman",
+        "checks": [
+          {
+            "args": [4],
+            "expected": "IV"
+          },
+          {
+            "args": [1987],
+            "expected": "MCMLXXXVII"
+          }
+        ]
+      }
+    }
+  ]
+}

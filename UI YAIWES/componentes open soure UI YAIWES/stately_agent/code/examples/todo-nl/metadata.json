@@ -1,0 +1,15 @@
+{
+  "name": "todo-nl",
+  "title": "Todo list you talk to",
+  "kind": "agent-workflow",
+  "origin": {
+    "type": "stately-agent",
+    "source": "Ported in spirit from v1 todo.ts (next branch)",
+    "url": null
+  },
+  "comparison": {
+    "targets": ["LangGraph", "Burr"],
+    "purpose": "Turns one free-text command into a sequence of typed machine events via an explicit decide loop, pausing on an idle state for the next thing you say."
+  },
+  "starters": ["add milk and eggs", "mark the first one done", "delete anything about groceries"]
+}

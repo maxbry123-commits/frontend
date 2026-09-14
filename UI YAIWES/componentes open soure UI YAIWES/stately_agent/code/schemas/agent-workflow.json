@@ -1,0 +1,550 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stately.ai/schemas/agent-workflow.json",
+  "title": "Stately Agent Workflow Definition",
+  "description": "Static, declarative agent workflow definition that can be lowered to a setupAgent(...) XState machine.",
+  "type": "object",
+  "required": ["initial", "states"],
+  "properties": {
+    "$schema": {
+      "description": "JSON Schema reference an editor attaches to the config file. Ignored by the lowering.",
+      "type": "string"
+    },
+    "key": {
+      "description": "Stable workflow key used by tools, storage, and visual editors.",
+      "type": "string",
+      "minLength": 1
+    },
+    "id": {
+      "description": "Optional XState machine id.",
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "description": "Definition version chosen by the author.",
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "schemas": {
+      "$ref": "#/$defs/AgentSchemas"
+    },
+    "context": {
+      "description": "Initial XState context. Values may be JSON literals or whole-string {{ }} expressions evaluated with machine input.",
+      "$ref": "#/$defs/ExpressionObject"
+    },
+    "requests": {
+      "description": "Named model requests that become typed invoke sources.",
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/Identifier"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/Request"
+      },
+      "default": {}
+    },
+    "actors": {
+      "description": "Placeholder actor sources declared by key. JSON wires no execution; provide the logic via machine.provide({ actors }) after setupAgent.fromConfig(...).",
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/Identifier"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/Actor"
+      },
+      "default": {}
+    },
+    "initial": {
+      "description": "Initial child state key.",
+      "type": "string"
+    },
+    "states": {
+      "description": "Root state nodes.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "$ref": "#/$defs/Identifier"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/State"
+      }
+    },
+    "idleTags": {
+      "description": "State tags that mark an intentional wait for an external event (a human approval, an inbound webhook, ...). Lowered by setupAgent.fromConfig(...) into a snapshot.hasTag(...) idle predicate so runAgent settles those states idle deterministically. Every listed tag must appear in some state's 'tags'.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "meta": {
+      "$ref": "#/$defs/JsonObject"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "Identifier": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z_$][A-Za-z0-9_$.-]*$"
+    },
+    "ExpressionString": {
+      "description": "Whole-string expression delimited by {{ }}.",
+      "type": "string",
+      "pattern": "^\\{\\{[\\s\\S]*\\}\\}$"
+    },
+    "TemplateString": {
+      "description": "String that may contain {{ }} template expressions. Escape literal delimiters according to the selected expression/template evaluator.",
+      "type": "string"
+    },
+    "JsonValue": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        { "type": "number" },
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JsonValue"
+          }
+        },
+        {
+          "$ref": "#/$defs/JsonObject"
+        }
+      ]
+    },
+    "JsonObject": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      }
+    },
+    "ExpressionValue": {
+      "description": "JSON value or whole-string {{ }} expression. Use this for typed values, not prompt templating.",
+      "anyOf": [
+        { "$ref": "#/$defs/ExpressionString" },
+        { "type": "null" },
+        { "type": "boolean" },
+        { "type": "number" },
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ExpressionValue"
+          }
+        },
+        {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/ExpressionValue"
+          }
+        }
+      ]
+    },
+    "ExpressionObject": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/ExpressionValue"
+      }
+    },
+    "JsonSchema": {
+      "description": "JSON Schema object.",
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": true
+    },
+    "AgentSchemas": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "$ref": "#/$defs/JsonSchema"
+        },
+        "context": {
+          "$ref": "#/$defs/JsonSchema"
+        },
+        "events": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/Identifier"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonSchema"
+          }
+        },
+        "emitted": {
+          "type": "object",
+          "description": "Schemas for events emitted outward by emit actions, keyed by emitted event type.",
+          "propertyNames": {
+            "$ref": "#/$defs/Identifier"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonSchema"
+          }
+        },
+        "output": {
+          "$ref": "#/$defs/JsonSchema"
+        },
+        "meta": {
+          "$ref": "#/$defs/JsonSchema"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Request": {
+      "type": "object",
+      "required": ["model", "input", "output"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["generate", "stream"],
+          "default": "generate"
+        },
+        "description": {
+          "type": "string"
+        },
+        "model": {
+          "$ref": "#/$defs/TemplateString"
+        },
+        "system": {
+          "$ref": "#/$defs/TemplateString"
+        },
+        "prompt": {
+          "$ref": "#/$defs/TemplateString"
+        },
+        "messages": {
+          "anyOf": [
+            { "$ref": "#/$defs/ExpressionString" },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Message"
+              }
+            }
+          ]
+        },
+        "input": {
+          "$ref": "#/$defs/JsonSchema"
+        },
+        "output": {
+          "$ref": "#/$defs/JsonSchema"
+        },
+        "tools": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/Identifier"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/Tool"
+          }
+        },
+        "toolChoice": {
+          "description": "Passed to the provider as-is; unlike other request fields it is NOT template-evaluated, so {{ }} expressions are not allowed here.",
+          "anyOf": [
+            {
+              "type": "string",
+              "enum": ["auto", "none", "required"]
+            },
+            {
+              "type": "object",
+              "required": ["type", "name"],
+              "properties": {
+                "type": {
+                  "const": "tool"
+                },
+                "name": {
+                  "$ref": "#/$defs/Identifier"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        },
+        "includeReasoning": {
+          "description": "Opt into the structured-output envelope's `reasoning` field.",
+          "type": "boolean"
+        },
+        "temperature": {
+          "$ref": "#/$defs/ExpressionValue"
+        },
+        "maxOutputTokens": {
+          "$ref": "#/$defs/ExpressionValue"
+        },
+        "topP": {
+          "$ref": "#/$defs/ExpressionValue"
+        },
+        "topK": {
+          "$ref": "#/$defs/ExpressionValue"
+        },
+        "seed": {
+          "$ref": "#/$defs/ExpressionValue"
+        },
+        "stopSequences": {
+          "anyOf": [
+            { "$ref": "#/$defs/ExpressionString" },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "metadata": {
+          "$ref": "#/$defs/ExpressionValue"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Message": {
+      "type": "object",
+      "required": ["role", "content"],
+      "properties": {
+        "role": {
+          "$ref": "#/$defs/TemplateString"
+        },
+        "content": {
+          "$ref": "#/$defs/TemplateString"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/ExpressionValue"
+      }
+    },
+    "Actor": {
+      "description": "A placeholder actor source: schemas describe it for authors/editors; the implementation is provided by the host.",
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "input": {
+          "$ref": "#/$defs/JsonSchema"
+        },
+        "output": {
+          "$ref": "#/$defs/JsonSchema"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Tool": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "inputSchema": {
+          "$ref": "#/$defs/JsonSchema"
+        },
+        "outputSchema": {
+          "$ref": "#/$defs/JsonSchema"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      }
+    },
+    "State": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["parallel", "history", "final", "choice"]
+        },
+        "initial": {
+          "type": "string"
+        },
+        "states": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/Identifier"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/State"
+          }
+        },
+        "invoke": {
+          "anyOf": [
+            { "$ref": "#/$defs/Invoke" },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Invoke"
+              }
+            }
+          ]
+        },
+        "choice": {
+          "description": "Choice-state routing, equivalent to XState's type: 'choice' + choice transition function.",
+          "$ref": "#/$defs/TransitionOrArray"
+        },
+        "on": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/TransitionOrArray"
+          }
+        },
+        "always": {
+          "$ref": "#/$defs/TransitionOrArray"
+        },
+        "onDone": {
+          "$ref": "#/$defs/TransitionOrArray"
+        },
+        "after": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/TransitionOrArray"
+          }
+        },
+        "entry": {
+          "$ref": "#/$defs/ActionOrArray"
+        },
+        "exit": {
+          "$ref": "#/$defs/ActionOrArray"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "output": {
+          "$ref": "#/$defs/ExpressionValue"
+        },
+        "meta": {
+          "description": "Static state metadata, passed through verbatim. Not template-evaluated.",
+          "$ref": "#/$defs/JsonObject"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Invoke": {
+      "type": "object",
+      "required": ["src"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "src": {
+          "description": "Actor source name. 'agent.decide' invokes are special: decision delivery is automatic (the chosen event is sent as soon as the model decides) and 'onDone' must be omitted — see the 'onDone' description.",
+          "$ref": "#/$defs/Identifier"
+        },
+        "input": {
+          "$ref": "#/$defs/ExpressionValue"
+        },
+        "onDone": {
+          "description": "Not valid on an 'agent.decide' invoke — the built-in lowering rejects it at setupAgent.fromConfig(...) time. A decision has no output value of its own (its output IS the chosen event), so delivery is automatic and not configurable from JSON. 'onError' (retries exhausted) still applies to 'agent.decide' invokes.",
+          "$ref": "#/$defs/TransitionOrArray"
+        },
+        "onError": {
+          "$ref": "#/$defs/TransitionOrArray"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TransitionOrArray": {
+      "anyOf": [
+        { "$ref": "#/$defs/Transition" },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Transition"
+          }
+        }
+      ]
+    },
+    "Transition": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "anyOf": [
+            { "type": "string" },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "guard": {
+          "description": "Either a whole-string {{ }} expression evaluated as truthy/falsy, or a named guard reference resolved against the `guards` passed to setupAgent.fromConfig(config, { guards }). Object guards ({ type, params }) are rejected by the lowering.",
+          "anyOf": [{ "$ref": "#/$defs/ExpressionString" }, { "$ref": "#/$defs/Identifier" }]
+        },
+        "assign": {
+          "description": "Context assignments applied when this transition is taken.",
+          "$ref": "#/$defs/ExpressionObject"
+        },
+        "actions": {
+          "$ref": "#/$defs/ActionOrArray"
+        },
+        "description": {
+          "type": "string"
+        },
+        "reenter": {
+          "type": "boolean"
+        },
+        "meta": {
+          "description": "Static transition metadata, passed through verbatim. Not template-evaluated.",
+          "$ref": "#/$defs/JsonObject"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ActionOrArray": {
+      "anyOf": [
+        { "$ref": "#/$defs/Action" },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Action"
+          }
+        }
+      ]
+    },
+    "Action": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "params": {
+          "$ref": "#/$defs/ExpressionValue"
+        },
+        "assign": {
+          "$ref": "#/$defs/ExpressionObject"
+        },
+        "emit": {
+          "description": "Event emitted outward through runAgent's on handlers.",
+          "$ref": "#/$defs/ExpressionValue"
+        }
+      },
+      "anyOf": [{ "required": ["type"] }, { "required": ["assign"] }, { "required": ["emit"] }],
+      "additionalProperties": {
+        "$ref": "#/$defs/ExpressionValue"
+      }
+    }
+  }
+}

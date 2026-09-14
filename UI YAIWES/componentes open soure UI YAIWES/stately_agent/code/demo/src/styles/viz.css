@@ -1,0 +1,64 @@
+/* Viz panel redesign styles (dot grid, state pill, code drawer). */
+
+/* ---------- Shell + canvas ---------- */
+.viz-shell {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  grid-template-rows: minmax(0, 1fr);
+  background: var(--surface-raised);
+}
+
+.viz-canvas {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background-color: var(--surface-raised);
+  background-image: radial-gradient(
+    color-mix(in oklch, var(--line-strong) 50%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 20px 20px;
+  background-position: -1px -1px;
+}
+
+.viz-embed {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ---------- Loading / error / empty ---------- */
+.viz-state {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  text-align: center;
+}
+
+.viz-state p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.viz-state strong {
+  color: var(--ink);
+  font-weight: 550;
+  font-size: 12px;
+}
+

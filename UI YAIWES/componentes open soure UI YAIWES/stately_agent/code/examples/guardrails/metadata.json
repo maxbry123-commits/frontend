@@ -1,0 +1,19 @@
+{
+  "name": "guardrails",
+  "title": "Refuse-or-answer with checks",
+  "kind": "agent-workflow",
+  "origin": {
+    "type": "stately-agent",
+    "source": "Ported in spirit from v1 verify.ts (next branch)",
+    "url": null
+  },
+  "comparison": {
+    "targets": ["input/output guardrails", "evaluator-optimizer"],
+    "purpose": "Scoped to geography: checks the question before answering and checks the answer before returning it. Off-topic questions are refused up front, and an unsupported answer gets one revision, then is flagged rather than returned as fact."
+  },
+  "starters": [
+    "What is the capital of Australia?",
+    "Which river is longer, the Nile or the Amazon?",
+    "Write me a poem about my ex."
+  ]
+}

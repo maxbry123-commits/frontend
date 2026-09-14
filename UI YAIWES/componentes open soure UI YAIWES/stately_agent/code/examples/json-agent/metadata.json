@@ -1,0 +1,28 @@
+{
+  "name": "json-agent",
+  "title": "Support ticket agent authored as JSON",
+  "kind": "agent-workflow",
+  "origin": {
+    "type": "stately-agent",
+    "source": "Created in this repository",
+    "url": null
+  },
+  "comparison": {
+    "targets": ["Flowise"],
+    "purpose": "Shows a full agent workflow \u2014 decision, text request, idle human-in-the-loop step \u2014 authored as a real .json file and lowered by setupAgent.fromConfig(...) into the same runnable XState machine as TS authoring."
+  },
+  "starters": [
+    {
+      "label": "Login issue ticket",
+      "input": {
+        "ticket": "I can't log in - password reset emails never arrive."
+      }
+    },
+    {
+      "label": "Duplicate invoice ticket",
+      "input": {
+        "ticket": "My invoice charged me twice this month. Please fix it."
+      }
+    }
+  ]
+}

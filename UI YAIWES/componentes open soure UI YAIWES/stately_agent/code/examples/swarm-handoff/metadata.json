@@ -1,0 +1,28 @@
+{
+  "name": "swarm-handoff",
+  "title": "Two concierges, one conversation (swarm handoff)",
+  "kind": "pattern",
+  "origin": {
+    "type": "pattern",
+    "source": "Active-agent swarm / handoff multi-agent pattern",
+    "url": "https://github.com/langchain-ai/langgraphjs/tree/main/examples"
+  },
+  "comparison": {
+    "targets": ["swarm", "handoff"],
+    "purpose": "An active-agent conversation hands off between two specialists; the active agent persists across a snapshot round-trip."
+  },
+  "starters": [
+    {
+      "label": "Plan a 3-day trip to Lisbon",
+      "input": {
+        "message": "I want a 3-day trip to Lisbon."
+      }
+    },
+    {
+      "label": "Find flights and a hotel for next weekend",
+      "input": {
+        "message": "Find me flights and a hotel for next weekend."
+      }
+    }
+  ]
+}

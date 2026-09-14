@@ -1,0 +1,24 @@
+name: Setup Workflow
+description: Composite action that sets up pnpm
+runs:
+  using: "composite"
+  steps:
+    - uses: pnpm/action-setup@v2
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22.18.0
+
+    - name: install pnpm
+      run: npm i pnpm@latest -g
+      shell: bash
+
+    - name: Setup npmrc
+      run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > .npmrc
+      shell: bash
+
+    - name: setup pnpm config
+      run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+      shell: bash
+
+    - run: pnpm install
+      shell: bash

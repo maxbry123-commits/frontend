@@ -1,0 +1,144 @@
+import { expect, test } from "vitest";
+import { getInteraction, runAgent, type AgentTextRequest } from "@statelyai/agent";
+import {
+  MAX_DOCS_REJECTIONS,
+  longRunningOnboardingMachine,
+  runLongRunningOnboardingExample,
+} from "./index.js";
+
+const generateText = async (request: AgentTextRequest) => ({
+  output: `Day one for ${request.prompt}`,
+});
+
+test("pauses twice and resumes from JSON snapshots", async () => {
+  const result = await runLongRunningOnboardingExample({ generateText });
+
+  expect(result.idleStates).toEqual(["waitingForSignedDocs", "waitingForHardware"]);
+  expect(result.idlePrompts[0]).toContain("Waiting on Ann Lee's signed onboarding documents");
+  expect(result.idlePrompts[1]).toContain("Simulated IT provisioning done (ticket IT-E-100)");
+  expect(result.idleEventTypes).toEqual([
+    ["DOCS_SIGNED", "DOCS_REJECTED", "ESCALATE"],
+    ["HARDWARE_DELIVERED", "ESCALATE"],
+  ]);
+  expect(result.output).toMatchObject({
+    employeeId: "E-100",
+    status: "onboarded",
+    welcomePacketId: "WELCOME-E-100",
+    accounts: {
+      email: "ann.lee@example.com",
+      slack: "@ann.lee",
+      ticketId: "IT-E-100",
+    },
+  });
+  expect(result.output.schedule).toContain("Ann Lee");
+});
+
+test("the hardware pause labels the stub-provisioned accounts as simulated", async () => {
+  const first = await runAgent(longRunningOnboardingMachine, {
+    input: {
+      employee: {
+        id: "E-100",
+        name: "Ann Lee",
+        role: "Product Engineer",
+        startDate: "2026-08-03",
+        equipment: "MacBook Pro",
+      },
+    },
+    executors: { generateText },
+  });
+  expect(first.status).toBe("idle");
+  if (first.status !== "idle") return;
+
+  const second = await runAgent(longRunningOnboardingMachine, {
+    snapshot: first.persist(),
+    event: { type: "DOCS_SIGNED", signedAt: "2026-07-20" },
+    executors: { generateText },
+  });
+  expect(second.status).toBe("idle");
+  if (second.status !== "idle") return;
+
+  // The provenance is rendered from `accounts` at read time, so a host can
+  // never show the identifiers without it.
+  const label = getInteraction(second.snapshot)?.label ?? "";
+  expect(label).toContain("Simulated IT provisioning");
+  expect(label).toContain("ann.lee@example.com");
+  expect(label).toContain("no real accounts exist");
+});
+
+test("a rejected packet is resent, and the second rejection escalates", async () => {
+  const result = await runLongRunningOnboardingExample({
+    generateText,
+    answers: [
+      { type: "DOCS_REJECTED", reason: "wrong start date" },
+      { type: "DOCS_REJECTED", reason: "still wrong" },
+    ],
+  });
+
+  // The first rejection went back through sendingWelcomePacket to the same
+  // wait; the second one hit the bound.
+  expect(result.idleStates).toEqual(["waitingForSignedDocs", "waitingForSignedDocs"]);
+  expect(result.output.status).toBe("escalated");
+  expect(result.output.escalation).toBe(
+    `Onboarding documents rejected ${MAX_DOCS_REJECTIONS} times. Last reason: still wrong`,
+  );
+  expect(result.output.schedule).toBeNull();
+});
+
+test("a human can escalate a wait instead of waiting longer", async () => {
+  const result = await runLongRunningOnboardingExample({
+    generateText,
+    answers: [
+      { type: "DOCS_SIGNED", signedAt: "2026-07-20" },
+      { type: "ESCALATE", note: "Laptop backordered six weeks; hand to IT." },
+    ],
+  });
+
+  expect(result.output.status).toBe("escalated");
+  expect(result.output.escalation).toContain("backordered");
+  // Everything the run did get done is still reported.
+  expect(result.output.accounts?.ticketId).toBe("IT-E-100");
+});
+
+test("a delivered laptop is never written up as still scheduled", async () => {
+  const requests: AgentTextRequest[] = [];
+  // Naive scheduler: it phrases hardware straight from the status it is given.
+  const scheduler = async (request: AgentTextRequest) => {
+    requests.push(request);
+    const status = /Hardware: (.*)/.exec(request.prompt ?? "")?.[1] ?? "";
+    return {
+      output: status.startsWith("delivered")
+        ? "9:00 Setup. The laptop was delivered and is waiting at the desk."
+        : "9:00 Setup. The laptop delivery is scheduled.",
+    };
+  };
+
+  const result = await runLongRunningOnboardingExample({ generateText: scheduler });
+
+  expect(result.output.schedule).toContain("was delivered");
+  expect(result.output.schedule).not.toContain("is scheduled");
+  // The delivery status — not just its timestamp — reaches the model, with an
+  // instruction against contradicting recorded events.
+  const scheduleRequest = requests.at(-1);
+  expect(scheduleRequest?.prompt).toContain("Hardware: delivered on 2026-07-28 (already received)");
+  expect(scheduleRequest?.system).toContain("never");
+});
+
+test("does not provision IT before documents are signed", async () => {
+  const first = await runAgent(longRunningOnboardingMachine, {
+    input: {
+      employee: {
+        id: "E-200",
+        name: "Sam Chen",
+        role: "Designer",
+        startDate: "2026-09-01",
+        equipment: "MacBook Air",
+      },
+    },
+    executors: { generateText },
+  });
+
+  expect(first.status).toBe("idle");
+  if (first.status !== "idle") return;
+  expect(first.snapshot.value).toBe("waitingForSignedDocs");
+  expect(first.snapshot.context.accounts).toBeNull();
+});

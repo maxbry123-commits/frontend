@@ -1,0 +1,33 @@
+{
+  "bundle_bytes": 1357717,
+  "bundle_sha256": "04e3b388923cf84373dfbbf97853c1aaec22608645715f2e630537ee3bcd0c65",
+  "extracted_tree": {
+    "bytes": 4230821,
+    "files": 504,
+    "sha256": "ef1347113a26ff54dcdc1bc505e6db0fd6796f6ff8fcb6fafd96e416ddc3066e"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 1357717,
+      "name": "stately_agent.bundle.zip.part-0001",
+      "sha256": "04e3b388923cf84373dfbbf97853c1aaec22608645715f2e630537ee3bcd0c65"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "stately_agent",
+  "source_bytes": 4230821,
+  "source_commit": "1fde45dcf6d3bda6a04cb468a2b74dc6595b8396",
+  "source_files": 504,
+  "source_ref": "1fde45dcf6d3bda6a04cb468a2b74dc6595b8396",
+  "source_repo": "statelyai/agent",
+  "source_tree": {
+    "bytes": 4230821,
+    "files": 504,
+    "sha256": "ef1347113a26ff54dcdc1bc505e6db0fd6796f6ff8fcb6fafd96e416ddc3066e"
+  }
+}
