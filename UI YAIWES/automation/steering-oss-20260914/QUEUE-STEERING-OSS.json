@@ -1,0 +1,58 @@
+{
+  "schema": "yaiwes.frontend.download-extract-queue.v1",
+  "node_id": "GAP-10-STEERING-OSS-DONORS",
+  "queue": [
+    {
+      "id": "GAP-10:Temporal",
+      "source_repo": "temporalio/temporal",
+      "source_ref": "9ab3a9f770da20df7d94bcc0030f28eec7b0b947",
+      "source_commit_expected": "9ab3a9f770da20df7d94bcc0030f28eec7b0b947",
+      "slug": "temporal",
+      "dest_repo": "maxbry123-commits/frontend",
+      "dest_branch": "main",
+      "dest_root": "UI YAIWES/componentes open soure UI YAIWES",
+      "publish": true,
+      "official_url": "https://github.com/temporalio/temporal",
+      "license": "MIT"
+    },
+    {
+      "id": "GAP-10:Stately-Agent",
+      "source_repo": "statelyai/agent",
+      "source_ref": "1fde45dcf6d3bda6a04cb468a2b74dc6595b8396",
+      "source_commit_expected": "1fde45dcf6d3bda6a04cb468a2b74dc6595b8396",
+      "slug": "stately_agent",
+      "dest_repo": "maxbry123-commits/frontend",
+      "dest_branch": "main",
+      "dest_root": "UI YAIWES/componentes open soure UI YAIWES",
+      "publish": true,
+      "official_url": "https://github.com/statelyai/agent",
+      "license": "MIT"
+    },
+    {
+      "id": "GAP-10:Hatchet",
+      "source_repo": "hatchet-dev/hatchet",
+      "source_ref": "315d43a72fd771b049b304b865a81dbab98c466c",
+      "source_commit_expected": "315d43a72fd771b049b304b865a81dbab98c466c",
+      "slug": "hatchet",
+      "dest_repo": "maxbry123-commits/frontend",
+      "dest_branch": "main",
+      "dest_root": "UI YAIWES/componentes open soure UI YAIWES",
+      "publish": true,
+      "official_url": "https://github.com/hatchet-dev/hatchet",
+      "license": "MIT"
+    },
+    {
+      "id": "GAP-10:Conductor",
+      "source_repo": "conductor-oss/conductor",
+      "source_ref": "24ac3cb4db112a3bcd70d6eef6eaf3dc91f70a77",
+      "source_commit_expected": "24ac3cb4db112a3bcd70d6eef6eaf3dc91f70a77",
+      "slug": "conductor",
+      "dest_repo": "maxbry123-commits/frontend",
+      "dest_branch": "main",
+      "dest_root": "UI YAIWES/componentes open soure UI YAIWES",
+      "publish": true,
+      "official_url": "https://github.com/conductor-oss/conductor",
+      "license": "Apache-2.0"
+    }
+  ]
+}
