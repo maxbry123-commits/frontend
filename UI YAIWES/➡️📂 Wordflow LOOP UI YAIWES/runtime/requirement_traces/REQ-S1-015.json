@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.requirement-trace.v1",
+  "requirement_id": "REQ-S1-015",
+  "goal_id": "G12",
+  "task_id": "GAP-03-REQ-S1-015",
+  "source": {
+    "path": "documentos proyectos UI YAIWES/📌MAX-SYSTEM-100X-FINAL-1.md",
+    "sha256": "6f9281123c002a99dbc9b9dbfeabf4d1e1987a90150eaa127845c647968449db",
+    "symbol": "§15 Catálogo de funciones"
+  },
+  "implementation": {
+    "path": "runtime/src/plugins/activation.py",
+    "sha256": "f38dd37081f736bfef5af1c308c361f2f100552c41e894c8522359db63d95ef5",
+    "symbol": "build_runtime_registry"
+  },
+  "test": {
+    "path": "runtime/tests/test_coverage_req_s1_015.py",
+    "sha256": "78486f54c11b923c647a1dd3ae4042bfbe925b7c019b809314016422b6341e65",
+    "symbol": "ReqS1015CapabilityGovernanceTests"
+  },
+  "evidence": {
+    "path": "runtime/evidence/requirement_traces/REQ-S1-015.ci.json",
+    "sha256": "340173f61d7b6d5fbd06e98bb0b40d6170b824711f4dc281212d5638b23e6ea1",
+    "symbol": ""
+  },
+  "revision": "7c1589284996377131baa2bc7071a1c1234f841d"
+}
