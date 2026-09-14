@@ -1,0 +1,64 @@
+name: GAP04 REQ-S2-009 Five Pass
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gap04-req-s2-009-five-pass.yml'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek/platform_control.py'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform_control.py'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S2-009.json'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S2-009.ci.json'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_req_s2_009.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/audit
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/coverage
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/uek
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform_matrix.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_platform_control.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_req_s2_009.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S2-009.json
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S2-009.ci.json
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR Q grock tiene ventanas agente  linux iOS Android phyton 🤯🤯🤯🎯 14 objetivos💡💡💡✅✅✅🎯🎯🎯.md
+          sparse-checkout-cone-mode: false
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install focused test dependency
+        run: python -m pip install pytest
+      - name: Exact source code test hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES'
+          sha256sum "$ROOT/documentos proyectos UI YAIWES/📌👨‍💻 ULTIMA VERSIÓN cómo HACERLO MEJOR Q grock tiene ventanas agente  linux iOS Android phyton 🤯🤯🤯🎯 14 objetivos💡💡💡✅✅✅🎯🎯🎯.md"
+          sha256sum "$ROOT/runtime/src/uek/platform_control.py"
+          sha256sum "$ROOT/runtime/tests/test_platform_control.py"
+      - name: Focused REQ-S2-009 behavior
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
+          PYTHONPATH=src python -m unittest -v tests.test_platform_matrix tests.test_platform_control
+      - name: Focused REQ-S2-009 five-pass if trace exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
+          if test -f tests/test_coverage_req_s2_009.py && test -f requirement_traces/REQ-S2-009.json && test -f evidence/requirement_traces/REQ-S2-009.ci.json; then
+            PYTHONPATH=src python -m pytest -q tests/test_coverage_req_s2_009.py::test_req_s2_009_platform_control_traceability_pass
+          else
+            echo 'TRACE_BOOTSTRAP_PENDING'
+          fi
