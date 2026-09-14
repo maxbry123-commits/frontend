@@ -1,0 +1,71 @@
+{
+  "schema": "yaiwes.factory.frontend.oss-gap-audit.v2",
+  "contract": "tel.workflow/v3",
+  "date": "2026-09-14",
+  "base_main_sha": "25002573c7f0a7b2f297606adf22e63b64b947e4",
+  "verdict": "REUSE_LOCAL_INVENTORY_DO_NOT_BULK_WIRE_OR_REDOWNLOAD",
+  "authoritative_sources": [
+    "📂 Indice fromtend componentes.md",
+    "📂componentes open soure fromtend/",
+    "Frontend/factory-v0/src/donors/oss-registry.js",
+    "Frontend/factory-v0/audits/ASTRA-E03-OSS-INDEPENDENT-REVIEW-2026-09-14.json",
+    "ARQUITECTURA-FACTORY-SEGMENTADA-V10-2026-09-14.md"
+  ],
+  "inventory_truth": {
+    "factory_registry_total": 66,
+    "factory_registry_core": 46,
+    "factory_registry_visual": 20,
+    "root_zip_paths": 193,
+    "root_unique_zip_blobs": 147,
+    "root_empty_zip": 0,
+    "known_runtime_or_test_active": ["Lucide", "Playwright", "Frappe Builder", "xyflow", "Craft.js"],
+    "known_extracted_high_value": ["assistant-ui", "Dockview", "i18next", "react-i18next", "Lucide"],
+    "zip_only_high_value": ["OpenPencil", "OpenDesign", "Onlook", "Penpot", "Webstudio", "Mermaid", "accessibility-skills", "frontend-audit-skill", "Transformers.js", "MLC WebLLM", "ONNX Runtime", "wllama", "LiteRT"],
+    "rule": "SOURCE_PRESENT != EXTRACTED != ADAPTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+  },
+  "current_real_integrations": {
+    "Frappe Builder": {
+      "capability": "context-menu canonical duplicate/delete",
+      "adapter": "Frontend/factory-v0/src/donors/frappe-context-menu-adapter.js",
+      "runtime_test": "Frontend/factory-v0/tests/e2e/f-oss-015-frappe-context-menu.spec.mjs",
+      "run_id": 34734668182,
+      "job_id": 103663797335
+    },
+    "xyflow": {"capability": "minimap/FitView", "adapter": "Frontend/factory-v0/src/donors/xyflow-minimap-adapter.js"},
+    "Craft.js": {"capability": "page-editor patterns", "adapter": "Frontend/factory-v0/src/donors/craftjs-patterns.js"},
+    "Lucide": {"capability": "icons", "adapter": "Frontend/factory-v0/src/donors/lucide-icons.js"},
+    "Playwright": {"capability": "browser E2E", "state": "TEST_ACTIVE"}
+  },
+  "recommended_next_adapters": [
+    {"component": "assistant-ui", "why": "AI chat/composer UI over existing Router actions", "decision": "ADAPT_THIN", "download": "NO"},
+    {"component": "Dockview", "why": "dockable Library/Canvas/Inspector workspace", "decision": "ADAPT_THIN", "download": "NO"},
+    {"component": "i18next", "why": "locale switch and removal of hardcoded UI strings", "decision": "ADAPT_THIN", "download": "NO"},
+    {"component": "CodeMirror 6", "why": "HTML/CSS/JS source editor for import/inspect", "decision": "ADAPT_IF_LOCAL_TREE_VERIFIED", "download": "NO_DUPLICATE"},
+    {"component": "Chart.js", "why": "chart component capability", "decision": "ADAPT_IF_LOCAL_TREE_VERIFIED", "download": "NO_DUPLICATE"},
+    {"component": "PDF.js", "why": "PDF preview for import workflow", "decision": "ADAPT_IF_LOCAL_TREE_VERIFIED", "download": "NO_DUPLICATE"},
+    {"component": "Mammoth.js", "why": "DOCX preview/import descriptor", "decision": "ADAPT_IF_LOCAL_TREE_VERIFIED", "download": "NO_DUPLICATE"},
+    {"component": "FullCalendar", "why": "calendar component capability", "decision": "ADAPT_THIN", "download": "NO"},
+    {"component": "Mermaid", "why": "diagram component from text", "decision": "EXTRACT_THEN_ADAPT", "motor": "motor_1_extract_only.py"},
+    {"component": "accessibility-skills", "why": "turn a11y rules into QA assertions", "decision": "EXTRACT_FOR_QA_ONLY", "motor": "motor_1_extract_only.py"},
+    {"component": "frontend-audit-skill", "why": "visual regression QA pattern", "decision": "EXTRACT_FOR_QA_ONLY", "motor": "motor_1_extract_only.py"},
+    {"component": "Webstudio", "why": "style/property-panel donor patterns", "decision": "REFERENCE_OR_EXTRACT_MINIMAL", "motor": "motor_1_extract_only.py"},
+    {"component": "Onlook", "why": "visual inspector donor patterns", "decision": "REFERENCE_OR_EXTRACT_MINIMAL", "motor": "motor_1_extract_only.py"},
+    {"component": "OpenPencil", "why": "selection/handles donor patterns", "decision": "REFERENCE_OR_EXTRACT_MINIMAL", "motor": "motor_1_extract_only.py"},
+    {"component": "tldraw", "why": "marquee/viewport patterns", "decision": "REUSE_EXTRACTED_REFERENCE", "download": "NO"}
+  ],
+  "deferred_no_current_frontend_need": [
+    "Transformers.js", "MLC WebLLM", "ONNX Runtime Web", "wllama", "LiteRT", "PGlite", "PixiJS full runtime", "GSAP full timeline", "Penpot monolith", "OpenDesign monolith", "Appsmith monolith", "Builder.io monolith"
+  ],
+  "motor_policy": {
+    "extract": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂 Motor de extracción zip/motor_1_extract_only.py",
+    "copy_batch": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂motor de copiar archivos/motor_3_copy_batches.py",
+    "copy_root": "➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂motor de copiar archivos/motor_copy_root_to_repo.py",
+    "new_download": "canonical Motor2 only after local dedup plus demonstrated capability gap"
+  },
+  "button_audit": {
+    "candidate_seed": "index-v195.html",
+    "atomic_control_count_planned": 60,
+    "policy": "each control gets independent QA node/spec; PASS means no product edit; FAIL records GAP and owner segment for a separate fix node"
+  },
+  "next_workpack": "FACTORY-FRONTEND-GROK-WORKPACK-100-V2-2026-09-14.json"
+}
