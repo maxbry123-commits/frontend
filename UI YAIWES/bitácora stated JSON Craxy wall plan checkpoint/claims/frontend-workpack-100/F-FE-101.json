@@ -5,33 +5,18 @@
   "node_id": "F-FE-101-BREAKPOINT-MOBILE",
   "segment_id": "SEG-03-EDITOR-CORE",
   "lane": "GROK-B",
-  "state": "CLAIMED",
+  "state": "PASS_RELEASED",
   "owner": "GROK 4",
   "agent": "GROK",
   "chat_id": "GROK-4-UI-YAIWES-WATCHDOG-HORARIO",
   "fresh_main_sha": "99e80654c087827133fb523fb2a1f531eb1db1d6",
   "claimed_at": "2026-09-14T12:46:10Z",
+  "claim_commit": "89b25f6c88a7f92abaeec6a2c17eed5846e19fad",
+  "delta_commit": "1c771466d0daa9cc9612642c0d3f6e8f066bbba3",
+  "released_at": "2026-09-14T12:51:40Z",
   "type": "CONTROL_QA",
   "selector": ".canvas-controls button[data-breakpoint='mobile']",
-  "write_scope": [
-    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-101-BREAKPOINT-MOBILE.spec.mjs",
-    "Frontend/factory-v0/project-memory/F-FE-101-BREAKPOINT-MOBILE-*",
-    ".github/workflows/factory-F-FE-101-BREAKPOINT-MOBILE.yml",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-101.json"
-  ],
-  "base_blobs": {
-    "index-v192.html": "e3d68e1063cd37c2a59d91911f071fda304e4695",
-    "src/app-v19.js": "1aab6ebec09a8e6a14f221b83226cf92552b4526",
-    "styles.css": "ddda72eb2073aaea9dbdcc647b6522a5b7faa4eb"
-  },
-  "depends_on": ["F-FE-100-BREAKPOINT-TABLET"],
-  "product_patched": false,
-  "frozen": [
-    "index-v19.html",
-    "index-v192.html",
-    "index-v193-preview.html",
-    "src/bootstrap/candidate-v193.js"
-  ],
-  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
-  "release": false
+  "run_id": 34845512240,
+  "job_id": 103980371636,
+  "release": true
 }
