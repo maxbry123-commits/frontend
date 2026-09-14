@@ -82,38 +82,38 @@
       "code_commit": "60c023e22cfd0e97d26e303f95821c8e9c5c6a74",
       "implementation_blob": "79399322f92e20ea08f77d0c8c0f4f278c3dc977",
       "test_blob": "e1b2a065dff7e48831cc37006b6daf2942d3b718",
-      "ci_run": 34793451831,
-      "ci_job": 103821924840,
+      "ci_run": 34803773045,
+      "ci_job": 103851476295,
       "ci_status": "success",
       "wordflow": "41 passed",
-      "runtime": "282 passed, 2 warnings",
+      "runtime": "283 passed, 2 warnings",
       "subtests": "42 passed",
-      "benchmark_speedup": "2.7826x, meets_100x=false",
+      "benchmark_speedup": "2.8682x, meets_100x=false",
       "platform_probe": "BLOCKED: no_verified_runtime_backend",
       "local_targeted": "32 passed, 24 subtests passed in 0.09s",
       "local_full": "270 passed, 42 subtests; 2 environment failures: local Pydantic version mismatch and Docker socket PermissionError",
-      "trace_certification": "5/167 independently certified; 162 missing"
+      "trace_certification": "6/167 independently certified; 161 missing"
     }
   },
   "node_id": "X17-11",
   "owner": "ASTRA_CROSSCHECK",
   "remaining": [
-    "Persist and independently attest 162 missing RequirementTrace rows",
+    "Persist and independently attest 161 missing RequirementTrace rows",
     "One Sol may claim N36 after fresh HEAD and central queue authorization; implement/test executable FinalJudge behavior before considering REQ-S3-056",
     "Web/Windows/Linux/Android/iOS evidence remains incomplete; merge CI reports no verified runtime backend",
-    "Benchmark 100x remains refuted: post-merge CI measured 2.7826x",
+    "Benchmark 100x remains refuted: post-merge CI measured 2.8682x",
     "Original scanner run 34711848316 remains CANCELLED"
   ],
   "report": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/ASTRA-PREFLIGHT-SCOPE-003.json",
   "schema": "yaiwes.astra.crosscheck.v1",
   "source_commit": "eddae9a6f81b7292f3df696e0a31ffd284b93963",
   "status": "ACTIVE_LOOP",
-  "updated_at_utc": "2026-09-14T03:10:15Z",
+  "updated_at_utc": "2026-09-14T04:00:24Z",
   "watchdog_id": "6aa6045af0748191b9560f6ffbad09e8",
   "write_scope": [
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
   ],
-  "last_observed_head": "19d3e77f08c1ef772260581cdc411ccec7897c56",
+  "last_observed_head": "8b65885394ef3521b2c359d8a9bf66d105cb4b55",
   "last_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "status": "ACTIVE_LOOP",
@@ -332,45 +332,98 @@
       "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/roles/ASTRA-CROSSCHECK-EXECUTION-STATE.json"
     ],
     "bounded_strategy": "Consume only independently verifiable RequirementTrace bindings; do not synthesize traces or CI attestations.",
-    "code_commit": "0d12d854a20a181251ab85e55a6c0982df686d34",
-    "next_action": "Continue with genuine per-requirement records; 5/167 are certified and 162 remain."
+    "code_commit": "8b65885394ef3521b2c359d8a9bf66d105cb4b55",
+    "next_action": "Continue with genuine per-requirement records; 6/167 are certified and 161 remain."
   },
   "current_activation": {
     "node": "N35-FULL-REQUIREMENT-TRACE-CERTIFICATION",
     "requirement_id": "REQ-S3-047",
-    "status": "IN_PROGRESS",
-    "checkpoint_read_blob": "06f031790368acb537201ec3d6d85de057656b92",
-    "observed_main": "19d3e77f08c1ef772260581cdc411ccec7897c56",
+    "status": "VERIFIED_CLOSED_DELTA",
+    "checkpoint_read_blob": "839ce1b90b0ba4813ba584a7bd8531223a34a21c",
+    "observed_main": "8b65885394ef3521b2c359d8a9bf66d105cb4b55",
+    "claim_commit": "a6d19fb1da02122a675a581fc6424a4f68b3bbd2",
     "verify_research": [
       "§47 forbids direct LLM writes to canonical memory and requires normalization, schema validation, audit and accepted state delta before memory update.",
-      "memory/boundary.py and test_memory_boundary.py are byte-identical at trusted revision cf40e9c and fresh main.",
-      "CI 34739510224/job 103678337638 checked out cf40e9c and completed all Wordflow/runtime steps successfully.",
-      "REQ-S3-047 trace lookup at fresh main returned 404 NOT_FOUND."
+      "memory/boundary.py and test_memory_boundary.py are byte-identical at trusted revision cf40e9c and merged main.",
+      "Trusted CI 34739510224/job 103678337638 checked out cf40e9c and passed all Wordflow/runtime steps.",
+      "REQ-S3-047 trace lookup at fresh pre-delta main returned 404 NOT_FOUND.",
+      "Exact branch CI 34801719326/job 103848792709 succeeded on 40c64aed7fe5f277b4625ef66a1f5dfd3487820d.",
+      "PR 63 merged as 8b65885394ef3521b2c359d8a9bf66d105cb4b55.",
+      "Post-merge CI 34803773045/job 103851476295 succeeded on the merge revision."
     ],
     "defect_reproduced": "Missing production trace: NOT_FOUND for REQ-S3-047.json.",
-    "delta": "PENDING",
+    "delta": "Added one source/code/test/evidence trace, one trusted CI evidence record and one production regression; no N18 memory implementation code changed.",
+    "files": [
+      {
+        "path": "runtime/evidence/requirement_traces/REQ-S3-047.ci.json",
+        "commit": "c420dfb81de55650ef5904cd0d69f19b66efcf8e",
+        "sha256": "1d4039d230f59e09721c962944d4892926de5bdae7a6a8cf0d763a2d0b792d5a"
+      },
+      {
+        "path": "runtime/requirement_traces/REQ-S3-047.json",
+        "commit": "a33e202fbece8cb965457ba62d9b62770c562204"
+      },
+      {
+        "path": "runtime/tests/test_coverage_production_trace.py",
+        "commit": "40c64aed7fe5f277b4625ef66a1f5dfd3487820d"
+      }
+    ],
     "tests": [
       {
         "scope": "pre-delta trace availability",
         "result": "FAIL reproduced: NOT_FOUND"
+      },
+      {
+        "run_id": 34739510224,
+        "job_id": 103678337638,
+        "revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e",
+        "result": "SUCCESS historical unchanged bytes: all workflow steps passed"
+      },
+      {
+        "run_id": 34801719326,
+        "job_id": 103848792709,
+        "revision": "40c64aed7fe5f277b4625ef66a1f5dfd3487820d",
+        "result": "SUCCESS",
+        "wordflow": "41 passed",
+        "runtime": "283 passed, 2 warnings",
+        "subtests": "42 passed"
+      },
+      {
+        "run_id": 34803773045,
+        "job_id": 103851476295,
+        "revision": "8b65885394ef3521b2c359d8a9bf66d105cb4b55",
+        "result": "SUCCESS",
+        "wordflow": "41 passed",
+        "runtime": "283 passed, 2 warnings",
+        "subtests": "42 passed"
       }
     ],
     "simulations": [
-      "Direct LLM write remains rejected before canonical memory mutation.",
-      "Incomplete audit gate remains rejected.",
-      "Full inventory remains fail-closed with 162 traces missing before this delta."
+      "Direct LLM origin is rejected before canonical memory authorization.",
+      "Incomplete normalize/schema/audit/state-delta gate is rejected.",
+      "Full inventory remains fail-closed with exactly 161 missing traces."
     ],
     "refutations": [
-      "Existing implementation alone is not a certified source/code/test/evidence binding.",
-      "Trusted CI certifies unchanged code/test bytes, not a missing trace.",
-      "Global closure remains false."
+      "Exact-head and post-merge CI certify only REQ-S3-047 and its trace regression, not remaining product requirements.",
+      "Six certified traces are 3.59%, not full product coverage.",
+      "Post-merge benchmark measured 2.8682x, refuting 100x.",
+      "Linux CI reported BLOCKED:no_verified_runtime_backend; it does not prove Windows, Android, iOS or platform E2E."
     ],
-    "decision": "Claim one trace/evidence pair and one regression; do not mutate N18 memory implementation.",
-    "limits": "N36, 162 pre-delta traces, scanner recovery, platforms, global E2E and 100x remain open."
+    "decision": "Close only REQ-S3-047 as VERIFIED_CLOSED_DELTA after exact-head and post-merge CI; keep N35 ACTIVE_LOOP.",
+    "pull_request": 63,
+    "branch": "astra-n35-req-s3-047-20260914",
+    "candidate_head": "40c64aed7fe5f277b4625ef66a1f5dfd3487820d",
+    "merge_commit": "8b65885394ef3521b2c359d8a9bf66d105cb4b55",
+    "post_merge_ci": {
+      "run_id": 34803773045,
+      "job_id": 103851476295,
+      "status": "SUCCESS"
+    },
+    "limits": "N36, 161 traces, scanner recovery, deployed/platform E2E and 100x remain open."
   },
   "n35_next_trace_claim": {
     "requirement_id": "REQ-S3-047",
-    "state": "IN_PROGRESS",
+    "state": "VERIFIED_CLOSED",
     "claimed_at_utc": "2026-09-14T03:10:15Z",
     "fresh_main_sha": "19d3e77f08c1ef772260581cdc411ccec7897c56",
     "source_anchor": "§47 REGLA DE ESCRITURA",
@@ -390,9 +443,23 @@
       "revision": "cf40e9cbde77fb663aa58c06701b9dedab46d43e"
     },
     "semantic_basis": "§47 is enforced by the existing canonical-write authorization gate: direct LLM origin and any incomplete normalize/schema/audit/state-delta chain fail closed.",
-    "next_step": "Create one trace/evidence pair plus one regression; no N18 code mutation.",
+    "next_step": "Select another unclaimed requirement only after fresh HEAD/owner/scope verification.",
     "branch": "astra-n35-req-s3-047-20260914",
-    "certification_if_integrated": "6/167; 161 missing"
+    "certification_if_integrated": "6/167; 161 missing",
+    "head_sha": "40c64aed7fe5f277b4625ef66a1f5dfd3487820d",
+    "pull_request": 63,
+    "branch_ci": {
+      "run_id": 34801719326,
+      "job_id": 103848792709,
+      "status": "SUCCESS"
+    },
+    "merge_commit": "8b65885394ef3521b2c359d8a9bf66d105cb4b55",
+    "post_merge_ci": {
+      "run_id": 34803773045,
+      "job_id": 103851476295,
+      "status": "SUCCESS"
+    },
+    "certification": "6/167; 161 missing"
   },
   "final_judge_gap_order": {
     "state": "CLAIMABLE_NOT_CLAIMED",
