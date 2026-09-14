@@ -1,0 +1,91 @@
+{
+  "schema": "yaiwes.crazy-wall.steering-oss.v2",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "extends": [
+    "CRAZY-WALL-CLOSE-ALL-GAPS-V1-2026-09-14.json",
+    "CRAZY-WALL-STEERING-OSS-V1-2026-09-14.json"
+  ],
+  "authority": "fresh code/manifests/motor state > V2 > V1 historical acquisition",
+  "node": {
+    "id": "GAP-10-STEERING-INTERPROCESS-OSS",
+    "state": "VERIFIED_CLOSED_ACQUISITION_ONLY",
+    "objective": "Comparar cuatro OSS avanzados contra drain_steer y conservar 3-4 componentes descargados/extractados bajo UI YAIWES sin declarar integración runtime.",
+    "literal_microflow": "run_id -> queue/key -> operator/API injects directive -> worker consumes directive(s) -> continue persistent task without restart",
+    "research": [
+      {
+        "rank": 1,
+        "name": "Temporal Python SDK",
+        "source_repo": "temporalio/sdk-python",
+        "source_commit": "ab25ed693f7ec77589346e66c98db299a8c9c9fe",
+        "steering_evidence": "workflow signal/update handlers; handlers can be active while workflow continues",
+        "path": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/Temporal-Python-SDK",
+        "manifest_blob": "acab95faa2129aecfbf10ee8bc70debd3f1d94f3",
+        "files": 796,
+        "extraction_verified": true,
+        "no_lfs": true,
+        "publish_commit": "c4bbe1a6e47fc0419ec1829bd2fd74fe0b308513"
+      },
+      {
+        "rank": 2,
+        "name": "DBOS Python",
+        "source_repo": "dbos-inc/dbos-transact-py",
+        "source_commit": "83805fd84494c85ea09105443884a2786152d921",
+        "steering_evidence": "durable notifications/messages persisted in Postgres with exactly-once semantics and resumable waits",
+        "path": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/DBOS-Python",
+        "manifest_blob": "288318149cb949e1758a7a7e3ccd8c593b54ca3d",
+        "files": 128,
+        "extraction_verified": true,
+        "no_lfs": true,
+        "publish_commit": "ddbe32b73a3b53a6a05f018d15cab30cb7ce8b71"
+      },
+      {
+        "rank": 3,
+        "name": "LangGraph",
+        "source_repo": "langchain-ai/langgraph",
+        "source_commit": "e539ac122f4126f6dd850581c1494948cf620e31",
+        "steering_evidence": "Command supports state update, goto and resume from interruptions",
+        "path": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/LangGraph",
+        "manifest_blob": "783f22b77988ba01f1528df75ef2a3ddb95f1f54",
+        "files": 673,
+        "extraction_verified": true,
+        "no_lfs": true,
+        "reuse_reason": "new Motor2 retry stopped on DESTINATION_EXISTS; existing exact requested source commit and verified manifest reused"
+      },
+      {
+        "rank": 4,
+        "name": "Hatchet",
+        "source_repo": "hatchet-dev/hatchet",
+        "source_commit": "315d43a72fd771b049b304b865a81dbab98c466c",
+        "steering_evidence": "external event push plus durable event waits for workflows",
+        "path": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/Hatchet",
+        "manifest_blob": "961314ff8cafd8445eda425c13a8cd9a3b35c873",
+        "files": 4774,
+        "extraction_verified": true,
+        "no_lfs": true,
+        "reuse_reason": "new Motor2 retry stopped on DESTINATION_EXISTS; existing exact requested source commit and verified manifest reused"
+      }
+    ],
+    "motor_state": {
+      "queue_path": "UI YAIWES/_adquisicion/gap10-steering-oss-20260914/queue.json",
+      "state_path": "UI YAIWES/_adquisicion/gap10-steering-oss-20260914/motor2-state.json",
+      "index_path": "UI YAIWES/_adquisicion/gap10-steering-oss-20260914/INDEX.md",
+      "temporal": "VERIFIED_CLOSED",
+      "dbos": "VERIFIED_CLOSED",
+      "langgraph_retry": "DESTINATION_EXISTS_REUSE_VERIFIED",
+      "hatchet_retry": "DESTINATION_EXISTS_REUSE_VERIFIED"
+    },
+    "verification": {
+      "selected_count": 4,
+      "authorized_range": "3_or_4",
+      "all_four_physical_destinations_present": true,
+      "all_four_manifest_present": true,
+      "all_four_source_commit_exact": true,
+      "all_four_extraction_verified": true,
+      "all_four_no_lfs": true,
+      "runtime_integration_claimed": false
+    },
+    "close": "Four researched steering/durable-workflow donors are physically present with pinned provenance and extraction manifests. Presence is donor acquisition only; runtime wiring may occur only as a minimum delta for a demonstrated remaining GAP.",
+    "next": "GAP-02-N35-S3-REMAINDER"
+  }
+}
