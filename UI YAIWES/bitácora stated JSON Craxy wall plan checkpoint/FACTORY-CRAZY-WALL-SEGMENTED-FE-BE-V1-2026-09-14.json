@@ -1,0 +1,214 @@
+{
+  "schema": "yaiwes.factory.segmented-swarm.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "ACTIVE_NOT_CLOSED",
+  "created_at": "2026-09-14T08:46:00Z",
+  "fresh_main_sha_at_plan": "1345f12111e802e240d860396d6fffd586710045",
+  "authority": "code+runtime+tests+Action/log > this queue > architecture/handoff > inference",
+  "parents": [
+    "FACTORY-CRAZY-WALL-DYNAMIC-V2-2026-09-12.json",
+    "FACTORY-CRAZY-WALL-FRONTEND-QA-V3-2026-09-12.json",
+    "FACTORY-SUPERVISOR-RECONCILIATION-R09-2026-09-13.json"
+  ],
+  "architecture": "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-FACTORY-SEGMENTADA-SWARM-V1-2026-09-14.md",
+  "segment_registry": "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/segments/segment-registry-v1.js",
+  "coordination": {
+    "one_chat_one_active_node": true,
+    "one_concrete_path_one_writer": true,
+    "allowed_claim_states": ["FREE", "GAP_RESOLVABLE", "FREE_VERIFY"],
+    "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+    "strategy": ["REUSE_EXISTING", "PATCH", "ADAPT", "GENERATE", "NEW_DOWNLOAD"],
+    "claim_requires": ["fresh_main_sha", "chat_id", "node_id", "write_scope", "claimed_at"],
+    "close_requires": ["paths", "blob_or_commit_sha", "test", "run_job_log_if_applicable", "readback", "remaining_gaps"],
+    "on_main_change": "STALE_LOCK_GAP_REBUILD_DELTA",
+    "on_collision": "RELEASE_AND_SELECT_NEXT_INDEPENDENT_FREE",
+    "frozen_paths": ["Frontend/factory-v0/index-v19.html", "Frontend/factory-v0/index-v192.html"],
+    "promotion_rule": "only SEG-11-INTEGRATOR may create/promote new canonical entrypoint; producer segments never edit live historical entrypoints"
+  },
+  "lanes": {
+    "frontend": "visual/editor/IO/import/AI/HF versioned segments only",
+    "backend": "acquisition micro-kernel/provenance/Fables bus/MCP/router; no visual UI paths",
+    "qa": "existing F-UI-051..063; must run against same integrated candidate before global closure"
+  },
+  "nodes": [
+    {
+      "id": "F-SEG-064",
+      "lane": "frontend-governance",
+      "title": "Segmentar ownership frontend y bloquear colisiones",
+      "state": "EXECUTING",
+      "owner": "SOL GPT <FACTORY-SEGMENTATION>",
+      "chat_id": "current-factory-chat",
+      "fresh_main_sha": "1345f12111e802e240d860396d6fffd586710045",
+      "claimed_at": "2026-09-14T08:46:00Z",
+      "write_scope": [
+        "Frontend/factory-v0/src/segments/**",
+        "Frontend/factory-v0/tests/segment-registry-v1.test.mjs",
+        "readme arquitectura UI YAIWES/ARQUITECTURA-FACTORY-SEGMENTADA-SWARM-V1-2026-09-14.md",
+        "bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-FE-BE-V1-2026-09-14.json"
+      ],
+      "steps": [
+        "VERIFY_RESEARCH: inventory entrypoint divergence and current frontend paths",
+        "EXECUTE_DELTA: publish deterministic segment registry + frozen historical entrypoints + disjoint ownership",
+        "TEST_REPORT: run registry claim/collision tests and read back exact blobs"
+      ],
+      "acceptance": "historical entrypoints frozen; every active frontend lane has explicit segment/write_scope; cross-segment write rejected; test PASS"
+    },
+    {
+      "id": "F-INT-065",
+      "lane": "frontend-integration",
+      "title": "Crear candidato canónico nuevo sin modificar v19/v192",
+      "state": "BLOCKED_AFTER_F-SEG-064",
+      "depends_on": ["F-SEG-064"],
+      "write_scope": ["Frontend/factory-v0/index-v193.html", "Frontend/factory-v0/src/bootstrap/candidate-v193.js", "Frontend/factory-v0/tests/e2e/*canonical-v193*", "Frontend/factory-v0/project-memory/*F-INT-065*"],
+      "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+      "acceptance": "one candidate loads coexistence of v19 router/layers/remote/HF and v192 json/touch/skills/workspace/browser; no second state engine"
+    },
+    {
+      "id": "F-FE-066",
+      "lane": "frontend",
+      "segment": "SEG-01-SHELL",
+      "title": "Workspace shell v+1",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/ui/workspace-shell-v2.js", "Frontend/factory-v0/workspace-shell-v2.css", "Frontend/factory-v0/tests/e2e/*shell-v2*", "Frontend/factory-v0/project-memory/*F-FE-066*"],
+      "acceptance": "canvas-first desktop/mobile drawers with previous v1 preserved"
+    },
+    {
+      "id": "F-FE-067",
+      "lane": "frontend",
+      "segment": "SEG-02-BROWSER",
+      "title": "Component browser v+1",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/ui/component-browser-v2.js", "Frontend/factory-v0/tests/e2e/*browser-v2*", "Frontend/factory-v0/project-memory/*F-FE-067*"],
+      "acceptance": "search/filter/preview/favorite/recent/insert/drag-drop remain isolated and tested"
+    },
+    {
+      "id": "F-FE-068",
+      "lane": "frontend",
+      "segment": "SEG-04-TOUCH",
+      "title": "Touch/mobile v1.9.3",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/touch-dnd-v193.js", "Frontend/factory-v0/tests/e2e/*touch-v193*", "Frontend/factory-v0/project-memory/*F-FE-068*"],
+      "acceptance": "real touch move/drop/scroll/resize no coordinate miss; previous v192 preserved"
+    },
+    {
+      "id": "F-FE-069",
+      "lane": "frontend",
+      "segment": "SEG-05-CONTROLS",
+      "title": "Convergencia versionada de controles",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/segments/controls-suite-v2.js", "Frontend/factory-v0/tests/e2e/*controls-suite-v2*", "Frontend/factory-v0/project-memory/*F-FE-069*"],
+      "acceptance": "layers/resize/minimap/context menu/undo-redo produce real effects with zero dead controls"
+    },
+    {
+      "id": "F-FE-070",
+      "lane": "frontend",
+      "segment": "SEG-06-IO",
+      "title": "IO/version/roundtrip convergence v2",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/json-roundtrip-v2.js", "Frontend/factory-v0/src/version-store-v2.js", "Frontend/factory-v0/src/destination-roundtrip-v2.js", "Frontend/factory-v0/tests/e2e/*roundtrip-v2*", "Frontend/factory-v0/project-memory/*F-FE-070*"],
+      "acceptance": "save/reload/reopen/version/json/html/destination roundtrip without loss"
+    },
+    {
+      "id": "F-FE-071",
+      "lane": "frontend",
+      "segment": "SEG-07-IMPORT",
+      "title": "Import convergence v2",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/file-import-controller-v2.js", "Frontend/factory-v0/src/file-import-v2.js", "Frontend/factory-v0/tests/e2e/*import-v2*", "Frontend/factory-v0/project-memory/*F-FE-071*"],
+      "acceptance": "file/html/reference -> normalized editable canvas"
+    },
+    {
+      "id": "F-FE-072",
+      "lane": "frontend",
+      "segment": "SEG-08-AI-ROUTER",
+      "title": "AI/MCP/router/remote frontend bridge v2",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/frontend-router-bridge-v2.js", "Frontend/factory-v0/src/remote-control-v2.js", "Frontend/factory-v0/src/skill-activation-v2.js", "Frontend/factory-v0/tests/e2e/*router-bridge-v2*", "Frontend/factory-v0/project-memory/*F-FE-072*"],
+      "acceptance": "MCP/API connect/status/cancel + routed AI job + skill readback; no secret in browser/repo/log"
+    },
+    {
+      "id": "F-FE-073",
+      "lane": "frontend",
+      "segment": "SEG-09-HF-JOBS",
+      "title": "HF jobs frontend panel v2",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/hf-jobs-panel-v2.js", "Frontend/factory-v0/tests/e2e/*hf-jobs-v2*", "Frontend/factory-v0/project-memory/*F-FE-073*"],
+      "acceptance": "run/status/logs/complete/cancel idempotent with secret_ref only"
+    },
+    {
+      "id": "F-BE-074",
+      "lane": "backend",
+      "title": "Canonical acquisition engines -> Factory micro-kernel wrapper",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/acquisition/microkernel-v1/**", "Frontend/factory-v0/tests/*acquisition-microkernel*", "Frontend/factory-v0/project-memory/*F-BE-074*"],
+      "acceptance": "reuse existing canonical download/extract/copy engines; no alternate engine; deterministic request/result contract"
+    },
+    {
+      "id": "F-BE-075",
+      "lane": "backend",
+      "title": "Acquisition provenance and deterministic policy",
+      "state": "BLOCKED_AFTER_F-BE-074",
+      "depends_on": ["F-BE-074"],
+      "write_scope": ["Frontend/factory-v0/src/acquisition/provenance-v1/**", "Frontend/factory-v0/tests/*provenance-v1*", "Frontend/factory-v0/project-memory/*F-BE-075*"],
+      "acceptance": "source_url+ref+hash+license+destination+capability+adapter+test+readback mandatory before promote"
+    },
+    {
+      "id": "F-BE-076",
+      "lane": "backend",
+      "title": "Fables universal plugin capability bus",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/bus/**", "Frontend/factory-v0/src/plugins/fables-factory/**", "Frontend/factory-v0/tests/*fables-bus*", "Frontend/factory-v0/project-memory/*F-BE-076*"],
+      "acceptance": "new capability attaches through typed Fables adapter/bus; no direct arbitrary core mutation"
+    },
+    {
+      "id": "F-BE-077",
+      "lane": "backend",
+      "title": "Factory MCP + Router API boundary",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/mcp/**", "Frontend/factory-v0/src/router/**", "Frontend/factory-v0/tests/*mcp-router*", "Frontend/factory-v0/project-memory/*F-BE-077*"],
+      "acceptance": "typed MCP/API tools routed by capability/model/provider with fail-closed policy and deterministic state"
+    },
+    {
+      "id": "F-BE-078",
+      "lane": "research",
+      "title": "Blender pattern research for Factory",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/project-memory/research/F-BE-078-*"],
+      "acceptance": "official-source research maps workspace/viewport/inspector/shortcuts/addons/history/assets to existing gaps; no Blender monolith copied"
+    },
+    {
+      "id": "F-BE-079",
+      "lane": "research",
+      "title": "Top 10 OSS app/web design systems dedup",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/project-memory/research/F-BE-079-*"],
+      "acceptance": "10 candidates scored against local registry; each has source/license/capability/gap/REUSE decision; no download by popularity alone"
+    },
+    {
+      "id": "F-BE-080",
+      "lane": "backend",
+      "title": "Acquire up to 3 additional OSS only for demonstrated residual gaps",
+      "state": "BLOCKED_CONDITIONAL",
+      "depends_on": ["F-BE-079", "F-BE-074", "F-BE-075"],
+      "write_scope": ["UI YAIWES/componentes open soure UI YAIWES/<approved-slug>/**", "Frontend/factory-v0/src/oss/<approved-slug>/**", "Frontend/factory-v0/project-memory/*F-BE-080*"],
+      "acceptance": "each acquisition proves residual gap + official source/license/ref/hash + canonical motor + adapter + runtime test"
+    },
+    {
+      "id": "F-BE-081",
+      "lane": "backend-integration",
+      "title": "Auto-evolution micro-kernel E2E",
+      "state": "BLOCKED",
+      "depends_on": ["F-BE-074", "F-BE-075", "F-BE-076", "F-BE-077"],
+      "write_scope": ["Frontend/factory-v0/tests/e2e/*auto-evolution-microkernel*", "Frontend/factory-v0/project-memory/*F-BE-081*"],
+      "acceptance": "capability request -> dedup/research -> acquire if needed -> provenance -> Fables bus -> MCP/router -> isolated test -> Factory test -> promote/reject"
+    }
+  ],
+  "join": {
+    "canonical_frontend": "F-INT-065",
+    "backend_microkernel": "F-BE-081",
+    "existing_qa_chain": ["F-UI-051", "F-UI-052", "F-UI-053", "F-UI-054", "F-UI-055", "F-UI-056", "F-UI-057", "F-UI-058", "F-UI-059", "F-UI-060", "F-UI-061", "F-UI-062", "F-UI-063"],
+    "global_frontend_close": "F-UI-063 only"
+  },
+  "progress_policy": "Do not derive product percentage from node count. Report implementation/test/evidence gates separately until F-UI-063."
+}
