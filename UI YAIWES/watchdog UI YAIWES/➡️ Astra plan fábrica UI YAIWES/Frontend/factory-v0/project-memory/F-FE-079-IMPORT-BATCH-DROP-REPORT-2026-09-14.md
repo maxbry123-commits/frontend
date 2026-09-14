@@ -1,0 +1,34 @@
+# REPORT — F-FE-079-IMPORT-BATCH-DROP
+
+- schema: yaiwes.factory.node-report/v1
+- contract: tel.workflow/v3
+- mode: FAIL_CLOSED_LOOP
+- node_id: F-FE-079-IMPORT-BATCH-DROP
+- segment_id: SEG-07-IMPORT
+- lane: GROK-B
+- agent: GROK
+- owner: GROK 4 UI YAIWES
+- chat_id: GROK-4-UI-YAIWES-WATCHDOG-HORARIO
+- state: PASS_RELEASED_SEGMENT
+- claim_sha: 99e21412c87f757ee1312402ec592f183228b50e
+- delta_sha: e9af6636b5d796b47aae2d8a8e691976d2a4a2c5
+- fresh_main_sha_at_report: c16286f5535d216936ae6e8cace415a1ecfcc61c
+- tested_sha: e9af6636b5d796b47aae2d8a8e691976d2a4a2c5
+- run_id: 34835073300
+- job_id: 103946933247
+- conclusion: success
+- tests: playwright chromium-desktop 3 passed (1.8s)
+- log: GET /src/file-import-controller-v2.js 200; 3 passed (1.8s)
+- blob_v2: b987b62c0b54856507ab0bc3c2d1a2c37e5fb2de
+- blob_spec: 5bcbe23a48ca7480b082af4ca44e076b8574dafd
+- blob_v1_unchanged: b1a9a67fdffe332fd8d39c6b939753e9d430ce29
+- blob_index-v19_frozen: 4b043e60eba53156d1fc23c9b2fa4be30b54960a
+- blob_candidate-v193_untouched: 73deb4432ddb3b40519984a6d85925e9c6cd21a2
+- SOURCE_PRESENT: true
+- IMPLEMENTED: true
+- WIRED: false
+- RUNTIME_TEST_PASS: GHA conclusion=success (LLM does not self-certify)
+- VERIFIED_CLOSED: false
+- remaining_gaps: v2 not wired into candidate-v193 (SEG-11 only); playwright-report artifact empty
+- next: F-FE-080-IMPORT-PREVIEW-VALIDATION
+- no_hf_live_promotion: true
