@@ -4,7 +4,8 @@
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_SEGMENTED_RECOVERY",
   "created_at": "2026-09-14T04:17:00-05:00",
-  "observed_head_before_write": "0129295e13ee2dd3c2b2d2d8ed642f68d2343f71",
+  "last_reconciled_at": "2026-09-14T04:23:00-05:00",
+  "observed_head_before_write": "90b5d6d23528edeabca3dd742bb3d1dde775b16f",
   "authority": [
     "fresh code + runtime + tests + Actions logs",
     "FACTORY-SUPERVISOR-RECONCILIATION-R09-2026-09-13.json",
@@ -42,11 +43,13 @@
     {
       "id": "F-ARCH-SEGMENT-064",
       "title": "Freeze historical entrypoints and establish path ownership segmentation",
-      "state": "CLAIMED",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS_STATIC_ARCHITECTURE_GATE",
       "owner": "GPT-5.6-SOL",
       "chat_id": "CURRENT_CHAT_FACTORY_SEGMENTATION",
       "fresh_main_sha": "0129295e13ee2dd3c2b2d2d8ed642f68d2343f71",
       "claimed_at": "2026-09-14T04:17:00-05:00",
+      "reported_at": "2026-09-14T04:23:00-05:00",
       "write_scope": [
         "Frontend/factory-v0/src/bootstrap/candidate-v193.js",
         "Frontend/factory-v0/index-v193-preview.html",
@@ -61,17 +64,35 @@
         "Run static architecture test/readback and report exact blobs/commit; do not promote live"
       ],
       "acceptance": "historical entrypoints unchanged; preview assembled by one bootstrap; every editable path has exactly one segment owner; static test PASS",
-      "evidence": [],
-      "remaining_gaps": []
+      "run_id": 34827565204,
+      "job_id": 103923110683,
+      "tests": "segment-architecture.test.mjs PASS on GitHub Actions Node 22",
+      "evidence": [
+        "CI output: status=PASS, candidate=1.9.3, segments=11, frozen=index-v19.html|index-v192.html, convergedModules=11",
+        "index-v19 blob 4b043e60eba53156d1fc23c9b2fa4be30b54960a",
+        "index-v192 blob e3d68e1063cd37c2a59d91911f071fda304e4695",
+        "index-v193-preview blob c2e3466bb51162cf12af25c26fb283bdeb2eef98",
+        "segment-registry blob 3b6c69b296f8d4e8ae2d33c77acfdff409376139",
+        "candidate-v193 bootstrap blob 73deb4432ddb3b40519984a6d85925e9c6cd21a2",
+        "sparse CI revision 43870fe53f94cbc575142245db5acaab70253ed5"
+      ],
+      "remaining_gaps": ["Browser/runtime coexistence is not certified by this static gate", "Preview is not the published live candidate"],
+      "next_free_node": "F-INT-CANONICAL-065"
     },
     {
       "id": "F-INT-CANONICAL-065",
       "title": "Browser smoke and canonical candidate convergence",
-      "state": "BLOCKED_AFTER_F-ARCH-SEGMENT-064",
-      "write_scope": ["Frontend/factory-v0/index-v193*.html", "Frontend/factory-v0/src/bootstrap/candidate-v193*.js", "Frontend/factory-v0/tests/e2e/*v193*", ".github/workflows/*factory-v193*"],
+      "state": "CLAIMED",
+      "owner": "GPT-5.6-SOL",
+      "chat_id": "CURRENT_CHAT_FACTORY_SEGMENTATION",
+      "fresh_main_sha": "90b5d6d23528edeabca3dd742bb3d1dde775b16f",
+      "claimed_at": "2026-09-14T04:23:00-05:00",
+      "write_scope": ["Frontend/factory-v0/index-v193*.html", "Frontend/factory-v0/src/bootstrap/candidate-v193*.js", "Frontend/factory-v0/tests/e2e/*v193*", ".github/workflows/*factory-v193*", "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json"],
       "depends_on": ["F-ARCH-SEGMENT-064"],
       "steps": ["Verify preview loads all approved v19+v192 capabilities", "Patch bootstrap/segment wiring only; no second state engine", "Run desktop+mobile smoke and preserve run/job/artifact evidence"],
-      "acceptance": "workspace/browser + JSON/version/destination/skill/touch + router/layers/HF coexist on one exact candidate SHA"
+      "acceptance": "workspace/browser + JSON/version/destination/skill/touch + router/layers/HF coexist on one exact candidate SHA",
+      "evidence": [],
+      "remaining_gaps": []
     },
     {
       "id": "F-FRONTEND-QA-066",
