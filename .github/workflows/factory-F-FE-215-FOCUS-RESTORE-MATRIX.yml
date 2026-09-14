@@ -1,0 +1,64 @@
+name: factory-F-FE-215-FOCUS-RESTORE-MATRIX
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-F-FE-215-FOCUS-RESTORE-MATRIX.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/control-audit/F-FE-215-FOCUS-RESTORE-MATRIX.spec.mjs'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v192.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/ui/workspace-shell-v1.js'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-F-FE-215-FOCUS-RESTORE-MATRIX
+  cancel-in-progress: false
+
+jobs:
+  focus-restore-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Frozen candidate readback
+        run: |
+          set -euo pipefail
+          test -s index-v192.html
+          test -s src/ui/workspace-shell-v1.js
+          test -s tests/e2e/control-audit/F-FE-215-FOCUS-RESTORE-MATRIX.spec.mjs
+          grep -F "dataset.workspaceShell = 'v1'" src/ui/workspace-shell-v1.js
+          grep -F "close.addEventListener('click', () => setCollapsed(side, true))" src/ui/workspace-shell-v1.js
+          node --check tests/e2e/control-audit/F-FE-215-FOCUS-RESTORE-MATRIX.spec.mjs
+          git hash-object index-v192.html
+          git hash-object src/ui/workspace-shell-v1.js
+          git hash-object tests/e2e/control-audit/F-FE-215-FOCUS-RESTORE-MATRIX.spec.mjs
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: F-FE-215 mobile focus restore gate
+        run: npx playwright test tests/e2e/control-audit/F-FE-215-FOCUS-RESTORE-MATRIX.spec.mjs --project=mobile-chromium --reporter=line
+      - name: Preserve F-FE-215 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-F-FE-215-FOCUS-RESTORE-MATRIX-evidence
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+          if-no-files-found: warn
+          retention-days: 14
