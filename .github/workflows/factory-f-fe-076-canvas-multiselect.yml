@@ -1,0 +1,71 @@
+name: factory-f-fe-076-canvas-multiselect
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-fe-076-canvas-multiselect.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/app-v21.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-fe-076-canvas-multiselect.spec.mjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-f-fe-076-canvas-multiselect
+  cancel-in-progress: false
+
+jobs:
+  multiselect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Preserve prior app-v19/v20
+        run: |
+          set -euo pipefail
+          test -s src/app-v19.js
+          test -s src/app-v20.js
+          test -s src/app-v21.js
+          grep -F "APP_V20_VERSION = '1.9.20'" src/app-v20.js
+          grep -F "APP_V21_VERSION = '1.9.21'" src/app-v21.js
+          ! grep -F "APP_V21_VERSION = '1.9.21'" src/app-v20.js
+          ! grep -F "APP_V21_VERSION = '1.9.21'" src/app-v19.js
+          git hash-object src/app-v19.js
+          git hash-object src/app-v20.js
+          git hash-object src/app-v21.js
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Syntax F-FE-076
+        run: |
+          node --check src/app-v21.js
+          node --check tests/e2e/f-fe-076-canvas-multiselect.spec.mjs
+      - name: F-FE-076 desktop multiselect
+        run: npx playwright test tests/e2e/f-fe-076-canvas-multiselect.spec.mjs --project=chromium-desktop --reporter=line
+      - name: F-FE-076 Pixel 7 multiselect
+        run: npx playwright test tests/e2e/f-fe-076-canvas-multiselect.spec.mjs --project=mobile-chromium --reporter=line
+      - name: Preserve F-FE-076 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-f-fe-076-canvas-multiselect-evidence
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+          if-no-files-found: warn
+          retention-days: 14
