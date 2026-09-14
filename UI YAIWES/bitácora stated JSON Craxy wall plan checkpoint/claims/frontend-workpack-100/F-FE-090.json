@@ -1,0 +1,52 @@
+{
+  "schema": "yaiwes.factory.frontend.node-claim.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-FE-090-MODE-MANUAL",
+  "segment_id": "SEG-03-EDITOR-CORE",
+  "lane": "GROK-A",
+  "state": "CLAIMED",
+  "owner": "GROK 3",
+  "agent": "GROK",
+  "chat_id": "GROK-3-UI-YAIWES-FACTORY",
+  "fresh_main_sha": "497b075bbec925d1a00fc0c3868f11e797535261",
+  "claimed_at": "2026-09-14T11:38:20Z",
+  "type": "CONTROL_QA",
+  "selector": "[data-mode='MANUAL']",
+  "depends_on": [],
+  "dependency_status": "initial_claimable workpack-100 GROK-A",
+  "write_scope": [
+    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-090-MODE-MANUAL.spec.mjs",
+    "Frontend/factory-v0/project-memory/F-FE-090-MODE-MANUAL-*",
+    ".github/workflows/factory-F-FE-090-MODE-MANUAL.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-090.json"
+  ],
+  "frozen": [
+    "index-v19.html",
+    "index-v192.html",
+    "src/touch-dnd-v192.js",
+    "src/touch-dnd-v193.js",
+    "src/touch-dnd-v194.js",
+    "src/bootstrap/candidate-v193.js"
+  ],
+  "skipped_collision": {
+    "node_id": "F-FE-073-TOUCH-DRAG-INTENT",
+    "first_writer": "GROK 1 UI YAIWES",
+    "chat_id": "GROK-1-UI-YAIWES-WATCHDOG-HORARIO",
+    "claim_commit": "497b075bbec925d1a00fc0c3868f11e797535261",
+    "policy": "READ_FRESH → NO WRITE → RELEASE/SKIP → NEXT DEPENDENCY-SATISFIED NODE"
+  },
+  "not_claimed": {
+    "F-FE-068": "TESTED_NOT_WIRED release=true GROK 3",
+    "F-FE-069": "CLAIMED SOL integrator",
+    "F-FE-070": "BLOCKED_DEPENDENCY F-FE-076",
+    "F-FE-072": "PASS_RELEASED GROK 3",
+    "F-FE-073": "CLAIMED GROK 1 first-writer",
+    "F-FE-074": "BLOCKED_DEPENDENCY F-FE-073"
+  },
+  "qa_policy": "CONTROL_QA never patches product. Gap → GAP_RESOLVABLE + owning_segment.",
+  "strategy": "REUSE_EXISTING candidate read-only + Playwright selector gate",
+  "acceptance": "On one exact candidate SHA interact with [data-mode='MANUAL']; prove observable state/UI effect and persistence when applicable; critical console/network errors=0.",
+  "base_blobs": {},
+  "release": false
+}
