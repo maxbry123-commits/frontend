@@ -1,0 +1,39 @@
+{
+  "schema": "yaiwes.factory.node-claim/v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-INT-V194-070",
+  "owner": "GPT-5.6-SOL",
+  "chat_id": "CURRENT_CHAT_FACTORY_SEGMENTATION",
+  "state": "CLAIMED",
+  "fresh_main_sha": "0d1b82158b8131dfb13fa666c863ec774ada55b7",
+  "segment_id": "SEG-11-INTEGRATOR",
+  "claimed_at": "2026-09-14T04:42:30-05:00",
+  "depends_on": [
+    "F-FE-066:SEG-01-SHELL-v2:PASS",
+    "F-FE-067:SEG-02-BROWSER-v2:PASS"
+  ],
+  "write_scope": [
+    "Frontend/factory-v0/index-v194.html",
+    "Frontend/factory-v0/src/bootstrap/candidate-v194.js",
+    "Frontend/factory-v0/tests/e2e/canonical-v194-integration.spec.mjs",
+    ".github/workflows/factory-v194-integration.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/F-INT-V194-070-*.json"
+  ],
+  "frozen": [
+    "Frontend/factory-v0/index-v19.html",
+    "Frontend/factory-v0/index-v192.html",
+    "Frontend/factory-v0/index-v193.html",
+    "Frontend/factory-v0/src/bootstrap/candidate-v193.js",
+    "Frontend/factory-v0/src/ui/workspace-shell-v1.js",
+    "Frontend/factory-v0/src/ui/component-browser-v1.js",
+    "Frontend/factory-v0/src/ui/workspace-shell-v2.js",
+    "Frontend/factory-v0/src/ui/component-browser-v2.js"
+  ],
+  "steps": [
+    "VERIFY_RESEARCH: validate producer PASS evidence and V2 auto-mount contracts",
+    "EXECUTE_DELTA: compose V1.9.4 from released V2 segments without editing producer paths",
+    "TEST_REPORT: desktop+mobile integration, shell V2, browser V2, no duplicate controls, F-UI-052 hit-target regression, evidence artifact"
+  ],
+  "acceptance": "V194 boots all prior V193 capabilities plus shell-v2/browser-v2; V193 remains unchanged; mobile Inspector is hit-testable and Escape closes drawers; browser insert remains canonical"
+}
