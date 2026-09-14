@@ -1,0 +1,65 @@
+name: Factory V1.9.3 Unified Smoke
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v193.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/bootstrap/candidate-v193.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/factory-v193-unified-smoke.spec.mjs'
+      - '.github/workflows/factory-v193-unified-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-v193-unified-smoke
+  cancel-in-progress: true
+
+jobs:
+  unified-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+          sparse-checkout-cone-mode: false
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install test dependencies
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Exact candidate readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "revision=$GITHUB_SHA"
+          git hash-object index-v19.html
+          git hash-object index-v192.html
+          git hash-object index-v193.html
+          git hash-object src/bootstrap/candidate-v193.js
+          git hash-object src/segments/segment-registry-v1.js
+      - name: Desktop unified smoke
+        run: npx playwright test tests/e2e/factory-v193-unified-smoke.spec.mjs --project=chromium-desktop
+      - name: Mobile unified smoke
+        run: npx playwright test tests/e2e/factory-v193-unified-smoke.spec.mjs --project=mobile-chromium
+      - name: Upload V1.9.3 smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-v193-unified-smoke-${{ github.sha }}
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/factory-v193-unified/**
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/**/attachments/**
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report/**
+          if-no-files-found: warn
+          retention-days: 14
