@@ -1,0 +1,24 @@
+{
+  "schema": "yaiwes.copy.provenance/v1",
+  "source_repo": "maxbry123-commits/agentes",
+  "source_branch": "main",
+  "source_commit": "81fa2b8db4167f7d87bed092616a50c5e9cbbc22",
+  "motor": "Motores/➡️📂motor de copiar archivos/motor_3_copy_batches.py",
+  "motor_blob_sha": "3689924361ce4a1a9fde4ae2b6f6009c37a6042d",
+  "destination_repo": "maxbry123-commits/frontend",
+  "destination_branch": "main",
+  "destination_root": "UI YAIWES/",
+  "components": [
+    "08",
+    "11",
+    "12",
+    "15",
+    "16",
+    "21",
+    "22",
+    "23"
+  ],
+  "batch_size": 25,
+  "collision_policy": "fail",
+  "result": "VERIFIED_CLOSED_LOCAL_READBACK"
+}
