@@ -1,0 +1,51 @@
+{
+  "schema": "yaiwes.factory.frontend.oss-nodes.v1",
+  "range": "F-FE-155..173",
+  "count": 19,
+  "family": "OSS_FRONTEND_ADAPTER",
+  "segment": "SEG-10-OSS",
+  "inventory": "UI YAIWES/componentes open soure UI YAIWES",
+  "registry": "Frontend/factory-v0/src/donors/oss-registry.js",
+  "canonical_acquisition": "Frontend/factory-v0/src/microkernel/acquisition/index.js",
+  "invariant": "NO_ALTERNATE_DOWNLOADER",
+  "steps": ["VERIFY_RESEARCH","EXECUTE_DELTA","TEST_REPORT"],
+  "write_scope_template": [
+    "Frontend/factory-v0/src/oss/<slug>-adapter-v1.js",
+    "Frontend/factory-v0/tests/e2e/oss/<node>.spec.mjs",
+    "Frontend/factory-v0/project-memory/<node>-*",
+    ".github/workflows/factory-<node>.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/<node-number>.json"
+  ],
+  "policy": {
+    "AVAILABLE_LOCAL": "REUSE_LOCAL_TREE_NO_DOWNLOAD",
+    "AVAILABLE_EXTRACTED": "REUSE_LOCAL_TREE_NO_DOWNLOAD",
+    "AVAILABLE_ZIP": "CANONICAL_MOTOR2_EXTRACT_IF_NEEDED",
+    "already_wired_at_claim_time": "PASS_NO_DELTA",
+    "adapter": "bounded thin capability only",
+    "producer_candidate_wiring": "FORBIDDEN",
+    "monolithic_embedding": "FORBIDDEN",
+    "second_state_engine": "FORBIDDEN"
+  },
+  "acceptance": "Prove a useful bounded Factory capability through a thin adapter; preserve source URL/ref/hash/license/local path; run browser microtest; SOURCE_PRESENT alone is not PASS.",
+  "nodes": [
+    ["F-FE-155-OSS-CHARTJS","Chart.js","chartjs","charts","AVAILABLE_LOCAL"],
+    ["F-FE-156-OSS-CODEMIRROR6","CodeMirror 6","codemirror6","code-editor","AVAILABLE_LOCAL"],
+    ["F-FE-157-OSS-EXCALIDRAW","Excalidraw","excalidraw","visual-canvas","AVAILABLE_LOCAL"],
+    ["F-FE-158-OSS-GSAP","GSAP","gsap","motion","AVAILABLE_LOCAL"],
+    ["F-FE-159-OSS-MSW","MSW","msw","api-mocking","AVAILABLE_LOCAL"],
+    ["F-FE-160-OSS-MAMMOTHJS","Mammoth.js","mammothjs","doc-preview","AVAILABLE_LOCAL"],
+    ["F-FE-161-OSS-PDFJS","PDF.js","pdfjs","pdf-preview","AVAILABLE_LOCAL"],
+    ["F-FE-162-OSS-PGLITE","PGlite","pglite","local-db","AVAILABLE_LOCAL"],
+    ["F-FE-163-OSS-PIXIJS","PixiJS","pixijs","high-density-canvas","AVAILABLE_LOCAL"],
+    ["F-FE-164-OSS-OPENPENCIL","OpenPencil","openpencil","design-canvas","AVAILABLE_ZIP"],
+    ["F-FE-165-OSS-WEBSTUDIO","Webstudio","webstudio","webflow-like-builder","AVAILABLE_ZIP"],
+    ["F-FE-166-OSS-SILEX","Silex","silex","visual-site-builder","AVAILABLE_EXTRACTED"],
+    ["F-FE-167-OSS-TLDRAW","tldraw","tldraw","infinite-canvas","AVAILABLE_EXTRACTED"],
+    ["F-FE-168-OSS-DRAWIO","draw.io","drawio","diagram-editor","AVAILABLE_EXTRACTED"],
+    ["F-FE-169-OSS-ASSISTANT-UI","assistant-ui","assistant-ui","ai-chat-components","AVAILABLE_EXTRACTED"],
+    ["F-FE-170-OSS-DOCKVIEW","Dockview","dockview","dockable-panels-tabs","AVAILABLE_EXTRACTED"],
+    ["F-FE-171-OSS-I18NEXT","i18next","i18next","internationalization","AVAILABLE_EXTRACTED"],
+    ["F-FE-172-OSS-REACT-I18NEXT","react-i18next","react-i18next","react-i18n","AVAILABLE_EXTRACTED"],
+    ["F-FE-173-OSS-FULLCALENDAR","FullCalendar","fullcalendar","calendar-workspace","AVAILABLE_LOCAL"]
+  ]
+}
