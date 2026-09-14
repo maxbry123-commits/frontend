@@ -1,0 +1,31 @@
+{
+  "schema": "yaiwes.factory.node-report/v1",
+  "contract": "tel.workflow/v3",
+  "node_id": "F-QA-V193-ENTRYPOINT-AUDIT-069",
+  "owner": "GPT-5.6-SOL",
+  "state": "VERIFIED_CLOSED",
+  "reported_at": "2026-09-14T04:39:00-05:00",
+  "run_id": 34829055523,
+  "job_id": 103927805834,
+  "artifact_id": 10341606069,
+  "artifact_digest": "sha256:7a33e6b6b2e5050fbc366585ce5846d5ee426297dd6c2b8e04882eeef1eb4cd6",
+  "result": {
+    "F-UI-051": "V193",
+    "F-UI-052": "V193",
+    "F-UI-053": "V193",
+    "F-UI-054": "V193",
+    "F-UI-055": "V193",
+    "F-UI-056": "V193",
+    "F-UI-057": "LIVE_DYNAMIC",
+    "F-UI-058": "V193",
+    "F-UI-059": "MIXED_V193_LIVE_AND_LEGACY_V19",
+    "F-UI-060": "MIXED_V193_LIVE_AND_LEGACY_V19",
+    "F-UI-061": "LIVE_DYNAMIC_PLUS_LEGACY_LOCAL_V19"
+  },
+  "gaps": [
+    "F-UI-052 remains blocked by reproduced mobile shell clipping until the existing SEG-01 V2 worker is integrated and retested.",
+    "F-UI-059 and F-UI-060 canonical V193 tests exist; legacy V19 web files must not be treated as canonical evidence.",
+    "F-UI-061 needs an explicit V193 local full-user journey before the published exact-SHA gate."
+  ],
+  "next": "Select independent V193 QA gate or F-UI-061 V193 journey; do not touch active SEG-01/SEG-02 paths."
+}
