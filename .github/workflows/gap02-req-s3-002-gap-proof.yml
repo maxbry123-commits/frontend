@@ -20,11 +20,21 @@ jobs:
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/storage/local_first.py
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_req_s3_002_master_input.py
             UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_storage_local_first.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md
           sparse-checkout-cone-mode: false
           fetch-depth: 1
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Exact trace hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES'
+          echo "revision=$GITHUB_SHA"
+          sha256sum "$ROOT/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md"
+          sha256sum "$ROOT/runtime/src/storage/local_first.py"
+          sha256sum "$ROOT/runtime/tests/test_req_s3_002_master_input.py"
       - name: REQ-S3-002 invariant proof
         shell: bash
         run: |
