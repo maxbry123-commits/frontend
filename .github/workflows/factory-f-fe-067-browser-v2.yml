@@ -1,0 +1,37 @@
+name: Factory F-FE-067 SEG-02-BROWSER v2
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/ui/component-browser-v2.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/component-browser-v2.test.mjs'
+      - '.github/workflows/factory-f-fe-067-browser-v2.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Preserve v1 and freeze candidate wiring
+        run: |
+          test -f src/ui/component-browser-v1.js
+          test -f src/ui/component-browser-v2.js
+          ! grep -q "COMPONENT_BROWSER_VERSION" src/ui/component-browser-v1.js
+          grep -q "component-browser-v1.js" src/bootstrap/candidate-v193.js
+          ! grep -q "component-browser-v2.js" src/bootstrap/candidate-v193.js
+      - name: Isolated node gate
+        run: node --check src/ui/component-browser-v2.js && node tests/component-browser-v2.test.mjs
