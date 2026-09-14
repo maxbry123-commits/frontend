@@ -1,0 +1,22 @@
+{
+  "schema": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-BE-074",
+  "owner": "SOL GPT <FACTORY-BACKEND>",
+  "chat_id": "current-factory-chat",
+  "fresh_main_sha": "ee61c77d88b172c8ba834055b6b07fa11d5274b1",
+  "claimed_at": "2026-09-14T08:54:00Z",
+  "state": "CLAIMED",
+  "write_scope": [
+    "Frontend/factory-v0/src/acquisition/microkernel-v1/**",
+    "Frontend/factory-v0/tests/*acquisition-microkernel*",
+    "Frontend/factory-v0/project-memory/*F-BE-074*"
+  ],
+  "reuse_authority": {
+    "workflow": ".github/workflows-paused/ui-yaiwes-124-download-extract-20260906.yml",
+    "extractor": "scripts/ui-yaiwes-grupo-a-14-20260906/extract_existing_parts.py",
+    "policy": "CANONICAL_MOTOR2_DIRECT_PUBLISH_FAIL_CLOSED",
+    "destination": "UI YAIWES/componentes open soure UI YAIWES"
+  },
+  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"]
+}
