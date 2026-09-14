@@ -1,0 +1,18 @@
+{
+  "schema": "yaiwes.gap-subclaim.v1",
+  "contract": "tel.workflow/v3",
+  "parent_node": "GAP-02-N35-S3-REMAINDER",
+  "requirement_id": "REQ-S3-018",
+  "owner": "SUPERVISOR_CHAT",
+  "state": "CLAIMED",
+  "fresh_base_main_sha": "2eef6049cfa5efc2659e98596d26362fdfa3bab0",
+  "write_scope": [
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-018.json",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-018.ci.json",
+    "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_req_s3_018.py",
+    ".github/workflows/yaiwes-n35-req-s3-018-focused-20260914.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/reports/CLAIM-GAP02-REQ-S3-018-SUPERVISOR-2026-09-14.json"
+  ],
+  "strategy": "REUSE N27 StrategyDelta retry/reinjection implementation, tests and trusted CI; no runtime rewrite.",
+  "acceptance": "Exact RequirementTrace + trusted evidence + focused five-pass exact-SHA CI + readback."
+}
