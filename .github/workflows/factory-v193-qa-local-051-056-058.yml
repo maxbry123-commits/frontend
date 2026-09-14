@@ -1,0 +1,86 @@
+name: Factory V1.9.3 QA 051-056 058
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/f-ui-05*.spec.mjs'
+      - '.github/workflows/factory-v193-qa-local-051-056-058.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-v193-qa-local
+  cancel-in-progress: true
+
+jobs:
+  qa-local:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+          sparse-checkout-cone-mode: false
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Candidate exact readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "revision=$GITHUB_SHA"
+          git hash-object index-v193.html
+          git hash-object src/bootstrap/candidate-v193.js
+          git hash-object tests/e2e/f-ui-051-button-matrix-desktop.spec.mjs
+          git hash-object tests/e2e/f-ui-052-button-matrix-mobile.spec.mjs
+          git hash-object tests/e2e/f-ui-053-component-journey.spec.mjs
+          git hash-object tests/e2e/f-ui-054-sol6-refutation.spec.mjs
+          git hash-object tests/e2e/f-ui-055-command-matrix.spec.mjs
+          git hash-object tests/e2e/f-ui-056-a11y-functional.spec.mjs
+          git hash-object tests/e2e/f-ui-058-visual-friction.spec.mjs
+      - name: F-UI-051 desktop controls
+        run: npx playwright test tests/e2e/f-ui-051-button-matrix-desktop.spec.mjs --project=chromium-desktop
+      - name: F-UI-052 mobile touch matrix
+        run: npx playwright test tests/e2e/f-ui-052-button-matrix-mobile.spec.mjs --project=mobile-chromium
+      - name: F-UI-053 component journey desktop
+        run: npx playwright test tests/e2e/f-ui-053-component-journey.spec.mjs --project=chromium-desktop
+      - name: F-UI-053 component journey mobile
+        run: npx playwright test tests/e2e/f-ui-053-component-journey.spec.mjs --project=mobile-chromium
+      - name: F-UI-054 three simulations three refutations
+        run: npx playwright test tests/e2e/f-ui-054-sol6-refutation.spec.mjs --project=chromium-desktop
+      - name: F-UI-055 command shortcut matrix
+        run: npx playwright test tests/e2e/f-ui-055-command-matrix.spec.mjs --project=chromium-desktop
+      - name: F-UI-056 accessibility desktop
+        if: always()
+        run: npx playwright test tests/e2e/f-ui-056-a11y-functional.spec.mjs --project=chromium-desktop
+      - name: F-UI-056 accessibility mobile
+        if: always()
+        run: npx playwright test tests/e2e/f-ui-056-a11y-functional.spec.mjs --project=mobile-chromium
+      - name: F-UI-058 visual desktop
+        if: always()
+        run: npx playwright test tests/e2e/f-ui-058-visual-friction.spec.mjs --project=chromium-desktop
+      - name: F-UI-058 visual mobile
+        if: always()
+        run: npx playwright test tests/e2e/f-ui-058-visual-friction.spec.mjs --project=mobile-chromium
+      - name: Upload QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-v193-qa-local-${{ github.sha }}
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/**
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report/**
+          if-no-files-found: warn
+          retention-days: 14
