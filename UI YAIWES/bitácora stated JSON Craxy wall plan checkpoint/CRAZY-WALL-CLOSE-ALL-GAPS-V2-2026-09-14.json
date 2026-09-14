@@ -8,17 +8,17 @@
   "base_head_observed": "3a65b905cb78cdaa71ddf455588d2d43fe92ed21",
   "progress": {
     "denominator": 167,
-    "certified_confirmed": 13,
-    "missing_confirmed": 154,
-    "certified_ids": ["REQ-S3-016","REQ-S3-018","REQ-S3-044","REQ-S3-045","REQ-S3-046","REQ-S3-047","REQ-S3-048","REQ-S3-049","REQ-S3-050","REQ-S3-053","REQ-S3-054","REQ-S3-055","REQ-S3-057"],
-    "current_subgap": "REQ-S3-017",
-    "current_subgap_state": "PASS_PENDING_CI",
+    "certified_confirmed": 14,
+    "missing_confirmed": 153,
+    "certified_ids": ["REQ-S3-016","REQ-S3-017","REQ-S3-018","REQ-S3-044","REQ-S3-045","REQ-S3-046","REQ-S3-047","REQ-S3-048","REQ-S3-049","REQ-S3-050","REQ-S3-053","REQ-S3-054","REQ-S3-055","REQ-S3-057"],
+    "current_subgap": "REQ-S3-001",
+    "current_subgap_state": "VERIFY_RESEARCH",
     "current_subgap_evidence": {
-      "evidence_commit": "fcaf020be6a75ab028efb8ee4f1e21cebe33ae02",
-      "trace_commit": "45404e74b9c1b889fcf7da950e3703aee8afe928",
-      "focused_test_commit": "aea8272039727c16a6d794c1cc16141800aeb40d",
-      "workflow_run": 34899656024,
-      "last_observed": "pending_with_zero_jobs"
+      "previous_closed": "REQ-S3-017",
+      "trusted_ci_run": 34745090975,
+      "trusted_ci_job": 103691474425,
+      "trusted_ci_conclusion": "success",
+      "revision": "52d52bac59186078e36af7a982b7c7f8aaf2d9dc"
     }
   },
   "node_task_schema": {
@@ -47,12 +47,12 @@
       "state": "IN_PROGRESS",
       "owner": "watchdog-close-all-gaps",
       "write_scope": ["runtime/requirement_traces/REQ-S3-*.json","runtime/evidence/requirement_traces/REQ-S3-*.ci.json","focused requirement tests only"],
-      "pending_confirmed_count": 51,
+      "pending_confirmed_count": 50,
       "verify_research": "literal requirement -> existing implementation symbol -> existing test symbol -> trusted CI candidate; detect active claim/collision first",
       "execute_delta": "repair only MISSING_IMPLEMENTATION|MISSING_WIRING|MISSING_TEST|MISSING_CI; otherwise REUSE existing code and add only missing trace/evidence/test binding",
       "test_report": "focused regression + audit_five_pass + exact trusted completed/success CI/readback",
       "close": "64/64 S3 certified; 0 S3 missing_trace",
-      "current_child": "REQ-S3-017"
+      "current_child": "REQ-S3-001"
     },
     {
       "id": "GAP-03-N35-S1",
