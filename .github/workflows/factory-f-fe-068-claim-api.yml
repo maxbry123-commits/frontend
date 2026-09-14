@@ -1,0 +1,61 @@
+name: Factory F-FE-068 mobile-fit claim
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-fe-068-claim-api.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  claim:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Claim one real reproduced GAP via API
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PATH_ENCODED: UI%20YAIWES/bit%C3%A1cora%20stated%20JSON%20Craxy%20wall%20plan%20checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os,json,base64,urllib.request,datetime
+          repo=os.environ['REPO']; token=os.environ['GH_TOKEN']; p=os.environ['PATH_ENCODED']
+          headers={'Authorization':f'Bearer {token}','Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','User-Agent':'factory-claim'}
+          def get(url):
+            with urllib.request.urlopen(urllib.request.Request(url,headers=headers)) as r:return json.load(r)
+          obj=get(f'https://api.github.com/repos/{repo}/contents/{p}?ref=main')
+          sha=obj['sha']; data=json.loads(base64.b64decode(obj['content']))
+          ref=get(f'https://api.github.com/repos/{repo}/git/ref/heads/main')
+          head=ref['object']['sha']
+          for n in data['frontend_nodes']:
+            if n.get('chat_id')=='CURRENT_CHAT_FACTORY_SEGMENTATION' and n.get('state') in ('CLAIMED','EXECUTING'):
+              raise SystemExit(f'active node collision: {n["id"]}')
+          ids={n['id'] for n in data['frontend_nodes']}
+          if 'F-FE-069-COMMAND-PALETTE' not in ids:
+            data['frontend_nodes'].append({
+              'id':'F-FE-069-COMMAND-PALETTE','title':'Implement real Ctrl+K command palette over canonical actions','state':'FREE','segment_id':'SEG-02-BROWSER','owner':None,'chat_id':None,
+              'write_scope':['Frontend/factory-v0/src/ui/component-browser-v3.js','Frontend/factory-v0/tests/e2e/f-ui-069-command-palette.spec.mjs','Frontend/factory-v0/project-memory/F-FE-069-*','.github/workflows/factory-f-fe-069*','UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json'],
+              'depends_on':['F-FRONTEND-QA-066'],'steps':['VERIFY_RESEARCH','EXECUTE_DELTA','TEST_REPORT'],
+              'acceptance':'Ctrl+K opens accessible command surface; every listed command calls existing canonical UI/action path; keyboard navigation/Escape PASS; no second state engine',
+              'evidence_seed':['run 34830387803 job 103932105765: command surfaces count=0 on V1.9.5']})
+          if 'F-FE-068-MOBILE-FIT' in ids:
+            node=next(n for n in data['frontend_nodes'] if n['id']=='F-FE-068-MOBILE-FIT')
+            assert node['state'] in ('FREE','GAP_RESOLVABLE'),node
+          else:
+            node={'id':'F-FE-068-MOBILE-FIT','title':'Eliminate real mobile horizontal overflow without clipping functionality','state':'FREE','segment_id':'SEG-01-SHELL','owner':None,'chat_id':None,
+              'write_scope':['Frontend/factory-v0/workspace-shell-v3.css','Frontend/factory-v0/tests/e2e/f-ui-068-mobile-fit.spec.mjs','Frontend/factory-v0/project-memory/F-FE-068-*','.github/workflows/factory-f-fe-068*','UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json'],
+              'depends_on':['F-FRONTEND-QA-066'],'steps':['VERIFY_RESEARCH','EXECUTE_DELTA','TEST_REPORT'],
+              'acceptance':'412px viewport has html/body scrollWidth <=414 without overflow:hidden-only masking; drawers, toolbar, canvas and touch targets remain usable; focused browser gate PASS',
+              'evidence_seed':['run 34830387803 job 103932105765: body.scrollWidth=604 on viewport=412']}
+            data['frontend_nodes'].append(node)
+          assert node['state'] in ('FREE','GAP_RESOLVABLE')
+          node.update({'state':'CLAIMED','owner':'GPT-5.6-SOL','chat_id':'CURRENT_CHAT_FACTORY_SEGMENTATION','fresh_main_sha':head,'claimed_at':'2026-09-14T05:00:00-05:00'})
+          data['last_reconciled_at']='2026-09-14T05:00:00-05:00'
+          raw=(json.dumps(data,ensure_ascii=False,indent=2)+'\n').encode()
+          payload=json.dumps({'message':'claim(factory): F-FE-068 mobile fit reproduced gap','content':base64.b64encode(raw).decode(),'sha':sha,'branch':'main'}).encode()
+          req=urllib.request.Request(f'https://api.github.com/repos/{repo}/contents/{p}',data=payload,headers={**headers,'Content-Type':'application/json'},method='PUT')
+          with urllib.request.urlopen(req) as r: out=json.load(r)
+          print(out['commit']['sha']); print(out['content']['sha']); print(head)
+          PY
