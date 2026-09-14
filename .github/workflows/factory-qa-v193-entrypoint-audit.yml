@@ -1,0 +1,39 @@
+name: Factory QA V1.9.3 Entrypoint Audit
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/qa-v193-entrypoint-audit.test.mjs'
+      - '.github/workflows/factory-qa-v193-entrypoint-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit-entrypoints:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax
+        run: node --check tests/qa-v193-entrypoint-audit.test.mjs
+      - name: Audit F-UI-051 through F-UI-061
+        run: node tests/qa-v193-entrypoint-audit.test.mjs
+      - name: Preserve audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-qa-v193-entrypoint-audit-${{ github.sha }}
+          path: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results/qa-v193-entrypoint-audit.json
+          if-no-files-found: warn
+          retention-days: 14
