@@ -200,10 +200,10 @@ test.describe('F-FE-073 unit drag intent', () => {
     expect(RESIZE_CORNER_PAD).toBe(22);
     expect(MOVE_THRESHOLD_PX).toBe(10);
     expect(LONG_PRESS_MS).toBe(350);
-    expect(v192).toMatch(/version:'1\\.9\\.2'/);
-    expect(v193).toMatch(/TOUCH_DND_VERSION = '1\\.9\\.3'/);
-    expect(v194).toMatch(/TOUCH_DND_VERSION = '1\\.9\\.4'/);
-    expect(v195).toMatch(/TOUCH_DND_VERSION = '1\\.9\\.5'/);
+    expect(v192).toContain("version:'1.9.2'");
+    expect(v193).toContain("TOUCH_DND_VERSION = '1.9.3'");
+    expect(v194).toContain("TOUCH_DND_VERSION = '1.9.4'");
+    expect(v195).toContain("TOUCH_DND_VERSION = '1.9.5'");
     expect(v192.includes('1.9.5')).toBe(false);
     expect(v193.includes('1.9.5')).toBe(false);
     expect(v194.includes('1.9.5')).toBe(false);
