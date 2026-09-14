@@ -1,0 +1,156 @@
+{
+  "schema": "yaiwes.factory.segmented.crazywall.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "status": "ACTIVE_SEGMENTED_RECOVERY",
+  "created_at": "2026-09-14T04:17:00-05:00",
+  "observed_head_before_write": "0129295e13ee2dd3c2b2d2d8ed642f68d2343f71",
+  "authority": [
+    "fresh code + runtime + tests + Actions logs",
+    "FACTORY-SUPERVISOR-RECONCILIATION-R09-2026-09-13.json",
+    "FACTORY-CRAZY-WALL-FRONTEND-QA-V3-2026-09-12.json",
+    "FACTORY-CRAZY-WALL-DYNAMIC-V2-2026-09-12.json"
+  ],
+  "coordination": {
+    "one_chat_one_active_node": true,
+    "one_path_one_writer": true,
+    "claimable_states": ["FREE", "GAP_RESOLVABLE"],
+    "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+    "strategy": ["REUSE_EXISTING", "PATCH", "ADAPT", "GENERATE", "NEW_DOWNLOAD"],
+    "fresh_read_before_every_write": true,
+    "on_collision": "RELEASE_OR_SKIP_PATH_AND_READ_FRESH",
+    "producer_cannot_self_certify_final": true,
+    "no_force_push": true,
+    "no_git_lfs": true,
+    "external_agents": "MCP_OR_API_ONLY",
+    "pass_rule": "SOURCE_PRESENT != IMPLEMENTED != WIRED != RUNTIME_TEST_PASS != VERIFIED_CLOSED"
+  },
+  "version_policy": {
+    "frozen_entrypoints": ["Frontend/factory-v0/index-v19.html", "Frontend/factory-v0/index-v192.html"],
+    "worker_rule": "workers create or patch only their assigned segment v+1; historical versions remain untouched",
+    "integrator_rule": "only SEG-11 integrator may assemble a new candidate entrypoint",
+    "promotion_rule": "preview -> candidate after focused tests -> live only after TESTED_SHA == PUBLISHED_SHA",
+    "stable_live_is_never_worker_scratch": true
+  },
+  "segment_registry": "Frontend/factory-v0/src/segments/segment-registry-v1.js",
+  "preclaim_coordination_delta": {
+    "path": "Frontend/factory-v0/src/segments/segment-contract-v1.js",
+    "commit": "0129295e13ee2dd3c2b2d2d8ed642f68d2343f71",
+    "classification": "COORDINATION_ONLY_NOT_PASS_EVIDENCE"
+  },
+  "frontend_nodes": [
+    {
+      "id": "F-ARCH-SEGMENT-064",
+      "title": "Freeze historical entrypoints and establish path ownership segmentation",
+      "state": "CLAIMED",
+      "owner": "GPT-5.6-SOL",
+      "chat_id": "CURRENT_CHAT_FACTORY_SEGMENTATION",
+      "fresh_main_sha": "0129295e13ee2dd3c2b2d2d8ed642f68d2343f71",
+      "claimed_at": "2026-09-14T04:17:00-05:00",
+      "write_scope": [
+        "Frontend/factory-v0/src/bootstrap/candidate-v193.js",
+        "Frontend/factory-v0/index-v193-preview.html",
+        "Frontend/factory-v0/tests/segment-architecture.test.mjs",
+        "UI YAIWES/readme arquitectura UI YAIWES/ARQUITECTURA-FACTORY-SEGMENTADA-V10-2026-09-14.md",
+        "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json"
+      ],
+      "depends_on": [],
+      "steps": [
+        "Verify R09 divergence and fresh segment registry without modifying frozen versions",
+        "Create integrator-only V1.9.3 preview bootstrap that reuses existing modules in deterministic order",
+        "Run static architecture test/readback and report exact blobs/commit; do not promote live"
+      ],
+      "acceptance": "historical entrypoints unchanged; preview assembled by one bootstrap; every editable path has exactly one segment owner; static test PASS",
+      "evidence": [],
+      "remaining_gaps": []
+    },
+    {
+      "id": "F-INT-CANONICAL-065",
+      "title": "Browser smoke and canonical candidate convergence",
+      "state": "BLOCKED_AFTER_F-ARCH-SEGMENT-064",
+      "write_scope": ["Frontend/factory-v0/index-v193*.html", "Frontend/factory-v0/src/bootstrap/candidate-v193*.js", "Frontend/factory-v0/tests/e2e/*v193*", ".github/workflows/*factory-v193*"],
+      "depends_on": ["F-ARCH-SEGMENT-064"],
+      "steps": ["Verify preview loads all approved v19+v192 capabilities", "Patch bootstrap/segment wiring only; no second state engine", "Run desktop+mobile smoke and preserve run/job/artifact evidence"],
+      "acceptance": "workspace/browser + JSON/version/destination/skill/touch + router/layers/HF coexist on one exact candidate SHA"
+    },
+    {
+      "id": "F-FRONTEND-QA-066",
+      "title": "Repoint existing F-UI-051..061 gates to the unified candidate",
+      "state": "BLOCKED_AFTER_F-INT-CANONICAL-065",
+      "write_scope": ["Frontend/factory-v0/tests/e2e/**", "Frontend/factory-v0/project-memory/**", ".github/workflows/*factory*"],
+      "depends_on": ["F-INT-CANONICAL-065"],
+      "steps": ["Repair F-UI-051 harness selectors/indexing", "Run 051..061 against same candidate without inheriting lane PASS", "Report gaps and preserve independent review chain 062->063"],
+      "acceptance": "same tested candidate across controls/mobile/accessibility/router/HF/full journey; F-UI-063 remains sole FRONTEND_100 gate"
+    }
+  ],
+  "backend_nodes": [
+    {
+      "id": "B-MK-001",
+      "title": "Canonical acquisition/extraction micro-kernel wrapper",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/microkernel/acquisition/**"],
+      "depends_on": [],
+      "steps": ["Verify canonical Motor 2 and existing acquisition artifacts", "Wrap, do not fork: capability request -> canonical acquisition adapter", "Test fail-closed no-download path + exact provenance handoff"],
+      "acceptance": "no alternate downloader; canonical motor invoked only after approved capability gap"
+    },
+    {
+      "id": "B-MK-002",
+      "title": "Research and local dedup gate",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/microkernel/research/**"],
+      "depends_on": [],
+      "steps": ["Search local OSS registry/capability bus first", "Research external source only when local gap remains", "Emit deterministic acquire|reuse|reject decision with source/license/version"],
+      "acceptance": "REUSE beats download; LLM limited to bounded ranking/ambiguity"
+    },
+    {
+      "id": "B-MK-003",
+      "title": "Provenance and integrity ledger",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/microkernel/provenance/**"],
+      "depends_on": ["B-MK-001"],
+      "steps": ["Define source_url/ref/hash/license/destination/adapter/test schema", "Bind extracted artifact to SHA256 and destination", "Reject promotion on missing provenance or hash mismatch"],
+      "acceptance": "every acquired artifact has auditable source/ref/hash/license/destination/adapter/test"
+    },
+    {
+      "id": "B-MK-004",
+      "title": "Fables Universal Plugin + capability bus wiring",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/microkernel/bus/**", "Frontend/factory-v0/src/microkernel/plugins/**"],
+      "depends_on": ["B-MK-003"],
+      "steps": ["Verify existing Fables/plugin contracts before code", "Adapt accepted capability behind typed bus port", "Shadow-test adapter then activate registry entry"],
+      "acceptance": "new capability cannot mutate core directly; all calls pass typed adapter/bus"
+    },
+    {
+      "id": "B-MK-005",
+      "title": "MCP/API ingress + capability router",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/src/microkernel/mcp/**", "Frontend/factory-v0/src/microkernel/router/**"],
+      "depends_on": ["B-MK-004"],
+      "steps": ["Reuse MCP SDK/router/backend adapter contracts", "Route API/MCP request to registered capability with policy and secret_ref", "Test health/route/error/cancel/readback without browser secrets"],
+      "acceptance": "MCP/API only external ingress; typed routing; fail-closed unknown capability/provider"
+    },
+    {
+      "id": "B-MK-006",
+      "title": "Deterministic auto-evolution promotion controller",
+      "state": "BLOCKED_AFTER_B-MK-001_005",
+      "write_scope": ["Frontend/factory-v0/src/microkernel/promotion/**", "Frontend/factory-v0/tests/microkernel/**"],
+      "depends_on": ["B-MK-001", "B-MK-002", "B-MK-003", "B-MK-004", "B-MK-005"],
+      "steps": ["Enforce 96/4 deterministic/LLM boundary", "Run isolated + Factory integration tests before promote", "Promote or reject with immutable evidence; never self-certify UI final"],
+      "acceptance": "capability_gap -> dedup -> research -> acquire -> provenance -> adapter -> bus -> test -> preview -> review -> promote|reject is auditable and fail-closed"
+    },
+    {
+      "id": "B-OSS-007",
+      "title": "Blender patterns + top10 app/web OSS + three additional candidates",
+      "state": "FREE",
+      "write_scope": ["Frontend/factory-v0/project-memory/oss-research/**"],
+      "depends_on": ["B-MK-002"],
+      "steps": ["Research Blender interaction/plugin/workspace patterns and inventory local OSS", "Rank 10 app/web design systems plus 3 additional candidates against concrete Factory gaps", "Acquire nothing until B-MK-002 says NEW_DOWNLOAD and provenance/license are complete"],
+      "acceptance": "research maps component -> gap -> reuse/adapt/download decision; no duplicate monolith"
+    }
+  ],
+  "join_gates": {
+    "frontend": "F-ARCH-SEGMENT-064 -> F-INT-CANONICAL-065 -> F-FRONTEND-QA-066 -> existing F-UI-062 -> existing F-UI-063",
+    "backend": "B-MK-001 + B-MK-002 -> B-MK-003 -> B-MK-004 -> B-MK-005 -> B-MK-006",
+    "final": "frontend and backend evidence are reconciled; product 100% still requires exact published candidate + independent review + F-UI-063"
+  }
+}
