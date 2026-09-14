@@ -1,0 +1,160 @@
+{
+  "schema": "yaiwes.crazy-wall.close-all-gaps.v2",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "created_utc": "2026-09-14T21:43:00Z",
+  "objective": "Resolver exclusivamente todos los GAPs restantes de UI YAIWES hasta cierre global verificable.",
+  "authority": "fresh main code + tests + trusted CI/readback > V2 > V1/N34/N35 > architecture/handoff > history",
+  "base_head_observed": "3a65b905cb78cdaa71ddf455588d2d43fe92ed21",
+  "progress": {
+    "denominator": 167,
+    "certified_confirmed": 13,
+    "missing_confirmed": 154,
+    "certified_ids": ["REQ-S3-016","REQ-S3-018","REQ-S3-044","REQ-S3-045","REQ-S3-046","REQ-S3-047","REQ-S3-048","REQ-S3-049","REQ-S3-050","REQ-S3-053","REQ-S3-054","REQ-S3-055","REQ-S3-057"],
+    "current_subgap": "REQ-S3-017",
+    "current_subgap_state": "PASS_PENDING_CI",
+    "current_subgap_evidence": {
+      "evidence_commit": "fcaf020be6a75ab028efb8ee4f1e21cebe33ae02",
+      "trace_commit": "45404e74b9c1b889fcf7da950e3703aee8afe928",
+      "focused_test_commit": "aea8272039727c16a6d794c1cc16141800aeb40d",
+      "workflow_run": 34899656024,
+      "last_observed": "pending_with_zero_jobs"
+    }
+  },
+  "node_task_schema": {
+    "one_literal_task_one_node": true,
+    "required_fields": ["id","source_selector","state","owner","write_scope","verify_research","execute_delta","test_report","close"],
+    "state_machine": "FREE -> CLAIMED -> VERIFY_RESEARCH -> EXECUTE_DELTA -> TEST_REPORT -> VERIFIED_CLOSED | GAP_RESOLVABLE | BLOCKED",
+    "strategy_order": "REUSE_EXISTING > PATCH > ADAPT",
+    "forbidden": ["unrelated feature","unrelated component/download","second runtime/state/auditor engine","synthetic trace","fake CI","fixture as real-platform proof","force push","overwrite active claim"],
+    "subtask_generation": "For requirement groups, materialize exactly one child node for each requirement_inventory() item whose RequirementTrace/five-pass certification is not VERIFIED_CLOSED."
+  },
+  "nodes": [
+    {
+      "id": "GAP-01-N35-S3-048",
+      "source_selector": "REQ-S3-048",
+      "state": "VERIFIED_CLOSED",
+      "owner": null,
+      "write_scope": [],
+      "verify_research": "read exact S3-048 anchor + code/test/trace/evidence",
+      "execute_delta": "none",
+      "test_report": "CI 34825919154/103917937346 + TRACEABILITY_PASS",
+      "close": "already verified closed"
+    },
+    {
+      "id": "GAP-02-N35-S3-REMAINDER",
+      "source_selector": "all S3 items in requirement_inventory() not VERIFIED_CLOSED",
+      "state": "IN_PROGRESS",
+      "owner": "watchdog-close-all-gaps",
+      "write_scope": ["runtime/requirement_traces/REQ-S3-*.json","runtime/evidence/requirement_traces/REQ-S3-*.ci.json","focused requirement tests only"],
+      "pending_confirmed_count": 51,
+      "verify_research": "literal requirement -> existing implementation symbol -> existing test symbol -> trusted CI candidate; detect active claim/collision first",
+      "execute_delta": "repair only MISSING_IMPLEMENTATION|MISSING_WIRING|MISSING_TEST|MISSING_CI; otherwise REUSE existing code and add only missing trace/evidence/test binding",
+      "test_report": "focused regression + audit_five_pass + exact trusted completed/success CI/readback",
+      "close": "64/64 S3 certified; 0 S3 missing_trace",
+      "current_child": "REQ-S3-017"
+    },
+    {
+      "id": "GAP-03-N35-S1",
+      "source_selector": "REQ-S1-001..REQ-S1-020",
+      "state": "GAP_RESOLVABLE",
+      "owner": null,
+      "write_scope": ["S1 implementation/test gaps + S1 RequirementTrace/evidence"],
+      "pending_confirmed_count": 20,
+      "verify_research": "anchor each S1 requirement -> locate existing code/test first",
+      "execute_delta": "minimum real fix only when implementation/wiring/test/CI is absent",
+      "test_report": "focused test + five-pass + trusted CI",
+      "close": "20/20 S1 certified"
+    },
+    {
+      "id": "GAP-04-N35-S2",
+      "source_selector": "REQ-S2-000..REQ-S2-014 excluding REQ-S2-011",
+      "state": "GAP_RESOLVABLE",
+      "owner": null,
+      "write_scope": ["S2 platform/sandbox gaps + S2 RequirementTrace/evidence"],
+      "pending_confirmed_count": 14,
+      "verify_research": "anchor -> real platform/sandbox implementation + test; classify simulated vs real",
+      "execute_delta": "minimum platform delta; never upgrade a fixture result to real-platform evidence",
+      "test_report": "focused platform regression + five-pass + trusted CI/readback",
+      "close": "14/14 S2 certified with real/simulated boundary explicit"
+    },
+    {
+      "id": "GAP-05-N35-S4-COMMAND-CENTER",
+      "source_selector": "all 69 S4 Command Center requirements",
+      "state": "GAP_RESOLVABLE",
+      "owner": null,
+      "write_scope": ["Command Center UI/runtime/connector gaps + S4 RequirementTrace/evidence"],
+      "pending_confirmed_count": 69,
+      "verify_research": "literal S4 requirement -> current UI/runtime route/control -> effect test -> auth boundary where applicable",
+      "execute_delta": "smallest real UI/runtime/connector repair; REQ-S4-034 requires real auth/authz evidence",
+      "test_report": "control/effect test + focused regression + five-pass + trusted CI",
+      "close": "69/69 S4 implemented, wired, tested and certified"
+    },
+    {
+      "id": "GAP-06-UI-COMMAND-CENTER-E2E",
+      "source_selector": "deployed Command Center browser acceptance",
+      "state": "BLOCKED_AFTER_GAP-05",
+      "owner": null,
+      "write_scope": ["only observed UI/E2E blocker paths"],
+      "verify_research": "map required routes/controls against exact published candidate",
+      "execute_delta": "repair only dead/missing wiring observed by browser test",
+      "test_report": "real browser E2E: chat/model/stream/stop/history/files/tasks/recovery/error/auth",
+      "close": "TESTED_SHA == PUBLISHED_SHA and browser suite PASS"
+    },
+    {
+      "id": "GAP-07-PLATFORM-REAL-ACCEPTANCE",
+      "source_selector": "required supported real platform targets",
+      "state": "BLOCKED_AFTER_GAP-04",
+      "owner": null,
+      "write_scope": ["only observed platform blocker paths"],
+      "verify_research": "execute available real targets; preserve unsupported targets honestly",
+      "execute_delta": "patch only reproducible real-platform blocker; preserve rollback and architecture gates",
+      "test_report": "reproducible real target evidence, no fixture substitution",
+      "close": "all required supported real targets evidenced"
+    },
+    {
+      "id": "GAP-08-GLOBAL-TRACE-CERTIFICATION",
+      "source_selector": "full 167 requirement inventory",
+      "state": "BLOCKED_AFTER_GAP-02-03-04-05",
+      "owner": null,
+      "write_scope": ["coverage/trace audit artifacts only unless a residual requirement gap is proven"],
+      "verify_research": "load exact 167 inventory + all traces/evidence and inverse-map artifacts",
+      "execute_delta": "repair only residual missing/contradictory/orphan binding",
+      "test_report": "full five-pass + inverse reconciliation + contradiction/orphan checks + trusted CI",
+      "close": "167/167; 0 missing_trace; 0 contradiction; 0 orphan"
+    },
+    {
+      "id": "GAP-09-FINAL-JUDGE",
+      "source_selector": "global project exact published candidate",
+      "state": "BLOCKED_AFTER_GAP-06-07-08",
+      "owner": null,
+      "write_scope": ["final residual fixes + final judge evidence/handoff/recovery patch"],
+      "verify_research": "cross-check Crazy Wall + architecture/handoff + exact code/tests/evidence",
+      "execute_delta": "repair residual only",
+      "test_report": "12 entry goals + 12 exit goals + Council12 + 3 refutations + 4 E2E simulations/executions + exact CI/readback",
+      "close": "no open GAP and Final Judge VERIFIED_CLOSED on exact published SHA; then publish recovery patch + updated handoff + URLs"
+    },
+    {
+      "id": "GAP-10-STEERING-INTERPROCESS-OSS",
+      "source_selector": "drain_steer-equivalent advanced OSS donors",
+      "state": "VERIFIED_CLOSED_ACQUISITION_ONLY",
+      "owner": null,
+      "write_scope": [],
+      "microflow": "run_id -> key/queue -> operator/API injects directive -> worker consumes directive(s) -> persistent task continues without restart",
+      "selected_count": 4,
+      "selected": [
+        {"name":"Temporal Python SDK","repo":"temporalio/sdk-python","commit":"ab25ed693f7ec77589346e66c98db299a8c9c9fe","path":"UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/Temporal-Python-SDK","manifest_blob":"acab95faa2129aecfbf10ee8bc70debd3f1d94f3"},
+        {"name":"DBOS Python","repo":"dbos-inc/dbos-transact-py","commit":"83805fd84494c85ea09105443884a2786152d921","path":"UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/DBOS-Python","manifest_blob":"288318149cb949e1758a7a7e3ccd8c593b54ca3d"},
+        {"name":"LangGraph","repo":"langchain-ai/langgraph","commit":"e539ac122f4126f6dd850581c1494948cf620e31","path":"UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/LangGraph","manifest_blob":"783f22b77988ba01f1528df75ef2a3ddb95f1f54"},
+        {"name":"Hatchet","repo":"hatchet-dev/hatchet","commit":"315d43a72fd771b049b304b865a81dbab98c466c","path":"UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/Hatchet","manifest_blob":"961314ff8cafd8445eda425c13a8cd9a3b35c873"}
+      ],
+      "verify_research": "official repos/docs + local manifest/source commit/readback",
+      "execute_delta": "none; acquisition already complete through canonical motors/reuse guards",
+      "test_report": "4 physical destinations + 4 manifests + source commit exact + extraction_verified + no_lfs",
+      "close": "acquisition only; runtime integration is forbidden unless a remaining GAP proves it necessary"
+    }
+  ],
+  "execution_order": ["GAP-02","GAP-03/GAP-04/GAP-05 non-overlapping parallel only","GAP-06/GAP-07","GAP-08","GAP-09"],
+  "final_deliverables": ["PARCHE-RECUPERACION-CIERRE-TOTAL-UI-YAIWES.md","HANDOFF-CIERRE-TOTAL-UI-YAIWES.md","exact project/Crazy-Wall/CI/commit URLs"],
+  "global_close_gate": "GAP-01..10 terminal AND GAP-09 Final Judge VERIFIED_CLOSED on exact published SHA"
+}
