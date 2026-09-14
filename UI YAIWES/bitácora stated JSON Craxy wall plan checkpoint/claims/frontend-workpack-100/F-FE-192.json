@@ -1,0 +1,27 @@
+{
+  "schema":"yaiwes.factory.frontend.node-claim.v1",
+  "contract":"tel.workflow/v3",
+  "mode":"FAIL_CLOSED_LOOP",
+  "node_id":"F-FE-192-OSS-FRONTEND-AUDIT-SKILL",
+  "segment_id":"SEG-10-OSS",
+  "lane":"GROK-K",
+  "state":"CLAIMED",
+  "owner":"GPT-5.6-SOL",
+  "agent":"GPT-5.6-SOL",
+  "chat_id":"CURRENT_CHAT_FACTORY_WATCHDOG_LOOP",
+  "fresh_main_sha":"990b582870a9567e57a13efb4c45b5c1eac4c129",
+  "claimed_at":"2026-09-14T13:38:00Z",
+  "type":"QA_ADAPTER",
+  "source_component":"frontend-audit-skill",
+  "source_truth":"Already extracted by commit 3e035c4675ed3d00430e9934d60948b890cfe6c6; do not install dependencies, OmniParser, browser, or autonomous CSS mutation loop from donor.",
+  "allowed_donation":"deterministic screenshot/semantic-locator visual regression policy only",
+  "write_scope":[
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/oss/frontend-audit-qa-v1.js",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/oss/f-fe-192-frontend-audit-skill.spec.mjs",
+    "UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/project-memory/F-FE-192-OSS-FRONTEND-AUDIT-SKILL-REPORT.md",
+    ".github/workflows/factory-f-fe-192-frontend-audit-skill.yml",
+    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-192.json"
+  ],
+  "rules":["QA_ONLY_NO_PRODUCT_PATCH","NO_AUTONOMOUS_CSS_MUTATION","NO_OMNIPARSER_OR_MODEL_DOWNLOAD","NO_CANDIDATE_WIRING","REUSE_PLAYWRIGHT","NO_SECOND_STATE_ENGINE"],
+  "release":false
+}
