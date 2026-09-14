@@ -1,0 +1,166 @@
+name: YAIWES Motor 3 copy fast sparse
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/yaiwes-copy-selected-coda-components-fast.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  copy-motor3-fast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Sparse checkout frontend
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            .github/workflows/yaiwes-copy-selected-coda-components-fast.yml
+            UI YAIWES/24-CODA-INTEGRATION/
+
+      - name: Sparse clone agentes source
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="$RUNNER_TEMP/agentes-source"
+          git clone --filter=blob:none --no-checkout --depth 1 --branch main https://github.com/maxbry123-commits/agentes.git "$SRC"
+          git -C "$SRC" sparse-checkout init --cone
+          git -C "$SRC" sparse-checkout set \
+            'Motores/➡️📂motor de copiar archivos' \
+            '📂coda workflow persistencias/🏈 YAIWES 08' \
+            '📂coda workflow persistencias/🏈 YAIWES 11' \
+            '📂coda workflow persistencias/🏈 YAIWES 12' \
+            '📂coda workflow persistencias/🏈 YAIWES 15' \
+            '📂coda workflow persistencias/🏈 YAIWES 16' \
+            '📂coda workflow persistencias/🏈 YAIWES 21' \
+            '📂coda workflow persistencias/🏈 YAIWES 22' \
+            '📂coda workflow persistencias/🏈 YAIWES 23'
+          git -C "$SRC" checkout main
+          echo "SOURCE_SHA=$(git -C "$SRC" rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Validate immutable Motor 3 lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="$RUNNER_TEMP/agentes-source"
+          EXPECTED='3689924361ce4a1a9fde4ae2b6f6009c37a6042d'
+          ACTUAL="$(git -C "$SRC" hash-object 'Motores/➡️📂motor de copiar archivos/motor_3_copy_batches.py')"
+          echo "motor_blob_sha=$ACTUAL"
+          test "$ACTUAL" = "$EXPECTED" || { echo MOTOR_CODE_LOCK_GAP; exit 1; }
+
+      - name: Run Motor 3 for selected CODA components
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="$RUNNER_TEMP/agentes-source"
+          MOTOR="$SRC/Motores/➡️📂motor de copiar archivos/motor_3_copy_batches.py"
+          STATE_ROOT="$RUNNER_TEMP/motor3-state"
+          mkdir -p "$STATE_ROOT"
+          for N in 08 11 12 15 16 21 22 23; do
+            echo "[MOTOR3][YAIWES $N]"
+            SOURCE_DIR="$SRC/📂coda workflow persistencias/🏈 YAIWES $N" \
+            DEST_DIR="$GITHUB_WORKSPACE/UI YAIWES/🏈 YAIWES $N" \
+            STATE_FILE="$STATE_ROOT/$N.json" \
+            BATCH_SIZE=25 \
+            COLLISION_POLICY=fail \
+            python "$MOTOR" | tee "$STATE_ROOT/$N.out"
+            grep -q '"verdict": "VERIFIED_CLOSED"' "$STATE_ROOT/$N.out"
+            grep -q '"failed": 0' "$STATE_ROOT/$N.out"
+            grep -q '"pending": 0' "$STATE_ROOT/$N.out"
+          done
+
+      - name: Create provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p 'UI YAIWES/24-CODA-INTEGRATION'
+          python - <<'PY'
+          import json, os, pathlib
+          pathlib.Path('UI YAIWES/24-CODA-INTEGRATION/COPY-PROVENANCE.json').write_text(
+            json.dumps({
+              'schema':'yaiwes.copy.provenance/v1',
+              'source_repo':'maxbry123-commits/agentes',
+              'source_branch':'main',
+              'source_commit':os.environ['SOURCE_SHA'],
+              'motor':'Motores/➡️📂motor de copiar archivos/motor_3_copy_batches.py',
+              'motor_blob_sha':'3689924361ce4a1a9fde4ae2b6f6009c37a6042d',
+              'destination_repo':'maxbry123-commits/frontend',
+              'destination_branch':'main',
+              'destination_root':'UI YAIWES/',
+              'components':['08','11','12','15','16','21','22','23'],
+              'batch_size':25,
+              'collision_policy':'fail',
+              'result':'VERIFIED_CLOSED_LOCAL_READBACK'
+            }, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+          PY
+
+      - name: Commit and push exact copied trees
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add --sparse -- \
+            'UI YAIWES/🏈 YAIWES 08' \
+            'UI YAIWES/🏈 YAIWES 11' \
+            'UI YAIWES/🏈 YAIWES 12' \
+            'UI YAIWES/🏈 YAIWES 15' \
+            'UI YAIWES/🏈 YAIWES 16' \
+            'UI YAIWES/🏈 YAIWES 21' \
+            'UI YAIWES/🏈 YAIWES 22' \
+            'UI YAIWES/🏈 YAIWES 23' \
+            'UI YAIWES/24-CODA-INTEGRATION/COPY-PROVENANCE.json'
+          if ! git diff --cached --quiet; then
+            git commit -m 'copy(yaiwes): Motor 3 verified selected CODA components'
+          fi
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "DEST_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+
+      - name: Fresh sparse readback and SHA-256 validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          RB="$RUNNER_TEMP/frontend-readback"
+          git clone --filter=blob:none --no-checkout --depth 1 --branch main https://github.com/maxbry123-commits/frontend.git "$RB"
+          git -C "$RB" sparse-checkout init --cone
+          git -C "$RB" sparse-checkout set \
+            'UI YAIWES/🏈 YAIWES 08' \
+            'UI YAIWES/🏈 YAIWES 11' \
+            'UI YAIWES/🏈 YAIWES 12' \
+            'UI YAIWES/🏈 YAIWES 15' \
+            'UI YAIWES/🏈 YAIWES 16' \
+            'UI YAIWES/🏈 YAIWES 21' \
+            'UI YAIWES/🏈 YAIWES 22' \
+            'UI YAIWES/🏈 YAIWES 23' \
+            'UI YAIWES/24-CODA-INTEGRATION'
+          git -C "$RB" checkout main
+          python - <<'PY'
+          import hashlib, json, os, pathlib
+          tmp=pathlib.Path(os.environ['RUNNER_TEMP'])
+          src=tmp/'agentes-source'/'📂coda workflow persistencias'
+          dst=tmp/'frontend-readback'/'UI YAIWES'
+          comps=['08','11','12','15','16','21','22','23']
+          def h(p):
+            x=hashlib.sha256()
+            with p.open('rb') as f:
+              for b in iter(lambda:f.read(1024*1024), b''): x.update(b)
+            return x.hexdigest()
+          rows=[]
+          for n in comps:
+            s=src/f'🏈 YAIWES {n}'; d=dst/f'🏈 YAIWES {n}'
+            sf={p.relative_to(s).as_posix():h(p) for p in s.rglob('*') if p.is_file()}
+            df={p.relative_to(d).as_posix():h(p) for p in d.rglob('*') if p.is_file()}
+            if sf!=df:
+              raise SystemExit(json.dumps({'verdict':'HASH_MISMATCH','component':n,'missing':sorted(set(sf)-set(df))[:20],'extra':sorted(set(df)-set(sf))[:20],'changed':sorted(k for k in set(sf)&set(df) if sf[k]!=df[k])[:20]},ensure_ascii=False))
+            rows.append({'component':n,'files':len(sf),'sha256_readback':True})
+          print(json.dumps({'verdict':'VERIFIED_CLOSED','source_commit':os.environ['SOURCE_SHA'],'destination_commit':os.environ.get('DEST_SHA'),'components':rows},ensure_ascii=False,sort_keys=True))
+          PY
