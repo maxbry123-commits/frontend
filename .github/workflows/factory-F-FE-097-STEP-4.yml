@@ -1,0 +1,65 @@
+name: factory-F-FE-097-STEP-4
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-F-FE-097-STEP-4.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/control-audit/F-FE-097-STEP-4.spec.mjs'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v192.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/app-v19.js'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-F-FE-097-STEP-4
+  cancel-in-progress: false
+
+jobs:
+  step-4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Frozen candidate readback
+        run: |
+          set -euo pipefail
+          test -s index-v192.html
+          test -s src/app-v19.js
+          test -s tests/e2e/control-audit/F-FE-097-STEP-4.spec.mjs
+          grep -F 'id="steps"' index-v192.html
+          grep -F "SET_STEP" src/app-v19.js
+          node --check tests/e2e/control-audit/F-FE-097-STEP-4.spec.mjs
+          git hash-object index-v192.html
+          git hash-object src/app-v19.js
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: F-FE-097 desktop STEP-4 gate
+        run: npx playwright test tests/e2e/control-audit/F-FE-097-STEP-4.spec.mjs --project=chromium-desktop --reporter=line
+      - name: F-FE-097 Pixel 7 STEP-4 gate
+        run: npx playwright test tests/e2e/control-audit/F-FE-097-STEP-4.spec.mjs --project=mobile-chromium --reporter=line
+      - name: Preserve F-FE-097 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-F-FE-097-STEP-4-evidence
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+          if-no-files-found: warn
+          retention-days: 14
