@@ -1,0 +1,77 @@
+name: factory-F-FE-109-NEXT-STEP
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-F-FE-109-NEXT-STEP.yml'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/tests/e2e/control-audit/F-FE-109-NEXT-STEP.spec.mjs'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/index-v192.html'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/app-v19.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/actions.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/src/state.js'
+      - 'UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/styles.css'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: factory-F-FE-109-NEXT-STEP
+  cancel-in-progress: false
+
+jobs:
+  next-step:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Frozen candidate readback
+        run: |
+          set -euo pipefail
+          test -s index-v192.html
+          test -s src/app-v19.js
+          test -s src/actions.js
+          test -s src/state.js
+          test -s tests/e2e/control-audit/F-FE-109-NEXT-STEP.spec.mjs
+          grep -F 'id="next-step"' index-v192.html
+          grep -F "type:'SET_STEP'" src/app-v19.js
+          grep -F "case 'SET_STEP'" src/actions.js
+          node --check tests/e2e/control-audit/F-FE-109-NEXT-STEP.spec.mjs
+          echo "INDEX_V192=$(git hash-object index-v192.html)"
+          echo "APP_V19=$(git hash-object src/app-v19.js)"
+          echo "ACTIONS=$(git hash-object src/actions.js)"
+          echo "STATE=$(git hash-object src/state.js)"
+          test "$(git hash-object index-v192.html)" = "e3d68e1063cd37c2a59d91911f071fda304e4695"
+          test "$(git hash-object src/app-v19.js)" = "1aab6ebec09a8e6a14f221b83226cf92552b4526"
+          test "$(git hash-object src/actions.js)" = "5d5617507b3cd2e02e397f6e973e79adfb8297b1"
+          test "$(git hash-object src/state.js)" = "32c6b9e619e146a1571766b2dcd9055c3a86d16d"
+      - name: Install harness
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: F-FE-109 desktop NEXT-STEP gate
+        run: npx playwright test tests/e2e/control-audit/F-FE-109-NEXT-STEP.spec.mjs --project=chromium-desktop --reporter=line
+      - name: F-FE-109 Pixel 7 NEXT-STEP gate
+        run: npx playwright test tests/e2e/control-audit/F-FE-109-NEXT-STEP.spec.mjs --project=mobile-chromium --reporter=line
+      - name: Preserve F-FE-109 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: factory-F-FE-109-NEXT-STEP-evidence
+          path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
+          if-no-files-found: warn
+          retention-days: 14
