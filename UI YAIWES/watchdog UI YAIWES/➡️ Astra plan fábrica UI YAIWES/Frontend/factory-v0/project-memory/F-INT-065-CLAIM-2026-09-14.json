@@ -6,8 +6,9 @@
   "chat_id": "current-factory-chat",
   "fresh_main_sha": "ecb3159935bd73086d90619293c1f77f104acd61",
   "claimed_at": "2026-09-14T08:57:00Z",
-  "state": "CLAIMED",
-  "report_state": "REOPENED_RUNTIME_IMPORT_PATH_GAP",
+  "reported_at": "2026-09-14T09:01:00Z",
+  "state": "GAP_RESOLVABLE",
+  "report_state": "IMPORT_PATH_FIXED_RUNTIME_EXECUTION_PENDING",
   "segment": "SEG-11-INTEGRATOR",
   "write_scope": [
     "Frontend/factory-v0/index-v193.html",
@@ -17,22 +18,34 @@
   ],
   "frozen": ["Frontend/factory-v0/index-v19.html", "Frontend/factory-v0/index-v192.html"],
   "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
-  "reclaim_reason": "candidate-v193.js is located in src/bootstrap but CANDIDATE_MODULES uses ./ paths that resolve under src/bootstrap instead of src; previous static test mocked importer and did not verify filesystem/module resolution",
-  "previous_report": {
-    "state": "GAP_RESOLVABLE",
-    "report_state": "STATIC_PASS_RUNTIME_E2E_PENDING",
-    "commits": [
-      "efc363e9888b0d6c403a86d029bf9a2ae5b8c12d",
-      "556b90b62aa4cbc11f3fef1ea2d2d8fdaeee0168",
-      "9cfc64729e2a43929f9a2c09f2cce1ad6bc30a8c",
-      "ee61c77d88b172c8ba834055b6b07fa11d5274b1"
-    ]
-  },
-  "remaining_gaps": [
-    "fix bootstrap import resolution",
-    "run hardened static/filesystem resolution test",
-    "real browser/Playwright runtime journey on index-v193.html",
-    "published/Hugging Face preview exact-SHA validation"
+  "verified_gap": "candidate-v193.js lives in src/bootstrap; prior ./ module specifiers resolved under src/bootstrap instead of src and previous mocked-importer static test could not catch it",
+  "fix": "all candidate module specifiers now resolve through ../ from src/bootstrap; static test now asserts every declared module resolves to an existing file; dedicated Playwright runtime boot spec added",
+  "paths": [
+    "Frontend/factory-v0/src/bootstrap/candidate-v193.js",
+    "Frontend/factory-v0/tests/e2e/canonical-v193-static.test.mjs",
+    "Frontend/factory-v0/tests/e2e/canonical-v193-runtime.spec.mjs"
   ],
-  "release": false
+  "commits": [
+    "a2322c028caecfda2a2df81084cc163c37587437",
+    "44787215a539d2b56d0eb36c5790718d372ff479",
+    "b3b1669a9229560b3326037727ccb8bc389d0783",
+    "7114de4d388b18cc4792bbfd8205d917e30c4611"
+  ],
+  "blobs": {
+    "bootstrap_v193": "73deb4432ddb3b40519984a6d85925e9c6cd21a2",
+    "static_resolution_test": "d10cde52b35ebac5538e1d7c19ba96034f7e93e0",
+    "runtime_playwright_spec": "c1d3be462906481dcde29c5b7c37c32f98703fc0"
+  },
+  "test_evidence": [
+    "GitHub exact blob readback confirms corrected bootstrap and hardened tests on main",
+    "GitHub Actions query for head 7114de4d388b18cc4792bbfd8205d917e30c4611 returned 0 workflow runs",
+    "local clone/runtime attempt was INFRA_FAILURE: Could not resolve host github.com; this is not counted as product PASS"
+  ],
+  "remaining_gaps": [
+    "execute canonical-v193-static.test.mjs on a trusted runner",
+    "execute canonical-v193-runtime.spec.mjs on desktop and mobile Playwright",
+    "publish/preview exact tested SHA on Hugging Face and verify served SHA"
+  ],
+  "release": true,
+  "next_free_node": "F-BE-078 or F-BE-079 research lane; do not claim F-BE-075 while provenance worker is active"
 }
