@@ -5,15 +5,30 @@
   "node_id":"F-FE-216-ERROR-STATE-MATRIX",
   "segment_id":"QA_ONLY",
   "lane":"GROK-P",
-  "state":"CLAIMED",
+  "state":"GAP_RESOLVABLE",
   "owner":"GPT-5.6-SOL",
   "agent":"GPT-5.6-SOL",
   "chat_id":"CURRENT_CHAT_FACTORY_SEGMENTATION",
   "fresh_main_sha":"069c491ec9ddc6643d26a414d90efee864e6fd93",
   "claimed_at":"2026-09-14T08:48:30-05:00",
+  "claim_commit":"6d4b303dac7ff6a477c744480a1a47de22288f91",
+  "test_commit":"b20b782c3d63d6ca3aacb637425488c730f38852",
+  "tested_sha":"7d4b926466683700b43cc9548da69d7fe0400e4f",
+  "report_commit":"846c6ebe1d6a84e48be5bce4348e054ac7c76738",
+  "released_at":"2026-09-14T08:53:20-05:00",
   "type":"QA_ONLY",
   "candidate":"index-v192.html",
-  "acceptance":"Import/router/HF/destination failures show actionable UI, no fake success and no canonical project corruption.",
+  "run_id":34851825990,
+  "job_id":104001423396,
+  "artifact_id":10350153719,
+  "artifact_digest":"sha256:93d9a244e6eebef8318d31698b2c2919a1fe30be833f4f434b053f388f69d035",
+  "test_summary":{"passed":1,"failed":3},
+  "gaps":[
+    {"type":"IMPORT_ERROR_UI_MISSING","owner":"SEG-07-IMPORT","detail":"invalid reference rejected without visible actionable error"},
+    {"type":"DELIVERY_ERROR_UI_MISSING","owner":"SEG-06-IO","detail":"NO_DOWNLOAD_DESTINATION is console/global only"},
+    {"type":"HF_STATUS_SURFACE_MISSING","owner":"SEG-09-HF-JOBS","detail":"candidate has no HF jobs/error status surface"}
+  ],
+  "verified_pass":"invalid remote URL produces REMOTE_PROBE=INVALID_CONFIG without canonical project mutation",
   "write_scope":[
     "Frontend/factory-v0/tests/e2e/control-audit/F-FE-216-ERROR-STATE-MATRIX.spec.mjs",
     "Frontend/factory-v0/project-memory/F-FE-216-ERROR-STATE-MATRIX-*",
@@ -21,5 +36,6 @@
     "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-216.json"
   ],
   "product_patched":false,
-  "release":false
+  "release":true,
+  "next_free_node":"F-FE-217-EMPTY-STATE-MATRIX"
 }
