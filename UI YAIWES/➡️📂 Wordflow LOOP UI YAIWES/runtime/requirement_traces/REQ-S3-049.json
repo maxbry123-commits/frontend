@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.requirement-trace.v1",
+  "requirement_id": "REQ-S3-049",
+  "goal_id": "G12",
+  "task_id": "N27-CONTINUOUS-LOOP",
+  "source": {
+    "path": "documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md",
+    "sha256": "aa9ea84565a9dfd250cc57ba465a7131a032b1e96c404d9dd21a349c8185c58c",
+    "symbol": "§49 CONTINUOUS COGNITIVE LOOP"
+  },
+  "implementation": {
+    "path": "runtime/src/core/workflow_definition.py",
+    "sha256": "0c758934750bfb22b55146b98f3bbfaf44e0e3efd635f62c46a787413ae8de5a",
+    "symbol": "WorkflowDefinition"
+  },
+  "test": {
+    "path": "runtime/tests/test_stabilize_integration.py",
+    "sha256": "526a7c16310b98a929faadb7d6b71ced5122f58960166682606891b5b4f62d90",
+    "symbol": "StabilizeIntegrationTests.test_s3_049_continuous_cognitive_loop_projection_is_ordered"
+  },
+  "evidence": {
+    "path": "runtime/evidence/requirement_traces/REQ-S3-049.ci.json",
+    "sha256": "b8d6c6f597b87a84c09a06b95d9d136f6e1557c4b1148c986906094f906155dd",
+    "symbol": ""
+  },
+  "revision": "7bd5b407a401ee66f1470aeb83dbbce1d85da761"
+}
