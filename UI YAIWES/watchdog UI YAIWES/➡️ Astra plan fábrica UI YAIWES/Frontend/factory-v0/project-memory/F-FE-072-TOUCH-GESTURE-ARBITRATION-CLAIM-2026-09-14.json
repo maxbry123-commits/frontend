@@ -8,40 +8,24 @@
   "agent": "GROK",
   "owner": "GROK 1 UI YAIWES",
   "chat_id": "GROK-1-UI-YAIWES-WATCHDOG-HORARIO",
-  "state": "CLAIMED",
-  "fresh_main_sha": "251102b104e9c36771551fcc84ee31f1dd357216",
-  "claimed_at": "2026-09-14T10:38:00Z",
-  "depends_on_evidence": {
-    "SEG-04-TOUCH-v193-RELEASED": {
-      "node_id": "F-FE-068",
-      "owner": "GROK 3",
-      "state": "TESTED_NOT_WIRED",
-      "release": true,
-      "delta_commit": "bcf7b46a82979454bee406b545c770b72c3de715",
-      "blob_touch_dnd_v193": "4125dfd27be2374e03e13763dc07264b3a7f8ebb"
-    }
+  "state": "RELEASED_COLLISION",
+  "release": true,
+  "fresh_main_sha_at_claim": "251102b104e9c36771551fcc84ee31f1dd357216",
+  "claim_commit_self": "797f433b1f6bf97289fb5c8ea981935796002c3a",
+  "collision": {
+    "first_writer": "GROK 3",
+    "chat_id": "GROK-3-UI-YAIWES-FACTORY",
+    "claim_commit": "1c14293ae3baf4c12dfb95d0e5800239d85492b5",
+    "claimed_at": "2026-09-14T10:38:39Z",
+    "path": "Frontend/factory-v0/project-memory/F-FE-072-TOUCH-GESTURE-ARBITRATION-CLAIM-2026-09-14.md",
+    "overlapping_write_scope": [
+      "Frontend/factory-v0/src/touch-dnd-v194.js",
+      "Frontend/factory-v0/tests/e2e/f-fe-072-touch-gesture-arbitration.spec.mjs",
+      ".github/workflows/factory-f-fe-072-touch-gesture-arbitration*.yml"
+    ]
   },
-  "write_scope": [
-    "Frontend/factory-v0/src/touch-dnd-v194.js",
-    "Frontend/factory-v0/tests/e2e/f-fe-072-touch-gesture-arbitration.spec.mjs",
-    "Frontend/factory-v0/project-memory/F-FE-072-TOUCH-GESTURE-ARBITRATION-*",
-    ".github/workflows/factory-f-fe-072-touch-gesture-arbitration*.yml"
-  ],
-  "frozen": [
-    "Frontend/factory-v0/index-v19.html",
-    "Frontend/factory-v0/index-v192.html",
-    "Frontend/factory-v0/src/touch-dnd-v191.js",
-    "Frontend/factory-v0/src/touch-dnd-v192.js",
-    "Frontend/factory-v0/src/touch-dnd-v193.js",
-    "Frontend/factory-v0/src/bootstrap/candidate-v193.js",
-    "Frontend/factory-v0/index-v193.html"
-  ],
-  "not_claimed": {
-    "F-FE-066": "RELEASED by GROK-1; not reopened",
-    "F-FE-068-MOBILE-FIT": "CLAIMED by GPT-5.6-SOL; workspace-shell-v3.css untouched",
-    "F-FE-069": "CLAIMED by GPT-5.6-SOL-ASTRA-WATCHDOG integrator; candidate-v195 untouched"
-  },
-  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
-  "strategy": "REUSE_EXISTING v193 helpers then ADAPT single-session arbitration into versioned v194",
-  "acceptance": "Pointer/touch/pen use one deterministic session; canvas scroll is preserved when gesture is not a node move; resize corner is never stolen; Android-size Playwright PASS."
+  "policy": "READ_FRESH → NO WRITE → RELEASE/SKIP → NEXT DEPENDENCY-SATISFIED NODE",
+  "product_paths_written": [],
+  "reported_at": "2026-09-14T10:40:30Z",
+  "next_free_node": "F-FE-073-TOUCH-DRAG-INTENT after F-FE-072 PASS_RELEASED; no other GROK-A node is dependency-satisfied"
 }
