@@ -50,14 +50,30 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Offline matrix
+        id: offline
         run: npx playwright test tests/e2e/control-audit/F-FE-218-NETWORK-OFFLINE-MATRIX.spec.mjs --project=chromium-desktop --reporter=line
+      - name: Capture evidence manifest
+        if: always()
+        run: |
+          mkdir -p evidence
+          {
+            echo 'node=F-FE-218-NETWORK-OFFLINE-MATRIX'
+            echo "tested_sha=$(git rev-parse HEAD)"
+            echo "candidate_blob=$(git hash-object index-v192.html)"
+            echo "app_blob=$(git hash-object src/app-v19.js)"
+            echo "version_store_blob=$(git hash-object src/version-store-v1.js)"
+            echo "test_blob=$(git hash-object tests/e2e/control-audit/F-FE-218-NETWORK-OFFLINE-MATRIX.spec.mjs)"
+            echo 'test_outcome=${{ steps.offline.outcome }}'
+          } > evidence/F-FE-218.txt
+          cat evidence/F-FE-218.txt
       - name: Preserve F-FE-218 evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: factory-F-FE-218-NETWORK-OFFLINE-MATRIX-evidence
           path: |
+            UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/evidence
             UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/playwright-report
             UI YAIWES/watchdog UI YAIWES/➡️ Astra plan fábrica UI YAIWES/Frontend/factory-v0/test-results
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 14
