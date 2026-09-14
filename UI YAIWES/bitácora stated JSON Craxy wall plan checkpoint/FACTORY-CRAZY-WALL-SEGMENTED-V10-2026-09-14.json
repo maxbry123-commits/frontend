@@ -4,8 +4,8 @@
   "mode": "FAIL_CLOSED_LOOP",
   "status": "ACTIVE_SEGMENTED_RECOVERY",
   "created_at": "2026-09-14T04:17:00-05:00",
-  "last_reconciled_at": "2026-09-14T04:23:00-05:00",
-  "observed_head_before_write": "90b5d6d23528edeabca3dd742bb3d1dde775b16f",
+  "last_reconciled_at": "2026-09-14T04:29:00-05:00",
+  "observed_head_before_write": "0305a040a28bfcb4e9a72d73294422c42ce1da57",
   "authority": [
     "fresh code + runtime + tests + Actions logs",
     "FACTORY-SUPERVISOR-RECONCILIATION-R09-2026-09-13.json",
@@ -39,6 +39,13 @@
     "commit": "0129295e13ee2dd3c2b2d2d8ed642f68d2343f71",
     "classification": "COORDINATION_ONLY_NOT_PASS_EVIDENCE"
   },
+  "lateral_evidence_pending_reconciliation": [
+    {
+      "commit": "0305a040a28bfcb4e9a72d73294422c42ce1da57",
+      "message": "close(factory): record B-MK-001 tested acquisition adapter",
+      "policy": "Do not change B-MK-001 queue state until its report/test evidence is independently read back"
+    }
+  ],
   "frontend_nodes": [
     {
       "id": "F-ARCH-SEGMENT-064",
@@ -82,26 +89,49 @@
     {
       "id": "F-INT-CANONICAL-065",
       "title": "Browser smoke and canonical candidate convergence",
-      "state": "CLAIMED",
+      "state": "VERIFIED_CLOSED",
+      "report_state": "PASS_UNIFIED_BROWSER_DESKTOP_MOBILE",
       "owner": "GPT-5.6-SOL",
       "chat_id": "CURRENT_CHAT_FACTORY_SEGMENTATION",
       "fresh_main_sha": "90b5d6d23528edeabca3dd742bb3d1dde775b16f",
       "claimed_at": "2026-09-14T04:23:00-05:00",
+      "reported_at": "2026-09-14T04:29:00-05:00",
       "write_scope": ["Frontend/factory-v0/index-v193*.html", "Frontend/factory-v0/src/bootstrap/candidate-v193*.js", "Frontend/factory-v0/tests/e2e/*v193*", ".github/workflows/*factory-v193*", "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json"],
       "depends_on": ["F-ARCH-SEGMENT-064"],
       "steps": ["Verify preview loads all approved v19+v192 capabilities", "Patch bootstrap/segment wiring only; no second state engine", "Run desktop+mobile smoke and preserve run/job/artifact evidence"],
       "acceptance": "workspace/browser + JSON/version/destination/skill/touch + router/layers/HF coexist on one exact candidate SHA",
-      "evidence": [],
-      "remaining_gaps": []
+      "run_id": 34828013813,
+      "job_id": 103924524220,
+      "artifact_id": 10340718683,
+      "artifact_digest": "sha256:fa44d7bc4fa4f1247cd518a54f082dfceb7f55544646aba775c23f1404580a31",
+      "tested_sha": "64f98261af4fb334bd753b46460c4d83e3e63cc4",
+      "tests": "factory-v193-unified-smoke.spec.mjs: chromium-desktop 1/1 PASS; mobile-chromium Pixel 7 1/1 PASS; console errors=[]; request failures=[]",
+      "evidence": [
+        "index-v193.html blob 2f42d309cef2c523180b030d4bc1d924cd280a20",
+        "candidate-v193 bootstrap blob 73deb4432ddb3b40519984a6d85925e9c6cd21a2",
+        "segment-registry blob 3b6c69b296f8d4e8ae2d33c77acfdff409376139",
+        "historical index-v19 blob remains 4b043e60eba53156d1fc23c9b2fa4be30b54960a",
+        "historical index-v192 blob remains e3d68e1063cd37c2a59d91911f071fda304e4695",
+        "browser loaded app/import/json/version/destination/touch/skills/workspace/browser/router/backend/layers/remote/HF modules with HTTP 200",
+        "smoke verified two component insertions, layer controls, version increment, skill activation, Router BLOCKED_NO_REMOTE fail-closed, HF panel coexistence, JSON/HTML/output/delivery controls"
+      ],
+      "remaining_gaps": ["Exhaustive F-UI-051..061 matrix must run on index-v193.html", "Published exact SHA gate and independent cross-review remain open"],
+      "next_free_node": "F-FRONTEND-QA-066"
     },
     {
       "id": "F-FRONTEND-QA-066",
       "title": "Repoint existing F-UI-051..061 gates to the unified candidate",
-      "state": "BLOCKED_AFTER_F-INT-CANONICAL-065",
-      "write_scope": ["Frontend/factory-v0/tests/e2e/**", "Frontend/factory-v0/project-memory/**", ".github/workflows/*factory*"],
+      "state": "CLAIMED",
+      "owner": "GPT-5.6-SOL",
+      "chat_id": "CURRENT_CHAT_FACTORY_SEGMENTATION",
+      "fresh_main_sha": "0305a040a28bfcb4e9a72d73294422c42ce1da57",
+      "claimed_at": "2026-09-14T04:29:00-05:00",
+      "write_scope": ["Frontend/factory-v0/tests/e2e/**", "Frontend/factory-v0/project-memory/**", ".github/workflows/*factory*", "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json"],
       "depends_on": ["F-INT-CANONICAL-065"],
       "steps": ["Repair F-UI-051 harness selectors/indexing", "Run 051..061 against same candidate without inheriting lane PASS", "Report gaps and preserve independent review chain 062->063"],
-      "acceptance": "same tested candidate across controls/mobile/accessibility/router/HF/full journey; F-UI-063 remains sole FRONTEND_100 gate"
+      "acceptance": "same tested candidate across controls/mobile/accessibility/router/HF/full journey; F-UI-063 remains sole FRONTEND_100 gate",
+      "evidence": [],
+      "remaining_gaps": []
     }
   ],
   "backend_nodes": [
