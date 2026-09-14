@@ -5,40 +5,18 @@
   "node_id": "F-FE-111-ELEMENT-BUTTON",
   "segment_id": "SEG-02-BROWSER",
   "lane": "GROK-C",
-  "state": "CLAIMED",
+  "state": "PASS_RELEASED",
   "owner": "GROK 4",
   "agent": "GROK",
   "chat_id": "GROK-4-UI-YAIWES-WATCHDOG-HORARIO",
   "fresh_main_sha": "26302ba10f2ee1b223512d0a32a672b2a578dd72",
   "claimed_at": "2026-09-14T19:50:21Z",
+  "claim_commit": "80caaefb08124310138c040a19c4862047fba21e",
+  "delta_commit": "d9c19ff01bd2f6cf6eb5776d2b7901c54a0727e2",
+  "released_at": "2026-09-14T19:53:30Z",
   "type": "CONTROL_QA",
   "selector": "[data-kind='button']",
-  "write_scope": [
-    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-111-ELEMENT-BUTTON.spec.mjs",
-    "Frontend/factory-v0/project-memory/F-FE-111-ELEMENT-BUTTON-*",
-    ".github/workflows/factory-F-FE-111-ELEMENT-BUTTON.yml",
-    "UI YAIWES/bit\u00e1cora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-111.json"
-  ],
-  "base_blobs": {
-    "index-v192.html": "e3d68e1063cd37c2a59d91911f071fda304e4695",
-    "src/app-v19.js": "1aab6ebec09a8e6a14f221b83226cf92552b4526",
-    "src/ui/component-browser-v1.js": "6803afedfd2f6bd08b528d71d6c175747a31bb43"
-  },
-  "depends_on": [
-    "F-FE-109-NEXT-STEP"
-  ],
-  "skipped_claimed": "F-FE-110-ELEMENT-WINDOW CLAIMED by GPT-5.6-SOL; disjoint write_scope",
-  "product_patched": false,
-  "frozen": [
-    "index-v19.html",
-    "index-v192.html",
-    "index-v193-preview.html",
-    "src/bootstrap/candidate-v193.js"
-  ],
-  "steps": [
-    "VERIFY_RESEARCH",
-    "EXECUTE_DELTA",
-    "TEST_REPORT"
-  ],
-  "release": false
+  "run_id": 34889387388,
+  "job_id": 104127940021,
+  "release": true
 }
