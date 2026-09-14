@@ -5,30 +5,21 @@
   "node_id": "F-FE-093-NEW-COMPONENT",
   "segment_id": "SEG-03-EDITOR-CORE",
   "lane": "GROK-A",
-  "state": "CLAIMED",
+  "state": "PASS_RELEASED",
   "owner": "GROK 3",
   "agent": "GROK",
   "chat_id": "GROK-3-UI-YAIWES-FACTORY",
   "fresh_main_sha": "c46e81f8d5b8a990882030ea6707a0645c244f15",
   "claimed_at": "2026-09-14T13:02:10Z",
+  "claim_commit": "fff243979564c52e404559343513b635be6277d7",
+  "delta_commit": "2dcdc4e408f695c307c2846785e717e8371e0271",
+  "tested_sha": "16f151f651a0cdd89b79b33c68d7c0919b5b3166",
+  "released_at": "2026-09-14T13:05:30Z",
   "type": "CONTROL_QA",
   "selector": "#new-component",
-  "candidate": "index-v192.html",
-  "depends_on": ["F-FE-092-MODE-AUTO"],
-  "dependency_status": "SATISFIED F-FE-092 PASS_RELEASED GROK 3 run 34844799706",
-  "write_scope": [
-    "Frontend/factory-v0/tests/e2e/control-audit/F-FE-093-NEW-COMPONENT.spec.mjs",
-    "Frontend/factory-v0/project-memory/F-FE-093-NEW-COMPONENT-*",
-    ".github/workflows/factory-F-FE-093-NEW-COMPONENT.yml",
-    "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/claims/frontend-workpack-100/F-FE-093.json"
-  ],
-  "skipped": {
-    "F-FE-091": "PASS_RELEASED GROK 3",
-    "F-FE-092": "PASS_RELEASED GROK 3 not FREE",
-    "F-FE-069": "CLAIMED GPT-5.6-SOL",
-    "F-FE-073": "CLAIM file still CLAIMED GROK 1; report PASS_RELEASED — skip product 074/075/076 this watchdog",
-    "F-FE-076": "SKIP while 073 claim not PASS_RELEASED"
-  },
+  "run_id": 34846959649,
+  "job_id": 103985145215,
   "product_patched": false,
-  "release": false
+  "release": true,
+  "next_free_node": "F-FE-094-STEP-1"
 }
