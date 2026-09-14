@@ -1,0 +1,68 @@
+name: Factory F-UI-066 API-only release
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/factory-f-ui-066-release-api.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: factory-f-ui-066-api-release
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail-closed API reconciliation
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PATH_ENCODED: UI%20YAIWES/bit%C3%A1cora%20stated%20JSON%20Craxy%20wall%20plan%20checkpoint/FACTORY-CRAZY-WALL-SEGMENTED-V10-2026-09-14.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os, json, base64, urllib.request
+
+          repo=os.environ['REPO']; token=os.environ['GH_TOKEN']; p=os.environ['PATH_ENCODED']
+          api=f'https://api.github.com/repos/{repo}/contents/{p}?ref=main'
+          headers={'Authorization':f'Bearer {token}','Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','User-Agent':'factory-fail-closed'}
+          req=urllib.request.Request(api,headers=headers)
+          with urllib.request.urlopen(req) as r: obj=json.load(r)
+          sha=obj['sha']
+          data=json.loads(base64.b64decode(obj['content']).decode())
+          nodes={n['id']:n for n in data['frontend_nodes']}
+          node=nodes['F-FRONTEND-QA-066']
+          assert node['state']=='CLAIMED', node
+          assert node['owner']=='GPT-5.6-SOL', node
+          assert node['chat_id']=='CURRENT_CHAT_FACTORY_SEGMENTATION', node
+          node.update({
+            'state':'GAP_RESOLVABLE',
+            'report_state':'QA_PARTIAL_PASS_TWO_REAL_GAPS',
+            'reported_at':'2026-09-14T04:57:00-05:00',
+            'tested_candidate':'V1.9.5',
+            'run_id':34830387803,
+            'job_id':103932105765,
+            'artifact_id':10341712835,
+            'artifact_digest':'sha256:210282ca705a43f8c011b47d2f926c0679320cffadf52272a7964b5ac8e5095c',
+            'tests':'V1.9.5 targeted closure regression: undo PASS; reload PASS; mobile Escape PASS; mobile canvas release PASS; command palette GAP; horizontal overflow GAP (body 604px on 412px viewport)',
+            'evidence':[
+              'Frontend/factory-v0/project-memory/F-UI-066-V193-QA-GAP-REPORT-2026-09-14.md blob 4ad6e22be0e072a770ac3fca614ab826e823fc3a',
+              'QA report reconciliation commit 465b5843d55ae86fc0b0375ed1127defca0bcbef',
+              'V1.9.5 targeted run 34830387803 / job 103932105765 / artifact 10341712835'
+            ],
+            'remaining_gaps':[
+              'SEG-01-SHELL: mobile horizontal overflow body.scrollWidth=604 on viewport=412; fix content geometry, not cosmetic clipping',
+              'F-UI-055: Ctrl+K command palette/quick-action surface absent; reuse canonical actions, no second state engine'
+            ],
+            'next_action':'READ_FRESH_THEN_CLAIM_ONE_REAL_GAP_ONLY'
+          })
+          data['last_reconciled_at']='2026-09-14T04:57:00-05:00'
+          raw=(json.dumps(data,ensure_ascii=False,indent=2)+'\n').encode()
+          payload=json.dumps({'message':'report(factory): release F-FRONTEND-QA-066 with two verified gaps','content':base64.b64encode(raw).decode(),'sha':sha,'branch':'main'}).encode()
+          put=urllib.request.Request(api,data=payload,headers={**headers,'Content-Type':'application/json'},method='PUT')
+          with urllib.request.urlopen(put) as r: out=json.load(r)
+          print(out['commit']['sha'])
+          print(out['content']['sha'])
+          PY
