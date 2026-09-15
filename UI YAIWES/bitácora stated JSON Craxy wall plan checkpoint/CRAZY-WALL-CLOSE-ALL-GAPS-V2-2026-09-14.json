@@ -8,17 +8,17 @@
   "base_head_observed": "3a65b905cb78cdaa71ddf455588d2d43fe92ed21",
   "progress": {
     "denominator": 167,
-    "certified_confirmed": 15,
-    "missing_confirmed": 152,
-    "certified_ids": ["REQ-S3-001","REQ-S3-016","REQ-S3-017","REQ-S3-018","REQ-S3-044","REQ-S3-045","REQ-S3-046","REQ-S3-047","REQ-S3-048","REQ-S3-049","REQ-S3-050","REQ-S3-053","REQ-S3-054","REQ-S3-055","REQ-S3-057"],
-    "current_subgap": "REQ-S3-002",
+    "certified_confirmed": 16,
+    "missing_confirmed": 151,
+    "certified_ids": ["REQ-S3-001","REQ-S3-002","REQ-S3-016","REQ-S3-017","REQ-S3-018","REQ-S3-044","REQ-S3-045","REQ-S3-046","REQ-S3-047","REQ-S3-048","REQ-S3-049","REQ-S3-050","REQ-S3-053","REQ-S3-054","REQ-S3-055","REQ-S3-057"],
+    "current_subgap": "REQ-S3-003",
     "current_subgap_state": "VERIFY_RESEARCH",
     "current_subgap_evidence": {
-      "previous_closed": "REQ-S3-001",
-      "trusted_ci_run": 34912038018,
-      "trusted_ci_job": 104201444360,
+      "previous_closed": "REQ-S3-002",
+      "trusted_ci_run": 34912203303,
+      "trusted_ci_job": 104201958140,
       "trusted_ci_conclusion": "success",
-      "revision": "d12fee6c891407e87c9c8f74b7de32144a9bb65d"
+      "revision": "8ebcc23edb33ac87a5e61e2dd38d587ea290edf6"
     }
   },
   "node_task_schema": {
@@ -47,12 +47,12 @@
       "state": "IN_PROGRESS",
       "owner": "watchdog-close-all-gaps",
       "write_scope": ["runtime/requirement_traces/REQ-S3-*.json","runtime/evidence/requirement_traces/REQ-S3-*.ci.json","focused requirement tests only"],
-      "pending_confirmed_count": 49,
+      "pending_confirmed_count": 48,
       "verify_research": "literal requirement -> existing implementation symbol -> existing test symbol -> trusted CI candidate; detect active claim/collision first",
       "execute_delta": "repair only MISSING_IMPLEMENTATION|MISSING_WIRING|MISSING_TEST|MISSING_CI; otherwise REUSE existing code and add only missing trace/evidence/test binding",
       "test_report": "focused regression + audit_five_pass + exact trusted completed/success CI/readback",
       "close": "64/64 S3 certified; 0 S3 missing_trace",
-      "current_child": "REQ-S3-002"
+      "current_child": "REQ-S3-003"
     },
     {
       "id": "GAP-03-N35-S1",
