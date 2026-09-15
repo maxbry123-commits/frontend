@@ -1,0 +1,66 @@
+name: GAP02 REQ-S3-001 Evidence
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/gap02-req-s3-001-evidence.yml'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src/core/workflow_definition.py'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_req_s3_001_workflow_responsibility.py'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_stabilize_integration.py'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_req_s3_001.py'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-001.json'
+      - 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-001.ci.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/src
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_req_s3_001_workflow_responsibility.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_stabilize_integration.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/tests/test_coverage_req_s3_001.py
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/requirement_traces/REQ-S3-001.json
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime/evidence/requirement_traces/REQ-S3-001.ci.json
+            UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md
+          sparse-checkout-cone-mode: false
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install focused test dependency
+        run: python -m pip install pytest
+      - name: Exact hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES'
+          echo "revision=$GITHUB_SHA"
+          sha256sum "$ROOT/runtime/src/core/workflow_definition.py"
+          sha256sum "$ROOT/runtime/tests/test_req_s3_001_workflow_responsibility.py"
+          sha256sum "$ROOT/documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md"
+      - name: Focused REQ-S3-001 regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
+          PYTHONPATH=src python -m pytest -q tests/test_req_s3_001_workflow_responsibility.py
+          PYTHONPATH=src python -m unittest -v tests.test_stabilize_integration.StabilizeIntegrationTests.test_workflow_definition_matches_runtime_single_owner
+      - name: Focused REQ-S3-001 five-pass readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT='UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES/runtime'
+          if [[ -f "$ROOT/requirement_traces/REQ-S3-001.json" && -f "$ROOT/evidence/requirement_traces/REQ-S3-001.ci.json" && -f "$ROOT/tests/test_coverage_req_s3_001.py" ]]; then
+            cd "$ROOT"
+            PYTHONPATH=src python -m pytest -q tests/test_coverage_req_s3_001.py
+          else
+            echo 'PRECERT_ONLY trace/evidence/five-pass binding not yet persisted'
+          fi
