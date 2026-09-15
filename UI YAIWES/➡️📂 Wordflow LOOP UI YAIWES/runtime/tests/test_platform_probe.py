@@ -7,7 +7,14 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from uek.platform_matrix import Platform, SupportState, assess_platform
-from uek.probe import PlatformProbeError, probe_current_host
+from uek.probe import (
+    AVF_CROSVM_PATH,
+    AVF_FEATURE,
+    AVF_VM_PATH,
+    PlatformProbeError,
+    probe_android_avf_runtime,
+    probe_current_host,
+)
 
 
 def fake_which(names):
@@ -23,6 +30,38 @@ def fake_exists(paths):
 def allow_paths(paths):
     paths = set(paths)
     return lambda path, _mode: path in paths
+
+
+def fake_run(responses):
+    normalized = {tuple(command): value for command, value in responses.items()}
+    return lambda command: normalized.get(tuple(command), (127, ""))
+
+
+def android_queries(
+    *,
+    feature=True,
+    abi="arm64-v8a",
+    device="panther",
+    model="Pixel 7",
+    name="aosp_panther",
+    service_access=True,
+):
+    vm_info_result = (0, "Assignable devices:") if service_access else (1, "permission denied")
+    return fake_run(
+        {
+            ("pm", "has-feature", AVF_FEATURE): (
+                0 if feature else 1,
+                "true" if feature else "false",
+            ),
+            ("getprop", "ro.product.cpu.abi"): (0, abi),
+            ("getprop", "ro.product.device"): (0, device),
+            ("getprop", "ro.product.model"): (0, model),
+            ("getprop", "ro.product.name"): (0, name),
+            ("/bin/vm", "info"): vm_info_result,
+            (AVF_VM_PATH, "info"): vm_info_result,
+            ("/system/bin/vm", "info"): vm_info_result,
+        }
+    )
 
 
 class PlatformProbeTests(unittest.TestCase):
@@ -52,20 +91,116 @@ class PlatformProbeTests(unittest.TestCase):
         self.assertEqual(row.state, SupportState.BLOCKED)
         self.assertIsNone(row.selected_backend)
 
-    def test_android_avf_crosvm_kvm_probe_can_support_primary_path(self):
+    def test_android_arm64_requires_feature_apex_and_real_avf_service_access(self):
+        snapshot = probe_current_host(
+            system_name="Linux",
+            environ={"ANDROID_ROOT": "/system"},
+            which=fake_which({"qemu-system-aarch64"}),
+            exists=fake_exists({AVF_VM_PATH, AVF_CROSVM_PATH}),
+            access=allow_paths(set()),
+            run_command=android_queries(),
+        )
+        row = assess_platform(snapshot)
+        self.assertEqual(snapshot.platform, Platform.ANDROID)
+        self.assertEqual(
+            snapshot.available_backends,
+            frozenset({"AVF", "CROSVM", "QEMU"}),
+        )
+        self.assertTrue(snapshot.hardware_virtualization)
+        self.assertTrue(snapshot.native_permission)
+        self.assertEqual(row.state, SupportState.SUPPORTED)
+        self.assertEqual(row.selected_backend, "AVF/CROSVM")
+
+    def test_android_binaries_without_framework_feature_fail_closed_to_qemu(self):
         snapshot = probe_current_host(
             system_name="Linux",
             environ={"ANDROID_ROOT": "/system"},
             which=fake_which({"vm", "crosvm", "qemu-system-aarch64"}),
-            exists=fake_exists({"/dev/kvm"}),
+            exists=fake_exists({AVF_VM_PATH, AVF_CROSVM_PATH}),
             access=allow_paths({"/dev/kvm"}),
+            run_command=android_queries(feature=False),
         )
         row = assess_platform(snapshot)
-        self.assertEqual(snapshot.platform, Platform.ANDROID)
-        self.assertEqual(snapshot.available_backends, frozenset({"AVF", "CROSVM", "QEMU"}))
-        self.assertTrue(snapshot.native_permission)
-        self.assertEqual(row.state, SupportState.SUPPORTED)
-        self.assertEqual(row.selected_backend, "AVF/CROSVM")
+        self.assertNotIn("AVF", snapshot.available_backends)
+        self.assertNotIn("CROSVM", snapshot.available_backends)
+        self.assertFalse(snapshot.native_permission)
+        self.assertEqual(row.state, SupportState.CONDITIONAL)
+        self.assertEqual(row.selected_backend, "QEMU")
+
+    def test_android_feature_and_apex_without_service_access_fail_closed(self):
+        snapshot = probe_current_host(
+            system_name="Linux",
+            environ={"ANDROID_ROOT": "/system"},
+            which=fake_which({"vm", "crosvm", "qemu-system-aarch64"}),
+            exists=fake_exists({AVF_VM_PATH, AVF_CROSVM_PATH}),
+            access=allow_paths(set()),
+            run_command=android_queries(service_access=False),
+        )
+        row = assess_platform(snapshot)
+        self.assertNotIn("AVF", snapshot.available_backends)
+        self.assertNotIn("CROSVM", snapshot.available_backends)
+        self.assertFalse(snapshot.hardware_virtualization)
+        self.assertFalse(snapshot.native_permission)
+        self.assertEqual(row.state, SupportState.CONDITIONAL)
+        self.assertEqual(row.selected_backend, "QEMU")
+
+    def test_unrelated_path_binaries_named_vm_and_crosvm_never_count_as_avf(self):
+        snapshot = probe_current_host(
+            system_name="Linux",
+            environ={"ANDROID_ROOT": "/system"},
+            which=fake_which({"vm", "crosvm"}),
+            exists=fake_exists(set()),
+            access=allow_paths(set()),
+            run_command=android_queries(),
+        )
+        self.assertEqual(snapshot.available_backends, frozenset())
+        self.assertFalse(snapshot.hardware_virtualization)
+        self.assertFalse(snapshot.native_permission)
+        self.assertEqual(assess_platform(snapshot).state, SupportState.BLOCKED)
+
+    def test_cuttlefish_x86_64_is_identified_but_protected_vm_is_not_inferred(self):
+        evidence = probe_android_avf_runtime(
+            which=fake_which(set()),
+            exists=fake_exists({AVF_VM_PATH, AVF_CROSVM_PATH}),
+            run_command=android_queries(
+                abi="x86_64",
+                device="vsoc_x86_64",
+                model="Cuttlefish x86_64 phone",
+                name="aosp_cf_x86_64_phone",
+            ),
+        )
+        self.assertTrue(evidence.feature_declared)
+        self.assertTrue(evidence.cuttlefish)
+        self.assertTrue(evidence.service_accessible)
+        self.assertTrue(evidence.executable)
+        self.assertIs(evidence.protected_vm_supported, False)
+
+    def test_android_unsupported_abi_never_advertises_avf(self):
+        snapshot = probe_current_host(
+            system_name="Linux",
+            environ={"ANDROID_DATA": "/data"},
+            which=fake_which({"vm", "crosvm"}),
+            exists=fake_exists({AVF_VM_PATH, AVF_CROSVM_PATH}),
+            access=allow_paths(set()),
+            run_command=android_queries(abi="armeabi-v7a"),
+        )
+        self.assertEqual(snapshot.available_backends, frozenset())
+        self.assertFalse(snapshot.hardware_virtualization)
+        self.assertFalse(snapshot.native_permission)
+        self.assertEqual(assess_platform(snapshot).state, SupportState.BLOCKED)
+
+    def test_android_query_failure_fails_closed_even_when_binaries_exist(self):
+        snapshot = probe_current_host(
+            system_name="Linux",
+            environ={"ANDROID_DATA": "/data"},
+            which=fake_which({"vm", "crosvm"}),
+            exists=fake_exists({AVF_VM_PATH, AVF_CROSVM_PATH}),
+            access=allow_paths(set()),
+            run_command=lambda _command: (_ for _ in ()).throw(OSError("query failed")),
+        )
+        self.assertEqual(snapshot.available_backends, frozenset())
+        self.assertFalse(snapshot.native_permission)
+        self.assertEqual(assess_platform(snapshot).state, SupportState.BLOCKED)
 
     def test_android_without_avf_permission_uses_qemu_only_conditionally(self):
         snapshot = probe_current_host(
@@ -74,6 +209,7 @@ class PlatformProbeTests(unittest.TestCase):
             which=fake_which({"qemu-system-aarch64"}),
             exists=fake_exists(set()),
             access=allow_paths(set()),
+            run_command=android_queries(feature=False),
         )
         row = assess_platform(snapshot)
         self.assertEqual(row.state, SupportState.CONDITIONAL)
