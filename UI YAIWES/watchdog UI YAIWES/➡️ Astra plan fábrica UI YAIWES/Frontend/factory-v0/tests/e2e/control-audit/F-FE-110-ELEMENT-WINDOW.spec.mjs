@@ -21,7 +21,14 @@ async function boot(page) {
   await page.reload({ waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => Boolean(globalThis.__YAIWES_FACTORY_V19__), null, { timeout: 10_000 });
   await expect(page.locator('#canvas')).toBeVisible();
-  await expect(page.locator(SELECTOR)).toBeVisible();
+
+  const card = page.locator(SELECTOR);
+  if (!(await card.isVisible())) {
+    const libraryToggle = page.getByRole('button', { name: 'Biblioteca' });
+    await expect(libraryToggle).toBeVisible();
+    await libraryToggle.click();
+  }
+  await expect(card).toBeVisible();
   return { pageErrors, failedRequests };
 }
 
