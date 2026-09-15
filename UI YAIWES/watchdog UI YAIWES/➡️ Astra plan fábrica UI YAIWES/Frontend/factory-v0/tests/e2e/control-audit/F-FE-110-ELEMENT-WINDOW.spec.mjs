@@ -41,8 +41,13 @@ test.describe('F-FE-110 ELEMENT-WINDOW control QA', () => {
     await expect(page.locator('[data-preview-insert]')).toHaveAttribute('data-selected-kind', 'window');
     await expect(page.locator('[data-node]')).toHaveCount(0);
 
-    const persistedProject = await page.evaluate(key => localStorage.getItem(key), PROJECT_KEY);
-    expect(persistedProject).toBeNull();
+    // Project persistence may be initialized by the canonical state engine during boot.
+    // Selecting a browser card must not mutate the canonical project state or create a node.
+    const beforeProject = await page.evaluate(key => localStorage.getItem(key), PROJECT_KEY);
+    await card.click();
+    const afterProject = await page.evaluate(key => localStorage.getItem(key), PROJECT_KEY);
+    expect(afterProject).toBe(beforeProject);
+    await expect(page.locator('[data-node]')).toHaveCount(0);
 
     expect(pageErrors, `critical page errors ${JSON.stringify(pageErrors)}`).toEqual([]);
     expect(failedRequests, `failed document/script ${JSON.stringify(failedRequests)}`).toEqual([]);
