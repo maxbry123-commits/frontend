@@ -1,0 +1,27 @@
+{
+  "schema": "yaiwes.requirement-trace.v1",
+  "requirement_id": "REQ-S3-001",
+  "goal_id": "G12",
+  "task_id": "GAP-02-N35-S3-REMAINDER",
+  "source": {
+    "path": "documentos proyectos UI YAIWES/🤯🗃️memoria del Wordflow resumen de lo que va en memoria del Wordflow para Kimi k y grock contexto de 20 millones d parámetros para el Wordflow y YAIWES.md",
+    "sha256": "aa9ea84565a9dfd250cc57ba465a7131a032b1e96c404d9dd21a349c8185c58c",
+    "symbol": "§1 RESPONSABILIDAD DEL WORKFLOW"
+  },
+  "implementation": {
+    "path": "runtime/src/core/workflow_definition.py",
+    "sha256": "0c758934750bfb22b55146b98f3bbfaf44e0e3efd635f62c46a787413ae8de5a",
+    "symbol": "YAIWES_CHAT_WORKFLOW"
+  },
+  "test": {
+    "path": "runtime/tests/test_req_s3_001_workflow_responsibility.py",
+    "sha256": "b189a0a4aad5e50519d42f748db416e47345b63923f67079da0f6248e6c36d38",
+    "symbol": "test_req_s3_001_workflow_controls_normative_pipeline_without_second_owner"
+  },
+  "evidence": {
+    "path": "runtime/evidence/requirement_traces/REQ-S3-001.ci.json",
+    "sha256": "262edbf47ef4adf5b5f0100f3e03f44f441b10527bf2b92b5ffa9adbd07f032e",
+    "symbol": ""
+  },
+  "revision": "58eb999314e13bd1622e921379feb008817fb614"
+}
