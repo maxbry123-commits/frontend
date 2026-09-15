@@ -1,0 +1,16 @@
+{
+  "schema": "yaiwes.factory.claim.v1",
+  "node_id": "F-FE-069",
+  "segment_id": "SEG-05-CONTROLS",
+  "agent": "GROK",
+  "chat_id": "GROK-1-UI-YAIWES-CRAZY-WALL",
+  "fresh_main_sha": "4b1f6bab8c778189875b2580cea747782f677ba9",
+  "state": "CLAIMED",
+  "write_scope": [
+    "Frontend/factory-v0/src/segments/controls-suite-v2.js",
+    "Frontend/factory-v0/tests/e2e/*controls-suite-v2*",
+    "Frontend/factory-v0/project-memory/*F-FE-069*"
+  ],
+  "claimed_at": "2026-09-15T05:11:00Z",
+  "title": "Convergencia versionada de controles"
+}
