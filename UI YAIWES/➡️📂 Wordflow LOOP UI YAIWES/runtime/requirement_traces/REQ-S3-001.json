@@ -11,7 +11,7 @@
   "implementation": {
     "path": "runtime/src/core/workflow_definition.py",
     "sha256": "0c758934750bfb22b55146b98f3bbfaf44e0e3efd635f62c46a787413ae8de5a",
-    "symbol": "YAIWES_CHAT_WORKFLOW"
+    "symbol": "WorkflowDefinition"
   },
   "test": {
     "path": "runtime/tests/test_req_s3_001_workflow_responsibility.py",
