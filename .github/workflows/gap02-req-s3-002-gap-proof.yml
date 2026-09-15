@@ -92,3 +92,5 @@ jobs:
           assert result.status == "TRACEABILITY_PASS", result.gaps
           assert result.verified_requirements == 1
           PY
+
+# recertification readback: current workflow content executes focused five-pass
