@@ -1,0 +1,21 @@
+{
+  "schema": "fabrica-ui.meta-integration-state/v1",
+  "status": "IN_PROGRESS",
+  "nodes": {
+    "N1_META_DOWNLOAD": "CLOSED",
+    "N2_ARCHITECTURE": "CLOSED",
+    "N3_UI_YAIWES_INTEGRATION": "VERIFY_PENDING",
+    "N4_HANDOFF": "PENDING"
+  },
+  "workflow": "GOAL -> CODE -> RUN -> SCREENSHOT -> VERIFY -> TEST -> FIX -> RETEST -> EVIDENCE -> PASS",
+  "gaps_pendientes_integraciones": [
+    "Read-back fresh de los tres árboles Meta en UI YAIWES",
+    "Confirmar evidencia final de integración CUA+MCP",
+    "Cerrar handoff sólo después del read-back"
+  ],
+  "required_integrations": [
+    "MetaCua-Glimmer-agentic-fundamentals",
+    "CUA-MCP-and-agentic-patterns",
+    "Multi-Agent-and-Muse-Code-patterns"
+  ]
+}
