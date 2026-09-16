@@ -46,16 +46,19 @@ jobs:
             rows.append({'repo':slug,'url':url[:-4],'commit':ref,'destination':str(dst)})
           mappings=[
             ('meta-oss-cookbook/agentic-fundamentals','MetaCua-Glimmer-agentic-fundamentals'),
-            ('meta-model-cookbook/03_agentic_patterns','CUA-MCP-and-agentic-patterns'),
+            ('meta-model-cookbook/02_agent_patterns','CUA-MCP-and-agentic-patterns'),
             ('meta-model-cookbook/04_muse_code','Multi-Agent-and-Muse-Code-patterns'),
           ]
+          copied=[]
           for rel,name in mappings:
             src=factory/rel
-            if src.exists():
-              dst=ui/name
-              if dst.exists(): shutil.rmtree(dst)
-              shutil.copytree(src,dst)
+            if not src.exists(): raise SystemExit(f'MISSING_INTEGRATION_SOURCE {src}')
+            dst=ui/name
+            if dst.exists(): shutil.rmtree(dst)
+            shutil.copytree(src,dst)
+            copied.append({'source':str(src),'destination':str(dst)})
           (factory/'DOWNLOAD_EVIDENCE.json').write_text(json.dumps(rows,indent=2)+'\n')
+          (ui/'INTEGRATION_EVIDENCE.json').write_text(json.dumps(copied,indent=2)+'\n')
           PY
       - name: Validate and commit
         shell: bash
@@ -65,15 +68,15 @@ jobs:
           test -d 'fabrica de UI INTERFACE fromtend/Meta Agents 2026/muse-code-sdk'
           test -d 'fabrica de UI INTERFACE fromtend/Meta Agents 2026/meta-oss-cookbook'
           test -d 'fabrica de UI INTERFACE fromtend/Meta Agents 2026/meta-model-cookbook'
+          test -d 'UI YAIWES/Meta Agents integration sources/MetaCua-Glimmer-agentic-fundamentals'
+          test -d 'UI YAIWES/Meta Agents integration sources/CUA-MCP-and-agentic-patterns'
+          test -d 'UI YAIWES/Meta Agents integration sources/Multi-Agent-and-Muse-Code-patterns'
+          test -f 'UI YAIWES/Meta Agents integration sources/INTEGRATION_EVIDENCE.json'
           rm -rf _work
           git add -- 'fabrica de UI INTERFACE fromtend/Meta Agents 2026' 'UI YAIWES/Meta Agents integration sources'
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          if git diff --cached --quiet; then
-            echo 'No vendor delta; validation complete.'
-            exit 0
-          fi
-          # Fail closed on concurrent HEAD changes instead of rebasing a dirty/generated worktree.
+          if git diff --cached --quiet; then echo 'No vendor delta; validation complete.'; exit 0; fi
           START_SHA="$(git rev-parse HEAD)"
           git fetch origin main
           REMOTE_SHA="$(git rev-parse origin/main)"
