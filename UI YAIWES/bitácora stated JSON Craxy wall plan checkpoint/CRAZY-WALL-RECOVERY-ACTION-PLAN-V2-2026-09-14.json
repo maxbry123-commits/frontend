@@ -462,9 +462,11 @@
   },
   "execution_order": [
     "READ_FRESH_AND_COLLISION_CHECK",
+    "XRAY requirement-mapped component work may execute only on non-overlapping scopes; XRAY-11 user-requested acquisition/copy gaps first when safe",
     "GAP-02 available noncolliding child; in parallel only with non-overlapping GAP-03/GAP-04/GAP-05 child scopes",
+    "XRAY-12/13 dedup/orphan/component-to-requirement reconciliation before global trace close",
     "GAP-06 and GAP-07 after their dependencies",
-    "GAP-08 global exact-167 audit",
+    "GAP-08 global exact-167 audit including X-Ray reconciliation",
     "GAP-09 Final Judge"
   ],
   "global_close_gate": [
@@ -485,31 +487,34 @@
     "3 refutations PASS",
     "Final Judge VERIFIED_CLOSED"
   ],
-  "global_state": "RECOVERY_CONTINUATION",
+  "global_state": "RECOVERY_CONTINUATION_XRAY_PLAN_ACTIVE",
   "xray_component_integration_extension": {
-    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-XRAY-COMPONENT-INTEGRATION-CLOSURE-V1-2026-09-17.json",
-    "schema": "yaiwes.crazy-wall.xray-component-integration-closure/v1",
-    "state": "ACTIVE_CLOSURE_EXTENSION",
-    "inventory_observed": {
-      "ui_yaiwes_root_entries": 24,
-      "oss_library_entries": 142,
-      "oss_physical_directories": 140,
-      "canonical_yaiwes_components": 8,
-      "review_unclassified": [
-        "Bulkman"
-      ]
+    "state": "ACTIVE_PLAN",
+    "crazy_wall_ref": "CRAZY-WALL-XRAY-COMPONENT-INTEGRATION-CLOSURE-V1-2026-09-17.json",
+    "inventory_ref": "XRAY-COMPONENT-INVENTORY-V1-2026-09-17.json",
+    "action_plan_ref": "../readme arquitectura UI YAIWES/PLAN-ACCION-CIERRE-XRAY-V3-2026-09-17.md",
+    "physical_directories": 207,
+    "normalized_identities": 196,
+    "duplicate_groups": 10,
+    "rule": "component presence never increments 167 certification; only requirement-mapped adapter/wiring/test/evidence may close existing GAP nodes",
+    "integration_priority": [
+      "editor/UI/controls",
+      "state/IO/memory/document ingest",
+      "AI/MCP/router/agents",
+      "security/observability",
+      "testing/CI",
+      "runtime/platform only if supported scope proves need",
+      "donors -> VERIFIED_NO_NEED when no requirement gap"
+    ],
+    "user_requested_5": {
+      "Codebase Memory MCP": "MCP code-intelligence adapter",
+      "OmniRoute": "ProviderGateway; no router ownership replacement",
+      "Orca": "UI/agent-surface donor; acquisition must be completed first",
+      "Omarchy": "ENVIRONMENT/OS DONOR; no frontend runtime dependency",
+      "Anydoc": "document->Markdown; excluded from Motor3 copy to UI YAIWES interface"
     },
-    "rule": "Every physical component is classified, but integration is permitted only when mapped to an authoritative requirement/GAP and verified through adapter/wiring/test/evidence/CI/readback.",
-    "execution_order": [
-      "XRAY-11 user-requested acquisition/copy gaps",
-      "XRAY-01..10 requirement-mapped integration review",
-      "XRAY-12 dedup/orphan/collision",
-      "XRAY-13 map selected capabilities to 167 requirements",
-      "existing GAP-02/03/04/05 certification",
-      "GAP-06/07 acceptance",
-      "GAP-08 global reconciliation",
-      "GAP-09 Final Judge"
-    ]
+    "watchdog_loop": "READ_FRESH -> CLAIM_ONE -> VERIFY_RESEARCH -> EXECUTE_DELTA -> TEST_REPORT -> READBACK -> RELEASE -> NEXT"
   },
-  "last_xray_update_utc": "2026-09-17T22:49:00Z"
+  "last_xray_update_utc": "2026-09-17T22:49:00Z",
+  "last_update_utc": "2026-09-17T23:36:00Z"
 }
