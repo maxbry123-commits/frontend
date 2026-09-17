@@ -1,0 +1,56 @@
+{
+  "schema": "yaiwes.download.queue.v1",
+  "task_id": "ui-yaiwes-user-components-5-20260917",
+  "destination_repository": "maxbry123-commits/frontend",
+  "destination_branch": "main",
+  "destination_root": "UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17",
+  "skill_repo": "maxbry123-commits/agentes",
+  "skill_ref": "c789e5fe635e220230ffc759d86dc3bbb8e261d4",
+  "skill_root": "skills/skills Github acción",
+  "rules": {
+    "overwrite": false,
+    "delete": false,
+    "reactivate_old_workflows": false,
+    "single_writer": true,
+    "git_lfs": false,
+    "source_present_is_not_runtime_integrated": true
+  },
+  "expected_components": 5,
+  "components": [
+    {
+      "director_index": 1,
+      "name": "Codebase Memory MCP",
+      "slug": "Codebase-Memory-MCP",
+      "source_url": "https://github.com/DeusData/codebase-memory-mcp",
+      "integration_role": "MCP code-intelligence knowledge graph; acquisition first, runtime wiring requires adapter test"
+    },
+    {
+      "director_index": 2,
+      "name": "OmniRoute",
+      "slug": "OmniRoute",
+      "source_url": "https://github.com/diegosouzapw/OmniRoute",
+      "integration_role": "AI provider gateway/router; acquisition first, provider-router wiring requires contract test"
+    },
+    {
+      "director_index": 3,
+      "name": "Orca",
+      "slug": "Orca",
+      "source_url": "https://github.com/stablyai/orca",
+      "integration_role": "graphical multi-agent orchestration donor; acquisition first, no second runtime/state engine"
+    },
+    {
+      "director_index": 4,
+      "name": "Omarchy",
+      "slug": "Omarchy",
+      "source_url": "https://github.com/omacom/omarchy",
+      "integration_role": "platform/OS donor profile; never execute installer during acquisition"
+    },
+    {
+      "director_index": 5,
+      "name": "Anydoc",
+      "slug": "Anydoc",
+      "source_url": "https://github.com/firecrawl/anydoc",
+      "integration_role": "Rust document-to-Markdown ingestion donor; runtime adapter requires focused conversion test"
+    }
+  ]
+}
