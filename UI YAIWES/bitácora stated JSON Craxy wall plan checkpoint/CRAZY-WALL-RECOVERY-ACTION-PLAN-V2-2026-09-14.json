@@ -1,1 +1,515 @@
-{"schema":"yaiwes.crazy-wall.recovery-action-plan.v2","contract":"tel.workflow/v3","mode":"FAIL_CLOSED_LOOP","date":"2026-09-14","state":"RECOVERY_CONTINUATION_NO_GLOBAL_CLOSE","extends":["CRAZY-WALL-CLOSE-ALL-GAPS-V2-2026-09-14.json","CRAZY-WALL-RECOVERY-ACTION-PLAN-V1-2026-09-14.json"],"authority":"fresh main code + tests + trusted CI/readback > Close-All-Gaps V2 > Recovery Plan V2 > V1/history","snapshot":{"head_observed":"0ddad7e38a49e6953c9a7f8e128bdad6ffcf536b","denominator":167,"certified_confirmed":18,"pending_confirmed":149,"physical_requirement_traces":18,"physical_ci_evidence":18,"pass_pending_five_pass_readback":[],"confirmed_certified_ids":["REQ-S1-003","REQ-S1-015","REQ-S2-009","REQ-S3-002","REQ-S3-016","REQ-S3-017","REQ-S3-018","REQ-S3-044","REQ-S3-045","REQ-S3-046","REQ-S3-047","REQ-S3-048","REQ-S3-049","REQ-S3-050","REQ-S3-053","REQ-S3-054","REQ-S3-055","REQ-S3-057"]},"cross_verification":{"denominator_source":"runtime/src/coverage/requirements.py","expected_partition":{"S1":20,"S2":14,"S3":64,"S4":69,"TOTAL":167},"trace_inventory_source":"runtime/requirement_traces/","evidence_inventory_source":"runtime/evidence/requirement_traces/","fresh_deltas_after_close_all_gaps_v2":[{"id":"REQ-S1-003","state":"VERIFIED_CLOSED_FOCUSED_CI_FIVE_PASS","run_id":34904075674,"job_id":104176546822,"revision":"b614811995b55324577e702c1fd538c7424e0ff1"},{"id":"REQ-S1-015","state":"VERIFIED_CLOSED_FOCUSED_CI_FIVE_PASS","run_id":34904337102,"job_id":104177381482,"revision":"7c1589284996377131baa2bc7071a1c1234f841d"},{"id":"REQ-S2-009","state":"VERIFIED_CLOSED_FOCUSED_CI_FIVE_PASS","run_id":34904843397,"job_id":104178992615,"revision":"1a799861d71a1a5154614289a89b2ef44b9d205b"},{"id":"REQ-S3-002","state":"VERIFIED_CLOSED_FOCUSED_CI_FIVE_PASS_READBACK","revision":"b4f62b56347df90166292373f57103a6950f7c39","evidence_run_id":34903920516,"evidence_job_id":104176059413,"five_pass_run_id":34904130338,"five_pass_job_id":104176715421}],"historical_regression_reconciled":{"failed_run":34899656024,"failed_job":104166414855,"failure":"REQ-S3-047 five-pass returned GAP at old checkout aea8272039727c16a6d794c1cc16141800aeb40d","strategy_delta_run":34902325960,"strategy_delta_job":104170931337,"strategy_delta_revision":"412031390af1074539f2129059dc80b9fb060c43","current_test_binding":"REQ-S3-047","state":"RESOLVED_BY_LATER_FOCUSED_CI_SUCCESS; preserve old failure as history"},"s4_queue_identity_correction":{"bug":"Recovery Plan V1 enumerated REQ-S4-001..REQ-S4-069, which does not match authoritative requirement_inventory().","incorrectly_included_in_v1":["REQ-S4-023","REQ-S4-028","REQ-S4-035","REQ-S4-041","REQ-S4-042","REQ-S4-043","REQ-S4-047","REQ-S4-049","REQ-S4-050","REQ-S4-051","REQ-S4-054","REQ-S4-055","REQ-S4-057"],"omitted_real_ids_in_v1":["REQ-S4-071","REQ-S4-072","REQ-S4-073","REQ-S4-074","REQ-S4-075","REQ-S4-076","REQ-S4-077","REQ-S4-078","REQ-S4-079","REQ-S4-080","REQ-S4-081","REQ-S4-083","REQ-S4-085"],"resolution":"V2 task queue uses exact S4 IDs produced by runtime/src/coverage/requirements.py"}},"step1_steering_interprocess_oss":{"state":"VERIFIED_CLOSED_ACQUISITION_ONLY","microflow":"run_id -> queue/key -> operator/API injects directive -> worker consumes directives -> queue empty -> return accumulated instructions; waiting/ownership preserved","components":[{"name":"Temporal Python SDK","repo":"temporalio/sdk-python","commit":"ab25ed693f7ec77589346e66c98db299a8c9c9fe","path":"UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/Temporal-Python-SDK","manifest_blob":"acab95faa2129aecfbf10ee8bc70debd3f1d94f3","extraction_verified":true,"no_lfs":true},{"name":"DBOS Python","repo":"dbos-inc/dbos-transact-py","commit":"83805fd84494c85ea09105443884a2786152d921","path":"UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/DBOS-Python","manifest_blob":"288318149cb949e1758a7a7e3ccd8c593b54ca3d","extraction_verified":true,"no_lfs":true},{"name":"LangGraph","repo":"langchain-ai/langgraph","commit":"e539ac122f4126f6dd850581c1494948cf620e31","path":"UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/LangGraph","manifest_blob":"783f22b77988ba01f1528df75ef2a3ddb95f1f54","extraction_verified":true,"no_lfs":true},{"name":"Hatchet","repo":"hatchet-dev/hatchet","commit":"315d43a72fd771b049b304b865a81dbab98c466c","path":"UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/Hatchet","manifest_blob":"961314ff8cafd8445eda425c13a8cd9a3b35c873","extraction_verified":true,"no_lfs":true}],"close_rule":"ACQUISITION_ONLY. SOURCE_PRESENT != IMPLEMENTED != WIRED != TEST_PASS. Runtime integration only if a remaining product GAP proves necessity."},"node_schema":{"required_fields":["id","source_selector","state","owner","write_scope","verify_research","execute_delta","test_report","close"],"state_machine":"FREE -> CLAIMED -> VERIFY_RESEARCH -> EXECUTE_DELTA -> TEST_REPORT -> VERIFIED_CLOSED | GAP_RESOLVABLE | BLOCKED","strategy_order":"REUSE_EXISTING > PATCH > ADAPT","claim_rule":"fresh HEAD + detect active claim/collision before every write; never overwrite another writer","task_materialization":"Every ID in pending_task_queues is one literal child node using id GAP-XX-<REQ-ID>; no synthetic RequirementTrace.","verify_research":"literal requirement -> current source anchor -> implementation/wiring -> focused test -> current trace/evidence -> trusted CI; classify exact missing link","execute_delta":"change only proven MISSING_IMPLEMENTATION|MISSING_WIRING|MISSING_TEST|MISSING_TRACE|MISSING_CI; no unrelated feature/component/runtime","test_report":"focused regression -> exact hashes/symbols -> RequirementTrace/evidence -> trusted completed/success CI -> five-pass -> readback","close":"source -> implementation -> wiring -> test -> RequirementTrace -> evidence -> trusted CI -> five-pass -> readback, all verified"},"gap_plan":[{"n":1,"id":"GAP-01-N35-S3-048","state":"VERIFIED_CLOSED","pending":0,"method":"Preserve evidence; reopen only on contradictory fresh evidence."},{"n":2,"id":"GAP-02-N35-S3-REMAINDER","state":"IN_PROGRESS_COLLISION_AWARE","pending":49,"method":"Continue with remaining S3 children after REQ-S3-002 verified; fresh claim/collision check before each child; source->code->test->trace->CI->five-pass until S3 64/64."},{"n":3,"id":"GAP-03-N35-S1","state":"GAP_RESOLVABLE","pending":18,"method":"Anchor each remaining S1 literal; reuse existing code/tests; patch only measurable performance/resilience/resource gaps; focused CI + five-pass. Explicitly validate any 100x literal against measured baseline/candidate instead of treating benchmark logging as PASS."},{"n":4,"id":"GAP-04-N35-S2","state":"GAP_RESOLVABLE","pending":13,"method":"Anchor each S2 target; distinguish fixture from real platform; patch minimal sandbox/platform delta; focused CI + five-pass; preserve unsupported targets honestly."},{"n":5,"id":"GAP-05-N35-S4-COMMAND-CENTER","state":"GAP_RESOLVABLE","pending":69,"method":"Use corrected exact S4 IDs from requirement_inventory(); map literal control -> UI route/runtime/effect/auth boundary; smallest repair; control/effect/browser test + CI + five-pass; REQ-S4-034 requires real auth/authz evidence."},{"n":6,"id":"GAP-06-UI-COMMAND-CENTER-E2E","state":"BLOCKED_AFTER_GAP-05","pending":"browser/deployed acceptance","method":"Test exact published candidate: chat/model/stream/stop/history/files/tasks/recovery/error/auth; patch only observed dead wiring; require TESTED_SHA == PUBLISHED_SHA."},{"n":7,"id":"GAP-07-PLATFORM-REAL-ACCEPTANCE","state":"BLOCKED_AFTER_GAP-04","pending":"supported real targets","method":"Execute real targets and collect reproducible evidence; no fixture substitution. Current host probe can remain BLOCKED when no verified backend exists, but final supported scope must be explicit."},{"n":8,"id":"GAP-08-GLOBAL-TRACE-CERTIFICATION","state":"BLOCKED_AFTER_GAP-02-03-04-05","pending":"full 167 reconciliation","method":"Load exact 167 inventory; require all traces/evidence; inverse artifact map; zero missing_trace/contradiction/orphan; run full regression + trusted CI + five-pass on exact candidate."},{"n":9,"id":"GAP-09-FINAL-JUDGE","state":"BLOCKED_AFTER_GAP-06-07-08","pending":"global final gates","method":"Exact published SHA; 12 entry goals + 12 exit goals + Council12 + 3 refutations + E2E/platform evidence + final CI/readback. Only then VERIFIED_CLOSED and final recovery patch/handoff."},{"n":10,"id":"GAP-10-STEERING-INTERPROCESS-OSS","state":"VERIFIED_CLOSED_ACQUISITION_ONLY","pending":"runtime wiring only if proven necessary","method":"Retain verified Temporal/DBOS/LangGraph/Hatchet acquisition; no duplicate download; integrate only as a minimal adapter if a product GAP requires it."}],"crosscutting_open_findings":[{"id":"TRACE-COVERAGE","mapped_to":"GAP-02/03/04/05/08","state":"OPEN","evidence":"18 physical traces/evidence and all 18 now have accepted focused CI/five-pass/readback; 149 certification tasks remain."},{"id":"BENCHMARK-100X","mapped_to":"GAP-03","state":"VERIFY_LITERAL_AND_MEASURE","evidence":"Historical full-suite run 34899656024 measured indexed policy lookup about 3.09x and explicitly meets_100x=false; current test certifies measurement integrity, not a 100x result."},{"id":"REAL-PLATFORM-BACKEND","mapped_to":"GAP-04/GAP-07","state":"OPEN_ACCEPTANCE","evidence":"Historical CI host probe reported BLOCKED/no_verified_runtime_backend; current probe intentionally fails closed when backend is unavailable."},{"id":"BROWSER-E2E","mapped_to":"GAP-06","state":"BLOCKED_AFTER_GAP-05","evidence":"No global exact-published-SHA browser PASS accepted yet."},{"id":"GLOBAL-PUBLISHED-SHA","mapped_to":"GAP-08/GAP-09","state":"OPEN","evidence":"No 167/167 + TESTED_SHA==PUBLISHED_SHA + Final Judge evidence accepted yet."}],"pending_task_queues":{"GAP-02-S3":["REQ-S3-001","REQ-S3-003","REQ-S3-004","REQ-S3-005","REQ-S3-006","REQ-S3-007","REQ-S3-008","REQ-S3-009","REQ-S3-010","REQ-S3-011","REQ-S3-012","REQ-S3-013","REQ-S3-014","REQ-S3-015","REQ-S3-019","REQ-S3-020","REQ-S3-021","REQ-S3-022","REQ-S3-023","REQ-S3-024","REQ-S3-025","REQ-S3-026","REQ-S3-027","REQ-S3-028","REQ-S3-029","REQ-S3-030","REQ-S3-031","REQ-S3-032","REQ-S3-033","REQ-S3-034","REQ-S3-035","REQ-S3-036","REQ-S3-037","REQ-S3-038","REQ-S3-039","REQ-S3-040","REQ-S3-041","REQ-S3-042","REQ-S3-043","REQ-S3-051","REQ-S3-052","REQ-S3-056","REQ-S3-058","REQ-S3-059","REQ-S3-060","REQ-S3-061","REQ-S3-063","REQ-S3-064","REQ-S3-065"],"GAP-03-S1":["REQ-S1-001","REQ-S1-002","REQ-S1-004","REQ-S1-005","REQ-S1-006","REQ-S1-007","REQ-S1-008","REQ-S1-009","REQ-S1-010","REQ-S1-011","REQ-S1-012","REQ-S1-013","REQ-S1-014","REQ-S1-016","REQ-S1-017","REQ-S1-018","REQ-S1-019","REQ-S1-020"],"GAP-04-S2":["REQ-S2-000","REQ-S2-001","REQ-S2-002","REQ-S2-003","REQ-S2-004","REQ-S2-005","REQ-S2-006","REQ-S2-007","REQ-S2-008","REQ-S2-010","REQ-S2-012","REQ-S2-013","REQ-S2-014"],"GAP-05-S4":["REQ-S4-001","REQ-S4-002","REQ-S4-003","REQ-S4-004","REQ-S4-005","REQ-S4-006","REQ-S4-007","REQ-S4-008","REQ-S4-009","REQ-S4-010","REQ-S4-011","REQ-S4-012","REQ-S4-013","REQ-S4-014","REQ-S4-015","REQ-S4-016","REQ-S4-017","REQ-S4-018","REQ-S4-019","REQ-S4-020","REQ-S4-021","REQ-S4-022","REQ-S4-024","REQ-S4-025","REQ-S4-026","REQ-S4-027","REQ-S4-029","REQ-S4-030","REQ-S4-031","REQ-S4-032","REQ-S4-033","REQ-S4-034","REQ-S4-036","REQ-S4-037","REQ-S4-038","REQ-S4-039","REQ-S4-040","REQ-S4-044","REQ-S4-045","REQ-S4-046","REQ-S4-048","REQ-S4-052","REQ-S4-053","REQ-S4-056","REQ-S4-058","REQ-S4-059","REQ-S4-060","REQ-S4-061","REQ-S4-062","REQ-S4-063","REQ-S4-064","REQ-S4-065","REQ-S4-066","REQ-S4-067","REQ-S4-068","REQ-S4-069","REQ-S4-071","REQ-S4-072","REQ-S4-073","REQ-S4-074","REQ-S4-075","REQ-S4-076","REQ-S4-077","REQ-S4-078","REQ-S4-079","REQ-S4-080","REQ-S4-081","REQ-S4-083","REQ-S4-085"]},"pending_task_counts":{"GAP-02-S3":49,"GAP-03-S1":18,"GAP-04-S2":13,"GAP-05-S4":69,"TOTAL":149},"execution_order":["READ_FRESH_AND_COLLISION_CHECK","GAP-02 available noncolliding child; in parallel only with non-overlapping GAP-03/GAP-04/GAP-05 child scopes","GAP-06 and GAP-07 after their dependencies","GAP-08 global exact-167 audit","GAP-09 Final Judge"],"global_close_gate":["S1 20/20","S2 14/14","S3 64/64","S4 69/69","TOTAL 167/167","missing_trace=0","contradiction=0","orphan=0","browser E2E PASS","real-platform acceptance PASS or supported scope explicitly bounded","TESTED_SHA == PUBLISHED_SHA","12 entry goals PASS","12 exit goals PASS","Council12 PASS","3 refutations PASS","Final Judge VERIFIED_CLOSED"],"global_state":"RECOVERY_CONTINUATION"}
+{
+  "schema": "yaiwes.crazy-wall.recovery-action-plan.v2",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "date": "2026-09-14",
+  "state": "RECOVERY_CONTINUATION_NO_GLOBAL_CLOSE",
+  "extends": [
+    "CRAZY-WALL-CLOSE-ALL-GAPS-V2-2026-09-14.json",
+    "CRAZY-WALL-RECOVERY-ACTION-PLAN-V1-2026-09-14.json"
+  ],
+  "authority": "fresh main code + tests + trusted CI/readback > Close-All-Gaps V2 > Recovery Plan V2 > V1/history",
+  "snapshot": {
+    "head_observed": "0ddad7e38a49e6953c9a7f8e128bdad6ffcf536b",
+    "denominator": 167,
+    "certified_confirmed": 18,
+    "pending_confirmed": 149,
+    "physical_requirement_traces": 18,
+    "physical_ci_evidence": 18,
+    "pass_pending_five_pass_readback": [],
+    "confirmed_certified_ids": [
+      "REQ-S1-003",
+      "REQ-S1-015",
+      "REQ-S2-009",
+      "REQ-S3-002",
+      "REQ-S3-016",
+      "REQ-S3-017",
+      "REQ-S3-018",
+      "REQ-S3-044",
+      "REQ-S3-045",
+      "REQ-S3-046",
+      "REQ-S3-047",
+      "REQ-S3-048",
+      "REQ-S3-049",
+      "REQ-S3-050",
+      "REQ-S3-053",
+      "REQ-S3-054",
+      "REQ-S3-055",
+      "REQ-S3-057"
+    ]
+  },
+  "cross_verification": {
+    "denominator_source": "runtime/src/coverage/requirements.py",
+    "expected_partition": {
+      "S1": 20,
+      "S2": 14,
+      "S3": 64,
+      "S4": 69,
+      "TOTAL": 167
+    },
+    "trace_inventory_source": "runtime/requirement_traces/",
+    "evidence_inventory_source": "runtime/evidence/requirement_traces/",
+    "fresh_deltas_after_close_all_gaps_v2": [
+      {
+        "id": "REQ-S1-003",
+        "state": "VERIFIED_CLOSED_FOCUSED_CI_FIVE_PASS",
+        "run_id": 34904075674,
+        "job_id": 104176546822,
+        "revision": "b614811995b55324577e702c1fd538c7424e0ff1"
+      },
+      {
+        "id": "REQ-S1-015",
+        "state": "VERIFIED_CLOSED_FOCUSED_CI_FIVE_PASS",
+        "run_id": 34904337102,
+        "job_id": 104177381482,
+        "revision": "7c1589284996377131baa2bc7071a1c1234f841d"
+      },
+      {
+        "id": "REQ-S2-009",
+        "state": "VERIFIED_CLOSED_FOCUSED_CI_FIVE_PASS",
+        "run_id": 34904843397,
+        "job_id": 104178992615,
+        "revision": "1a799861d71a1a5154614289a89b2ef44b9d205b"
+      },
+      {
+        "id": "REQ-S3-002",
+        "state": "VERIFIED_CLOSED_FOCUSED_CI_FIVE_PASS_READBACK",
+        "revision": "b4f62b56347df90166292373f57103a6950f7c39",
+        "evidence_run_id": 34903920516,
+        "evidence_job_id": 104176059413,
+        "five_pass_run_id": 34904130338,
+        "five_pass_job_id": 104176715421
+      }
+    ],
+    "historical_regression_reconciled": {
+      "failed_run": 34899656024,
+      "failed_job": 104166414855,
+      "failure": "REQ-S3-047 five-pass returned GAP at old checkout aea8272039727c16a6d794c1cc16141800aeb40d",
+      "strategy_delta_run": 34902325960,
+      "strategy_delta_job": 104170931337,
+      "strategy_delta_revision": "412031390af1074539f2129059dc80b9fb060c43",
+      "current_test_binding": "REQ-S3-047",
+      "state": "RESOLVED_BY_LATER_FOCUSED_CI_SUCCESS; preserve old failure as history"
+    },
+    "s4_queue_identity_correction": {
+      "bug": "Recovery Plan V1 enumerated REQ-S4-001..REQ-S4-069, which does not match authoritative requirement_inventory().",
+      "incorrectly_included_in_v1": [
+        "REQ-S4-023",
+        "REQ-S4-028",
+        "REQ-S4-035",
+        "REQ-S4-041",
+        "REQ-S4-042",
+        "REQ-S4-043",
+        "REQ-S4-047",
+        "REQ-S4-049",
+        "REQ-S4-050",
+        "REQ-S4-051",
+        "REQ-S4-054",
+        "REQ-S4-055",
+        "REQ-S4-057"
+      ],
+      "omitted_real_ids_in_v1": [
+        "REQ-S4-071",
+        "REQ-S4-072",
+        "REQ-S4-073",
+        "REQ-S4-074",
+        "REQ-S4-075",
+        "REQ-S4-076",
+        "REQ-S4-077",
+        "REQ-S4-078",
+        "REQ-S4-079",
+        "REQ-S4-080",
+        "REQ-S4-081",
+        "REQ-S4-083",
+        "REQ-S4-085"
+      ],
+      "resolution": "V2 task queue uses exact S4 IDs produced by runtime/src/coverage/requirements.py"
+    }
+  },
+  "step1_steering_interprocess_oss": {
+    "state": "VERIFIED_CLOSED_ACQUISITION_ONLY",
+    "microflow": "run_id -> queue/key -> operator/API injects directive -> worker consumes directives -> queue empty -> return accumulated instructions; waiting/ownership preserved",
+    "components": [
+      {
+        "name": "Temporal Python SDK",
+        "repo": "temporalio/sdk-python",
+        "commit": "ab25ed693f7ec77589346e66c98db299a8c9c9fe",
+        "path": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/Temporal-Python-SDK",
+        "manifest_blob": "acab95faa2129aecfbf10ee8bc70debd3f1d94f3",
+        "extraction_verified": true,
+        "no_lfs": true
+      },
+      {
+        "name": "DBOS Python",
+        "repo": "dbos-inc/dbos-transact-py",
+        "commit": "83805fd84494c85ea09105443884a2786152d921",
+        "path": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/DBOS-Python",
+        "manifest_blob": "288318149cb949e1758a7a7e3ccd8c593b54ca3d",
+        "extraction_verified": true,
+        "no_lfs": true
+      },
+      {
+        "name": "LangGraph",
+        "repo": "langchain-ai/langgraph",
+        "commit": "e539ac122f4126f6dd850581c1494948cf620e31",
+        "path": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/LangGraph",
+        "manifest_blob": "783f22b77988ba01f1528df75ef2a3ddb95f1f54",
+        "extraction_verified": true,
+        "no_lfs": true
+      },
+      {
+        "name": "Hatchet",
+        "repo": "hatchet-dev/hatchet",
+        "commit": "315d43a72fd771b049b304b865a81dbab98c466c",
+        "path": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS/Hatchet",
+        "manifest_blob": "961314ff8cafd8445eda425c13a8cd9a3b35c873",
+        "extraction_verified": true,
+        "no_lfs": true
+      }
+    ],
+    "close_rule": "ACQUISITION_ONLY. SOURCE_PRESENT != IMPLEMENTED != WIRED != TEST_PASS. Runtime integration only if a remaining product GAP proves necessity."
+  },
+  "node_schema": {
+    "required_fields": [
+      "id",
+      "source_selector",
+      "state",
+      "owner",
+      "write_scope",
+      "verify_research",
+      "execute_delta",
+      "test_report",
+      "close"
+    ],
+    "state_machine": "FREE -> CLAIMED -> VERIFY_RESEARCH -> EXECUTE_DELTA -> TEST_REPORT -> VERIFIED_CLOSED | GAP_RESOLVABLE | BLOCKED",
+    "strategy_order": "REUSE_EXISTING > PATCH > ADAPT",
+    "claim_rule": "fresh HEAD + detect active claim/collision before every write; never overwrite another writer",
+    "task_materialization": "Every ID in pending_task_queues is one literal child node using id GAP-XX-<REQ-ID>; no synthetic RequirementTrace.",
+    "verify_research": "literal requirement -> current source anchor -> implementation/wiring -> focused test -> current trace/evidence -> trusted CI; classify exact missing link",
+    "execute_delta": "change only proven MISSING_IMPLEMENTATION|MISSING_WIRING|MISSING_TEST|MISSING_TRACE|MISSING_CI; no unrelated feature/component/runtime",
+    "test_report": "focused regression -> exact hashes/symbols -> RequirementTrace/evidence -> trusted completed/success CI -> five-pass -> readback",
+    "close": "source -> implementation -> wiring -> test -> RequirementTrace -> evidence -> trusted CI -> five-pass -> readback, all verified"
+  },
+  "gap_plan": [
+    {
+      "n": 1,
+      "id": "GAP-01-N35-S3-048",
+      "state": "VERIFIED_CLOSED",
+      "pending": 0,
+      "method": "Preserve evidence; reopen only on contradictory fresh evidence."
+    },
+    {
+      "n": 2,
+      "id": "GAP-02-N35-S3-REMAINDER",
+      "state": "IN_PROGRESS_COLLISION_AWARE",
+      "pending": 49,
+      "method": "Continue with remaining S3 children after REQ-S3-002 verified; fresh claim/collision check before each child; source->code->test->trace->CI->five-pass until S3 64/64."
+    },
+    {
+      "n": 3,
+      "id": "GAP-03-N35-S1",
+      "state": "GAP_RESOLVABLE",
+      "pending": 18,
+      "method": "Anchor each remaining S1 literal; reuse existing code/tests; patch only measurable performance/resilience/resource gaps; focused CI + five-pass. Explicitly validate any 100x literal against measured baseline/candidate instead of treating benchmark logging as PASS."
+    },
+    {
+      "n": 4,
+      "id": "GAP-04-N35-S2",
+      "state": "GAP_RESOLVABLE",
+      "pending": 13,
+      "method": "Anchor each S2 target; distinguish fixture from real platform; patch minimal sandbox/platform delta; focused CI + five-pass; preserve unsupported targets honestly."
+    },
+    {
+      "n": 5,
+      "id": "GAP-05-N35-S4-COMMAND-CENTER",
+      "state": "GAP_RESOLVABLE",
+      "pending": 69,
+      "method": "Use corrected exact S4 IDs from requirement_inventory(); map literal control -> UI route/runtime/effect/auth boundary; smallest repair; control/effect/browser test + CI + five-pass; REQ-S4-034 requires real auth/authz evidence."
+    },
+    {
+      "n": 6,
+      "id": "GAP-06-UI-COMMAND-CENTER-E2E",
+      "state": "BLOCKED_AFTER_GAP-05",
+      "pending": "browser/deployed acceptance",
+      "method": "Test exact published candidate: chat/model/stream/stop/history/files/tasks/recovery/error/auth; patch only observed dead wiring; require TESTED_SHA == PUBLISHED_SHA."
+    },
+    {
+      "n": 7,
+      "id": "GAP-07-PLATFORM-REAL-ACCEPTANCE",
+      "state": "BLOCKED_AFTER_GAP-04",
+      "pending": "supported real targets",
+      "method": "Execute real targets and collect reproducible evidence; no fixture substitution. Current host probe can remain BLOCKED when no verified backend exists, but final supported scope must be explicit."
+    },
+    {
+      "n": 8,
+      "id": "GAP-08-GLOBAL-TRACE-CERTIFICATION",
+      "state": "BLOCKED_AFTER_GAP-02-03-04-05",
+      "pending": "full 167 reconciliation",
+      "method": "Load exact 167 inventory; require all traces/evidence; inverse artifact map; zero missing_trace/contradiction/orphan; run full regression + trusted CI + five-pass on exact candidate."
+    },
+    {
+      "n": 9,
+      "id": "GAP-09-FINAL-JUDGE",
+      "state": "BLOCKED_AFTER_GAP-06-07-08",
+      "pending": "global final gates",
+      "method": "Exact published SHA; 12 entry goals + 12 exit goals + Council12 + 3 refutations + E2E/platform evidence + final CI/readback. Only then VERIFIED_CLOSED and final recovery patch/handoff."
+    },
+    {
+      "n": 10,
+      "id": "GAP-10-STEERING-INTERPROCESS-OSS",
+      "state": "VERIFIED_CLOSED_ACQUISITION_ONLY",
+      "pending": "runtime wiring only if proven necessary",
+      "method": "Retain verified Temporal/DBOS/LangGraph/Hatchet acquisition; no duplicate download; integrate only as a minimal adapter if a product GAP requires it."
+    }
+  ],
+  "crosscutting_open_findings": [
+    {
+      "id": "TRACE-COVERAGE",
+      "mapped_to": "GAP-02/03/04/05/08",
+      "state": "OPEN",
+      "evidence": "18 physical traces/evidence and all 18 now have accepted focused CI/five-pass/readback; 149 certification tasks remain."
+    },
+    {
+      "id": "BENCHMARK-100X",
+      "mapped_to": "GAP-03",
+      "state": "VERIFY_LITERAL_AND_MEASURE",
+      "evidence": "Historical full-suite run 34899656024 measured indexed policy lookup about 3.09x and explicitly meets_100x=false; current test certifies measurement integrity, not a 100x result."
+    },
+    {
+      "id": "REAL-PLATFORM-BACKEND",
+      "mapped_to": "GAP-04/GAP-07",
+      "state": "OPEN_ACCEPTANCE",
+      "evidence": "Historical CI host probe reported BLOCKED/no_verified_runtime_backend; current probe intentionally fails closed when backend is unavailable."
+    },
+    {
+      "id": "BROWSER-E2E",
+      "mapped_to": "GAP-06",
+      "state": "BLOCKED_AFTER_GAP-05",
+      "evidence": "No global exact-published-SHA browser PASS accepted yet."
+    },
+    {
+      "id": "GLOBAL-PUBLISHED-SHA",
+      "mapped_to": "GAP-08/GAP-09",
+      "state": "OPEN",
+      "evidence": "No 167/167 + TESTED_SHA==PUBLISHED_SHA + Final Judge evidence accepted yet."
+    }
+  ],
+  "pending_task_queues": {
+    "GAP-02-S3": [
+      "REQ-S3-001",
+      "REQ-S3-003",
+      "REQ-S3-004",
+      "REQ-S3-005",
+      "REQ-S3-006",
+      "REQ-S3-007",
+      "REQ-S3-008",
+      "REQ-S3-009",
+      "REQ-S3-010",
+      "REQ-S3-011",
+      "REQ-S3-012",
+      "REQ-S3-013",
+      "REQ-S3-014",
+      "REQ-S3-015",
+      "REQ-S3-019",
+      "REQ-S3-020",
+      "REQ-S3-021",
+      "REQ-S3-022",
+      "REQ-S3-023",
+      "REQ-S3-024",
+      "REQ-S3-025",
+      "REQ-S3-026",
+      "REQ-S3-027",
+      "REQ-S3-028",
+      "REQ-S3-029",
+      "REQ-S3-030",
+      "REQ-S3-031",
+      "REQ-S3-032",
+      "REQ-S3-033",
+      "REQ-S3-034",
+      "REQ-S3-035",
+      "REQ-S3-036",
+      "REQ-S3-037",
+      "REQ-S3-038",
+      "REQ-S3-039",
+      "REQ-S3-040",
+      "REQ-S3-041",
+      "REQ-S3-042",
+      "REQ-S3-043",
+      "REQ-S3-051",
+      "REQ-S3-052",
+      "REQ-S3-056",
+      "REQ-S3-058",
+      "REQ-S3-059",
+      "REQ-S3-060",
+      "REQ-S3-061",
+      "REQ-S3-063",
+      "REQ-S3-064",
+      "REQ-S3-065"
+    ],
+    "GAP-03-S1": [
+      "REQ-S1-001",
+      "REQ-S1-002",
+      "REQ-S1-004",
+      "REQ-S1-005",
+      "REQ-S1-006",
+      "REQ-S1-007",
+      "REQ-S1-008",
+      "REQ-S1-009",
+      "REQ-S1-010",
+      "REQ-S1-011",
+      "REQ-S1-012",
+      "REQ-S1-013",
+      "REQ-S1-014",
+      "REQ-S1-016",
+      "REQ-S1-017",
+      "REQ-S1-018",
+      "REQ-S1-019",
+      "REQ-S1-020"
+    ],
+    "GAP-04-S2": [
+      "REQ-S2-000",
+      "REQ-S2-001",
+      "REQ-S2-002",
+      "REQ-S2-003",
+      "REQ-S2-004",
+      "REQ-S2-005",
+      "REQ-S2-006",
+      "REQ-S2-007",
+      "REQ-S2-008",
+      "REQ-S2-010",
+      "REQ-S2-012",
+      "REQ-S2-013",
+      "REQ-S2-014"
+    ],
+    "GAP-05-S4": [
+      "REQ-S4-001",
+      "REQ-S4-002",
+      "REQ-S4-003",
+      "REQ-S4-004",
+      "REQ-S4-005",
+      "REQ-S4-006",
+      "REQ-S4-007",
+      "REQ-S4-008",
+      "REQ-S4-009",
+      "REQ-S4-010",
+      "REQ-S4-011",
+      "REQ-S4-012",
+      "REQ-S4-013",
+      "REQ-S4-014",
+      "REQ-S4-015",
+      "REQ-S4-016",
+      "REQ-S4-017",
+      "REQ-S4-018",
+      "REQ-S4-019",
+      "REQ-S4-020",
+      "REQ-S4-021",
+      "REQ-S4-022",
+      "REQ-S4-024",
+      "REQ-S4-025",
+      "REQ-S4-026",
+      "REQ-S4-027",
+      "REQ-S4-029",
+      "REQ-S4-030",
+      "REQ-S4-031",
+      "REQ-S4-032",
+      "REQ-S4-033",
+      "REQ-S4-034",
+      "REQ-S4-036",
+      "REQ-S4-037",
+      "REQ-S4-038",
+      "REQ-S4-039",
+      "REQ-S4-040",
+      "REQ-S4-044",
+      "REQ-S4-045",
+      "REQ-S4-046",
+      "REQ-S4-048",
+      "REQ-S4-052",
+      "REQ-S4-053",
+      "REQ-S4-056",
+      "REQ-S4-058",
+      "REQ-S4-059",
+      "REQ-S4-060",
+      "REQ-S4-061",
+      "REQ-S4-062",
+      "REQ-S4-063",
+      "REQ-S4-064",
+      "REQ-S4-065",
+      "REQ-S4-066",
+      "REQ-S4-067",
+      "REQ-S4-068",
+      "REQ-S4-069",
+      "REQ-S4-071",
+      "REQ-S4-072",
+      "REQ-S4-073",
+      "REQ-S4-074",
+      "REQ-S4-075",
+      "REQ-S4-076",
+      "REQ-S4-077",
+      "REQ-S4-078",
+      "REQ-S4-079",
+      "REQ-S4-080",
+      "REQ-S4-081",
+      "REQ-S4-083",
+      "REQ-S4-085"
+    ]
+  },
+  "pending_task_counts": {
+    "GAP-02-S3": 49,
+    "GAP-03-S1": 18,
+    "GAP-04-S2": 13,
+    "GAP-05-S4": 69,
+    "TOTAL": 149
+  },
+  "execution_order": [
+    "READ_FRESH_AND_COLLISION_CHECK",
+    "GAP-02 available noncolliding child; in parallel only with non-overlapping GAP-03/GAP-04/GAP-05 child scopes",
+    "GAP-06 and GAP-07 after their dependencies",
+    "GAP-08 global exact-167 audit",
+    "GAP-09 Final Judge"
+  ],
+  "global_close_gate": [
+    "S1 20/20",
+    "S2 14/14",
+    "S3 64/64",
+    "S4 69/69",
+    "TOTAL 167/167",
+    "missing_trace=0",
+    "contradiction=0",
+    "orphan=0",
+    "browser E2E PASS",
+    "real-platform acceptance PASS or supported scope explicitly bounded",
+    "TESTED_SHA == PUBLISHED_SHA",
+    "12 entry goals PASS",
+    "12 exit goals PASS",
+    "Council12 PASS",
+    "3 refutations PASS",
+    "Final Judge VERIFIED_CLOSED"
+  ],
+  "global_state": "RECOVERY_CONTINUATION",
+  "xray_component_integration_extension": {
+    "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-XRAY-COMPONENT-INTEGRATION-CLOSURE-V1-2026-09-17.json",
+    "schema": "yaiwes.crazy-wall.xray-component-integration-closure/v1",
+    "state": "ACTIVE_CLOSURE_EXTENSION",
+    "inventory_observed": {
+      "ui_yaiwes_root_entries": 24,
+      "oss_library_entries": 142,
+      "oss_physical_directories": 140,
+      "canonical_yaiwes_components": 8,
+      "review_unclassified": [
+        "Bulkman"
+      ]
+    },
+    "rule": "Every physical component is classified, but integration is permitted only when mapped to an authoritative requirement/GAP and verified through adapter/wiring/test/evidence/CI/readback.",
+    "execution_order": [
+      "XRAY-11 user-requested acquisition/copy gaps",
+      "XRAY-01..10 requirement-mapped integration review",
+      "XRAY-12 dedup/orphan/collision",
+      "XRAY-13 map selected capabilities to 167 requirements",
+      "existing GAP-02/03/04/05 certification",
+      "GAP-06/07 acceptance",
+      "GAP-08 global reconciliation",
+      "GAP-09 Final Judge"
+    ]
+  },
+  "last_xray_update_utc": "2026-09-17T22:49:00Z"
+}
