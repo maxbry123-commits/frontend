@@ -1,0 +1,166 @@
+name: YAIWES Copy User Components to Interface with Motor3
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/yaiwes-copy-user-components-to-interface-motor3-20260917.yml'
+      - 'UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17/Codebase-Memory-MCP/**'
+      - 'UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17/OmniRoute/**'
+      - 'UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17/Orca/**'
+      - 'UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17/Omarchy/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: yaiwes-copy-user-components-to-interface-motor3
+  cancel-in-progress: false
+
+jobs:
+  copy-verified-components:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout frontend
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: false
+
+      - name: Checkout authorized Motor3
+        uses: actions/checkout@v4
+        with:
+          repository: maxbry123-commits/agentes
+          ref: main
+          path: _agentes_source
+          fetch-depth: 1
+          lfs: false
+
+      - name: Copy independently verified components
+        shell: bash
+        run: |
+          set -euo pipefail
+          MOTOR="$GITHUB_WORKSPACE/_agentes_source/Motores/➡️📂motor de copiar archivos/motor_3_copy_batches.py"
+          SRC_ROOT="$GITHUB_WORKSPACE/UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17"
+          DST_ROOT="$GITHUB_WORKSPACE/UI YAIWES interface/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17"
+          EV_ROOT="$GITHUB_WORKSPACE/UI YAIWES interface/copy-evidence/user-components-motor3-2026-09-17"
+          mkdir -p "$DST_ROOT" "$EV_ROOT"
+          : > "$EV_ROOT/gaps.tsv"
+
+          components=("Codebase-Memory-MCP" "OmniRoute" "Orca" "Omarchy")
+          for slug in "${components[@]}"; do
+            src="$SRC_ROOT/$slug"
+            dst="$DST_ROOT/$slug"
+            missing=0
+            if [[ ! -d "$src" ]]; then
+              printf '%s\t%s\n' "$slug" 'SOURCE_DIR_MISSING' >> "$EV_ROOT/gaps.tsv"
+              continue
+            fi
+            for marker in SOURCE_URL.txt SOURCE_COMMIT.txt SOURCE_SHA256SUMS.txt SOURCE_LICENSE.txt; do
+              if [[ ! -f "$src/$marker" ]]; then
+                printf '%s\tTRACE_MISSING:%s\n' "$slug" "$marker" >> "$EV_ROOT/gaps.tsv"
+                missing=1
+              fi
+            done
+            if [[ "$missing" -ne 0 ]]; then
+              continue
+            fi
+
+            SOURCE_DIR="$src" \
+            DEST_DIR="$dst" \
+            STATE_FILE="$EV_ROOT/$slug.motor3-state.json" \
+            BATCH_SIZE=100 \
+            COLLISION_POLICY=fail \
+            MAX_BATCHES=0 \
+            python "$MOTOR" | tee "$EV_ROOT/$slug.motor3-result.json"
+          done
+
+      - name: Verify copied trees and produce readback summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json, pathlib
+          root=pathlib.Path.cwd()
+          src_root=root/'UI YAIWES'/'componentes open soure UI YAIWES'/'user-requested-workflow-2026-09-17'
+          dst_root=root/'UI YAIWES interface'/'componentes open soure UI YAIWES'/'user-requested-workflow-2026-09-17'
+          ev=root/'UI YAIWES interface'/'copy-evidence'/'user-components-motor3-2026-09-17'
+          components=['Codebase-Memory-MCP','OmniRoute','Orca','Omarchy']
+          marker_names=['SOURCE_URL.txt','SOURCE_COMMIT.txt','SOURCE_SHA256SUMS.txt','SOURCE_LICENSE.txt']
+          def sha(p):
+              h=hashlib.sha256()
+              with p.open('rb') as f:
+                  for b in iter(lambda:f.read(1024*1024),b''): h.update(b)
+              return h.hexdigest()
+          rows=[]
+          verified=0
+          for slug in components:
+              src=src_root/slug; dst=dst_root/slug
+              reasons=[]
+              if not src.is_dir(): reasons.append('SOURCE_DIR_MISSING')
+              else:
+                  for m in marker_names:
+                      if not (src/m).is_file(): reasons.append('TRACE_MISSING:'+m)
+              rp=ev/f'{slug}.motor3-result.json'
+              if not reasons:
+                  if not rp.is_file(): reasons.append('MOTOR_RESULT_MISSING')
+                  else:
+                      r=json.loads(rp.read_text())
+                      if r.get('verdict')!='VERIFIED_CLOSED': reasons.append('MOTOR_NOT_CLOSED')
+              if not reasons:
+                  s={p.relative_to(src).as_posix():sha(p) for p in src.rglob('*') if p.is_file()}
+                  d={p.relative_to(dst).as_posix():sha(p) for p in dst.rglob('*') if p.is_file()}
+                  if s!=d: reasons.append('HASH_TREE_MISMATCH')
+              if not reasons: verified+=1
+              rows.append({'component':slug,'status':'VERIFIED_COPIED' if not reasons else 'GAP','reasons':reasons})
+          summary={
+              'schema':'yaiwes.interface.user-components-copy/v1',
+              'motor':'motor_3_copy_batches.py',
+              'requested_components':components,
+              'excluded':['Anydoc'],
+              'verified_copied':verified,
+              'expected':4,
+              'results':rows,
+              'verdict':'VERIFIED_CLOSED' if verified==4 else 'GAPS_PENDING'
+          }
+          (ev/'COPY-READBACK-SUMMARY.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps(summary,ensure_ascii=False))
+          PY
+
+      - name: Remove nested source checkout
+        if: always()
+        run: rm -rf _agentes_source
+
+      - name: Commit verified copies and evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- 'UI YAIWES interface/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17' 'UI YAIWES interface/copy-evidence/user-components-motor3-2026-09-17'
+          if ! git diff --cached --quiet; then
+            git commit -m 'copy(yaiwes-interface): Motor3 user components except Anydoc'
+            for attempt in 1 2 3; do
+              git pull --rebase origin main && git push origin HEAD:main && break
+              test "$attempt" -lt 3 || exit 41
+              sleep $((attempt*10))
+            done
+          fi
+
+      - name: Fail closed unless all 4 requested copies verify
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          summary='UI YAIWES interface/copy-evidence/user-components-motor3-2026-09-17/COPY-READBACK-SUMMARY.json'
+          test -f "$summary"
+          python - "$summary" <<'PY'
+          import json,sys
+          d=json.load(open(sys.argv[1]))
+          print(json.dumps(d,ensure_ascii=False,indent=2))
+          if d.get('verified_copied') != 4 or d.get('verdict') != 'VERIFIED_CLOSED':
+              raise SystemExit(42)
+          PY
