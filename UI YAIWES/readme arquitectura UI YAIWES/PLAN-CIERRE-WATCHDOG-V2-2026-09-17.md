@@ -42,3 +42,12 @@ Resultado de simulación: 10/10 escenarios preservan FAIL_CLOSED; ninguno permit
 
 ## Gate global final
 No VERIFIED_CLOSED sin S1 20/20, S2 14/14, S3 64/64, S4 69/69, 167/167, missing_trace=0, contradiction=0, orphan=0, browser E2E PASS, real-platform acceptance soportada, TESTED_SHA==PUBLISHED_SHA, 12 entry goals, 12 exit goals, Council12, 3 refutaciones y Final Judge.
+
+## X-Ray de componentes
+- Autoridad: `UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-XRAY-COMPONENT-INTEGRATION-CLOSURE-V1-2026-09-17.json`.
+- Inventario observado: 24 entradas en raíz UI YAIWES; 142 entradas en biblioteca OSS; 140 directorios OSS; 8 componentes YAIWES canónicos.
+- Política: ningún componente se integra por presencia. Cada selección exige Requirement/GAP -> adapter -> wiring -> focused test -> evidence -> trusted CI -> readback.
+- Los 8 YAIWES/CODA se reutilizan como capacidades existentes; no crear runtimes paralelos.
+- Grupos de cierre: frontend/UI, contratos/policy, workflow/state, AI/MCP/gateway, memory/data/search, documentos, sandbox/plataforma, seguridad, observabilidad/tests, media/notificaciones, requested-5.
+- Bulkman permanece REVIEW_UNCLASSIFIED hasta evidencia funcional suficiente.
+- El X-Ray alimenta GAP-02/03/04/05; XRAY-12/13 alimentan GAP-08; XRAY-14 sólo aporta evidencia a GAP-09 Final Judge.
