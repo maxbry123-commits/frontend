@@ -1522,7 +1522,7 @@
     },
     {
       "id": "XRAY-11-USER-REQUESTED-5",
-      "state": "GAP_RESOLVABLE",
+      "state": "IN_PROGRESS_REPAIR_TRIGGERED",
       "depends_on": [
         "XRAY-00-INVENTORY"
       ],
@@ -1544,7 +1544,13 @@
         "interface_copy_root_present": false,
         "result": "4/5 physical source directories; Orca missing; authorized 4-component Motor3 copy not physically published/read-back yet"
       },
-      "next_action": "Repair/complete Orca acquisition with canonical downloader; then run/readback Motor3 copy for Codebase-Memory-MCP, OmniRoute, Orca, Omarchy; keep Anydoc excluded."
+      "next_action": "Read back main for component-03 acquisition commit/directory/markers; if present, validate hashes then continue OmniRoute trace repair and Motor3 4/4 copy.",
+      "repair_trigger": {
+        "commit": "ce6047c7badfd1d5879c9e4e6035afcdcffa8b7c",
+        "target": "Orca component 03 only",
+        "mechanism": "canonical existing acquisition workflow, focused via REPAIR_ONLY_INDEX=3",
+        "observation": "no ui-yaiwes-user-components-5-03 commit observed yet at immediate readback"
+      }
     },
     {
       "id": "XRAY-12-DEDUP-ORPHAN-COLLISION",
@@ -1605,7 +1611,7 @@
     "GAP-08 global trace reconciliation",
     "GAP-09 Final Judge"
   ],
-  "last_update_utc": "2026-09-17T23:40:00Z",
+  "last_update_utc": "2026-09-17T23:41:00Z",
   "review_unclassified": [
     "Bulkman"
   ],
