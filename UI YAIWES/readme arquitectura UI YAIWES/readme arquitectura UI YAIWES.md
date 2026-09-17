@@ -108,3 +108,16 @@ Política de la copia:
 ## Flujo objetivo
 
 `ACQUISITION VERIFIED -> MOTOR3 COPY -> HASH READBACK -> ADAPTER -> CONTRACT/WIRING -> FOCUSED TEST -> EVIDENCE -> TRUSTED CI -> READBACK -> VERIFIED_CLOSED`
+
+
+## X-Ray de componentes y plan de cierre V3
+
+Autoridad de ejecución añadida 2026-09-17:
+- `../bitácora stated JSON Craxy wall plan checkpoint/XRAY-COMPONENT-INVENTORY-V1-2026-09-17.json`
+- `../bitácora stated JSON Craxy wall plan checkpoint/CRAZY-WALL-XRAY-COMPONENT-INTEGRATION-CLOSURE-V1-2026-09-17.json`
+- `PLAN-ACCION-CIERRE-XRAY-V3-2026-09-17.md`
+- Recovery enlazado: `CRAZY-WALL-RECOVERY-ACTION-PLAN-V2-2026-09-14.json`
+
+Hallazgo físico: 207 directorios en 5 raíces, 196 identidades normalizadas y 10 grupos duplicados/repetidos. La integración se decide por requisito/capacidad; un donor no necesario cierra `VERIFIED_NO_NEED`. Ningún componente se considera integrado por presencia física.
+
+Flujo: `INVENTORY -> DEDUP/PROVENANCE -> CAPABILITY -> REQUIREMENT -> ADAPTER/WIRING -> FOCUSED TEST -> EVIDENCE -> TRUSTED CI -> FIVE-PASS -> READBACK -> VERIFIED_CLOSED|VERIFIED_NO_NEED`.
