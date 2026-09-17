@@ -34,7 +34,20 @@
       "Eight YAIWES 08/11/12/15/16/21/22/23 components also appear under `todos los componentes`; treat as mirror candidates and compare tree hashes before any dedup.",
       "24-CODA-INTEGRATION already defines eight reusable capabilities; wrap via adapters rather than creating eight runtimes.",
       "OSS library contains donor code plus acquisition/meta directories; meta directories are excluded from runtime integration."
-    ]
+    ],
+    "scanned_component_roots": 5,
+    "physical_component_directories": 207,
+    "normalized_component_identities": 196,
+    "duplicate_groups_detected": 10,
+    "by_root": {
+      "UI YAIWES/componentes open soure UI YAIWES": 140,
+      "UI YAIWES/todos los componentes": 9,
+      "UI YAIWES/Meta Agents integration sources": 2,
+      "UI YAIWES/➡️📂 descarga extracción 14 faltantes": 5,
+      "📂componentes open soure fromtend": 51
+    },
+    "inventory_status": "VERIFIED_PHYSICAL_DISCOVERY_ONLY",
+    "integration_status": "OPEN_REQUIREMENT_MAPPED_EXECUTION"
   },
   "root_inventory": [
     {
@@ -1576,8 +1589,32 @@
     "GAP-08 global trace reconciliation",
     "GAP-09 Final Judge"
   ],
-  "last_update_utc": "2026-09-17T22:49:00Z",
+  "last_update_utc": "2026-09-17T23:35:00Z",
   "review_unclassified": [
     "Bulkman"
-  ]
+  ],
+  "plan_ref": "UI YAIWES/readme arquitectura UI YAIWES/PLAN-ACCION-CIERRE-XRAY-V3-2026-09-17.md",
+  "inventory_ref": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/XRAY-COMPONENT-INVENTORY-V1-2026-09-17.json",
+  "duplicate_policy": {
+    "rule": "canonicalize by source/provenance/hash/capability; do not integrate duplicate physical copies",
+    "known_groups": [
+      "Apache PyCasbin/PyCasbin",
+      "Lucide mirrors",
+      "Radix UI/Radix-UI",
+      "React Virtuoso mirrors",
+      "Rule Engine/rule-engine",
+      "Uppy mirrors",
+      "XYFlow mirrors",
+      "gVisor mirrors",
+      "shadcn-ui x3",
+      "xterm.js mirrors"
+    ],
+    "close": "duplicate canonical runtime owners=0; destructive dedup only with exact hash/provenance proof"
+  },
+  "chatgpt_pending_execution": {
+    "cadence": "hourly watchdog",
+    "output": "minimal",
+    "loop": "READ_FRESH -> CLAIM_ONE -> VERIFY_RESEARCH -> EXECUTE_DELTA -> TEST_REPORT -> READBACK -> RELEASE -> NEXT",
+    "instruction": "execute all pending nodes in this plan without inventing PASS; select a noncolliding requirement-mapped node each run"
+  }
 }
