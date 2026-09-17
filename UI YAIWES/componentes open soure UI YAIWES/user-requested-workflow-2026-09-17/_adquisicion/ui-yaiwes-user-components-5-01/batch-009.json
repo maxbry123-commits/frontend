@@ -1,0 +1,22 @@
+{
+  "task_id": "ui-yaiwes-user-components-5-01",
+  "run_id": "35205512907",
+  "files": [
+    {
+      "component": "Codebase-Memory-MCP",
+      "parts": 0,
+      "path": "internal/cbm/vendored/grammars/lean/parser.c",
+      "source_blob": "6e171f902d2449914cd9e4da210d86e70f5f8064",
+      "source_commit": "59a05eb1bf9e11deb060d782cd7d3a29f2ae2866",
+      "source_mode": "100644",
+      "source_size": 104437134,
+      "source_url": "https://github.com/DeusData/codebase-memory-mcp",
+      "destination": "UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17/Codebase-Memory-MCP/internal/cbm/vendored/grammars/lean/parser.c",
+      "operation": "DOWNLOAD_PINNED_GIT_BLOB",
+      "blob": "6e171f902d2449914cd9e4da210d86e70f5f8064",
+      "bytes": 104437134,
+      "status": "PREPARED",
+      "sha256": "9a1652cf2bfafdaf1b17d103cecd3255170748720abef08e05edddb45630e8a3"
+    }
+  ]
+}
