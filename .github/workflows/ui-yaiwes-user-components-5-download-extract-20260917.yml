@@ -21,6 +21,7 @@ env:
   GIT_LFS_SKIP_PUSH: '1'
   GIT_LFS_SKIP_DOWNLOAD: '1'
   GIT_TERMINAL_PROMPT: '0'
+  REPAIR_ONLY_INDEX: '3'
 
 concurrency:
   group: ui-yaiwes-user-components-5-download-extract
