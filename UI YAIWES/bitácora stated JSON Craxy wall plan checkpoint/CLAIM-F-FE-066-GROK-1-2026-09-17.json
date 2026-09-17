@@ -1,0 +1,23 @@
+{
+  "schema": "yaiwes.node.claim.v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "node_id": "F-FE-066",
+  "segment_id": "SEG-01-SHELL",
+  "title": "Workspace shell v+1",
+  "agent": "GROK",
+  "chat_id": "GROK-1-UI-YAIWES-CRAZY-WALL",
+  "state": "CLAIMED",
+  "fresh_main_sha": "5137b6580ec8d3ad226aeeeecc2c3ba4269affcb",
+  "write_scope": [
+    "Frontend/factory-v0/src/ui/workspace-shell-v2.js",
+    "Frontend/factory-v0/workspace-shell-v2.css",
+    "Frontend/factory-v0/tests/e2e/*shell-v2*",
+    "Frontend/factory-v0/project-memory/*F-FE-066*"
+  ],
+  "claimed_at": "2026-09-17T06:10:27Z",
+  "steps": ["VERIFY_RESEARCH", "EXECUTE_DELTA", "TEST_REPORT"],
+  "strategy": "REUSE_EXISTING > PATCH > ADAPT > GENERATE",
+  "acceptance": "canvas-first desktop/mobile drawers with previous v1 preserved",
+  "version_policy": "create v2, do not destroy previous version"
+}
