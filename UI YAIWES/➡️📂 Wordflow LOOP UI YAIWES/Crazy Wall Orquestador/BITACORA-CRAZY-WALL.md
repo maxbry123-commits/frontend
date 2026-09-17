@@ -190,3 +190,10 @@ No se autoriza saltar directamente a P03–P14 sin cerrar o justificar formalmen
 - Si falta acceso suficiente, el watchdog debe registrar `GAP/INCONCLUSIVE`; no puede solicitar una conexión adicional por iniciativa propia.
 - STATE sincronizado en commit `0fe1a43c74ec547dba514753f068e1fb14c40af2`.
 - CHECKPOINT sincronizado para registrar el cierre del Paso 4; el siguiente nodo funcional continúa siendo `P01_COMPONENT_PHYSICAL_INVENTORY`.
+
+
+## PENDING — Integración skills frontend 2026-09-17
+- `PENDING: INTEGRAR COMPONENTE DESCARGADO` — Impeccable.
+- `PENDING: INTEGRAR COMPONENTE DESCARGADO` — Anthropic Frontend Design.
+- `PENDING: INTEGRAR COMPONENTE DESCARGADO` — Anthropic Skill Creator / Skills Design.
+- Estado: materializados; integración funcional no marcada PASS.
