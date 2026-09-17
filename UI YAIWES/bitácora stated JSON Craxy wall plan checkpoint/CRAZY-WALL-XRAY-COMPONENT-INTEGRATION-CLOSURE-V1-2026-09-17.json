@@ -1589,7 +1589,7 @@
     "GAP-08 global trace reconciliation",
     "GAP-09 Final Judge"
   ],
-  "last_update_utc": "2026-09-17T23:35:00Z",
+  "last_update_utc": "2026-09-17T23:45:00Z",
   "review_unclassified": [
     "Bulkman"
   ],
@@ -1613,8 +1613,29 @@
   },
   "chatgpt_pending_execution": {
     "cadence": "hourly watchdog",
-    "output": "minimal",
+    "state": "ACTIVE",
+    "watchdog_title": "YAIWES ChatGPT Pending Closure",
     "loop": "READ_FRESH -> CLAIM_ONE -> VERIFY_RESEARCH -> EXECUTE_DELTA -> TEST_REPORT -> READBACK -> RELEASE -> NEXT",
-    "instruction": "execute all pending nodes in this plan without inventing PASS; select a noncolliding requirement-mapped node each run"
+    "queue": [
+      "XRAY-11 complete user-requested acquisition/copy gaps",
+      "XRAY-01 canonical YAIWES/CODA requirement mapping",
+      "XRAY-02 frontend/UI donor mapping",
+      "XRAY-03 workflow/state donor mapping without second state owner",
+      "XRAY-04 AI/MCP/gateway mapping",
+      "XRAY-05 memory/data/search canonical paths",
+      "XRAY-06 document ingest including Anydoc adapter plan",
+      "XRAY-07 real platform/sandbox supported scope",
+      "XRAY-08 security/supply-chain mapping",
+      "XRAY-09 observability/testing exact-SHA evidence",
+      "XRAY-10 media/notify need check",
+      "XRAY-12 dedup/orphan/collision reconciliation",
+      "XRAY-13 selected component -> exact 167 requirement mapping",
+      "GAP-02/GAP-03/GAP-04/GAP-05 remaining requirement certification",
+      "GAP-06 browser/deployed E2E",
+      "GAP-07 real-platform acceptance",
+      "GAP-08 global trace reconciliation",
+      "GAP-09 Final Judge"
+    ],
+    "close_rule": "No PASS by presence; each selected integration requires adapter/wiring/test/evidence/CI/readback or VERIFIED_NO_NEED."
   }
 }
