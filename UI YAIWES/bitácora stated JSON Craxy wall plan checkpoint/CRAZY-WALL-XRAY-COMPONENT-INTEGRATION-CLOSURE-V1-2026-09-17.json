@@ -1,0 +1,1579 @@
+{
+  "schema": "yaiwes.crazy-wall.xray-component-integration-closure/v1",
+  "contract": "tel.workflow/v3",
+  "mode": "FAIL_CLOSED_LOOP",
+  "created_utc": "2026-09-17T22:45:00Z",
+  "head_observed": "3749fd01de4d18d718bdc83528b72f1469a4a1d2",
+  "objective": "Auditoría forense X-Ray de componentes físicos y plan de integración ligado al cierre global UI YAIWES.",
+  "authority": "fresh main code/tests/RequirementTrace/evidence/trusted CI > Close-All-Gaps V2 > Recovery Plan V2 > this X-Ray extension > history",
+  "invariants": [
+    "SOURCE_PRESENT != ACQUISITION_VERIFIED != ADAPTED != WIRED != TEST_PASS != VERIFIED_CLOSED",
+    "Stabilize remains the single workflow/state owner",
+    "No OSS is integrated solely because it exists",
+    "1 path = 1 writer; collision => re-read and select another safe node",
+    "REUSE_EXISTING > PATCH > ADAPT; NEW_DOWNLOAD only if a proven GAP has no existing donor",
+    "Secrets use SECRET_REF_ONLY",
+    "No global VERIFIED_CLOSED without existing 167/167 final gates"
+  ],
+  "inventory_summary": {
+    "ui_yaiwes_root_entries": 24,
+    "oss_library_entries": 142,
+    "oss_physical_directories": 140,
+    "oss_non_directory_entries": 2,
+    "canonical_yaiwes_components_detected": [
+      "🏈 YAIWES 08",
+      "🏈 YAIWES 11",
+      "🏈 YAIWES 12",
+      "🏈 YAIWES 15",
+      "🏈 YAIWES 16",
+      "🏈 YAIWES 21",
+      "🏈 YAIWES 22",
+      "🏈 YAIWES 23"
+    ],
+    "notes": [
+      "Eight YAIWES 08/11/12/15/16/21/22/23 components also appear under `todos los componentes`; treat as mirror candidates and compare tree hashes before any dedup.",
+      "24-CODA-INTEGRATION already defines eight reusable capabilities; wrap via adapters rather than creating eight runtimes.",
+      "OSS library contains donor code plus acquisition/meta directories; meta directories are excluded from runtime integration."
+    ]
+  },
+  "root_inventory": [
+    {
+      "name": "24-CODA-INTEGRATION",
+      "path": "UI YAIWES/24-CODA-INTEGRATION",
+      "type": "dir",
+      "sha": "4d69e7c9f0c361dd6782be9c1593636c80920b25",
+      "classification": "CODA_CAPABILITY_PACK"
+    },
+    {
+      "name": "Fabrica Empaque-local YAIWES",
+      "path": "UI YAIWES/Fabrica Empaque-local YAIWES",
+      "type": "dir",
+      "sha": "451aae54115d24938594721ba1c478342079c074",
+      "classification": "PRODUCT_SURFACE"
+    },
+    {
+      "name": "Interface YAIWES ui",
+      "path": "UI YAIWES/Interface YAIWES ui",
+      "type": "dir",
+      "sha": "d92a398f07514cbb8a7ce8ee2adeb182897c1e3d",
+      "classification": "PRODUCT_SURFACE"
+    },
+    {
+      "name": "Meta Agents integration sources",
+      "path": "UI YAIWES/Meta Agents integration sources",
+      "type": "dir",
+      "sha": "fe7f19a517749ad9c44acd5de39a685578ff73fc",
+      "classification": "AGENT_DONOR_SOURCES"
+    },
+    {
+      "name": "Readme arquitectura UI YAIWES.md",
+      "path": "UI YAIWES/Readme arquitectura UI YAIWES.md",
+      "type": "file",
+      "sha": "cc4d4f805e153785c21987a33339dd9ac15b4a67",
+      "classification": "ARCHITECTURE_DOCS"
+    },
+    {
+      "name": "_adquisicion",
+      "path": "UI YAIWES/_adquisicion",
+      "type": "dir",
+      "sha": "d03581273d94a1682e2cb1601fdca17bc17ee55e",
+      "classification": "ACQUISITION_META"
+    },
+    {
+      "name": "automation",
+      "path": "UI YAIWES/automation",
+      "type": "dir",
+      "sha": "633a088231481957be1826660f8aeb38302914cf",
+      "classification": "REVIEW_ROOT_ENTRY"
+    },
+    {
+      "name": "bitácora stated JSON Craxy wall plan checkpoint",
+      "path": "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint",
+      "type": "dir",
+      "sha": "74fac773ad207168ce00daa5973b93274352cf2d",
+      "classification": "STATE_AUTHORITY"
+    },
+    {
+      "name": "componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES",
+      "type": "dir",
+      "sha": "12d13d75403f6043da163c70f87ff2081517eb30",
+      "classification": "OSS_LIBRARY"
+    },
+    {
+      "name": "readme arquitectura UI YAIWES",
+      "path": "UI YAIWES/readme arquitectura UI YAIWES",
+      "type": "dir",
+      "sha": "040eed638d30f1dedab08325a5beceeabcfc1d33",
+      "classification": "ARCHITECTURE_DOCS"
+    },
+    {
+      "name": "todos los componentes",
+      "path": "UI YAIWES/todos los componentes",
+      "type": "dir",
+      "sha": "4361f194e325717e1ccc3bedd355e5aadb75be64",
+      "classification": "COMPONENT_MIRROR_INDEX"
+    },
+    {
+      "name": "watchdog UI YAIWES",
+      "path": "UI YAIWES/watchdog UI YAIWES",
+      "type": "dir",
+      "sha": "1521417c77e0e5d6f993feab2cf6e04e8b7d3b54",
+      "classification": "REVIEW_ROOT_ENTRY"
+    },
+    {
+      "name": "➡️📂 Documentos del proyecto Yaiwes UI",
+      "path": "UI YAIWES/➡️📂 Documentos del proyecto Yaiwes UI",
+      "type": "dir",
+      "sha": "84bd30fd1dd30ebeea79525dae4d22e869d5d035",
+      "classification": "REVIEW_ROOT_ENTRY"
+    },
+    {
+      "name": "➡️📂 Wordflow LOOP UI YAIWES",
+      "path": "UI YAIWES/➡️📂 Wordflow LOOP UI YAIWES",
+      "type": "dir",
+      "sha": "25d9851f7a99317266823595ea659b08a9fa0f20",
+      "classification": "WORKFLOW_RUNTIME"
+    },
+    {
+      "name": "➡️📂 descarga extracción 14 faltantes",
+      "path": "UI YAIWES/➡️📂 descarga extracción 14 faltantes",
+      "type": "dir",
+      "sha": "be5b2c52c006ee5cb1350a0395da22aea5b3c415",
+      "classification": "REVIEW_ROOT_ENTRY"
+    },
+    {
+      "name": "➡️📂motores de descarga extracción copiado movimiento archivos frontend",
+      "path": "UI YAIWES/➡️📂motores de descarga extracción copiado movimiento archivos frontend",
+      "type": "dir",
+      "sha": "4951574898a81f0bd51a57ae99fa31c48b1d1e65",
+      "classification": "CANONICAL_MOTORS"
+    },
+    {
+      "name": "🏈 YAIWES 08",
+      "path": "UI YAIWES/🏈 YAIWES 08",
+      "type": "dir",
+      "sha": "ce1c5c71ee1ebd66a4990f90a2f7aab4072bd9c2",
+      "classification": "CANONICAL_YAIWES_COMPONENT"
+    },
+    {
+      "name": "🏈 YAIWES 11",
+      "path": "UI YAIWES/🏈 YAIWES 11",
+      "type": "dir",
+      "sha": "1d8a526ea0da3c4274a183563082eee3fdc051ab",
+      "classification": "CANONICAL_YAIWES_COMPONENT"
+    },
+    {
+      "name": "🏈 YAIWES 12",
+      "path": "UI YAIWES/🏈 YAIWES 12",
+      "type": "dir",
+      "sha": "c1f86c7d3fcd23c22507aee6196b14c172586242",
+      "classification": "CANONICAL_YAIWES_COMPONENT"
+    },
+    {
+      "name": "🏈 YAIWES 15",
+      "path": "UI YAIWES/🏈 YAIWES 15",
+      "type": "dir",
+      "sha": "a0b42d6f089b40069cffea85e29bf5bf88c2b4cb",
+      "classification": "CANONICAL_YAIWES_COMPONENT"
+    },
+    {
+      "name": "🏈 YAIWES 16",
+      "path": "UI YAIWES/🏈 YAIWES 16",
+      "type": "dir",
+      "sha": "75453681eb12f26ced76932282742e5500c8a56f",
+      "classification": "CANONICAL_YAIWES_COMPONENT"
+    },
+    {
+      "name": "🏈 YAIWES 21",
+      "path": "UI YAIWES/🏈 YAIWES 21",
+      "type": "dir",
+      "sha": "b4ecfd9876ef95853e7e00b652a547abc77f3c9f",
+      "classification": "CANONICAL_YAIWES_COMPONENT"
+    },
+    {
+      "name": "🏈 YAIWES 22",
+      "path": "UI YAIWES/🏈 YAIWES 22",
+      "type": "dir",
+      "sha": "582064cc7ad46e2f1e073f0d6b66d672dbf4a977",
+      "classification": "CANONICAL_YAIWES_COMPONENT"
+    },
+    {
+      "name": "🏈 YAIWES 23",
+      "path": "UI YAIWES/🏈 YAIWES 23",
+      "type": "dir",
+      "sha": "850629d697a027bdccac902240ea73c170d3ec12",
+      "classification": "CANONICAL_YAIWES_COMPONENT"
+    }
+  ],
+  "oss_inventory": [
+    {
+      "name": "Apache PyCasbin",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Apache PyCasbin",
+      "tree_sha": "ca8d5efdcb1b63bbfabf07e6679075134391b314",
+      "category": "CONTRACT_API_POLICY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Apache Tika",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Apache Tika",
+      "tree_sha": "2a139e178da6b90bfcbbfd817cf99ac1c3697c9f",
+      "category": "DOCUMENT_INGEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Apprise",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Apprise",
+      "tree_sha": "3c655645396005612c2aeec76c699823d22d9384",
+      "category": "MEDIA_NOTIFY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Bulkman",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Bulkman",
+      "tree_sha": "271c64e915a38926db06754adc6c20841a4a4dd0",
+      "category": "REVIEW_UNCLASSIFIED",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Chart.js",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Chart.js",
+      "tree_sha": "c88820825363bdfa3b7cf98b73f8515bd2e1a4ca",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "CodeMirror 6",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6",
+      "tree_sha": "1a7c7ade9f04041dc37a3c5eaa6e461f2009cbd4",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Cosign",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Cosign",
+      "tree_sha": "eb45203663034c775d406cab5aa2875b2fa6ae44",
+      "category": "SECURITY_SUPPLY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Dagu",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Dagu",
+      "tree_sha": "766403bfa76c123b3d8bf9f2a9be3008e4e0d2eb",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Debezium",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Debezium",
+      "tree_sha": "09e5c4e9a3026332432ab10cfadd827f250267c7",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Docling",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Docling",
+      "tree_sha": "e0cb1abfc17945b23d48b37f994d9d0c7dfbf9a6",
+      "category": "DOCUMENT_INGEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "DuckDB",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
+      "tree_sha": "f285629514621c970db3d5f7380139621845b98a",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Excalidraw",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Excalidraw",
+      "tree_sha": "2d25d1a7e80baf7ac328028b58366080912cd707",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "FastEmbed",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/FastEmbed",
+      "tree_sha": "e09be1ea83e2599c734f321de24b00940b90f41d",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Firecracker",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Firecracker",
+      "tree_sha": "1b4fef7e89ee8db98c40f6e06221888b07b92642",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Flutter",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Flutter",
+      "tree_sha": "9864a7fb9817f1d0db699d2fd15ad9a3d5627169",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "GSAP",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/GSAP",
+      "tree_sha": "cea576bb413b0c1b093937168ca50ccc67118e88",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Grafana",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Grafana",
+      "tree_sha": "3edadb09bac5aaf3b6b40cb3794dff150d5c1b11",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Grok Build",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Grok Build",
+      "tree_sha": "8ffd505d4b90db0909bb711757663abafc270f55",
+      "category": "AI_AGENT_MCP",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "HTTPX",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/HTTPX",
+      "tree_sha": "50f3492d7c603cfd94e5029870ac7546666dec5e",
+      "category": "CONTRACT_API_POLICY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Hypothesis",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Hypothesis",
+      "tree_sha": "c7a0b0e22f5d5b63fd1f97fbd4dbf65a781e865c",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Jan",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Jan",
+      "tree_sha": "0ae3c4304bbd09fb3b5650c2c6153439c32b3d35",
+      "category": "AI_AGENT_MCP",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "LanceDB",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/LanceDB",
+      "tree_sha": "925b0e6c3eed860199476d46ba9bd64d81694649",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "LibreChat",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/LibreChat",
+      "tree_sha": "c1e15f6849d7d3e905544f66d7febf5405f8dfd9",
+      "category": "AI_AGENT_MCP",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "LiteLLM",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/LiteLLM",
+      "tree_sha": "06bafca009ad2eafe943ce2501c900fa191bdf8f",
+      "category": "AI_AGENT_MCP",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "LiveKit",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/LiveKit",
+      "tree_sha": "eb35e489987e6f27df531053a754d258fef8b4c7",
+      "category": "MEDIA_NOTIFY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Loguru",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Loguru",
+      "tree_sha": "269898310e40afe2fc8c3e08c081eed8ef37ebae",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Loki",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Loki",
+      "tree_sha": "5372e30d602060b1c8404dffd8229656a342ad13",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Lucide",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Lucide",
+      "tree_sha": "0c1f13b90b535df1eaa71ac1771e8161854cde17",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "MCP Python SDK",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/MCP Python SDK",
+      "tree_sha": "eabc9e3853e35f2baea20352623975ce7c61b988",
+      "category": "AI_AGENT_MCP",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "MCP TypeScript SDK",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/MCP TypeScript SDK",
+      "tree_sha": "dc6479873729701a3fb8a5230ce7126f42772e7f",
+      "category": "AI_AGENT_MCP",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "MSW",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/MSW",
+      "tree_sha": "e023ed01195d2e0d8e5e27bee83de9d8473871cf",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Mammoth.js",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Mammoth.js",
+      "tree_sha": "9d303937dff83d42c757b9b27d02ce48ae18e8db",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Meilisearch",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Meilisearch",
+      "tree_sha": "74454ebc56f3a60a8ac630e878b36109854ba301",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Mesa",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Mesa",
+      "tree_sha": "c89a899143cc4d9e882a1ac2f4ac838e4f8548dc",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Moby",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Moby",
+      "tree_sha": "a328e62da3fa83f9b6aa85ad17353917acef4797",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "NATS",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/NATS",
+      "tree_sha": "f869c39fcbab4470d4466ec3871bf73922cbc1ba",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "OPA",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/OPA",
+      "tree_sha": "7ad6f6f9552e79fd8df582957a02a2481515b582",
+      "category": "CONTRACT_API_POLICY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "ORAS",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/ORAS",
+      "tree_sha": "fa3563235352321567f51a053cb18f6014f0c6e4",
+      "category": "SECURITY_SUPPLY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Open WebUI",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Open WebUI",
+      "tree_sha": "8709626cf7a9775629ee583bc0d86b7625c4d523",
+      "category": "AI_AGENT_MCP",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "OpenBao",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/OpenBao",
+      "tree_sha": "a8835024c0865ee89252dea1f686d252f8819271",
+      "category": "SECURITY_SUPPLY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "OpenFGA",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/OpenFGA",
+      "tree_sha": "072e1693e1c831f33e8589f42aa3fb0abd7e56fe",
+      "category": "CONTRACT_API_POLICY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "OpenTelemetry Collector",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Collector",
+      "tree_sha": "fa8160c1034294b791ae6ad71d630cece41ea5cf",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "OpenTelemetry Python",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Python",
+      "tree_sha": "2a74339d862124f2637247862f53497448619d49",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Oxigraph",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Oxigraph",
+      "tree_sha": "c7029d8b6a76c2500f52a1685c44b8d9e577899b",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "PDF.js",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/PDF.js",
+      "tree_sha": "3b6cf86588c878936f457e2f1e81b1324fc9c1d8",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "PGMQ",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/PGMQ",
+      "tree_sha": "00a5a308dd52929c93ab9dbf3b21c9753bb83722",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "PGlite",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/PGlite",
+      "tree_sha": "b4d0e65d2a314e2b96c2f87fd2b928cd9f0b9e9d",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "ParadeDB",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/ParadeDB",
+      "tree_sha": "600eed77edfa5d70769ed407e3746c9c1c68a1b0",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Piper",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Piper",
+      "tree_sha": "55b9b80536f5820352a905bc3263abbe61272cc7",
+      "category": "MEDIA_NOTIFY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "PixiJS",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/PixiJS",
+      "tree_sha": "b382e0b499560711c178552e5f9af128265c43d9",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Playwright",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Playwright",
+      "tree_sha": "393394f47e69a5690186eb245801a9bb45c2180a",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Prometheus",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Prometheus",
+      "tree_sha": "ec4035d7c05bf99eb3f3780f51eff885b7146a6f",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "PyCasbin",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/PyCasbin",
+      "tree_sha": "6ab9bbe6aee4293a1fbc5287bf09a0a8b7bc04f2",
+      "category": "CONTRACT_API_POLICY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Pydantic",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Pydantic",
+      "tree_sha": "41f2003ff0dd618e9f0b751b01bcea3f1deb5c6f",
+      "category": "CONTRACT_API_POLICY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Python-TUF",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Python-TUF",
+      "tree_sha": "c3de6ab409a75b2309c31c9d84e86fb03d14a589",
+      "category": "SECURITY_SUPPLY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "QEMU",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/QEMU",
+      "tree_sha": "2684081288b3309e64d0d50227d00ddb014716e0",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Qdrant",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Qdrant",
+      "tree_sha": "caae7e9607f0a86b1bde80eec508cfefe51c5667",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "RNNoise",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/RNNoise",
+      "tree_sha": "687399eca3b4bd6cec9fd74208563ef5c67c3455",
+      "category": "MEDIA_NOTIFY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Radix UI",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Radix UI",
+      "tree_sha": "832d365ed9f7779b3b2b1135341172cebe80edc8",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Ray",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Ray",
+      "tree_sha": "e49b7b68d6fa4fc6d590de260109124afaf8c6c8",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "React Testing Library",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/React Testing Library",
+      "tree_sha": "a15baac963557aa4d16e6b51d58f114344a44a94",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "React Virtuoso",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/React Virtuoso",
+      "tree_sha": "10bd6868fce955fa549c6d7df2875815e82a5883",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "React-Toastify",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/React-Toastify",
+      "tree_sha": "a4ddbe0a69ba18434290a79b7c7ed4ad28df301a",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "React",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/React",
+      "tree_sha": "f9c4e1615f537cb14d6971c455a22aa4147bdf33",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Rete.js",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Rete.js",
+      "tree_sha": "b8602e9c079d63457aa9ec8a63ee1111c6a021d8",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Rule Engine",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Rule Engine",
+      "tree_sha": "ab1bbafa70cc9fb0dc1f82c138e5a6a734e9a882",
+      "category": "CONTRACT_API_POLICY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "SOPS",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/SOPS",
+      "tree_sha": "11023b9559b546a9b4e01271a556a4146e9b4a50",
+      "category": "SECURITY_SUPPLY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "SQLCipher",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/SQLCipher",
+      "tree_sha": "716fdc9059bc82f53a4b92244bddfdda03324a55",
+      "category": "SECURITY_SUPPLY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Sandpack",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Sandpack",
+      "tree_sha": "3e2ec7686fba1a086c1e214535f02ee47057a0ee",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Shiki",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Shiki",
+      "tree_sha": "e401f4ee215b6a581abd7bdb2064b2d634307394",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "SortableJS",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/SortableJS",
+      "tree_sha": "44639e205aa3e36355172ffe7ce94ecd1f9a52d1",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Stabilize CORE",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Stabilize CORE",
+      "tree_sha": "4698f403b847a5cc7aecd4b6f22a1636ca8be98b",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Starlette",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Starlette",
+      "tree_sha": "9d9ad977106de6488276491f051c93a2698954e7",
+      "category": "CONTRACT_API_POLICY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Syft",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Syft",
+      "tree_sha": "374d5da48cd40912174ac2d00d04fc58caa9a775",
+      "category": "SECURITY_SUPPLY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Tailwind CSS",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Tailwind CSS",
+      "tree_sha": "d9141e785d347b6a906bcaa7e87ab823d3f1b39a",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "TanStack Query",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/TanStack Query",
+      "tree_sha": "e0cc1c3f66b0662a8412463bf00dc6ee120dac2f",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Tantivy",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Tantivy",
+      "tree_sha": "afc947904bacf8b48176d4ca3de5a0b37f288f82",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Taskiq",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Taskiq",
+      "tree_sha": "0c55e510d64bf7883124267cd2d6bddfec986b55",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Testcontainers Python",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Testcontainers Python",
+      "tree_sha": "342546bc6c45257ce8b5d9f901a13ad859930cb9",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Tokio",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Tokio",
+      "tree_sha": "72687f1c67b4fc107cc014b22e5e46894f2ffb44",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Toxiproxy",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Toxiproxy",
+      "tree_sha": "888433aef61097a4a059a78470b913fb610e4354",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Tree-sitter",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Tree-sitter",
+      "tree_sha": "e0cec2e2e0a5df6039750499f7d58b11e508137c",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Trivy",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Trivy",
+      "tree_sha": "fba5cf3863884d95f687794d4c8e7508ab259d7e",
+      "category": "SECURITY_SUPPLY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Typesense",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Typesense",
+      "tree_sha": "f9e579d93fca743b90d37cce3bb72def4f41d656",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "UTM",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/UTM",
+      "tree_sha": "e83f2d6b6ece0221bea0ed24795017bdcefa0949",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Unstructured",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Unstructured",
+      "tree_sha": "9db82bc5574211d0aec728329bd0ae2546f131cf",
+      "category": "DOCUMENT_INGEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Uppy",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Uppy",
+      "tree_sha": "883bfd3dedb9dac1c61889aee3432418c8c04d32",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Valkey",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Valkey",
+      "tree_sha": "610e096947b043177b50c879739c89117e0e7d29",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Vercel AI SDK",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Vercel AI SDK",
+      "tree_sha": "614685454969a91f9a92703b77096c1e5d8c0b38",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Vitest",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Vitest",
+      "tree_sha": "fc689ce5d6cf4aac3c5820b41603f9ed90482ebd",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Wasmtime",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Wasmtime",
+      "tree_sha": "35b0a88e2864680fd193217d7066112a50a382c5",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Wayland",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Wayland",
+      "tree_sha": "d4a738cf5fd731999015e6baecc782b481b4d91b",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Weston-libweston",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Weston-libweston",
+      "tree_sha": "e4aa0d936dc464ce09fa45b7fb92fca35923f8bf",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "XYFlow React Flow",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/XYFlow React Flow",
+      "tree_sha": "a3ffdc9e87af411b795ebe60348ae94327473369",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "Zustand",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Zustand",
+      "tree_sha": "887465a60d1dcdc3c1d95120b81f4496a93fdb93",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "_adquisicion",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/_adquisicion",
+      "tree_sha": "dd38ab549ccd63dcc6f10c7a57a3061c61ad2032",
+      "category": "ACQUISITION_META",
+      "integration_policy": "NO_RUNTIME_INTEGRATION",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "_canonical_download_43",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43",
+      "tree_sha": "a760fce42cb44a89392d8327087e7127aa1deeec",
+      "category": "ACQUISITION_META",
+      "integration_policy": "NO_RUNTIME_INTEGRATION",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "_skill_rdc_ui_yaiwes_43_20260909",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/_skill_rdc_ui_yaiwes_43_20260909",
+      "tree_sha": "952bf2cd4cdc85271e007f219d173357f24bb744",
+      "category": "ACQUISITION_META",
+      "integration_policy": "NO_RUNTIME_INTEGRATION",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "age",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/age",
+      "tree_sha": "35eb6935b959d78c0c32931bd575dc2f6ca61a04",
+      "category": "SECURITY_SUPPLY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "axe-core",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/axe-core",
+      "tree_sha": "49e811aa4b31313f6e417a4a24f35ac7e2d5233d",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "big-AGI",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/big-AGI",
+      "tree_sha": "018ee939827f2fb36a1f8b7a5e7cce39946dfb04",
+      "category": "AI_AGENT_MCP",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "bubblewrap",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/bubblewrap",
+      "tree_sha": "37a2ef33144b59859b01050bfde6f86bcc4cc81b",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "conductor",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/conductor",
+      "tree_sha": "6a783c8f45e8d55fbf7bf31cd8f0bb9054b9d76f",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "crosvm",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/crosvm",
+      "tree_sha": "538312bf9369660f13dda65ce7b899cf6ac9589d",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "docx",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/docx",
+      "tree_sha": "756707971820972aefd2299871a83b86a51a939a",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "fast-check",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/fast-check",
+      "tree_sha": "6b1d2dadc4a3608db85a586137d2ff2934af0271",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "flutter_rust_bridge",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/flutter_rust_bridge",
+      "tree_sha": "6313b3731b217bb56c6ffceaf3fd7a0c2b339d2f",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "flutter_secure_storage",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/flutter_secure_storage",
+      "tree_sha": "59571fea327c4e7e0479941a28a3c7dff1affb13",
+      "category": "SECURITY_SUPPLY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "gVisor",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/gVisor",
+      "tree_sha": "fa6b9f1ca81285907f24d71ef100410ef48aac1f",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "gfxstream",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/gfxstream",
+      "tree_sha": "e696264983a685fb44a7b9706bcf35383fd67159",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "hatchet",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/hatchet",
+      "tree_sha": "1901d0b7da0bb73c0a5979cd2314b6cb9824de4e",
+      "category": "REVIEW_UNCLASSIFIED",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "in-toto",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/in-toto",
+      "tree_sha": "15f144d06ef6b781b93484c3f72cbbdf7101bae4",
+      "category": "SECURITY_SUPPLY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "jsPDF",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/jsPDF",
+      "tree_sha": "b85b001772c33639db82c4c0b64313a37522bbc0",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "k6",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/k6",
+      "tree_sha": "2a346cdf5ab489fefdfca84bbb706d054fd017d3",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "libdatachannel",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/libdatachannel",
+      "tree_sha": "dce2a5f7a935d249b0130cb2c944bee4f06e7016",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "libsodium",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/libsodium",
+      "tree_sha": "11468ec7a22e66fa3f9d3dbeb2e7fc9c37497add",
+      "category": "SECURITY_SUPPLY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "nsjail",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/nsjail",
+      "tree_sha": "6b5ef4f698c68df95602292a9defee775f79f817",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "ntfy",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/ntfy",
+      "tree_sha": "7bc4d01e2974f1ea65e9651929450680a1524494",
+      "category": "MEDIA_NOTIFY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "pgvector",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/pgvector",
+      "tree_sha": "dee3af44e7c2b6779d02fa1372c89c9b89809679",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "pytest",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/pytest",
+      "tree_sha": "b60fb0aeee9d41072c2f19a4582f4c48a39e8260",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "react-markdown",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/react-markdown",
+      "tree_sha": "5c4c9ffa1013e36a8446c8f365988fea2848c919",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "redun",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/redun",
+      "tree_sha": "e301e8967ebdcb0b27734a820bd2608999b08541",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "resilient-circuit",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/resilient-circuit",
+      "tree_sha": "32c7a96fee897e44e20a85b6e78995cc9bd5a9e3",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "rqlite",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/rqlite",
+      "tree_sha": "330d07f20803dc32add7a299e0d2a2a475fbf513",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "rule-engine",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/rule-engine",
+      "tree_sha": "f0e68f7a6d40700c5dc9af884222ba681468c3b6",
+      "category": "CONTRACT_API_POLICY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "scrcpy",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/scrcpy",
+      "tree_sha": "f2bad30434a978ae0fadeb16c5774310c4893dad",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "shadcn-ui",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/shadcn-ui",
+      "tree_sha": "fccb2d09a7d673b69c557fa1eb9007a149e1f870",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "sqlite-vec",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/sqlite-vec",
+      "tree_sha": "d9037e582fb7bb9ab30bde84358ee86082c37e67",
+      "category": "MEMORY_DATA_SEARCH",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "stately_agent",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/stately_agent",
+      "tree_sha": "341841621c186809e8d79ae2bfb1eafc6a59dac0",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "steering interprocess OSS",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS",
+      "tree_sha": "c44b5be4e2ec376a67f81d6b677096bf13a0a19d",
+      "category": "STEERING_DONOR_PACK",
+      "integration_policy": "ACQUISITION_ONLY_UNLESS_GAP_PROVES_NEED",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "structlog",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/structlog",
+      "tree_sha": "5393fcee00ae1ed638601ed9915c78dd862988d5",
+      "category": "OBS_TEST",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "sysinfo",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/sysinfo",
+      "tree_sha": "113a9eb66d399827e88fecf0b88e733128948344",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "tokio-vsock",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/tokio-vsock",
+      "tree_sha": "ac445d97f8798b0514c08efe2fa6202e5e562374",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "tusd",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/tusd",
+      "tree_sha": "fad2b38e649ba49071fcb735ce2d38f4df698c41",
+      "category": "MEDIA_NOTIFY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "user-requested-workflow-2026-09-17",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17",
+      "tree_sha": "e59f942e0070c0d05ec9f8e00d9d204a4d2481cc",
+      "category": "USER_REQUESTED_PACK",
+      "integration_policy": "EXPAND_CHILDREN_AND_VALIDATE",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "virglrenderer",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/virglrenderer",
+      "tree_sha": "8831ef127b26ced8cd7548c8aee49ae9e77ecb3c",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "virtiofsd",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/virtiofsd",
+      "tree_sha": "4395b7e0c7fb1cfdabdc6afec4c0a88eaa5b36b7",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "whisper.cpp",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/whisper.cpp",
+      "tree_sha": "8c57878f8fc92f2ec7040dc809389c452c90f3b4",
+      "category": "MEDIA_NOTIFY",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "workerd",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/workerd",
+      "tree_sha": "181d3b5b9d3580e6329441ce5485e05e94a5761e",
+      "category": "SANDBOX_PLATFORM",
+      "integration_policy": "CAPABILITY_ADAPTER_ONLY_ON_SUPPORTED_PLATFORM_GAP",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    },
+    {
+      "name": "xterm.js",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/xterm.js",
+      "tree_sha": "2728f64f1d936c282fb08d00d031a27a784d5156",
+      "category": "FRONTEND_UI",
+      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
+    }
+  ],
+  "special_component_children": [
+    {
+      "name": "Codebase Memory MCP",
+      "source": "DeusData/codebase-memory-mcp",
+      "role": "MCP_CODE_INTELLIGENCE",
+      "state": "ACQUISITION_TRACE_PRESENT_PENDING_RUNTIME_INTEGRATION",
+      "copy_to_interface": true
+    },
+    {
+      "name": "OmniRoute",
+      "source": "diegosouzapw/OmniRoute",
+      "role": "PROVIDER_GATEWAY",
+      "state": "GAP_ACQUISITION_TRACE_READBACK",
+      "copy_to_interface": true
+    },
+    {
+      "name": "Orca",
+      "source": "stablyai/orca",
+      "role": "UI_AGENT_SURFACE_DONOR",
+      "state": "GAP_ACQUISITION_MISSING",
+      "copy_to_interface": true
+    },
+    {
+      "name": "Omarchy",
+      "source": "omacom/omarchy",
+      "role": "ENVIRONMENT_OS_DONOR",
+      "state": "ACQUISITION_TRACE_PRESENT_NO_FRONTEND_RUNTIME_DEPENDENCY",
+      "copy_to_interface": true
+    },
+    {
+      "name": "Anydoc",
+      "source": "firecrawl/anydoc",
+      "role": "DOCUMENT_TO_MARKDOWN",
+      "state": "ACQUISITION_TRACE_PRESENT",
+      "copy_to_interface": false
+    }
+  ],
+  "coda_existing_capabilities": [
+    {
+      "component": "YAIWES 08",
+      "role": "steering/directive queue"
+    },
+    {
+      "component": "YAIWES 11",
+      "role": "incremental memory/repetition detection"
+    },
+    {
+      "component": "YAIWES 12",
+      "role": "durable supervisor/executor/recovery"
+    },
+    {
+      "component": "YAIWES 15",
+      "role": "SQLite pattern memory"
+    },
+    {
+      "component": "YAIWES 16",
+      "role": "phase FSM"
+    },
+    {
+      "component": "YAIWES 21",
+      "role": "dependency/priority DAG selection"
+    },
+    {
+      "component": "YAIWES 22",
+      "role": "memory/anchor hygiene"
+    },
+    {
+      "component": "YAIWES 23",
+      "role": "plan-observe-summarize-evaluate"
+    }
+  ],
+  "integration_plan_nodes": [
+    {
+      "id": "XRAY-00-INVENTORY",
+      "state": "VERIFIED_DISCOVERY_ONLY",
+      "depends_on": [],
+      "scope": "root + OSS inventory",
+      "close": "Every physical directory classified; unknowns remain REVIEW_UNCLASSIFIED rather than guessed."
+    },
+    {
+      "id": "XRAY-01-CANONICAL-YAIWES-CODA",
+      "state": "GAP_RESOLVABLE",
+      "depends_on": [
+        "XRAY-00-INVENTORY"
+      ],
+      "scope": "YAIWES 08/11/12/15/16/21/22/23 + 24-CODA-INTEGRATION",
+      "method": "Map each existing capability to current 167 requirements; reuse adapters; no second runtime.",
+      "close": "Every reused capability has requirement->adapter->wiring->test evidence or VERIFIED_NO_NEED."
+    },
+    {
+      "id": "XRAY-02-FRONTEND-UI-DONORS",
+      "state": "GAP_RESOLVABLE",
+      "depends_on": [
+        "XRAY-00-INVENTORY"
+      ],
+      "scope": "FRONTEND_UI",
+      "method": "Compare against current Factory/Command Center imports and dead controls; integrate only proven missing capability.",
+      "close": "No dead duplicate UI framework; effect tests on selected controls/components."
+    },
+    {
+      "id": "XRAY-03-WORKFLOW-STATE-DONORS",
+      "state": "GAP_RESOLVABLE",
+      "depends_on": [
+        "XRAY-00-INVENTORY"
+      ],
+      "scope": "WORKFLOW_STATE + steering donor pack",
+      "method": "Stabilize remains owner; Dagu/redun/conductor/stately/Temporal/DBOS/LangGraph/Hatchet only adapters/donors when GAP requires.",
+      "close": "No second state engine; all used donor paths have contract tests."
+    },
+    {
+      "id": "XRAY-04-AI-MCP-GATEWAY",
+      "state": "GAP_RESOLVABLE",
+      "depends_on": [
+        "XRAY-00-INVENTORY"
+      ],
+      "scope": "AI_AGENT_MCP + Codebase Memory MCP + OmniRoute",
+      "method": "MCP/API only; CBM code-intelligence adapter; OmniRoute ProviderGateway; reconcile with LiteLLM before adding route.",
+      "close": "No duplicate router ownership; routing/MCP tests and SECRET_REF_ONLY."
+    },
+    {
+      "id": "XRAY-05-MEMORY-DATA-SEARCH",
+      "state": "GAP_RESOLVABLE",
+      "depends_on": [
+        "XRAY-00-INVENTORY"
+      ],
+      "scope": "MEMORY_DATA_SEARCH",
+      "method": "Select existing stores/indexes per explicit requirement; prevent parallel canonical memories.",
+      "close": "One canonical write path per memory class; retrieval/evidence tests."
+    },
+    {
+      "id": "XRAY-06-DOCUMENT-INGEST",
+      "state": "GAP_RESOLVABLE",
+      "depends_on": [
+        "XRAY-00-INVENTORY"
+      ],
+      "scope": "DOCUMENT_INGEST + Anydoc",
+      "method": "Prefer existing pipeline; Anydoc adapter FileImport->Normalize->Markdown; remote OCR optional.",
+      "close": "Round-trip/file-format tests; Anydoc remains excluded from interface copy."
+    },
+    {
+      "id": "XRAY-07-SANDBOX-PLATFORM",
+      "state": "GAP_RESOLVABLE",
+      "depends_on": [
+        "XRAY-00-INVENTORY"
+      ],
+      "scope": "SANDBOX_PLATFORM",
+      "method": "Map to S2/platform requirements; distinguish donor/source presence from verified real backend.",
+      "close": "Supported real-platform evidence; no fixture substitution."
+    },
+    {
+      "id": "XRAY-08-SECURITY-SUPPLY",
+      "state": "GAP_RESOLVABLE",
+      "depends_on": [
+        "XRAY-00-INVENTORY"
+      ],
+      "scope": "SECURITY_SUPPLY + policy components",
+      "method": "Reuse existing policy/secret/signing/scanning components only where current security requirement calls them.",
+      "close": "No secrets committed; auth/policy/supply-chain tests where mapped."
+    },
+    {
+      "id": "XRAY-09-OBSERVABILITY-TEST",
+      "state": "GAP_RESOLVABLE",
+      "depends_on": [
+        "XRAY-00-INVENTORY"
+      ],
+      "scope": "OBS_TEST",
+      "method": "Use as verification infrastructure, not product owners; bind evidence to exact SHA.",
+      "close": "Focused+trusted CI+five-pass/readback coverage."
+    },
+    {
+      "id": "XRAY-10-MEDIA-NOTIFY",
+      "state": "GAP_RESOLVABLE",
+      "depends_on": [
+        "XRAY-00-INVENTORY"
+      ],
+      "scope": "MEDIA_NOTIFY",
+      "method": "Integrate only if an S4/product requirement explicitly needs voice/media/notification.",
+      "close": "Capability test or VERIFIED_NO_NEED."
+    },
+    {
+      "id": "XRAY-11-USER-REQUESTED-5",
+      "state": "IN_PROGRESS",
+      "depends_on": [
+        "XRAY-00-INVENTORY"
+      ],
+      "scope": "Codebase Memory MCP, OmniRoute, Orca, Omarchy, Anydoc",
+      "method": "Finish acquisition/readback; Motor3 copy 4 excluding Anydoc; then adapters only as above.",
+      "close": "5/5 acquisition verified; 4/4 authorized copies hash-readback; integration gates individually evidenced."
+    },
+    {
+      "id": "XRAY-12-DEDUP-ORPHAN-COLLISION",
+      "state": "BLOCKED_AFTER_XRAY-01-11",
+      "depends_on": [
+        "XRAY-01-CANONICAL-YAIWES-CODA",
+        "XRAY-02-FRONTEND-UI-DONORS",
+        "XRAY-03-WORKFLOW-STATE-DONORS",
+        "XRAY-04-AI-MCP-GATEWAY",
+        "XRAY-05-MEMORY-DATA-SEARCH",
+        "XRAY-06-DOCUMENT-INGEST",
+        "XRAY-07-SANDBOX-PLATFORM",
+        "XRAY-08-SECURITY-SUPPLY",
+        "XRAY-09-OBSERVABILITY-TEST",
+        "XRAY-10-MEDIA-NOTIFY",
+        "XRAY-11-USER-REQUESTED-5"
+      ],
+      "scope": "all selected integrations",
+      "method": "Inverse-map artifacts; compare mirror/tree hashes; detect duplicate owners/orphans/collisions.",
+      "close": "0 duplicate canonical owners; 0 proven orphan selected artifacts; no destructive dedup without hash proof."
+    },
+    {
+      "id": "XRAY-13-167-REQUIREMENT-MAP",
+      "state": "BLOCKED_AFTER_XRAY-12",
+      "depends_on": [
+        "XRAY-12-DEDUP-ORPHAN-COLLISION"
+      ],
+      "scope": "S1/S2/S3/S4 167 inventory",
+      "method": "Map every selected component capability to actual requirements and existing GAP-02/03/04/05 nodes.",
+      "close": "No component integration exists outside a requirement or explicit VERIFIED_NO_NEED rationale."
+    },
+    {
+      "id": "XRAY-14-FINAL-INTEGRATION-GATE",
+      "state": "BLOCKED_AFTER_XRAY-13",
+      "depends_on": [
+        "XRAY-13-167-REQUIREMENT-MAP"
+      ],
+      "scope": "global exact candidate",
+      "method": "Feed results into GAP-06/07/08/09; browser E2E, real platform, 167 traces, TESTED_SHA==PUBLISHED_SHA, Final Judge.",
+      "close": "Existing global close gate satisfied; never supersedes GAP-09 Final Judge."
+    }
+  ],
+  "merge_into_existing_closure": {
+    "GAP_02_03_04_05": "XRAY nodes may supply/reuse components only for a proven requirement gap; they do not create a new denominator.",
+    "GAP_06_07": "XRAY frontend/platform selections must pass browser/real-platform acceptance.",
+    "GAP_08": "XRAY-12/13 feed contradiction/orphan/component-to-requirement reconciliation.",
+    "GAP_09": "XRAY-14 is prerequisite evidence only; Final Judge remains sole global closure authority.",
+    "GAP_10": "Steering OSS remains ACQUISITION_ONLY unless XRAY-03 proves a functional need."
+  },
+  "watchdog_execution_order": [
+    "READ_FRESH_HEAD_AUTHORITY_CLAIMS",
+    "XRAY-11 finish user-requested acquisition/copy gaps without collisions",
+    "XRAY-01..10 choose only next noncolliding requirement-mapped node",
+    "XRAY-12 dedup/orphan audit",
+    "XRAY-13 map to 167 requirements",
+    "resume/continue GAP-02/03/04/05 certification",
+    "GAP-06/07 acceptance",
+    "GAP-08 global trace reconciliation",
+    "GAP-09 Final Judge"
+  ]
+}
