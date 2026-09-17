@@ -458,3 +458,9 @@ Estimación de ingeniería, no implementación demostrada: ~1.860–3.990 LOC de
 
 Cierre backend únicamente tras:
 `componentes reales ➡️ revisión código ➡️ adapters ➡️ wiring ➡️ contract tests ➡️ recovery tests ➡️ E2E ➡️ evidence ➡️ VERIFIED_CLOSED`
+
+
+## GAP — Skills frontend materializados 2026-09-17
+- Impeccable (`pbakaus/impeccable`, source commit `f2c7051853848826aac2f4646581d62a732155ad`) — `GAP: COMPONENTE DESCARGADO/COPIADO. INTEGRACIÓN PENDIENTE.`
+- Anthropic Frontend Design (`anthropics/skills`) — `GAP: COMPONENTE DESCARGADO/COPIADO. INTEGRACIÓN PENDIENTE.`
+- Anthropic Skill Creator / Skills Design (`anthropics/skills`) — `GAP: COMPONENTE DESCARGADO/COPIADO. INTEGRACIÓN PENDIENTE.`
