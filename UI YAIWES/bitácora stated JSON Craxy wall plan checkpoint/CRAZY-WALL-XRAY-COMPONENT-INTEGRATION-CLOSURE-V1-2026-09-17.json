@@ -1522,13 +1522,29 @@
     },
     {
       "id": "XRAY-11-USER-REQUESTED-5",
-      "state": "IN_PROGRESS",
+      "state": "GAP_RESOLVABLE",
       "depends_on": [
         "XRAY-00-INVENTORY"
       ],
       "scope": "Codebase Memory MCP, OmniRoute, Orca, Omarchy, Anydoc",
       "method": "Finish acquisition/readback; Motor3 copy 4 excluding Anydoc; then adapters only as above.",
-      "close": "5/5 acquisition verified; 4/4 authorized copies hash-readback; integration gates individually evidenced."
+      "close": "5/5 acquisition verified; 4/4 authorized copies hash-readback; integration gates individually evidenced.",
+      "last_probe": {
+        "head": "2164e44d706d1978fae1788f79ac2d4c7cc8fb34",
+        "observed_utc": "2026-09-17T23:40:00Z",
+        "source_dirs_present": [
+          "Codebase-Memory-MCP",
+          "OmniRoute",
+          "Omarchy",
+          "Anydoc"
+        ],
+        "source_dirs_missing": [
+          "Orca"
+        ],
+        "interface_copy_root_present": false,
+        "result": "4/5 physical source directories; Orca missing; authorized 4-component Motor3 copy not physically published/read-back yet"
+      },
+      "next_action": "Repair/complete Orca acquisition with canonical downloader; then run/readback Motor3 copy for Codebase-Memory-MCP, OmniRoute, Orca, Omarchy; keep Anydoc excluded."
     },
     {
       "id": "XRAY-12-DEDUP-ORPHAN-COLLISION",
@@ -1589,7 +1605,7 @@
     "GAP-08 global trace reconciliation",
     "GAP-09 Final Judge"
   ],
-  "last_update_utc": "2026-09-17T23:45:00Z",
+  "last_update_utc": "2026-09-17T23:40:00Z",
   "review_unclassified": [
     "Bulkman"
   ],
