@@ -1091,8 +1091,8 @@
       "name": "hatchet",
       "path": "UI YAIWES/componentes open soure UI YAIWES/hatchet",
       "tree_sha": "1901d0b7da0bb73c0a5979cd2314b6cb9824de4e",
-      "category": "REVIEW_UNCLASSIFIED",
-      "integration_policy": "REUSE_EXISTING>PATCH>ADAPT; REQUIRE_REQUIREMENT_MAPPING",
+      "category": "WORKFLOW_STATE",
+      "integration_policy": "DONOR_OR_ADAPTER_ONLY; STABILIZE_REMAINS_SINGLE_OWNER",
       "state": "DISCOVERED_PHYSICAL_NOT_RUNTIME_CERTIFIED"
     },
     {
@@ -1575,5 +1575,9 @@
     "GAP-06/07 acceptance",
     "GAP-08 global trace reconciliation",
     "GAP-09 Final Judge"
+  ],
+  "last_update_utc": "2026-09-17T22:49:00Z",
+  "review_unclassified": [
+    "Bulkman"
   ]
 }
