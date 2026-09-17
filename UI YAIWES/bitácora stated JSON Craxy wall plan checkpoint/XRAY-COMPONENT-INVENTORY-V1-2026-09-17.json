@@ -1,0 +1,2276 @@
+{
+  "schema": "yaiwes.xray.component-inventory/v1",
+  "generated_utc": "2026-09-17T23:30:00Z",
+  "repo": "maxbry123-commits/frontend",
+  "branch": "main",
+  "head_guard": "re-read HEAD before any integration write",
+  "project_roots": [
+    ".github",
+    "Maxbry AGI",
+    "Maxbry web",
+    "NCT neuronas code turbo",
+    "Skills arquitectura frontend Yaiwes",
+    "UI Osquestador Maxbry",
+    "UI Osquestador auditor memoria",
+    "UI YAIWES interface",
+    "UI YAIWES",
+    "UI router inteligente universal",
+    "_work",
+    "conectividad con Router inteligente universal",
+    "diseño Video 3d",
+    "diseño web",
+    "fabrica de UI INTERFACE fromtend",
+    "forensics",
+    "scripts",
+    "➡️📂motores de descarga extracción copiado movimiento archivos fromtend",
+    "📂componentes open soure fromtend"
+  ],
+  "scanned_component_roots": [
+    "UI YAIWES/componentes open soure UI YAIWES",
+    "UI YAIWES/todos los componentes",
+    "UI YAIWES/Meta Agents integration sources",
+    "UI YAIWES/➡️📂 descarga extracción 14 faltantes",
+    "📂componentes open soure fromtend"
+  ],
+  "counts": {
+    "physical_directories": 207,
+    "normalized_identities": 196,
+    "duplicate_groups": 10,
+    "by_root": {
+      "UI YAIWES/componentes open soure UI YAIWES": 140,
+      "UI YAIWES/todos los componentes": 9,
+      "UI YAIWES/Meta Agents integration sources": 2,
+      "UI YAIWES/➡️📂 descarga extracción 14 faltantes": 5,
+      "📂componentes open soure fromtend": 51
+    }
+  },
+  "methodology": "physical directory inventory only; capability class is planning classification, not proof of runtime integration",
+  "duplicate_groups": [
+    {
+      "normalized_id": "pycasbin",
+      "locations": [
+        {
+          "root": "UI YAIWES/componentes open soure UI YAIWES",
+          "name": "Apache PyCasbin"
+        },
+        {
+          "root": "UI YAIWES/componentes open soure UI YAIWES",
+          "name": "PyCasbin"
+        }
+      ],
+      "rule": "choose canonical source; duplicates are DONOR/DUPLICATE until hash/provenance comparison"
+    },
+    {
+      "normalized_id": "lucide",
+      "locations": [
+        {
+          "root": "UI YAIWES/componentes open soure UI YAIWES",
+          "name": "Lucide"
+        },
+        {
+          "root": "UI YAIWES/➡️📂 descarga extracción 14 faltantes",
+          "name": "Lucide"
+        }
+      ],
+      "rule": "choose canonical source; duplicates are DONOR/DUPLICATE until hash/provenance comparison"
+    },
+    {
+      "normalized_id": "radixui",
+      "locations": [
+        {
+          "root": "UI YAIWES/componentes open soure UI YAIWES",
+          "name": "Radix UI"
+        },
+        {
+          "root": "📂componentes open soure fromtend",
+          "name": "Radix-UI"
+        }
+      ],
+      "rule": "choose canonical source; duplicates are DONOR/DUPLICATE until hash/provenance comparison"
+    },
+    {
+      "normalized_id": "reactvirtuoso",
+      "locations": [
+        {
+          "root": "UI YAIWES/componentes open soure UI YAIWES",
+          "name": "React Virtuoso"
+        },
+        {
+          "root": "UI YAIWES/➡️📂 descarga extracción 14 faltantes",
+          "name": "React Virtuoso"
+        }
+      ],
+      "rule": "choose canonical source; duplicates are DONOR/DUPLICATE until hash/provenance comparison"
+    },
+    {
+      "normalized_id": "ruleengine",
+      "locations": [
+        {
+          "root": "UI YAIWES/componentes open soure UI YAIWES",
+          "name": "Rule Engine"
+        },
+        {
+          "root": "UI YAIWES/componentes open soure UI YAIWES",
+          "name": "rule-engine"
+        }
+      ],
+      "rule": "choose canonical source; duplicates are DONOR/DUPLICATE until hash/provenance comparison"
+    },
+    {
+      "normalized_id": "uppy",
+      "locations": [
+        {
+          "root": "UI YAIWES/componentes open soure UI YAIWES",
+          "name": "Uppy"
+        },
+        {
+          "root": "UI YAIWES/➡️📂 descarga extracción 14 faltantes",
+          "name": "Uppy"
+        }
+      ],
+      "rule": "choose canonical source; duplicates are DONOR/DUPLICATE until hash/provenance comparison"
+    },
+    {
+      "normalized_id": "xyflowreactflow",
+      "locations": [
+        {
+          "root": "UI YAIWES/componentes open soure UI YAIWES",
+          "name": "XYFlow React Flow"
+        },
+        {
+          "root": "UI YAIWES/➡️📂 descarga extracción 14 faltantes",
+          "name": "XYFlow React Flow"
+        }
+      ],
+      "rule": "choose canonical source; duplicates are DONOR/DUPLICATE until hash/provenance comparison"
+    },
+    {
+      "normalized_id": "gvisor",
+      "locations": [
+        {
+          "root": "UI YAIWES/componentes open soure UI YAIWES",
+          "name": "gVisor"
+        },
+        {
+          "root": "📂componentes open soure fromtend",
+          "name": "gVisor"
+        }
+      ],
+      "rule": "choose canonical source; duplicates are DONOR/DUPLICATE until hash/provenance comparison"
+    },
+    {
+      "normalized_id": "shadcnui",
+      "locations": [
+        {
+          "root": "UI YAIWES/componentes open soure UI YAIWES",
+          "name": "shadcn-ui"
+        },
+        {
+          "root": "UI YAIWES/➡️📂 descarga extracción 14 faltantes",
+          "name": "shadcn-ui"
+        },
+        {
+          "root": "📂componentes open soure fromtend",
+          "name": "shadcn-ui"
+        }
+      ],
+      "rule": "choose canonical source; duplicates are DONOR/DUPLICATE until hash/provenance comparison"
+    },
+    {
+      "normalized_id": "xtermjs",
+      "locations": [
+        {
+          "root": "UI YAIWES/componentes open soure UI YAIWES",
+          "name": "xterm.js"
+        },
+        {
+          "root": "📂componentes open soure fromtend",
+          "name": "xterm.js"
+        }
+      ],
+      "rule": "choose canonical source; duplicates are DONOR/DUPLICATE until hash/provenance comparison"
+    }
+  ],
+  "components": [
+    {
+      "name": "Apache PyCasbin",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Apache PyCasbin",
+      "normalized_id": "pycasbin",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Apache Tika",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Apache Tika",
+      "normalized_id": "tika",
+      "capability_class": "DOCUMENT_MEDIA_INGEST",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Apprise",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Apprise",
+      "normalized_id": "apprise",
+      "capability_class": "OBSERVABILITY_NOTIFICATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Bulkman",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Bulkman",
+      "normalized_id": "bulkman",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Chart.js",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Chart.js",
+      "normalized_id": "chartjs",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "CodeMirror 6",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/CodeMirror 6",
+      "normalized_id": "codemirror6",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Cosign",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Cosign",
+      "normalized_id": "cosign",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Dagu",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Dagu",
+      "normalized_id": "dagu",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Debezium",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Debezium",
+      "normalized_id": "debezium",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Docling",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Docling",
+      "normalized_id": "docling",
+      "capability_class": "DOCUMENT_MEDIA_INGEST",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "DuckDB",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/DuckDB",
+      "normalized_id": "duckdb",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Excalidraw",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Excalidraw",
+      "normalized_id": "excalidraw",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "FastEmbed",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/FastEmbed",
+      "normalized_id": "fastembed",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Firecracker",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Firecracker",
+      "normalized_id": "firecracker",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Flutter",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Flutter",
+      "normalized_id": "flutter",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "GSAP",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/GSAP",
+      "normalized_id": "gsap",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Grafana",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Grafana",
+      "normalized_id": "grafana",
+      "capability_class": "OBSERVABILITY_NOTIFICATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Grok Build",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Grok Build",
+      "normalized_id": "grokbuild",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "HTTPX",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/HTTPX",
+      "normalized_id": "httpx",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Hypothesis",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Hypothesis",
+      "normalized_id": "hypothesis",
+      "capability_class": "TESTING_CI",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Jan",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Jan",
+      "normalized_id": "jan",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "LanceDB",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/LanceDB",
+      "normalized_id": "lancedb",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "LibreChat",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/LibreChat",
+      "normalized_id": "librechat",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "LiteLLM",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/LiteLLM",
+      "normalized_id": "litellm",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "LiveKit",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/LiveKit",
+      "normalized_id": "livekit",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Loguru",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Loguru",
+      "normalized_id": "loguru",
+      "capability_class": "OBSERVABILITY_NOTIFICATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Loki",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Loki",
+      "normalized_id": "loki",
+      "capability_class": "OBSERVABILITY_NOTIFICATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Lucide",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Lucide",
+      "normalized_id": "lucide",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "MCP Python SDK",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/MCP Python SDK",
+      "normalized_id": "mcppythonsdk",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "MCP TypeScript SDK",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/MCP TypeScript SDK",
+      "normalized_id": "mcptypescriptsdk",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "MSW",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/MSW",
+      "normalized_id": "msw",
+      "capability_class": "TESTING_CI",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Mammoth.js",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Mammoth.js",
+      "normalized_id": "mammothjs",
+      "capability_class": "DOCUMENT_MEDIA_INGEST",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Meilisearch",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Meilisearch",
+      "normalized_id": "meilisearch",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Mesa",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Mesa",
+      "normalized_id": "mesa",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Moby",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Moby",
+      "normalized_id": "moby",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "NATS",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/NATS",
+      "normalized_id": "nats",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "OPA",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/OPA",
+      "normalized_id": "opa",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "ORAS",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/ORAS",
+      "normalized_id": "oras",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Open WebUI",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Open WebUI",
+      "normalized_id": "openwebui",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "OpenBao",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/OpenBao",
+      "normalized_id": "openbao",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "OpenFGA",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/OpenFGA",
+      "normalized_id": "openfga",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "OpenTelemetry Collector",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Collector",
+      "normalized_id": "opentelemetrycollector",
+      "capability_class": "OBSERVABILITY_NOTIFICATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "OpenTelemetry Python",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/OpenTelemetry Python",
+      "normalized_id": "opentelemetrypython",
+      "capability_class": "OBSERVABILITY_NOTIFICATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Oxigraph",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Oxigraph",
+      "normalized_id": "oxigraph",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "PDF.js",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/PDF.js",
+      "normalized_id": "pdfjs",
+      "capability_class": "DOCUMENT_MEDIA_INGEST",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "PGMQ",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/PGMQ",
+      "normalized_id": "pgmq",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "PGlite",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/PGlite",
+      "normalized_id": "pglite",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "ParadeDB",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/ParadeDB",
+      "normalized_id": "paradedb",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Piper",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Piper",
+      "normalized_id": "piper",
+      "capability_class": "DOCUMENT_MEDIA_INGEST",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "PixiJS",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/PixiJS",
+      "normalized_id": "pixijs",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Playwright",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Playwright",
+      "normalized_id": "playwright",
+      "capability_class": "TESTING_CI",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Prometheus",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Prometheus",
+      "normalized_id": "prometheus",
+      "capability_class": "OBSERVABILITY_NOTIFICATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "PyCasbin",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/PyCasbin",
+      "normalized_id": "pycasbin",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Pydantic",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Pydantic",
+      "normalized_id": "pydantic",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Python-TUF",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Python-TUF",
+      "normalized_id": "pythontuf",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "QEMU",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/QEMU",
+      "normalized_id": "qemu",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Qdrant",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Qdrant",
+      "normalized_id": "qdrant",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "RNNoise",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/RNNoise",
+      "normalized_id": "rnnoise",
+      "capability_class": "DOCUMENT_MEDIA_INGEST",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Radix UI",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Radix UI",
+      "normalized_id": "radixui",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Ray",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Ray",
+      "normalized_id": "ray",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "React Testing Library",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/React Testing Library",
+      "normalized_id": "reacttestinglibrary",
+      "capability_class": "TESTING_CI",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "React Virtuoso",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/React Virtuoso",
+      "normalized_id": "reactvirtuoso",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "React-Toastify",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/React-Toastify",
+      "normalized_id": "reacttoastify",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "React",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/React",
+      "normalized_id": "react",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Rete.js",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Rete.js",
+      "normalized_id": "retejs",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Rule Engine",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Rule Engine",
+      "normalized_id": "ruleengine",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "SOPS",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/SOPS",
+      "normalized_id": "sops",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "SQLCipher",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/SQLCipher",
+      "normalized_id": "sqlcipher",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Sandpack",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Sandpack",
+      "normalized_id": "sandpack",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Shiki",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Shiki",
+      "normalized_id": "shiki",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "SortableJS",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/SortableJS",
+      "normalized_id": "sortablejs",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Stabilize CORE",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Stabilize CORE",
+      "normalized_id": "stabilizecore",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Starlette",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Starlette",
+      "normalized_id": "starlette",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Syft",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Syft",
+      "normalized_id": "syft",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Tailwind CSS",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Tailwind CSS",
+      "normalized_id": "tailwindcss",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "TanStack Query",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/TanStack Query",
+      "normalized_id": "tanstackquery",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Tantivy",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Tantivy",
+      "normalized_id": "tantivy",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Taskiq",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Taskiq",
+      "normalized_id": "taskiq",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Testcontainers Python",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Testcontainers Python",
+      "normalized_id": "testcontainerspython",
+      "capability_class": "TESTING_CI",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Tokio",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Tokio",
+      "normalized_id": "tokio",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Toxiproxy",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Toxiproxy",
+      "normalized_id": "toxiproxy",
+      "capability_class": "TESTING_CI",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Tree-sitter",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Tree-sitter",
+      "normalized_id": "treesitter",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Trivy",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Trivy",
+      "normalized_id": "trivy",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Typesense",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Typesense",
+      "normalized_id": "typesense",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "UTM",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/UTM",
+      "normalized_id": "utm",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Unstructured",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Unstructured",
+      "normalized_id": "unstructured",
+      "capability_class": "DOCUMENT_MEDIA_INGEST",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Uppy",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Uppy",
+      "normalized_id": "uppy",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Valkey",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Valkey",
+      "normalized_id": "valkey",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Vercel AI SDK",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Vercel AI SDK",
+      "normalized_id": "vercelaisdk",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Vitest",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Vitest",
+      "normalized_id": "vitest",
+      "capability_class": "TESTING_CI",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Wasmtime",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Wasmtime",
+      "normalized_id": "wasmtime",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Wayland",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Wayland",
+      "normalized_id": "wayland",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Weston-libweston",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Weston-libweston",
+      "normalized_id": "westonlibweston",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "XYFlow React Flow",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/XYFlow React Flow",
+      "normalized_id": "xyflowreactflow",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Zustand",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/Zustand",
+      "normalized_id": "zustand",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "_adquisicion",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/_adquisicion",
+      "normalized_id": "adquisicion",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "_canonical_download_43",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/_canonical_download_43",
+      "normalized_id": "canonicaldownload43",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "_skill_rdc_ui_yaiwes_43_20260909",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/_skill_rdc_ui_yaiwes_43_20260909",
+      "normalized_id": "skillrdcuiyaiwes4320260909",
+      "capability_class": "YAIWES_INTERNAL_COMPONENT",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "age",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/age",
+      "normalized_id": "age",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "axe-core",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/axe-core",
+      "normalized_id": "axecore",
+      "capability_class": "TESTING_CI",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "big-AGI",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/big-AGI",
+      "normalized_id": "bigagi",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "bubblewrap",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/bubblewrap",
+      "normalized_id": "bubblewrap",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "conductor",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/conductor",
+      "normalized_id": "conductor",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "crosvm",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/crosvm",
+      "normalized_id": "crosvm",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "docx",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/docx",
+      "normalized_id": "docx",
+      "capability_class": "DOCUMENT_MEDIA_INGEST",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "fast-check",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/fast-check",
+      "normalized_id": "fastcheck",
+      "capability_class": "TESTING_CI",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "flutter_rust_bridge",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/flutter_rust_bridge",
+      "normalized_id": "flutterrustbridge",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "flutter_secure_storage",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/flutter_secure_storage",
+      "normalized_id": "fluttersecurestorage",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "gVisor",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/gVisor",
+      "normalized_id": "gvisor",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "gfxstream",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/gfxstream",
+      "normalized_id": "gfxstream",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "hatchet",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/hatchet",
+      "normalized_id": "hatchet",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "in-toto",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/in-toto",
+      "normalized_id": "intoto",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "jsPDF",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/jsPDF",
+      "normalized_id": "jspdf",
+      "capability_class": "DOCUMENT_MEDIA_INGEST",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "k6",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/k6",
+      "normalized_id": "k6",
+      "capability_class": "TESTING_CI",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "libdatachannel",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/libdatachannel",
+      "normalized_id": "libdatachannel",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "libsodium",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/libsodium",
+      "normalized_id": "libsodium",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "nsjail",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/nsjail",
+      "normalized_id": "nsjail",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "ntfy",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/ntfy",
+      "normalized_id": "ntfy",
+      "capability_class": "OBSERVABILITY_NOTIFICATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "pgvector",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/pgvector",
+      "normalized_id": "pgvector",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "pytest",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/pytest",
+      "normalized_id": "pytest",
+      "capability_class": "TESTING_CI",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "react-markdown",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/react-markdown",
+      "normalized_id": "reactmarkdown",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "redun",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/redun",
+      "normalized_id": "redun",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "resilient-circuit",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/resilient-circuit",
+      "normalized_id": "resilientcircuit",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "rqlite",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/rqlite",
+      "normalized_id": "rqlite",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "rule-engine",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/rule-engine",
+      "normalized_id": "ruleengine",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "scrcpy",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/scrcpy",
+      "normalized_id": "scrcpy",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "shadcn-ui",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/shadcn-ui",
+      "normalized_id": "shadcnui",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "sqlite-vec",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/sqlite-vec",
+      "normalized_id": "sqlitevec",
+      "capability_class": "MEMORY_DATA_RETRIEVAL",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "stately_agent",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/stately_agent",
+      "normalized_id": "statelyagent",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "steering interprocess OSS",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/steering interprocess OSS",
+      "normalized_id": "steeringinterprocessoss",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "structlog",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/structlog",
+      "normalized_id": "structlog",
+      "capability_class": "OBSERVABILITY_NOTIFICATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "sysinfo",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/sysinfo",
+      "normalized_id": "sysinfo",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "tokio-vsock",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/tokio-vsock",
+      "normalized_id": "tokiovsock",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "tusd",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/tusd",
+      "normalized_id": "tusd",
+      "capability_class": "DONOR_NEEDS_VERIFY",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "user-requested-workflow-2026-09-17",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17",
+      "normalized_id": "userrequestedworkflow20260917",
+      "capability_class": "AI_AGENT_ROUTING_ORCHESTRATION",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "virglrenderer",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/virglrenderer",
+      "normalized_id": "virglrenderer",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "virtiofsd",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/virtiofsd",
+      "normalized_id": "virtiofsd",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "whisper.cpp",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/whisper.cpp",
+      "normalized_id": "whispercpp",
+      "capability_class": "DOCUMENT_MEDIA_INGEST",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "workerd",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/workerd",
+      "normalized_id": "workerd",
+      "capability_class": "RUNTIME_VIRTUALIZATION_PLATFORM",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "xterm.js",
+      "root": "UI YAIWES/componentes open soure UI YAIWES",
+      "path": "UI YAIWES/componentes open soure UI YAIWES/xterm.js",
+      "normalized_id": "xtermjs",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Watchdog UI",
+      "root": "UI YAIWES/todos los componentes",
+      "path": "UI YAIWES/todos los componentes/Watchdog UI",
+      "normalized_id": "watchdogui",
+      "capability_class": "YAIWES_INTERNAL_COMPONENT",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "🏈 YAIWES 08",
+      "root": "UI YAIWES/todos los componentes",
+      "path": "UI YAIWES/todos los componentes/🏈 YAIWES 08",
+      "normalized_id": "🏈yaiwes08",
+      "capability_class": "YAIWES_INTERNAL_COMPONENT",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "🏈 YAIWES 11",
+      "root": "UI YAIWES/todos los componentes",
+      "path": "UI YAIWES/todos los componentes/🏈 YAIWES 11",
+      "normalized_id": "🏈yaiwes11",
+      "capability_class": "YAIWES_INTERNAL_COMPONENT",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "🏈 YAIWES 12",
+      "root": "UI YAIWES/todos los componentes",
+      "path": "UI YAIWES/todos los componentes/🏈 YAIWES 12",
+      "normalized_id": "🏈yaiwes12",
+      "capability_class": "YAIWES_INTERNAL_COMPONENT",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "🏈 YAIWES 15",
+      "root": "UI YAIWES/todos los componentes",
+      "path": "UI YAIWES/todos los componentes/🏈 YAIWES 15",
+      "normalized_id": "🏈yaiwes15",
+      "capability_class": "YAIWES_INTERNAL_COMPONENT",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "🏈 YAIWES 16",
+      "root": "UI YAIWES/todos los componentes",
+      "path": "UI YAIWES/todos los componentes/🏈 YAIWES 16",
+      "normalized_id": "🏈yaiwes16",
+      "capability_class": "YAIWES_INTERNAL_COMPONENT",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "🏈 YAIWES 21",
+      "root": "UI YAIWES/todos los componentes",
+      "path": "UI YAIWES/todos los componentes/🏈 YAIWES 21",
+      "normalized_id": "🏈yaiwes21",
+      "capability_class": "YAIWES_INTERNAL_COMPONENT",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "🏈 YAIWES 22",
+      "root": "UI YAIWES/todos los componentes",
+      "path": "UI YAIWES/todos los componentes/🏈 YAIWES 22",
+      "normalized_id": "🏈yaiwes22",
+      "capability_class": "YAIWES_INTERNAL_COMPONENT",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "🏈 YAIWES 23",
+      "root": "UI YAIWES/todos los componentes",
+      "path": "UI YAIWES/todos los componentes/🏈 YAIWES 23",
+      "normalized_id": "🏈yaiwes23",
+      "capability_class": "YAIWES_INTERNAL_COMPONENT",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "MetaCua-Glimmer-agentic-fundamentals",
+      "root": "UI YAIWES/Meta Agents integration sources",
+      "path": "UI YAIWES/Meta Agents integration sources/MetaCua-Glimmer-agentic-fundamentals",
+      "normalized_id": "metacuaglimmeragenticfundamentals",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Multi-Agent-and-Muse-Code-patterns",
+      "root": "UI YAIWES/Meta Agents integration sources",
+      "path": "UI YAIWES/Meta Agents integration sources/Multi-Agent-and-Muse-Code-patterns",
+      "normalized_id": "multiagentandmusecodepatterns",
+      "capability_class": "SECURITY_POLICY_SUPPLY_CHAIN",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Lucide",
+      "root": "UI YAIWES/➡️📂 descarga extracción 14 faltantes",
+      "path": "UI YAIWES/➡️📂 descarga extracción 14 faltantes/Lucide",
+      "normalized_id": "lucide",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "React Virtuoso",
+      "root": "UI YAIWES/➡️📂 descarga extracción 14 faltantes",
+      "path": "UI YAIWES/➡️📂 descarga extracción 14 faltantes/React Virtuoso",
+      "normalized_id": "reactvirtuoso",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Uppy",
+      "root": "UI YAIWES/➡️📂 descarga extracción 14 faltantes",
+      "path": "UI YAIWES/➡️📂 descarga extracción 14 faltantes/Uppy",
+      "normalized_id": "uppy",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "XYFlow React Flow",
+      "root": "UI YAIWES/➡️📂 descarga extracción 14 faltantes",
+      "path": "UI YAIWES/➡️📂 descarga extracción 14 faltantes/XYFlow React Flow",
+      "normalized_id": "xyflowreactflow",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "shadcn-ui",
+      "root": "UI YAIWES/➡️📂 descarga extracción 14 faltantes",
+      "path": "UI YAIWES/➡️📂 descarga extracción 14 faltantes/shadcn-ui",
+      "normalized_id": "shadcnui",
+      "capability_class": "EDITOR_UI_CONTROLS",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "APScheduler-COMBINED-E2E",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/APScheduler-COMBINED-E2E",
+      "normalized_id": "apschedulercombinede2e",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "APScheduler-E2E-V2",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/APScheduler-E2E-V2",
+      "normalized_id": "apschedulere2ev2",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "APScheduler",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/APScheduler",
+      "normalized_id": "apscheduler",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "AppFlowy",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/AppFlowy",
+      "normalized_id": "appflowy",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Appsmith",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Appsmith",
+      "normalized_id": "appsmith",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Builder.io",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Builder.io",
+      "normalized_id": "builderio",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Dashup",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Dashup",
+      "normalized_id": "dashup",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Frappe-Builder",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Frappe-Builder",
+      "normalized_id": "frappebuilder",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Fromtend code",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Fromtend code",
+      "normalized_id": "fromtendcode",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "FullCalendar",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/FullCalendar",
+      "normalized_id": "fullcalendar",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "LiteRT",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/LiteRT",
+      "normalized_id": "litert",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "MaoMao-Window-Manager",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/MaoMao-Window-Manager",
+      "normalized_id": "maomaowindowmanager",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Microsoft-Agent-Framework-Durable-Extension",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Microsoft-Agent-Framework-Durable-Extension",
+      "normalized_id": "microsoftagentframeworkdurableextension",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Mitosis",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Mitosis",
+      "normalized_id": "mitosis",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Motion",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Motion",
+      "normalized_id": "motion",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Onlook",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Onlook",
+      "normalized_id": "onlook",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "OpenPencil",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/OpenPencil",
+      "normalized_id": "openpencil",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "PlantUML",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/PlantUML",
+      "normalized_id": "plantuml",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "PracticalSwan-agent-skills",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/PracticalSwan-agent-skills",
+      "normalized_id": "practicalswanagentskills",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Puck",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Puck",
+      "normalized_id": "puck",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Radix-UI",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Radix-UI",
+      "normalized_id": "radixui",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "React-Spectrum",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/React-Spectrum",
+      "normalized_id": "reactspectrum",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Saas-UI",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Saas-UI",
+      "normalized_id": "saasui",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Silex",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Silex",
+      "normalized_id": "silex",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "TanStack-Table",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/TanStack-Table",
+      "normalized_id": "tanstacktable",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "TeleportHQ",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/TeleportHQ",
+      "normalized_id": "teleporthq",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "UI YAIWES",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/UI YAIWES",
+      "normalized_id": "uiyaiwes",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Volt-React-Dashboard",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Volt-React-Dashboard",
+      "normalized_id": "voltreactdashboard",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "VvvebJs",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/VvvebJs",
+      "normalized_id": "vvvebjs",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "Webiny",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/Webiny",
+      "normalized_id": "webiny",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "WinUI-Gallery",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/WinUI-Gallery",
+      "normalized_id": "winuigallery",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "architecture-samples",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/architecture-samples",
+      "normalized_id": "architecturesamples",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "archives",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/archives",
+      "normalized_id": "archives",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "codigo real frontend",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/codigo real frontend",
+      "normalized_id": "codigorealfrontend",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "codigo real heredado",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/codigo real heredado",
+      "normalized_id": "codigorealheredado",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "compose-multiplatform",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/compose-multiplatform",
+      "normalized_id": "composemultiplatform",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "compose-samples",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/compose-samples",
+      "normalized_id": "composesamples",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "dnd-kit",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/dnd-kit",
+      "normalized_id": "dndkit",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "echarts",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/echarts",
+      "normalized_id": "echarts",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "flutter-widgets",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/flutter-widgets",
+      "normalized_id": "flutterwidgets",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "frappe-gantt",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/frappe-gantt",
+      "normalized_id": "frappegantt",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "fromted-sources",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/fromted-sources",
+      "normalized_id": "fromtedsources",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "gVisor",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/gVisor",
+      "normalized_id": "gvisor",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "herramientas descarga",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/herramientas descarga",
+      "normalized_id": "herramientasdescarga",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "material-components-android",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/material-components-android",
+      "normalized_id": "materialcomponentsandroid",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "monaco-editor",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/monaco-editor",
+      "normalized_id": "monacoeditor",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "react-jsonschema-form",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/react-jsonschema-form",
+      "normalized_id": "reactjsonschemaform",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "react-native-paper",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/react-native-paper",
+      "normalized_id": "reactnativepaper",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "shadcn-ui",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/shadcn-ui",
+      "normalized_id": "shadcnui",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "tools",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/tools",
+      "normalized_id": "tools",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    },
+    {
+      "name": "xterm.js",
+      "root": "📂componentes open soure fromtend",
+      "path": "📂componentes open soure fromtend/xterm.js",
+      "normalized_id": "xtermjs",
+      "capability_class": "FRONTEND_UI_DONOR",
+      "physical_state": "SOURCE_PRESENT",
+      "integration_state": "VERIFY_RESEARCH_REQUIRED",
+      "close_rule": "REUSE_EXISTING>PATCH>ADAPT; SOURCE_PRESENT!=WIRED!=TESTED!=VERIFIED_CLOSED"
+    }
+  ],
+  "integration_priority": [
+    "EDITOR_UI_CONTROLS",
+    "MEMORY_DATA_RETRIEVAL + DOCUMENT_MEDIA_INGEST",
+    "AI_AGENT_ROUTING_ORCHESTRATION",
+    "SECURITY_POLICY_SUPPLY_CHAIN + OBSERVABILITY_NOTIFICATION",
+    "TESTING_CI",
+    "RUNTIME_VIRTUALIZATION_PLATFORM only when supported scope proves need",
+    "FRONTEND_UI_DONOR/DONOR_NEEDS_VERIFY -> VERIFIED_NO_NEED when no functional gap"
+  ],
+  "global_rule": "No component is promoted beyond SOURCE_PRESENT without provenance, exact capability mapping, adapter/wiring, focused test, evidence, trusted CI when applicable, and readback."
+}
