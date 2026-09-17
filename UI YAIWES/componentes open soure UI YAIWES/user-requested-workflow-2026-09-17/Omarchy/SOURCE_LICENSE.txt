@@ -1,0 +1,4 @@
+https://github.com/omacom/omarchy/blob/9c5482c58dbe4974de337450754885083c91eada/LICENSE
+https://github.com/omacom/omarchy/blob/9c5482c58dbe4974de337450754885083c91eada/manual/images/notice-battery.webp
+https://github.com/omacom/omarchy/blob/9c5482c58dbe4974de337450754885083c91eada/manual/images/notice-datetime.webp
+https://github.com/omacom/omarchy/blob/9c5482c58dbe4974de337450754885083c91eada/manual/images/notice-weather.webp
