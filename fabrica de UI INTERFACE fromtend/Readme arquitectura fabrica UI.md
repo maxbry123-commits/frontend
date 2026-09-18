@@ -33,3 +33,11 @@ La captura de pantalla es una evidencia esencial del frontend: permite observar 
 - Impeccable (`pbakaus/impeccable`, source commit `f2c7051853848826aac2f4646581d62a732155ad`) — `GAP: COMPONENTE DESCARGADO/COPIADO. INTEGRACIÓN PENDIENTE.`
 - Anthropic Frontend Design (`anthropics/skills`) — `GAP: COMPONENTE DESCARGADO/COPIADO. INTEGRACIÓN PENDIENTE.`
 - Anthropic Skill Creator / Skills Design (`anthropics/skills`) — `GAP: COMPONENTE DESCARGADO/COPIADO. INTEGRACIÓN PENDIENTE.`
+
+
+## COMPONENT-OPS — Animation/Video Skills — 2026-09-17
+- `manim-skill` — https://github.com/vumichien/manim-skill @ `70ccd68cf4dea135973f899b25fb408ddf5946c5` — destino: `fabrica de UI INTERFACE fromtend/manim-skill/` — DOWNLOAD/EXTRACT=RUNNING; INTEGRATION=PENDING.
+- `skill-canvas-video` — https://github.com/siegerts/skill-canvas-video @ `6419a14d9fddb5003c66e0567d927ad57f1e4f06` — destino: `fabrica de UI INTERFACE fromtend/skill-canvas-video/` — DOWNLOAD/EXTRACT=RUNNING; INTEGRATION=PENDING.
+- `chat-animation` — https://github.com/xue-xiaobao/chat-animation @ `d114e627833e2461efcc233d7a63a18cf85b149a` — destino: `fabrica de UI INTERFACE fromtend/chat-animation/` — DOWNLOAD/EXTRACT=RUNNING; INTEGRATION=PENDING.
+- `taste-skill` — https://github.com/Leonxlnx/taste-skill @ `e79ca9ec7e071eb3a3b623c4fb752e853fc3ed58` — destino: `fabrica de UI INTERFACE fromtend/taste-skill/` — DOWNLOAD/EXTRACT=RUNNING; INTEGRATION=PENDING.
+- Regla: no marcar integración PASS sin materialización física + read-back/hash + prueba real en Fábrica UI.
