@@ -1,0 +1,180 @@
+name: acquire-orca-source
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/acquire-orca-source.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: acquire-orca-source
+  cancel-in-progress: false
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    env:
+      SOURCE_URL: https://github.com/stablyai/orca
+      SOURCE_COMMIT: 1cd2964501acd5c0bc736323f09205d272664f09
+      DEST: UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17/Orca
+      ACQ: UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17/_adquisicion/ui-yaiwes-user-components-5-03
+    steps:
+      - name: Checkout destination
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Fetch pinned Orca source
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/orca-src
+          git init /tmp/orca-src
+          git -C /tmp/orca-src remote add origin "$SOURCE_URL.git"
+          git -C /tmp/orca-src fetch --depth=1 origin "$SOURCE_COMMIT"
+          git -C /tmp/orca-src checkout --detach FETCH_HEAD
+          ACTUAL="$(git -C /tmp/orca-src rev-parse HEAD)"
+          test "$ACTUAL" = "$SOURCE_COMMIT"
+          git -C /tmp/orca-src rev-parse 'HEAD^{tree}' > /tmp/orca-tree.txt
+
+      - name: Materialize source and provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -e "$DEST" ]; then
+            echo "Destination already exists; refusing silent overwrite: $DEST"
+            exit 20
+          fi
+          mkdir -p "$DEST" "$ACQ"
+          rsync -a --exclude='.git/' /tmp/orca-src/ "$DEST/"
+          printf '%s\n' "$SOURCE_URL" > "$DEST/SOURCE_URL.txt"
+          printf '%s\n' "$SOURCE_COMMIT" > "$DEST/SOURCE_COMMIT.txt"
+          cat /tmp/orca-tree.txt > "$DEST/SOURCE_TREE.txt"
+          if [ -f "$DEST/LICENSE" ]; then
+            cp "$DEST/LICENSE" "$DEST/SOURCE_LICENSE.txt"
+          elif [ -f "$DEST/LICENSE.md" ]; then
+            cp "$DEST/LICENSE.md" "$DEST/SOURCE_LICENSE.txt"
+          elif [ -f "$DEST/LICENSE.txt" ]; then
+            cp "$DEST/LICENSE.txt" "$DEST/SOURCE_LICENSE.txt"
+          else
+            printf 'LICENSE_NOT_FOUND_AT_ROOT\n' > "$DEST/SOURCE_LICENSE.txt"
+          fi
+
+      - name: Build acquisition manifest and hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib, json, os, pathlib, subprocess
+          source_url = os.environ["SOURCE_URL"]
+          source_commit = os.environ["SOURCE_COMMIT"]
+          dest = pathlib.Path(os.environ["DEST"])
+          acq = pathlib.Path(os.environ["ACQ"])
+          acq.mkdir(parents=True, exist_ok=True)
+
+          tree_lines = subprocess.check_output(
+              ["git","-C","/tmp/orca-src","ls-tree","-r","-l",source_commit],
+              text=True
+          ).splitlines()
+          source = {}
+          for line in tree_lines:
+              left, path = line.split("\t", 1)
+              mode, typ, sha, size = left.split(maxsplit=3)
+              source[path] = {
+                  "mode": mode,
+                  "type": typ,
+                  "sha": sha,
+                  "size": None if size == "-" else int(size),
+              }
+
+          rows = []
+          hash_lines = []
+          total_bytes = 0
+          for p in sorted(x for x in dest.rglob("*") if x.is_file()):
+              rel = p.relative_to(dest).as_posix()
+              data = p.read_bytes()
+              h = hashlib.sha256(data).hexdigest()
+              total_bytes += len(data)
+              hash_lines.append(f"{h}  {rel}")
+              src = source.get(rel)
+              rows.append({
+                  "component": "Orca",
+                  "parts": 0,
+                  "path": rel,
+                  "source_blob": src["sha"] if src else None,
+                  "source_commit": source_commit,
+                  "source_mode": src["mode"] if src else None,
+                  "source_size": src["size"] if src else len(data),
+                  "source_url": source_url,
+                  "destination": f"{dest.as_posix()}/{rel}",
+                  "operation": "DOWNLOAD_PINNED_GIT_BLOB" if src else "GENERATED_PROVENANCE",
+                  "blob": src["sha"] if src else None,
+                  "bytes": len(data),
+                  "status": "PREPARED",
+                  "sha256": h,
+              })
+
+          (dest / "SOURCE_SHA256SUMS.txt").write_text("\n".join(hash_lines) + "\n")
+          tree_sha = pathlib.Path("/tmp/orca-tree.txt").read_text().strip()
+          batch = {
+              "task_id": "ui-yaiwes-user-components-5-03",
+              "source_url": source_url,
+              "source_commit": source_commit,
+              "source_tree": tree_sha,
+              "component": "Orca",
+              "files": rows,
+              "file_count": len(rows),
+              "total_bytes": total_bytes,
+              "status": "PREPARED",
+          }
+          (acq / "batch-001.json").write_text(json.dumps(batch, indent=2) + "\n")
+          summary = {
+              "task_id": batch["task_id"],
+              "component": "Orca",
+              "source_url": source_url,
+              "source_commit": source_commit,
+              "source_tree": tree_sha,
+              "destination": dest.as_posix(),
+              "file_count": len(rows),
+              "total_bytes": total_bytes,
+              "status": "ACQUISITION_TRACE_PRESENT",
+          }
+          (acq / "acquisition-summary.json").write_text(json.dumps(summary, indent=2) + "\n")
+          PY
+
+      - name: Validate readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d "$DEST"
+          test -f "$DEST/SOURCE_COMMIT.txt"
+          test -f "$DEST/SOURCE_URL.txt"
+          test -f "$DEST/SOURCE_TREE.txt"
+          test -f "$DEST/SOURCE_SHA256SUMS.txt"
+          test -f "$ACQ/batch-001.json"
+          test "$(cat "$DEST/SOURCE_COMMIT.txt")" = "$SOURCE_COMMIT"
+          test "$(cat "$DEST/SOURCE_URL.txt")" = "$SOURCE_URL"
+          python - <<'PY'
+          import json, os, pathlib
+          acq = pathlib.Path(os.environ["ACQ"])
+          d = json.loads((acq/"acquisition-summary.json").read_text())
+          assert d["status"] == "ACQUISITION_TRACE_PRESENT"
+          assert d["source_commit"] == os.environ["SOURCE_COMMIT"]
+          assert d["file_count"] > 0
+          print(json.dumps(d, indent=2))
+          PY
+
+      - name: Commit Orca acquisition
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "$DEST" "$ACQ"
+          git diff --cached --quiet && { echo "No changes"; exit 0; }
+          git commit -m "acquire Orca pinned source for UI YAIWES"
+          git push origin HEAD:main
