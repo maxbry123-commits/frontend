@@ -53,3 +53,5 @@ La captura de pantalla es una evidencia esencial del frontend: permite observar 
 - Integración funcional dentro de la Fábrica UI: `PENDING` hasta wiring/test real.
 
 - Gitlinks no autorizados eliminados de ambos destinos; `.gitmodules` ausente. Continuar únicamente con motores canónicos.
+
+- DOWNLOAD/EXTRACT GATE: 8/8 VERIFIED_CLOSED = 100% PASS. Publicación física/materialización en destino sigue PENDING; no se cuenta como instalación. Gitlinks/.gitmodules no autorizados: AUSENTES.
