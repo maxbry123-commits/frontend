@@ -47,7 +47,30 @@ jobs:
             test -s "$SRC/$c/SOURCE_SHA256SUMS.txt"
             test -s "$DST/$c/SOURCE_SHA256SUMS.txt"
             cmp "$SRC/$c/SOURCE_SHA256SUMS.txt" "$DST/$c/SOURCE_SHA256SUMS.txt"
-            (cd "$DST/$c" && sha256sum -c SOURCE_SHA256SUMS.txt)
+            python3 - "$DST/$c" <<'PY'
+          import hashlib, pathlib, sys
+          root = pathlib.Path(sys.argv[1])
+          manifest = root / 'SOURCE_SHA256SUMS.txt'
+          checked = 0
+          for raw in manifest.read_text(encoding='utf-8').splitlines():
+              if not raw.strip():
+                  continue
+              digest, rel = raw.split(None, 1)
+              rel = rel.lstrip('*')
+              p = root / rel
+              if not p.is_file():
+                  raise SystemExit(f'MISSING: {rel}')
+              h = hashlib.sha256()
+              with p.open('rb') as f:
+                  for chunk in iter(lambda: f.read(1024 * 1024), b''):
+                      h.update(chunk)
+              if h.hexdigest().lower() != digest.lower():
+                  raise SystemExit(f'HASH_MISMATCH: {rel}')
+              checked += 1
+          if checked == 0:
+              raise SystemExit('EMPTY_MANIFEST')
+          print(f'HASH_READBACK_OK files={checked}')
+          PY
           done
           test ! -e "$DST/Anydoc"
           echo 'XRAY-11 MOTOR3 4/4 HASH READBACK PASS; Anydoc excluded'
