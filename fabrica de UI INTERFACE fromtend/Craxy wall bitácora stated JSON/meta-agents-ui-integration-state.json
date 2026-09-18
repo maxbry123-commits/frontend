@@ -67,7 +67,11 @@
       "note": "Motor canónico ejecutado y download/extract verificado. Gitlinks no autorizados eliminados. Publicación física sigue pendiente; no usar métodos alternativos.",
       "materialization_commit": "ed752eaf5164345116942473aca24375d079cd85",
       "readback_job": "6aacc3f55c02253cfb1463cb",
-      "readback": "FRONTEND_4_OF_4_OK"
+      "readback": "FRONTEND_4_OF_4_OK",
+      "download_extract_gate": "8/8 VERIFIED_CLOSED = 100% PASS",
+      "materialization_gate": "PENDING",
+      "unauthorized_gitlinks_present": false,
+      "gitmodules_present": false
     }
   }
 }
