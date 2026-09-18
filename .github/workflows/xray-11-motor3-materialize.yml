@@ -25,6 +25,23 @@ jobs:
           for c in Codebase-Memory-MCP OmniRoute Orca Omarchy; do
             test -d "$SRC/$c"
             SOURCE_DIR="$SRC/$c" DEST_DIR="$DST/$c" STATE_FILE="$RUNNER_TEMP/$c-state.json" BATCH_SIZE=100 COLLISION_POLICY=fail python3 "$MOTOR"
+            python3 - "$SRC/$c" "$DST/$c/SOURCE_SHA256SUMS.txt" <<'PY'
+          import hashlib, pathlib, sys
+          root = pathlib.Path(sys.argv[1])
+          out = pathlib.Path(sys.argv[2])
+          rows = []
+          for p in sorted(x for x in root.rglob('*') if x.is_file() and x.name != 'SOURCE_SHA256SUMS.txt'):
+              h = hashlib.sha256()
+              with p.open('rb') as f:
+                  for chunk in iter(lambda: f.read(1024 * 1024), b''):
+                      h.update(chunk)
+              rows.append(f"{h.hexdigest()}  {p.relative_to(root).as_posix()}")
+          if not rows:
+              raise SystemExit('EMPTY_SOURCE')
+          out.parent.mkdir(parents=True, exist_ok=True)
+          out.write_text('\n'.join(rows) + '\n', encoding='utf-8')
+          print(f'PROVENANCE_MANIFEST_OK files={len(rows)}')
+          PY
           done
           test ! -e "$DST/Anydoc"
           git add "$DST"
@@ -44,32 +61,34 @@ jobs:
           DST='UI YAIWES interface/Backend/Motor3 approved donors'
           for c in Codebase-Memory-MCP OmniRoute Orca Omarchy; do
             test -d "$DST/$c"
-            test -s "$SRC/$c/SOURCE_SHA256SUMS.txt"
             test -s "$DST/$c/SOURCE_SHA256SUMS.txt"
-            cmp "$SRC/$c/SOURCE_SHA256SUMS.txt" "$DST/$c/SOURCE_SHA256SUMS.txt"
-            python3 - "$DST/$c" <<'PY'
+            python3 - "$SRC/$c" "$DST/$c" <<'PY'
           import hashlib, pathlib, sys
-          root = pathlib.Path(sys.argv[1])
-          manifest = root / 'SOURCE_SHA256SUMS.txt'
-          checked = 0
+          src = pathlib.Path(sys.argv[1])
+          dst = pathlib.Path(sys.argv[2])
+          manifest = dst / 'SOURCE_SHA256SUMS.txt'
+          expected = {}
           for raw in manifest.read_text(encoding='utf-8').splitlines():
-              if not raw.strip():
-                  continue
-              digest, rel = raw.split(None, 1)
-              rel = rel.lstrip('*')
-              p = root / rel
-              if not p.is_file():
-                  raise SystemExit(f'MISSING: {rel}')
-              h = hashlib.sha256()
-              with p.open('rb') as f:
-                  for chunk in iter(lambda: f.read(1024 * 1024), b''):
-                      h.update(chunk)
-              if h.hexdigest().lower() != digest.lower():
+              if raw.strip():
+                  digest, rel = raw.split(None, 1)
+                  expected[rel.lstrip('*')] = digest.lower()
+          actual_paths = {p.relative_to(src).as_posix() for p in src.rglob('*') if p.is_file() and p.name != 'SOURCE_SHA256SUMS.txt'}
+          if set(expected) != actual_paths:
+              raise SystemExit(f'MANIFEST_SET_MISMATCH expected={len(expected)} source={len(actual_paths)}')
+          for rel, digest in expected.items():
+              sp, dp = src / rel, dst / rel
+              if not dp.is_file():
+                  raise SystemExit(f'MISSING_DEST: {rel}')
+              def sha(p):
+                  h = hashlib.sha256()
+                  with p.open('rb') as f:
+                      for chunk in iter(lambda: f.read(1024 * 1024), b''):
+                          h.update(chunk)
+                  return h.hexdigest().lower()
+              sh, dh = sha(sp), sha(dp)
+              if sh != digest or dh != digest:
                   raise SystemExit(f'HASH_MISMATCH: {rel}')
-              checked += 1
-          if checked == 0:
-              raise SystemExit('EMPTY_MANIFEST')
-          print(f'HASH_READBACK_OK files={checked}')
+          print(f'HASH_READBACK_OK files={len(expected)}')
           PY
           done
           test ! -e "$DST/Anydoc"
