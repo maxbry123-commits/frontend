@@ -40,8 +40,8 @@ La presencia de un directorio o de código descargado no autoriza a declararlo i
 - Fuente validada: `https://github.com/stablyai/orca`
 - Licencia declarada upstream: MIT.
 - Rol correcto: superficie gráfica/orquestador de CLI agents (Codex, Claude Code, OpenCode y otros), worktrees, terminales, Chromium/Design Mode, SSH y companion móvil.
-- Estado físico observado: NO aparece el directorio `Orca/` en el destino de adquisición y tampoco aparece `_adquisicion/ui-yaiwes-user-components-5-03`.
-- GAP-ACQUISITION-ORCA-01: adquisición 03 ausente; investigar clone/source/size/error y ejecutar reparación focalizada antes de copiar o integrar.
+- Estado físico observado: directorio `Orca/` materializado en el destino de adquisición y lote `_adquisicion/ui-yaiwes-user-components-5-03` presente.
+- Adquisición reparada 2026-09-17: source `https://github.com/stablyai/orca`, commit fijado `1cd2964501acd5c0bc736323f09205d272664f09`, tree `0a197784e2ef1c880d23ea673108cba84663f1c7`, 27,344 archivos / 235,134,345 bytes, estado `ACQUISITION_TRACE_PRESENT`.
 - GAP-INTEGRATION-ORCA-02: reutilizar como UI/agent-surface o donor; prohibido introducir un segundo runtime/state engine.
 - GAP-INTEGRATION-ORCA-03: evaluar Design Mode como capacidad de captura HTML/CSS/screenshot con permisos explícitos.
 - GAP-INTEGRATION-ORCA-04: test de worktree/agent adapter aislado y no destructivo.
@@ -71,11 +71,11 @@ La presencia de un directorio o de código descargado no autoriza a declararlo i
 |---|---|---|---|
 | Codebase Memory MCP | sí | sí | `ACQUISITION_TRACE_PRESENT` |
 | OmniRoute | sí | no observado | `GAP_ACQUISITION_INCOMPLETE` |
-| Orca | no | no | `GAP_ACQUISITION_MISSING` |
+| Orca | sí | sí | `ACQUISITION_TRACE_PRESENT` |
 | Omarchy | sí | sí | `ACQUISITION_TRACE_PRESENT` |
 | Anydoc | sí | sí | `ACQUISITION_TRACE_PRESENT` |
 
-No declarar `5/5 ACQUISITION_READBACK_PASS` hasta resolver OmniRoute + Orca y verificar hashes/manifiestos finales.
+Orca queda resuelto en adquisición. No declarar `5/5 ACQUISITION_READBACK_PASS` hasta resolver el GAP restante de OmniRoute y verificar hashes/manifiestos finales.
 
 ## Copia hacia UI YAIWES interface
 
