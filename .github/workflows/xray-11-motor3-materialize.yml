@@ -1,0 +1,50 @@
+name: XRAY-11 Motor3 Materialize
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/xray-11-motor3-materialize.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: xray-11-motor3-materialize
+  cancel-in-progress: false
+jobs:
+  copy-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: main, fetch-depth: 1, lfs: false}
+      - name: Copy approved 4 with canonical Motor3
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC='UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17'
+          DST='UI YAIWES interface/Backend/Motor3 approved donors'
+          MOTOR='UI YAIWES/➡️📂motores de descarga extracción copiado movimiento archivos frontend/➡️📂motor de copiar archivos/motor_3_copy_batches.py'
+          for c in Codebase-Memory-MCP OmniRoute Orca Omarchy; do
+            test -d "$SRC/$c"
+            SOURCE_DIR="$SRC/$c" DEST_DIR="$DST/$c" STATE_FILE="$RUNNER_TEMP/$c-state.json" BATCH_SIZE=100 COLLISION_POLICY=fail python3 "$MOTOR"
+          done
+          test ! -e "$DST/Anydoc"
+          git add "$DST"
+          if ! git diff --cached --quiet; then
+            git config user.name github-actions[bot]
+            git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+            git commit -m 'xray11: Motor3 copy four approved donors (Anydoc excluded)'
+            git push origin HEAD:main
+          fi
+      - name: Independent readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git reset --hard origin/main
+          SRC='UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17'
+          DST='UI YAIWES interface/Backend/Motor3 approved donors'
+          for c in Codebase-Memory-MCP OmniRoute Orca Omarchy; do
+            diff -qr "$SRC/$c" "$DST/$c"
+            test -s "$DST/$c/SOURCE_SHA256SUMS.txt"
+          done
+          test ! -e "$DST/Anydoc"
+          echo 'XRAY-11 MOTOR3 4/4 READBACK PASS; Anydoc excluded'
