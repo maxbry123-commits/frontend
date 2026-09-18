@@ -53,7 +53,7 @@ jobs:
           git config --local filter.lfs.required false
           git config --local core.autocrlf false
 
-      - name: Download, extract, publish and read back 5 pinned sources
+      - name: Download, extract, publish and read back pinned sources
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -70,6 +70,10 @@ jobs:
 
           while IFS=$'\t' read -r idx slug url; do
             echo "===== COMPONENT ${idx}/5: ${slug} ====="
+            if [[ -n "${REPAIR_ONLY_INDEX:-}" && "$idx" != "$REPAIR_ONLY_INDEX" ]]; then
+              echo "SKIP component ${idx}: focused repair index=${REPAIR_ONLY_INDEX}"
+              continue
+            fi
             src="$RDC_SOURCE_ROOT/$slug"
             rm -rf "$src"
 
@@ -84,8 +88,7 @@ jobs:
               continue
             fi
 
-            if ! git -c filter.lfs.smudge= -c filter.lfs.clean= -c filter.lfs.process= -c filter.lfs.required=false \
-              clone --depth 1 --single-branch --no-tags "$url" "$src"; then
+            if ! git -c filter.lfs.smudge= -c filter.lfs.clean= -c filter.lfs.process= -c filter.lfs.required=false clone --depth 1 --single-branch --no-tags "$url" "$src"; then
               printf '%s\t%s\t%s\n' "$idx" "$slug" "CLONE_GAP:$url" >> "$RUNNER_TEMP/gaps.tsv"
               rm -rf "$src"
               continue
@@ -115,16 +118,8 @@ jobs:
               size=int(subprocess.check_output(['git','-C',src,'cat-file','-s',blob],text=True).strip())
               items.append({'component':slug,'parts':0,'path':path,'source_blob':blob,'source_commit':sha,'source_mode':mode,'source_size':size,'source_url':url})
               base=pathlib.PurePosixPath(path).name.lower()
-              if base.startswith(('license','copying','notice')):
-                  licenses.append(path)
-          plan={
-            'task_id':f'ui-yaiwes-user-components-5-{int(idx):02d}',
-            'destination_repository':'maxbry123-commits/frontend',
-            'destination_branch':'main',
-            'destination_root':dest,
-            'components':[{'name':slug,'source_url':url,'source_commit':sha,'expected_files':len(items),'license_files':sorted(set(licenses))}],
-            'items':items,'blocked':blocked,'overwrite':False,'delete':False
-          }
+              if base.startswith(('license','copying','notice')): licenses.append(path)
+          plan={'task_id':f'ui-yaiwes-user-components-5-{int(idx):02d}','destination_repository':'maxbry123-commits/frontend','destination_branch':'main','destination_root':dest,'components':[{'name':slug,'source_url':url,'source_commit':sha,'expected_files':len(items),'license_files':sorted(set(licenses))}],'items':items,'blocked':blocked,'overwrite':False,'delete':False}
           pathlib.Path(out).write_text(json.dumps(plan,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
           PY
 
@@ -157,8 +152,7 @@ jobs:
                   urlf=d/'SOURCE_URL.txt'; commitf=d/'SOURCE_COMMIT.txt'; sumsf=d/'SOURCE_SHA256SUMS.txt'
                   for f in (urlf,commitf,sumsf,d/'SOURCE_LICENSE.txt'):
                       if not f.is_file(): reasons.append('TRACE_MISSING:'+f.name)
-                  if urlf.is_file() and urlf.read_text(encoding='utf-8').strip().rstrip('/') != expected_url:
-                      reasons.append('SOURCE_URL_MISMATCH')
+                  if urlf.is_file() and urlf.read_text(encoding='utf-8').strip().rstrip('/') != expected_url: reasons.append('SOURCE_URL_MISMATCH')
                   if commitf.is_file():
                       sha=commitf.read_text(encoding='utf-8').strip()
                       if len(sha)!=40 or any(ch not in '0123456789abcdef' for ch in sha): reasons.append('SOURCE_COMMIT_INVALID')
