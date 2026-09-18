@@ -1,0 +1,11 @@
+{
+  "task_id": "ui-yaiwes-user-components-5-03",
+  "component": "Orca",
+  "source_url": "https://github.com/stablyai/orca",
+  "source_commit": "1cd2964501acd5c0bc736323f09205d272664f09",
+  "source_tree": "0a197784e2ef1c880d23ea673108cba84663f1c7",
+  "destination": "UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17/Orca",
+  "file_count": 27344,
+  "total_bytes": 235134345,
+  "status": "ACQUISITION_TRACE_PRESENT"
+}
