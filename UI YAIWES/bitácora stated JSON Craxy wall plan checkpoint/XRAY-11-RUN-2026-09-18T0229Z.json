@@ -1,0 +1,21 @@
+{
+  "schema": "yaiwes.watchdog.run-evidence/v1",
+  "node": "XRAY-11-USER-REQUESTED-5",
+  "observed_head": "4f14754423f9843f1a42f41ce4e3dac10c108c02",
+  "classification": "ACQUISITION_GAP",
+  "observations": {
+    "orca_source_present": true,
+    "orca_source_commit": "1cd2964501acd5c0bc736323f09205d272664f09",
+    "source_sha256_manifest_nonempty": false,
+    "prior_acquisition_ci_run": 35292294065,
+    "prior_acquisition_ci_conclusion": "success"
+  },
+  "repair": {
+    "workflow": ".github/workflows/repair-orca-provenance-hashes.yml",
+    "trigger_commit": "1389906ba3696bc65bb5d8701cef649a23921eb9",
+    "purpose": "Generate deterministic SHA256 manifest for current Orca destination and independently read back every listed file before committing.",
+    "state": "TRIGGERED_AWAITING_RUN_DISCOVERY"
+  },
+  "fail_closed": true,
+  "next": "Read back repair workflow; require completed/success plus non-empty SOURCE_SHA256SUMS and independent hash readback before upgrading Orca acquisition. Then continue Motor3 4/4 with Anydoc excluded."
+}
