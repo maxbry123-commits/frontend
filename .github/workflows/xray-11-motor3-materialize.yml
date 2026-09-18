@@ -34,7 +34,7 @@ jobs:
             git commit -m 'xray11: Motor3 copy four approved donors (Anydoc excluded)'
             git push origin HEAD:main
           fi
-      - name: Independent readback
+      - name: Independent hash readback
         shell: bash
         run: |
           set -euo pipefail
@@ -43,8 +43,11 @@ jobs:
           SRC='UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17'
           DST='UI YAIWES interface/Backend/Motor3 approved donors'
           for c in Codebase-Memory-MCP OmniRoute Orca Omarchy; do
-            diff -qr "$SRC/$c" "$DST/$c"
+            test -d "$DST/$c"
+            test -s "$SRC/$c/SOURCE_SHA256SUMS.txt"
             test -s "$DST/$c/SOURCE_SHA256SUMS.txt"
+            cmp "$SRC/$c/SOURCE_SHA256SUMS.txt" "$DST/$c/SOURCE_SHA256SUMS.txt"
+            (cd "$DST/$c" && sha256sum -c SOURCE_SHA256SUMS.txt)
           done
           test ! -e "$DST/Anydoc"
-          echo 'XRAY-11 MOTOR3 4/4 READBACK PASS; Anydoc excluded'
+          echo 'XRAY-11 MOTOR3 4/4 HASH READBACK PASS; Anydoc excluded'
