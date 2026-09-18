@@ -36,10 +36,10 @@ La captura de pantalla es una evidencia esencial del frontend: permite observar 
 
 
 ## COMPONENT-OPS — Animation/Video Skills — 2026-09-17
-- `manim-skill` — https://github.com/vumichien/manim-skill @ `70ccd68cf4dea135973f899b25fb408ddf5946c5` — destino: `fabrica de UI INTERFACE fromtend/manim-skill/` — DOWNLOAD/EXTRACT=RUNNING; INTEGRATION=PENDING.
-- `skill-canvas-video` — https://github.com/siegerts/skill-canvas-video @ `6419a14d9fddb5003c66e0567d927ad57f1e4f06` — destino: `fabrica de UI INTERFACE fromtend/skill-canvas-video/` — DOWNLOAD/EXTRACT=RUNNING; INTEGRATION=PENDING.
-- `chat-animation` — https://github.com/xue-xiaobao/chat-animation @ `d114e627833e2461efcc233d7a63a18cf85b149a` — destino: `fabrica de UI INTERFACE fromtend/chat-animation/` — DOWNLOAD/EXTRACT=RUNNING; INTEGRATION=PENDING.
-- `taste-skill` — https://github.com/Leonxlnx/taste-skill @ `e79ca9ec7e071eb3a3b623c4fb752e853fc3ed58` — destino: `fabrica de UI INTERFACE fromtend/taste-skill/` — DOWNLOAD/EXTRACT=RUNNING; INTEGRATION=PENDING.
+- `manim-skill` — https://github.com/vumichien/manim-skill @ `70ccd68cf4dea135973f899b25fb408ddf5946c5` — destino: `fabrica de UI INTERFACE fromtend/manim-skill/` — DOWNLOAD/EXTRACT=VERIFIED_CLOSED; INTEGRATION=PENDING.
+- `skill-canvas-video` — https://github.com/siegerts/skill-canvas-video @ `6419a14d9fddb5003c66e0567d927ad57f1e4f06` — destino: `fabrica de UI INTERFACE fromtend/skill-canvas-video/` — DOWNLOAD/EXTRACT=VERIFIED_CLOSED; INTEGRATION=PENDING.
+- `chat-animation` — https://github.com/xue-xiaobao/chat-animation @ `d114e627833e2461efcc233d7a63a18cf85b149a` — destino: `fabrica de UI INTERFACE fromtend/chat-animation/` — DOWNLOAD/EXTRACT=VERIFIED_CLOSED; INTEGRATION=PENDING.
+- `taste-skill` — https://github.com/Leonxlnx/taste-skill @ `e79ca9ec7e071eb3a3b623c4fb752e853fc3ed58` — destino: `fabrica de UI INTERFACE fromtend/taste-skill/` — DOWNLOAD/EXTRACT=VERIFIED_CLOSED; INTEGRATION=PENDING.
 - Regla: no marcar integración PASS sin materialización física + read-back/hash + prueba real en Fábrica UI.
 
 
@@ -51,3 +51,5 @@ La captura de pantalla es una evidencia esencial del frontend: permite observar 
 - `chat-animation` @ `d114e627833e2461efcc233d7a63a18cf85b149a` — 25 archivos upstream; motor `6aacc2d7b1dc2b62dc590818` COMPLETED.
 - `taste-skill` @ `e79ca9ec7e071eb3a3b623c4fb752e853fc3ed58` — 65 archivos upstream; motor `6aacc2de5c02253cfb146385` COMPLETED.
 - Integración funcional dentro de la Fábrica UI: `PENDING` hasta wiring/test real.
+
+- Gitlinks no autorizados eliminados de ambos destinos; `.gitmodules` ausente. Continuar únicamente con motores canónicos.
