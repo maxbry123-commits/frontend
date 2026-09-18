@@ -1,0 +1,85 @@
+name: repair-orca-provenance-hashes
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/repair-orca-provenance-hashes.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: repair-orca-provenance-hashes
+  cancel-in-progress: false
+
+jobs:
+  repair-and-readback:
+    runs-on: ubuntu-latest
+    env:
+      DEST: UI YAIWES/componentes open soure UI YAIWES/user-requested-workflow-2026-09-17/Orca
+      EXPECTED_URL: https://github.com/stablyai/orca
+      EXPECTED_COMMIT: 1cd2964501acd5c0bc736323f09205d272664f09
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+          lfs: false
+      - name: Validate pinned provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d "$DEST"
+          test "$(cat "$DEST/SOURCE_URL.txt")" = "$EXPECTED_URL"
+          test "$(cat "$DEST/SOURCE_COMMIT.txt")" = "$EXPECTED_COMMIT"
+          test -s "$DEST/SOURCE_TREE.txt"
+          test -s "$DEST/SOURCE_LICENSE.txt"
+      - name: Generate deterministic SHA256 manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, os, pathlib
+          root=pathlib.Path(os.environ['DEST'])
+          out=root/'SOURCE_SHA256SUMS.txt'
+          rows=[]
+          for p in sorted(x for x in root.rglob('*') if x.is_file()):
+              if p == out: continue
+              h=hashlib.sha256()
+              with p.open('rb') as f:
+                  for b in iter(lambda:f.read(1024*1024), b''): h.update(b)
+              rows.append(f"{h.hexdigest()}  {p.relative_to(root).as_posix()}")
+          assert rows
+          out.write_text('\n'.join(rows)+'\n', encoding='utf-8')
+          print('hashed',len(rows),'files')
+          PY
+      - name: Independent readback
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, os, pathlib
+          root=pathlib.Path(os.environ['DEST'])
+          lines=(root/'SOURCE_SHA256SUMS.txt').read_text(encoding='utf-8').splitlines()
+          assert lines
+          for line in lines:
+              digest, rel=line.split('  ',1)
+              p=root/rel
+              assert p.is_file(), rel
+              h=hashlib.sha256(p.read_bytes()).hexdigest()
+              assert h == digest, rel
+          print('READBACK_PASS',len(lines))
+          PY
+      - name: Commit repaired manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "$DEST/SOURCE_SHA256SUMS.txt"
+          git diff --cached --quiet && { echo 'No hash delta'; exit 0; }
+          git commit -m "fix: materialize Orca SHA256 provenance manifest"
+          git pull --rebase origin main
+          git push origin HEAD:main
