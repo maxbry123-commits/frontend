@@ -1,0 +1,44 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Caret",
+  "source_repo": "precious112/caret-desktop",
+  "source_ref": "HEAD",
+  "source_url": "https://github.com/precious112/caret-desktop",
+  "zip_url": "https://codeload.github.com/precious112/caret-desktop/zip/refs/heads/main",
+  "source_commit": "pending-api-readback",
+  "source_bytes": 13141480,
+  "source_files": 473,
+  "bundle_bytes": 10207816,
+  "bundle_sha256": "4b77d8448e199ade36bff1d4d3fdd5b4072d05013010413337604ca6ec69bd73",
+  "parts": [
+    {
+      "name": "Caret.bundle.zip.part-0001",
+      "bytes": 10207816,
+      "sha256": "4b77d8448e199ade36bff1d4d3fdd5b4072d05013010413337604ca6ec69bd73"
+    }
+  ],
+  "part_size_limit_bytes": 12582912,
+  "reconstruction_verified": true,
+  "extraction_verified": true,
+  "extracted_tree": {
+    "bytes": 13141480,
+    "files": 473,
+    "sha256": "1a5f489c4028d38be01fac2f41583b4989d75837741962caef849c23c3a43aa7"
+  },
+  "source_tree": {
+    "bytes": 13141480,
+    "files": 473,
+    "sha256": "1a5f489c4028d38be01fac2f41583b4989d75837741962caef849c23c3a43aa7"
+  },
+  "product": {
+    "name": "caret",
+    "version": "0.1.3",
+    "license": "Apache-2.0"
+  },
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "status": "LOCAL_VERIFIED_PENDING_BLOB_PUBLISH",
+  "dest_root": "componentes open soure fromtend/Caret",
+  "fabrica_zip_dest": "fabrica de UI INTERFACE fromtend/componentes para fabrica de interface/01-canvas-editor/",
+  "notes": "ZIP 9.8MB / 473 files verified on Grok box. Binary part not yet in git (no GH_TOKEN on box). Text staging via GitHub MCP."
+}

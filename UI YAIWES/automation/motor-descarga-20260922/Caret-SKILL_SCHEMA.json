@@ -1,0 +1,17 @@
+{
+  "schema": "yaiwes.skill-schema.v1",
+  "slug": "Caret",
+  "source_repo": "precious112/caret-desktop",
+  "product": {
+    "name": "caret",
+    "version": "0.1.3",
+    "license": "Apache-2.0"
+  },
+  "skills_count": 0,
+  "skills": [],
+  "readme_excerpt_chars": 11046,
+  "status": "LOCAL_VERIFIED_PENDING_BLOB_PUBLISH",
+  "generated_at": "2026-09-22T15:56:18Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY text publish",
+  "note": "Binary zip LOCAL_VERIFIED_PENDING_BLOB_PUBLISH"
+}

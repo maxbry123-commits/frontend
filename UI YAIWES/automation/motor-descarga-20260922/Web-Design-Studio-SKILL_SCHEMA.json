@@ -1,0 +1,36 @@
+{
+  "schema": "yaiwes.skill-schema.v1",
+  "slug": "Web-Design-Studio",
+  "source_repo": "MustBeSimo/web-design-studio",
+  "skills_count": 4,
+  "skills": [
+    {
+      "id": "cinematic-scroll",
+      "name": "cinematic-scroll",
+      "path": ".codex/skills/cinematic-scroll/SKILL.md",
+      "body_chars": 2301
+    },
+    {
+      "id": "cinematic-scroll",
+      "name": "cinematic-scroll",
+      "path": ".cursor/skills/cinematic-scroll/SKILL.md",
+      "body_chars": 2301
+    },
+    {
+      "id": "",
+      "name": "",
+      "path": "SKILL.md",
+      "body_chars": 7551
+    },
+    {
+      "id": "cinematic-scroll",
+      "name": "cinematic-scroll",
+      "path": "skills/cinematic-scroll/SKILL.md",
+      "body_chars": 6398
+    }
+  ],
+  "generated_at": "2026-09-22T15:56:18Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY text publish",
+  "note": "Binary zip retained local-only",
+  "source_commit": "c8b99b171c7c1f8c5ebb9fb6962d26769f015ab5"
+}

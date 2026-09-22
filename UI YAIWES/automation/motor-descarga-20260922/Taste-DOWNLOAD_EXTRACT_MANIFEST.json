@@ -4,6 +4,7 @@
   "product": "skill",
   "source_repo": "Leonxlnx/taste-skill",
   "source_ref": "HEAD",
+  "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
   "source_url": "https://github.com/Leonxlnx/taste-skill",
   "zip_url": "https://codeload.github.com/Leonxlnx/taste-skill/zip/refs/heads/main",
   "source_bytes": 3118728,
@@ -17,21 +18,23 @@
       "sha256": "140b066c1605b49465042b7ef274fc5af9b727416cfc1453f60a1ff70a4742e2"
     }
   ],
+  "part_size_limit_bytes": 12582912,
   "reconstruction_verified": true,
   "extraction_verified": true,
   "extracted_tree": {
     "files": 65,
     "bytes": 3118728,
-    "sha256": "aaed193f236177e5eea47af9a1c6a0c4f0f2ef5e7f12042434e859a110b0342b"
+    "sha256": "163f70d548879295db0fba9fc70084e67eb64cc4ca00abad9615dfbf8848d4bb"
   },
   "source_tree": {
     "files": 65,
     "bytes": 3118728,
-    "sha256": "aaed193f236177e5eea47af9a1c6a0c4f0f2ef5e7f12042434e859a110b0342b"
+    "sha256": "163f70d548879295db0fba9fc70084e67eb64cc4ca00abad9615dfbf8848d4bb"
   },
-  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Taste",
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "dest_root": "componentes open soure fromtend/Taste",
+  "fabrica_zip_dest": "fabrica de UI INTERFACE fromtend/componentes para fabrica de interface/skills/",
   "status": "LOCAL_VERIFIED_PENDING_BLOB_PUBLISH",
-  "skill_schema_path": "UI YAIWES/automation/motor-descarga-20260922/Taste-SKILL_SCHEMA.json",
-  "watchdog_run": "2026-09-22T12:43Z Motor de descarga",
-  "notes": "REUSE COPY_ONLY via codeload. Skills converted to schema. Binary zip staged locally; text schema/manifest for GitHub MCP publish."
+  "notes": "COPY_ONLY codeload GitHub zip (not engine re-zip). Tree hash via hf_download_extract_engine.tree_hash on inner extract folder (taste-skill-main/)."
 }
