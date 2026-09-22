@@ -1,0 +1,25 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Caret",
+  "source_repo": "precious112/caret-desktop",
+  "source_ref": "HEAD",
+  "source_commit": "pending-api-readback",
+  "source_url": "https://github.com/precious112/caret-desktop",
+  "zip_url": "https://codeload.github.com/precious112/caret-desktop/zip/refs/heads/main",
+  "bundle_bytes": 10207816,
+  "bundle_sha256": "4b77d8448e199ade",
+  "source_files": 473,
+  "extraction_verified": true,
+  "reconstruction_verified": true,
+  "parts": [
+    {
+      "name": "Caret.bundle.zip.part-0001",
+      "bytes": 10207816,
+      "sha256": "pending-full-sha-in-STAGING-RECEIPT"
+    }
+  ],
+  "status": "LOCAL_VERIFIED_PENDING_BLOB_PUBLISH",
+  "dest_root": "📂componentes open soure fromtend/Caret",
+  "fabrica_zip_dest": "fabrica de UI INTERFACE fromtend/componentes para fabrica de interface/01-canvas-editor/",
+  "notes": "ZIP descargado y extraído en box Grok (473 files). Publicación del blob .part pendiente: sin GH_TOKEN en box; conector GitHub MCP OK para texto."
+}
