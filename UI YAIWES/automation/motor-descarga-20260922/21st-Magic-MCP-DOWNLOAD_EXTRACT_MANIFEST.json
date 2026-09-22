@@ -1,0 +1,38 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "21st-Magic-MCP",
+  "product": "mcp",
+  "source_repo": "21st-dev/magic-mcp",
+  "source_ref": "HEAD",
+  "source_commit": "6b5299e8a83ceffa73d4fc4e148905bb3eeeeb55",
+  "source_url": "https://github.com/21st-dev/magic-mcp",
+  "zip_url": "https://codeload.github.com/21st-dev/magic-mcp/zip/refs/heads/main",
+  "source_bytes": 56571,
+  "source_files": 21,
+  "bundle_bytes": 30948,
+  "bundle_sha256": "31a78229c2fde60182e31c07d02639a75698822c2c124fa606e1917d3e9413be",
+  "parts": [
+    {
+      "name": "21st-Magic-MCP.bundle.zip.part-0001",
+      "bytes": 30948,
+      "sha256": "31a78229c2fde60182e31c07d02639a75698822c2c124fa606e1917d3e9413be"
+    }
+  ],
+  "reconstruction_verified": true,
+  "extraction_verified": true,
+  "extracted_tree": {
+    "files": 21,
+    "bytes": 56571,
+    "sha256": "c609aca287ec401685a58fc7de127971e0dbd6e45d3efae262cdd29af36698fb"
+  },
+  "source_tree": {
+    "files": 21,
+    "bytes": 56571,
+    "sha256": "c609aca287ec401685a58fc7de127971e0dbd6e45d3efae262cdd29af36698fb"
+  },
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/21st-Magic-MCP",
+  "status": "LOCAL_VERIFIED_PENDING_BLOB_PUBLISH",
+  "skill_schema_path": "UI YAIWES/componentes open soure UI YAIWES/21st-Magic-MCP/SKILL_SCHEMA.json",
+  "watchdog_run": "2026-09-22T14:00Z Motor de descarga",
+  "notes": "REUSE COPY_ONLY via codeload. Skills converted to schema. Binary zip staged locally; text schema/manifest for GitHub MCP publish."
+}
