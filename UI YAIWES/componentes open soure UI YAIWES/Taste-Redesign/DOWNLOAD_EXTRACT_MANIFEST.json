@@ -14,8 +14,11 @@
   "files": 1,
   "bytes": 15060,
   "file_sha256": "98ad3e5b051bfb71b2795f7e8a6aa0d32b51ee095606c098a4b2822ac07926c9",
-  "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+  "status": "TEXT_STAGED_FULL_BODY",
   "extraction_verified": true,
   "reconstruction_verified": true,
-  "notes": "Excerpted COPY_ONLY from Taste donor; not regenerated."
+  "notes": "Excerpted COPY_ONLY from Taste donor; not regenerated.",
+  "full_body_file": "skills/redesign-skill/SKILL.md",
+  "full_body_bytes": 15060,
+  "full_body_sha256": "98ad3e5b051bfb71b2795f7e8a6aa0d32b51ee095606c098a4b2822ac07926c9"
 }
