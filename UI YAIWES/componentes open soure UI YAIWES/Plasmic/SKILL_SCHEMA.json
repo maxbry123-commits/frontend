@@ -1,0 +1,10 @@
+{
+  "schema": "yaiwes.skill-schema.v1",
+  "slug": "Plasmic",
+  "source_repo": "plasmicapp/plasmic",
+  "source_commit": "7b7c4712399503a7e1fa9f2012299a9da2528074",
+  "skills_count": 1,
+  "skills": [{"id": "plasmic-designer", "name": "plasmic-designer", "description": "Build and modify Plasmic Studio designs using copilot tools via Chrome DevTools MCP.", "body_chars": 9330, "path": "ai/skills/plasmic-designer/SKILL.md", "body_sha256": "9805de0aa5f087700b661b3d105eaad226e6b23ffb6c631ddb4dca76c58176ef"}],
+  "generated_at": "2026-09-22T16:55:39Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY text publish"
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "yaiwes.skill-schema.v1",
+  "slug": "Webstudio",
+  "source_repo": "webstudio-is/webstudio",
+  "source_commit": "d50652591576457a9fa49db3ce52bbf8100cbedc",
+  "skills_count": 0,
+  "skills": [],
+  "generated_at": "2026-09-22T16:55:39Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY text publish"
+}
