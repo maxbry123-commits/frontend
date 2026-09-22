@@ -1,0 +1,18 @@
+{
+  "schema": "yaiwes.skill-schema.v1",
+  "slug": "Design-to-Code",
+  "source_repo": "JPeetz/agent-skills",
+  "source_commit": "3f0e3daf55b5f8a954b5e022395c19628453027c",
+  "skills_count": 1,
+  "skills": [
+    {
+      "id": "design-to-code",
+      "name": "design-to-code",
+      "description": ">",
+      "body_chars": 32171,
+      "path": "skills/frontend/design-to-code/SKILL.md"
+    }
+  ],
+  "generated_at": "2026-09-22T14:59:33Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY text publish"
+}

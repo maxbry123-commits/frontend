@@ -1,0 +1,530 @@
+{
+  "schema": "yaiwes.skill-schema.v1",
+  "slug": "Awesome-Design",
+  "source_repo": "VoltAgent/awesome-design-md",
+  "source_commit": "f6961238d5cddcf8042a74a70fc400ec67181abb",
+  "skills_count": 74,
+  "skills": [
+    {
+      "id": "airbnb",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for airbnb from VoltAgent/awesome-design-md.",
+      "body_chars": 30296,
+      "path": "design-md/airbnb/DESIGN.md"
+    },
+    {
+      "id": "airtable",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for airtable from VoltAgent/awesome-design-md.",
+      "body_chars": 35042,
+      "path": "design-md/airtable/DESIGN.md"
+    },
+    {
+      "id": "apple",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for apple from VoltAgent/awesome-design-md.",
+      "body_chars": 36812,
+      "path": "design-md/apple/DESIGN.md"
+    },
+    {
+      "id": "binance",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for binance from VoltAgent/awesome-design-md.",
+      "body_chars": 39650,
+      "path": "design-md/binance/DESIGN.md"
+    },
+    {
+      "id": "bmw",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for bmw from VoltAgent/awesome-design-md.",
+      "body_chars": 27648,
+      "path": "design-md/bmw/DESIGN.md"
+    },
+    {
+      "id": "bmw-m",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for bmw-m from VoltAgent/awesome-design-md.",
+      "body_chars": 30463,
+      "path": "design-md/bmw-m/DESIGN.md"
+    },
+    {
+      "id": "bugatti",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for bugatti from VoltAgent/awesome-design-md.",
+      "body_chars": 28342,
+      "path": "design-md/bugatti/DESIGN.md"
+    },
+    {
+      "id": "cal",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for cal from VoltAgent/awesome-design-md.",
+      "body_chars": 30940,
+      "path": "design-md/cal/DESIGN.md"
+    },
+    {
+      "id": "claude",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for claude from VoltAgent/awesome-design-md.",
+      "body_chars": 33346,
+      "path": "design-md/claude/DESIGN.md"
+    },
+    {
+      "id": "clay",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for clay from VoltAgent/awesome-design-md.",
+      "body_chars": 25531,
+      "path": "design-md/clay/DESIGN.md"
+    },
+    {
+      "id": "clickhouse",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for clickhouse from VoltAgent/awesome-design-md.",
+      "body_chars": 25810,
+      "path": "design-md/clickhouse/DESIGN.md"
+    },
+    {
+      "id": "cohere",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for cohere from VoltAgent/awesome-design-md.",
+      "body_chars": 20020,
+      "path": "design-md/cohere/DESIGN.md"
+    },
+    {
+      "id": "coinbase",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for coinbase from VoltAgent/awesome-design-md.",
+      "body_chars": 25663,
+      "path": "design-md/coinbase/DESIGN.md"
+    },
+    {
+      "id": "composio",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for composio from VoltAgent/awesome-design-md.",
+      "body_chars": 20458,
+      "path": "design-md/composio/DESIGN.md"
+    },
+    {
+      "id": "cursor",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for cursor from VoltAgent/awesome-design-md.",
+      "body_chars": 21617,
+      "path": "design-md/cursor/DESIGN.md"
+    },
+    {
+      "id": "dell-1996",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for dell-1996 from VoltAgent/awesome-design-md.",
+      "body_chars": 34302,
+      "path": "design-md/dell-1996/DESIGN.md"
+    },
+    {
+      "id": "elevenlabs",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for elevenlabs from VoltAgent/awesome-design-md.",
+      "body_chars": 20781,
+      "path": "design-md/elevenlabs/DESIGN.md"
+    },
+    {
+      "id": "expo",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for expo from VoltAgent/awesome-design-md.",
+      "body_chars": 21468,
+      "path": "design-md/expo/DESIGN.md"
+    },
+    {
+      "id": "ferrari",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for ferrari from VoltAgent/awesome-design-md.",
+      "body_chars": 24181,
+      "path": "design-md/ferrari/DESIGN.md"
+    },
+    {
+      "id": "figma",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for figma from VoltAgent/awesome-design-md.",
+      "body_chars": 32149,
+      "path": "design-md/figma/DESIGN.md"
+    },
+    {
+      "id": "framer",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for framer from VoltAgent/awesome-design-md.",
+      "body_chars": 28953,
+      "path": "design-md/framer/DESIGN.md"
+    },
+    {
+      "id": "hashicorp",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for hashicorp from VoltAgent/awesome-design-md.",
+      "body_chars": 27848,
+      "path": "design-md/hashicorp/DESIGN.md"
+    },
+    {
+      "id": "hp",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for hp from VoltAgent/awesome-design-md.",
+      "body_chars": 36068,
+      "path": "design-md/hp/DESIGN.md"
+    },
+    {
+      "id": "ibm",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for ibm from VoltAgent/awesome-design-md.",
+      "body_chars": 26324,
+      "path": "design-md/ibm/DESIGN.md"
+    },
+    {
+      "id": "intercom",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for intercom from VoltAgent/awesome-design-md.",
+      "body_chars": 23144,
+      "path": "design-md/intercom/DESIGN.md"
+    },
+    {
+      "id": "kraken",
+      "name": "Design System Inspired by Kraken",
+      "description": "Design system / brand reference DESIGN.md for kraken from VoltAgent/awesome-design-md.",
+      "body_chars": 4336,
+      "path": "design-md/kraken/DESIGN.md"
+    },
+    {
+      "id": "lamborghini",
+      "name": "Design System Inspired by Lamborghini",
+      "description": "Design system / brand reference DESIGN.md for lamborghini from VoltAgent/awesome-design-md.",
+      "body_chars": 20938,
+      "path": "design-md/lamborghini/DESIGN.md"
+    },
+    {
+      "id": "linear.app",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for linear.app from VoltAgent/awesome-design-md.",
+      "body_chars": 24201,
+      "path": "design-md/linear.app/DESIGN.md"
+    },
+    {
+      "id": "lovable",
+      "name": "Design System Inspired by Lovable",
+      "description": "Design system / brand reference DESIGN.md for lovable from VoltAgent/awesome-design-md.",
+      "body_chars": 17284,
+      "path": "design-md/lovable/DESIGN.md"
+    },
+    {
+      "id": "mastercard",
+      "name": "Design System Inspired by Mastercard",
+      "description": "Design system / brand reference DESIGN.md for mastercard from VoltAgent/awesome-design-md.",
+      "body_chars": 26799,
+      "path": "design-md/mastercard/DESIGN.md"
+    },
+    {
+      "id": "meta",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for meta from VoltAgent/awesome-design-md.",
+      "body_chars": 37783,
+      "path": "design-md/meta/DESIGN.md"
+    },
+    {
+      "id": "minimax",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for minimax from VoltAgent/awesome-design-md.",
+      "body_chars": 37725,
+      "path": "design-md/minimax/DESIGN.md"
+    },
+    {
+      "id": "mintlify",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for mintlify from VoltAgent/awesome-design-md.",
+      "body_chars": 43867,
+      "path": "design-md/mintlify/DESIGN.md"
+    },
+    {
+      "id": "miro",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for miro from VoltAgent/awesome-design-md.",
+      "body_chars": 36376,
+      "path": "design-md/miro/DESIGN.md"
+    },
+    {
+      "id": "mistral.ai",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for mistral.ai from VoltAgent/awesome-design-md.",
+      "body_chars": 35311,
+      "path": "design-md/mistral.ai/DESIGN.md"
+    },
+    {
+      "id": "mongodb",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for mongodb from VoltAgent/awesome-design-md.",
+      "body_chars": 31943,
+      "path": "design-md/mongodb/DESIGN.md"
+    },
+    {
+      "id": "nike",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for nike from VoltAgent/awesome-design-md.",
+      "body_chars": 36428,
+      "path": "design-md/nike/DESIGN.md"
+    },
+    {
+      "id": "nintendo-2001",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for nintendo-2001 from VoltAgent/awesome-design-md.",
+      "body_chars": 38662,
+      "path": "design-md/nintendo-2001/DESIGN.md"
+    },
+    {
+      "id": "notion",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for notion from VoltAgent/awesome-design-md.",
+      "body_chars": 35028,
+      "path": "design-md/notion/DESIGN.md"
+    },
+    {
+      "id": "nvidia",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for nvidia from VoltAgent/awesome-design-md.",
+      "body_chars": 35377,
+      "path": "design-md/nvidia/DESIGN.md"
+    },
+    {
+      "id": "ollama",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for ollama from VoltAgent/awesome-design-md.",
+      "body_chars": 32505,
+      "path": "design-md/ollama/DESIGN.md"
+    },
+    {
+      "id": "opencode.ai",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for opencode.ai from VoltAgent/awesome-design-md.",
+      "body_chars": 32395,
+      "path": "design-md/opencode.ai/DESIGN.md"
+    },
+    {
+      "id": "pinterest",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for pinterest from VoltAgent/awesome-design-md.",
+      "body_chars": 36125,
+      "path": "design-md/pinterest/DESIGN.md"
+    },
+    {
+      "id": "playstation",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for playstation from VoltAgent/awesome-design-md.",
+      "body_chars": 39463,
+      "path": "design-md/playstation/DESIGN.md"
+    },
+    {
+      "id": "posthog",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for posthog from VoltAgent/awesome-design-md.",
+      "body_chars": 40138,
+      "path": "design-md/posthog/DESIGN.md"
+    },
+    {
+      "id": "raycast",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for raycast from VoltAgent/awesome-design-md.",
+      "body_chars": 40919,
+      "path": "design-md/raycast/DESIGN.md"
+    },
+    {
+      "id": "renault",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for renault from VoltAgent/awesome-design-md.",
+      "body_chars": 29834,
+      "path": "design-md/renault/DESIGN.md"
+    },
+    {
+      "id": "replicate",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for replicate from VoltAgent/awesome-design-md.",
+      "body_chars": 31256,
+      "path": "design-md/replicate/DESIGN.md"
+    },
+    {
+      "id": "resend",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for resend from VoltAgent/awesome-design-md.",
+      "body_chars": 31211,
+      "path": "design-md/resend/DESIGN.md"
+    },
+    {
+      "id": "revolut",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for revolut from VoltAgent/awesome-design-md.",
+      "body_chars": 31776,
+      "path": "design-md/revolut/DESIGN.md"
+    },
+    {
+      "id": "runwayml",
+      "name": "Design System Inspired by Runway",
+      "description": "Design system / brand reference DESIGN.md for runwayml from VoltAgent/awesome-design-md.",
+      "body_chars": 14225,
+      "path": "design-md/runwayml/DESIGN.md"
+    },
+    {
+      "id": "sanity",
+      "name": "Design System Inspired by Sanity",
+      "description": "Design system / brand reference DESIGN.md for sanity from VoltAgent/awesome-design-md.",
+      "body_chars": 21231,
+      "path": "design-md/sanity/DESIGN.md"
+    },
+    {
+      "id": "sentry",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for sentry from VoltAgent/awesome-design-md.",
+      "body_chars": 35196,
+      "path": "design-md/sentry/DESIGN.md"
+    },
+    {
+      "id": "shopify",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for shopify from VoltAgent/awesome-design-md.",
+      "body_chars": 26884,
+      "path": "design-md/shopify/DESIGN.md"
+    },
+    {
+      "id": "slack",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for slack from VoltAgent/awesome-design-md.",
+      "body_chars": 24350,
+      "path": "design-md/slack/DESIGN.md"
+    },
+    {
+      "id": "spacex",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for spacex from VoltAgent/awesome-design-md.",
+      "body_chars": 19517,
+      "path": "design-md/spacex/DESIGN.md"
+    },
+    {
+      "id": "spotify",
+      "name": "Design System Inspired by Spotify",
+      "description": "Design system / brand reference DESIGN.md for spotify from VoltAgent/awesome-design-md.",
+      "body_chars": 12845,
+      "path": "design-md/spotify/DESIGN.md"
+    },
+    {
+      "id": "starbucks",
+      "name": "Design System Inspired by Starbucks",
+      "description": "Design system / brand reference DESIGN.md for starbucks from VoltAgent/awesome-design-md.",
+      "body_chars": 37051,
+      "path": "design-md/starbucks/DESIGN.md"
+    },
+    {
+      "id": "stripe",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for stripe from VoltAgent/awesome-design-md.",
+      "body_chars": 24441,
+      "path": "design-md/stripe/DESIGN.md"
+    },
+    {
+      "id": "supabase",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for supabase from VoltAgent/awesome-design-md.",
+      "body_chars": 21155,
+      "path": "design-md/supabase/DESIGN.md"
+    },
+    {
+      "id": "superhuman",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for superhuman from VoltAgent/awesome-design-md.",
+      "body_chars": 21704,
+      "path": "design-md/superhuman/DESIGN.md"
+    },
+    {
+      "id": "tesla",
+      "name": "Design System Inspired by Tesla",
+      "description": "Design system / brand reference DESIGN.md for tesla from VoltAgent/awesome-design-md.",
+      "body_chars": 22070,
+      "path": "design-md/tesla/DESIGN.md"
+    },
+    {
+      "id": "theverge",
+      "name": "Design System Inspired by The Verge",
+      "description": "Design system / brand reference DESIGN.md for theverge from VoltAgent/awesome-design-md.",
+      "body_chars": 28057,
+      "path": "design-md/theverge/DESIGN.md"
+    },
+    {
+      "id": "together.ai",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for together.ai from VoltAgent/awesome-design-md.",
+      "body_chars": 38087,
+      "path": "design-md/together.ai/DESIGN.md"
+    },
+    {
+      "id": "uber",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for uber from VoltAgent/awesome-design-md.",
+      "body_chars": 34529,
+      "path": "design-md/uber/DESIGN.md"
+    },
+    {
+      "id": "vercel",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for vercel from VoltAgent/awesome-design-md.",
+      "body_chars": 41105,
+      "path": "design-md/vercel/DESIGN.md"
+    },
+    {
+      "id": "vodafone",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for vodafone from VoltAgent/awesome-design-md.",
+      "body_chars": 27923,
+      "path": "design-md/vodafone/DESIGN.md"
+    },
+    {
+      "id": "voltagent",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for voltagent from VoltAgent/awesome-design-md.",
+      "body_chars": 25739,
+      "path": "design-md/voltagent/DESIGN.md"
+    },
+    {
+      "id": "warp",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for warp from VoltAgent/awesome-design-md.",
+      "body_chars": 24267,
+      "path": "design-md/warp/DESIGN.md"
+    },
+    {
+      "id": "webflow",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for webflow from VoltAgent/awesome-design-md.",
+      "body_chars": 27966,
+      "path": "design-md/webflow/DESIGN.md"
+    },
+    {
+      "id": "wired",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for wired from VoltAgent/awesome-design-md.",
+      "body_chars": 23490,
+      "path": "design-md/wired/DESIGN.md"
+    },
+    {
+      "id": "wise",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for wise from VoltAgent/awesome-design-md.",
+      "body_chars": 24391,
+      "path": "design-md/wise/DESIGN.md"
+    },
+    {
+      "id": "x.ai",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for x.ai from VoltAgent/awesome-design-md.",
+      "body_chars": 21606,
+      "path": "design-md/x.ai/DESIGN.md"
+    },
+    {
+      "id": "zapier",
+      "name": "Overview",
+      "description": "Design system / brand reference DESIGN.md for zapier from VoltAgent/awesome-design-md.",
+      "body_chars": 22817,
+      "path": "design-md/zapier/DESIGN.md"
+    }
+  ],
+  "skills_total": 74,
+  "generated_at": "2026-09-22T14:59:33Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY text publish"
+}

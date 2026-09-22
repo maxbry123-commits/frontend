@@ -1,0 +1,24 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Design-to-Code",
+  "product": "skill",
+  "source_repo": "JPeetz/agent-skills",
+  "source_ref": "HEAD",
+  "source_commit": "3f0e3daf55b5f8a954b5e022395c19628453027c",
+  "source_url": "https://github.com/JPeetz/agent-skills",
+  "zip_url": "https://codeload.github.com/JPeetz/agent-skills/zip/refs/heads/main",
+  "path_filter": "skills/frontend/design-to-code/",
+  "source_bytes": 85752,
+  "source_files": 6,
+  "extraction_verified": true,
+  "reconstruction_verified": true,
+  "extracted_tree": {
+    "sha256": "89874451e133799c900ec03e04b27e79d0a07f05e50dc2b12171c62470a4905b",
+    "files": 6,
+    "bytes": 85752
+  },
+  "no_lfs": true,
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Design-to-Code",
+  "status": "TEXT_SCHEMA_PUBLISH_READY",
+  "notes": "COPY_ONLY design-to-code skill path."
+}

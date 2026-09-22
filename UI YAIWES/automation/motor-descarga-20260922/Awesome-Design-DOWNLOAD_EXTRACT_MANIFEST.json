@@ -1,0 +1,24 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Awesome-Design",
+  "product": "design-md-catalog",
+  "source_repo": "VoltAgent/awesome-design-md",
+  "source_ref": "HEAD",
+  "source_commit": "f6961238d5cddcf8042a74a70fc400ec67181abb",
+  "source_url": "https://github.com/VoltAgent/awesome-design-md",
+  "zip_url": "https://codeload.github.com/VoltAgent/awesome-design-md/zip/refs/heads/main",
+  "path_filter": "design-md/",
+  "source_bytes": 2165423,
+  "source_files": 147,
+  "extraction_verified": true,
+  "reconstruction_verified": true,
+  "extracted_tree": {
+    "sha256": "fff77949d2b93a6ce0c3c56dbf93e5fa14409dc98c3a2d54b2d8ab97ee6ff2a9",
+    "files": 147,
+    "bytes": 2165423
+  },
+  "no_lfs": true,
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Awesome-Design",
+  "status": "TEXT_SCHEMA_PUBLISH_READY",
+  "notes": "COPY_ONLY design-md catalog; schema maps DESIGN.md brands as reusable design references."
+}
