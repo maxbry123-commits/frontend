@@ -1,0 +1,16 @@
+{
+  "schema": "yaiwes.skill-schema.v1",
+  "slug": "Web-Design-Guidelines",
+  "source_repo": "vercel-labs/agent-skills",
+  "skills_count": 1,
+  "skills": [
+    {
+      "id": "web-design-guidelines",
+      "name": "web-design-guidelines",
+      "description": "Review UI code for Web Interface Guidelines compliance.",
+      "body_chars": 916,
+      "path": "skills/web-design-guidelines/SKILL.md"
+    }
+  ],
+  "generated_at": "2026-09-22T14:00:00Z"
+}
