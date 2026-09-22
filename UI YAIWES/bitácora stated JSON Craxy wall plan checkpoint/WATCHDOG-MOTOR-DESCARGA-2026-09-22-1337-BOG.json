@@ -1,0 +1,98 @@
+{
+  "schema": "yaiwes.watchdog.motor-descarga.v1",
+  "routine": "Motor de descarga",
+  "fired_at_utc": "2026-09-22T18:45:03.206Z",
+  "reported_at_bogota": "2026-09-22T13:45:03-05:00",
+  "repo": "maxbry123-commits/frontend",
+  "branch": "main",
+  "state": {
+    "STATUS": "ACTIVE_LOOP",
+    "STATE_status": "ACTIVE_LOOP_NOT_CLOSED",
+    "GATE": "T1_FACTORY_FRONTEND",
+    "T2": "BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
+    "next_node": "WAIT_FOR_SOL6_F_UI_051_AND_SOL8_F_UI_061_REPORTS_THEN_RUN_F_UI_062_INDEPENDENT_REVIEW",
+    "FREE_nodes": [
+      "N17-FULL-PRODUCT-E2E",
+      "N27-CONTINUOUS-LOOP"
+    ],
+    "CLAIMED": [
+      "N32-GUEST-INSTALLER-VERIFICATION"
+    ],
+    "BLOCKED": [
+      "N31-UI-FINAL"
+    ],
+    "CHECKPOINT": "UIYAIWES-N04-RECONCILIATION-2026-09-13T0717Z"
+  },
+  "action_taken": {
+    "type": "REUSE_DOWNLOAD_AND_SKILL_SCHEMA",
+    "donors": [
+      {
+        "slug": "Taste-Output",
+        "status": "TEXT_STAGED_FULL_SKILL_PUBLISHED",
+        "skills": 1,
+        "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+        "source_repo": "Leonxlnx/taste-skill",
+        "source_path": "skills/output-skill/SKILL.md",
+        "parent_donor": "Taste",
+        "bytes": 2592,
+        "commit": "42dbf81a7b42fbc8a863801fa671f45bee3eb70c"
+      },
+      {
+        "slug": "Taste-Brutalist",
+        "status": "TEXT_STAGED_FULL_SKILL_PUBLISHED",
+        "skills": 1,
+        "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+        "source_repo": "Leonxlnx/taste-skill",
+        "source_path": "skills/brutalist-skill/SKILL.md",
+        "parent_donor": "Taste",
+        "bytes": 8456,
+        "commit": "cb8fec5b524f55d53e68167b67672d0f972b4368"
+      },
+      {
+        "slug": "Taste-Minimalist",
+        "status": "TEXT_STAGED_FULL_SKILL_PUBLISHED",
+        "skills": 1,
+        "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+        "source_repo": "Leonxlnx/taste-skill",
+        "source_path": "skills/minimalist-skill/SKILL.md",
+        "parent_donor": "Taste",
+        "bytes": 7901,
+        "commit": "548439dec9ed2b7024455c9a63dca9d03d0f9bf4"
+      }
+    ],
+    "dest": "UI YAIWES/componentes open soure UI YAIWES/{Taste-Output,Taste-Brutalist,Taste-Minimalist} + automation/bitácora",
+    "evidence": [
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Output/DOWNLOAD_EXTRACT_MANIFEST.json",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Output/SKILL_SCHEMA.json",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Output/skills/output-skill/SKILL.md",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Brutalist/DOWNLOAD_EXTRACT_MANIFEST.json",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Brutalist/SKILL_SCHEMA.json",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Brutalist/skills/brutalist-skill/SKILL.md",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Minimalist/DOWNLOAD_EXTRACT_MANIFEST.json",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Minimalist/SKILL_SCHEMA.json",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Minimalist/skills/minimalist-skill/SKILL.md",
+      "UI YAIWES/automation/motor-descarga-20260922/WATCHDOG-RUN-1337-BOG.json",
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/WATCHDOG-MOTOR-DESCARGA-2026-09-22-1337-BOG.json"
+    ]
+  },
+  "pending_donors_still_queued": [],
+  "taste_siblings_remaining": [
+    "gpt-tasteskill",
+    "soft-skill",
+    "stitch-skill",
+    "redesign-skill",
+    "brandkit",
+    "taste-skill-v1",
+    "imagegen-frontend-web",
+    "imagegen-frontend-mobile",
+    "taste-skill"
+  ],
+  "gaps": [
+    "Binary zip/blob publish blocked without GH_TOKEN on box (LOCAL_VERIFIED_PENDING_BLOB_PUBLISH)",
+    "E2E_BROWSER_RUN_NOT_EXECUTED — no PASS sin browser log + reviewer",
+    "T2 blocked until T1 source revalidated",
+    "Image-to-Code full SKILL.md body still local-only (36KB); SKILL.STAGED.md pointer+sha published"
+  ],
+  "verdict": "PROGRESS_PARTIAL",
+  "note": "Excerpted 3 Taste sibling skills (Output/Brutalist/Minimalist) COPY_ONLY with full SKILL.md published via GitHub MCP. REUSE>GENERATE DONOR_STAGING_ONLY. Image-to-Code 36KB body still pending."
+}
