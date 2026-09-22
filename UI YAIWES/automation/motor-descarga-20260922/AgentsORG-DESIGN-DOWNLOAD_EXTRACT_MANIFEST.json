@@ -1,0 +1,15 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "AgentsORG-DESIGN",
+  "source_repo": "AgentsORG/DESIGN",
+  "source_ref": "HEAD",
+  "source_url": "https://github.com/AgentsORG/DESIGN",
+  "zip_url": "https://codeload.github.com/AgentsORG/DESIGN/zip/refs/heads/main",
+  "source_commit": "014a1864c641f8e9792ed76de93c95493489dd8c",
+  "bundle_bytes": 221677,
+  "bundle_sha256": "13262a04bf9d4813ee612054304b195e00b12e06b5c5557e10fb4b1f968829f8",
+  "skills_count": 1,
+  "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+  "generated_at": "2026-09-22T15:56:18Z",
+  "rule": "REUSE > GENERATE; COPY_ONLY"
+}
