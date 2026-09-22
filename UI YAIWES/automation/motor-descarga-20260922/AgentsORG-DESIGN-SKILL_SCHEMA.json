@@ -1,0 +1,19 @@
+{
+  "schema": "yaiwes.skill-schema.v1",
+  "slug": "AgentsORG-DESIGN",
+  "source_repo": "AgentsORG/DESIGN",
+  "source_commit": "014a1864c641f8e9792ed76de93c95493489dd8c",
+  "skills_count": 1,
+  "skills": [
+    {
+      "id": "design",
+      "name": "design",
+      "description": ">",
+      "body_chars": 10878,
+      "path": "skills/design/SKILL.md",
+      "body_sha256": "a6ebbfe5d44f5709f53b3797134e42814d44b85207821d8cd75c0b4aa80af625"
+    }
+  ],
+  "generated_at": "2026-09-22T15:56:18Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY text publish"
+}
