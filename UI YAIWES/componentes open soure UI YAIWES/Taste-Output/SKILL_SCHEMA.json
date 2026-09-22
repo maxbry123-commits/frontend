@@ -1,0 +1,25 @@
+{
+  "schema": "yaiwes.skill-to-schema.v1",
+  "slug": "Taste-Output",
+  "source_repo": "Leonxlnx/taste-skill",
+  "source_path": "skills/output-skill/SKILL.md",
+  "source_ref": "main",
+  "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+  "source_url": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/output-skill/SKILL.md",
+  "parent_donor": "Taste",
+  "downloaded_at": "2026-09-22T18:40:00Z",
+  "watchdog": "Motor de descarga",
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Taste-Output",
+  "reuse_rule": "REUSE > GENERATE / COPY_ONLY / DONOR_STAGING_ONLY",
+  "skills_count": 1,
+  "skills": [
+    {
+      "id": "output-skill",
+      "path": "skills/output-skill/SKILL.md",
+      "name": "full-output-enforcement",
+      "description": "Overrides default LLM truncation behavior. Enforces complete code generation, bans placeholder patterns, and handles token-limit splits cleanly. Apply to any task requiring exhaustive, unabridged output.",
+      "body_sha256": "e5bf48b1ae561511439cf71672209a10a88cee0968cc925909ff861dfa0a96a7",
+      "bytes": 2592
+    }
+  ]
+}
