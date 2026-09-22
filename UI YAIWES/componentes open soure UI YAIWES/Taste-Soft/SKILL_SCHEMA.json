@@ -1,0 +1,25 @@
+{
+  "schema": "yaiwes.skill-to-schema.v1",
+  "slug": "Taste-Soft",
+  "source_repo": "Leonxlnx/taste-skill",
+  "source_path": "skills/soft-skill/SKILL.md",
+  "source_ref": "main",
+  "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+  "source_url": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/soft-skill/SKILL.md",
+  "parent_donor": "Taste",
+  "downloaded_at": "2026-09-22T19:40:00Z",
+  "watchdog": "Motor de descarga",
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Taste-Soft",
+  "reuse_rule": "REUSE > GENERATE / COPY_ONLY / DONOR_STAGING_ONLY",
+  "skills_count": 1,
+  "skills": [
+    {
+      "id": "soft-skill",
+      "path": "skills/soft-skill/SKILL.md",
+      "name": "high-end-visual-design",
+      "description": "Teaches the AI to design like a high-end agency. Defines the exact fonts, spacing, shadows, card structures, and animations that make a website feel expensive. Blocks all the common defaults that make AI designs look cheap or generic.",
+      "body_sha256": "e1e32f5e2d420872c6c7332b53d5ff7721946766b78c4822b424c2d512c8fdbc",
+      "bytes": 10561
+    }
+  ]
+}
