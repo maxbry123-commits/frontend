@@ -1,0 +1,21 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Taste-Redesign",
+  "product": "skill-excerpt",
+  "source_repo": "Leonxlnx/taste-skill",
+  "source_path": "skills/redesign-skill/SKILL.md",
+  "source_ref": "HEAD",
+  "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+  "source_url": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/redesign-skill/SKILL.md",
+  "parent_donor": "Taste",
+  "reuse_rule": "REUSE > GENERATE / COPY_ONLY / DONOR_STAGING_ONLY",
+  "watchdog": "Motor de descarga",
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Taste-Redesign",
+  "files": 1,
+  "bytes": 15060,
+  "file_sha256": "98ad3e5b051bfb71b2795f7e8a6aa0d32b51ee095606c098a4b2822ac07926c9",
+  "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+  "extraction_verified": true,
+  "reconstruction_verified": true,
+  "notes": "Excerpted COPY_ONLY from Taste donor; not regenerated."
+}
