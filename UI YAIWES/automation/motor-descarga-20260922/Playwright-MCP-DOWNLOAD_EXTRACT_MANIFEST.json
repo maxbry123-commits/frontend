@@ -1,0 +1,13 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Playwright-MCP",
+  "source_repo": "microsoft/playwright",
+  "source_path": "docs/src/getting-started-mcp.md",
+  "source_url": "https://github.com/microsoft/playwright/blob/main/docs/src/getting-started-mcp.md",
+  "bundle_bytes": 10581,
+  "bundle_sha256": "80778b32fe034221693761c08c4f0ffcd433eb616b976715c3df8fc77aa7b0eb",
+  "skills_count": 1,
+  "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+  "generated_at": "2026-09-22T15:56:18Z",
+  "rule": "REUSE > GENERATE; COPY_ONLY"
+}

@@ -1,0 +1,18 @@
+{
+  "schema": "yaiwes.skill-schema.v1",
+  "slug": "Playwright-MCP",
+  "source_repo": "microsoft/playwright",
+  "skills_count": 1,
+  "skills": [
+    {
+      "id": "playwright-mcp",
+      "name": "playwright-mcp",
+      "description": "Playwright MCP getting started documentation for browser automation via Model Context Protocol.",
+      "body_chars": 10571,
+      "path": "docs/src/getting-started-mcp.md",
+      "body_sha256": "80778b32fe034221693761c08c4f0ffcd433eb616b976715c3df8fc77aa7b0eb"
+    }
+  ],
+  "generated_at": "2026-09-22T15:56:18Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY text publish"
+}
