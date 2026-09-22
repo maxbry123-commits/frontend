@@ -1,0 +1,29 @@
+{
+  "schema": "yaiwes.skill-to-schema.v1",
+  "slug": "Image-to-Code",
+  "source_repo": "Leonxlnx/taste-skill",
+  "source_ref": "HEAD",
+  "source_url": "https://github.com/Leonxlnx/taste-skill",
+  "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+  "downloaded_at": "2026-09-22T17:48:43Z",
+  "watchdog": "Motor de descarga",
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Image-to-Code",
+  "reuse_rule": "REUSE > GENERATE / COPY_ONLY",
+  "parent_donor": "Taste",
+  "skills_count": 1,
+  "skills": [
+    {
+      "id": "image-to-code-skill",
+      "path": "skills/image-to-code-skill/SKILL.md",
+      "name": "image-to-code",
+      "description": "Elite website image-to-code skill for Codex. For visually important web tasks, it must first generate the design image(s) itself, deeply analyze them, then implement the website to match them as closely as possible. In Codex, it must prefer large, readable, section-specific images instead of tiny compressed boards, generate fresh standalone images for sections or detail views instead of cropping old ones, avoid lazy under-generation, avoid cards-inside-cards-inside-cards UI, and keep the hero cl",
+      "body_sha256": "4c060a8064a8b13380bc2ef3d6e6a1d0b1e316aa093cd9807d0ce9e4eeb037fa",
+      "bytes": 36442
+    }
+  ],
+  "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+  "publish": {
+    "mode": "text_excerpt_mcp",
+    "binary_blob": false
+  }
+}
