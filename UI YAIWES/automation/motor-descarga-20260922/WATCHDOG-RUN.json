@@ -1,0 +1,37 @@
+{
+  "schema": "yaiwes.watchdog.motor-descarga.v1",
+  "routine": "Motor de descarga",
+  "fired_at_utc": "2026-09-22T12:43:44Z",
+  "reported_at_bogota": "2026-09-22T07:45:00-05:00",
+  "repo": "maxbry123-commits/frontend",
+  "branch": "main",
+  "state": {
+    "STATUS": "ACTIVE_LOOP",
+    "GATE": "T1_FACTORY_FRONTEND",
+    "T2": "BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
+    "next_node": "WAIT_FOR_SOL6_F_UI_051_AND_SOL8_F_UI_061_REPORTS_THEN_RUN_F_UI_062_INDEPENDENT_REVIEW",
+    "STATE_status": "ACTIVE_LOOP_NOT_CLOSED",
+    "FREE_nodes": ["N17-FULL-PRODUCT-E2E", "N27-CONTINUOUS-LOOP"],
+    "CLAIMED": ["N32-GUEST-INSTALLER-VERIFICATION"],
+    "BLOCKED": ["N31-UI-FINAL"]
+  },
+  "action_taken": {
+    "type": "REUSE_DOWNLOAD_AND_SKILL_SCHEMA",
+    "donor": "Taste",
+    "source_repo": "Leonxlnx/taste-skill",
+    "skills_count": 13,
+    "skill_ids": ["brandkit", "brutalist-skill", "gpt-tasteskill", "image-to-code-skill", "imagegen-frontend-mobile", "imagegen-frontend-web", "minimalist-skill", "output-skill", "redesign-skill", "soft-skill", "stitch-skill", "taste-skill", "taste-skill-v1"],
+    "dest": "UI YAIWES/componentes open soure UI YAIWES/Taste",
+    "evidence": [
+      "UI YAIWES/automation/motor-descarga-20260922/Taste-DOWNLOAD_EXTRACT_MANIFEST.json",
+      "UI YAIWES/automation/motor-descarga-20260922/Taste-SKILL_SCHEMA.json"
+    ]
+  },
+  "pending_donors_still_queued": ["Caret", "Onlook", "Plasmic", "Webstudio", "HyperFrames", "Playwright MCP", "UI/UX Pro Max"],
+  "gaps": [
+    "Binary zip/blob publish blocked without GH_TOKEN on box (Caret/Onlook/Taste LOCAL_VERIFIED_PENDING_BLOB_PUBLISH)",
+    "E2E_BROWSER_RUN_NOT_EXECUTED — no PASS sin browser log + reviewer",
+    "T2 blocked until T1 source revalidated"
+  ],
+  "verdict": "PROGRESS_PARTIAL"
+}
