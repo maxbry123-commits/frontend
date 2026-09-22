@@ -1,0 +1,26 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Web-Design-Studio",
+  "source_repo": "MustBeSimo/web-design-studio",
+  "source_url": "https://github.com/MustBeSimo/web-design-studio",
+  "zip_url": "https://codeload.github.com/MustBeSimo/web-design-studio/zip/refs/heads/main",
+  "bundle_bytes": 397104352,
+  "bundle_sha256": "585ea5578294dcabdcb7bef3836178bdf55d965dddbfc30e68e6a558d1355652",
+  "zip_entries": 1074,
+  "text_excerpts": 31,
+  "excerpts": [
+    {"path": ".codex/skills/cinematic-scroll/SKILL.md", "bytes": 2301, "sha256": "c998cb96097f3de457c40365a4e4ab759d412e942c0df18b0dfeb0be3d03b5a8"},
+    {"path": ".cursor/skills/cinematic-scroll/SKILL.md", "bytes": 2301, "sha256": "c998cb96097f3de457c40365a4e4ab759d412e942c0dfeb0be3d03b5a8"},
+    {"path": "LICENSE", "bytes": 1072, "sha256": "ceba299cf2d6817db51387dcf32ef5086f64c9750aae3b415d61c9bbcde94a4c"},
+    {"path": "README.md", "bytes": 20544, "sha256": "20b41da4c935f72b104d1e974e97a4c7460f00025e772940641ab538ca2ca99f"},
+    {"path": "SKILL.md", "bytes": 7551, "sha256": "4bdfe498e380f11e649c7d72353208fd5b0886abd00c0465aacb707a2e7872b0"},
+    {"path": "package.json", "bytes": 6061, "sha256": "e93a117bf525136665ce5775c4cb0c464b0d2ee1eb4de61453de9206d44d74ca"},
+    {"path": "skills/cinematic-scroll/SKILL.md", "bytes": 6398, "sha256": "09b005c4f590acb35880fb1619ee90dadbf42ac4facad82ef1fadd498dfa9942"}
+  ],
+  "status": "TEXT_CORE_STAGED_BINARY_LOCAL",
+  "notes": "Core text (manifest/schema/SKILL) published via Motor. Full zip ~379MB remains local-only (LOCAL_VERIFIED_PENDING_BLOB_PUBLISH).",
+  "generated_at": "2026-09-22T19:47:00Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY",
+  "source_commit": "c8b99b171c7c1f8c5ebb9fb6962d26769f015ab5",
+  "watchdog": "Motor de descarga"
+}
