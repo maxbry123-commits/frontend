@@ -1,0 +1,21 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Taste-Stitch",
+  "product": "skill-excerpt",
+  "source_repo": "Leonxlnx/taste-skill",
+  "source_path": "skills/stitch-skill/SKILL.md",
+  "source_ref": "HEAD",
+  "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+  "source_url": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/stitch-skill/SKILL.md",
+  "parent_donor": "Taste",
+  "reuse_rule": "REUSE > GENERATE / COPY_ONLY / DONOR_STAGING_ONLY",
+  "watchdog": "Motor de descarga",
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Taste-Stitch",
+  "files": 2,
+  "bytes": 11851,
+  "file_sha256": "46bdb08fee2dded38b6ba0a051230a502d6ac6e4044afd47592cb40c256028b5",
+  "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+  "extraction_verified": true,
+  "reconstruction_verified": true,
+  "notes": "Excerpted COPY_ONLY from Taste donor; not regenerated."
+}
