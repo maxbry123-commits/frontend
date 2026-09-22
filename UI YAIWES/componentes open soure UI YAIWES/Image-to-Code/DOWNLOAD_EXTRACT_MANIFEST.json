@@ -1,1 +1,22 @@
-PLACEHOLDER
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Image-to-Code",
+  "product": "skill-excerpt",
+  "source_repo": "Leonxlnx/taste-skill",
+  "source_path": "skills/image-to-code-skill/SKILL.md",
+  "source_ref": "HEAD",
+  "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+  "source_url": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/image-to-code-skill/SKILL.md",
+  "parent_donor": "Taste",
+  "parent_manifest": "/workspace/DONOR_STAGING/Taste/DOWNLOAD_EXTRACT_MANIFEST.json",
+  "reuse_rule": "REUSE > GENERATE / COPY_ONLY / DONOR_STAGING_ONLY",
+  "watchdog": "Motor de descarga",
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Image-to-Code",
+  "files": 1,
+  "bytes": 36442,
+  "file_sha256": "4c060a8064a8b13380bc2ef3d6e6a1d0b1e316aa093cd9807d0ce9e4eeb037fa",
+  "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+  "extraction_verified": true,
+  "reconstruction_verified": true,
+  "notes": "Excerpted COPY_ONLY from already-verified Taste donor extract; not regenerated."
+}
