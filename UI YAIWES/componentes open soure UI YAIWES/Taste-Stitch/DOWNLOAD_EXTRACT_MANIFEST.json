@@ -14,8 +14,11 @@
   "files": 2,
   "bytes": 11851,
   "file_sha256": "46bdb08fee2dded38b6ba0a051230a502d6ac6e4044afd47592cb40c256028b5",
-  "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+  "status": "TEXT_STAGED_FULL_BODY",
   "extraction_verified": true,
   "reconstruction_verified": true,
-  "notes": "Excerpted COPY_ONLY from Taste donor; not regenerated."
+  "notes": "Excerpted COPY_ONLY from Taste donor; not regenerated.",
+  "full_body_file": "skills/stitch-skill/DESIGN.md",
+  "full_body_bytes": 12053,
+  "full_body_sha256": "0ab6740c4ebb1966dbceddb823a66d4bf027e960efbd73faca56cbf8370ae2ad"
 }
