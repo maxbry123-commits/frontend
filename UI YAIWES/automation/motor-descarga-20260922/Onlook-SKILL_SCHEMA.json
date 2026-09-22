@@ -1,0 +1,10 @@
+{
+  "schema": "yaiwes.skill-schema.v1",
+  "slug": "Onlook",
+  "source_repo": "onlook-dev/onlook",
+  "source_commit": "423e2e924366419e418ee049093872d535eea41a",
+  "skills_count": 0,
+  "skills": [],
+  "generated_at": "2026-09-22T16:54:40Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY text publish"
+}
