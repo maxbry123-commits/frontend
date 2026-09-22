@@ -1,0 +1,44 @@
+{
+  "schema": "yaiwes.watchdog.motor-descarga.v1",
+  "routine": "Motor de descarga",
+  "fired_at_utc": "2026-09-22T15:53:27Z",
+  "reported_at_bogota": "2026-09-22T10:56:41-05:00",
+  "repo": "maxbry123-commits/frontend",
+  "branch": "main",
+  "state": {
+    "STATUS": "ACTIVE_LOOP",
+    "STATE_status": "ACTIVE_LOOP_NOT_CLOSED",
+    "GATE": "T1_FACTORY_FRONTEND",
+    "T2": "BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
+    "next_node": "WAIT_FOR_SOL6_F_UI_051_AND_SOL8_F_UI_061_REPORTS_THEN_RUN_F_UI_062_INDEPENDENT_REVIEW",
+    "FREE_nodes": ["N17-FULL-PRODUCT-E2E", "N27-CONTINUOUS-LOOP"],
+    "CLAIMED": ["N32-GUEST-INSTALLER-VERIFICATION"],
+    "BLOCKED": ["N31-UI-FINAL"]
+  },
+  "action_taken": {
+    "type": "REUSE_DOWNLOAD_AND_SKILL_SCHEMA",
+    "donors": [
+      {"slug": "Frontend-Design-Codex", "source_repo": "dachent/skills", "skills_count": 1, "source_commit": "2e133e356a11214cd9c31f479ec021625f2df571"},
+      {"slug": "AgentsORG-DESIGN", "source_repo": "AgentsORG/DESIGN", "skills_count": 1, "source_commit": "014a1864c641f8e9792ed76de93c95493489dd8c"},
+      {"slug": "Emil-Kowalski-skills", "source_repo": "emilkowalski/skills", "skills_count": 13, "source_commit": "85e8e2363b713506e1d5b6e07a0eb2da66be1bc3"},
+      {"slug": "Playwright-MCP", "source_repo": "microsoft/playwright", "path": "docs/src/getting-started-mcp.md", "skills_count": 1},
+      {"slug": "Web-Design-Studio", "source_repo": "MustBeSimo/web-design-studio", "skills_count": 4, "note": "text excerpts only; ~379MB zip LOCAL_VERIFIED_PENDING_BLOB_PUBLISH", "source_commit": "c8b99b171c7c1f8c5ebb9fb6962d26769f015ab5"},
+      {"slug": "Caret", "source_repo": "precious112/caret-desktop", "skills_count": 0, "note": "text staging of LOCAL_VERIFIED manifest/README"},
+      {"slug": "Taste", "source_repo": "Leonxlnx/taste-skill", "skills_count": 13, "note": "text schema staging; binary still pending blob"}
+    ],
+    "dest": "UI YAIWES/componentes open soure UI YAIWES/{Frontend-Design-Codex,AgentsORG-DESIGN,Emil-Kowalski-skills,Playwright-MCP,Web-Design-Studio,Caret,Taste} + automation/motor-descarga-20260922/",
+    "evidence": [
+      "UI YAIWES/automation/motor-descarga-20260922/WATCHDOG-RUN-1053-BOG.json",
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/WATCHDOG-MOTOR-DESCARGA-2026-09-22-1053-BOG.json"
+    ]
+  },
+  "pending_donors_still_queued": ["Onlook", "Plasmic", "Webstudio", "HyperFrames"],
+  "local_verified_pending_blob": ["Caret", "Onlook", "Taste", "UI-UX-Pro-Max", "21st-Magic-MCP", "Impeccable", "Web-Design-Studio"],
+  "gaps": [
+    "Binary zip/blob publish blocked without GH_TOKEN on box (LOCAL_VERIFIED_PENDING_BLOB_PUBLISH)",
+    "E2E_BROWSER_RUN_NOT_EXECUTED — no PASS sin browser log + reviewer",
+    "T2 blocked until T1 source revalidated",
+    "STATE.json no encontrado en Astra (STATE leído desde bitácoras/PENDIENTES)"
+  ],
+  "verdict": "PROGRESS_PARTIAL"
+}
