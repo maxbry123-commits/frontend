@@ -1,0 +1,9 @@
+{
+  "generated_at": "2026-09-22T16:55:57Z",
+  "donors": [
+    {"slug": "Onlook", "status": "LOCAL_VERIFIED_PENDING_BLOB_PUBLISH", "skills": 0, "source_commit": "423e2e924366419e418ee049093872d535eea41a", "source_repo": "onlook-dev/onlook", "bundle_bytes": 19251828, "source_files": 1695, "text_excerpt_files": 80},
+    {"slug": "HyperFrames", "status": "TEXT_STAGED_DONOR_STAGING_ONLY", "skills": 24, "source_commit": "0945de83c7f51ba0c20c7c0a56421f066a378ee8", "source_repo": "heygen-com/hyperframes", "bundle_bytes": 130394155, "source_files": 7934, "text_excerpt_files": 389},
+    {"slug": "Webstudio", "status": "TEXT_STAGED_DONOR_STAGING_ONLY", "skills": 0, "source_commit": "d50652591576457a9fa49db3ce52bbf8100cbedc", "source_repo": "webstudio-is/webstudio", "bundle_bytes": 66306491, "source_files": 4332, "text_excerpt_files": 50},
+    {"slug": "Plasmic", "status": "TEXT_STAGED_DONOR_STAGING_ONLY", "skills": 1, "source_commit": "7b7c4712399503a7e1fa9f2012299a9da2528074", "source_repo": "plasmicapp/plasmic", "bundle_bytes": 81799877, "source_files": 7742, "text_excerpt_files": 50}
+  ]
+}
