@@ -1,0 +1,19 @@
+{
+  "schema": "yaiwes.skill-schema.v1",
+  "slug": "Frontend-Design-Codex",
+  "source_repo": "dachent/skills",
+  "source_commit": "2e133e356a11214cd9c31f479ec021625f2df571",
+  "skills_count": 1,
+  "skills": [
+    {
+      "id": "frontend-design-codex",
+      "name": "frontend-design-codex",
+      "description": "Use when Codex is building, revising, or reviewing a frontend UI, web app screen, responsive layout, component surface, dashboard view, form flow, visual system, or no-template product interface that needs visual polish, accessibility, screenshots, or browser QA.",
+      "body_chars": 3348,
+      "path": "frontend-design-codex/SKILL.md",
+      "body_sha256": "65ef40be778e0d06bfe2d43157fe32e9117a29cd9e665b16b589ca03c4b20065"
+    }
+  ],
+  "generated_at": "2026-09-22T15:56:18Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY text publish"
+}
