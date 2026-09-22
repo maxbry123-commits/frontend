@@ -1,0 +1,15 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Frontend-Design-Codex",
+  "source_repo": "dachent/skills",
+  "source_ref": "HEAD",
+  "source_url": "https://github.com/dachent/skills",
+  "zip_url": "https://codeload.github.com/dachent/skills/zip/refs/heads/main",
+  "source_commit": "2e133e356a11214cd9c31f479ec021625f2df571",
+  "bundle_bytes": 1430858,
+  "bundle_sha256": "9984fa0a74baa9a569d50ffff4cf036f85956e908715fe75c75879fea2652716",
+  "skills_count": 1,
+  "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+  "generated_at": "2026-09-22T15:56:18Z",
+  "rule": "REUSE > GENERATE; COPY_ONLY"
+}
