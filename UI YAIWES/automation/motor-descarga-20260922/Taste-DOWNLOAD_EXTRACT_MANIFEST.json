@@ -1,0 +1,37 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Taste",
+  "product": "skill",
+  "source_repo": "Leonxlnx/taste-skill",
+  "source_ref": "HEAD",
+  "source_url": "https://github.com/Leonxlnx/taste-skill",
+  "zip_url": "https://codeload.github.com/Leonxlnx/taste-skill/zip/refs/heads/main",
+  "source_bytes": 3118728,
+  "source_files": 65,
+  "bundle_bytes": 2844179,
+  "bundle_sha256": "140b066c1605b49465042b7ef274fc5af9b727416cfc1453f60a1ff70a4742e2",
+  "parts": [
+    {
+      "name": "Taste.bundle.zip.part-0001",
+      "bytes": 2844179,
+      "sha256": "140b066c1605b49465042b7ef274fc5af9b727416cfc1453f60a1ff70a4742e2"
+    }
+  ],
+  "reconstruction_verified": true,
+  "extraction_verified": true,
+  "extracted_tree": {
+    "files": 65,
+    "bytes": 3118728,
+    "sha256": "aaed193f236177e5eea47af9a1c6a0c4f0f2ef5e7f12042434e859a110b0342b"
+  },
+  "source_tree": {
+    "files": 65,
+    "bytes": 3118728,
+    "sha256": "aaed193f236177e5eea47af9a1c6a0c4f0f2ef5e7f12042434e859a110b0342b"
+  },
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Taste",
+  "status": "LOCAL_VERIFIED_PENDING_BLOB_PUBLISH",
+  "skill_schema_path": "UI YAIWES/automation/motor-descarga-20260922/Taste-SKILL_SCHEMA.json",
+  "watchdog_run": "2026-09-22T12:43Z Motor de descarga",
+  "notes": "REUSE COPY_ONLY via codeload. Skills converted to schema. Binary zip staged locally; text schema/manifest for GitHub MCP publish."
+}
