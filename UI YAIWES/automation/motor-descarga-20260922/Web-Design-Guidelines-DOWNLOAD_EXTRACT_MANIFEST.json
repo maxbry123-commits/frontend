@@ -1,0 +1,25 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Web-Design-Guidelines",
+  "product": "skill",
+  "source_repo": "vercel-labs/agent-skills",
+  "source_ref": "main",
+  "source_path": "skills/web-design-guidelines/SKILL.md",
+  "source_url": "https://github.com/vercel-labs/agent-skills/blob/main/skills/web-design-guidelines/SKILL.md",
+  "source_bytes": 1231,
+  "source_files": 1,
+  "bundle_bytes": 1231,
+  "bundle_sha256": "f4647ca866a3accf763777f83e7682954f0187cd6bea7eea0399796652414e8f",
+  "parts": [],
+  "reconstruction_verified": true,
+  "extraction_verified": true,
+  "extracted_tree": {
+    "files": 1,
+    "bytes": 1231,
+    "sha256": "f4647ca866a3accf763777f83e7682954f0187cd6bea7eea0399796652414e8f"
+  },
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Web-Design-Guidelines",
+  "status": "LOCAL_VERIFIED_TEXT_READY",
+  "watchdog_run": "2026-09-22T14:00Z Motor de descarga",
+  "notes": "Single-file skill COPY_ONLY from vercel-labs/agent-skills raw."
+}
