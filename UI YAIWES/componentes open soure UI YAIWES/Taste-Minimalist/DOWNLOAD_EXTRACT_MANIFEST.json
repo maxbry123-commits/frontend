@@ -1,0 +1,21 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Taste-Minimalist",
+  "product": "skill-excerpt",
+  "source_repo": "Leonxlnx/taste-skill",
+  "source_path": "skills/minimalist-skill/SKILL.md",
+  "source_ref": "HEAD",
+  "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+  "source_url": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/minimalist-skill/SKILL.md",
+  "parent_donor": "Taste",
+  "reuse_rule": "REUSE > GENERATE / COPY_ONLY / DONOR_STAGING_ONLY",
+  "watchdog": "Motor de descarga",
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Taste-Minimalist",
+  "files": 1,
+  "bytes": 7901,
+  "file_sha256": "36bc7328f085405f43b476938e62460fa573bf7e984e949e072bcf014831a44c",
+  "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+  "extraction_verified": true,
+  "reconstruction_verified": true,
+  "notes": "Excerpted COPY_ONLY from already-verified Taste donor extract; not regenerated."
+}
