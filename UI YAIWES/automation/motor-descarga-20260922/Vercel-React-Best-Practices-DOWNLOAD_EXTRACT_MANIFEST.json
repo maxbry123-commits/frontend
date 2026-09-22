@@ -1,0 +1,24 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Vercel-React-Best-Practices",
+  "product": "skill",
+  "source_repo": "vercel-labs/agent-skills",
+  "source_ref": "HEAD",
+  "source_commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+  "source_url": "https://github.com/vercel-labs/agent-skills",
+  "zip_url": "https://codeload.github.com/vercel-labs/agent-skills/zip/refs/heads/main",
+  "path_filter": "skills/react-best-practices/",
+  "source_bytes": 230383,
+  "source_files": 76,
+  "extraction_verified": true,
+  "reconstruction_verified": true,
+  "extracted_tree": {
+    "sha256": "741c320ab924f3d033c763574c1a166e4318454937dce6e10015f0230830a6bf",
+    "files": 76,
+    "bytes": 230383
+  },
+  "no_lfs": true,
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Vercel-React-Best-Practices",
+  "status": "TEXT_SCHEMA_PUBLISH_READY",
+  "notes": "COPY_ONLY subset path skills/react-best-practices from vercel-labs/agent-skills; REUSE>GENERATE; DONOR_STAGING_ONLY text publish (no full monorepo blob)."
+}

@@ -1,0 +1,24 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Anthropic-Frontend-Design",
+  "product": "skill",
+  "source_repo": "anthropics/skills",
+  "source_ref": "HEAD",
+  "source_commit": "34040c9c568585f6929bedeaad110ad08f079624",
+  "source_url": "https://github.com/anthropics/skills",
+  "zip_url": "https://codeload.github.com/anthropics/skills/zip/refs/heads/main",
+  "path_filter": "skills/frontend-design/",
+  "source_bytes": 19564,
+  "source_files": 2,
+  "extraction_verified": true,
+  "reconstruction_verified": true,
+  "extracted_tree": {
+    "sha256": "89a6e59de80320a32e8b4c597a329ef3c503f624a2e68874bb0475dfb66dbf4b",
+    "files": 2,
+    "bytes": 19564
+  },
+  "no_lfs": true,
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Anthropic-Frontend-Design",
+  "status": "TEXT_SCHEMA_PUBLISH_READY",
+  "notes": "COPY_ONLY subset path skills/frontend-design from anthropics/skills."
+}
