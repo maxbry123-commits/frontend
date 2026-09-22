@@ -1,0 +1,47 @@
+{
+  "schema": "yaiwes.watchdog.motor-descarga.v1",
+  "routine": "Motor de descarga",
+  "fired_at_utc": "2026-09-22T19:39:36.118Z",
+  "reported_at_bogota": "2026-09-22T14:49:36-05:00",
+  "repo": "maxbry123-commits/frontend",
+  "branch": "main",
+  "state": {
+    "STATUS": "ACTIVE_LOOP",
+    "STATE_status": "ACTIVE_LOOP_NOT_CLOSED",
+    "GATE": "T1_FACTORY_FRONTEND",
+    "T2": "BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
+    "next_node": "WAIT_FOR_SOL6_F_UI_051_AND_SOL8_F_UI_061_REPORTS_THEN_RUN_F_UI_062_INDEPENDENT_REVIEW",
+    "FREE_nodes": ["N17-FULL-PRODUCT-E2E", "N27-CONTINUOUS-LOOP"],
+    "CLAIMED": ["N32-GUEST-INSTALLER-VERIFICATION"],
+    "BLOCKED": ["N31-UI-FINAL"],
+    "CHECKPOINT": "UIYAIWES-N04-RECONCILIATION-2026-09-13T0717Z"
+  },
+  "action_taken": {
+    "type": "REUSE_DOWNLOAD_AND_SKILL_SCHEMA",
+    "donors": [
+      {"slug": "Taste-Soft", "status": "TEXT_STAGED_FULL_SKILL_PUBLISHED", "skills": 1, "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684", "source_repo": "Leonxlnx/taste-skill", "source_path": "skills/soft-skill/SKILL.md", "parent_donor": "Taste", "bytes": 10561, "commit": "e2106d88f697df8551cdff310b622496a1e37e60"},
+      {"slug": "Taste-Stitch", "status": "TEXT_STAGED_FULL_SKILL_PARTIAL_DESIGN", "skills": 1, "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684", "source_repo": "Leonxlnx/taste-skill", "source_path": "skills/stitch-skill/SKILL.md", "parent_donor": "Taste", "bytes": 11851, "commit": "41d19be2bc6a0259cff847f05177d71f1412fb1f", "note": "DESIGN.md staged as DESIGN.STAGED.md pointer"},
+      {"slug": "Taste-Redesign", "status": "TEXT_STAGED_SCHEMA_PLUS_POINTER", "skills": 1, "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684", "source_repo": "Leonxlnx/taste-skill", "source_path": "skills/redesign-skill/SKILL.md", "parent_donor": "Taste", "bytes": 15060, "commit": "ea7bf8c6802a0788ef4317a4d6be96ddc2ec4918", "note": "SKILL.STAGED.md pointer; full body local"},
+      {"slug": "Web-Design-Studio", "status": "TEXT_CORE_STAGED", "skills": 1, "source_commit": "c8b99b171c7c1f8c5ebb9fb6962d26769f015ab5", "source_repo": "MustBeSimo/web-design-studio", "parent_donor": null, "bytes": 7551, "commit": "cc3b40534afe4f3d50051a0271e173db5e9abfb4", "note": "manifest+schema+SKILL.md; zip ~379MB local-only"}
+    ],
+    "dest": "UI YAIWES/componentes open soure UI YAIWES/{Taste-Soft,Taste-Stitch,Taste-Redesign,Web-Design-Studio} + automation/bitácora",
+    "evidence": [
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Soft/skills/soft-skill/SKILL.md",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Stitch/skills/stitch-skill/SKILL.md",
+      "UI YAIWES/componentes open soure UI YAIWES/Web-Design-Studio/SKILL.md",
+      "UI YAIWES/automation/motor-descarga-20260922/WATCHDOG-RUN-1439-BOG.json",
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/WATCHDOG-MOTOR-DESCARGA-2026-09-22-1439-BOG.json"
+    ]
+  },
+  "pending_donors_still_queued": [],
+  "taste_siblings_remaining": ["gpt-tasteskill", "brandkit", "taste-skill-v1", "imagegen-frontend-web", "imagegen-frontend-mobile", "taste-skill", "Taste-Redesign full SKILL.md", "Taste-Stitch DESIGN.md full", "Image-to-Code full SKILL.md body"],
+  "gaps": [
+    "Binary zip/blob publish blocked without GH_TOKEN on box — Web-Design-Studio ~379MB",
+    "E2E_BROWSER_RUN_NOT_EXECUTED",
+    "T2 blocked until T1 source revalidated",
+    "Image-to-Code full SKILL.md body still local-only (36KB)",
+    "Taste-Redesign and Taste-Stitch DESIGN full bodies pending MCP publish"
+  ],
+  "verdict": "PROGRESS_PARTIAL",
+  "note": "Published Taste-Soft (full), Taste-Stitch (SKILL full + DESIGN staged), Taste-Redesign (schema+pointer), Web-Design-Studio core. REUSE>GENERATE DONOR_STAGING_ONLY."
+}
