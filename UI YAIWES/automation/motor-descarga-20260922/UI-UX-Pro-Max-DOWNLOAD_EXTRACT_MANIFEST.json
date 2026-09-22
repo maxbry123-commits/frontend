@@ -1,0 +1,38 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "UI-UX-Pro-Max",
+  "product": "skill",
+  "source_repo": "nextlevelbuilder/ui-ux-pro-max-skill",
+  "source_ref": "HEAD",
+  "source_commit": "dcc40ff5133ef78276117db0cc34e7b83cc8aeba",
+  "source_url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+  "zip_url": "https://codeload.github.com/nextlevelbuilder/ui-ux-pro-max-skill/zip/refs/heads/main",
+  "source_bytes": 21825622,
+  "source_files": 680,
+  "bundle_bytes": 8477504,
+  "bundle_sha256": "1e1b8ba108f4a4942815f582ad283fd3bca20760eef6d199ca478589c01797a2",
+  "parts": [
+    {
+      "name": "UI-UX-Pro-Max.bundle.zip.part-0001",
+      "bytes": 8477504,
+      "sha256": "1e1b8ba108f4a4942815f582ad283fd3bca20760eef6d199ca478589c01797a2"
+    }
+  ],
+  "reconstruction_verified": true,
+  "extraction_verified": true,
+  "extracted_tree": {
+    "files": 680,
+    "bytes": 21825622,
+    "sha256": "bbdfd327ccf534d9cb78b4a3717ac7c02ad9689269333f28070ca1a78a0b493c"
+  },
+  "source_tree": {
+    "files": 680,
+    "bytes": 21825622,
+    "sha256": "bbdfd327ccf534d9cb78b4a3717ac7c02ad9689269333f28070ca1a78a0b493c"
+  },
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/UI-UX-Pro-Max",
+  "status": "LOCAL_VERIFIED_PENDING_BLOB_PUBLISH",
+  "skill_schema_path": "UI YAIWES/componentes open soure UI YAIWES/UI-UX-Pro-Max/SKILL_SCHEMA.json",
+  "watchdog_run": "2026-09-22T14:00Z Motor de descarga",
+  "notes": "REUSE COPY_ONLY via codeload. Skills converted to schema. Binary zip staged locally; text schema/manifest for GitHub MCP publish."
+}
