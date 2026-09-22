@@ -1,0 +1,48 @@
+{
+  "schema": "yaiwes.watchdog.motor-descarga.v1",
+  "routine": "Motor de descarga",
+  "fired_at_utc": "2026-09-22T17:46:00.457Z",
+  "reported_at_bogota": "2026-09-22T12:49:06-05:00",
+  "repo": "maxbry123-commits/frontend",
+  "branch": "main",
+  "state": {
+    "STATUS": "ACTIVE_LOOP",
+    "STATE_status": "ACTIVE_LOOP_NOT_CLOSED",
+    "GATE": "T1_FACTORY_FRONTEND",
+    "T2": "BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
+    "next_node": "WAIT_FOR_SOL6_F_UI_051_AND_SOL8_F_UI_061_REPORTS_THEN_RUN_F_UI_062_INDEPENDENT_REVIEW",
+    "FREE_nodes": ["N17-FULL-PRODUCT-E2E", "N27-CONTINUOUS-LOOP"],
+    "CLAIMED": ["N32-GUEST-INSTALLER-VERIFICATION"],
+    "BLOCKED": ["N31-UI-FINAL"],
+    "CHECKPOINT": "UIYAIWES-N04-RECONCILIATION-2026-09-13T0717Z"
+  },
+  "action_taken": {
+    "type": "REUSE_DOWNLOAD_AND_SKILL_SCHEMA",
+    "donors": [{
+      "slug": "Image-to-Code",
+      "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+      "skills": 1,
+      "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+      "source_repo": "Leonxlnx/taste-skill",
+      "source_path": "skills/image-to-code-skill/SKILL.md",
+      "parent_donor": "Taste",
+      "bytes": 36442
+    }],
+    "dest": "UI YAIWES/componentes open soure UI YAIWES/Image-to-Code + automation/motor-descarga-20260922/",
+    "evidence": [
+      "UI YAIWES/componentes open soure UI YAIWES/Image-to-Code/SKILL_SCHEMA.json",
+      "UI YAIWES/automation/motor-descarga-20260922/WATCHDOG-RUN-1246-BOG.json",
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/WATCHDOG-MOTOR-DESCARGA-2026-09-22-1247-BOG.json"
+    ]
+  },
+  "pending_donors_still_queued": [],
+  "local_verified_pending_blob": ["Onlook", "Caret", "Taste", "UI-UX-Pro-Max", "21st-Magic-MCP", "Impeccable", "Web-Design-Studio", "HyperFrames", "Webstudio", "Plasmic", "Image-to-Code"],
+  "gaps": [
+    "Binary zip/blob publish blocked without GH_TOKEN on box (LOCAL_VERIFIED_PENDING_BLOB_PUBLISH)",
+    "E2E_BROWSER_RUN_NOT_EXECUTED — no PASS sin browser log + reviewer",
+    "T2 blocked until T1 source revalidated",
+    "Cola PENDIENTES 21: Image-to-Code was the last missing slug; excerpted COPY_ONLY from Taste this run"
+  ],
+  "verdict": "PROGRESS_PARTIAL",
+  "note": "Staged Image-to-Code skill excerpt from verified Taste donor. REUSE>GENERATE COPY_ONLY; DONOR_STAGING_ONLY text publish."
+}
