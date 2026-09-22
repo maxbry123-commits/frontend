@@ -11,30 +11,16 @@
   "source_files": 65,
   "bundle_bytes": 2844179,
   "bundle_sha256": "140b066c1605b49465042b7ef274fc5af9b727416cfc1453f60a1ff70a4742e2",
-  "parts": [
-    {
-      "name": "Taste.bundle.zip.part-0001",
-      "bytes": 2844179,
-      "sha256": "140b066c1605b49465042b7ef274fc5af9b727416cfc1453f60a1ff70a4742e2"
-    }
-  ],
+  "parts": [{"name":"Taste.bundle.zip.part-0001","bytes":2844179,"sha256":"140b066c1605b49465042b7ef274fc5af9b727416cfc1453f60a1ff70a4742e2"}],
   "part_size_limit_bytes": 12582912,
   "reconstruction_verified": true,
   "extraction_verified": true,
-  "extracted_tree": {
-    "files": 65,
-    "bytes": 3118728,
-    "sha256": "163f70d548879295db0fba9fc70084e67eb64cc4ca00abad9615dfbf8848d4bb"
-  },
-  "source_tree": {
-    "files": 65,
-    "bytes": 3118728,
-    "sha256": "163f70d548879295db0fba9fc70084e67eb64cc4ca00abad9615dfbf8848d4bb"
-  },
+  "extracted_tree": {"files":65,"bytes":3118728,"sha256":"163f70d548879295db0fba9fc70084e67eb64cc4ca00abad9615dfbf8848d4bb"},
+  "source_tree": {"files":65,"bytes":3118728,"sha256":"163f70d548879295db0fba9fc70084e67eb64cc4ca00abad9615dfbf8848d4bb"},
   "max_github_blob_bytes": 99614720,
   "no_lfs": true,
-  "dest_root": "componentes open soure fromtend/Taste",
+  "dest_root": "📂componentes open soure fromtend/Taste",
   "fabrica_zip_dest": "fabrica de UI INTERFACE fromtend/componentes para fabrica de interface/skills/",
   "status": "LOCAL_VERIFIED_PENDING_BLOB_PUBLISH",
-  "notes": "COPY_ONLY codeload GitHub zip (not engine re-zip). Tree hash via hf_download_extract_engine.tree_hash on inner extract folder (taste-skill-main/)."
+  "notes": "COPY_ONLY codeload GitHub zip (not engine re-zip). Tree hash via hf_download_extract_engine.tree_hash on inner extract folder (taste-skill-main/). code_tree_with_zip_prefix=e7ccb8060f0ca2c05f61bf01b9bc5d554aec9aade2e7454abbe828448fba9798."
 }

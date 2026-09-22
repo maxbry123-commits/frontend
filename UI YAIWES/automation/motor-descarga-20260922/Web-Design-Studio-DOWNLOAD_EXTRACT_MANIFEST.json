@@ -1,0 +1,173 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Web-Design-Studio",
+  "source_repo": "MustBeSimo/web-design-studio",
+  "source_url": "https://github.com/MustBeSimo/web-design-studio",
+  "zip_url": "https://codeload.github.com/MustBeSimo/web-design-studio/zip/refs/heads/main",
+  "bundle_bytes": 397104352,
+  "bundle_sha256": "585ea5578294dcabdcb7bef3836178bdf55d965dddbfc30e68e6a558d1355652",
+  "zip_entries": 1074,
+  "text_excerpts": 31,
+  "excerpts": [
+    {
+      "path": ".codex/skills/cinematic-scroll/SKILL.md",
+      "bytes": 2301,
+      "sha256": "c998cb96097f3de457c40365a4e4ab759d412e942c0df18b0dfeb0be3d03b5a8"
+    },
+    {
+      "path": ".cursor/skills/cinematic-scroll/SKILL.md",
+      "bytes": 2301,
+      "sha256": "c998cb96097f3de457c40365a4e4ab759d412e942c0df18b0dfeb0be3d03b5a8"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1072,
+      "sha256": "ceba299cf2d6817db51387dcf32ef5086f64c9750aae3b415d61c9bbcde94a4c"
+    },
+    {
+      "path": "README.md",
+      "bytes": 20544,
+      "sha256": "20b41da4c935f72b104d1e974e97a4c7460f00025e772940641ab538ca2ca99f"
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 7551,
+      "sha256": "4bdfe498e380f11e649c7d72353208fd5b0886abd00c0465aacb707a2e7872b0"
+    },
+    {
+      "path": "assets/examples-showreel/README.md",
+      "bytes": 1632,
+      "sha256": "c84466fefac6eeaf7f966ae6b432f9ffe1d245c01be34985dcc5f62b784d9cf3"
+    },
+    {
+      "path": "assets/promo-linkedin/README.md",
+      "bytes": 1875,
+      "sha256": "056a0e498ed9b9a3208b7a31da0390ac09036af6c056b5d9cbb67899da36e963"
+    },
+    {
+      "path": "assets/promo-v2.4.0/README.md",
+      "bytes": 2040,
+      "sha256": "c7ad940dd35381595dfe1e55d1f1871436f1484f6b246420857de5e2abcb55ee"
+    },
+    {
+      "path": "bench/skill-ab/v3-efficiency-taste/README.md",
+      "bytes": 1876,
+      "sha256": "1fce60d2067b2ba8a55e0c14dfcdb619d489d8346ba6bb56ffe31160e5f790e2"
+    },
+    {
+      "path": "bench/skill-ab/v4-forward/README.md",
+      "bytes": 2052,
+      "sha256": "a1ffceb50453f73e5861682b8d03c36237365a215de4dc9b364c6fbcdbecd1ee"
+    },
+    {
+      "path": "docs/skill-advantage/README.md",
+      "bytes": 4677,
+      "sha256": "0bd2c74b0d90f8121ba3ebbd59cc522c492f1e95bc2b4a88fff553825ab5065b"
+    },
+    {
+      "path": "evals/README.md",
+      "bytes": 2323,
+      "sha256": "71747a33a5edd8df667a0bd435f7a9aa2ecd70da6315acfe34924eab5c41fcfe"
+    },
+    {
+      "path": "examples/_surface-assets/README.md",
+      "bytes": 1679,
+      "sha256": "4272b8d3d7567a099460aa58b3bdf7e0b7318bc4bb9ae5e1d790baef6adc5e28"
+    },
+    {
+      "path": "examples/effects-lab/README.md",
+      "bytes": 998,
+      "sha256": "58c124a29de510e33d31586893e4e400e3113d8be6dfce58c70f0ac645eded16"
+    },
+    {
+      "path": "examples/flagship/README.md",
+      "bytes": 6273,
+      "sha256": "9ebe5ab0cf6d6549dc74bb4b5b14d7fde5a1d72eae904f5a7e82ed9e30e31e04"
+    },
+    {
+      "path": "examples/immersive/README.md",
+      "bytes": 3777,
+      "sha256": "2dc908e1c9c3addba60c460eefa8b463f799e79a2db4c7e5ad9ef93fdf003d28"
+    },
+    {
+      "path": "examples/kern-calibration/README.md",
+      "bytes": 3507,
+      "sha256": "76603cd97e38fb7c9ec6c362651371a1372807827ec27b3d78342227ccb1c27b"
+    },
+    {
+      "path": "examples/luxe/README.md",
+      "bytes": 4584,
+      "sha256": "951d01187ef82483d0de4d43f17116bf8cd7c59b803735560183bd0c4eb841a5"
+    },
+    {
+      "path": "examples/noir/README.md",
+      "bytes": 4352,
+      "sha256": "aaf2b7f53f49c0edaed86c8bf34da558c17b37acbdb28fe22287c38a8848ca0f"
+    },
+    {
+      "path": "examples/pop/README.md",
+      "bytes": 6225,
+      "sha256": "c20a036cf975590ca6723a74317bab28e7e3e7f6502579754dcc1e70a73a6826"
+    },
+    {
+      "path": "examples/renaissance/README.md",
+      "bytes": 3156,
+      "sha256": "a03e35da7d001fd99b59355caee054d95b91650c286b01c11691fb870999d2ce"
+    },
+    {
+      "path": "examples/studio/README.md",
+      "bytes": 4407,
+      "sha256": "ffab3709ccf8937b0e903bdb13fbf8790d5df7d3d49ec0687b43569b3e8fef30"
+    },
+    {
+      "path": "examples/v3-flagship/README.md",
+      "bytes": 4037,
+      "sha256": "53402d4fdfd8ab6c3fe790a5a625b9ca4229cf497e24c73195aee49187e6b47c"
+    },
+    {
+      "path": "package.json",
+      "bytes": 6061,
+      "sha256": "e93a117bf525136665ce5775c4cb0c464b0d2ee1eb4de61453de9206d44d74ca"
+    },
+    {
+      "path": "skills/cinematic-scroll/SKILL.md",
+      "bytes": 6398,
+      "sha256": "09b005c4f590acb35880fb1619ee90dadbf42c4facad82ef1fadd498dfa9942"
+    },
+    {
+      "path": "templates/nextjs/package.json",
+      "bytes": 1485,
+      "sha256": "724a91c5bc694c90eb5ec9698ed86f84ab8d9f192cd93575847dac00a300e6bd"
+    },
+    {
+      "path": "tools/bench/README.md",
+      "bytes": 3126,
+      "sha256": "ede5d6deb75a42699eb9b077613d53319904537dfd27f3865ec587f51d470c64"
+    },
+    {
+      "path": "tools/build-tokens/README.md",
+      "bytes": 1637,
+      "sha256": "42f4bef668aa49d94a9e72848bfb972b6141aefff46dff85dc8801c2ebb8d776"
+    },
+    {
+      "path": "tools/cinematic-doctor/README.md",
+      "bytes": 6430,
+      "sha256": "8d2d645f5f90c8cb2302d9eead103b4dcd6803dfcac731603da7c6eb9de3325e"
+    },
+    {
+      "path": "tools/page-proof/README.md",
+      "bytes": 3513,
+      "sha256": "d1aeeb0a242a428bfee89c7624939e6663a45b147669d93f304f333cd76982bc"
+    },
+    {
+      "path": "tools/verify/README.md",
+      "bytes": 4148,
+      "sha256": "f25bff21328ad7c67bfd91328b7cc8c323d5093725d5f0b9bbb4fec780a0dd1d"
+    }
+  ],
+  "status": "LOCAL_VERIFIED_PENDING_BLOB_PUBLISH",
+  "notes": "Full zip ~379MB; only text excerpts staged. Binary blob publish blocked without GH_TOKEN/parts pipeline.",
+  "generated_at": "2026-09-22T15:56:18Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY",
+  "source_commit": "c8b99b171c7c1f8c5ebb9fb6962d26769f015ab5"
+}
