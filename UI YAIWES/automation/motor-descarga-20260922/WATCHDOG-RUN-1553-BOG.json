@@ -1,0 +1,136 @@
+{
+  "schema": "yaiwes.watchdog.motor-descarga.v1",
+  "routine": "Motor de descarga",
+  "fired_at_utc": "2026-09-22T20:41:09.341Z",
+  "reported_at_bogota": "2026-09-22T15:53:03-05:00",
+  "repo": "maxbry123-commits/frontend",
+  "branch": "main",
+  "state": {
+    "STATUS": "ACTIVE_LOOP",
+    "STATE_status": "PROGRAMMING_INTEGRATION_PLAN_ACTIVE",
+    "GATE": "T1_FACTORY_FRONTEND",
+    "T2": "BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
+    "crazy_wall_current_node": "P01_COMPONENT_PHYSICAL_INVENTORY",
+    "crazy_wall_checkpoint": "UIYAIWES-P01-RECONCILE-0007",
+    "crazy_wall_status": "P01_PARTIAL_PASS_RECONCILED",
+    "next_node": "WAIT_FOR_SOL6_F_UI_051_AND_SOL8_F_UI_061_REPORTS_THEN_RUN_F_UI_062_INDEPENDENT_REVIEW",
+    "FREE_nodes": [
+      "N17-FULL-PRODUCT-E2E",
+      "N27-CONTINUOUS-LOOP"
+    ],
+    "CLAIMED": [
+      "N32-GUEST-INSTALLER-VERIFICATION"
+    ],
+    "BLOCKED": [
+      "N31-UI-FINAL"
+    ],
+    "CHECKPOINT": "UIYAIWES-N04-RECONCILIATION-2026-09-13T0717Z"
+  },
+  "action_taken": {
+    "type": "REUSE_DOWNLOAD_AND_SKILL_SCHEMA",
+    "donors": [
+      {
+        "slug": "Taste-GPT",
+        "status": "TEXT_STAGED_FULL_SKILL_PUBLISHED",
+        "skills": 1,
+        "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+        "source_repo": "Leonxlnx/taste-skill",
+        "source_path": "skills/gpt-tasteskill/SKILL.md",
+        "parent_donor": "Taste",
+        "bytes": 7857,
+        "commit_tip": "a864dcc27005f1ac4e7ada7d109ba5f2f9675051"
+      },
+      {
+        "slug": "Taste-Brandkit",
+        "status": "TEXT_STAGED_FULL_SKILL_PUBLISHED",
+        "skills": 1,
+        "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+        "source_repo": "Leonxlnx/taste-skill",
+        "source_path": "skills/brandkit/SKILL.md",
+        "parent_donor": "Taste",
+        "bytes": 15992,
+        "commit_tip": "a864dcc27005f1ac4e7ada7d109ba5f2f9675051"
+      },
+      {
+        "slug": "Taste-Skill-v1",
+        "status": "TEXT_STAGED_FULL_SKILL_PUBLISHED",
+        "skills": 1,
+        "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+        "source_repo": "Leonxlnx/taste-skill",
+        "source_path": "skills/taste-skill-v1/SKILL.md",
+        "parent_donor": "Taste",
+        "bytes": 20750,
+        "commit_tip": "a864dcc27005f1ac4e7ada7d109ba5f2f9675051"
+      },
+      {
+        "slug": "Taste-Redesign",
+        "status": "FULL_BODY_PUBLISHED",
+        "skills": 1,
+        "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+        "source_repo": "Leonxlnx/taste-skill",
+        "source_path": "skills/redesign-skill/SKILL.md",
+        "parent_donor": "Taste",
+        "bytes": 15081,
+        "note": "Replaced SKILL.STAGED.md pointer with full SKILL.md",
+        "commit_tip": "a864dcc27005f1ac4e7ada7d109ba5f2f9675051"
+      },
+      {
+        "slug": "Taste-Stitch",
+        "status": "FULL_DESIGN_PUBLISHED",
+        "skills": 1,
+        "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+        "source_repo": "Leonxlnx/taste-skill",
+        "source_path": "skills/stitch-skill/DESIGN.md",
+        "parent_donor": "Taste",
+        "bytes": 12053,
+        "note": "Replaced DESIGN.STAGED.md pointer with full DESIGN.md; SKILL.md already published",
+        "commit_tip": "a864dcc27005f1ac4e7ada7d109ba5f2f9675051"
+      },
+      {
+        "slug": "Image-to-Code",
+        "status": "FULL_BODY_PUBLISHED",
+        "skills": 1,
+        "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+        "source_repo": "Leonxlnx/taste-skill",
+        "source_path": "skills/image-to-code-skill/SKILL.md",
+        "parent_donor": "Taste",
+        "bytes": 36446,
+        "note": "Replaced SKILL.STAGED.md pointer with full SKILL.md",
+        "commit_tip": "a864dcc27005f1ac4e7ada7d109ba5f2f9675051"
+      }
+    ],
+    "dest": "UI YAIWES/componentes open soure UI YAIWES/{Taste-GPT,Taste-Brandkit,Taste-Skill-v1} + full bodies Taste-Redesign/Taste-Stitch/Image-to-Code + automation/bitácora",
+    "evidence": [
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-GPT/DOWNLOAD_EXTRACT_MANIFEST.json",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-GPT/SKILL_SCHEMA.json",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-GPT/skills/gpt-tasteskill/SKILL.md",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Brandkit/DOWNLOAD_EXTRACT_MANIFEST.json",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Brandkit/SKILL_SCHEMA.json",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Brandkit/skills/brandkit/SKILL.md",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Skill-v1/DOWNLOAD_EXTRACT_MANIFEST.json",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Skill-v1/SKILL_SCHEMA.json",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Skill-v1/skills/taste-skill-v1/SKILL.md",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Redesign/skills/redesign-skill/SKILL.md",
+      "UI YAIWES/componentes open soure UI YAIWES/Taste-Stitch/skills/stitch-skill/DESIGN.md",
+      "UI YAIWES/componentes open soure UI YAIWES/Image-to-Code/skills/image-to-code-skill/SKILL.md",
+      "UI YAIWES/automation/motor-descarga-20260922/WATCHDOG-RUN-1553-BOG.json",
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/WATCHDOG-MOTOR-DESCARGA-2026-09-22-1553-BOG.json"
+    ],
+    "readback_ref": "a864dcc27005f1ac4e7ada7d109ba5f2f9675051"
+  },
+  "pending_donors_still_queued": [],
+  "taste_siblings_remaining": [
+    "imagegen-frontend-web",
+    "imagegen-frontend-mobile",
+    "taste-skill (full ~87KB body)"
+  ],
+  "gaps": [
+    "Binary zip/blob publish blocked without GH_TOKEN on box (LOCAL_VERIFIED_PENDING_BLOB_PUBLISH) — Web-Design-Studio ~379MB",
+    "E2E_BROWSER_RUN_NOT_EXECUTED — no PASS sin browser log + reviewer",
+    "T2 blocked until T1 source revalidated",
+    "P01 canonical 14-row provenance matrix incomplete (Crazy Wall)",
+    "imagegen-frontend-web/mobile and taste-skill full body still queued"
+  ],
+  "verdict": "PROGRESS_PARTIAL",
+  "note": "Published Taste-GPT, Taste-Brandkit, Taste-Skill-v1 (full skills) and upgraded Taste-Redesign SKILL.md, Taste-Stitch DESIGN.md, Image-to-Code SKILL.md from pointers to full COPY_ONLY bodies. REUSE>GENERATE DONOR_STAGING_ONLY."
+}
