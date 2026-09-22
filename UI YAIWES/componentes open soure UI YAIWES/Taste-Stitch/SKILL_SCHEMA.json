@@ -1,0 +1,25 @@
+{
+  "schema": "yaiwes.skill-to-schema.v1",
+  "slug": "Taste-Stitch",
+  "source_repo": "Leonxlnx/taste-skill",
+  "source_path": "skills/stitch-skill/SKILL.md",
+  "source_ref": "main",
+  "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+  "source_url": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/stitch-skill/SKILL.md",
+  "parent_donor": "Taste",
+  "downloaded_at": "2026-09-22T19:40:00Z",
+  "watchdog": "Motor de descarga",
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Taste-Stitch",
+  "reuse_rule": "REUSE > GENERATE / COPY_ONLY / DONOR_STAGING_ONLY",
+  "skills_count": 1,
+  "skills": [
+    {
+      "id": "stitch-skill",
+      "path": "skills/stitch-skill/SKILL.md",
+      "name": "stitch-design-taste",
+      "description": "Semantic Design System Skill for Google Stitch. Generates agent-friendly DESIGN.md files that enforce premium, anti-generic UI standards — strict typography, calibrated color, asymmetric layouts, perpetual micro-motion, and hardware-accelerated performance.",
+      "body_sha256": "46bdb08fee2dded38b6ba0a051230a502d6ac6e4044afd47592cb40c256028b5",
+      "bytes": 11851
+    }
+  ]
+}
