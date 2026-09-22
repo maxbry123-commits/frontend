@@ -10,12 +10,29 @@
   "source_files": 7742,
   "bundle_bytes": 81799877,
   "bundle_sha256": "b3514037da8ee12efcd2c7f7683788176ff872c2fbe75f173b59379a701c623a",
-  "parts": [{"name": "Plasmic.bundle.zip.part-0001", "bytes": 81799877, "sha256": "b3514037da8ee12efcd2c7f7683788176ff872c2fbe75f173b59379a701c623a"}],
+  "parts": [
+    {
+      "name": "Plasmic.bundle.zip.part-0001",
+      "bytes": 81799877,
+      "sha256": "b3514037da8ee12efcd2c7f7683788176ff872c2fbe75f173b59379a701c623a"
+    }
+  ],
   "reconstruction_verified": false,
   "extraction_verified": false,
-  "extracted_tree": {"files": 7742, "bytes": 221072394, "sha256": "zip-index-only"},
-  "source_tree": {"files": 7742, "bytes": 221072394, "sha256": "zip-index-only"},
-  "product": {"name": "ab-testing-split-io", "version": "0.1.0"},
+  "extracted_tree": {
+    "files": 7742,
+    "bytes": 221072394,
+    "sha256": "zip-index-only"
+  },
+  "source_tree": {
+    "files": 7742,
+    "bytes": 221072394,
+    "sha256": "zip-index-only"
+  },
+  "product": {
+    "name": "ab-testing-split-io",
+    "version": "0.1.0"
+  },
   "text_excerpt_files": 50,
   "skills_count": 1,
   "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
