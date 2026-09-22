@@ -25,6 +25,7 @@ Esta raíz contiene los motores autorizados para:
 - extraer ZIP;
 - copiar archivos;
 - mover archivos;
+- empaquetar una raíz completa a ZIP sin historial Git (`.git/`);
 - copiar esta raíz completa de motores + skill a otro repositorio.
 
 La raíz destino siempre debe llamarse:
@@ -37,7 +38,7 @@ El nombre se define **desde la copia inicial**. No se crea con un nombre tempora
 
 ## 2. Contenido final autorizado de la raíz
 
-La raíz final contiene **solamente** estos siete archivos distribuidos en cuatro carpetas de motores + este skill:
+La raíz final contiene **solamente** estos ocho archivos distribuidos en cuatro carpetas de motores + este skill:
 
 1. `➡️📂 skills descargar extraer zip copiar mover archivos readme.md`
 2. `➡️📂 Motor de extracción zip/motor_1_extract_only.py`
@@ -46,6 +47,7 @@ La raíz final contiene **solamente** estos siete archivos distribuidos en cuatr
 5. `➡️📂motor de copiar archivos/motor_3_copy_batches.py`
 6. `➡️📂motor de copiar archivos/motor_copy_root_to_repo.py`
 7. `➡️📂motor de moves archivos/motor_4_move_batches.py`
+8. `📂Motor descarga de componentes y extracción de zip/motor_5_zip_root.py`
 
 Cualquier otro archivo dentro de esta raíz produce:
 
@@ -65,6 +67,7 @@ Los siguientes blobs son canónicos e inmutables:
 | `motor_3_copy_batches.py` | `3689924361ce4a1a9fde4ae2b6f6009c37a6042d` |
 | `motor_copy_root_to_repo.py` | `8281211da76db3080fe1f1ea38b3eb0c45d655cb` |
 | `motor_4_move_batches.py` | `9a21facfe11327cf60a2afca8f415ad52f0ecbe5` |
+| `motor_5_zip_root.py` | `2516d85d81f691f86c32a70b90c2599639eb83c6` |
 
 Regla: si una copia de cualquiera de esos motores devuelve un blob distinto, la operación falla y no se publica como PASS.
 
@@ -139,6 +142,56 @@ PASS solo después de descargar, reconstruir, extraer y verificar read-back.
 
 ---
 
+## 6B. Motor 5 — empaquetar una raíz completa a ZIP sin historial Git
+
+Ruta:
+
+`📂Motor descarga de componentes y extracción de zip/motor_5_zip_root.py`
+
+Entradas obligatorias:
+
+- `ROOT_DIR`
+- `OUTPUT_ZIP`
+- `MANIFEST_PATH`
+
+Entrada opcional:
+
+- `COLLISION_POLICY=fail|replace` (default operativo recomendado: `fail`)
+
+Función:
+
+- inventariar la raíz completa;
+- excluir cualquier ruta cuyo componente sea exactamente `.git`;
+- conservar los demás archivos, incluidos `.gitignore` y `.gitmodules`;
+- rechazar symlinks/special files en lugar de seguirlos silenciosamente;
+- generar ZIP determinista con Zip64;
+- verificar CRC;
+- verificar que el set de archivos/directorios coincide con el inventario;
+- verificar SHA-256 de cada archivo dentro del ZIP;
+- generar tree hash + SHA-256 del ZIP + manifest;
+- hacer read-back del ZIP final.
+
+Reglas:
+
+- `OUTPUT_ZIP` y `MANIFEST_PATH` deben estar fuera de `ROOT_DIR`;
+- nunca empaquetar `.git/`;
+- nunca declarar PASS si cambia el set de archivos;
+- si existe un symlink/special file: GAP explicito, no materializacion silenciosa.
+
+PASS:
+
+`VERIFIED_CLOSED` + `zip_sha256` + `tree_sha256` + manifest completo.
+
+Estado actual:
+
+`CODE_CREATED / RUNTIME_TEST_PENDING`.
+
+El blob canónico es:
+
+`2516d85d81f691f86c32a70b90c2599639eb83c6`.
+
+---
+
 ## 7. Motor de copia por lotes
 
 Ruta:
@@ -182,7 +235,7 @@ Entradas obligatorias:
 Controles:
 
 1. valida el nombre exacto de la raíz destino;
-2. valida que el origen contenga exactamente la allowlist de siete archivos;
+2. valida la allowlist histórica del motor; tras añadir Motor 5, este motor queda `GAP_ALLOWLIST_STALE` hasta autorización explícita para modificar su código;
 3. copia por lotes;
 4. usa `.partial` únicamente dentro de la raíz destino durante la operación;
 5. verifica SHA-256 antes y después de cada reemplazo;
@@ -225,8 +278,8 @@ PASS:
 7. Publicar mediante GitHub sin force.
 8. No copiar ningún archivo que no esté en la allowlist.
 9. Releer `main`.
-10. Verificar la raíz y los siete archivos.
-11. Comparar los seis blob SHA de motores.
+10. Verificar la raíz y los ocho archivos.
+11. Comparar los siete blob SHA de motores.
 12. Registrar la operación mediante el commit GitHub y su evidencia de read-back; **no crear un ledger adicional**.
 13. Solo entonces declarar `100% PASS ✅`.
 
@@ -253,7 +306,7 @@ Una operación está cerrada únicamente cuando:
 - la raíz existe en `main`;
 - el nombre de la raíz coincide exactamente con el repo;
 - contiene únicamente la allowlist autorizada;
-- los seis motores conservan sus blob SHA canónicos;
+- los siete motores conservan sus blob SHA canónicos;
 - el skill está presente;
 - no existe ningún archivo extra;
 - la publicación fue sin force;
