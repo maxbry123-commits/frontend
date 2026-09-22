@@ -1,0 +1,22 @@
+{
+  "schema": "yaiwes.skill-schema.v1",
+  "slug": "21st-Magic-MCP",
+  "source_repo": "21st-dev/magic-mcp",
+  "source_commit": "6b5299e8a83ceffa73d4fc4e148905bb3eeeeb55",
+  "skills_count": 1,
+  "skills": [
+    {
+      "id": "21st-ui",
+      "name": "21st-ui",
+      "description": "Find, install, and generate UI with 21st.dev. Use when the user asks for a UI component (pricing table, hero, navbar, dashboard, form, etc.), wants design inspiration, needs a brand logo as an SVG component, or wants to generate new UI from a prompt.",
+      "frontmatter": {
+        "name": "21st-ui",
+        "description": "Find, install, and generate UI with 21st.dev. Use when the user asks for a UI component (pricing table, hero, navbar, dashboard, form, etc.), wants design inspiration, needs a brand logo as an SVG component, or wants to generate new UI from a prompt."
+      },
+      "body_chars": 3162,
+      "path": "skills/21st-ui/SKILL.md"
+    }
+  ],
+  "generated_at": "2026-09-22T14:00:00Z",
+  "rule": "REUSE > GENERATE; DONOR_STAGING_ONLY text publish"
+}
