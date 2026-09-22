@@ -1,0 +1,95 @@
+{
+  "schema": "yaiwes.watchdog.motor-descarga.v1",
+  "routine": "Motor de descarga",
+  "fired_at_utc": "2026-09-22T14:55:27Z",
+  "reported_at_bogota": "2026-09-22T09:59:57-05:00",
+  "repo": "maxbry123-commits/frontend",
+  "branch": "main",
+  "state": {
+    "STATUS": "ACTIVE_LOOP",
+    "STATE_status": "ACTIVE_LOOP_NOT_CLOSED",
+    "GATE": "T1_FACTORY_FRONTEND",
+    "T2": "BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
+    "next_node": "WAIT_FOR_SOL6_F_UI_051_AND_SOL8_F_UI_061_REPORTS_THEN_RUN_F_UI_062_INDEPENDENT_REVIEW",
+    "FREE_nodes": [
+      "N17-FULL-PRODUCT-E2E",
+      "N27-CONTINUOUS-LOOP"
+    ],
+    "CLAIMED": [
+      "N32-GUEST-INSTALLER-VERIFICATION"
+    ],
+    "BLOCKED": [
+      "N31-UI-FINAL"
+    ]
+  },
+  "action_taken": {
+    "type": "REUSE_DOWNLOAD_AND_SKILL_SCHEMA",
+    "donors": [
+      {
+        "slug": "Vercel-React-Best-Practices",
+        "source_repo": "vercel-labs/agent-skills",
+        "source_commit": "063bee94c3f4df8453406c830b0a7df0f2860278",
+        "path": "skills/react-best-practices/",
+        "skills_count": 1
+      },
+      {
+        "slug": "Anthropic-Frontend-Design",
+        "source_repo": "anthropics/skills",
+        "source_commit": "34040c9c568585f6929bedeaad110ad08f079624",
+        "path": "skills/frontend-design/",
+        "skills_count": 1
+      },
+      {
+        "slug": "Awesome-Design",
+        "source_repo": "VoltAgent/awesome-design-md",
+        "source_commit": "f6961238d5cddcf8042a74a70fc400ec67181abb",
+        "skills_count": 74
+      },
+      {
+        "slug": "Design-to-Code",
+        "source_repo": "JPeetz/agent-skills",
+        "source_commit": "3f0e3daf55b5f8a954b5e022395c19628453027c",
+        "path": "skills/frontend/design-to-code/",
+        "skills_count": 1
+      },
+      {
+        "slug": "Impeccable",
+        "source_repo": "pbakaus/impeccable",
+        "source_commit": "83c2c735777c68e30ea536ab9cc97f7843456945",
+        "skills_count": 1,
+        "note": "text schema from LOCAL_VERIFIED staging; binary parts still pending blob publish"
+      }
+    ],
+    "dest": "UI YAIWES/componentes open soure UI YAIWES/{Vercel-React-Best-Practices,Anthropic-Frontend-Design,Awesome-Design,Design-to-Code,Impeccable} + automation/motor-descarga-20260922/",
+    "evidence": [
+      "UI YAIWES/automation/motor-descarga-20260922/WATCHDOG-RUN-0955-BOG.json",
+      "UI YAIWES/bitácora stated JSON Craxy wall plan checkpoint/WATCHDOG-MOTOR-DESCARGA-2026-09-22-0955-BOG.json"
+    ]
+  },
+  "pending_donors_still_queued": [
+    "Caret",
+    "Onlook",
+    "Plasmic",
+    "Webstudio",
+    "HyperFrames",
+    "Playwright MCP",
+    "Frontend Design Codex",
+    "AgentsORG DESIGN",
+    "Emil Kowalski skills",
+    "Web Design Studio"
+  ],
+  "local_verified_pending_blob": [
+    "Caret",
+    "Onlook",
+    "Taste",
+    "UI-UX-Pro-Max",
+    "21st-Magic-MCP",
+    "Impeccable"
+  ],
+  "gaps": [
+    "Binary zip/blob publish blocked without GH_TOKEN on box (LOCAL_VERIFIED_PENDING_BLOB_PUBLISH)",
+    "E2E_BROWSER_RUN_NOT_EXECUTED — no PASS sin browser log + reviewer",
+    "T2 blocked until T1 source revalidated"
+  ],
+  "verdict": "PROGRESS_PARTIAL"
+}

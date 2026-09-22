@@ -1,0 +1,45 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Impeccable",
+  "product": "skill",
+  "source_repo": "pbakaus/impeccable",
+  "source_ref": "HEAD",
+  "source_commit": "83c2c735777c68e30ea536ab9cc97f7843456945",
+  "source_url": "https://github.com/pbakaus/impeccable",
+  "zip_url": "https://codeload.github.com/pbakaus/impeccable/zip/refs/heads/main",
+  "source_bytes": 65709862,
+  "source_files": 3140,
+  "bundle_bytes": 23725389,
+  "bundle_sha256": "21b283957303e70cc6ac4eba0a278881d73cda376523a51c3f7df259ca1fc275",
+  "parts": [
+    {
+      "name": "Impeccable.bundle.zip.part-0001",
+      "bytes": 12582912,
+      "sha256": "f8daf6e70f3b9a78b8e11b080732a3d1bef2c8c5a8623ee649de5284e81fb94d"
+    },
+    {
+      "name": "Impeccable.bundle.zip.part-0002",
+      "bytes": 11142477,
+      "sha256": "e5b16b244b231abb38dae2c87b7b74f78f2847411e6e7aca84ef8098b6bca861"
+    }
+  ],
+  "part_size_limit_bytes": 12582912,
+  "reconstruction_verified": true,
+  "extraction_verified": true,
+  "extracted_tree": {
+    "files": 3140,
+    "bytes": 65709862,
+    "sha256": "70f74824edf7260ccc8387f484951c78f6eeeb3664340a217956b834c95cc158"
+  },
+  "source_tree": {
+    "files": 3140,
+    "bytes": 65709862,
+    "sha256": "70f74824edf7260ccc8387f484951c78f6eeeb3664340a217956b834c95cc158"
+  },
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Impeccable",
+  "fabrica_zip_dest": "fabrica de UI INTERFACE fromtend/componentes para fabrica de interface/skills/",
+  "status": "TEXT_SCHEMA_PUBLISH_READY_BINARY_PENDING",
+  "notes": "COPY_ONLY codeload GitHub zip (not engine re-zip). Tree hash via hf_download_extract_engine.tree_hash on inner extract folder (impeccable-main/). code_tree_with_zip_prefix=a4dc0ff4bd42a828e6e467850f4027eb89de1dd14ad3c76520d12f4fae352563. | 2026-09-22T09:55 BOG motor: published skill schema + manifest text only; parts/zip still LOCAL_VERIFIED_PENDING_BLOB_PUBLISH (no GH_TOKEN for large blobs)."
+}
