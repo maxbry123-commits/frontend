@@ -1,0 +1,25 @@
+{
+  "schema": "yaiwes.skill-to-schema.v1",
+  "slug": "Taste-GPT",
+  "source_repo": "Leonxlnx/taste-skill",
+  "source_path": "skills/gpt-tasteskill/SKILL.md",
+  "source_ref": "main",
+  "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+  "source_url": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/gpt-tasteskill/SKILL.md",
+  "parent_donor": "Taste",
+  "downloaded_at": "2026-09-22T20:43:12Z",
+  "watchdog": "Motor de descarga",
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Taste-GPT",
+  "reuse_rule": "REUSE > GENERATE / COPY_ONLY / DONOR_STAGING_ONLY",
+  "skills_count": 1,
+  "skills": [
+    {
+      "id": "gpt-tasteskill",
+      "path": "skills/gpt-tasteskill/SKILL.md",
+      "name": "gpt-taste",
+      "description": "Elite UX/UI & Advanced GSAP Motion Engineer. Enforces Python-driven true randomization for layout variance, strict AIDA page structure, wide editorial typography (bans 6-line wraps), gapless bento grids, strict GSAP ScrollTriggers (pinning, stacking, scrubbing), inline micro-images, and massive section spacing.",
+      "body_sha256": "2e64c269953f2656c21bf5a0fa6b4568e82fe0c72b36e8f84758e090349966a5",
+      "bytes": 7857
+    }
+  ]
+}
