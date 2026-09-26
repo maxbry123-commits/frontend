@@ -1,0 +1,14 @@
+{
+  "schema": "yaiwes.frontend.download-extract-manifest.v1",
+  "component": "Silex",
+  "motor_extract": "motor_1_extract_only.py",
+  "motor_copy": "motor_3_copy_batches.py",
+  "forbidden": ["github_actions", "huggingface", "unzip_cli", "motor_2"],
+  "files": 575,
+  "bytes": 9553676,
+  "tree_sha256": "928907aa07add7c959f44e30142cbb63c69124250d4c1de62f2826506af75158",
+  "motor1": "VERIFIED_CLOSED",
+  "motor3": "VERIFIED_CLOSED",
+  "dest": "UI YAIWES/componentes open soure UI YAIWES/Silex",
+  "gap": "push_files timeout on 575 blobs; tree mounted locally + catalog on main"
+}

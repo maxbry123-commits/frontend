@@ -1,0 +1,10 @@
+{
+  "schema": "yaiwes.frontend.extract-only.v1",
+  "motors_used": ["motor_1_extract_only.py", "motor_3_copy_batches.py"],
+  "motors_not_used": ["motor_2_queue_download_extract.py", "hf_download_extract_engine.py", "github_actions"],
+  "components": {
+    "Silex": {"files": 575, "verdict": "VERIFIED_CLOSED"},
+    "Craft.js": {"files": 373, "verdict": "VERIFIED_CLOSED"}
+  },
+  "next": ["Frappe-Builder", "Mermaid"]
+}

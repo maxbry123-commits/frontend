@@ -1,0 +1,14 @@
+{
+  "schema": "yaiwes.frontend.download-extract-manifest.v1",
+  "component": "Craft.js",
+  "motor_extract": "motor_1_extract_only.py",
+  "motor_copy": "motor_3_copy_batches.py",
+  "forbidden": ["github_actions", "huggingface", "unzip_cli", "motor_2"],
+  "files": 373,
+  "bytes": 7873658,
+  "tree_sha256": "2891512f3d63794120973ff1885ffc4f8fb1f6b724c1ba089bd5dbff86ddd3a1",
+  "motor1": "VERIFIED_CLOSED",
+  "motor3": "VERIFIED_CLOSED",
+  "dest": "UI YAIWES/componentes open soure UI YAIWES/Craft.js",
+  "gap": "push_files timeout on 373 blobs; tree mounted locally + catalog on main"
+}
