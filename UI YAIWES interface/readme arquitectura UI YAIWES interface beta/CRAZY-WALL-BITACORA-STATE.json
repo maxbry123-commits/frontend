@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.bitacora.state.v1",
   "project": "UI YAIWES interface",
-  "updated": "2026-09-27T13:33:00-05:00",
+  "updated": "2026-09-27T16:03:00-05:00",
   "mode": "modular-puzzle-fifa-output",
   "rule": "mostrar -> discutir -> aprobar por ID -> integrar",
   "scope": {
@@ -25,6 +25,11 @@
       "id": "L0",
       "name": "gobierno",
       "status": "active"
+    },
+    {
+      "id": "L0-SKILLS",
+      "name": "SkillRegistry+SkillResolver",
+      "status": "architecture-wired"
     },
     {
       "id": "L1",
@@ -155,6 +160,30 @@
         "backend": "boundary-only"
       },
       "next": "esperar OK PANEL-01-CHAT o correcciones visuales/funcionales"
+    },
+    {
+      "id": "SKILLS-ARCH",
+      "title": "Skill Registry + Resolver",
+      "kind": "architecture",
+      "status": "architecture-wired",
+      "source": "UI YAIWES interface + fabrica de UI INTERFACE fromtend",
+      "objective": "gobernar 51 SKILL.md físicos / 39 familias sin activar donors fuera de scope",
+      "outputs": [
+        "SKILL-REGISTRY-UI-YAIWES-2026-09-27.json",
+        "HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md",
+        "PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md"
+      ],
+      "gates": [
+        "REGISTERED",
+        "SCOPE_OK",
+        "ADAPTER_READY",
+        "TESTED",
+        "VERIFIED",
+        "ACTIVE"
+      ],
+      "policy": "donor skill outside scope = BLOCKED",
+      "approval": null,
+      "next": "implementar SkillResolver/adapter tests cuando se autorice runtime integration"
     }
   ],
   "events": [
@@ -181,6 +210,12 @@
       "type": "prototype.created",
       "actor": "Manus",
       "result": "PANEL-01-CHAT snapshot plus modular source staged"
+    },
+    {
+      "at": "2026-09-27T16:03:00-05:00",
+      "type": "skills.architecture-wired",
+      "actor": "ChatGPT GPT-5.6 Sol",
+      "result": "51 physical SKILL.md audited; 39 logical families registered; handoff and action plan created"
     }
   ],
   "approval_gate": {
