@@ -1,87 +1,47 @@
-# PANEL-01 — Chat operativo
+# PANEL-01 — Chat operativo v0.2.0
 
 ## Estado
 
-`PROTOTYPE / FRONTEND FUNCTIONAL / BACKEND BOUNDARY`
+`PROTOTYPE / FRONTEND FUNCTIONAL / BACKEND BOUNDARY / REVIEW`
 
-## Salidas normativas
+## Fuentes aplicadas
 
-Este panel se entrega siempre en dos formas:
+- arquitectura: `ARQUITECTURA-FRONTEND-UI-YAIWES-V1.md` + `PLAN-DE-TRABAJO-UI-YAIWES.md`;
+- skills: `frontend-design.SKILL.md` + `Image-to-Code/skills/image-to-code-skill/SKILL.md`;
+- referencias: lote `01-original/FOTOS-REF/`, con foco en Manus, Grok Bot, chat, tool sheet, sidebar y mode dropdown;
+- originales: `LOCKED`, no modificados.
 
-1. `index.html` autocontenido: snapshot funcional, respaldo y referencia desplegable directa en Chrome.
-2. `src/`: fuente separada y editable para seguir desarrollando sin romper otras piezas.
+## Salida FIFA
 
-Flujo obligatorio:
+1. `index.html`: snapshot autocontenido y ejecutable sin build.
+2. `src/`: HTML/CSS/JS modular editable.
+3. `src/panel-01-chat.manifest.json`: contrato de ventana y acciones.
+4. `ACCEPTANCE.md`: criterios técnicos PASS/FAIL.
+5. `tests/panel-01-chat.spec.js`: prueba Playwright.
 
-```text
-Diseño en Manus → HTML funcional → código fuente modular → versión → siguiente pieza
-```
+## Funcionalidad real
 
-## Cómo abrir
-
-Abrir `index.html` directamente en Chrome, Edge o Firefox. No usa `<canvas>` ni dependencias externas.
-
-## Funciones frontend reales
-
-- crear chat local;
-- cambiar conversación;
-- renombrar chat;
-- escribir y enviar mensajes al hilo local;
-- abrir selector real de archivos;
-- abrir selector real de imágenes;
-- previsualizar adjuntos;
-- retirar adjuntos;
-- grabar audio mediante `MediaRecorder` cuando el navegador concede permiso;
-- cambiar tema Matte/Glass;
-- exportar JSON;
-- limpiar conversación con confirmación;
-- mostrar estados y bitácora local;
-- responsive móvil/escritorio;
-- navegación sin `<canvas>`.
+- nuevo chat, selección y persistencia local;
+- renombrar, exportar JSON y eliminar mensajes;
+- selector Heavy/Expert/Fast/Auto;
+- sheet `Añadir al chat` con cámara, fotos, audio y archivos;
+- toggles de herramientas con estado visual y `aria-pressed`;
+- previsualización y retiro de adjuntos;
+- grabación real con `MediaRecorder` cuando el navegador concede permiso;
+- enviar por botón o Enter; Shift+Enter crea nueva línea;
+- estado QUEUED/RUNNING/BRIDGE_REQUIRED y cancelación local;
+- rail responsive y navegación por teclado;
+- localStorage para chats, modo y tools;
+- inspector local solo en escritorio.
 
 ## Frontera backend
 
-La UI no inventa respuestas de IA cuando el bridge no existe. En ese caso registra `BRIDGE_REQUIRED`.
+La UI emite `yaiwes:ui-action`. Si existe `window.YAIWES_BRIDGE.dispatch`, lo usa. Si no existe, falla cerrado y muestra `BRIDGE_REQUIRED`; nunca fabrica una respuesta del modelo.
 
-### Comandos que debe existir detrás
+## Paleta
 
-| Comando | Entrada mínima | Resultado esperado |
-|---|---|---|
-| `send_message` | `conversationId`, `text`, `attachments`, `mode` | eventos `run.started`, `run.delta`, `run.completed` o `run.failed` |
-| `upload_file` | `conversationId`, `fileRef`, `mime`, `size` | `file.accepted` o `file.rejected` |
-| `transcribe_audio` | `conversationId`, `audioRef`, `mime` | `transcription.completed` o `transcription.failed` |
-| `cancel_run` | `conversationId`, `runId` | `run.cancelled` |
+Matte fijado por arquitectura: `#0a0a0d`, superficies grises, texto blanco, Little `#2563eb` para selección/foco. Naranja queda reservado a cargar/descargar y no se usa como marca del chat.
 
-### Contrato de eventos
+## Cierre
 
-```json
-{"type":"YAIWES_EVENT","panelId":"PANEL-01","windowId":"CHAT-01","event":"run.delta","runId":"...","payload":{}}
-```
-
-El frontend debe recibir eventos y actualizar `StateStore`. No debe llamar proveedores directamente.
-
-## Componentes y referencias usadas
-
-- HostShell visual del proyecto.
-- Tokens Matte/Little/Blanco de FROMTED.
-- Patrones observados en las 158 imágenes actuales: chat móvil oscuro, composer persistente, selector de modo, adjuntos, menús, estados, tarjetas de archivo y paneles técnicos.
-- `assistant-ui` queda como candidato de integración futura; este primer corte usa HTML/CSS/JS nativo para mantener el prototipo portable.
-
-## Próximas pruebas
-
-- [ ] conectar `Action Bus` real;
-- [ ] conectar `WindowRegistry`;
-- [ ] validar manifest con `Manifest Schema`;
-- [ ] integrar eventos backend reales;
-- [ ] pruebas Playwright;
-- [ ] auditoría `axe-core`;
-- [ ] aprobar con `OK PANEL-01-CHAT`.
-
-## No tocar
-
-- originales de `01-original/`;
-- fotos de referencia;
-- backend;
-- router;
-- memoria interna backend;
-- proveedores.
+Este prototipo permanece en `REVIEW`. No integra HostShell/WindowRegistry/Action Bus reales hasta recibir `OK PANEL-01-CHAT`.
