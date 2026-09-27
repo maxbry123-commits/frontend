@@ -233,3 +233,52 @@ https://github.com/maxbry123-commits/frontend/commit/430809bd98c614435ad7597493e
 ## Flujo de trabajo frontend
 
 `FUENTES + FOTOS -> ARQUITECTURA FRONTEND -> CONTRATOS UI -> HOST/WINDOW REGISTRY -> PANEL A + PANEL B -> SYNC/OFFLINE/VOZ -> EMPAQUE -> QA -> EVIDENCIA -> HANDOFF`
+
+## Extensión PANEL-01 / CHAT-01 — controles, selectores y capacidades
+
+El chat de Panel B queda especificado como una superficie compacta con **inventario amplio pero exposición progresiva**.
+
+### Regla de densidad
+
+No se muestran las ~60 capacidades de chat a la vez. Se mantienen 10–15 controles persistentes y el resto se organiza en sheets/selectores.
+
+Persistentes:
+
+- Agregar `+`;
+- Thinking;
+- selector Modelo;
+- selector Modo;
+- Micrófono;
+- Enviar;
+- Documento;
+- Website;
+- Imagen;
+- Audio;
+- Detener cuando el run está activo.
+
+Agrupaciones:
+
+- `+` = medios, archivos, investigación, web, proyecto, estilo, herramientas, conectores, plugins y artefactos.
+- Modelo = 9 AI + 3 AGI desde registry.
+- Modo = Heavy/Expert/Fast/Auto + intensidad/especialidades/expertos.
+- Workflow = loops, watchdogs, investigación, workflows y proyectos.
+- Agente = YAIWES, CODE, NCT CODE, skills, roles, prompts, memoria y almacenamiento.
+
+Fuente detallada:
+`actualizaciones arquitectura/ACTUALIZACION-PANEL-01-CHAT-CONTROLES-Y-SELECTORES-2026-09-27.md`
+
+### Contrato
+
+`CONTROL -> actionId -> ACTION BUS -> BRIDGE/PLUGIN -> BACKEND (frontera) -> EVENTO -> STATESTORE -> UI`
+
+Reglas adicionales:
+
+1. cero controles muertos;
+2. estado visual y estado lógico deben coincidir;
+3. seleccionado = Little azul `#2563eb`;
+4. naranja solo Cargar/Descargar;
+5. modelos/capacidades vienen de registry/configuración, no del JSX;
+6. sin bridge o actionId válido = fail-closed;
+7. entregar HTML funcional + proyecto modular + assets + dependencias + versión;
+8. `OK PANEL-01-CHAT` es obligatorio antes de integración.
+
