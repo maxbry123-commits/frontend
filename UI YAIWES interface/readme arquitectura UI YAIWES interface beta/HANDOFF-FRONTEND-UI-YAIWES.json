@@ -2,7 +2,7 @@
   "schema": "yaiwes.frontend.handoff.v1",
   "handoff_id": "YAIWES-FE-2026-09-27-RUN01",
   "project": "UI YAIWES interface",
-  "status": "PANEL_01_PROTOTYPE_REVIEW",
+  "status": "PANEL_01_IMPLEMENTING_V2",
   "language": "es",
   "read_first": [
     "PLAN-DE-TRABAJO-UI-YAIWES.md",
@@ -13,8 +13,9 @@
   "current_task": {
     "id": "PANEL-01-CHAT",
     "name": "Chat operativo",
-    "goal": "primer prototipo funcional sin canvas, con HTML snapshot y fuente modular separada",
-    "acceptance": "OK PANEL-01-CHAT"
+    "goal": "refinar PANEL-01-CHAT usando arquitectura, skills y referencias visuales reales; completar fuente modular y eliminar controles muertos",
+    "acceptance": "OK PANEL-01-CHAT",
+    "phase": "IMPLEMENTATION"
   },
   "architecture": {
     "flow": [
@@ -105,11 +106,12 @@
     "update memory and this handoff"
   ],
   "next_actions": [
-    "review PANEL-01 visual distribution",
-    "test native file/image/audio actions",
-    "connect real Action Bus",
-    "connect backend bridge events",
-    "approve with OK PANEL-01-CHAT"
+    "materializar HTML/CSS/JS modular completo",
+    "alinear snapshot index.html con la fuente modular",
+    "implementar selector de modo, menú, adjuntos, audio, chats y estados con interacción real",
+    "añadir criterios técnicos de aceptación y prueba Playwright",
+    "mantener backend como frontera fail-closed",
+    "solicitar OK PANEL-01-CHAT antes de integración"
   ],
   "blocked_if": [
     "source contradicts architecture",
@@ -118,8 +120,8 @@
     "approval ID is missing"
   ],
   "last_decision": null,
-  "last_agent": "Manus",
-  "last_update": "2026-09-27T11:22:00-05:00",
+  "last_agent": "ChatGPT GPT-5.6 Sol",
+  "last_update": "2026-09-27T12:20:00-05:00",
   "visual_audit": {
     "reference_count": 158,
     "path": "Ui Yaiwes interface beta/01-original/FOTOS-REF/",
@@ -137,5 +139,27 @@
     ],
     "applied_to": "PANEL-01-CHAT"
   },
-  "output_norm": "FIFA: index.html autocontenido + fuente modular separada + README/manifest + version"
+  "output_norm": "FIFA: index.html autocontenido + fuente modular separada + README/manifest + version",
+  "implementation_inputs": {
+    "architecture": [
+      "ARQUITECTURA-FRONTEND-UI-YAIWES-V1.md",
+      "PLAN-DE-TRABAJO-UI-YAIWES.md"
+    ],
+    "skills": [
+      "frontend-design.SKILL.md",
+      "Image-to-Code/skills/image-to-code-skill/SKILL.md"
+    ],
+    "visual_refs": [
+      "01-original/FOTOS-REF/Screenshot_20260927-030938_Manus.png",
+      "01-original/FOTOS-REF/Screenshot_20260927-030944_Manus.png",
+      "01-original/FOTOS-REF/Screenshot_20260927-030948_Manus.png",
+      "01-original/FOTOS-REF/Screenshot_20260927-031004_Manus.png",
+      "01-original/FOTOS-REF/Screenshot_20260927-031226_Grok Bot.png",
+      "01-original/FOTOS-REF/Screenshot_20260927-031235_Grok Bot.png",
+      "01-original/FOTOS-REF/📌p01-chat-minimax.html",
+      "01-original/FOTOS-REF/p05-sheet-herramientas.html",
+      "01-original/FOTOS-REF/p07-sidebar-menu.html",
+      "01-original/FOTOS-REF/p09-mode-dropdown.html"
+    ]
+  }
 }
