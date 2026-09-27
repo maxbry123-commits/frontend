@@ -6,6 +6,9 @@
   "language": "es",
   "read_first": [
     "PLAN-DE-TRABAJO-UI-YAIWES.md",
+    "actualizaciones arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md",
+    "actualizaciones arquitectura/SKILL-REGISTRY-UI-YAIWES-2026-09-27.json",
+    "PLAN-DE-TRABAJO-UI-YAIWES.md",
     "CRAZY-WALL-BITACORA-STATE.json",
     "memoria.md",
     "UI YAIWES interface/readme arquitectura UI YAIWES interface beta/HANDOFF-FRONTEND-UI-YAIWES-2026-09-27.md"
@@ -117,9 +120,9 @@
     "backend behavior is required to demonstrate the UI",
     "approval ID is missing"
   ],
-  "last_decision": "PANEL-01-CHAT v0.2.0 publicado en formato FIFA; originales intactos; backend permanece boundary-only.",
+  "last_decision": "Skills inventory wired into architecture: 51 physical SKILL.md / 39 logical families; donor skills remain scoped until adapter+test.",
   "last_agent": "ChatGPT GPT-5.6 Sol",
-  "last_update": "2026-09-27T13:33:00-05:00",
+  "last_update": "2026-09-27T16:03:00-05:00",
   "visual_audit": {
     "reference_count": 158,
     "path": "Ui Yaiwes interface beta/01-original/FOTOS-REF/",
@@ -196,5 +199,27 @@
       "originals_modified": false,
       "backend_modified": false
     }
+  },
+  "skill_architecture": {
+    "registry": "actualizaciones arquitectura/SKILL-REGISTRY-UI-YAIWES-2026-09-27.json",
+    "handoff": "actualizaciones arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md",
+    "plan": "actualizaciones arquitectura/PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md",
+    "counts": {
+      "physical_skill_md": 51,
+      "logical_families": 39,
+      "ui_interface": 10,
+      "factory": 41
+    },
+    "policy": "donor-scoped skills are not global; adapter+test+evidence required before ACTIVE",
+    "flow": [
+      "task",
+      "skill-resolver",
+      "fromted-policy",
+      "surface-skill",
+      "capability-or-tool",
+      "qa-skill",
+      "evidence",
+      "pass-or-fail"
+    ]
   }
 }
