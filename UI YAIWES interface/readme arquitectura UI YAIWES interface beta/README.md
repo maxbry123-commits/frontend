@@ -130,3 +130,22 @@ Reglas:
 
 Flujo:
 `SUBIR IMAGEN -> 01-original/FOTOS-REF -> REFERENCIA README/FICHA -> TRANSFORMACIÓN FROMTED SI APLICA -> VALIDACIÓN`
+
+## Nota de arquitectura — Backend + Frontend + Diseño
+
+Documento conectado:
+https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/NOTA-ARQUITECTURA-BACKEND-FRONTEND-Y-DISENO.md
+
+Carpeta para nuevas actualizaciones de arquitectura:
+https://github.com/maxbry123-commits/frontend/tree/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/actualizaciones%20arquitectura
+
+Enlace directo para subir el próximo archivo de arquitectura/diseño:
+https://github.com/maxbry123-commits/frontend/upload/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/actualizaciones%20arquitectura
+
+Evidencias visuales conectadas:
+- Fotos parte 1: https://github.com/maxbry123-commits/frontend/commit/13f4e932866284fb5ddfaaf6ada5ce4809f82f46
+- Fotos parte 2: https://github.com/maxbry123-commits/frontend/commit/c50fc98d19debe1a85817cf1129b55a99c895c9f
+- Fotos parte 3: https://github.com/maxbry123-commits/frontend/commit/430809bd98c614435ad7597493ed46c16d6552a3
+
+Flujo documental:
+`README -> NOTA BACKEND/FRONTEND/DISEÑO -> ARCHIVO NUEVO DE ARQUITECTURA -> FOTOS -> IMPLEMENTACIÓN -> VALIDACIÓN`
