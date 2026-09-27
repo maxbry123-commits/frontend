@@ -539,3 +539,23 @@ Regla: el catálogo es un banco de piezas. Ningún componente se descarga o inte
 Esta arquitectura conceptual queda documentada. La implementación física no se considera cerrada hasta demostrar:
 
 `componentes reales → revisión fuente/licencia/SHA → adapters → wiring → tests → recovery/chaos/E2E → evidence → cross-check 12 GOALS → Council12 → Final Judge → VERIFIED_CLOSED`.
+
+## 17. ACTUALIZACIÓN BACKEND 2026-09-27
+
+Arquitectura backend consolidada y cableado lógico vigente:
+https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES/readme%20arquitectura%20UI%20YAIWES/ARQUITECTURA-BACKEND-UI-YAIWES-V1-2026-09-27.md
+
+Handoff backend:
+https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES/readme%20arquitectura%20UI%20YAIWES/HANDOFF-BACKEND-UI-YAIWES-2026-09-27.md
+
+Fuentes nuevas preservadas:
+- https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES/readme%20arquitectura%20UI%20YAIWES/actualizaciones%20arquitectura%20backend/sistema%20de%20componente%20tipo%20plugins%20para%20la%20f%C3%A1brica%20y%20yaiwes%F0%9F%9A%80%F0%9F%86%98%F0%9F%86%98con%20los%20componentes%20necesarios%20y%20como%20funciona%F0%9F%93%B2no%20tocar%20%E2%9A%A0%EF%B8%8F.md
+- https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES/readme%20arquitectura%20UI%20YAIWES/actualizaciones%20arquitectura%20backend/%F0%9F%93%B2%F0%9F%93%8C%F0%9F%9A%80%F0%9F%93%B2%F0%9F%93%B2%20UI%20YAIWES%20INTERFACE%20VERSI%C3%93N%201.0%20FINAL%20%F0%9F%93%8C%F0%9F%9A%80%F0%9F%93%B2%20Con%20backend%20frontend%20y%20URL%20visible%20...a%20y%20dise%C3%B1o%20para%20backend%20y%20frontend%20todo%20%E2%9B%94no%20tocar%20%F0%9F%94%A8%F0%9F%93%8C.md
+- https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES/readme%20arquitectura%20UI%20YAIWES/actualizaciones%20arquitectura%20backend/%F0%9F%93%B2%F0%9F%93%B2%20UI%20YAIWES.%20fromtend%20plan%20de%20ejecuci%C3%B3n%20todo%20%20no%20tocar.md
+
+La actualización mantiene a Stabilize CORE como único owner del DAG/runtime y añade, por adapters, Micro-Kernel + Component-IR, Action Registry, Capability Registry, harnesses, workers, event bus, policy, memoria/retrieval, router/cache, Skills, browser y autoevolución controlada.
+
+Microflujo vigente:
+`INPUT -> ROUTE/CACHE/RETRIEVE -> STABILIZE CORE -> ACTION REGISTRY -> CAPABILITY REGISTRY -> EXECUTOR -> POLICY/SANDBOX -> VERIFY -> CHECKPOINT/STATE -> RESULT`
+
+Regla fail-closed: ningún componente citado en la arquitectura se considera físicamente integrado hasta pasar `acquisition -> provenance -> adapter -> contract -> wiring -> test -> evidence -> readback`.
