@@ -1,0 +1,26 @@
+{
+  "id": "chat-01",
+  "kind": "window",
+  "label": "Chat operativo",
+  "slotId": "panel-b-chat",
+  "source": "UI YAIWES interface / Panel 1",
+  "frontend": {
+    "snapshot": "../index.html",
+    "source": ["panel-01-chat.html", "panel-01-chat.css", "panel-01-chat.js"],
+    "canvasTag": false,
+    "runtime": "browser-native"
+  },
+  "actions": [
+    {"id":"chat.create","kind":"button","targetSlot":"panel-b-chat"},
+    {"id":"chat.rename","kind":"button","targetSlot":"panel-b-chat"},
+    {"id":"send_message","kind":"button","targetSlot":"panel-b-chat"},
+    {"id":"upload_file","kind":"button","targetSlot":"panel-b-chat"},
+    {"id":"transcribe_audio","kind":"button","targetSlot":"panel-b-chat"},
+    {"id":"cancel_run","kind":"button","targetSlot":"panel-b-chat"},
+    {"id":"export_conversation","kind":"button","targetSlot":"panel-b-chat"}
+  ],
+  "backendBoundary": {
+    "requiredEvents": ["action.accepted","run.started","run.delta","run.completed","run.failed"],
+    "requiredCommands": ["send_message","upload_file","transcribe_audio","cancel_run"]
+  }
+}
