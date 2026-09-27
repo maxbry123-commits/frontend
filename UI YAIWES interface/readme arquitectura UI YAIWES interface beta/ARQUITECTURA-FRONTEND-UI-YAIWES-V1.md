@@ -1,0 +1,235 @@
+# Arquitectura Frontend UI YAIWES interface — V1
+
+Fecha de consolidación: 2026-09-27  
+Repo: `maxbry123-commits/frontend`  
+Branch: `main`  
+Alcance: **solo frontend / UI / experiencia / empaquetado cliente**.
+
+## Autoridad de esta arquitectura
+
+Esta extensión consolida únicamente el trabajo frontend extraído de los tres archivos subidos el 27 de septiembre de 2026. Los archivos fuente se conservan intactos y marcados como referencia.
+
+Fuente 1 — sistema de componentes/plugins de fábrica:
+https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/actualizaciones%20arquitectura/sistema%20de%20componente%20tipo%20plugins%20para%20la%20f%C3%A1brica%20y%20yaiwes%F0%9F%9A%80%F0%9F%86%98%F0%9F%86%98con%20los%20componentes%20necesarios%20y%20como%20funciona%F0%9F%93%B2no%20tocar%20%E2%9A%A0%EF%B8%8F.md
+
+Fuente 2 — arquitectura completa backend + frontend:
+https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/actualizaciones%20arquitectura/%F0%9F%93%B2%F0%9F%93%8C%F0%9F%9A%80%F0%9F%93%B2%F0%9F%93%B2%20UI%20YAIWES%20INTERFACE%20VERSI%C3%93N%201.0%20FINAL%20%F0%9F%93%8C%F0%9F%9A%80%F0%9F%93%B2%20Con%20backend%20frontend%20y%20URL%20visible%20...a%20y%20dise%C3%B1o%20para%20backend%20y%20frontend%20todo%20%E2%9B%94no%20tocar%20%F0%9F%94%A8%F0%9F%93%8C.md
+
+Fuente 3 — plan ejecutable frontend:
+https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/actualizaciones%20arquitectura/%F0%9F%93%B2%F0%9F%93%B2%20UI%20YAIWES.%20fromtend%20plan%20de%20ejecuci%C3%B3n%20todo%20%20no%20tocar.md
+
+Regla de alcance: el backend aparece aquí solamente como **frontera de contrato** necesaria para que la UI pueda enviar acciones y recibir resultados. Esta arquitectura no añade tareas de implementación del backend, router de modelos, memoria, scheduler, proveedores ni orquestación interna.
+
+## Arquitectura frontend resumida
+
+`USUARIO -> PANEL B / PANEL A -> UI CONTRACTS -> ACTION BUS -> BRIDGE -> BACKEND (frontera) -> EVENTOS/RESULTADOS -> CANVAS / VENTANAS`
+
+La UI no controla proveedores ni ejecuta lógica interna del backend. Proyecta estado, emite acciones tipadas y renderiza resultados.
+
+## Núcleo frontend
+
+- Un núcleo compartido HTML/CSS/JS + manifiestos + tokens FROMTED.
+- React solo donde la interacción lo justifique: canvas, chat, grafo y componentes complejos.
+- `HOST.html` como HostShell existente.
+- `INDEX.json` como registro canónico de las 39 ventanas.
+- `WindowRegistry` para resolver y montar ventanas.
+- `StateStore` para estado visual/local.
+- `Action Bus` como salida única de acciones del frontend.
+- `NodePlanBridge` / bridge API-MCP como frontera, no como implementación backend.
+- `CanvasOrchestrator` para abrir, actualizar, enfocar y cerrar ventanas según eventos.
+- `CapabilityProjector` para mostrar en la UI capacidades registradas por la fábrica.
+
+## Doble panel
+
+### Panel A — Command Center
+
+Superficie para operador técnico.
+
+Incluye:
+- shell del panel;
+- visualizador del DAG;
+- inspector de nodos;
+- stream de eventos;
+- checkpoints;
+- controles HITL;
+- métricas/coste mostrados como datos recibidos;
+- auditoría;
+- preview/sandbox;
+- test de integración del panel.
+
+Microflujo:
+`EVENTOS -> VISUALIZER -> INSPECTOR -> CHECKPOINT/HITL -> FEEDBACK VISUAL`
+
+### Panel B — Conversation & Canvas
+
+Superficie por defecto para usuario final.
+
+Incluye:
+- shell del panel;
+- chat persistente;
+- entrada de voz;
+- NodePlanBridge;
+- CanvasOrchestrator;
+- WindowRenderer;
+- CanvasCore;
+- AttentionScheduler;
+- MediaPipeline;
+- CapabilityProjector;
+- onboarding;
+- test de integración.
+
+Microflujo:
+`TEXTO/VOZ -> NODEPLAN -> BRIDGE -> RESULTADO -> CANVAS ORCHESTRATOR -> VENTANA`
+
+## Canvas y ventanas
+
+El canvas funciona como monitor multi-ventana dinámico. Puede proyectar:
+- documento;
+- imagen;
+- vídeo;
+- gráfico;
+- conversación;
+- otros tipos registrados mediante capacidades.
+
+Las 39 ventanas existentes siguen siendo fuente física de UI:
+- 8 RUN;
+- 16 WALL;
+- 1 GBOT;
+- 14 FOTO.
+
+Ruta:
+`UI YAIWES interface/Ui Yaiwes interface beta/02-fromted/`
+
+El frontend debe reutilizar esas ventanas mediante HostShell/WindowRegistry antes de crear superficies duplicadas.
+
+## Fábrica y sistema de componentes — frontera frontend
+
+Del archivo de plugins se incorpora únicamente lo que afecta a la UI:
+
+`COMPONENTE -> CAPABILITY REGISTRY -> CAPABILITY PROJECTOR / WINDOW REGISTRY -> UI`
+
+La transformación interna de software a Harness/Tool/Pool/Workflow/Subagent pertenece a la fábrica/backend y queda fuera de este alcance frontend.
+
+Para frontend, el contrato mínimo de una capacidad debe permitir:
+- id;
+- nombre visible;
+- tipo;
+- entradas/salidas;
+- permisos de UI;
+- ventana/superficie asociada;
+- estado;
+- versión;
+- disponibilidad.
+
+## Persistencia, sync y offline del cliente
+
+- Dexie + IndexedDB para persistencia local.
+- Yjs o Loro para sincronización CRDT.
+- OfflineQueue para operaciones cliente pendientes.
+- DeviceRegistry para identificar superficies/dispositivos.
+- Service Worker/Workbox para PWA y recursos offline.
+- recuperación visual sin pérdida del estado reciente cuando sea posible.
+
+Microflujo:
+`CAMBIO LOCAL -> STORE -> PERSISTENCIA -> CRDT -> OTRO DISPOSITIVO -> RERENDER`
+
+## Voz
+
+La voz es otro canal de entrada/salida del frontend y debe producir el mismo contrato que el texto:
+
+`AUDIO -> STT -> INTENCIÓN/NODEPLAN -> BRIDGE -> RESULTADO -> TTS/UI`
+
+Componentes propuestos en los archivos fuente:
+- faster-whisper;
+- Piper;
+- Silero VAD.
+
+## Diseño y sistema visual
+
+Tokens FROMTED vigentes:
+- fondo: `#000000`, `#0a0a0d`, `#141417`;
+- selección/acento: `#2563eb`;
+- texto primario: `#ffffff`;
+- naranja `#ff5500`: solo Cargar/Descargar.
+
+Design System compartido:
+- Button;
+- Input;
+- Select;
+- Toggle;
+- Modal;
+- Window;
+- Card;
+- Badge;
+- WindowFrame;
+- componentes comunes accesibles e internacionalizables.
+
+Regla: las fotos sirven como evidencia y referencia visual/layout; no sustituyen contratos ni componentes ejecutables.
+
+## Empaque cliente
+
+Un mismo núcleo frontend debe poder empaquetarse como:
+- PWA con Workbox;
+- desktop con Tauri 2;
+- móvil con Capacitor o Tauri móvil.
+
+No se crea una implementación visual distinta por plataforma.
+
+## Accesibilidad e i18n
+
+- navegación completa por teclado;
+- roles/ARIA;
+- contraste;
+- reduced motion;
+- lector de pantalla;
+- axe-core en QA;
+- strings fuera del código;
+- i18n por JSON/namespace;
+- cambio de idioma sin reescribir componentes.
+
+## Cinco salidas frontend
+
+### Salida 1 — Fundación — 11 nodos
+Contratos UI, estructura, tokens, StateStore, router de paneles, HostShell, WindowRegistry, Action Bus, bridge de frontera, bootstrap y test.
+
+### Salida 2 — Panel A — 10 nodos
+Shell, visualizer, inspector, eventos, checkpoints, HITL, métricas, auditoría, sandbox y test.
+
+### Salida 3 — Panel B — 12 nodos
+Shell, chat, voz stub, NodePlanBridge, CanvasOrchestrator, WindowRenderer, CanvasCore, AttentionScheduler, MediaPipeline, CapabilityProjector, onboarding y test.
+
+### Salida 4 — Cliente avanzado — 10 nodos
+Voz completa, runtime local embebido, OfflineQueue, LocalPersistence, CRDTSync, DeviceRegistry, CapabilityRegistry UI Bridge, resiliencia cliente, privacidad/consentimiento y test.
+
+### Salida 5 — Empaque y cierre — 12 nodos
+PWA, Tauri, Capacitor, native bridges, accesibilidad, i18n, Design System, build unificado, guía de despliegue frontend, telemetría opt-in, criterios de aceptación y test final.
+
+**Cuenta corregida:** 11 + 10 + 12 + 10 + 12 = **55 nodos declarados**. Los archivos fuente dicen “45” en su cierre, pero esa cifra no coincide con su propio desglose.
+
+## Evidencia visual conectada
+
+Fotos proyecto — parte 1:
+https://github.com/maxbry123-commits/frontend/commit/13f4e932866284fb5ddfaaf6ada5ce4809f82f46
+
+Fotos proyecto — parte 2:
+https://github.com/maxbry123-commits/frontend/commit/c50fc98d19debe1a85817cf1129b55a99c895c9f
+
+Fotos proyecto — parte 3:
+https://github.com/maxbry123-commits/frontend/commit/430809bd98c614435ad7597493ed46c16d6552a3
+
+## Reglas de implementación frontend
+
+1. Reutilizar primero los activos físicos existentes.
+2. No crear un segundo dueño de estado global.
+3. Toda acción UI sale por Action Bus/contrato.
+4. La UI no llama directamente a proveedores LLM.
+5. Backend solo se consume por contrato/bridge.
+6. Panel A y Panel B comparten núcleo, pero no mezclan permisos ni experiencia.
+7. Fotos = referencia visual; `01-original` permanece intacto.
+8. Mantener paridad web/desktop/móvil desde un único núcleo.
+9. Accesibilidad e i18n forman parte del componente base.
+10. No declarar cierre por presencia de archivos: exigir wiring + test + evidencia.
+
+## Flujo de trabajo frontend
+
+`FUENTES + FOTOS -> ARQUITECTURA FRONTEND -> CONTRATOS UI -> HOST/WINDOW REGISTRY -> PANEL A + PANEL B -> SYNC/OFFLINE/VOZ -> EMPAQUE -> QA -> EVIDENCIA -> HANDOFF`
