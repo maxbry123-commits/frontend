@@ -111,3 +111,22 @@ Empaque: `UI YAIWES interface/empaque/`.
 
 Estado: **SUBIDO-FROMTED-SPLIT**. `03-producto` vacío hasta `OK <ID>`.
 Original intacto en `01-original/`.
+
+## Extensión — imágenes del proyecto
+
+Ruta canónica para subir imágenes originales del proyecto:
+
+`UI YAIWES interface/Ui Yaiwes interface beta/01-original/FOTOS-REF/`
+
+Enlace directo de carga:
+https://github.com/maxbry123-commits/frontend/upload/main/UI%20YAIWES%20interface/Ui%20Yaiwes%20interface%20beta/01-original/FOTOS-REF
+
+Reglas:
+- las imágenes originales se conservan sin modificar en `01-original/FOTOS-REF/`;
+- no reemplazar una imagen original silenciosamente;
+- usar nombres claros y estables para que puedan citarse desde README, fichas y evidencias;
+- cualquier versión transformada o FROMTED debe vivir fuera de `01-original/`;
+- subir primero la imagen y después enlazarla desde la documentación o la ventana correspondiente.
+
+Flujo:
+`SUBIR IMAGEN -> 01-original/FOTOS-REF -> REFERENCIA README/FICHA -> TRANSFORMACIÓN FROMTED SI APLICA -> VALIDACIÓN`
