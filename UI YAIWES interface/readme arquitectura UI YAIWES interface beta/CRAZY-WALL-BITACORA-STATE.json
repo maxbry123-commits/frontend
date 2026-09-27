@@ -1,7 +1,7 @@
 {
   "schema": "yaiwes.crazy-wall.bitacora.state.v1",
   "project": "UI YAIWES interface",
-  "updated": "2026-09-27T12:18:00-05:00",
+  "updated": "2026-09-27T12:20:00-05:00",
   "mode": "modular-puzzle-fifa-output",
   "rule": "mostrar -> discutir -> aprobar por ID -> integrar",
   "scope": {
@@ -98,9 +98,9 @@
       "id": "PANEL-01-CHAT",
       "title": "Chat operativo",
       "kind": "panel",
-      "status": "prototype",
+      "status": "implementing",
       "source": "158 FOTOS-REF + Run.html + arquitectura + índice de fábrica",
-      "objective": "primer prototipo funcional sin canvas con snapshot autocontenido y fuente modular",
+      "objective": "refinar chat funcional con fuente modular completa, fidelidad a referencias, estados reales y cero controles muertos",
       "outputs": [
         "index.html",
         "src/",
@@ -113,7 +113,27 @@
         "transcribe_audio",
         "cancel_run"
       ],
-      "approval": null
+      "approval": null,
+      "inputs": [
+        "arquitectura frontend v1",
+        "plan maestro",
+        "frontend-design skill",
+        "image-to-code skill",
+        "referencias Manus/Grok/FOTOS-REF"
+      ],
+      "acceptance_gate": [
+        "snapshot autocontenido funcional",
+        "fuente HTML/CSS/JS modular equivalente",
+        "responsive desktop/mobile",
+        "selector de modo funcional",
+        "menús y sheets funcionales",
+        "archivo/imagen/audio funcionales en navegador",
+        "persistencia local",
+        "teclado/foco visibles",
+        "cero botones muertos",
+        "backend fail-closed",
+        "Playwright spec incluida"
+      ]
     }
   ],
   "events": [
