@@ -353,3 +353,27 @@ No marcar DONE si:
 
 Estado de este subplan: `ACTIVE / DESIGN+PROTOTYPE / REVIEW`.
 
+## 13. Plan de Skills integrado
+
+El plan de acción oficial vive en:
+
+`actualizaciones arquitectura/PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md`
+
+Orden:
+
+1. Registry y deduplicación.
+2. `SkillResolver` fail-closed.
+3. Core frontend: FROMTED architecture + frontend-design + image-to-code + impeccable + web guidelines + builder + skill-creator.
+4. QA: Playwright, visual, lint, a11y.
+5. Device/runtime: Orca sólo cuando exista runtime real.
+6. Donor adapters: nunca promover instrucciones específicas del donor directamente.
+7. Integración Fábrica UI.
+8. Aplicación por superficie, empezando por `PANEL-01-CHAT`.
+9. Handoff/evidencia por ejecución.
+
+Gate general:
+
+`REGISTERED -> SCOPE_OK -> ADAPTER_READY -> TESTED -> VERIFIED -> ACTIVE`
+
+Si falla cualquier gate: `BLOCKED`.
+
