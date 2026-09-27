@@ -182,3 +182,27 @@ Plan frontend consolidado:
 - **Total corregido: 55 nodos.** Los archivos fuente indican 45 en el cierre, pero 11+10+12+10+12 = 55.
 
 Regla de continuidad: los tres archivos fuente marcados `no tocar` permanecen intactos; cualquier implementación nueva debe partir de la arquitectura frontend consolidada y cerrar con wiring + test + evidencia.
+
+## Actualización — PANEL-01 / CHAT-01 — inventario completo de controles — 2026-09-27
+
+Se incorpora oficialmente al plan de arquitectura el inventario consolidado del chat, cruzado con `FOTOS-REF` y con las instrucciones originales de `Maxbry web/Readme arquitectura Maxbry web.md`.
+
+Documento detallado:
+https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/actualizaciones%20arquitectura/ACTUALIZACION-PANEL-01-CHAT-CONTROLES-Y-SELECTORES-2026-09-27.md
+
+Reglas nuevas del plan:
+
+- PANEL-01/CHAT-01 pasa a tener un **inventario de 60 acciones/capacidades de chat**, no 60 botones simultáneos.
+- Mantener **10–15 controles persistentes visibles** y agrupar el resto en `+`, Modelo, Modo, Workflow, Agente y `•••`.
+- Persistentes base: `+`, Thinking, Modelo, Modo, Micrófono, Enviar, Documento, Website, Imagen y Audio.
+- Modelo debe soportar **9 AI + 3 AGI** desde registry/configuración; la UI no inventa nombres faltantes.
+- Los seleccionables parten blanco/gris y pasan a **Little azul `#2563eb`** al quedar activos.
+- Cada control requiere `actionId -> Action Bus -> bridge/plugin -> backend frontera -> evento -> StateStore`.
+- Acción no registrada o bridge ausente = **fail-closed**; nunca fabricar respuesta.
+- Salida obligatoria: HTML funcional de referencia + código modular + assets + dependencias + manifest + tests + versión.
+- Gate: no integración hasta `OK PANEL-01-CHAT`.
+
+Microflujo:
+
+`REFERENCIAS -> INVENTARIO CHAT -> AGRUPACIÓN -> HTML FUNCIONAL -> FUENTE MODULAR -> ACTION BUS -> BRIDGE/PLUGIN -> QA -> OK -> INTEGRACIÓN`
+
