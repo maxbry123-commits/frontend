@@ -1,0 +1,12 @@
+/* Fuente modular Panel 1. El snapshot index.html contiene una copia autocontenida para respaldo. */
+:root {
+  --bg:#09090b; --surface:#141417; --panel:#1a1a1e; --card:#202025;
+  --line:#2a2a33; --line-strong:#3f3f4e; --text:#e4e4e7; --muted:#a1a1aa;
+  --dim:#71717a; --white:#fff; --little:#2563eb; --orange:#ff5500;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+* { box-sizing:border-box; }
+body { margin:0; min-height:100vh; background:var(--bg); color:var(--text); }
+.source-placeholder { max-width:720px; margin:15vh auto; padding:32px; border:1px solid var(--line); border-radius:14px; background:var(--surface); }
+.source-placeholder h1 { color:var(--white); }
+.source-placeholder p { color:var(--muted); line-height:1.6; }
