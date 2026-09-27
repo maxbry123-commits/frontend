@@ -885,3 +885,12 @@ Test real de mount-guard/cableado 1×1: `17` PASS, `3` PENDING_SOURCE, `0` PRUNE
 
 <!-- YAIWES_COMPONENTS_01_20_STEP3_END -->
 
+## Backend V1 — actualización 2026-09-27
+
+Punto de entrada del backend actualizado:
+https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES/readme%20arquitectura%20UI%20YAIWES/ARQUITECTURA-BACKEND-UI-YAIWES-V1-2026-09-27.md
+
+Handoff:
+https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES/readme%20arquitectura%20UI%20YAIWES/HANDOFF-BACKEND-UI-YAIWES-2026-09-27.md
+
+Esta actualización agrega al catálogo arquitectónico las familias Micro-Kernel/Component-IR, Action Registry, Capability Registry, Harness, durable workflow adapters, pools/workers, event bus, OPA/Sheriff, memoria/retrieval, cache/router, Skills, browser/scraping y autoevolución controlada. No cambia automáticamente el estado físico de ningún componente: todos los nuevos nombres permanecen `CANDIDATE/REFERENCE` hasta evidencia real de integración.
