@@ -377,3 +377,25 @@ Gate general:
 
 Si falla cualquier gate: `BLOCKED`.
 
+## 13. Plan de acción — Skills
+
+Handoff canónico:
+`HANDOFF-SKILLS-UI-YAIWES-Y-FABRICA-2026-09-27.md`
+
+Orden por pieza:
+
+1. resolver skills requeridos desde el inventario;
+2. diseño: `frontend-design + impeccable`;
+3. componente: `headless-component / v9-component / token-lookup` cuando aplique;
+4. implementación modular;
+5. `lint-check`;
+6. `write-and-verify-pw-test`;
+7. `fix-pw-spec` si el error está en el test;
+8. `diagnose-pw-failure` si el test es correcto y falla producto;
+9. `visual-test`;
+10. emuladores Orca para QA Android/iOS cuando aplique;
+11. evidencia + handoff;
+12. PASS/FAIL.
+
+Siguiente acción técnica pendiente: crear un `SKILL-REGISTRY.json` machine-readable sin mover ni duplicar los donors.
+
