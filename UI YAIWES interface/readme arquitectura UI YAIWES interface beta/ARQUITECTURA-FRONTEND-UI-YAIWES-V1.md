@@ -320,3 +320,20 @@ Política:
 6. Skill sin scope/dependencia disponible = `BLOCKED`.
 7. Integración no es PASS hasta adapter + test + evidencia.
 
+## Capa de Skills — handoff canónico
+
+Documento canónico:
+`HANDOFF-SKILLS-UI-YAIWES-Y-FABRICA-2026-09-27.md`
+
+Inventario actual:
+- 10 `SKILL.md` físicos bajo `UI YAIWES interface/`;
+- 31 `SKILL.md` físicos bajo `fabrica de UI INTERFACE fromtend/`;
+- 41 archivos físicos;
+- 30 nombres funcionales únicos después de consolidar duplicados.
+
+Flujo frontend recomendado:
+
+`frontend-design -> impeccable -> component/token skills -> implementación -> lint -> Playwright -> visual-test -> evidencia`
+
+La capa de skills guía a los agentes; no sustituye `Action Bus`, `WindowRegistry`, `StateStore` ni runtime del producto. Los donors permanecen en sus rutas originales. Un skill nuevo solo se crea mediante `skill-creator` cuando un gap real no esté cubierto.
+
