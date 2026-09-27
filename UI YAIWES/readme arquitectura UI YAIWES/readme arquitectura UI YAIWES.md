@@ -121,3 +121,16 @@ Autoridad de ejecución añadida 2026-09-17:
 Hallazgo físico: 207 directorios en 5 raíces, 196 identidades normalizadas y 10 grupos duplicados/repetidos. La integración se decide por requisito/capacidad; un donor no necesario cierra `VERIFIED_NO_NEED`. Ningún componente se considera integrado por presencia física.
 
 Flujo: `INVENTORY -> DEDUP/PROVENANCE -> CAPABILITY -> REQUIREMENT -> ADAPTER/WIRING -> FOCUSED TEST -> EVIDENCE -> TRUSTED CI -> FIVE-PASS -> READBACK -> VERIFIED_CLOSED|VERIFIED_NO_NEED`.
+
+## Arquitectura backend consolidada — 2026-09-27
+
+Arquitectura backend V1:
+https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES/readme%20arquitectura%20UI%20YAIWES/ARQUITECTURA-BACKEND-UI-YAIWES-V1-2026-09-27.md
+
+Handoff backend:
+https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES/readme%20arquitectura%20UI%20YAIWES/HANDOFF-BACKEND-UI-YAIWES-2026-09-27.md
+
+Carpeta de fuentes:
+https://github.com/maxbry123-commits/frontend/tree/main/UI%20YAIWES/readme%20arquitectura%20UI%20YAIWES/actualizaciones%20arquitectura%20backend
+
+Regla: las fuentes `no tocar` se conservan; las nuevas capacidades quedan como `CANDIDATE/REFERENCE` hasta wiring + test + evidencia.
