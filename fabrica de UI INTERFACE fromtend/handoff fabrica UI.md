@@ -26,3 +26,17 @@ No cerrar por iteraciones. Cerrar sólo cuando los tres árboles estén presente
 - `Readme arquitectura fabrica UI.md`
 - `Craxy wall bitácora stated JSON/meta-agents-ui-integration-state.json`
 - `CABLEADO.md`
+
+## Handoff skills 2026-09-27
+
+Nuevo handoff canónico:
+`UI YAIWES interface/readme arquitectura UI YAIWES interface beta/actualizaciones arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md`
+
+Nuevo plan:
+`UI YAIWES interface/readme arquitectura UI YAIWES interface beta/actualizaciones arquitectura/PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md`
+
+Registry:
+`UI YAIWES interface/readme arquitectura UI YAIWES interface beta/actualizaciones arquitectura/SKILL-REGISTRY-UI-YAIWES-2026-09-27.json`
+
+Regla al siguiente agente: leer registry -> resolver scope -> leer SKILL.md exacto -> verificar runtime -> ejecutar -> probar -> dejar evidencia. Donor skill fuera de scope = BLOCKED.
+
