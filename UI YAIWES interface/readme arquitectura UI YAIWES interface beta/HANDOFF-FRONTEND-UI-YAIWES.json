@@ -2,7 +2,7 @@
   "schema": "yaiwes.frontend.handoff.v1",
   "handoff_id": "YAIWES-FE-2026-09-27-RUN01",
   "project": "UI YAIWES interface",
-  "status": "PANEL_01_IMPLEMENTING_V2",
+  "status": "PANEL_01_V2_REVIEW",
   "language": "es",
   "read_first": [
     "PLAN-DE-TRABAJO-UI-YAIWES.md",
@@ -13,9 +13,9 @@
   "current_task": {
     "id": "PANEL-01-CHAT",
     "name": "Chat operativo",
-    "goal": "refinar PANEL-01-CHAT usando arquitectura, skills y referencias visuales reales; completar fuente modular y eliminar controles muertos",
+    "goal": "PANEL-01-CHAT v0.2.0 funcional publicado; espera revisión y OK antes de integración",
     "acceptance": "OK PANEL-01-CHAT",
-    "phase": "IMPLEMENTATION"
+    "phase": "REVIEW"
   },
   "architecture": {
     "flow": [
@@ -106,12 +106,10 @@
     "update memory and this handoff"
   ],
   "next_actions": [
-    "materializar HTML/CSS/JS modular completo",
-    "alinear snapshot index.html con la fuente modular",
-    "implementar selector de modo, menú, adjuntos, audio, chats y estados con interacción real",
-    "añadir criterios técnicos de aceptación y prueba Playwright",
-    "mantener backend como frontera fail-closed",
-    "solicitar OK PANEL-01-CHAT antes de integración"
+    "revisión visual del usuario sobre PANEL-01-CHAT v0.2.0",
+    "recibir OK PANEL-01-CHAT o cambios solicitados",
+    "solo después del OK: integrar HostShell/WindowRegistry/StateStore/Action Bus y bridge real",
+    "ejecutar Playwright completo y axe-core en entorno de integración"
   ],
   "blocked_if": [
     "source contradicts architecture",
@@ -119,9 +117,9 @@
     "backend behavior is required to demonstrate the UI",
     "approval ID is missing"
   ],
-  "last_decision": null,
+  "last_decision": "PANEL-01-CHAT v0.2.0 publicado en formato FIFA; originales intactos; backend permanece boundary-only.",
   "last_agent": "ChatGPT GPT-5.6 Sol",
-  "last_update": "2026-09-27T12:20:00-05:00",
+  "last_update": "2026-09-27T13:33:00-05:00",
   "visual_audit": {
     "reference_count": 158,
     "path": "Ui Yaiwes interface beta/01-original/FOTOS-REF/",
@@ -161,5 +159,42 @@
       "01-original/FOTOS-REF/p07-sidebar-menu.html",
       "01-original/FOTOS-REF/p09-mode-dropdown.html"
     ]
+  },
+  "implementation_evidence": {
+    "version": "0.2.0",
+    "repo_path": "UI YAIWES interface/Ui Yaiwes interface beta/04-panels/PANEL-01-CHAT/",
+    "outputs": [
+      "index.html",
+      "src/panel-01-chat.html",
+      "src/panel-01-chat.css",
+      "src/panel-01-chat.js",
+      "src/panel-01-chat.manifest.json",
+      "README.md",
+      "ACCEPTANCE.md",
+      "package.json",
+      "tests/panel-01-chat.spec.js"
+    ],
+    "chromium_smoke": {
+      "result": "PASS_CORE",
+      "checked": [
+        "render composer",
+        "new chat",
+        "mode Fast",
+        "send local message",
+        "bridge fail-closed",
+        "tools sheet",
+        "tool toggle",
+        "rename",
+        "mobile rail",
+        "console errors = 0"
+      ],
+      "note": "El entorno de ejecución bloqueó navegación file:// y localhost; el smoke se ejecutó en Chromium con el HTML autocontenido mediante setContent. La spec Playwright queda publicada para ejecución normal del repo."
+    },
+    "source_checks": {
+      "modular_source_complete": true,
+      "snapshot_synced": true,
+      "originals_modified": false,
+      "backend_modified": false
+    }
   }
 }
