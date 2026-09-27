@@ -206,3 +206,23 @@ Microflujo:
 
 `REFERENCIAS -> INVENTARIO CHAT -> AGRUPACIÓN -> HTML FUNCIONAL -> FUENTE MODULAR -> ACTION BUS -> BRIDGE/PLUGIN -> QA -> OK -> INTEGRACIÓN`
 
+## Integración canónica de Skills — 2026-09-27
+
+Auditoría física cerrada sobre las dos raíces:
+
+- `UI YAIWES interface/`: 10 `SKILL.md`.
+- `fabrica de UI INTERFACE fromtend/`: 41 `SKILL.md`.
+- Total: **51 archivos físicos / 39 familias lógicas** tras mirrors/alias.
+
+Documentos canónicos:
+
+- Registry máquina: `actualizaciones arquitectura/SKILL-REGISTRY-UI-YAIWES-2026-09-27.json`.
+- Handoff: `actualizaciones arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md`.
+- Plan: `actualizaciones arquitectura/PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md`.
+
+Regla: **presencia != activación**. Skills de donors quedan `DONOR_SCOPED`; sólo un adapter probado puede promoverlos.
+
+Microflujo:
+
+`TASK -> SkillResolver -> FROMTED policy -> skill de superficie -> tool/component -> browser/device -> QA -> evidence -> PASS/FAIL`
+
