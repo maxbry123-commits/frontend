@@ -83,3 +83,14 @@ El método oficial de salida queda fijado así:
 El lote completo actual contiene 158 imágenes en `01-original/FOTOS-REF/`. Se observaron patrones repetidos que pasan a ser requisitos visuales del Panel 1: chat móvil oscuro; composer persistente; selector de modo; botones de imagen, archivo y audio; menús desplegables; estados de ejecución; tarjetas de archivos; conectores; respuestas largas; paneles técnicos; controles de configuración; vistas de código; navegación compacta; y layouts de doble panel. Las imágenes se usan como referencia de composición y comportamiento visible, no como sustituto de contratos backend.
 
 El primer prototipo `PANEL-01 / CHAT-01` se construye sin la etiqueta `<canvas>`, con acciones nativas reales del navegador y frontera explícita para `send_message`, `upload_file`, `transcribe_audio` y `cancel_run`.
+
+## 2026-09-27 — PANEL-01-CHAT v0.2.0
+
+- Se leyó arquitectura frontend, plan maestro, handoff/bitácora, `frontend-design.SKILL.md`, `Image-to-Code/SKILL.md` y referencias visuales reales de Manus/Grok/FOTOS-REF.
+- Se completó la fuente modular de `PANEL-01-CHAT` y se sincronizó con un `index.html` autocontenido.
+- Funciones locales implementadas: chats, modo Heavy/Expert/Fast/Auto, tool sheet, toggles, archivos/imágenes/cámara, audio MediaRecorder, mensajes, cancelación, renombrado, exportación, borrado, persistencia y responsive.
+- El frontend emite acciones tipadas y mantiene fail-closed cuando no existe bridge; no fabrica respuestas de IA.
+- Se añadieron `ACCEPTANCE.md` y prueba Playwright.
+- Smoke Chromium: PASS en render, nuevo chat, modo, envío/fail-closed, tools, rename, rail móvil; 0 errores de consola en la corrida válida.
+- Estado: REVIEW. No integrar núcleo/backend hasta `OK PANEL-01-CHAT`.
+
