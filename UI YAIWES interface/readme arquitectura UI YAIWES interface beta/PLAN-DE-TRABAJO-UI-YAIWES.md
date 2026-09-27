@@ -399,3 +399,21 @@ Orden por pieza:
 
 Siguiente acción técnica pendiente: crear un `SKILL-REGISTRY.json` machine-readable sin mover ni duplicar los donors.
 
+## 13. Plan de acción — Skills
+
+Fuente: `HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md`  
+Registry: `SKILLS-REGISTRY-UI-YAIWES.json`
+
+Estado:
+- P0 inventario 38 físicos / 26 canónicos: **PASS**.
+- P1 registry y aliases: **PASS documental**.
+- P2 cableado arquitectura: **PASS documental**.
+- P3 adapter común + validación de dependencias: **NEXT**.
+- P4 QA Playwright (`write-and-verify -> fix-pw-spec -> diagnose-pw-failure`) + `visual-test`: **NEXT**.
+- P5 component factory (`token-lookup -> headless-component/v9-component -> lint-check`): **NEXT**.
+- P6 mobile QA (`orca-emulator-android/orca-emulator`): **NEXT**.
+- P7 orchestration (`orchestration + orca-cli`): **NEXT**.
+- P8 acceptance/evidence/handoff: **NEXT**.
+
+Regla de cierre: ningún skill se considera integrado solo porque su `SKILL.md` exista. Debe resolver por ID canónico, verificar runtime/dependencias, ejecutar el test aplicable y dejar evidencia.
+
