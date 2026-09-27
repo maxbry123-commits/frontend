@@ -157,3 +157,17 @@ No cerrar integración de skills hasta:
 - pruebas de dispositivo cuando aplique;
 - trazabilidad por tarea;
 - documentación y handoff actualizados.
+
+## Verificación de ejecución del plan
+
+El inventario base de S0 queda congelado en **51 SKILL.md físicos / 39 familias lógicas**.
+
+Registry de fábrica:
+`UI YAIWES interface/fabrica-ui/SKILLS-REGISTRY.json`.
+
+Gate operativo:
+
+`DISCOVERED -> SCOPE_OK -> ADAPTER_READY -> TESTED -> VERIFIED -> ACTIVE`
+
+No se salta ningún estado. Skills donor-specific permanecen bloqueados fuera de su runtime/adapter.
+
