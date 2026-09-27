@@ -126,3 +126,30 @@ Antes de usar un skill:
 7. no declarar integración por mera presencia del archivo.
 
 Siguiente documento: `PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md`.
+
+## Verificación final de inventario — 17:05 -05:00
+
+Se verificó el conteo por subárbol porque el árbol recursivo raíz de `fabrica de UI INTERFACE fromtend/` devuelve `truncated=true`.
+
+Resultado completo:
+
+- `UI YAIWES interface/`: 10 SKILL.md, árbol completo (`truncated=false`).
+- `fabrica de UI INTERFACE fromtend/`: 41 SKILL.md, verificados por subárboles completos.
+- total físico: **51**.
+- familias lógicas: **39**.
+
+Desglose fábrica:
+- Appsmith: 3.
+- Budibase: 1.
+- Fluent UI: 24.
+- VS Code Contribution Points Docs: 10.
+- skills propios de fábrica: 3 (`frontend-design`, `impeccable`, `skill-creator`).
+
+Registry operativo sincronizado:
+`UI YAIWES interface/fabrica-ui/SKILLS-REGISTRY.json`.
+
+Fuente canónica:
+`actualizaciones arquitectura/SKILL-REGISTRY-UI-YAIWES-2026-09-27.json`.
+
+Estado de cableado documental: **PASS**. Runtime/adapters de donors: **PENDING / GATED**.
+
