@@ -64,3 +64,22 @@ Estado:
 Pruebas:
 Handoff actualizado: sí/no
 ```
+
+
+## Norma FIFA — formato de salida (instrucción del usuario)
+
+El método oficial de salida queda fijado así:
+
+1. `index.html` funcional y autocontenido: snapshot, referencia visual y respaldo rápido.
+2. Proyecto fuente separado: componentes, estilos, lógica, assets, configuración y dependencias.
+3. Flujo obligatorio: `Diseño en Manus → HTML funcional de referencia → código fuente por componentes → guardar versión → seguir editando`.
+4. Nunca guardar únicamente el HTML cuando la pieza vaya a continuar evolucionando.
+5. Mantener HTML funcional, fuente modular, assets, dependencias y versión.
+6. Todo el código debe permanecer separado por partes para editar una función sin romper las demás.
+
+
+## Hallazgos visuales incorporados — lote actual
+
+El lote completo actual contiene 158 imágenes en `01-original/FOTOS-REF/`. Se observaron patrones repetidos que pasan a ser requisitos visuales del Panel 1: chat móvil oscuro; composer persistente; selector de modo; botones de imagen, archivo y audio; menús desplegables; estados de ejecución; tarjetas de archivos; conectores; respuestas largas; paneles técnicos; controles de configuración; vistas de código; navegación compacta; y layouts de doble panel. Las imágenes se usan como referencia de composición y comportamiento visible, no como sustituto de contratos backend.
+
+El primer prototipo `PANEL-01 / CHAT-01` se construye sin la etiqueta `<canvas>`, con acciones nativas reales del navegador y frontera explícita para `send_message`, `upload_file`, `transcribe_audio` y `cancel_run`.
