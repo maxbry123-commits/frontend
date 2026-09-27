@@ -1,8 +1,8 @@
 {
   "schema": "yaiwes.crazy-wall.bitacora.state.v1",
   "project": "UI YAIWES interface",
-  "updated": "2026-09-27T11:22:00-05:00",
-  "mode": "modular-puzzle",
+  "updated": "2026-09-27T12:18:00-05:00",
+  "mode": "modular-puzzle-fifa-output",
   "rule": "mostrar -> discutir -> aprobar por ID -> integrar",
   "scope": {
     "frontend": true,
@@ -21,46 +21,140 @@
     "Skills arquitectura frontend Yaiwes/"
   ],
   "layers": [
-    {"id":"L0","name":"gobierno","status":"active"},
-    {"id":"L1","name":"HostShell","status":"planned"},
-    {"id":"L2","name":"WindowRegistry+Manifest","status":"planned"},
-    {"id":"L3","name":"StateStore+ActionBus","status":"planned"},
-    {"id":"L4","name":"windows","status":"planned"},
-    {"id":"L5","name":"polish+verification","status":"planned"}
+    {
+      "id": "L0",
+      "name": "gobierno",
+      "status": "active"
+    },
+    {
+      "id": "L1",
+      "name": "HostShell",
+      "status": "planned"
+    },
+    {
+      "id": "L2",
+      "name": "WindowRegistry+Manifest",
+      "status": "planned"
+    },
+    {
+      "id": "L3",
+      "name": "StateStore+ActionBus",
+      "status": "planned"
+    },
+    {
+      "id": "L4",
+      "name": "windows",
+      "status": "planned"
+    },
+    {
+      "id": "L5",
+      "name": "polish+verification",
+      "status": "planned"
+    }
   ],
   "cards": [
     {
-      "id":"RUN-01",
-      "title":"CASCADE",
-      "kind":"window",
-      "status":"review",
-      "source":"Run.html + 02-fromted/INDEX.json + fotos RUN",
-      "objective":"primer vertical slice para seleccionar nodos, inspeccionar y emitir acciones locales",
-      "components":["HostShell","WindowRegistry","Manifest Schema","Action Bus","StateStore"],
-      "allowed":["HTML","CSS","JS local","componentes ya catalogados"],
-      "forbidden":["backend implementation","provider logic","secrets","memory backend"],
-      "approval":null,
-      "next":"aprobar dirección visual y luego implementar la pieza mínima"
+      "id": "RUN-01",
+      "title": "CASCADE",
+      "kind": "window",
+      "status": "review",
+      "source": "Run.html + 02-fromted/INDEX.json + fotos RUN",
+      "objective": "primer vertical slice para seleccionar nodos, inspeccionar y emitir acciones locales",
+      "components": [
+        "HostShell",
+        "WindowRegistry",
+        "Manifest Schema",
+        "Action Bus",
+        "StateStore"
+      ],
+      "allowed": [
+        "HTML",
+        "CSS",
+        "JS local",
+        "componentes ya catalogados"
+      ],
+      "forbidden": [
+        "backend implementation",
+        "provider logic",
+        "secrets",
+        "memory backend"
+      ],
+      "approval": null,
+      "next": "aprobar dirección visual y luego implementar la pieza mínima"
     },
     {
-      "id":"MODEL-VISUAL",
-      "title":"dirección visual base",
-      "kind":"design-decision",
-      "status":"review",
-      "options":["A-Matte-Control","B-Holographic-Glass","C-Little-Factory"],
-      "approval":null
+      "id": "MODEL-VISUAL",
+      "title": "dirección visual base",
+      "kind": "design-decision",
+      "status": "review",
+      "options": [
+        "A-Matte-Control",
+        "B-Holographic-Glass",
+        "C-Little-Factory"
+      ],
+      "approval": null
+    },
+    {
+      "id": "PANEL-01-CHAT",
+      "title": "Chat operativo",
+      "kind": "panel",
+      "status": "prototype",
+      "source": "158 FOTOS-REF + Run.html + arquitectura + índice de fábrica",
+      "objective": "primer prototipo funcional sin canvas con snapshot autocontenido y fuente modular",
+      "outputs": [
+        "index.html",
+        "src/",
+        "README.md",
+        "manifest.json"
+      ],
+      "backend_contract": [
+        "send_message",
+        "upload_file",
+        "transcribe_audio",
+        "cancel_run"
+      ],
+      "approval": null
     }
   ],
   "events": [
-    {"at":"2026-09-27T11:22:00-05:00","type":"audit.completed","actor":"Manus","result":"plan required and sources mapped"},
-    {"at":"2026-09-27T11:22:00-05:00","type":"workplan.created","actor":"Manus","result":"ACTIVE"}
+    {
+      "at": "2026-09-27T11:22:00-05:00",
+      "type": "audit.completed",
+      "actor": "Manus",
+      "result": "plan required and sources mapped"
+    },
+    {
+      "at": "2026-09-27T11:22:00-05:00",
+      "type": "workplan.created",
+      "actor": "Manus",
+      "result": "ACTIVE"
+    },
+    {
+      "at": "2026-09-27T12:17:00-05:00",
+      "type": "visual-audit.completed",
+      "actor": "Manus",
+      "result": "158 images reviewed; chat/composer/mobile/technical patterns mapped"
+    },
+    {
+      "at": "2026-09-27T12:18:00-05:00",
+      "type": "prototype.created",
+      "actor": "Manus",
+      "result": "PANEL-01-CHAT snapshot plus modular source staged"
+    }
   ],
   "approval_gate": {
-    "format":"OK <ID>",
-    "required_before_integration":true,
-    "required_checks":["visual","responsive","a11y","manifest","action-bus","handoff"]
+    "format": "OK <ID>",
+    "required_before_integration": true,
+    "required_checks": [
+      "visual",
+      "responsive",
+      "a11y",
+      "manifest",
+      "action-bus",
+      "handoff"
+    ]
   },
-  "open_questions":[
+  "open_questions": [
     "¿Se aprueba A, B o C como base visual?",
     "¿RUN-01 es el primer vertical slice?",
     "¿El azul Little queda bloqueado como #2563eb para UI YAIWES?"
