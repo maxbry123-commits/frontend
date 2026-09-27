@@ -282,3 +282,41 @@ Reglas adicionales:
 7. entregar HTML funcional + proyecto modular + assets + dependencias + versión;
 8. `OK PANEL-01-CHAT` es obligatorio antes de integración.
 
+## Skill layer — resolución y gobierno
+
+Se añade una capa explícita entre intención y ejecución:
+
+```text
+USER/TASK
+  ↓
+SkillResolver
+  ↓
+FROMTED architecture policy
+  ↓
+surface skill
+  ↓
+Capability / Tool / Component
+  ↓
+Action Bus / browser / device / repo
+  ↓
+QA skill
+  ↓
+Evidence
+```
+
+Fuentes:
+
+- `SKILL-REGISTRY-UI-YAIWES-2026-09-27.json`.
+- `HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md`.
+- `PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md`.
+
+Política:
+
+1. `fromted-frontend-architecture` gobierna tokens, modularidad y fail-closed.
+2. `frontend-design`, `image-to-code`, `impeccable`, `web-design-guidelines` y builder se usan por etapa.
+3. Donor skills Appsmith/Fluent/VS Code/Budibase/Orca/Omarchy no son globales.
+4. Mirror/alias no crea una segunda capacidad.
+5. Skill != tool != plugin != componente: el skill define método; la capacidad ejecuta.
+6. Skill sin scope/dependencia disponible = `BLOCKED`.
+7. Integración no es PASS hasta adapter + test + evidencia.
+
