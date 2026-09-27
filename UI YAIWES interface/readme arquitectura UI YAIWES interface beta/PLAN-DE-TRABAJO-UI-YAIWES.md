@@ -259,3 +259,97 @@ El método oficial de salida queda fijado así:
 El lote completo actual contiene 158 imágenes en `01-original/FOTOS-REF/`. Se observaron patrones repetidos que pasan a ser requisitos visuales del Panel 1: chat móvil oscuro; composer persistente; selector de modo; botones de imagen, archivo y audio; menús desplegables; estados de ejecución; tarjetas de archivos; conectores; respuestas largas; paneles técnicos; controles de configuración; vistas de código; navegación compacta; y layouts de doble panel. Las imágenes se usan como referencia de composición y comportamiento visible, no como sustituto de contratos backend.
 
 El primer prototipo `PANEL-01 / CHAT-01` se construye sin la etiqueta `<canvas>`, con acciones nativas reales del navegador y frontera explícita para `send_message`, `upload_file`, `transcribe_audio` y `cancel_run`.
+
+## 12. Subplan oficial — PANEL-01 / CHAT-01
+
+Este subplan se incorpora a la ejecución del Panel B y **reemplaza cualquier interpretación reducida del chat como un simple textarea + enviar**.
+
+Documento de detalle:
+`actualizaciones arquitectura/ACTUALIZACION-PANEL-01-CHAT-CONTROLES-Y-SELECTORES-2026-09-27.md`
+
+### 12.1 Fuente
+
+Cruzar antes de implementar:
+
+- más de 50 referencias visuales de `01-original/FOTOS-REF/`;
+- `📌p01-chat-minimax.html`;
+- `p04-sheet-agregar.html`;
+- `p05-sheet-herramientas.html`;
+- `p09-mode-dropdown.html`;
+- `Maxbry web/Readme arquitectura Maxbry web.md`, BLOQUE A, punto 2;
+- `Maxbry web/memoria grock.md`.
+
+### 12.2 Alcance
+
+Inventario consolidado: **60 acciones/capacidades del chat**.
+
+No significa 60 botones visibles. Implementar exposición progresiva:
+
+```text
+PERSISTENTE
++ · Thinking · Modelo▾ · Modo▾ · Mic · Enviar
+Documento · Website · Imagen · Audio
+
+DESPLEGABLE
++          -> medios/herramientas/proyecto/conectores/plugins
+Modelo▾    -> 9 AI + 3 AGI
+Modo▾      -> Heavy/Expert/Fast/Auto + razonamiento/especialistas
+Workflow▾  -> loops/watchdogs/investigación/workflows/proyectos
+Agente▾    -> YAIWES/CODE/NCT/roles/prompts/skills/memoria
+•••        -> acciones de conversación
+```
+
+### 12.3 Implementación
+
+Orden:
+
+1. inventario y manifest de controles;
+2. HTML funcional de referencia;
+3. código fuente React/Vite por componentes;
+4. estados blanco/gris -> Little azul al seleccionar;
+5. selectores/sheets reales;
+6. Action Bus y adaptador plugin/bridge;
+7. fail-closed sin backend;
+8. Playwright: click/select/toggle/input/touch/keyboard;
+9. evidencia visual desktop+móvil;
+10. revisión del Director;
+11. `OK PANEL-01-CHAT`;
+12. integración en Panel B.
+
+### 12.4 Formato obligatorio de salida
+
+```text
+PANEL-01-CHAT/
+├── index.html
+├── package.json
+├── vite.config.js
+├── src/
+│   ├── App.jsx
+│   ├── main.jsx
+│   ├── components/
+│   ├── styles/
+│   └── assets/
+├── manifest.json
+├── README.md
+├── ACCEPTANCE.md
+├── tests/
+└── snapshot/index-reference.html
+```
+
+### 12.5 Gate
+
+No marcar DONE si:
+
+- existe un botón muerto;
+- falta un selector;
+- se inventa un nombre de modelo/capacidad no registrado;
+- seleccionado no produce estado lógico + visual;
+- el frontend llama directo a proveedores;
+- no hay fail-closed;
+- falta HTML funcional o fuente modular;
+- falta responsive/touch/keyboard;
+- falta evidencia;
+- no existe `OK PANEL-01-CHAT`.
+
+Estado de este subplan: `ACTIVE / DESIGN+PROTOTYPE / REVIEW`.
+
