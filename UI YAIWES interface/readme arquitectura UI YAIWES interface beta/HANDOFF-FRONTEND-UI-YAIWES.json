@@ -1,0 +1,66 @@
+{
+  "schema": "yaiwes.frontend.handoff.v1",
+  "handoff_id": "YAIWES-FE-2026-09-27-RUN01",
+  "project": "UI YAIWES interface",
+  "status": "ACTIVE_REVIEW",
+  "language": "es",
+  "read_first": [
+    "PLAN-DE-TRABAJO-UI-YAIWES.md",
+    "CRAZY-WALL-BITACORA-STATE.json",
+    "memoria.md",
+    "UI YAIWES interface/readme arquitectura UI YAIWES interface beta/HANDOFF-FRONTEND-UI-YAIWES-2026-09-27.md"
+  ],
+  "current_task": {
+    "id":"RUN-01",
+    "name":"CASCADE",
+    "goal":"crear el primer vertical slice frontend modular sin backend",
+    "acceptance":"OK RUN-01"
+  },
+  "architecture": {
+    "flow":["user","panel","ui-contract","action-bus","bridge","backend-boundary","events","canvas"],
+    "singletons":["HostShell","WindowRegistry","StateStore","ActionBus"],
+    "fail_closed":["invalid manifest","unknown action","missing target slot"]
+  },
+  "design": {
+    "base_candidates":["A-Matte-Control","B-Holographic-Glass","C-Little-Factory"],
+    "locked_palette_intent":["black","grays","white","Little blue","orange only load/download"],
+    "do_not_use_as_brand":["lime","neon green","purple"]
+  },
+  "component_policy": {
+    "catalog":"fabrica de UI INTERFACE fromtend/",
+    "candidate_components":["dockview","lucide","assistant-ui","xyflow","tldraw","TanStack Table","Monaco","CodeMirror","Dexie","i18next"],
+    "must_record":["source","license","version_or_sha","role","status","evidence"],
+    "never":"integrate every downloaded component automatically"
+  },
+  "backend_boundary": {
+    "implement":false,
+    "ui_may":"emit typed actions and render received results",
+    "ui_must_not":["providers","router","scheduler","secrets","backend memory","agent orchestration"]
+  },
+  "working_protocol": [
+    "audit sources",
+    "write/update card in Crazy Wall state",
+    "create local canvas",
+    "explain real/stub/boundary",
+    "request review",
+    "wait for OK <ID>",
+    "integrate only after approval",
+    "update memory and this handoff"
+  ],
+  "next_actions":[
+    "obtain visual decision",
+    "extract RUN-01 zones from Run.html",
+    "define RUN-01 manifest",
+    "wire local node.select and action dispatch demo",
+    "run responsive and accessibility checks"
+  ],
+  "blocked_if":[
+    "source contradicts architecture",
+    "component license or provenance is missing",
+    "backend behavior is required to demonstrate the UI",
+    "approval ID is missing"
+  ],
+  "last_decision":null,
+  "last_agent": "Manus",
+  "last_update": "2026-09-27T11:22:00-05:00"
+}
