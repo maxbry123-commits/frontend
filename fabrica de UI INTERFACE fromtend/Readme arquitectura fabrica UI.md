@@ -55,3 +55,19 @@ La captura de pantalla es una evidencia esencial del frontend: permite observar 
 - Gitlinks no autorizados eliminados de ambos destinos; `.gitmodules` ausente. Continuar únicamente con motores canónicos.
 
 - DOWNLOAD/EXTRACT GATE: 8/8 VERIFIED_CLOSED = 100% PASS. Publicación física/materialización en destino sigue PENDING; no se cuenta como instalación. Gitlinks/.gitmodules no autorizados: AUSENTES.
+
+## Skills — integración gobernada
+
+La auditoría 2026-09-27 reemplaza el estado ambiguo “integración pendiente” por un modelo de gates.
+
+- 3 skills primarios materializados en `fabrica.../skills/`: `frontend-design`, `impeccable`, `skill-creator`.
+- Skills de donors encontrados dentro de Appsmith, Budibase, Fluent UI y VS Code Docs: registrados como `DONOR_SCOPED`.
+- Skills Orca/Omarchy dentro de `UI YAIWES interface/Backend/Motor3 approved donors/`: registrados como `DONOR_SCOPED`.
+- Referencias canónicas externas se mantienen en `Skills arquitectura frontend Yaiwes/`.
+
+Estado correcto:
+
+`MATERIALIZED -> ARCHITECTURE_WIRED -> ADAPTER_PENDING -> TEST_PENDING -> VERIFIED -> ACTIVE`
+
+No marcar `ACTIVE` por mera copia física.
+
