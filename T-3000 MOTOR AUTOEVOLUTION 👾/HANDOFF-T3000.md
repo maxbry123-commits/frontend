@@ -4,6 +4,11 @@ Actualizado: 2026-09-26 por Opus. Estado: RECEPCIÓN TERMINADA, SIN CÓDIGO. El 
 ## Qué es (resumen fiel del Director)
 Micro kernel determinista de autoevolución: recibe URL visible + nombre de un componente → lo descarga con los motores de descarga y extracción → lo clasifica (plugin, pool, tool, agente, software…) → lo convierte en contrato/esquema + código ejecutable (no skill informativo) con CLI-Anything y el estilo de plugins de DeepSeek Harness (Cordis) → lo prueba → solo si pasa lo registra y actualiza el sistema. Bloque independiente y copiable; conectado a la Fábrica UI pero FUERA de su runtime; activable desde el chat o por una IA con URL + nombre.
 
+## Regla de gobierno de integración
+DeepSeek Harness es componente obligatorio del sistema de integración junto al workflow determinista. El workflow determinista es el sistema operativo de integración: vigila qué hacer, decide y encadena los pasos obligatorios, dependencias, ejecución, pruebas, verificación, registro y actualización. DeepSeek no gobierna el flujo completo ni sustituye al workflow determinista; solo aparece en los huecos donde realmente se necesita razonamiento, resolución de ambigüedad o generación/adaptación de código.
+
+Microflujo: `URL + nombre → workflow determinista → descarga/extracción → clasificación → adapter/CLI-Anything cuando corresponda → DeepSeek Harness + contrato/schema/código ejecutable → pruebas/verificación → PASS → registro/actualización`. Si durante el flujo aparece un hueco que no puede resolverse de forma determinista: `workflow → DeepSeek → resultado estructurado → workflow continúa`.
+
 ## Fuentes (en este orden)
 1. Archivo del Director (NO TOCAR, 3.571 líneas) en `00-ENTRADA/` de esta carpeta.
 2. Repo router-universal-router-inteligente-: `chat router/INPUT-BLOCK-VERBATIM-CHAT-Y-PANEL-PARTE-3.md` (docs 11–13) y `-PARTE-4.md` (docs 14–19): Capability Engine, 15 motores deterministas, registro obligatorio, cobertura, recetas, CLI-Anything.
