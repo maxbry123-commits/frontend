@@ -337,3 +337,30 @@ Flujo frontend recomendado:
 
 La capa de skills guía a los agentes; no sustituye `Action Bus`, `WindowRegistry`, `StateStore` ni runtime del producto. Los donors permanecen en sus rutas originales. Un skill nuevo solo se crea mediante `skill-creator` cuando un gap real no esté cubierto.
 
+## Skill Registry y SkillResolver — cableado 2026-09-27
+
+Handoff canónico:
+`HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md`
+
+Registry:
+`SKILLS-REGISTRY-UI-YAIWES.json`
+
+Auditoría física:
+- `UI YAIWES interface/`: 10 SKILL docs / 9 capacidades canónicas.
+- `fabrica de UI INTERFACE fromtend/`: 28 SKILL docs / 17 capacidades canónicas.
+- total: 38 físicos / 26 canónicos.
+
+Microflujo:
+
+`TASK -> SkillRegistry -> SkillResolver -> adapter -> Agent/Workflow -> QA/Evidence`
+
+Reglas:
+1. rutas donor se resuelven por ID canónico;
+2. aliases no duplican capacidad;
+3. UI no hardcodea rutas de donor;
+4. skill existente no equivale a runtime instalado;
+5. validar dependencias/allowed-tools antes de ejecutar;
+6. frontend visual cierra con Playwright/visual-test/lint cuando aplique;
+7. emuladores Orca se reservan para QA móvil;
+8. orchestration/orca-cli coordinan trabajo, pero no sustituyen Action Bus, StateStore ni WindowRegistry.
+
