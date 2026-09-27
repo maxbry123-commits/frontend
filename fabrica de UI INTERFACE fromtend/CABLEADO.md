@@ -66,3 +66,34 @@ Runtime nunca importa el canvas GrapesJS/Puck.
 Fábrica nunca pinta lime Operator como chrome producto.
 Backend nunca vive dentro de yaiwes-button.
 Si mueves una carpeta, cambias BASE en 10-wire.js. El resto no se reescribe.
+
+## Cableado skills 2026-09-27
+
+Registro autoritativo del proyecto:
+
+- `UI YAIWES interface/readme arquitectura UI YAIWES interface beta/actualizaciones arquitectura/SKILL-REGISTRY-UI-YAIWES-2026-09-27.json`
+- `.../HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md`
+- `.../PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md`
+
+Inventario: 51 `SKILL.md` físicos en UI interface + fábrica; 39 familias lógicas.
+
+Cable:
+
+```text
+GOAL
+→ SkillResolver
+→ FROMTED policy
+→ skill de diseño/build/QA
+→ Capability Registry
+→ componente/tool
+→ browser/device
+→ screenshot/test
+→ evidencia
+```
+
+Los skills de donors permanecen aislados. Para reutilizarlos:
+
+`DONOR SKILL -> EXTRACT GENERIC METHOD -> skill-creator -> YAIWES ADAPTER -> TEST -> APPROVAL`
+
+No cablear directamente comandos específicos de Fluent UI, VS Code, Appsmith, Budibase, Orca u Omarchy a una tarea YAIWES si su runtime no existe.
+
