@@ -1,0 +1,68 @@
+{
+  "schema": "yaiwes.crazy-wall.bitacora.state.v1",
+  "project": "UI YAIWES interface",
+  "updated": "2026-09-27T11:22:00-05:00",
+  "mode": "modular-puzzle",
+  "rule": "mostrar -> discutir -> aprobar por ID -> integrar",
+  "scope": {
+    "frontend": true,
+    "backend": "boundary-only",
+    "originals": "locked-no-touch",
+    "monolith": false
+  },
+  "sources": [
+    "readme arquitectura UI YAIWES interface beta",
+    "HANDOFF-FRONTEND-UI-YAIWES-2026-09-27.md",
+    "ARQUITECTURA-FRONTEND-UI-YAIWES-V1.md",
+    "Ui Yaiwes interface beta/02-fromted/INDEX.json",
+    "01-original/FOTOS-REF/",
+    "Run.html",
+    "fabrica de UI INTERFACE fromtend/",
+    "Skills arquitectura frontend Yaiwes/"
+  ],
+  "layers": [
+    {"id":"L0","name":"gobierno","status":"active"},
+    {"id":"L1","name":"HostShell","status":"planned"},
+    {"id":"L2","name":"WindowRegistry+Manifest","status":"planned"},
+    {"id":"L3","name":"StateStore+ActionBus","status":"planned"},
+    {"id":"L4","name":"windows","status":"planned"},
+    {"id":"L5","name":"polish+verification","status":"planned"}
+  ],
+  "cards": [
+    {
+      "id":"RUN-01",
+      "title":"CASCADE",
+      "kind":"window",
+      "status":"review",
+      "source":"Run.html + 02-fromted/INDEX.json + fotos RUN",
+      "objective":"primer vertical slice para seleccionar nodos, inspeccionar y emitir acciones locales",
+      "components":["HostShell","WindowRegistry","Manifest Schema","Action Bus","StateStore"],
+      "allowed":["HTML","CSS","JS local","componentes ya catalogados"],
+      "forbidden":["backend implementation","provider logic","secrets","memory backend"],
+      "approval":null,
+      "next":"aprobar dirección visual y luego implementar la pieza mínima"
+    },
+    {
+      "id":"MODEL-VISUAL",
+      "title":"dirección visual base",
+      "kind":"design-decision",
+      "status":"review",
+      "options":["A-Matte-Control","B-Holographic-Glass","C-Little-Factory"],
+      "approval":null
+    }
+  ],
+  "events": [
+    {"at":"2026-09-27T11:22:00-05:00","type":"audit.completed","actor":"Manus","result":"plan required and sources mapped"},
+    {"at":"2026-09-27T11:22:00-05:00","type":"workplan.created","actor":"Manus","result":"ACTIVE"}
+  ],
+  "approval_gate": {
+    "format":"OK <ID>",
+    "required_before_integration":true,
+    "required_checks":["visual","responsive","a11y","manifest","action-bus","handoff"]
+  },
+  "open_questions":[
+    "¿Se aprueba A, B o C como base visual?",
+    "¿RUN-01 es el primer vertical slice?",
+    "¿El azul Little queda bloqueado como #2563eb para UI YAIWES?"
+  ]
+}
