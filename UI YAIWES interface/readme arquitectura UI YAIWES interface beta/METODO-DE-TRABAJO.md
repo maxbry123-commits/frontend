@@ -1,61 +1,82 @@
-# Método de trabajo · UI YAIWES interface beta
+# Método de trabajo · UI YAIWES interface
 
-Actualizado 2026-09-08. GitHub `main` solamente con OK del director.
+Actualizado 2026-09-27 · ACTIVE / FAIL_CLOSED / EVIDENCE_FIRST.
 
-## Ritmo
+## Propósito
+Cualquier IA/modelo puede retomar el proyecto sin historial del chat.
 
-- 5 partes (P1 Run → P2 Wall → P3 Grok Bot → P4 fotos-motivo → P5 anims).
-- 1 ventana HTML por salida.
-- Sandbox → 5 clicks → mostrar en chat → `OK ID` → push.
+## Lectura
+`AGENTS -> EXECUTION-CONTRACT -> arquitectura -> plan -> handoff skills -> SKILL -> DESIGN_SYSTEM -> COMPONENT_INDEX -> ACCEPTANCE -> handoff frontend -> referencias`.
 
-## 2 copias
+## Fórmula
+`REFERENCE + CONTEXT + SKILLS + BROWSER + VERIFIER`.
+`VER -> USAR -> COMPARAR -> CORREGIR -> VERIFICAR`.
 
+## Staff
+Director; Codex executor/improver; v0 bootstrap visual; Meta Visual Reviewer; Sheriff; Validator; Verifier; Sentinel; Guardian. Ver `TEAM-UI-YAIWES.md`.
+
+## Skills como Schema/Contract/Sheriff
+`TASK -> SkillResolver -> SkillInvocation Schema -> Task Contract -> Sheriff -> Implement -> Validator -> Verifier -> Sentinel -> Guardian`.
+
+## DSL/DAG
+- `workflow/UI-YAIWES-FRONTEND.dsl.yaml`
+- `workflow/UI-YAIWES-FRONTEND-DAG.json`
+- `workflow/UI-YAIWES-CONTRACT.schema.json`
+- `workflow/SHERIFF-POLICY.yaml`
+- `workflow/VALIDATOR-VERIFIER.md`
+- `workflow/SENTINEL-WEB-AUDIT.md`
+- `workflow/GUARDIAN.md`
+
+## Mini workflow
+```text
+READ references
+READ project files
+READ skills
+BUILD CONTRACT
+SHERIFF
+IMPLEMENT
+START application
+OPEN browser
+TEST interactions
+CAPTURE desktop
+CAPTURE mobile
+COMPARE references
+FIX differences
+META REVIEW if available
+SENTINEL WEB AUDIT
+VERIFY
+GUARDIAN
+LOOP UNTIL ACCEPTANCE == 100%
 ```
-Ui Yaiwes interface beta/01-original/   # source usuario
-Ui Yaiwes interface beta/02-fromted/    # solo tokens FROMTED
-UI code versiones/                      # borradores pre-OK
-```
 
-## Cambio permitido en 02-fromted
+## Browser
+`CODE -> localhost/file target -> BROWSER -> DOM -> computedStyle -> console -> network -> screenshot`.
 
-- Colores Matte / Little / Blanco.
-- Naranja solo Cargar/Descargar.
-- Detalle estético menor (radio, gap) sin mover layout ni JS.
+## Source priority
+Director -> visual reference -> design system -> existing components -> project files -> SKILL/AGENTS -> inference last.
 
-## Prohibido
+## Diseño != comportamiento != verificación
+Apariencia, acciones/estado y prueba son capas distintas.
 
-- Unificar ventanas.
-- Mock estático.
-- GitHub sin `OK ID`.
-- Inventar HTML si no hay source.
-- Paleta naranja de las 14 fotos HUD.
-- Llamar Grok Bot a un chat OSS.
+## FIFA
+`Diseño/Manus -> HTML funcional -> código modular -> assets -> dependencies -> version -> seguir editando`.
+Nunca solo HTML para una pieza evolutiva.
 
-## Foto / zip que subas
+## QA
+11/11 de `ACCEPTANCE.md` + AC01..AC15.
 
-1. Lo proceso en sandbox.
-2. Te doy limpio (lista + HTML partido).
-3. Tú lo subes **o** dices `SUBE TÚ` y lo empujo.
-4. Zip copia en el chat.
+## LOOP legado
+L0-L10 sigue protegiendo IDs/originales y queda contenido dentro del DAG nuevo.
 
-## Validación cada salida
+## Evidencia
+Registrar task/surface ID, sources, skills, componentes, cambios, tests, screenshots, Sentinel report, PASS/FAIL/BLOCKED, commit SHA.
 
-- [ ] ID
-- [ ] anotado en README arquitectura
-- [ ] bitácora `state.json`
-- [ ] enlace GitHub visible
-- [ ] 01-original intacto
+## Referencias
+Imágenes:
+https://github.com/maxbry123-commits/frontend/tree/39a614b9b098a8a932d8923b861af790959118b8/UI%20YAIWES%20interface/Ui%20Yaiwes%20interface%20beta/01-original/FOTOS-REF
 
+Handoff skills:
+https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/readme%20arquitectura%20UI%20YAIWES%20interface%20beta/actualizaciones%20arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md
 
-## LOOP L0–L10
-
-Contrato: `CONTRATO-LOOP-OPERATIVO.md`  
-Schema: `LOOP-SCHEMA.json`  
-Vigente al `LOOP OK` del director.
-
-
-## LOOP (contrato)
-
-Ver `CONTRATO-TRABAJO.md`, `LOOP-OPERATIVO.md`, `SCHEMA-LOOP.json`.
-
-Trigger: `CICLO RUN-01`. Sin ese texto no se fabrica.
+## Done
+`11/11 PASS + AC01..AC15 PASS + dead_controls=0 + console_errors=0 + missing_assets=0 + evidence + handoff`.

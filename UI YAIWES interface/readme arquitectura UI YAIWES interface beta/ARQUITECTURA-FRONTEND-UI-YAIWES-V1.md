@@ -378,3 +378,14 @@ Plan:
 `actualizaciones arquitectura/PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md`
 
 Los 10 skills físicos encontrados bajo `UI YAIWES interface/` son donors Omarchy/Orca y no se vuelven globales. El catálogo de fábrica se consume desde el índice del Director; sus entradas staged/catalogadas no se consideran activas hasta resolver path/runtime y pasar test.
+
+## Governance de ejecución v2 — Schema / Contract / Sheriff / Sentinel / Guardian
+
+`REFERENCE -> SkillResolver -> Schema -> Contract -> Sheriff -> Codex -> Browser/Playwright -> Meta Review(si real) -> Sentinel -> Verifier -> Guardian -> PASS/FAIL/BLOCKED`.
+
+Canónicos en raíz: `AGENTS.md`, `SKILL.md`, `DESIGN_SYSTEM.md`, `COMPONENT_INDEX.md`, `ACCEPTANCE.md`, `TEAM-UI-YAIWES.md`, `EXECUTION-CONTRACT.md`, `workflow/`, `skills/`, `qa/`.
+
+Codex queda en staff como ejecutador/mejorador. v0 = bootstrap visual opcional. Meta OSS Cookbook/Muse Glimmer = reviewer adapter, nunca revisión fingida. Sentinel investiga web/docs oficiales cuando la tarea depende de información externa mutable.
+
+Esta capa no sustituye Action Bus, WindowRegistry, StateStore ni backend boundary.
+

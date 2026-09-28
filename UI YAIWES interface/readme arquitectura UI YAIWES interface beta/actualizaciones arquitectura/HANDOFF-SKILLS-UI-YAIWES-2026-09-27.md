@@ -232,3 +232,18 @@ PASS requiere:
 `PANEL-01-CHAT -> resolver skill chain -> build -> QA -> evidence -> review`.
 
 No activar en masa los skills del catálogo.
+
+## 11. Skills nativos del proyecto
+
+Se añaden en `UI YAIWES interface/skills/`:
+1. reference-reader
+2. design-system
+3. frontend-implementation
+4. browser-verification
+5. mobile-qa
+6. interaction-qa
+
+Cadena: `reference-reader -> design-system -> frontend-implementation -> browser-verification -> mobile-qa -> interaction-qa`.
+
+Gobierno: Contract schema + Sheriff policy. No sustituyen los donors existentes.
+

@@ -240,3 +240,13 @@ Alcance:
 - `PANEL-01-CHAT` usa la cadena: Image-to-Code → frontend-design → build → Impeccable → visual/a11y QA → Playwright → evidencia.
 
 Regla: `skill != tool != plugin`; el skill orienta, el componente/tool ejecuta, Action Bus gobierna las acciones.
+
+## Método ejecutable para cualquier IA — 2026-09-27
+
+Entrada: `UI YAIWES interface/AGENTS.md`.
+
+Gobierno: `Schema -> Contract -> Sheriff -> Validator -> Codex -> Browser -> Meta Review -> Sentinel -> Verifier -> Guardian`.
+
+Método: `readme arquitectura UI YAIWES interface beta/METODO-DE-TRABAJO.md`.  
+Workflow: `workflow/`. Skills nativos: `skills/`. QA Playwright: `qa/`.
+

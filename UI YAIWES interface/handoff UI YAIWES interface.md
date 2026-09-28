@@ -79,3 +79,13 @@ Botón (JS en ese HTML) → ABS → HOST postMessage → kernel (local | web | g
 - Workflow propuesto: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/empaque/extract-to-factory.workflow.yml
 
 - Lista final fábrica: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/fabrica-ui/LISTA-FINAL-FABRICA.md
+
+## Handoff método/agentes — 2026-09-27
+
+- AGENTS: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/AGENTS.md
+- Contrato: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/EXECUTION-CONTRACT.md
+- Staff: https://github.com/maxbry123-commits/frontend/blob/main/UI%20YAIWES%20interface/TEAM-UI-YAIWES.md
+- Workflow: https://github.com/maxbry123-commits/frontend/tree/main/UI%20YAIWES%20interface/workflow
+- Skills: https://github.com/maxbry123-commits/frontend/tree/main/UI%20YAIWES%20interface/skills
+- QA: https://github.com/maxbry123-commits/frontend/tree/main/UI%20YAIWES%20interface/qa
+

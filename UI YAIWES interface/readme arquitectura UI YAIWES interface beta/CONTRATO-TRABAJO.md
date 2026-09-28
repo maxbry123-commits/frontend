@@ -54,3 +54,8 @@ El LOOP (`LOOP-OPERATIVO.md` + `SCHEMA-LOOP.json`) es obligatorio en cada ID.
 
 Ver `GOALS-12.md`. Cada HTML de ventana sale con `CHECKLIST.md` **antes** de `OK`.
 G01 no mock · G02 factory backend privado · G03 sandbox por proceso · G04 unir IN/OUT · G05 skill · G06 instrucciones · G07 plugins · G08 original · G09 evidence · G10 config · G11 factory≠user · G12 resume fotos/handoff.
+
+## 8. Governance frontend v2
+
+El LOOP se complementa con `AGENTS.md`, `EXECUTION-CONTRACT.md`, Contract Schema, Sheriff Policy y `ACCEPTANCE.md`. L0-L10 protege IDs/originales; el nuevo DAG añade Schema/Contract/Sheriff/Verifier/Sentinel/Guardian. Duda o contradicción => BLOCKED.
+

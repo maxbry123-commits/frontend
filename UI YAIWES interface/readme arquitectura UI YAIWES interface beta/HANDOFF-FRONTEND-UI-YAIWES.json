@@ -5,6 +5,13 @@
   "status": "PANEL_01_V2_REVIEW",
   "language": "es",
   "read_first": [
+    "UI YAIWES interface/AGENTS.md",
+    "UI YAIWES interface/EXECUTION-CONTRACT.md",
+    "UI YAIWES interface/SKILL.md",
+    "UI YAIWES interface/DESIGN_SYSTEM.md",
+    "UI YAIWES interface/COMPONENT_INDEX.md",
+    "UI YAIWES interface/ACCEPTANCE.md",
+    "UI YAIWES interface/TEAM-UI-YAIWES.md",
     "actualizaciones arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md",
     "actualizaciones arquitectura/PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md",
     "PLAN-DE-TRABAJO-UI-YAIWES.md",
@@ -120,7 +127,7 @@
     "backend behavior is required to demonstrate the UI",
     "approval ID is missing"
   ],
-  "last_decision": "Canonical skills handoff consolidated: 10 physical UI YAIWES SKILL.md verified; factory planning source is Director-provided index; no factory rescan in this update.",
+  "last_decision": "Governance v2 wired: staff + native skills + DSL/DAG + Schema/Contract/Sheriff + Playwright + Sentinel + Guardian.",
   "last_agent": "ChatGPT GPT-5.6 Sol",
   "last_update": "2026-09-27T18:21:00-05:00",
   "visual_audit": {
@@ -228,5 +235,39 @@
       "evidence",
       "pass-fail-blocked"
     ]
+  },
+  "execution_governance": {
+    "dsl": "UI YAIWES interface/workflow/UI-YAIWES-FRONTEND.dsl.yaml",
+    "dag": "UI YAIWES interface/workflow/UI-YAIWES-FRONTEND-DAG.json",
+    "schema": "UI YAIWES interface/workflow/UI-YAIWES-CONTRACT.schema.json",
+    "sheriff": "UI YAIWES interface/workflow/SHERIFF-POLICY.yaml",
+    "validator_verifier": "UI YAIWES interface/workflow/VALIDATOR-VERIFIER.md",
+    "sentinel": "UI YAIWES interface/workflow/SENTINEL-WEB-AUDIT.md",
+    "guardian": "UI YAIWES interface/workflow/GUARDIAN.md",
+    "staff": [
+      "Director",
+      "Codex executor/improver",
+      "v0 optional visual bootstrap",
+      "Meta Visual Reviewer adapter",
+      "Sheriff",
+      "Validator",
+      "Verifier",
+      "Sentinel",
+      "Guardian"
+    ],
+    "close": "11/11 PASS + AC01..AC15 PASS + evidence"
+  },
+  "project_native_skills": [
+    "reference-reader",
+    "design-system",
+    "frontend-implementation",
+    "browser-verification",
+    "mobile-qa",
+    "interaction-qa"
+  ],
+  "qa": {
+    "playwright": "1.63.0",
+    "path": "UI YAIWES interface/qa/",
+    "official_repo": "https://github.com/microsoft/playwright"
   }
 }

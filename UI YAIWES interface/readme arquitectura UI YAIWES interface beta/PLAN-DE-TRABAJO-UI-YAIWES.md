@@ -426,3 +426,17 @@ Para `PANEL-01-CHAT`:
 
 No activar donors ni catálogo en masa. Cada skill debe pasar:
 `SCOPE_OK -> ADAPTER_READY(si aplica) -> TESTED -> VERIFIED -> ACTIVE`.
+
+## 14. Plan ejecutable multi-agente
+
+1. Bootstrap de contexto: AGENTS + contrato + arquitectura + plan + handoffs + skills + design system + component index + acceptance + referencias.
+2. Skills: `reference-reader -> design-system -> frontend-implementation -> browser-verification -> mobile-qa -> interaction-qa`.
+3. TaskContract -> Schema -> Sheriff PASS.
+4. Codex implementa/mejora; v0 puede aportar bootstrap visual.
+5. Playwright desktop+móvil: DOM/CSS/console/network/screenshot.
+6. Meta Visual Reviewer solo con adapter real; si no `META_REVIEW_UNAVAILABLE`.
+7. Sentinel audita documentación/versiones/claims.
+8. Guardian cierra solo con 11/11 + AC01..AC15 + evidencia.
+
+Estado: ACTIVE.
+
