@@ -416,4 +416,13 @@ Estado:
 - P8 acceptance/evidence/handoff: **NEXT**.
 
 Regla de cierre: ningún skill se considera integrado solo porque su `SKILL.md` exista. Debe resolver por ID canónico, verificar runtime/dependencias, ejecutar el test aplicable y dejar evidencia.
+## Skills — handoff canónico 2026-09-27
 
+Antes de construir cualquier pieza, resolver su cadena de skills desde:
+`actualizaciones arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md`.
+
+Para `PANEL-01-CHAT`:
+`FOTOS -> Image-to-Code -> frontend-design -> BUILD -> Impeccable -> frontend-audit/accessibility -> Playwright -> evidence -> review`.
+
+No activar donors ni catálogo en masa. Cada skill debe pasar:
+`SCOPE_OK -> ADAPTER_READY(si aplica) -> TESTED -> VERIFIED -> ACTIVE`.
