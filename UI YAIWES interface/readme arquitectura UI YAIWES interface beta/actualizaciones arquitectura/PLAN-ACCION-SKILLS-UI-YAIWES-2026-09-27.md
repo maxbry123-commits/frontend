@@ -1,173 +1,89 @@
 # Plan de acción — Skills UI YAIWES
 
 Fecha: 2026-09-27  
-Objetivo: convertir el inventario de skills en un sistema gobernado, seleccionable y verificable, sin contaminar YAIWES con reglas específicas de donors.
+Fuente canónica: `HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md`.
 
-## Fase S0 — Registro — PASS documental
+## Objetivo
 
-- congelar conteo actual: 51 SKILL.md físicos / 39 familias lógicas;
-- mantener `SKILL-REGISTRY-UI-YAIWES-2026-09-27.json`;
-- registrar source path, categoría, scope y estado;
-- mirrors/aliases deben apuntar a una sola familia lógica.
+Usar skills como una capa gobernada del proyecto, no como archivos pasivos ni instrucciones globales de donors.
 
-**Gate:** ningún skill sin registro puede ser invocado por el router.
+## Fases
 
-## Fase S1 — Política y resolución
+### S0 — Inventario — PASS
+- 10 `SKILL.md` físicos verificados en `UI YAIWES interface/`.
+- catálogo de fábrica tomado del índice entregado por el Director.
+- no se reescanea fábrica en esta actualización.
 
-Crear/definir `SkillResolver` con prioridad:
+### S1 — Resolver
+Crear/usar `SkillResolver`:
 
 ```text
-explicit task requirement
-→ fromted-frontend-architecture
-→ surface-specific primary skill
-→ QA skill
-→ donor adapter only if scope matches
+task
+→ product policy
+→ surface skill
+→ build skill
+→ QA/a11y skill
+→ donor adapter si aplica
 → fail_closed
 ```
 
-Estados mínimos:
+### S2 — Core frontend
+Prioridad operativa:
+1. FROMTED architecture.
+2. frontend-design.
+3. Image-to-Code.
+4. Impeccable.
+5. frontend-audit-skill.
+6. accessibility-skills.
+7. skill-creator.
 
-- `CANONICAL`
-- `FACTORY_PRIMARY`
-- `REFERENCE`
-- `DONOR_SCOPED`
-- `MIRROR`
-- `ALIAS`
-- `ADAPTER_READY`
-- `VERIFIED`
-- `BLOCKED`
+### S3 — QA
+- Playwright.
+- screenshot/visual audit.
+- keyboard/touch.
+- a11y.
+- console/runtime.
+- retest.
 
-## Fase S2 — Core frontend
+### S4 — PANEL-01 / CHAT-01
+Cadena:
 
-Cablear primero:
+`FOTOS -> Image-to-Code -> frontend-design -> BUILD -> Impeccable -> audit visual -> a11y -> Playwright -> evidence -> OK PANEL-01-CHAT`.
 
-1. `fromted-frontend-architecture` — política base.
-2. `frontend-design` — diseño.
-3. `image-to-code` — cuando hay imágenes/referencias visuales.
-4. `impeccable` — crítica/pulido/hardening.
-5. `web-design-guidelines` — auditoría web.
-6. `web-artifacts-builder` — cuando la salida es React/Vite compleja.
-7. `skill-creator` — crear adapters/skills YAIWES, no editar donors en sitio.
+### S5 — Runtime/Device
+- `computer-use` solo GUI real.
+- `orca-emulator-android` solo Android real.
+- `orca-emulator` solo iOS Simulator real.
+- `orca-cli` solo Orca real.
+- `orchestration` solo coordinación Orca real.
+- `orca-per-workspace-env` solo receta/runtime real.
 
-**Gate:** una prueba pequeña por skill y evidencia de qué decisión cambió.
+### S6 — Adapters donor
+`DONOR_SCOPED -> adapter YAIWES -> test -> evidence -> approval -> ACTIVE`.
 
-## Fase S3 — QA determinista
+### S7 — Expansión por superficie
+Después de CHAT:
+- RUN;
+- WALL;
+- GBOT;
+- resto según plan maestro.
 
-Adaptar patrones de Appsmith/Fluent:
+## Gate general
 
-- write Playwright test;
-- fix spec;
-- diagnose product failure;
-- lint;
-- visual screenshot check;
-- PR/code review;
-- token lookup.
+`DISCOVERED/CATALOG -> SCOPE_OK -> ADAPTER_READY -> TESTED -> VERIFIED -> ACTIVE`.
 
-Flujo:
+Cualquier fallo: `BLOCKED`.
 
-`BUILD -> PLAYWRIGHT -> SCREENSHOT -> VISUAL CHECK -> LINT -> ACCESSIBILITY -> FIX -> RETEST`
+## Salida de cada ejecución
 
-**Gate:** 0 controles muertos, 0 errores de consola, responsive desktop+móvil, keyboard/touch.
-
-## Fase S4 — Device/runtime skills
-
-Activar Orca únicamente si existe el runtime requerido:
-
-- desktop GUI -> `computer-use`;
-- iOS -> `orca-emulator`;
-- Android -> `orca-emulator-android`;
-- worktree/runtime -> `orca-cli`;
-- multi-agent supervised DAG -> `orchestration`;
-- workspace env -> `orca-per-workspace-env`.
-
-Sin runtime real: `BLOCKED`, no simulación.
-
-## Fase S5 — Donor adapters
-
-No promover directamente skills Fluent/VS Code/Budibase/Omarchy.
-
-Para reutilizar uno:
-
-```text
-READ DONOR SKILL
-→ extract generic behavior
-→ skill-creator
-→ create YAIWES adapter
-→ tests
-→ compare donor vs adapter
-→ approve
-→ register ADAPTER_READY
-```
-
-No copiar comandos específicos del donor si no existen en YAIWES.
-
-## Fase S6 — Integración con Fábrica UI
-
-```text
-GOAL
-→ SkillResolver
-→ skill selected
-→ component/capability registry
-→ build/edit
-→ browser/device
-→ screenshot
-→ Playwright
-→ evidence
-→ PASS
-```
-
-El skill orienta el trabajo; la capacidad/componente ejecuta. No mezclar `skill` con `tool` o `plugin`.
-
-## Fase S7 — PANEL-01 / CHAT-01
-
-Skills mínimos por etapa:
-
-- referencia visual -> `image-to-code` + `frontend-design`;
-- construcción -> `fromted-frontend-architecture` + builder;
-- comportamiento -> contrato Action Bus/bridge;
-- pulido -> `impeccable`;
-- verificación -> Playwright + visual-test + web-design-guidelines;
-- skill nuevo específico del chat -> `skill-creator`.
-
-Gate del chat sigue siendo `OK PANEL-01-CHAT`.
-
-## Fase S8 — Handoff y observabilidad
-
-Cada ejecución debe dejar:
-
-- skill elegido;
-- versión/path;
-- motivo de selección;
-- entradas;
-- salida;
-- test ejecutado;
+- skill(s);
+- paths/versión;
+- decisión tomada;
+- componente/tool usado;
+- test;
 - evidencia;
-- PASS/FAIL;
-- fallback o bloqueo.
+- resultado.
 
-## Definition of Done
+## Cierre
 
-No cerrar integración de skills hasta:
-
-- registry consumible;
-- resolver con fail-closed;
-- core frontend cableado;
-- donor adapters separados;
-- QA real;
-- pruebas de dispositivo cuando aplique;
-- trazabilidad por tarea;
-- documentación y handoff actualizados.
-
-## Verificación de ejecución del plan
-
-El inventario base de S0 queda congelado en **51 SKILL.md físicos / 39 familias lógicas**.
-
-Registry de fábrica:
-`UI YAIWES interface/fabrica-ui/SKILLS-REGISTRY.json`.
-
-Gate operativo:
-
-`DISCOVERED -> SCOPE_OK -> ADAPTER_READY -> TESTED -> VERIFIED -> ACTIVE`
-
-No se salta ningún estado. Skills donor-specific permanecen bloqueados fuera de su runtime/adapter.
-
+No hay cierre por presencia de `SKILL.md`. Hay cierre únicamente con ejecución verificable y evidencia.
