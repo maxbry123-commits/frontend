@@ -389,3 +389,159 @@ Codex queda en staff como ejecutador/mejorador. v0 = bootstrap visual opcional. 
 
 Esta capa no sustituye Action Bus, WindowRegistry, StateStore ni backend boundary.
 
+## Extensión de gobierno ejecutable multi-IA — 2026-09-27
+
+Esta extensión no sustituye la arquitectura anterior. Añade la capa de gobierno para que Codex, otro modelo o cualquier agente frontend ejecute UI YAIWES con las mismas fuentes, contratos y gates.
+
+### Fuentes canónicas cableadas
+
+- Método: readme arquitectura UI YAIWES interface beta/METODO-DE-TRABAJO.md
+- Handoff skills: readme arquitectura UI YAIWES interface beta/actualizaciones arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md
+- Registry skills: readme arquitectura UI YAIWES interface beta/SKILLS-REGISTRY-UI-YAIWES-2026-09-27.json
+- Plan maestro: readme arquitectura UI YAIWES interface beta/PLAN-DE-TRABAJO-UI-YAIWES.md
+- Referencias visuales: UI YAIWES interface/Ui Yaiwes interface beta/01-original/FOTOS-REF/
+- Gate por pieza: ACCEPTANCE.md
+
+Referencia visual:
+https://github.com/maxbry123-commits/frontend/tree/39a614b9b098a8a932d8923b861af790959118b8/UI%20YAIWES%20interface/Ui%20Yaiwes%20interface%20beta/01-original/FOTOS-REF
+
+### Staff UI YAIWES
+
+| Rol | Función | Autoridad |
+|---|---|---|
+| Director | requisito, prioridad, aprobación/rechazo | máxima |
+| Codex | ejecutor y mejorador: implementar, refactorizar, probar, corregir | ejecuta; no redefine producto |
+| Agente frontend | implementa la pieza asignada siguiendo contrato | ejecuta |
+| v0 | diseño/screenshot a primera propuesta de componentes | apoyo; no fuente final |
+| Meta visual reviewer | revisión independiente de fidelidad visual | revisor |
+| SkillResolver | selecciona skills válidos por tarea | control |
+| Sheriff | aplica políticas, límites y prohibiciones | gate |
+| Validator | valida DSL, schema, manifest y contrato | gate |
+| Verifier | navegador y Playwright | gate |
+| Sentinel Web | investiga documentación/web cuando haga falta y audita el resultado | revisor |
+| Guardian | gate final: evidencia, 11/11 PASS y handoff | cierre |
+
+### Arquitectura de ejecución
+
+DIRECTOR/TASK
+→ DSL
+→ DAG
+→ SCHEMA
+→ CONTRACT
+→ SkillResolver
+→ SHERIFF
+→ CODEX/FRONTEND EXECUTOR
+→ VALIDATOR
+→ BROWSER/PLAYWRIGHT
+→ VERIFIER
+→ SENTINEL WEB + META VISUAL REVIEWER
+→ GUARDIAN
+→ PASS 100% → HANDOFF/VERSION
+
+Si falla un nodo: CORREGIR y repetir desde el nodo fallido.
+
+### DSL mínimo
+
+Toda tarea declara:
+- id
+- surface
+- objective
+- references
+- project_files
+- skills
+- design_system
+- constraints
+- delivery
+- acceptance.required_pass = 100
+
+El DSL se convierte en DAG. Cada nodo debe registrar entradas, salida, test y evidencia.
+
+### Skills como Schema + Contract + Sheriff
+
+SKILL.md
+→ SKILL_SCHEMA
+→ SKILL_CONTRACT
+→ SKILL_SHERIFF
+→ Task/Surface Adapter
+→ Executor
+→ Evidence
+
+Reglas:
+1. skill no resoluble = BLOCKED;
+2. donor skill sin adapter/runtime = BLOCKED;
+3. conflicto con Director/arquitectura = gana Director/arquitectura;
+4. skill no puede saltarse Action Bus, StateStore, WindowRegistry, tokens ni aceptación;
+5. registrar skill, path/versión, razón, input, output, test y evidencia.
+
+Cadena frontend requerida:
+reference-reader → design-system → frontend-implementation → browser-verification → interaction-qa → mobile-qa
+
+Estos nombres son contratos funcionales: deben mapearse a skills físicos del registry o crearse con skill-creator antes de ACTIVE.
+
+### Prioridad
+
+Orden de lectura:
+REFERENCIA REAL → DESIGN SYSTEM → COMPONENTES EXISTENTES → ARCHIVOS DEL PROYECTO → SKILL.md/AGENTS.md → INSTRUCCIÓN OPERATIVA.
+
+Precedencia de conflicto:
+DIRECTOR → ARQUITECTURA/CONTRATOS LOCKED → REFERENCIA APROBADA → COMPONENTES/ARCHIVOS → SKILLS → INFERENCIA.
+
+La inferencia de diseño es último recurso y se declara.
+
+### Browser verificador
+
+CODE
+→ localhost/runtime
+→ BROWSER
+→ DOM + computedStyle + console + network + screenshot
+→ interacción real
+→ comparación referencia ↔ resultado
+→ corrección
+
+Playwright es el E2E preferente. Su instalación/configuración pertenece a la tarea de implementación, no a esta edición documental.
+
+### Gate 11/11
+
+TEST_REFERENCE PASS
+TEST_LAYOUT PASS
+TEST_BUTTONS PASS
+TEST_DROPDOWNS PASS
+TEST_TABS PASS
+TEST_INPUTS PASS
+TEST_STATE PASS
+TEST_RELOAD PASS
+TEST_DESKTOP PASS
+TEST_MOBILE PASS
+TEST_CONSOLE PASS
+
+11/11 PASS es mínimo; los AC específicos pueden ampliar, nunca reducir.
+
+### Sentinel Web
+
+RESULTADO
+→ investigar documentación/evidencia pertinente
+→ comparar
+→ registrar discrepancias
+→ PASS/FAIL/BLOCKED
+
+No reemplaza referencias del proyecto.
+
+### Entrega mantenible
+
+Diseño/referencia
+→ HTML funcional autocontenido
+→ código modular
+→ assets
+→ dependencias
+→ manifest/contrato
+→ tests
+→ versión
+→ seguir editando
+
+Nunca guardar solo HTML como fuente mantenible.
+
+### Regla final
+
+REFERENCE + CONTEXT + SKILLS + BROWSER + VERIFIER son obligatorios.
+
+VER → USAR → COMPARAR → CORREGIR → VERIFICAR hasta aceptación 100%.
