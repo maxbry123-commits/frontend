@@ -1,155 +1,234 @@
 # HANDOFF — Skills UI YAIWES + Fábrica UI
 
 Fecha: 2026-09-27  
-Estado: `ARCHITECTURE_WIRED / RUNTIME_ADAPTERS_PENDING`
+Estado: `ARCHITECTURE_WIRED / RUNTIME_ADAPTERS_PENDING`  
+Canónico: **este archivo**.
 
-## Resultado de auditoría
+## 1. Alcance y fuentes
 
-Se auditaron las dos raíces pedidas:
+Este handoff une dos fuentes sin mezclarlas:
 
-- `UI YAIWES interface/`: **10 SKILL.md físicos**.
-- `fabrica de UI INTERFACE fromtend/`: **41 SKILL.md físicos**.
-- Total físico: **51 SKILL.md**.
-- Capacidad lógica consolidada: **39 familias**, al colapsar los mirrors `.agents/.claude` de Fluent UI y el alias legacy `linear-tickets -> orca-linear`.
+### A. UI YAIWES interface — auditoría física verificada
 
-La raíz de fábrica devuelve un árbol Git recursivo truncado; para cerrar el conteo se recorrieron sus subárboles superiores individualmente. El registro máquina queda en `UI YAIWES interface/readme arquitectura UI YAIWES interface beta/actualizaciones arquitectura/SKILL-REGISTRY-UI-YAIWES-2026-09-27.json`.
+Raíz: `UI YAIWES interface/`.
 
-## Regla de seguridad
+Resultado: **10 archivos SKILL.md reales**.
 
-**Encontrado no significa activado.**
+### B. Fábrica UI — índice entregado por el Director
 
-Los skills internos de Appsmith, Budibase, Fluent UI, VS Code, Orca y Omarchy contienen supuestos, comandos y convenciones de esos proyectos. Se registran como `DONOR_SCOPED` y **no se cargan globalmente en YAIWES**.
+Fuente: índice de fábrica entregado en el chat el 2026-09-27.
 
-`DONOR_SCOPED -> ADAPTER -> TEST -> APPROVAL -> ACTIVE`
+En esta actualización **no se reescanea la fábrica**. Se conserva literalmente su clasificación de catálogo/estado y se incorpora al plan.
 
-Sin adapter/test, el router de skills debe fallar cerrado.
+Regla:
+`VERIFICADO_FÍSICO != CATÁLOGO != ACTIVO`.
 
-## Skills primarios de la fábrica
+## 2. Skills físicos verificados en UI YAIWES interface
 
-1. `frontend-design` — dirección visual y diseño intencional.
-2. `impeccable` — auditoría/pulido/hardening UI, responsive, a11y y calidad visual.
-3. `skill-creator` — creación, mejora y evaluación de skills.
+| # | Skill | Ruta | Función para YAIWES | Estado |
+|---|---|---|---|---|
+| 1 | diagnose-crash | `Backend/Motor3 approved donors/Omarchy/default/agents/skills/diagnose-crash/SKILL.md` | diagnóstico de crash basado en evidencia | DONOR_SCOPED |
+| 2 | omarchy | `Backend/Motor3 approved donors/Omarchy/default/agents/skills/omarchy/SKILL.md` | configuración desktop/Hyprland/Omarchy | DONOR_SCOPED |
+| 3 | computer-use | `Backend/Motor3 approved donors/Orca/skills/computer-use/SKILL.md` | control GUI visible cuando CLI/API no alcanza | DONOR_SCOPED |
+| 4 | linear-tickets | `Backend/Motor3 approved donors/Orca/skills/linear-tickets/SKILL.md` | alias legacy de orca-linear | ALIAS_DONOR_SCOPED |
+| 5 | orca-cli | `Backend/Motor3 approved donors/Orca/skills/orca-cli/SKILL.md` | worktrees, browser, artifacts, handoff Orca | DONOR_SCOPED |
+| 6 | orca-emulator-android | `Backend/Motor3 approved donors/Orca/skills/orca-emulator-android/SKILL.md` | QA Android/ADB | DONOR_SCOPED |
+| 7 | orca-emulator | `Backend/Motor3 approved donors/Orca/skills/orca-emulator/SKILL.md` | QA iOS Simulator | DONOR_SCOPED |
+| 8 | orca-linear | `Backend/Motor3 approved donors/Orca/skills/orca-linear/SKILL.md` | tickets Linear | DONOR_SCOPED |
+| 9 | orca-per-workspace-env | `Backend/Motor3 approved donors/Orca/skills/orca-per-workspace-env/SKILL.md` | entornos desechables por workspace | DONOR_SCOPED |
+| 10 | orchestration | `Backend/Motor3 approved donors/Orca/skills/orchestration/SKILL.md` | coordinación DAG/multiagente supervisada | DONOR_SCOPED |
 
-## Skills de QA reutilizables por patrón
+### Regla de estos 10
 
-Appsmith:
-- `diagnose-pw-failure`.
-- `fix-pw-spec`.
-- `write-and-verify-pw-test`.
+Son skills de donor. No pasan a ser reglas globales de UI YAIWES por estar presentes.
 
-Fluent UI:
-- `lint-check`.
-- `review-pr`.
-- `token-lookup`.
-- `visual-test`.
-- `headless-component`.
-- `v9-component`.
-- resto: operaciones específicas de Fluent/release/triage.
+`DONOR_SCOPED -> SCOPE_OK -> ADAPTER_READY -> TESTED -> VERIFIED -> ACTIVE`
 
-Estos skills se reutilizan **como patrón o mediante adapter YAIWES**; no se ejecutan contra rutas/proyectos que no les correspondan.
+Si no existe runtime/dependencia real: `BLOCKED`.
 
-## Skills de operación UI YAIWES interface
+## 3. Skills de Fábrica incorporados desde el índice del Director
 
-Orca:
-- `computer-use`.
-- `orca-cli`.
-- `orca-emulator`.
-- `orca-emulator-android`.
-- `orca-per-workspace-env`.
-- `orchestration`.
-- `orca-linear` + alias legacy `linear-tickets`.
+### K. Skills Fábrica
 
-Omarchy:
-- `diagnose-crash`.
-- `omarchy`.
+1. `frontend-design` — identidad, tipo, layout e intención visual. Estado del índice: `S`.
+2. `Impeccable` — audit/polish/a11y/perf/motion. Estado: `S`, wire pendiente según índice.
+3. `skill-creator` — crear/evaluar nuevos `SKILL.md`. Estado: `S`.
+4. `manim-skill` — animación/video. Estado: `Z*`.
+5. `skill-canvas-video` — canvas -> video. Estado: `Z*`, wire pendiente.
+6. `chat-animation` — animación de chat. Estado: `Z*`, wire pendiente.
+7. `taste-skill` — taste/brand visual. Estado: `Z*`, wire pendiente.
 
-Todos permanecen donor-scoped salvo que una tarea use realmente ese runtime.
+Nota del índice: `Z*` = documentado en arquitectura pero ausente del listing actual de la raíz en ese corte.
 
-## Skills documentales de donor
+### R. Skills extra del índice
 
-La fábrica contiene 10 skills del donor VS Code Contribution Points Docs:
-`blog-writer`, `content-redirect`, `daily-docs-audit`, `doc-writer`,
-`docs-product-alignment`, `frontmatter-description`, `pr-review`,
-`release-note-writer`, `review-agent-corrections`, `write-my-release-notes`.
+8. `anthropic-skills` — pack Agent Skills Anthropic.
+9. `microsoft-skills` — skills + MCP.
+10. `nolly-agent-skills` — bootstrap AGENTS.md.
+11. `PracticalSwan-agent-skills` — skills multi-agent.
+12. `ui-ux-pro-max-skill` — reglas UI multiplataforma.
+13. `wordpress-agent-skills` — generación de temas WordPress.
+14. `frontend-audit-skill` — comparación PNG vs render.
+15. `accessibility-skills` — WCAG/ARIA.
+16. `Taste` — pack de brand/taste.
 
-Son útiles como patrones de documentación/revisión, pero sus instrucciones mencionan repos y convenciones VS Code. Estado: `DONOR_SCOPED`.
+### Packs de diseño/skills relacionados que el mismo índice conecta
 
-## Skills canónicos relacionados fuera de las dos raíces
+- `Image-to-Code`.
+- `Web-Design-Studio`.
+- `Web-Design-Guidelines`.
+- `Awesome-Design`.
+- `HyperFrames`.
+- `Grok Build`.
+- `Taste-Brandkit`, `Taste-Brutalist`, `Taste-GPT`, `Taste-Minimalist`, `Taste-Output`, `Taste-Redesign`, `Taste-Skill-v1`, `Taste-Soft`, `Taste-Stitch`.
+- `Anthropic-Frontend-Design`.
 
-La propia fábrica apunta a `Skills arquitectura frontend Yaiwes/.../skills-referencia-claude`. Por eso se cablean como referencias, **sin sumarlos a los 51**:
+Estos elementos quedan como `CATALOG_SOURCE_DIRECTOR` hasta resolver path físico/adapter cuando una tarea los necesite.
 
-- `fromted-frontend-architecture` — orquestador/ley FROMTED.
-- `frontend-design.SKILL.md`.
-- `web-design-guidelines.SKILL.md`.
-- `web-artifacts-builder.SKILL.md`.
-- `theme-factory.SKILL.md` — no sustituye tokens de producto.
-- `brand-guidelines.SKILL.md` — explícitamente no aplicar a FROMTED.
-- `image-to-code` — flujo image-first para trabajos visuales.
-
-## Cableado canónico
+## 4. SkillResolver — cableado del proyecto
 
 ```text
 TASK
   ↓
 SkillResolver
   ↓
-FROMTED architecture policy
+FROMTED / arquitectura de producto
   ↓
-┌─ DESIGN: frontend-design / image-to-code
-├─ BUILD: web-artifacts-builder / component adapter
-├─ POLISH: impeccable
-├─ QA: Playwright skills / visual-test / web-design-guidelines
-├─ DEVICE: emulator skills
-├─ ORCHESTRATION: Orca orchestration (solo si runtime real)
-├─ DOCS/RELEASE: donor adapters cuando aplique
-└─ CREATE-SKILL: skill-creator
+┌─ DISEÑO: frontend-design + Image-to-Code
+├─ BUILD: skill de superficie / builder
+├─ POLISH: Impeccable + Taste cuando esté disponible
+├─ QA VISUAL: frontend-audit-skill + visual checks
+├─ A11Y: accessibility-skills
+├─ DEVICE: orca-emulator / orca-emulator-android
+├─ GUI FALLBACK: computer-use
+├─ ORCHESTRATION: orchestration + orca-cli
+└─ CREATE/ADAPT: skill-creator
   ↓
-Action/Tool execution
+Tool / Component / Action Bus
   ↓
-Browser / device / repo
+Browser / Device / Repo
   ↓
 Evidence
   ↓
-PASS/FAIL
+PASS / FAIL / BLOCKED
 ```
 
-## Condiciones de entrega a otro agente
+## 5. Aplicación directa al proyecto UI YAIWES
 
-Antes de usar un skill:
+### PANEL-01 / CHAT-01
 
-1. resolver path exacto;
-2. leer su `SKILL.md`;
-3. verificar `scope`;
-4. verificar dependencias/herramientas;
-5. no usar un donor skill fuera de su dominio sin adapter;
-6. registrar evidencia;
-7. no declarar integración por mera presencia del archivo.
+```text
+FOTOS-REF
+→ Image-to-Code
+→ frontend-design
+→ código modular
+→ Impeccable
+→ frontend-audit-skill
+→ accessibility-skills
+→ Playwright/QA
+→ evidence
+→ OK PANEL-01-CHAT
+```
 
-Siguiente documento: `PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md`.
+Orca solo entra si existe el runtime real:
 
-## Verificación final de inventario — 17:05 -05:00
+- desktop GUI: `computer-use`;
+- Android: `orca-emulator-android`;
+- iOS: `orca-emulator`;
+- worktree/handoff: `orca-cli`;
+- coordinación DAG: `orchestration`;
+- entorno aislado: `orca-per-workspace-env`.
 
-Se verificó el conteo por subárbol porque el árbol recursivo raíz de `fabrica de UI INTERFACE fromtend/` devuelve `truncated=true`.
+## 6. Política de prioridad
 
-Resultado completo:
+1. requisito explícito del Director;
+2. arquitectura UI YAIWES/FROMTED;
+3. skill específico de la superficie;
+4. skill de build;
+5. skill QA/a11y;
+6. donor adapter solo si scope y runtime coinciden;
+7. fail-closed.
 
-- `UI YAIWES interface/`: 10 SKILL.md, árbol completo (`truncated=false`).
-- `fabrica de UI INTERFACE fromtend/`: 41 SKILL.md, verificados por subárboles completos.
-- total físico: **51**.
-- familias lógicas: **39**.
+Un donor skill nunca puede reemplazar tokens, arquitectura, Action Bus, WindowRegistry, StateStore o reglas de producto.
 
-Desglose fábrica:
-- Appsmith: 3.
-- Budibase: 1.
-- Fluent UI: 24.
-- VS Code Contribution Points Docs: 10.
-- skills propios de fábrica: 3 (`frontend-design`, `impeccable`, `skill-creator`).
+## 7. Estados del registry
 
-Registry operativo sincronizado:
-`UI YAIWES interface/fabrica-ui/SKILLS-REGISTRY.json`.
+- `VERIFIED_PHYSICAL`
+- `CATALOG_SOURCE_DIRECTOR`
+- `FACTORY_PRIMARY`
+- `REFERENCE`
+- `DONOR_SCOPED`
+- `ALIAS`
+- `STAGED`
+- `ADAPTER_READY`
+- `TESTED`
+- `VERIFIED`
+- `ACTIVE`
+- `BLOCKED`
 
-Fuente canónica:
-`actualizaciones arquitectura/SKILL-REGISTRY-UI-YAIWES-2026-09-27.json`.
+## 8. Plan de acción
 
-Estado de cableado documental: **PASS**. Runtime/adapters de donors: **PENDING / GATED**.
+### S0 — Inventario
+PASS:
+- 10 SKILL.md físicos de UI YAIWES verificados.
+- catálogo de fábrica incorporado desde índice Director.
 
+### S1 — Registry
+- registrar path, origen, estado, categoría y dependencia;
+- aliases/mirrors apuntan a una sola familia;
+- entradas de catálogo sin path físico quedan `CATALOG_SOURCE_DIRECTOR`.
+
+### S2 — Core frontend
+Prioridad:
+1. arquitectura FROMTED;
+2. frontend-design;
+3. Image-to-Code;
+4. Impeccable;
+5. frontend-audit-skill;
+6. accessibility-skills;
+7. skill-creator.
+
+### S3 — QA
+`BUILD -> PLAYWRIGHT -> SCREENSHOT -> VISUAL AUDIT -> A11Y -> FIX -> RETEST`.
+
+### S4 — Device
+Orca Android/iOS/GUI solo cuando runtime real exista.
+
+### S5 — Donor adapters
+`READ DONOR -> EXTRACT GENERIC BEHAVIOR -> CREATE ADAPTER -> TEST -> APPROVE -> ACTIVE`.
+
+### S6 — Superficies
+Primero `PANEL-01-CHAT`; luego RUN/WALL/GBOT según plan maestro.
+
+### S7 — Handoff/evidencia
+Cada ejecución registra:
+- skill elegido;
+- path/version;
+- razón;
+- input;
+- output;
+- tests;
+- evidencia;
+- PASS/FAIL/BLOCKED.
+
+## 9. Definition of Done
+
+No se considera “skills cableados” solo porque el archivo exista.
+
+PASS requiere:
+
+- resolver por ID/path;
+- scope correcto;
+- runtime/dependencias disponibles;
+- adapter cuando sea donor;
+- test aplicable;
+- evidencia;
+- registro en handoff;
+- no alterar reglas de producto;
+- fail-closed ante ausencia o contradicción.
+
+## 10. Próximo paso técnico
+
+`PANEL-01-CHAT -> resolver skill chain -> build -> QA -> evidence -> review`.
+
+No activar en masa los skills del catálogo.
