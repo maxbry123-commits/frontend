@@ -5,10 +5,10 @@
   "status": "PANEL_01_V2_REVIEW",
   "language": "es",
   "read_first": [
-    "PLAN-DE-TRABAJO-UI-YAIWES.md",
     "actualizaciones arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md",
-    "actualizaciones arquitectura/SKILL-REGISTRY-UI-YAIWES-2026-09-27.json",
+    "actualizaciones arquitectura/PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md",
     "PLAN-DE-TRABAJO-UI-YAIWES.md",
+    "actualizaciones arquitectura/SKILL-REGISTRY-UI-YAIWES-2026-09-27.json",
     "CRAZY-WALL-BITACORA-STATE.json",
     "memoria.md",
     "UI YAIWES interface/readme arquitectura UI YAIWES interface beta/HANDOFF-FRONTEND-UI-YAIWES-2026-09-27.md"
@@ -120,9 +120,9 @@
     "backend behavior is required to demonstrate the UI",
     "approval ID is missing"
   ],
-  "last_decision": "Skills inventory wired into architecture: 51 physical SKILL.md / 39 logical families; donor skills remain scoped until adapter+test.",
+  "last_decision": "Canonical skills handoff consolidated: 10 physical UI YAIWES SKILL.md verified; factory planning source is Director-provided index; no factory rescan in this update.",
   "last_agent": "ChatGPT GPT-5.6 Sol",
-  "last_update": "2026-09-27T16:03:00-05:00",
+  "last_update": "2026-09-27T18:21:00-05:00",
   "visual_audit": {
     "reference_count": 158,
     "path": "Ui Yaiwes interface beta/01-original/FOTOS-REF/",
@@ -201,25 +201,32 @@
     }
   },
   "skill_architecture": {
-    "registry": "actualizaciones arquitectura/SKILL-REGISTRY-UI-YAIWES-2026-09-27.json",
-    "handoff": "actualizaciones arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md",
+    "canonical_handoff": "actualizaciones arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md",
     "plan": "actualizaciones arquitectura/PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md",
-    "counts": {
-      "physical_skill_md": 51,
-      "logical_families": 39,
-      "ui_interface": 10,
-      "factory": 41
-    },
-    "policy": "donor-scoped skills are not global; adapter+test+evidence required before ACTIVE",
+    "ui_interface_verified_skill_md": 10,
+    "factory_source": "Director-provided factory index, 2026-09-27",
+    "factory_rescan_this_update": false,
+    "policy": "catalog/presence is not activation; donor skills require scope+adapter+test+evidence",
+    "panel_01_chain": [
+      "Image-to-Code",
+      "frontend-design",
+      "build",
+      "Impeccable",
+      "frontend-audit/accessibility",
+      "Playwright",
+      "evidence"
+    ],
     "flow": [
       "task",
       "skill-resolver",
-      "fromted-policy",
+      "product-policy",
       "surface-skill",
-      "capability-or-tool",
-      "qa-skill",
+      "build",
+      "qa-a11y",
+      "donor-adapter-if-needed",
+      "tool-component",
       "evidence",
-      "pass-or-fail"
+      "pass-fail-blocked"
     ]
   }
 }
