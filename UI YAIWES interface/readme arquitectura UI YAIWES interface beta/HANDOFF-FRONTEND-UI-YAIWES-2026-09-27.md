@@ -120,3 +120,89 @@ Total matemático: **55 nodos**, no 45. La arquitectura consolidada usa 55 como 
 ## Flujo de continuidad
 
 `README -> ARQUITECTURA FRONTEND V1 -> FUENTES -> FOTOS -> IMPLEMENTACIÓN -> QA -> EVIDENCIA -> HANDOFF`
+
+
+## TASK CHAT-DONORS-01 — 3 chats debajo de CHAT-01
+
+Estado inicial: `PLANNED / ONE_TASK_ONLY`  
+Fecha: 2026-09-27  
+Director: copiar sin reescribir código las tres interfaces de chat ya descargadas,
+colocarlas debajo del chat WebUI actual y cablearlas a Hermes + OpenClaw.
+NO usar las UI propias de Hermes/OpenClaw.
+
+### Chat WebUI actual
+- Panel: `Ui Yaiwes interface beta/04-panels/PANEL-01-CHAT/`
+- Window: `CHAT-01`
+- Bridge actual: `window.YAIWES_BRIDGE.dispatch(actionId,payload)`
+- Fail closed: si no existe bridge, no fabricar respuesta.
+
+### Donantes exactos ya descargados
+Origen canónico, intacto:
+`Skills arquitectura frontend Yaiwes/biblioteca code frontend Maxbry Yaiwes/lote-zips-extraidos/01-original/`
+
+1. `_chat-ui-main/`
+2. `__open-chat-ui-main/`
+3. `_chat-ui-react-master/`
+
+No usar:
+- UI de Hermes;
+- UI de OpenClaw;
+- OpenHands u otras UI de agente.
+
+### Motor obligatorio
+Usar exclusivamente:
+`➡️📂motores de descarga extracción copiado movimiento archivos fromtend/➡️📂motor de copiar archivos/motor_3_copy_batches.py`
+
+Blob canónico:
+`3689924361ce4a1a9fde4ae2b6f6009c37a6042d`
+
+Reglas:
+- no editar el motor;
+- `COLLISION_POLICY=fail`;
+- preservar archivos/hash del donor;
+- read-back obligatorio;
+- no reescribir donor code.
+
+### Destino operativo de esta tarea
+`UI YAIWES interface/Ui Yaiwes interface beta/04-panels/PANEL-01-CHAT/chat-variants/`
+
+Orden visual:
+`CHAT-01 -> chat-ui -> open-chat-ui -> chat-ui-react`
+
+Cada donor debe conservarse en su propia subcarpeta:
+- `chat-variants/chat-ui/`
+- `chat-variants/open-chat-ui/`
+- `chat-variants/chat-ui-react/`
+
+### Wiring
+No modificar la lógica interna del donor para acoplarla a agentes.
+Crear el cableado fuera de las carpetas copiadas mediante el bridge del panel.
+
+Microflujo:
+`DONOR CHAT -> ADAPTER -> YAIWES_BRIDGE -> agent target {hermes|openclaw} -> respuesta/evento -> DONOR CHAT`
+
+Targets:
+- `hermes`
+- `openclaw`
+
+El selector/adapter debe poder dirigir cualquiera de las tres superficies a Hermes
+o OpenClaw sin usar sus UI nativas.
+
+### Gate
+No declarar PASS hasta:
+1. las 3 copias existen;
+2. hashes/read-back del Motor 3 pasan;
+3. donor folders permanecen intactos;
+4. CHAT-01 sigue funcional;
+5. las 3 superficies quedan debajo de CHAT-01;
+6. adapter expone Hermes/OpenClaw;
+7. no se usa UI propia de Hermes/OpenClaw;
+8. test funcional + evidencia;
+9. trazabilidad del equipo actualizada.
+
+### Prohibiciones
+- no reescribir donor code;
+- no sustituir los tres chats por clones visuales;
+- no descargar otra UI;
+- no modificar originales en `01-original`;
+- no mezclar esta tarea con otras.
