@@ -225,4 +225,18 @@ Regla: **presencia != activación**. Skills de donors quedan `DONOR_SCOPED`; só
 Microflujo:
 
 `TASK -> SkillResolver -> FROMTED policy -> skill de superficie -> tool/component -> browser/device -> QA -> evidence -> PASS/FAIL`
+## Skills — handoff canónico 2026-09-27
 
+Fuente única de planificación:
+`actualizaciones arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md`
+
+Plan:
+`actualizaciones arquitectura/PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md`
+
+Alcance:
+- 10 SKILL.md físicos verificados en `UI YAIWES interface/`;
+- catálogo de fábrica incorporado desde el índice entregado por el Director, sin reescaneo de fábrica en esta actualización;
+- donor skills permanecen `DONOR_SCOPED` hasta adapter+test;
+- `PANEL-01-CHAT` usa la cadena: Image-to-Code → frontend-design → build → Impeccable → visual/a11y QA → Playwright → evidencia.
+
+Regla: `skill != tool != plugin`; el skill orienta, el componente/tool ejecuta, Action Bus gobierna las acciones.
