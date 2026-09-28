@@ -3,10 +3,14 @@
   "tab": "B",
   "mode": "ask",
   "proyecto": "UI YAIWES interface beta",
-  "updated": "2026-09-12T04:49:37-05:00",
+  "updated": "2026-09-27T21:44:00-05:00",
   "fase": "T2-R5-FIRST-MODULE-PREFLIGHT",
   "parte_actual": "PREFLIGHT_COMPLETE_IMPLEMENTATION_NOT_STARTED",
-  "ok_ids": ["T2-R1","T2-R2","T2-R3"],
+  "ok_ids": [
+    "T2-R1",
+    "T2-R2",
+    "T2-R3"
+  ],
   "pending_next": "T2-R5A_ADAPT_CODEMIRROR_MINIMUM_CAPABILITY_IN_FACTORY_WORKFLOW",
   "conteo": {
     "fotos14": 14,
@@ -20,8 +24,8 @@
   "st": {},
   "pct": {},
   "notes": {
-    "00": "39 FROMTED split subidas. Fábrica DAG+seguridad+empaque.",
     "20": "hot path wordflow: no reescribir runner. fuera de este lote UI.",
+    "00": "39 FROMTED split subidas. Fábrica DAG+seguridad+empaque.",
     "t1": "T1_FACTORY_FRONTEND VERIFIED_CLOSED: source 8d5a7ed86f9af517b0d42f5aad9e2f7359edd7f0; HF 9aa43978497e9bd9fba9d9ecea11ac8e83b01764.",
     "t2": "R1 39 ventanas VERIFIED_COMPLETE; R2 backend/API/MCP boundary VERIFIED_COMPLETE; R3 OSS donor capability map VERIFIED_COMPLETE; R4 Sol A/B coordinado pero esperando claims de sus owners; R5 preflight del primer módulo completo, sin implementación.",
     "oss": "Shortlist frontend: CodeMirror 6, Lucide, Excalidraw, PDF.js, Chart.js. Presencia no equivale a runtime PASS.",
@@ -55,5 +59,25 @@
     "current": "RUN-01",
     "pending": "OK RUN-01 | RECHAZO RUN-01",
     "preserved": true
+  },
+  "chat_donors_01": {
+    "status": "READY_FOR_CODEX",
+    "task_contract": "UI YAIWES interface/workflow/TASK-CHAT-DONORS-01.contract.json",
+    "handoff_commit": "d6fa8aecd64d9deb88272f004bb69d2ed80b9de7",
+    "contract_commit": "6fde5d73b73cce4499df1aeaff6c26038b02958b",
+    "executor": "Codex",
+    "automatic_runner_found": false,
+    "donor_sources": [
+      "_chat-ui-main",
+      "__open-chat-ui-main",
+      "_chat-ui-react-master"
+    ],
+    "target_root": "UI YAIWES interface/Ui Yaiwes interface beta/04-panels/PANEL-01-CHAT/chat-variants",
+    "agent_targets": [
+      "hermes",
+      "openclaw"
+    ],
+    "motor3_blob": "3689924361ce4a1a9fde4ae2b6f6009c37a6042d",
+    "next": "executor_claim_then_motor3_copy_then_external_adapter_then_browser_qa_then_sentinel_then_guardian"
   }
 }
