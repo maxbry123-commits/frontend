@@ -363,4 +363,18 @@ Reglas:
 6. frontend visual cierra con Playwright/visual-test/lint cuando aplique;
 7. emuladores Orca se reservan para QA móvil;
 8. orchestration/orca-cli coordinan trabajo, pero no sustituyen Action Bus, StateStore ni WindowRegistry.
+## Skills — handoff canónico 2026-09-27
 
+La arquitectura adopta un `SkillResolver` documental con fail-closed.
+
+```text
+TASK -> PRODUCT POLICY -> SURFACE SKILL -> BUILD -> QA/A11Y -> DONOR ADAPTER IF NEEDED -> TOOL/COMPONENT -> EVIDENCE
+```
+
+Handoff:
+`actualizaciones arquitectura/HANDOFF-SKILLS-UI-YAIWES-2026-09-27.md`
+
+Plan:
+`actualizaciones arquitectura/PLAN-ACCION-SKILLS-UI-YAIWES-2026-09-27.md`
+
+Los 10 skills físicos encontrados bajo `UI YAIWES interface/` son donors Omarchy/Orca y no se vuelven globales. El catálogo de fábrica se consume desde el índice del Director; sus entradas staged/catalogadas no se consideran activas hasta resolver path/runtime y pasar test.
