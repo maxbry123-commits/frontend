@@ -54,4 +54,63 @@ After the design read, set three dials. Every layout, motion, and density decisi
 | Signal | VARIANCE | MOTION | DENSITY |
 |---|---|---|---|
 | "minimalist / clean / calm / editorial / Linear-style" | 5-6 | 3-4 | 2-3 |
-| "premium consumer / Apple-y / 
+| "premium consumer / Apple-y / luxury / brand" | 7-8 | 5-7 | 3-4 |
+| "playful / wild / Dribbble / Awwwards / experimental / agency" | 9-10 | 8-10 | 3-4 |
+| "landing page / portfolio / marketing site (default)" | 7-9 | 6-8 | 3-5 |
+| "trust-first / public-sector / regulated / accessibility-critical" | 3-4 | 2-3 | 4-5 |
+| "redesign - preserve" | match existing | +1 | match existing |
+| "redesign - overhaul" | +2 | +2 | match existing |
+
+### 1.B Use-Case Presets
+| Use case | VARIANCE | MOTION | DENSITY |
+|---|---|---|---|
+| Landing (SaaS, mainstream) | 7 | 6 | 4 |
+| Landing (Agency / creative) | 9 | 8 | 3 |
+| Landing (Premium consumer) | 7 | 6 | 3 |
+| Portfolio (Designer / studio) | 8 | 7 | 3 |
+| Portfolio (Developer) | 6 | 5 | 4 |
+| Editorial / Blog | 6 | 4 | 3 |
+| Public-sector service | 3 | 2 | 5 |
+| Redesign - preserve | match | match+1 | match |
+| Redesign - overhaul | +2 | +2 | match |
+
+### 1.C How the Dials Drive Output
+Use these (or user-overridden values) as global variables. Cross-references throughout this document refer to these exact variable names - never invent aliases like `LAYOUT_VARIANCE` or `ANIM_LEVEL`.
+
+---
+
+## 2. BRIEF → DESIGN SYSTEM MAP
+
+Once you have the design read (Section 0) and dials (Section 1), pick the right foundation. Do not invent CSS for things that have an official package. Do not pretend an aesthetic trend is an official system.
+
+### 2.A When to reach for a real design system (use official packages)
+| Brief reads as… | Reach for | Why |
+|---|---|---|
+| Microsoft / enterprise SaaS / dashboards | `@fluentui/react-components` or `@fluentui/web-components` | Official Fluent UI, Microsoft tokens, accessibility done |
+| Google-ish UI, Material-flavored product | `@material/web` + Material 3 tokens | Official, theme-able via Material Theming |
+| IBM-style B2B / enterprise analytics | `@carbon/react` + `@carbon/styles` | Official Carbon, mature data-density patterns |
+| Shopify app surfaces | `polaris.js` web components / Polaris React | Required for Shopify admin UI |
+| Atlassian / Jira-style product | `@atlaskit/*` + `@atlaskit/tokens` | Official Atlassian DS |
+| GitHub-style devtool / community page | `@primer/css` or `@primer/react-brand` | Official Primer; Brand variant for marketing |
+| Public-sector UK service | `govuk-frontend` | Legally / regulatorily expected |
+| US public-sector / trust-first | `uswds` | Same |
+| Fast local-business / agency MVP | Bootstrap 5.3 | Boring, fast, works |
+| Modern accessible React foundation | `@radix-ui/themes` | Primitives + polished theme |
+| Modern SaaS where you own the components | shadcn/ui (`npx shadcn@latest add ...`) | You own the code, easy to customise; never ship default state |
+| Tailwind-based modern SaaS / AI marketing | Tailwind v4 utilities + `dark:` variant | Default for indie + small team builds |
+
+**Honesty rule:** if the brief reads as one of the systems above, install and use the **official** package. Do not recreate its CSS by hand. Do not import a system's tokens but then override 90% of them.
+
+**One system per project.** Do not mix Fluent React with Carbon in the same tree. Do not import shadcn/ui components into a Material 3 app.
+
+### 2.B When the brief is an aesthetic, not a system
+For these directions, there is **no single official package**. Build with native CSS + Tailwind + a maintained component library. Be honest in code comments about what is borrowed inspiration vs. official material.
+
+| Aesthetic | Honest implementation |
+|---|---|
+| Glassmorphism / "frosted glass" | `backdrop-filter`, layered borders, highlight overlays. Provide solid-fill fallback for `prefers-reduced-transparency`. |
+| Bento (Apple-style tile grids) | CSS Grid with mixed cell sizes. No single library owns this. |
+| Brutalism | Native CSS, monospace, raw borders. No library. |
+| Editorial / magazine | Serif type, asymmetric grid, generous whitespace. No library. |
+| Dark tech / hacker | Mono + accent neon, terminal motifs. No library. |
+| Aurora / mesh gradients | SVG or layered rad
