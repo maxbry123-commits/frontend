@@ -14,8 +14,11 @@
   "files": 1,
   "bytes": 87253,
   "file_sha256": "aa194351b246b8b4799099d4ed7b033d29eab6e6e3d58d8d2172978be7b3ec89",
-  "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+  "status": "PARTIAL_PREFIX_16K_PLUS_STAGED_POINTER",
   "extraction_verified": true,
   "reconstruction_verified": true,
-  "notes": "Excerpted COPY_ONLY from Taste donor; not regenerated."
+  "partial_on_github_bytes": 16000,
+  "partial_blob_sha": "6e4b4f3751b4b983fa38ec71252d7706764c869e",
+  "staged_pointer": "skills/taste-skill/SKILL.FULL.STAGED.md",
+  "notes": "Excerpted COPY_ONLY from Taste donor; not regenerated. Phase A 16000B prefix on main; full 87253B blocked by MCP embed limits; SKILL.FULL.STAGED.md pointer published."
 }
