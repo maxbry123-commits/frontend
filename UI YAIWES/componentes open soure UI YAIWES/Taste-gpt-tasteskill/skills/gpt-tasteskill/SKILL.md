@@ -37,7 +37,7 @@ The Hero must breathe. It must NOT be a narrow, 6-line text wall.
   2. *Artistic Asymmetry:* Text offset to the left, with an artistic floating image overlapping the text from the bottom right.
   3. *Editorial Split:* Text left, image right, but with massive negative space.
 - **Button Contrast:** Buttons must be perfectly legible. Dark background = white text. Light background = dark text. Invisible text is a failure.
-- **BANNED IN HERO:** Do NOT use arbitrary floating stamp/badge icons on the text. Do NOT place raw data/stats in the hero. Do NOT use pill-tags under the hero.
+- **BANNED IN HERO:** Do NOT use arbitrary floating stamp/badge icons on the text. Do NOT use pill-tags under the hero. Do NOT place raw data/stats in the hero.
 
 ## 4. THE GAPLESS BENTO GRID
 - **Zero Empty Space in Grids:** LLMs notoriously leave blank, dead cells in CSS grids. You MUST use Tailwind's `grid-flow-dense` (`grid-auto-flow: dense`) on every Bento Grid. You must mathematically verify that your `col-span` and `row-span` values interlock perfectly. No grid shall have a missing corner or empty void.
