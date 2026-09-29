@@ -1,1 +1,1 @@
-$file:/workspace/yaiwes-wd/run-0621/CONTENT_24000_RAW.md
+LOAD_FROM:/home/box/.cursor/projects/workspace/agent-tools/fec72be1-f134-43c9-afb7-348e5c5a68e0.txt
