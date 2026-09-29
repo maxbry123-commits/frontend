@@ -1,0 +1,21 @@
+{
+  "schema": "yaiwes.hf.download-extract.v1",
+  "slug": "Taste-Skill",
+  "product": "skill-excerpt",
+  "source_repo": "Leonxlnx/taste-skill",
+  "source_path": "skills/taste-skill/SKILL.md",
+  "source_ref": "HEAD",
+  "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+  "source_url": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/taste-skill/SKILL.md",
+  "parent_donor": "Taste",
+  "reuse_rule": "REUSE > GENERATE / COPY_ONLY / DONOR_STAGING_ONLY",
+  "watchdog": "Motor de descarga",
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Taste-Skill",
+  "files": 1,
+  "bytes": 87253,
+  "file_sha256": "aa194351b246b8b4799099d4ed7b033d29eab6e6e3d58d8d2172978be7b3ec89",
+  "status": "TEXT_STAGED_DONOR_STAGING_ONLY",
+  "extraction_verified": true,
+  "reconstruction_verified": true,
+  "notes": "Excerpted COPY_ONLY from Taste donor; not regenerated."
+}
