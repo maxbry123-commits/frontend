@@ -105,7 +105,7 @@ Check for these problems and fix them:
 
 - **Lucide or Feather icons exclusively.** These are the "default" AI icon choice. Use Phosphor, Heroicons, or a custom set for differentiation.
 - **Rocketship for "Launch", shield for "Security".** Replace cliche metaphors with less obvious icons (bolt, fingerprint, spark, vault).
-- **Inconsistent stroke widths across icons.** Audit all imports and standardize to one stroke weight.
+- **Inconsistent stroke widths across icons.** Audit all icons and standardize to one stroke weight.
 - **Missing favicon.** Always include a branded favicon.
 - **Stock "diverse team" photos.** Use real team photos, candid shots, or a consistent illustration style instead of uncanny stock imagery.
 
@@ -126,12 +126,12 @@ Check for these problems and fix them:
 - **No "back" navigation.** Dead ends in user flows. Every page needs a way back.
 - **No custom 404 page.** Design a helpful, branded "page not found" experience.
 - **No form validation.** Add client-side validation for emails, required fields, and format checks.
-- **No skip to content link.** Essential for keyboard users. Add a hidden skip-link.
+- **No "skip to content" link.** Essential for keyboard users. Add a hidden skip-link.
 - **No cookie consent.** If required by jurisdiction, add a compliant consent banner.
 
 ## Upgrade Techniques
 
-When upgrading a project, pull from these high-impact techniques to replace generic coded patterns:
+When upgrading a project, pull from these high-impact techniques to replace generic patterns:
 
 ### Typography Upgrades
 - **Variable font animation.** Interpolate weight or width on scroll or hover for text that feels alive.
@@ -154,7 +154,7 @@ When upgrading a project, pull from these high-impact techniques to replace gene
 - **True glassmorphism.** Go beyond `backdrop-filter: blur`. Add a 1px inner border and a subtle inner shadow to simulate edge refraction.
 - **Spotlight borders.** Card borders that illuminate dynamically under the cursor.
 - **Grain and noise overlays.** A fixed, pointer-events-none overlay with subtle noise to break digital flatness.
-- **Colored, tinted shadows.** Shadows that carry the hue of the background rather than using generic black at low opacity.
+- **Colored, tinted shadows.** Shadows that carry the hue of the background rather than using generic black.
 
 ## Fix Priority
 
