@@ -73,7 +73,7 @@ The layout must appear mathematically engineered. It rejects conventional web pa
 ## 6. UI Components and Symbology
 Standard web UI conventions are replaced with utilitarian, industrial graphic elements.
 
-*   **Syntax Decorations:** Utilization of ASCII characters to frame data points.
+*   **Syntax Decoration:** Utilization of ASCII characters to frame data points.
     *   *Framing:* `[ DELIVERY SYSTEMS ]`, `< RE-IND >`
     *   *Directional:* `>>>`, `///`, `\\\\`
 *   **Industrial Markers:** Prominent integration of registration (`®`), copyright (`©`), and trademark (`™`) symbols functioning as structural geometric elements rather than legal text.
