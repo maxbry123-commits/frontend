@@ -1,0 +1,76 @@
+{
+  "schema": "yaiwes.watchdog.motor-descarga.v1",
+  "routine": "Motor de descarga",
+  "fired_at_utc": "2026-09-29T14:05:49.066Z",
+  "reported_at_bogota": "2026-09-29T09:05:49-05:00",
+  "repo": "maxbry123-commits/frontend",
+  "branch": "main",
+  "state": {
+    "STATUS": "ACTIVE_LOOP",
+    "STATE_status": "ACTIVE_LOOP_NOT_CLOSED",
+    "GATE": "T1_FACTORY_FRONTEND",
+    "TASTE_SKILL": "PARTIAL_PREFIX_16K_PLUS_STAGED_POINTER"
+  },
+  "verdict": "PROGRESS_PARTIAL",
+  "action_taken": {
+    "type": "REUSE_PUBLISH_SKILL_MD_BODIES",
+    "principle": "REUSE > GENERATE / DONOR_STAGING_ONLY",
+    "publish_attempt": "PHASE_A_OK_PHASE_B_STAGED_FALLBACK",
+    "phase_a": {
+      "ok": true,
+      "size": 16000,
+      "blob_sha": "6e4b4f3751b4b983fa38ec71252d7706764c869e",
+      "commit_sha": "87eb783a4fd93c7f16bbe2a82aa6055350212850",
+      "note": "Progressive grow after PLACEHOLDER wipe: 2k→4k→8k→10k→12k→14k→16k COPY_ONLY"
+    },
+    "phase_b": {
+      "ok": false,
+      "attempt": "push_files_skipped_embed_infeasible",
+      "push_oneline_bytes": 89189,
+      "reason": "Full 87253B body (~89KB MCP oneline) exceeds reliable CallMcpTool embed; stub/path substitution forbidden. Kept 16000B file intact.",
+      "fallback": "SKILL.FULL.STAGED.md pointer + manifest status PARTIAL_PREFIX_16K_PLUS_STAGED_POINTER"
+    },
+    "donors": [
+      {
+        "slug": "Taste-Imagegen-Web",
+        "github_status": "PUBLISHED_ON_MAIN",
+        "ok": true,
+        "note": "untouched"
+      },
+      {
+        "slug": "Taste-Imagegen-Mobile",
+        "github_status": "PUBLISHED_ON_MAIN",
+        "ok": true,
+        "note": "untouched"
+      },
+      {
+        "slug": "Taste-Skill",
+        "path": "UI YAIWES/componentes open soure UI YAIWES/Taste-Skill/skills/taste-skill/SKILL.md",
+        "expected_bytes": 87253,
+        "local_sha256": "aa194351b246b8b4799099d4ed7b033d29eab6e6e3d58d8d2172978be7b3ec89",
+        "readback_bytes": 16000,
+        "blob_sha": "6e4b4f3751b4b983fa38ec71252d7706764c869e",
+        "commit_sha": "87eb783a4fd93c7f16bbe2a82aa6055350212850",
+        "staged_pointer": "skills/taste-skill/SKILL.FULL.STAGED.md",
+        "staged_commit": "52f580ee0d9f804cb933325b6e831cbf5129f3c3",
+        "github_status": "PARTIAL_PREFIX_16K_PLUS_STAGED_POINTER",
+        "ok": false,
+        "status": "PARTIAL_PREFIX_16K_PLUS_STAGED_POINTER"
+      }
+    ]
+  },
+  "gaps_still_true": [
+    "E2E_BROWSER_RUN_NOT_EXECUTED",
+    "T2_BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
+    "LARGE_BINARY_ZIP_PUBLISH_STILL_PENDING",
+    "TASTE_SKILL_SKILL_MD_FULL_BODY_NOT_ON_MAIN"
+  ],
+  "already_published_manifests_schemas_do_not_redo": [
+    "Taste-Imagegen-Web/DOWNLOAD_EXTRACT_MANIFEST.json:cec0572",
+    "Taste-Imagegen-Web/SKILL_SCHEMA.json:8b5b136",
+    "Taste-Imagegen-Mobile/DOWNLOAD_EXTRACT_MANIFEST.json:387da53",
+    "Taste-Imagegen-Mobile/SKILL_SCHEMA.json:be3f97e",
+    "Taste-Skill/DOWNLOAD_EXTRACT_MANIFEST.json:985ac71",
+    "Taste-Skill/SKILL_SCHEMA.json:4d1016b"
+  ]
+}
