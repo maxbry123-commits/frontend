@@ -1,0 +1,81 @@
+{
+  "schema": "yaiwes.watchdog.motor-descarga.v1",
+  "routine": "Motor de descarga",
+  "fired_at_utc": "2026-09-29T11:21:23.960Z",
+  "reported_at_bogota": "2026-09-29T07:00:26-05:00",
+  "repo": "maxbry123-commits/frontend",
+  "branch": "main",
+  "state": {
+    "STATUS": "ACTIVE_LOOP",
+    "STATE_status": "ACTIVE_LOOP_NOT_CLOSED",
+    "GATE": "T1_FACTORY_FRONTEND",
+    "T2": "BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
+    "next_node": "WAIT_FOR_SOL6_F_UI_051_AND_SOL8_F_UI_061_REPORTS_THEN_RUN_F_UI_062_INDEPENDENT_REVIEW",
+    "FREE_nodes": [
+      "N17-FULL-PRODUCT-E2E",
+      "N27-CONTINUOUS-LOOP"
+    ],
+    "CLAIMED": [
+      "N32-GUEST-INSTALLER-VERIFICATION"
+    ],
+    "BLOCKED": [
+      "N31-UI-FINAL"
+    ],
+    "CHECKPOINT": "UIYAIWES-N04-RECONCILIATION-2026-09-13T0717Z"
+  },
+  "verdict": "PROGRESS_PARTIAL",
+  "action_taken": {
+    "type": "REUSE_PUBLISH_SKILL_MD_BODIES",
+    "principle": "REUSE > GENERATE / DONOR_STAGING_ONLY",
+    "publish_attempt": "PARTIAL_SUCCESS",
+    "auto_review_block_fields_cleared": true,
+    "donors": [
+      {
+        "slug": "Taste-Imagegen-Web",
+        "path": "UI YAIWES/componentes open soure UI YAIWES/Taste-Imagegen-Web/skills/imagegen-frontend-web/SKILL.md",
+        "expected_bytes": 36854,
+        "readback_bytes": 36854,
+        "blob_sha": "26b293b8d0088631c41ebefde4a650768d01cf22",
+        "commit_sha": "71e95eae5215765fd5a8f0c62f487faebc1f36b4",
+        "github_status": "PUBLISHED_ON_MAIN",
+        "ok": true
+      },
+      {
+        "slug": "Taste-Imagegen-Mobile",
+        "path": "UI YAIWES/componentes open soure UI YAIWES/Taste-Imagegen-Mobile/skills/imagegen-frontend-mobile/SKILL.md",
+        "expected_bytes": 40326,
+        "readback_bytes": 40326,
+        "blob_sha": "9d8d55f3ca7a77e18329922ea8a67694dee52ebb",
+        "commit_sha": "a37d038a48f8212abacca5c3540d0b689b932feb",
+        "github_status": "PUBLISHED_ON_MAIN",
+        "ok": true
+      },
+      {
+        "slug": "Taste-Skill",
+        "path": "UI YAIWES/componentes open soure UI YAIWES/Taste-Skill/skills/taste-skill/SKILL.md",
+        "expected_bytes": 87253,
+        "local_sha256": "aa194351b246b8b4799099d4ed7b033d29eab6e6e3d58d8d2172978be7b3ec89",
+        "readback_bytes": 15011,
+        "blob_sha": "cd240201e50a4a95019945539890e3518714b4c1",
+        "commit_sha": "92f3fd0718485011c908c2dbe034451c358b2967",
+        "github_status": "PARTIAL_ON_MAIN_PROGRESSIVE_P1_ONLY",
+        "ok": false,
+        "failure": "Full 87253-byte SKILL.md body not yet on main. HTTP MCP user-GitHub-xai does not expand $file: symbolic args (stdio-only). Embedding ~87KB (or even half1 43601) in one CallMcpTool from this harness was not completed after accidental $file: literal writes; restored to progressive p1 (15011 bytes, prefix of real COPY_ONLY body). Local full body ready at /workspace/yaiwes-wd/run-0621/FULL_FOR_MCP.md and NOW_FULL.json / PUSH_FULL_NOW.json / cu_Taste-Skill_2.json. Current remote sha for next update: cd240201e50a4a95019945539890e3518714b4c1. Next agent must CallMcpTool create_or_update_file with REAL content string (not $file:/path) and sha cd240201..., expected size 87253."
+      }
+    ]
+  },
+  "gaps_still_true": [
+    "E2E_BROWSER_RUN_NOT_EXECUTED",
+    "T2_BLOCKED_UNTIL_T1_CURRENT_SOURCE_REVALIDATED",
+    "LARGE_BINARY_ZIP_PUBLISH_STILL_PENDING",
+    "TASTE_SKILL_SKILL_MD_FULL_BODY_NOT_ON_MAIN"
+  ],
+  "already_published_manifests_schemas_do_not_redo": [
+    "Taste-Imagegen-Web/DOWNLOAD_EXTRACT_MANIFEST.json:cec0572",
+    "Taste-Imagegen-Web/SKILL_SCHEMA.json:8b5b136",
+    "Taste-Imagegen-Mobile/DOWNLOAD_EXTRACT_MANIFEST.json:387da53",
+    "Taste-Imagegen-Mobile/SKILL_SCHEMA.json:be3f97e",
+    "Taste-Skill/DOWNLOAD_EXTRACT_MANIFEST.json:985ac71",
+    "Taste-Skill/SKILL_SCHEMA.json:4d1016b"
+  ]
+}
