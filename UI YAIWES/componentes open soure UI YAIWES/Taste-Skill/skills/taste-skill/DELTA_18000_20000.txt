@@ -1,0 +1,16 @@
+ro is OK for editorial / manifesto / launch-announcement briefs where the message itself is the design.
+
+### 4.4 Materiality, Shadows, Cards
+* Use cards ONLY when elevation communicates real hierarchy. Otherwise group with `border-t`, `divide-y`, or negative space.
+* When a shadow is used, tint it to the background hue. No pure-black drop shadows on light backgrounds.
+* For `VISUAL_DENSITY > 7`: generic card containers are banned. Data metrics breathe in plain layout.
+* **SHAPE CONSISTENCY LOCK (mandatory):** Pick ONE corner-radius scale for the page and stick to it. Options: all-sharp (radius 0), all-soft (radius 12-16px), all-pill (full radius for interactive). Mixed systems are allowed only when there is a documented rule (e.g. "buttons are full-pill, cards are 16px, inputs are 8px") and that rule is followed everywhere. Round buttons in a square layout, or square cards on a pill-button page, is broken design.
+
+### 4.5 Interactive UI States
+LLMs default to "static successful state only." Always implement full cycles:
+* **Loading:** Skeletal loaders matching the final layout's shape. Avoid generic circular spinners.
+* **Empty States:** Beautifully composed; indicate how to populate.
+* **Error States:** Clear, inline (forms), or contextual (toasts only for transient).
+* **Tactile Feedback:** On `:active`, use `-translate-y-[1px]` or `scale-[0.98]` to simulate a physical push.
+* **BUTTON CONTRAST CHECK (mandatory, a11y):** Before shipping any button, verify the button text is readable against the button background. White button + white text, `bg-white` CTA with `text-white` label, transparent button against the page background with no border → all banned. Audit every CTA: contrast ratio WCAG AA min (4.5:1 for body, 3:1 for large text 18px+). Same rule applies to ghost buttons over photographic backgrounds (use a backdrop, scrim, or stroke).
+* **CTA BUTTON WRAP BAN (mandatory):** Button text MUST fit on one line at desktop. If a label like "VIEW SELECTED WORK" wrap
