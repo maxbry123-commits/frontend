@@ -138,4 +138,32 @@ Unless the design read picks a real design system (Section 2.A), these are the d
 * **NEVER** use `useState` to track continuous values driven by user input (mouse position, scroll progress, pointer physics, magnetic hover). Use Motion's `useMotionValue` / `useTransform` / `useScroll`. `useState` re-renders the React tree on every change and collapses on mobile.
 
 ### 3.C Icons
-* **Allowed lib
+* **Allowed libraries (priority order):** `@phosphor-icons/react`, `hugeicons-react`, `@radix-ui/react-icons`, `@tabler/icons-react`.
+* **Discouraged:** `lucide-react`. Acceptable only when the user explicitly asks for it or the project already depends on it.
+* **NEVER hand-roll SVG icons.** If a glyph is missing, install a second library or compose from primitives - do not draw icon paths from scratch.
+* **One family per project.** Do not mix Phosphor with Lucide in the same component tree.
+* **Standardize `strokeWidth` globally** (e.g. `1.5` or `2.0`).
+
+### 3.D Emoji Policy
+Discouraged by default in code, markup, and visible text. Replace symbols with icon-library glyphs. **Override:** allow emojis only when the user explicitly asks for a playful / chat-style / social-native vibe - and even then use them sparingly with intent.
+
+### 3.E Responsiveness & Layout Mechanics
+* Standardize breakpoints (`sm 640`, `md 768`, `lg 1024`, `xl 1280`, `2xl 1536`).
+* Contain page layouts using `max-w-[1400px] mx-auto` or `max-w-7xl`.
+* **Viewport Stability:** NEVER use `h-screen` for full-height Hero sections. ALWAYS use `min-h-[100dvh]` to prevent layout jumping on mobile (iOS Safari address bar).
+* **Grid over Flex-Math:** NEVER use complex flexbox percentage math (`w-[calc(33%-1rem)]`). ALWAYS use CSS Grid (`grid grid-cols-1 md:grid-cols-3 gap-6`).
+
+### 3.F Dependency Verification (mandatory)
+Before importing ANY 3rd-party library, check `package.json`. If the package is missing, output the install command first. **Never** assume a library exists.
+
+---
+
+## 4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)
+
+LLMs default to clichés. Override these defaults proactively. Each rule has a context-aware override path.
+
+### 4.1 Typography
+* **Display / Headlines:** Default `text-4xl md:text-6xl tracking-tighter leading-none`.
+* **Body / Paragraphs:** Default `text-base text-gray-600 leading-relaxed max-w-[65ch]`.
+* **Sans font choice:**
+  * **Discouraged as default:** `Inter`. Pick `Geist`, `Outfi
