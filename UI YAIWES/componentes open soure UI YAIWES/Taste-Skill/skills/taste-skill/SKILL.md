@@ -1,1 +1,1 @@
-PLACEHOLDER_LOAD_FROM_FILE
+LOAD_FROM:/workspace/yaiwes-wd/run-1520/CONTENT_ONLY.md
