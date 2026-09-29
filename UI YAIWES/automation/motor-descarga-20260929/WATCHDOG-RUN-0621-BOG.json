@@ -2,7 +2,7 @@
   "schema": "yaiwes.watchdog.motor-descarga.v1",
   "routine": "Motor de descarga",
   "fired_at_utc": "2026-09-29T11:21:23.960Z",
-  "reported_at_bogota": "2026-09-29T07:00:26-05:00",
+  "reported_at_bogota": "2026-09-29T07:33:07-05:00",
   "repo": "maxbry123-commits/frontend",
   "branch": "main",
   "state": {
@@ -21,7 +21,8 @@
     "BLOCKED": [
       "N31-UI-FINAL"
     ],
-    "CHECKPOINT": "UIYAIWES-N04-RECONCILIATION-2026-09-13T0717Z"
+    "CHECKPOINT": "UIYAIWES-N04-RECONCILIATION-2026-09-13T0717Z",
+    "TASTE_SKILL": "PARTIAL_PROGRESSIVE_40031_AWAITING_FULL_87253"
   },
   "verdict": "PROGRESS_PARTIAL",
   "action_taken": {
@@ -55,12 +56,13 @@
         "path": "UI YAIWES/componentes open soure UI YAIWES/Taste-Skill/skills/taste-skill/SKILL.md",
         "expected_bytes": 87253,
         "local_sha256": "aa194351b246b8b4799099d4ed7b033d29eab6e6e3d58d8d2172978be7b3ec89",
-        "readback_bytes": 15011,
-        "blob_sha": "cd240201e50a4a95019945539890e3518714b4c1",
-        "commit_sha": "92f3fd0718485011c908c2dbe034451c358b2967",
-        "github_status": "PARTIAL_ON_MAIN_PROGRESSIVE_P1_ONLY",
+        "readback_bytes": 40031,
+        "blob_sha": "0d45bf7a9290b841d1e896cff660704227678039",
+        "commit_sha": "c86ebca7f5053fd37d3e8b17535c177511702261",
+        "github_status": "PARTIAL_ON_MAIN_PROGRESSIVE_40031",
         "ok": false,
-        "failure": "Full 87253-byte SKILL.md body not yet on main. HTTP MCP user-GitHub-xai does not expand $file: symbolic args (stdio-only). Embedding ~87KB (or even half1 43601) in one CallMcpTool from this harness was not completed after accidental $file: literal writes; restored to progressive p1 (15011 bytes, prefix of real COPY_ONLY body). Local full body ready at /workspace/yaiwes-wd/run-0621/FULL_FOR_MCP.md and NOW_FULL.json / PUSH_FULL_NOW.json / cu_Taste-Skill_2.json. Current remote sha for next update: cd240201e50a4a95019945539890e3518714b4c1. Next agent must CallMcpTool create_or_update_file with REAL content string (not $file:/path) and sha cd240201..., expected size 87253."
+        "status": "PARTIAL_PROGRESSIVE",
+        "failure": "Full 87253-byte SKILL.md body not yet on main. Progressive real COPY_ONLY prefix advanced to 40031 bytes (commit c86ebca7, blob 0d45bf7a). Prior steps: 8k→16k→32k→40k landed; accidental $file: literal wipe restored. HTTP MCP user-GitHub-xai does NOT expand $file: (writes literal path). Next agent: CallMcpTool create_or_update_file with REAL content from /workspace/yaiwes-wd/run-0621/CALL_FULL_NOW.json or T87253_CONTENT.md (87126 chars / 87253 bytes, sha256 aa194351...), sha=0d45bf7a9290b841d1e896cff660704227678039. Or continue progressive 48k→56k→72k→full using P*_AS_JSON.txt Read→CallMcpTool pattern."
       }
     ]
   },
