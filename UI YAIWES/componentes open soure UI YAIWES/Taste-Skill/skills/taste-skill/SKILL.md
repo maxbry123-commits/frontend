@@ -191,4 +191,4 @@ LLMs default to clichés. Override these defaults proactively. Each rule has a c
 
 * **PREMIUM-CONSUMER PALETTE BAN (mandatory, second-most-recurring AI-tell):**
   * For premium-consumer briefs (cookware, wellness, artisan, luxury, heritage craft, DTC home goods, etc.) the LLM default is **warm beige/cream + brass/clay/oxblood/ochre + espresso/ink dark text**. Concretely banned hex families as default backgrounds and accents:
-    - Back
+    - Backgrounds: `#f5f1ea`, `#f7f5f1`, `#fbf8f1`, `#efeae0`, `#ece6db`, `#faf7f1`, `#e8dfcb` (all "warm pape
