@@ -1,0 +1,25 @@
+{
+  "schema": "yaiwes.skill-to-schema.v1",
+  "slug": "Taste-Skill",
+  "source_repo": "Leonxlnx/taste-skill",
+  "source_path": "skills/taste-skill/SKILL.md",
+  "source_ref": "main",
+  "source_commit": "5217fb45be2c0b302f29c9cd31cbd3237501c684",
+  "source_url": "https://github.com/Leonxlnx/taste-skill/blob/main/skills/taste-skill/SKILL.md",
+  "parent_donor": "Taste",
+  "downloaded_at": "2026-09-22T21:38:00Z",
+  "watchdog": "Motor de descarga",
+  "dest_root": "UI YAIWES/componentes open soure UI YAIWES/Taste-Skill",
+  "reuse_rule": "REUSE > GENERATE / COPY_ONLY / DONOR_STAGING_ONLY",
+  "skills_count": 1,
+  "skills": [
+    {
+      "id": "taste-skill",
+      "path": "skills/taste-skill/SKILL.md",
+      "name": "design-taste-frontend",
+      "description": "Anti-slop frontend skill for landing pages, portfolios, and redesigns. The agent reads the brief, infers the right design direction, and ships interfaces that do not look templated. Real design systems when applicable, audit-first on redesigns, strict pre-flight check.",
+      "body_sha256": "aa194351b246b8b4799099d4ed7b033d29eab6e6e3d58d8d2172978be7b3ec89",
+      "bytes": 87253
+    }
+  ]
+}
