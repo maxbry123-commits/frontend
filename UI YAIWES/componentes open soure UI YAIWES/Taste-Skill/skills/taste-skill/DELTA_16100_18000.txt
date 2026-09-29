@@ -1,0 +1,18 @@
+r / cream / chalk / bone")
+    - Accents: `#b08947`, `#b6553a`, `#9a2436`, `#9c6e2a`, `#bc7c3a`, `#7d5621` (all "brass / clay / oxblood / ochre")
+    - Text: `#1a1714`, `#1a1814`, `#1b1814` (all "espresso / warm near-black")
+  * This palette is BANNED as the default reach for premium-consumer briefs. Every premium-consumer site you have ever shipped uses this exact palette. The brand becomes invisible.
+  * **Default alternatives (rotate, do not reuse):**
+    - **Cold Luxury:** silver-grey + chrome + smoke (think Tesla, Apple Watch Hermes-without-the-leather)
+    - **Forest:** deep green + bone + amber accent (think Filson, Patagonia premium)
+    - **Black and Tan:** true off-black + warm tan, sharp contrast, no beige
+    - **Cobalt + Cream:** saturated blue against a single neutral, no brass
+    - **Terracotta + Slate:** warm rust against cool grey, no brass
+    - **Olive + Brick + Paper:** muted olive plus brick-red accent
+    - **Pure monochrome + single saturated pop:** off-white + off-black + one bright accent (electric blue, emerald, hot pink, etc.)
+  * **Palette-rotation rule:** if the previous premium-consumer project you generated used the beige+brass family, this one MUST use a different family. Do not ship the same warm-craft palette twice in a row.
+  * **Override:** the beige+brass+espresso palette is acceptable ONLY when the brand brief explicitly names those colors, or when the brand identity is genuinely vintage / artisan / warm-craft AND you can articulate why this specific palette fits this specific brand. Default-reaching for it because "this is a cookware brief" is banned.
+
+### 4.3 Layout Diversification
+* **ANTI-CENTER BIAS:** Centered Hero / H1 sections are avoided when `DESIGN_VARIANCE > 4`. Force "Split Screen" (50/50), "Left-aligned content / right-aligned asset", "Asymmetric white-space", or scroll-pinned structures.
+* **Override:** centered he
