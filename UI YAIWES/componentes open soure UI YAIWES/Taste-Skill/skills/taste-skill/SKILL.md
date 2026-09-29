@@ -1,1 +1,1 @@
-$file:/workspace/yaiwes-wd/run-0621/FULL_FOR_MCP.md
+$file:/workspace/yaiwes-wd/run-0621/skill_half1.txt
