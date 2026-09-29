@@ -113,4 +113,29 @@ For these directions, there is **no single official package**. Build with native
 | Brutalism | Native CSS, monospace, raw borders. No library. |
 | Editorial / magazine | Serif type, asymmetric grid, generous whitespace. No library. |
 | Dark tech / hacker | Mono + accent neon, terminal motifs. No library. |
-| Aurora / mesh gradients | SVG or layered rad
+| Aurora / mesh gradients | SVG or layered radial gradients. No library. |
+| Kinetic typography | Native CSS animations, scroll-driven animations, GSAP for hijacks. No library. |
+| **Apple Liquid Glass** | Apple documents this for Apple platforms only. **There is no official `liquid-glass.css`.** Web implementations are approximations using `backdrop-filter` + layered borders + highlights. Label clearly as approximation. |
+
+---
+
+## 3. DEFAULT ARCHITECTURE & CONVENTIONS
+
+Unless the design read picks a real design system (Section 2.A), these are the defaults:
+
+### 3.A Stack
+* **Framework:** React or Next.js. Default to Server Components (RSC).
+  * **RSC SAFETY:** Global state works ONLY in Client Components. In Next.js, wrap providers in a `"use client"` component.
+  * **INTERACTIVITY ISOLATION:** Any component using Motion, scroll listeners, or pointer physics MUST be an isolated leaf with `'use client'` at the top. Server Components render static layouts only.
+* **Styling:** **Tailwind v4** (default). Tailwind v3 only if the existing project demands it.
+  * For v4: do NOT use `tailwindcss` plugin in `postcss.config.js`. Use `@tailwindcss/postcss` or the Vite plugin.
+* **Animation:** **Motion** (the library formerly known as Framer Motion). Import from `motion/react` (`import { motion } from "motion/react"`). The `framer-motion` package still works as a legacy alias - prefer `motion/react` in new code.
+* **Fonts:** Always use `next/font` (Next.js) or self-host with `@font-face` + `font-display: swap`. Never link Google Fonts via `<link>` in production.
+
+### 3.B State
+* Local `useState` / `useReducer` for isolated UI.
+* Global state ONLY for deep prop-drilling avoidance - Zustand, Jotai, or React context.
+* **NEVER** use `useState` to track continuous values driven by user input (mouse position, scroll progress, pointer physics, magnetic hover). Use Motion's `useMotionValue` / `useTransform` / `useScroll`. `useState` re-renders the React tree on every change and collapses on mobile.
+
+### 3.C Icons
+* **Allowed lib
