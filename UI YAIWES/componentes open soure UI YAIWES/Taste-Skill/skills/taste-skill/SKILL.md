@@ -1,1 +1,1 @@
-PLACEHOLDER_LOAD_FROM_FILE
+$file:/workspace/yaiwes-wd/run-0621/CONTENT_24000_RAW.md
