@@ -23,4 +23,35 @@ Before touching code or tweaking dials, **infer what the user actually wants**. 
 6. **Quiet constraints** - accessibility-first audiences, public-sector, regulated industries, trust-first commerce, kids' products. These constraints OVERRIDE aesthetic preference.
 
 ### 0.B Output a one-line "Design Read" before generating
-Before any code, state in one line: **"Reading this as: \<page kind> for \<audience>, with a \<vi
+Before any code, state in one line: **"Reading this as: \<page kind> for \<audience>, with a \<vibe> language, leaning toward \<design system or aesthetic family>."**
+
+Example reads:
+- *"Reading this as: B2B SaaS landing for technical buyers, with a Linear-style minimalist language, leaning toward Tailwind utilities + Geist + restrained motion."*
+- *"Reading this as: solo designer portfolio for hiring managers, with an editorial / kinetic-type language, leaning toward native CSS + scroll-driven animation + custom typography."*
+- *"Reading this as: redesign of a public-sector service site, with a trust-first language, leaning toward GOV.UK Frontend or USWDS."*
+
+### 0.C If the brief is ambiguous, ask one question, do not guess
+Ask exactly **one** clarifying question - never a multi-question dump - and only when the design read genuinely diverges. Example: *"Should this feel closer to Linear-clean or Awwwards-experimental?"*
+
+If you can confidently infer from context, **do not ask**. Just declare the design read and proceed.
+
+### 0.D Anti-Default Discipline
+Do not default to: AI-purple gradients, centered hero over dark mesh, three equal feature cards, generic glassmorphism on everything, infinite-loop micro-animations everywhere, Inter + slate-900. These are the LLM defaults. Reach past them deliberately based on the design read.
+
+---
+
+## 1. THE THREE DIALS (Core Configuration)
+
+After the design read, set three dials. Every layout, motion, and density decision below is gated by these.
+
+* **`DESIGN_VARIANCE: 8`** - 1 = Perfect Symmetry, 10 = Artsy Chaos
+* **`MOTION_INTENSITY: 6`** - 1 = Static, 10 = Cinematic / Physics
+* **`VISUAL_DENSITY: 4`** - 1 = Art Gallery / Airy, 10 = Cockpit / Packed Data
+
+**Baseline:** `8 / 6 / 4`. Use these unless the design read overrides them. Do not ask the user to edit this file - overrides happen conversationally.
+
+### 1.A Dial Inference (design read → dial values)
+| Signal | VARIANCE | MOTION | DENSITY |
+|---|---|---|---|
+| "minimalist / clean / calm / editorial / Linear-style" | 5-6 | 3-4 | 2-3 |
+| "premium consumer / Apple-y / 
