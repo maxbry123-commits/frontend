@@ -1,0 +1,40 @@
+{
+  "bundle_bytes": 21289589,
+  "bundle_sha256": "b194a177d006b0cc7e7cb615681f3147d5c6173fcd73e8970e5bc177e2435c4c",
+  "extracted_tree": {
+    "bytes": 25076810,
+    "files": 502,
+    "sha256": "fc885fa446516f6556096a0e34c6d2fc7e3c7aa9663b764c0e02abb91ec8d2b1"
+  },
+  "extraction_verified": true,
+  "max_github_blob_bytes": 99614720,
+  "no_lfs": true,
+  "part_size_limit_bytes": 12582912,
+  "parts": [
+    {
+      "bytes": 12582912,
+      "name": "context7.bundle.zip.part-0001",
+      "sha256": "2bfcd216b68c5a1d7ed96860eaac9bd65c4fd89a5bdb442a9d083357b952ca86"
+    },
+    {
+      "bytes": 8706677,
+      "name": "context7.bundle.zip.part-0002",
+      "sha256": "75ecca44b02b594952d277ccb8ea6a02bab1eb0301cef55d73742c4eaadd5895"
+    }
+  ],
+  "reconstruction_verified": true,
+  "schema": "yaiwes.hf.download-extract.v1",
+  "skipped_special": [],
+  "skipped_special_count": 0,
+  "slug": "context7",
+  "source_bytes": 25076810,
+  "source_commit": "bfa02ea67b5707fe0e0a673faa49d0f50b28c80b",
+  "source_files": 502,
+  "source_ref": "HEAD",
+  "source_repo": "upstash/context7",
+  "source_tree": {
+    "bytes": 25076810,
+    "files": 502,
+    "sha256": "fc885fa446516f6556096a0e34c6d2fc7e3c7aa9663b764c0e02abb91ec8d2b1"
+  }
+}
