@@ -9,7 +9,11 @@ CICLO 16:
 - lib/auth/provider.tsx idéntico, 593 bytes: https://github.com/maxbry123-commits/frontend/commit/cd7d02e7a5d02375f8c814d7cf97e780ad47d457
 - components/preview-host-bridge.tsx idéntico, 668 bytes: https://github.com/maxbry123-commits/frontend/commit/338a2438f67273a707d084ec978764e0d498f0f0
 - El proveedor es un paso. No demuestra sesión. El puente de preview no es el router externo.
-- La primera escritura del proveedor devolvió 500. La segunda coincidió. No hubo tercera.
+
+CICLO 17:
+- styles.css idéntico, 6397 bytes: https://github.com/maxbry123-commits/frontend/commit/112b6efd80e407cc712a4b2d79c579ca4f2d48ab
+- SHA-256 56aec03a85764d1957d71d03fe331f6673e201d21e6ae62a55bdb740b1b0f157
+- La hoja no es una APK ni un MP4.
 
 PROGRESO: 17/84 = 20 %.
 APK: NONE
@@ -19,4 +23,4 @@ APK: NONE
 RELAY: BLOCKED
 YOUTUBE: NOT_CONFIGURED
 BLOCKERS: sin SDK. HyperFrames. Remotion. 600000 ms. Sin LFS, Vercel, Hugging Face ni GitHub Actions.
-NEXT: publicar src/styles.css, 6397 bytes.
+NEXT: publicar lib/preview-host-bridge.ts, 9595 bytes.
