@@ -5,10 +5,11 @@ BRANCH: https://github.com/maxbry123-commits/frontend/tree/feat/video-youtube-ap
 main: https://github.com/maxbry123-commits/frontend/commit/f85f5ed3ea04ebc3c8ef5b94445238bf30a63c9e
 main no se tocó. El router externo sigue NOT_ATTACHED.
 
-CICLO 15:
-- routes/api/mcp.ts idéntico, 256 bytes: https://github.com/maxbry123-commits/frontend/commit/28f03074ffa4356fb63815132c76ac107edac815
-- routes/__root.tsx idéntico, 1438 bytes: https://github.com/maxbry123-commits/frontend/commit/8497ddfe262f232356938a275326003f99a7f091
-- MCP importa mcp.server.ts, que no está publicado. La raíz importa auth/provider.tsx, preview-host-bridge.tsx y styles.css, que tampoco.
+CICLO 16:
+- lib/auth/provider.tsx idéntico, 593 bytes: https://github.com/maxbry123-commits/frontend/commit/cd7d02e7a5d02375f8c814d7cf97e780ad47d457
+- components/preview-host-bridge.tsx idéntico, 668 bytes: https://github.com/maxbry123-commits/frontend/commit/338a2438f67273a707d084ec978764e0d498f0f0
+- El proveedor es un paso. No demuestra sesión. El puente de preview no es el router externo.
+- La primera escritura del proveedor devolvió 500. La segunda coincidió. No hubo tercera.
 
 PROGRESO: 17/84 = 20 %.
 APK: NONE
@@ -18,4 +19,4 @@ APK: NONE
 RELAY: BLOCKED
 YOUTUBE: NOT_CONFIGURED
 BLOCKERS: sin SDK. HyperFrames. Remotion. 600000 ms. Sin LFS, Vercel, Hugging Face ni GitHub Actions.
-NEXT: publicar lib/auth/provider.tsx, 593 bytes.
+NEXT: publicar src/styles.css, 6397 bytes.
