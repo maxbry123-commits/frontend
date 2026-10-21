@@ -1,0 +1,201 @@
+{
+  "version": 1,
+  "films": [
+    {
+      "id": "nuevo-01",
+      "title": "El arquitecto",
+      "voice": "orion",
+      "language": "en",
+      "src": "/cinema/films/nuevo-01.mp4",
+      "poster": "/cinema/posters/nuevo-01.jpg",
+      "music": "/cinema/stems/nuevo-01-music.m4a",
+      "voiceSrc": "/cinema/stems/nuevo-01-voice.m4a",
+      "measuredDurationMs": 60200,
+      "shots": [
+        {
+          "name": "Cubierta",
+          "ms": 10030,
+          "at": 0,
+          "poster": "/cinema/shots/nuevo-01-00.jpg"
+        },
+        {
+          "name": "Perfil",
+          "ms": 10030,
+          "at": 10030,
+          "poster": "/cinema/shots/nuevo-01-01.jpg"
+        },
+        {
+          "name": "Reflejo",
+          "ms": 10030,
+          "at": 20060,
+          "poster": "/cinema/shots/nuevo-01-02.jpg"
+        },
+        {
+          "name": "Planeta",
+          "ms": 10030,
+          "at": 30090,
+          "poster": "/cinema/shots/nuevo-01-03.jpg"
+        },
+        {
+          "name": "Aleja",
+          "ms": 10030,
+          "at": 40120,
+          "poster": "/cinema/shots/nuevo-01-04.jpg"
+        },
+        {
+          "name": "Traje",
+          "ms": 10030,
+          "at": 50150,
+          "poster": "/cinema/shots/nuevo-01-05.jpg"
+        }
+      ]
+    },
+    {
+      "id": "nuevo-02",
+      "title": "La l\u00e1mpara",
+      "voice": "rex",
+      "language": "en",
+      "src": "/cinema/films/nuevo-02.mp4",
+      "poster": "/cinema/posters/nuevo-02.jpg",
+      "music": "/cinema/stems/nuevo-02-music.m4a",
+      "voiceSrc": "/cinema/stems/nuevo-02-voice.m4a",
+      "measuredDurationMs": 60200,
+      "shots": [
+        {
+          "name": "Sala",
+          "ms": 10030,
+          "at": 0,
+          "poster": "/cinema/shots/nuevo-02-00.jpg"
+        },
+        {
+          "name": "Esfera",
+          "ms": 10030,
+          "at": 10030,
+          "poster": "/cinema/shots/nuevo-02-01.jpg"
+        },
+        {
+          "name": "Sill\u00f3n",
+          "ms": 10030,
+          "at": 20060,
+          "poster": "/cinema/shots/nuevo-02-02.jpg"
+        },
+        {
+          "name": "Ventana",
+          "ms": 10030,
+          "at": 30090,
+          "poster": "/cinema/shots/nuevo-02-03.jpg"
+        },
+        {
+          "name": "Suelo",
+          "ms": 10030,
+          "at": 40120,
+          "poster": "/cinema/shots/nuevo-02-04.jpg"
+        },
+        {
+          "name": "Estante",
+          "ms": 10030,
+          "at": 50150,
+          "poster": "/cinema/shots/nuevo-02-05.jpg"
+        }
+      ]
+    },
+    {
+      "id": "nuevo-03",
+      "title": "Los anillos",
+      "voice": "luna",
+      "language": "es",
+      "src": "/cinema/films/nuevo-03.mp4",
+      "poster": "/cinema/posters/nuevo-03.jpg",
+      "music": "/cinema/stems/nuevo-03-music.m4a",
+      "voiceSrc": "/cinema/stems/nuevo-03-voice.m4a",
+      "measuredDurationMs": 60200,
+      "shots": [
+        {
+          "name": "Tres",
+          "ms": 10030,
+          "at": 0,
+          "poster": "/cinema/shots/nuevo-03-00.jpg"
+        },
+        {
+          "name": "Bajo",
+          "ms": 10030,
+          "at": 10030,
+          "poster": "/cinema/shots/nuevo-03-01.jpg"
+        },
+        {
+          "name": "Uno",
+          "ms": 10030,
+          "at": 20060,
+          "poster": "/cinema/shots/nuevo-03-02.jpg"
+        },
+        {
+          "name": "Suelo",
+          "ms": 10030,
+          "at": 30090,
+          "poster": "/cinema/shots/nuevo-03-03.jpg"
+        },
+        {
+          "name": "Cierra",
+          "ms": 10030,
+          "at": 40120,
+          "poster": "/cinema/shots/nuevo-03-04.jpg"
+        },
+        {
+          "name": "Cenit",
+          "ms": 10030,
+          "at": 50150,
+          "poster": "/cinema/shots/nuevo-03-05.jpg"
+        }
+      ]
+    },
+    {
+      "id": "nuevo-04",
+      "title": "La escotilla",
+      "voice": "kepler",
+      "language": "es",
+      "src": "/cinema/films/nuevo-04.mp4",
+      "poster": "/cinema/posters/nuevo-04.jpg",
+      "music": "/cinema/stems/nuevo-04-music.m4a",
+      "voiceSrc": "/cinema/stems/nuevo-04-voice.m4a",
+      "measuredDurationMs": 60200,
+      "shots": [
+        {
+          "name": "Escotilla",
+          "ms": 10030,
+          "at": 0,
+          "poster": "/cinema/shots/nuevo-04-00.jpg"
+        },
+        {
+          "name": "Cerca",
+          "ms": 10030,
+          "at": 10030,
+          "poster": "/cinema/shots/nuevo-04-01.jpg"
+        },
+        {
+          "name": "Pasillo",
+          "ms": 10030,
+          "at": 20060,
+          "poster": "/cinema/shots/nuevo-04-02.jpg"
+        },
+        {
+          "name": "Metal",
+          "ms": 10030,
+          "at": 30090,
+          "poster": "/cinema/shots/nuevo-04-03.jpg"
+        },
+        {
+          "name": "Quieto",
+          "ms": 10030,
+          "at": 40120,
+          "poster": "/cinema/shots/nuevo-04-04.jpg"
+        },
+        {
+          "name": "Fondo",
+          "ms": 10030,
+          "at": 50150,
+          "poster": "/cinema/shots/nuevo-04-05.jpg"
+        }
+      ]
+    }
+  ]
+}
