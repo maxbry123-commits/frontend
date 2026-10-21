@@ -5,10 +5,9 @@ BRANCH: https://github.com/maxbry123-commits/frontend/tree/feat/video-youtube-ap
 main: https://github.com/maxbry123-commits/frontend/commit/f85f5ed3ea04ebc3c8ef5b94445238bf30a63c9e
 main no se tocó. El router externo sigue NOT_ATTACHED.
 
-CICLO 43:
-- lib/auth/providers.ts idéntico, 1486 bytes: https://github.com/maxbry123-commits/frontend/commit/07d357ebc20f2dd9b43e36fca53b50bb9125fb8d
-- SHA-256 4acefac17931529bdeab053588a917b06e44abdb67a275a2ca1c7841080c6a78
-- Solo nombra dos proveedores. No hay client id. No hay secreto. No hay OAuth.
+CICLO 44:
+- lib/auth/preview.ts NO se publicó. Contiene un secreto literal. El valor no se copia aquí.
+- No hay commit de ese archivo. No hay OAuth. No hay conexión.
 
 PROGRESO: 17/84 = 20 %.
 APK: NONE
@@ -17,8 +16,8 @@ APK: NONE
 600s: PENDING
 RELAY: BLOCKED
 YOUTUBE: NOT_CONFIGURED
-BLOCKERS: sin SDK. HyperFrames. Remotion no instalado. 600000 ms. Sin LFS, Vercel, Hugging Face ni GitHub Actions.
-NEXT: revisar y, si no hay secretos, publicar lib/auth/preview.ts, 1679 bytes.
+BLOCKERS: sin SDK. HyperFrames. Remotion no instalado. 600000 ms. preview.ts bloqueado por secreto. Sin LFS, Vercel, Hugging Face ni GitHub Actions.
+NEXT: revisar y, si no hay secretos, publicar lib/auth/middleware.ts, 2462 bytes. El barrido inicial no vio un secreto literal.
 
 URL:
 - Árbol: https://github.com/maxbry123-commits/frontend/tree/feat/video-youtube-apk/video%20Youtube%20apk
