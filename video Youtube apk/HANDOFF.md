@@ -5,10 +5,10 @@ BRANCH: https://github.com/maxbry123-commits/frontend/tree/feat/video-youtube-ap
 main: https://github.com/maxbry123-commits/frontend/commit/f85f5ed3ea04ebc3c8ef5b94445238bf30a63c9e
 main no se tocó. El router externo sigue NOT_ATTACHED.
 
-CICLO 33:
-- lib/auth/email-password.ts idéntico, 442 bytes: https://github.com/maxbry123-commits/frontend/commit/ceb73394b3761f9602e04e0b870fcbe287330390
-- SHA-256 9b1da7c786e48adfa9a6f7c485bcf5817cf2075a601d8726a965f11171910354
-- emailAndPasswordEnabled = false. No hay sesión. No hay secreto.
+CICLO 34:
+- lib/app-data/server-only.ts idéntico, 476 bytes: https://github.com/maxbry123-commits/frontend/commit/bf290db658a81fc518c26583c0ce546e81331c1e
+- SHA-256 82821474088face6b9fcadad49793629e5f07a16386402b816262a1c070a3210
+- Es un candado de fuente. No hay conexión. No hay secreto.
 
 PROGRESO: 17/84 = 20 %.
 APK: NONE
@@ -18,15 +18,15 @@ APK: NONE
 RELAY: BLOCKED
 YOUTUBE: NOT_CONFIGURED
 BLOCKERS: sin SDK. HyperFrames. Remotion no instalado. 600000 ms. Sin LFS, Vercel, Hugging Face ni GitHub Actions.
-NEXT: publicar lib/app-data/server-only.ts, 476 bytes.
+NEXT: publicar lib/env.server.ts, 477 bytes.
 
 URL:
 - Árbol: https://github.com/maxbry123-commits/frontend/tree/feat/video-youtube-apk/video%20Youtube%20apk
 - README: https://github.com/maxbry123-commits/frontend/blob/feat/video-youtube-apk/video%20Youtube%20apk/README.md
 - HANDOFF: https://github.com/maxbry123-commits/frontend/blob/feat/video-youtube-apk/video%20Youtube%20apk/HANDOFF.md
 - CHECKPOINT: https://github.com/maxbry123-commits/frontend/blob/feat/video-youtube-apk/video%20Youtube%20apk/CHECKPOINT.md
+- Candado: https://github.com/maxbry123-commits/frontend/blob/feat/video-youtube-apk/video%20Youtube%20apk/frontend/src/lib/app-data/server-only.ts
 - Bandera: https://github.com/maxbry123-commits/frontend/blob/feat/video-youtube-apk/video%20Youtube%20apk/frontend/src/lib/auth/email-password.ts
-- Prueba del horario: https://github.com/maxbry123-commits/frontend/blob/feat/video-youtube-apk/video%20Youtube%20apk/frontend/src/lib/app-data/readiness-schedule.test.ts
 - Plantillas: https://github.com/maxbry123-commits/frontend/blob/feat/video-youtube-apk/video%20Youtube%20apk/frontend/src/lib/cinema/plantillas.ts
 - Sala: https://github.com/maxbry123-commits/frontend/blob/feat/video-youtube-apk/video%20Youtube%20apk/frontend/src/components/cinema/replica.tsx
 - Cola: https://github.com/maxbry123-commits/frontend/blob/feat/video-youtube-apk/video%20Youtube%20apk/frontend/src/lib/cinema/db.ts
