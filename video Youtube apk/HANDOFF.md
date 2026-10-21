@@ -7,10 +7,9 @@ main no se tocó.
 
 CICLO 7:
 - Sala: https://github.com/maxbry123-commits/frontend/commit/6ed3a1b2521296f59177162996978068a5e501a5
-- Archivo: https://github.com/maxbry123-commits/frontend/blob/feat/video-youtube-apk/video%20Youtube%20apk/frontend/src/components/cinema/replica.tsx
-- Comparación: el blob publicado es idéntico al de la sala. 21853 bytes.
+- El blob es idéntico a la sala. 21853 bytes.
 
-PROGRESO: 16/84 = 19 %. La sala está publicada, pero no compila sola: faltan db.ts, media.ts, engines.ts, los catálogos y la ruta.
+PROGRESO: 17/84 = 20 %. Se cuenta 0.4, que ya estaba verificado y faltaba en la suma. La sala no compila sola: faltan db.ts, media.ts, engines.ts, catálogos y ruta.
 APK: NONE
 59s: PASS de archivo. No es Media3.
 300s: PARTIAL
