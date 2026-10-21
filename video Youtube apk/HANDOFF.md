@@ -5,10 +5,10 @@ BRANCH: https://github.com/maxbry123-commits/frontend/tree/feat/video-youtube-ap
 main: https://github.com/maxbry123-commits/frontend/commit/f85f5ed3ea04ebc3c8ef5b94445238bf30a63c9e
 main no se tocó. El router externo sigue NOT_ATTACHED.
 
-CICLO 13:
-- studio.ts idéntico, 315 bytes: https://github.com/maxbry123-commits/frontend/commit/f4c99bb7b1131dca284e570f7b666d514766cd24
-- router.tsx de la preview idéntico, 382 bytes: https://github.com/maxbry123-commits/frontend/commit/7aa2fa91ff4e4223976e97ccbf02e8093f39f9d8
-- La ruta importa studio.server.ts, que no está publicado. El router importa error-component.tsx y routeTree.gen.ts, que tampoco.
+CICLO 14:
+- error-component.tsx idéntico, 1029 bytes: https://github.com/maxbry123-commits/frontend/commit/bfd06a8e1f2cb81a53b9e525003c4d250f9c46c4
+- routeTree.gen.ts idéntico, 2977 bytes: https://github.com/maxbry123-commits/frontend/commit/9c418bebf44685c8a9865eab3ca83349f90aae48
+- El árbol importa routes/__root.tsx y routes/api/mcp.ts. Ninguno está publicado.
 
 PROGRESO: 17/84 = 20 %.
 APK: NONE
@@ -18,4 +18,4 @@ APK: NONE
 RELAY: BLOCKED
 YOUTUBE: NOT_CONFIGURED
 BLOCKERS: sin SDK. HyperFrames. Remotion. 600000 ms. Sin LFS, Vercel, Hugging Face ni GitHub Actions.
-NEXT: publicar error-component.tsx, 1029 bytes.
+NEXT: publicar routes/api/mcp.ts, 256 bytes.
