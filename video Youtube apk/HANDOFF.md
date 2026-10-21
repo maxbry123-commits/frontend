@@ -5,11 +5,10 @@ BRANCH: https://github.com/maxbry123-commits/frontend/tree/feat/video-youtube-ap
 main: https://github.com/maxbry123-commits/frontend/commit/f85f5ed3ea04ebc3c8ef5b94445238bf30a63c9e
 main no se tocó. El router externo sigue NOT_ATTACHED.
 
-CICLO 18:
-- lib/preview-host-bridge.ts idéntico, 9595 bytes: https://github.com/maxbry123-commits/frontend/commit/ba04ba5841b8e64df9ed9d713e0f1dae1c134b04
-- SHA-256 63a91311378037680b6be414937295069ec2950520d1dc959741cf430ba6b38b
-- Es el puente de la preview. No es el router externo ni una conexión viva.
-- Importa preview-embedder-origin.ts y app-data/types.ts. Ninguno está publicado.
+CICLO 19:
+- lib/app-data/types.ts idéntico, 1361 bytes: https://github.com/maxbry123-commits/frontend/commit/0fa94d3a84f8798980dcc8b98b6493dd0a91ad88
+- SHA-256 65f3c7566db12661ee9d3633eaae66a85505e00f57a61c258fa72bd22881489f
+- Son nombres de tipo. No hay token, ni conector conectado, ni secreto.
 
 PROGRESO: 17/84 = 20 %.
 APK: NONE
@@ -19,4 +18,4 @@ APK: NONE
 RELAY: BLOCKED
 YOUTUBE: NOT_CONFIGURED
 BLOCKERS: sin SDK. HyperFrames. Remotion. 600000 ms. Sin LFS, Vercel, Hugging Face ni GitHub Actions.
-NEXT: publicar lib/app-data/types.ts, 1361 bytes.
+NEXT: publicar lib/preview-embedder-origin.ts, 1855 bytes.
