@@ -3,13 +3,12 @@
 REPO: https://github.com/maxbry123-commits/frontend
 BRANCH: https://github.com/maxbry123-commits/frontend/tree/feat/video-youtube-apk
 main: https://github.com/maxbry123-commits/frontend/commit/f85f5ed3ea04ebc3c8ef5b94445238bf30a63c9e
-main no se tocó.
+main no se tocó. El router externo sigue NOT_ATTACHED.
 
-CICLO 12:
-- nuevo.json idéntico, 5030 bytes: https://github.com/maxbry123-commits/frontend/commit/f75cfe80b773060581a137dce305775d7a274d92
-- SHA-256 2de16ceb2f236082b7051040610e4bb16274ab9d3f499639ee5cfebfe0fe2b84
-- El origen local está fuera de la carpeta. El destino publicado es video Youtube apk/frontend/public/cinema/nuevo.json
-- Los 60200 ms del catálogo no son una medición de este ciclo.
+CICLO 13:
+- studio.ts idéntico, 315 bytes: https://github.com/maxbry123-commits/frontend/commit/f4c99bb7b1131dca284e570f7b666d514766cd24
+- router.tsx de la preview idéntico, 382 bytes: https://github.com/maxbry123-commits/frontend/commit/7aa2fa91ff4e4223976e97ccbf02e8093f39f9d8
+- La ruta importa studio.server.ts, que no está publicado. El router importa error-component.tsx y routeTree.gen.ts, que tampoco.
 
 PROGRESO: 17/84 = 20 %.
 APK: NONE
@@ -19,4 +18,4 @@ APK: NONE
 RELAY: BLOCKED
 YOUTUBE: NOT_CONFIGURED
 BLOCKERS: sin SDK. HyperFrames. Remotion. 600000 ms. Sin LFS, Vercel, Hugging Face ni GitHub Actions.
-NEXT: publicar routes/api/studio.ts, 315 bytes.
+NEXT: publicar error-component.tsx, 1029 bytes.
