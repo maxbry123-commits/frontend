@@ -5,13 +5,12 @@ BRANCH: https://github.com/maxbry123-commits/frontend/tree/feat/video-youtube-ap
 main: https://github.com/maxbry123-commits/frontend/commit/f85f5ed3ea04ebc3c8ef5b94445238bf30a63c9e
 main no se tocó.
 
-CICLO 6:
-- Comandos: https://github.com/maxbry123-commits/frontend/commit/30eac2490b54d7071a6f9858de54c0ad3215e2bf
-- Contrato: https://github.com/maxbry123-commits/frontend/commit/bdc8159fef73b7a5bbce8830fbaca008e2c550bc
-- Pruebas previas: https://github.com/maxbry123-commits/frontend/commit/f303fcf20607a7ae2cfb9253223641efa959c717
+CICLO 7:
+- Sala: https://github.com/maxbry123-commits/frontend/commit/6ed3a1b2521296f59177162996978068a5e501a5
+- Archivo: https://github.com/maxbry123-commits/frontend/blob/feat/video-youtube-apk/video%20Youtube%20apk/frontend/src/components/cinema/replica.tsx
+- Comparación: el blob publicado es idéntico al de la sala. 21853 bytes.
 
-La suite se volvió a ejecutar con los tres archivos publicados. Resultado: 13 pass, 0 fail.
-PROGRESO: 16/84 = 19 %. G06 sigue parcial: no hay worker de descarga ni Room.
+PROGRESO: 16/84 = 19 %. La sala está publicada, pero no compila sola: faltan db.ts, media.ts, engines.ts, los catálogos y la ruta.
 APK: NONE
 59s: PASS de archivo. No es Media3.
 300s: PARTIAL
@@ -19,4 +18,4 @@ APK: NONE
 RELAY: BLOCKED
 YOUTUBE: NOT_CONFIGURED
 BLOCKERS: sin SDK. HyperFrames. Remotion. 600000 ms. Sin LFS, Vercel, Hugging Face ni GitHub Actions.
-NEXT: subir replica.tsx en un solo commit.
+NEXT: subir db.ts y media.ts, un archivo por commit.
