@@ -5,10 +5,10 @@ BRANCH: https://github.com/maxbry123-commits/frontend/tree/feat/video-youtube-ap
 main: https://github.com/maxbry123-commits/frontend/commit/f85f5ed3ea04ebc3c8ef5b94445238bf30a63c9e
 main no se tocó. El router externo sigue NOT_ATTACHED.
 
-CICLO 19:
-- lib/app-data/types.ts idéntico, 1361 bytes: https://github.com/maxbry123-commits/frontend/commit/0fa94d3a84f8798980dcc8b98b6493dd0a91ad88
-- SHA-256 65f3c7566db12661ee9d3633eaae66a85505e00f57a61c258fa72bd22881489f
-- Son nombres de tipo. No hay token, ni conector conectado, ni secreto.
+CICLO 20:
+- lib/preview-embedder-origin.ts idéntico, 1855 bytes: https://github.com/maxbry123-commits/frontend/commit/8ff7f3160b09243212fe454f383de808c4027b81
+- SHA-256 c2d5e1acc5653ff2abc08a5eeb5feb3331f4e3d7c751ec83d60dee83cf33a6ee
+- Es una lista de orígenes. No conecta el router ni abre una sesión.
 
 PROGRESO: 17/84 = 20 %.
 APK: NONE
@@ -18,4 +18,4 @@ APK: NONE
 RELAY: BLOCKED
 YOUTUBE: NOT_CONFIGURED
 BLOCKERS: sin SDK. HyperFrames. Remotion. 600000 ms. Sin LFS, Vercel, Hugging Face ni GitHub Actions.
-NEXT: publicar lib/preview-embedder-origin.ts, 1855 bytes.
+NEXT: publicar lib/cinema/cartilla.test.ts, 520 bytes.
