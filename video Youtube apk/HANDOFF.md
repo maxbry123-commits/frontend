@@ -2,20 +2,24 @@
 
 REPO: https://github.com/maxbry123-commits/frontend
 BRANCH: https://github.com/maxbry123-commits/frontend/tree/feat/video-youtube-apk
-COMMIT ANTERIOR VERIFICADO: https://github.com/maxbry123-commits/frontend/commit/d9c6f612534992ef1d5befafd6e2ae7669ef00fb
-BASE: f85f5ed3ea04ebc3c8ef5b94445238bf30a63c9e
-main: no tocada
-UI: preview de la sala, ruta /, v6
+main: https://github.com/maxbry123-commits/frontend/commit/f85f5ed3ea04ebc3c8ef5b94445238bf30a63c9e
+main no se tocó en este ciclo.
+
+COMMITS DE ESTE CICLO:
+- Índice: https://github.com/maxbry123-commits/frontend/commit/2f2e87802edfeabc70f9c6ca7e2df4c91141aef3
+- Partitura y arquitectura: https://github.com/maxbry123-commits/frontend/commit/347a112ea95ca62147c567a9b93b0c7368acd574
+- Pruebas: https://github.com/maxbry123-commits/frontend/commit/f303fcf20607a7ae2cfb9253223641efa959c717
+
+UI: sala v6. replica.tsx todavía no está en la rama.
 APK DEBUG: NONE
 APK RELEASE: NONE
-59s: PASS de archivo. reel-59, 59000 ms, 720x1280, 1770 cuadros. No es Media3.
-300s: PARTIAL. land-01 decodificado 300000 ms.
+59s: PASS de archivo. No es Media3.
+300s: PARTIAL.
 600s: PENDING
 RELAY: BLOCKED
-MCP: /api/mcp local. Router NOT_ATTACHED
 YOUTUBE: NOT_CONFIGURED
-TESTS: model.test.ts 13 pass. Dos MP4 persistieron tras recargar. Selector 16:9 probado en 390 px.
+TESTS: model.test.ts 13 pass en la sala. El archivo ya está en la rama, pero model.ts y commands.ts no, así que GitHub no puede repetir la suite.
 SECRETS: PASS
-BLOCKERS: sin Android SDK. HyperFrames y Remotion rechazados por el motor. Sin Git LFS, Vercel, Hugging Face ni GitHub Actions.
-NEXT: subir el índice de la partitura y replica.tsx en commits pequeños.
-README: https://github.com/maxbry123-commits/frontend/blob/feat/video-youtube-apk/video%20Youtube%20apk/README.md
+BLOCKERS: sin Android SDK. HyperFrames y Remotion. 600000 ms. Sin Git LFS, Vercel, Hugging Face ni GitHub Actions.
+NEXT: subir model.ts y replica.tsx en commits separados.
+PROGRESO: 20 de 84 verificadas. 24 %.
